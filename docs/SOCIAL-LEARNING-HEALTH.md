@@ -7,8 +7,8 @@ canonical Operations health (#425) and recovery (#427) layers.
 
 ## Weekly learning checkpoint
 
-Social learning joins the existing Monday-night reporting checkpoint; it does not introduce a
-cron, timer, queue or recovery loop. Each real Social Distribution profile is evaluated from the
+Social learning joins the Monday morning day checkpoint, the run that writes the weekly report;
+it does not introduce a cron, timer, queue or recovery loop. Each real Social Distribution profile is evaluated from the
 latest canonical 28-day post observation per native post and canonical daily operation receipts.
 The lookback is capped at 90 days. Future, malformed and non-28-day observations do not enter the
 sample. Fewer than eight distinct posts is explicitly `INSUFFICIENT_DATA`, never a zero-result
