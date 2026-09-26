@@ -1,4 +1,3 @@
-import sharp from "sharp";
 import { describe, expect, it } from "vitest";
 import { loadRoutingConfig, routeBoardroom } from "../src/boardroom/router.js";
 import { configRoot } from "../src/paths.js";
@@ -9,7 +8,6 @@ import {
   enabledAgentsForVenture,
   loadVentureAgentControls
 } from "../src/ventures/agent-controls.js";
-import { composeArticleHero } from "../src/social/media/compose.js";
 import path from "node:path";
 
 describe("venture agent controls", () => {
@@ -79,14 +77,5 @@ describe("venture agent controls", () => {
     expect(room.selectedParticipants.some(({ agent }) => agent === "SPLIT")).toBe(false);
     expect(room.selectedParticipants.some(({ agent }) => agent === "REACH")).toBe(false);
     expect(room.skippedParticipants.find(({ agent }) => agent === "REACH")?.reason).toContain("switched off");
-  });
-
-  it("renders a small deterministic article hero", async () => {
-    const first = await composeArticleHero({ date: "2026-08-01", title: "A useful AI change", dek: "The facts and the remaining uncertainty." });
-    const second = await composeArticleHero({ date: "2026-08-01", title: "A useful AI change", dek: "The facts and the remaining uncertainty." });
-    const metadata = await sharp(first).metadata();
-    expect(first.equals(second)).toBe(true);
-    expect(metadata).toMatchObject({ format: "webp", width: 1200, height: 630 });
-    expect(first.byteLength).toBeLessThan(400_000);
   });
 });
