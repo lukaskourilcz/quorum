@@ -120,7 +120,6 @@ export const PerformanceWeightsSchema = z.strictObject({
 
 export type PerformanceWeights = z.infer<typeof PerformanceWeightsSchema>;
 export type PerformanceWeightProposal = z.infer<typeof PerformanceWeightProposalSchema>;
-export type PerformanceAxis = z.infer<typeof AxisSchema>;
 
 export interface PerformanceResultEvidence {
   resultId: string;

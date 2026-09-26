@@ -1,7 +1,6 @@
 import {
   CarouselTemplateSchema,
-  TemplateReferenceSchema,
-  type TemplateReference
+  TemplateReferenceSchema
 } from "@boardlessai/carousel-studio";
 import { resolveLiveCarouselTemplate } from "../studio/catalog.js";
 
@@ -18,5 +17,3 @@ export const LiveTemplateReferenceSchema = TemplateReferenceSchema.superRefine((
     });
   }
 });
-
-export type LiveTemplateReference = TemplateReference;

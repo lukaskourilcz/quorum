@@ -19,5 +19,3 @@ export const MeetingEmailSchema = openObject({
   }),
   meetingCostUsd: z.number().finite().nonnegative()
 }).describe("Retired meeting-email/1 compatibility schema. Runtime delivery uses daily-digest/1.");
-
-export type MeetingEmail = z.infer<typeof MeetingEmailSchema>;

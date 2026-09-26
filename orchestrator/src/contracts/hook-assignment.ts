@@ -111,5 +111,4 @@ export const HookAssignmentSchema = openObject({
 });
 
 export type HookAssignment = z.infer<typeof HookAssignmentSchema>;
-export type HookCooldownEntry = z.infer<typeof HookCooldownEntrySchema>;
 export type NoHookReason = z.infer<typeof NoHookReasonSchema>;

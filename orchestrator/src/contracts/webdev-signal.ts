@@ -762,7 +762,6 @@ export function parseWebDevCandidates(values: readonly unknown[]): {
 
 export type WebDevTopic = z.infer<typeof WebDevTopicSchema>;
 export type WebDevChangeKind = z.infer<typeof WebDevChangeKindSchema>;
-export type WebDevImpactScope = z.infer<typeof WebDevImpactScopeSchema>;
 export type WebDevSource = z.infer<typeof WebDevSourceSchema>;
 export type WebDevCandidate = z.infer<typeof WebDevCandidateSchema>;
 export type WebDevRecord = z.infer<typeof WebDevRecordSchema>;

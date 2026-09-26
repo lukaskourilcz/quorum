@@ -259,9 +259,7 @@ export const MetricsPlaceholderSchema = openObject({
 
 export type PriorityItem = z.infer<typeof PriorityItemSchema>;
 export type PriorityQueue = z.infer<typeof PriorityQueueSchema>;
-export type PriorityOrigin = z.infer<typeof PriorityOriginSchema>;
 export type PriorityProposalProvenance = z.infer<typeof PriorityProposalSchema>;
 export type ArticleImage = z.infer<typeof ArticleImageSchema>;
 export type ReleaseProof = z.infer<typeof ReleaseProofSchema>;
-export type SocialPostReceipt = z.infer<typeof SocialPostReceiptSchema>;
 export type SocialActivation = z.infer<typeof SocialActivationSchema>;

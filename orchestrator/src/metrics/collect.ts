@@ -58,7 +58,6 @@ export const KpiRegistrySchema = z.object({
   }
 });
 
-export type KpiMeasurement = z.infer<typeof KpiMeasurementSchema>;
 export type KpiRegistryEntry = z.infer<typeof KpiRegistryEntrySchema>;
 export type KpiRegistry = z.infer<typeof KpiRegistrySchema>;
 

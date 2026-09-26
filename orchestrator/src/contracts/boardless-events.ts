@@ -40,4 +40,3 @@ export const BoardlessEventsSchema = openObject({
 );
 
 export type MagazineEvent = z.infer<typeof MagazineEventSchema>;
-export type BoardlessEvents = z.infer<typeof BoardlessEventsSchema>;

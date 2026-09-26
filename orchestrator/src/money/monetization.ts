@@ -66,7 +66,6 @@ export const PublicMonetizationMethodSchema = openObject({
 
 export type MonetizationStatus = z.infer<typeof MonetizationStatusSchema>;
 export type MonetizationMethodId = z.infer<typeof MonetizationMethodIdSchema>;
-export type MonetizationProposal = z.infer<typeof MonetizationProposalSchema>;
 export type MonetizationMethodState = z.infer<typeof MonetizationMethodStateSchema>;
 export type PublicMonetizationMethod = z.infer<typeof PublicMonetizationMethodSchema>;
 

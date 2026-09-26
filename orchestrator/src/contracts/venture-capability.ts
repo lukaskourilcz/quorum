@@ -183,6 +183,5 @@ export const ApprovedPublishPackageRefSchema = z.strictObject({
   }
 });
 
-export type VentureCapability = z.infer<typeof VentureCapabilitySchema>;
 export type VentureCapabilityEdge = z.infer<typeof VentureCapabilityEdgeSchema>;
 export type VentureCapabilityMap = z.infer<typeof VentureCapabilityMapSchema>;

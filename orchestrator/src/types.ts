@@ -66,7 +66,6 @@ export const StageSchema = z.enum([
 export type Stage = z.infer<typeof StageSchema>;
 
 export const LegacyPhaseSchema = z.enum(["am", "pm"]);
-export type LegacyPhase = z.infer<typeof LegacyPhaseSchema>;
 
 export const ShiftPhaseSchema = z.enum(["morning", "afternoon", "night"]);
 export type ShiftPhase = z.infer<typeof ShiftPhaseSchema>;

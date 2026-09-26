@@ -179,7 +179,6 @@ export const AgentRegistrySchema = z
   });
 
 export type AgentRegistry = z.infer<typeof AgentRegistrySchema>;
-export type RegisteredAgent = AgentRegistry["agents"][number];
 
 export async function loadAgentRegistry(
   registryPath = path.join(configRoot, "agents.json")

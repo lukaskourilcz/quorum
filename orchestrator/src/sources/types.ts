@@ -12,7 +12,6 @@ export const SOURCE_KINDS = [
 ] as const;
 
 export const SourceKindSchema = z.enum(SOURCE_KINDS);
-export type SourceKind = z.infer<typeof SourceKindSchema>;
 
 export const SourceItemSchema = z.object({
   sourceId: z.string().min(1),

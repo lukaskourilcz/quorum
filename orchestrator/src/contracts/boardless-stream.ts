@@ -55,7 +55,6 @@ export const BoardlessStreamSchema = openObject({
 
 export type StreamSource = z.infer<typeof StreamSourceSchema>;
 export type StreamItem = z.infer<typeof StreamItemSchema>;
-export type BoardlessStream = z.infer<typeof BoardlessStreamSchema>;
 
 /** `stream-sync/1` — the receipt written beside every fetch, model-free by construction. */
 export const StreamSyncReceiptSchema = openObject({

@@ -271,6 +271,5 @@ export const AnyPerformanceWeightProposalSchema = z.union([
 ]);
 
 export type PerformanceHookStyle = z.infer<typeof PerformanceHookStyleSchema>;
-export type PerformanceWeightChanges = z.infer<typeof PerformanceWeightChangesSchema>;
 export type PerformanceWeightProposal = z.infer<typeof PerformanceWeightProposalSchema>;
 export type PerformanceWeights = z.infer<typeof PerformanceWeightsSchema>;

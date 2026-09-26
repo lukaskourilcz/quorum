@@ -22,7 +22,6 @@ export const ChannelRegistrySchema = z.object({
   schemaVersion: z.literal(1),
   channels: z.array(ChannelSchema).length(3)
 });
-export type ChannelRegistry = z.infer<typeof ChannelRegistrySchema>;
 
 export function assertLiveChannel(channel: Channel, environment: NodeJS.ProcessEnv): void {
   const parsed = ChannelSchema.parse(channel);

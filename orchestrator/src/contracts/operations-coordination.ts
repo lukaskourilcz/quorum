@@ -147,7 +147,6 @@ export const OperationsCapacitySnapshotSchema = z.strictObject({
 });
 
 export type OperationsCapacityPlan = z.infer<typeof OperationsCapacityPlanSchema>;
-export type OperationsCapacityPlanJob = z.infer<typeof OperationsCapacityPlanJobSchema>;
 export type OperationsEfficiencyObservation = z.infer<typeof OperationsEfficiencyObservationSchema>;
 export type SharedResourceLease = z.infer<typeof SharedResourceLeaseSchema>;
 export type OperationsCapacitySnapshot = z.infer<typeof OperationsCapacitySnapshotSchema>;
