@@ -131,6 +131,8 @@ test("mobile Admin navigation has safe targets and exposes every live destinatio
 });
 
 test("Contest Radar is out of every admin navigation and still opens at its own address", async ({ page }) => {
+  // Seven routes, several compiled for the first time by the development server.
+  test.setTimeout(600_000);
   for (const route of ["/admin", "/admin/queue", "/admin/settings", "/admin/operations", "/admin/implementation-plans", "/admin/social-profiles"]) {
     await page.goto(route, { waitUntil: "networkidle" });
     await expect(page.getByRole("navigation", { name: "Admin destinations" }).locator('a[href="/admin?venture=contest-radar"]'), route)
