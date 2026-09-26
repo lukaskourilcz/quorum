@@ -42,8 +42,8 @@ rising is invisible until it is over.
 ## 5. Competitive landscape
 
 Nothing to compete with — this is internal. The alternatives are: guess; scroll; or pay for a
-social listening tool, which starts around $16/mo for Firecrawl and $50 minimum for DataForSEO,
-either of which alone would consume half the $30 all-in operating cap.
+social listening tool, which starts around $16/mo for Firecrawl, a third of the $50 all-in
+operating cap, and $50 minimum for DataForSEO, the whole of it.
 
 ## 6. Differentiation
 
