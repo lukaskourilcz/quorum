@@ -1,6 +1,6 @@
 {
   "schemaVersion": "owner-attention/1",
-  "generatedAt": "2026-09-25T09:07:15.398Z",
+  "generatedAt": "2026-09-26T23:09:07.142Z",
   "approvals": [
     {
       "id": "DEVSHARK-SOCIAL-001",
@@ -38,40 +38,9 @@
   ],
   "manualTasks": [
     {
-      "id": "ADMIN_USER",
-      "title": "Admin username is not set in production",
-      "plain": "The admin door will not open in production until a username and password are set.",
-      "steps": [
-        "Open the quorum-site project in Vercel",
-        "Add ADMIN_USER and ADMIN_PASSWORD to Production",
-        "Redeploy"
-      ],
-      "source": {
-        "kind": "runtime",
-        "ref": "ADMIN_USER"
-      },
-      "since": null,
-      "urgency": "blocking"
-    },
-    {
-      "id": "BOARDLESSAI_GITHUB_TOKEN",
-      "title": "The admin cannot write back to the repository",
-      "plain": "Nothing you save in the admin can be written back to the repository without this token.",
-      "steps": [
-        "Create a fine-grained token with Contents read/write on this repository",
-        "Add BOARDLESSAI_GITHUB_TOKEN to the site's Production environment"
-      ],
-      "source": {
-        "kind": "runtime",
-        "ref": "BOARDLESSAI_GITHUB_TOKEN"
-      },
-      "since": null,
-      "urgency": "blocking"
-    },
-    {
-      "id": "create-door-money-s-private-source-repository",
-      "title": "Create Door Money's private source repository",
-      "plain": "BOOK-SOURCE-001 was signed on 2026-08-29, so what is left is yours to create rather than to decide: the English manuscript's private Git repository, with the working clone outside this public checkout. Put the manuscript at the gitignored local path or pass it explicitly to the CLI; set BOOK_PRIVATE_CLONE_PATH for a local live desk. The optional fine-grained BOOK_SOURCE_TOKEN is only for the owner",
+      "id": "countersign-state-decisions-2026-09-26-devshark-social-queue-md",
+      "title": "Countersign state/decisions/2026-09-26-devshark-social-queue.md",
+      "plain": "#568 wrote it with status proposed; set countersigned and name your approval on its signature line.",
       "steps": [],
       "source": {
         "kind": "needed",
@@ -81,9 +50,9 @@
       "urgency": "blocking"
     },
     {
-      "id": "deploy-main-to-vercel-and-count-the-deployed-cron-jobs",
-      "title": "Deploy main to Vercel and count the deployed cron jobs",
-      "plain": "#527. The Design Lab update and the calendar are still undeployed; if the Hobby plan deploys two crons, decide the Pro move.",
+      "id": "create-the-devshark-profiles",
+      "title": "Create the devShark profiles",
+      "plain": "a LinkedIn Company Page (desktop or iOS), an Instagram professional account (Instagram Login, no Facebook Page needed) and its Threads profile; record the URLs here and in devShark's client/product-catalog.ts.",
       "steps": [],
       "source": {
         "kind": "needed",
@@ -93,9 +62,9 @@
       "urgency": "blocking"
     },
     {
-      "id": "deploy-the-site-it-is-a-schedule-change-behind",
-      "title": "Deploy the site — it is a schedule change behind",
-      "plain": "boardless-ai.vercel.app still shows the old calendar: eighteen rows, one per room per hour, with the DNESKAi edition at 05:00, the MMA rooms spread across 08:00–20:00 and the afternoon and night company meetings that operations-2026-08c retired. main has carried the consolidated nine-row calendar since 2026-08-29. Nothing is wrong with the code; nothing has deployed. site/vercel.json carries git.d",
+      "id": "tick-human-approval-devshark-social-001-and-then-002-in-state-inbox-md",
+      "title": "Tick HUMAN_APPROVAL DEVSHARK-SOCIAL-001 and then -002 in state/INBOX.md",
+      "plain": "when the connections are live and three drafted packages exist. Both are written under Pending with their scope text; the scope text is the approval, and you tick each in your own commit.",
       "steps": [],
       "source": {
         "kind": "needed",
@@ -105,9 +74,9 @@
       "urgency": "blocking"
     },
     {
-      "id": "land-the-production-domain-and-clear-the-handle",
-      "title": "Land the production domain and clear the handle",
-      "plain": "TS-ACCOUNTS-003 was signed on 2026-08-29; the domain and the handle are what remain. Finish the product's existing",
+      "id": "tick-human-approval-devshark-social-003-in-state-inbox-md-before-creating-any-account",
+      "title": "Tick HUMAN_APPROVAL DEVSHARK-SOCIAL-003 in state/INBOX.md before creating any account",
+      "plain": "it approves the Buffer Free account, the Meta app and its four publish scopes, and Actions write on BOARDLESSAI_GITHUB_TOKEN, and says where each value lives.",
       "steps": [],
       "source": {
         "kind": "needed",
@@ -153,21 +122,9 @@
       "urgency": "blocking"
     },
     {
-      "id": "add-the-first-opportunity-record-to-state-opportunities-json",
-      "title": "Add the first opportunity record to state/OPPORTUNITIES.json",
-      "plain": "the file still holds only fixtures, so the opportunity gate stays dormant and publishes one line rather than a daily rejection. The task allowlist deliberately does not let any agent write this file; the narrow write scope is a guard, so do not widen it. Needs a score ≥35/50, no dimension below 2, and ≥3 independent non-fixture evidence refs in state/EVIDENCE.jsonl. This is not what holds the stag",
-      "steps": [],
-      "source": {
-        "kind": "needed",
-        "ref": "docs/NEEDED.md"
-      },
-      "since": null,
-      "urgency": "soon"
-    },
-    {
       "id": "add-the-instagram-and-threads-credentials",
       "title": "Add the Instagram and Threads credentials",
-      "plain": "each brand needs its account ID and access token as GitHub Actions secrets before any channel can be considered. Missing now — caught-up: CAUGHT_UP_THREADS_ACCESS_TOKEN, CAUGHT_UP_THREADS_USER_ID, CAUGHT_UP_INSTAGRAM_ACCESS_TOKEN, CAUGHT_UP_INSTAGRAM_USER_ID; mma-files: MMA_FILES_THREADS_ACCESS_TOKEN, MMA_FILES_THREADS_USER_ID, MMA_FILES_INSTAGRAM_ACCESS_TOKEN, MMA_FILES_INSTAGRAM_USER_ID; titty-t",
+      "plain": "each brand needs its account ID and access token as GitHub Actions secrets before any channel can be considered. Missing now — caught-up: CAUGHT_UP_THREADS_ACCESS_TOKEN, CAUGHT_UP_THREADS_USER_ID, CAUGHT_UP_INSTAGRAM_ACCESS_TOKEN, CAUGHT_UP_INSTAGRAM_USER_ID. MMA Files and Titty Tuesdays are paused (operations-2026-09b) and their credentials are no longer requested. Until they exist every per-vent",
       "steps": [],
       "source": {
         "kind": "needed",
@@ -177,9 +134,9 @@
       "urgency": "soon"
     },
     {
-      "id": "approve-tehdej-sv-t-s-first-12-feature-content-bank",
-      "title": "Approve Tehdejší svět's first 12-feature content bank",
-      "plain": "review both language packages, their source coverage, tier labels, licences, send-target questions and Design Lab previews before day 1. Approval of an individual feature still does not create an account or post it; the owner performs every external post by hand.",
+      "id": "append-the-premium-launch-block-to-devshark-s-fact-sheet",
+      "title": "Append the Premium launch block to devShark's fact sheet",
+      "plain": "the 2026-09-25 block in config/marketingshark.json records the freemium decision and the English-only product. It names what every account gets, keeps the price out of anything a post may quote, and forbids both a price and any claim that learning is free. Read it and correct it there if devShark's facts differ. On the day Premium goes on sale, append one block dated that day with the price and th",
       "steps": [],
       "source": {
         "kind": "needed",
@@ -189,35 +146,9 @@
       "urgency": "soon"
     },
     {
-      "id": "CAUGHT_UP_STREAMS_ENABLED",
-      "title": "The DNESKAi streams are switched off",
-      "plain": "DNESKAi's 'what people are talking about' and podcast pages stay empty until this switch is on.",
-      "steps": [
-        "Set the Actions variable CAUGHT_UP_STREAMS_ENABLED to true"
-      ],
-      "source": {
-        "kind": "runtime",
-        "ref": "CAUGHT_UP_STREAMS_ENABLED"
-      },
-      "since": null,
-      "urgency": "soon"
-    },
-    {
-      "id": "clear-the-door-money-handle-and-create-its-accounts",
-      "title": "Clear the Door Money handle and create its accounts",
-      "plain": "DM-ACCOUNTS-003 was signed on 2026-08-29. What is left: the shared handle/collision/trademark screen for \"Door Money\", whether the account should carry the English book title instead, and which of Instagram, TikTok, X, Threads or YouTube to open. You create and configure it; BoardlessAI remains drafts-only and has no credential, publisher or autopublish permission.",
-      "steps": [],
-      "source": {
-        "kind": "needed",
-        "ref": "docs/NEEDED.md"
-      },
-      "since": null,
-      "urgency": "soon"
-    },
-    {
-      "id": "configure-the-separate-personal-growth-private-clone-and-ingest-owner-selected-journals",
-      "title": "Configure the separate Personal Growth private clone and ingest owner-selected journals.",
-      "plain": "Set PERSONAL_GROWTH_PRIVATE_CLONE_PATH to a private clone that does not overlap this repository, then run the documented ingestion command separately for the Czech and optional English Rapovej deník sources. Select the files and titles yourself; no agent may infer, translate or move private journal text into Git.",
+      "id": "buffer-free-account",
+      "title": "Buffer Free account",
+      "plain": "connect the LinkedIn Page and create the API key; store BUFFER_API_KEY as an Actions secret and BUFFER_CHANNEL_ID_DEVSHARK_LINKEDIN as an Actions variable. Then run the live test in docs/SOCIAL-PROVIDERS.md (\"The live test\"): one multi-image post from the API, and write the result under its \"Result\" line. That is all; an agent session flips Buffer's verdict from it (the",
       "steps": [],
       "source": {
         "kind": "needed",
@@ -239,21 +170,9 @@
       "urgency": "soon"
     },
     {
-      "id": "confirm-or-reverse-the-daily-runner-activation",
-      "title": "Confirm or reverse the daily-runner activation",
-      "plain": "read state/decisions/2026-09-15-webdev-signal-daily-runner.md. It is recorded as countersigned on your 2026-09-15 instruction: it matches the config to the founding you countersigned on 2026-08-30, enables the deterministic render and makes the venture operating so it has a pause switch in Settings. Reversing means reverting those three config lines; the runner then records honest held receipts.",
-      "steps": [],
-      "source": {
-        "kind": "needed",
-        "ref": "docs/NEEDED.md"
-      },
-      "since": null,
-      "urgency": "soon"
-    },
-    {
       "id": "confirm-the-apify-plan-set-its-spending-limit-and-fill-goviral-s-profile",
       "title": "Confirm the Apify plan, set its spending limit and fill GoVIRAL's profile",
-      "plain": "#528. The account is on a paid tier since 2026-09-15; the repository assumes Starter ($19 a month, $19 of credit). Confirm or correct the plan in config/fixed-costs.json and APIFY_MONTHLY_CREDIT_USD, set the console's monthly spending limit to the plan credit so overage can never reach the card, record the payment in the treasury ledger, and write state/ventures/goviral/profile.md.",
+      "plain": "#528. The account is on a paid tier since 2026-09-15; the repository assumes Starter ($19 a month, $19 of credit). Confirm or correct the plan in config/fixed-costs.json and APIFY_MONTHLY_CREDIT_USD, set the console's monthly spending limit to the plan credit so overage can never reach the card, and write state/ventures/goviral/profile.md. The payment itself is recorded under the three-payments it",
       "steps": [],
       "source": {
         "kind": "needed",
@@ -275,9 +194,9 @@
       "urgency": "soon"
     },
     {
-      "id": "create-the-four-instagram-and-threads-accounts-and-record-the-handles",
-      "title": "Create the four Instagram and Threads accounts and record the handles",
-      "plain": "one Instagram and one Threads account per edition, cs and en, created by you in the platforms' own UIs. Nothing in the repository can create them, and no delivery feature is reconsidered before the handles exist. Never paste a credential into Git.",
+      "id": "countersign-the-dneskai-yield-proposals",
+      "title": "Countersign the DNESKAi yield proposals",
+      "plain": "state/decisions/2026-09-25-dneskai-yield-proposals.md (edition-2026-09a, Status: proposed) lists five changes, each with its measured effect from docs/reports/dneskai-yield-2026-09-25.md; tick the ones you approve. Nothing in config/edition-quality.json changes before you do.",
       "steps": [],
       "source": {
         "kind": "needed",
@@ -287,9 +206,9 @@
       "urgency": "soon"
     },
     {
-      "id": "create-the-two-webdev-signal-instagram-accounts",
-      "title": "Create the two WebDev Signal Instagram accounts",
-      "plain": "@webdevsignal and @webdevsignal.cz, each with its Threads profile; do the trademark check first. Nothing in the repository can create them.",
+      "id": "create-the-webdev-signal-accounts-and-record-the-handles",
+      "title": "Create the WebDev Signal accounts and record the handles",
+      "plain": "#532. Two Instagram accounts, @webdevsignal (en) and @webdevsignal.cz (cs), each with its Threads profile, created by you in the platforms' own UIs after the trademark check. Nothing in the repository can create them, and no delivery feature is reconsidered before the handles exist. Never paste a credential into Git.",
       "steps": [],
       "source": {
         "kind": "needed",
@@ -301,7 +220,19 @@
     {
       "id": "decide-the-two-efficiency-review-calls",
       "title": "Decide the two efficiency-review calls.",
-      "plain": "so 05:00 is a paid rehearsal for it. Moving the slot deletes the retry machinery (config/ventures.json daily@05:00 → daily@09:00, EDITION_RETRY_HOUR and its special-case dispatch, two site/vercel.json cron entries). Two things to resolve first: 09:00 already belongs to mag-editorial, so either confirm cycle.yml runs two dispatches in one hour without the concurrency group cancelling one, or move m",
+      "plain": "Both were measured against the ledger and both are product decisions rather than engineering ones.",
+      "steps": [],
+      "source": {
+        "kind": "needed",
+        "ref": "docs/NEEDED.md"
+      },
+      "since": null,
+      "urgency": "soon"
+    },
+    {
+      "id": "decide-what-happens-to-claude-elegant-cori-h9cdgb",
+      "title": "Decide what happens to claude/elegant-cori-h9cdgb",
+      "plain": "it holds the only implementation of most of #534 to #554 in 11 commits: the Design Lab's 4:5 master canvas, per-room and per-desk budget caps, GoVIRAL signal scoring with a weekly brief and play library, portfolio RICE, DNESKAi practical items and the edition rubric in CI. It is 557 commits behind main and not merge-ready, and its own docs/NEEDED.md carries 29 owner decisions that apply only to th",
       "steps": [],
       "source": {
         "kind": "needed",
@@ -323,45 +254,9 @@
       "urgency": "soon"
     },
     {
-      "id": "enter-actual-fixed-monthly-costs-in-admin-or-leave-the-flag-as-your-answer",
-      "title": "Enter actual fixed monthly costs in /admin — or leave the flag as your answer",
-      "plain": "config/fixed-costs.json carries confirmedNoFixedCosts: true, which says \"there are none\" rather than \"nobody has entered any\". If that is right, tick this. If you do pay for something, enter each subscription with its monthly USD amount, category and first-paid date: that registry feeds the non-API half of the all-in total measured against the $50 cap (allInNonApiSpentUsd in orchestrator/src/budge",
-      "steps": [],
-      "source": {
-        "kind": "needed",
-        "ref": "docs/NEEDED.md"
-      },
-      "since": null,
-      "urgency": "soon"
-    },
-    {
-      "id": "fill-in-state-ventures-goviral-profile-md",
-      "title": "Fill in state/ventures/goviral/profile.md",
-      "plain": "the writer half of the weekly brief: your niches, your voice, your audiences, and what you never write about. Nothing in it is generated and nothing should be; until you fill it in the room leans on the two magazine niches and says so plainly in the brief rather than inventing a voice for you. Half-thoughts and bullets are fine; it is read as data, never as instructions. Tracked with the Apify cre",
-      "steps": [],
-      "source": {
-        "kind": "needed",
-        "ref": "docs/NEEDED.md"
-      },
-      "since": null,
-      "urgency": "soon"
-    },
-    {
-      "id": "finish-the-vercel-half-of-the-aifirst-credential-audit",
-      "title": "Finish the Vercel half of the aifirst credential audit",
-      "plain": "the retired ANTHROPIC_API_KEY Actions secret is deleted; old source, image, promotion, heartbeat and generation-report credentials in the aifirst Vercel project are still open, and keys pasted into chat still want rotating. Tracked in aifirst/NEEDED.md.",
-      "steps": [],
-      "source": {
-        "kind": "needed",
-        "ref": "docs/NEEDED.md"
-      },
-      "since": null,
-      "urgency": "soon"
-    },
-    {
-      "id": "give-the-desk-the-book-and-audiobook-facts",
-      "title": "Give the desk the book and audiobook facts.",
-      "plain": "The state tree holds no title, retail link, release date, narrator or publisher, so no plan can mention the launch. Put a finalUrl or articleUrl on the OKRAJ and BBARAK occurrences in the admin Timeline, and send the facts in #530; a dedicated \"book launch\" action type is a contract change a session can make once they exist.",
+      "id": "give-boardlessai-github-token-the-actions-write-permission",
+      "title": "Give BOARDLESSAI_GITHUB_TOKEN the actions: write permission",
+      "plain": "so an approval can dispatch the publisher (#574), under DEVSHARK-SOCIAL-003.",
       "steps": [],
       "source": {
         "kind": "needed",
@@ -395,9 +290,9 @@
       "urgency": "soon"
     },
     {
-      "id": "merge-claude-article-image-selection-61rs70-in-the-mma-files-repository",
-      "title": "Merge claude/article-image-selection-61rs70 in the mma-files repository",
-      "plain": "the two wrong heroes are corrected on this side and cannot reach the magazine until that branch is on its main. A delivered article is immutable there by date and slot, which is what stops a published piece being swapped; the branch adds the one narrow exception, an article-image-correction/1 block whose claim the consumer re-checks itself, and refuses anything where more than the picture differs.",
+      "id": "meta-developer-app",
+      "title": "Meta developer app",
+      "plain": "with the Instagram use case (Instagram Login: instagram_business_basic, instagram_business_content_publish) and the Threads use case (threads_basic, threads_content_publish), the devShark accounts as testers; store DEVSHARK_INSTAGRAM_ACCESS_TOKEN and DEVSHARK_THREADS_ACCESS_TOKEN as Actions secrets and DEVSHARK_INSTAGRAM_USER_ID and DEVSHARK_THREADS_USER_ID as Actions variables, as DNESKAi's are; ",
       "steps": [],
       "source": {
         "kind": "needed",
@@ -405,19 +300,6 @@
       },
       "since": null,
       "urgency": "soon"
-    },
-    {
-      "id": "PODCASTINDEX_API_SECRET",
-      "title": "Podcast Index key pair is missing",
-      "plain": "PODCASTINDEX_API_SECRET is not set.",
-      "steps": [],
-      "source": {
-        "kind": "runtime",
-        "ref": "PODCASTINDEX_API_SECRET"
-      },
-      "since": null,
-      "urgency": "soon",
-      "needsPlainCopy": true
     },
     {
       "id": "post-the-first-rendered-drafts-by-hand",
@@ -432,21 +314,9 @@
       "urgency": "soon"
     },
     {
-      "id": "rate-the-titty-tuesdays-idea-cards-in-admin",
-      "title": "Rate the Titty Tuesdays idea cards in /admin",
-      "plain": "the marketing room writes concrete campaign ideas every day and nothing has ever rated one, so the taste loop that turns your ratings into written style rules has no input and PALATE has nothing to work from. Nine cards sit unrated under the venture's ideas tab, every one still proposed (state/ideas/titty-tuesdays/ledger.jsonl); the count grows by roughly one a day until you rate them. Rating them",
-      "steps": [],
-      "source": {
-        "kind": "needed",
-        "ref": "docs/NEEDED.md"
-      },
-      "since": null,
-      "urgency": "soon"
-    },
-    {
-      "id": "record-the-fal-ai-prepaid-credit-in-the-finance-state",
-      "title": "Record the fal.ai prepaid credit in the finance state",
-      "plain": "the prepayment on 2026-08-08 is real operating spend under the $50 all-in cap, and only the owner records payments: add the amount and date where LEDGER reconciles (state/treasury/ / state/FINANCE.md) so the monthly numbers include it.",
+      "id": "record-three-payments-in-state-treasury-ledger-json",
+      "title": "Record three payments in state/treasury/ledger.json",
+      "plain": "the fal.ai prepayment of 2026-08-08, the Anthropic credit bought on 2026-09-15 and the Apify subscription since 2026-09-15. The ledger is empty ({\"entries\": [], \"recurringCommitments\": []}), so the monthly all-in numbers leave all three out; only the owner records payments.",
       "steps": [],
       "source": {
         "kind": "needed",
@@ -468,9 +338,9 @@
       "urgency": "soon"
     },
     {
-      "id": "review-and-deploy-the-design-lab-update",
-      "title": "Review and deploy the Design Lab update",
-      "plain": "inspect the editor on desktop/mobile and compare Canva exports with reference PNGs; then use the existing production release gate. Local browser acceptance was blocked in this session. Git merge does not deploy.",
+      "id": "rename-the-repositories-on-github",
+      "title": "Rename the repositories on GitHub",
+      "plain": "react-express-app → devShark, aifirst → DNESKAi, quorum → boardlessAI, in that order. The prerequisites are met as of 2026-09-25: own-dashboard #75 and #555–#564 are merged, and OwnDashboard has the GitHub ids of all four repositories, so their projects survive the rename. After renaming, update the Claude Code environment's repository list, git remote set-url on local clones and NEXT_PUBLIC_GITHU",
       "steps": [],
       "source": {
         "kind": "needed",
@@ -480,9 +350,9 @@
       "urgency": "soon"
     },
     {
-      "id": "run-the-admin-e2e-specs-on-every-pull-request-not-only-on-full-e2e",
-      "title": "Run the admin e2e specs on every pull request, not only on [full-e2e]",
-      "plain": "the site's Playwright job in .github/workflows/ci.yml runs only when a PR title or commit message contains [full-e2e], so nothing has run it for weeks. In that time the navigation guard drifted two destinations out of date, the visual guard was looking for baselines in a directory Playwright never writes to, a WCAG AA contrast failure went unseen and three assertions about the admin's privacy head",
+      "id": "review-the-design-lab-update",
+      "title": "Review the Design Lab update",
+      "plain": "it is live since the c66700dc deploy of 2026-09-25. Inspect the editor on desktop and mobile and compare the Canva exports with the reference PNGs.",
       "steps": [],
       "source": {
         "kind": "needed",
@@ -492,9 +362,9 @@
       "urgency": "soon"
     },
     {
-      "id": "run-the-bounded-ingestion",
-      "title": "Run the bounded ingestion",
-      "plain": "BOOK-INGEST-002 was signed on 2026-08-29 at $3.00 for the program, $0.80 per day and $0.10 per call, all inside the company caps. With the private repository above in place, run pnpm book:ingest -- --manuscript <ignored-path> --private-root <private-clone> locally. A stop is resumable for the same manuscript hash; do not copy the source or private output into this repository to make a hosted run c",
+      "id": "time-the-first-live-approval",
+      "title": "Time the first live approval",
+      "plain": "once a devShark connection is active, approve one post with \"Approve and publish now\", follow the run link on its card, and record here the minutes from the click to the post's permalink (#574; target under five).",
       "steps": [],
       "source": {
         "kind": "needed",
@@ -506,7 +376,19 @@
     {
       "id": "vercel-production-settings",
       "title": "Vercel production settings",
-      "plain": "BoardlessAI tracks main at https://boardless-ai.vercel.app; DNESKAi at https://caughtup-ai.vercel.app; MMA Files at https://mma-files.vercel.app with NEXT_PUBLIC_DEMO_MODE=false. The delivery step builds its clone with demo mode off (cycle.yml passes NEXT_PUBLIC_DEMO_MODE=false), so leaving production on demo makes a delivered article's route 404 and fails every page check. Keep NEXT_PUBLIC_ALLOW_",
+      "plain": "BoardlessAI tracks main at https://boardless-ai.vercel.app; DNESKAi at https://caughtup-ai.vercel.app. Keep NEXT_PUBLIC_ALLOW_INDEXING=false on DNESKAi until it has a body of work worth indexing — that variable lives in the magazine's project, not here, and social-2026-08a does not cover it. Your call, separate from the social stop, and the answer today is still no.",
+      "steps": [],
+      "source": {
+        "kind": "needed",
+        "ref": "docs/NEEDED.md"
+      },
+      "since": null,
+      "urgency": "soon"
+    },
+    {
+      "id": "write-the-premium-launch-announcement",
+      "title": "Write the premium launch announcement",
+      "plain": "on launch day, after devShark's public copy step ships and the fact sheet has a block with the price and the date: save your copy as state/ventures/marketingshark/announcements/<date>-devshark.json in the shape of contracts/fixtures/marketingshark-announcement.fixture.json, dated that day. That morning the room drafts it with no model call and puts three drafts in the Queue for you to approve; a n",
       "steps": [],
       "source": {
         "kind": "needed",
@@ -518,55 +400,7 @@
     {
       "id": "add-the-free-podcast-index-key-pair",
       "title": "Add the free Podcast Index key pair",
-      "plain": "#529.",
-      "steps": [],
-      "source": {
-        "kind": "needed",
-        "ref": "docs/NEEDED.md"
-      },
-      "since": null,
-      "urgency": "whenever"
-    },
-    {
-      "id": "analytics-deliberately-deferred",
-      "title": "Analytics — deliberately deferred.",
-      "plain": "Name the exact decisions the data would change, then approve the provider, legal posture and data minimisation before setting METRICS_INGESTION_ENABLED=true. Until then follower and engagement KPIs stay honestly unavailable, SPLIT stays off, the quarterly evaluator reports missing audience data as unavailable, and no analytics credential is required.",
-      "steps": [],
-      "source": {
-        "kind": "needed",
-        "ref": "docs/NEEDED.md"
-      },
-      "since": null,
-      "urgency": "whenever"
-    },
-    {
-      "id": "answer-the-booksofhistory-launch-questions",
-      "title": "Answer the BOOKSOFHISTORY launch questions",
-      "plain": "lane priority (both at once, or English first with Czech two weeks behind), the starting cycle length (3 days or 4), and any must-include books or hard exclusions to append or correct in the authored 200-entry seed library before its first live cycle. All three are listed in the design's \"Open questions\".",
-      "steps": [],
-      "source": {
-        "kind": "needed",
-        "ref": "docs/NEEDED.md"
-      },
-      "since": null,
-      "urgency": "whenever"
-    },
-    {
-      "id": "authorise-the-owner-only-meta-insight-connection",
-      "title": "Authorise the owner-only Meta insight connection.",
-      "plain": "Create or select the Meta app for lukaskouril93, grant only the Instagram/Threads read permissions listed in docs/PERSONAL-GROWTH-PROVIDERS.md, and place the access token plus Instagram and Threads account ids in the approved server-side secret store. Do not reuse a brand publisher credential or put a token in Git. Leave instagramInsights, threadsInsights, threadsSearch, providerLive and tokenRefr",
-      "steps": [],
-      "source": {
-        "kind": "needed",
-        "ref": "docs/NEEDED.md"
-      },
-      "since": null,
-      "urgency": "whenever"
-    },
-    {
-      "id": "confirm-the-wallboard-s-five-figures-are-the-ones-you-want-on-the-wall",
-      "title": "Confirm the wallboard's five figures are the ones you want on the wall",
-      "plain": "the home page's TV shows published articles, publishing reliability, cost per article, spend against the $50 limit and ideas from meetings, all read from the record. Any figure the record cannot supply prints an em dash rather than a zero.",
+      "plain": "#529: register at api.podcastindex.org and add PODCASTINDEX_API_KEY and PODCASTINDEX_API_SECRET to the quorum Actions secrets. It is only used for shows with no workable RSS or YouTube surface; a dry run without it already returns nine episodes.",
       "steps": [],
       "source": {
         "kind": "needed",
@@ -578,7 +412,7 @@
     {
       "id": "countersign-and-connect-social-distribution-social-distribution-connection-001",
       "title": "Countersign and connect Social Distribution (SOCIAL-DISTRIBUTION-CONNECTION-001).",
-      "plain": "the runtime's own per-venture thresholds, which are not all ten. Keep SOCIAL_KILL_SWITCH=true; setting it to false removes only the owner stop, and each venture's counter, credentials, roles and safety checks still have to pass. Until a channel is enabled the composer no longer renders inventory nothing can consume.",
+      "plain": "Review docs/SOCIAL-DISTRIBUTION-DESIGN.md, confirm direct Meta as the core provider (or record a superseding choice), name each exact real profile, and choose Facebook Login or Instagram Login per Instagram connection. Create/authorise the accounts yourself; approve only the documented publishing scopes and any separately approved own-insight scope; store tokens and native ids in the server-side s",
       "steps": [],
       "source": {
         "kind": "needed",
@@ -588,69 +422,9 @@
       "urgency": "whenever"
     },
     {
-      "id": "countersign-or-decline-door-money-s-founding-decision",
-      "title": "Countersign or decline Door Money's founding decision",
-      "plain": "Kvórum's, BOOKSOFHISTORY's and Tehdejší svět's were signed on 2026-08-29, and Kvórum's capacity reallocation with them, so its desk is open. state/decisions/2026-08-12-door-money-founding.md is the one left, and it is not urgent: you paused Door Money in Settings, and a paused venture holds no meetings whether its founding is signed or not. Sign it when you resume the venture.",
-      "steps": [],
-      "source": {
-        "kind": "needed",
-        "ref": "docs/NEEDED.md"
-      },
-      "since": null,
-      "urgency": "whenever"
-    },
-    {
-      "id": "create-the-free-podcast-index-key-pair",
-      "title": "Create the free Podcast Index key pair",
-      "plain": "register at api.podcastindex.org and add PODCASTINDEX_API_KEY and PODCASTINDEX_API_SECRET to the quorum Actions secrets. It is free and it is only used for shows with no workable RSS or YouTube surface, so its absence degrades a few shows rather than the podcast stream. A live dry run without it already returns nine episodes.",
-      "steps": [],
-      "source": {
-        "kind": "needed",
-        "ref": "docs/NEEDED.md"
-      },
-      "since": null,
-      "urgency": "whenever"
-    },
-    {
-      "id": "decide-board-hq-s-roster-length",
-      "title": "Decide Board HQ's roster length",
-      "plain": "the opened room lists all 23 roles scoped global, correct by the registry but a long column beside rooms showing two or three. Restricting it to the council is a one-line change.",
-      "steps": [],
-      "source": {
-        "kind": "needed",
-        "ref": "docs/NEEDED.md"
-      },
-      "since": null,
-      "urgency": "whenever"
-    },
-    {
-      "id": "decide-on-the-monday-retro-meeting",
-      "title": "Decide on the Monday retro meeting",
-      "plain": "set WEEKLY_RETRO_ENABLED=true to have two seats read the weekly report the night writes and add a short summary plus up to three fix tasks. Capped at $0.05 a week. With it off, the weekly report still gets written and simply carries no written summary, which is a complete report rather than a gap.",
-      "steps": [],
-      "source": {
-        "kind": "needed",
-        "ref": "docs/NEEDED.md"
-      },
-      "since": null,
-      "urgency": "whenever"
-    },
-    {
-      "id": "decide-on-the-nightly-content-scoring",
-      "title": "Decide on the nightly content scoring",
-      "plain": "set the Actions variable CONTENT_GATE_ENABLED=true to have one comparative model call score each day's published articles and dataset appends, recorded to state/ventures/<venture>/content-scores/. It is capped at $0.05 a call and is the first rung the budget ladder drops, so a tight month loses the scoring before it loses a room. Off is the default and off writes nothing.",
-      "steps": [],
-      "source": {
-        "kind": "needed",
-        "ref": "docs/NEEDED.md"
-      },
-      "since": null,
-      "urgency": "whenever"
-    },
-    {
-      "id": "decide-the-titty-tuesdays-dock-bay",
-      "title": "Decide the Titty Tuesdays dock bay",
-      "plain": "a bay is where a courier loads, and that venture collects: it pulls a feed and nothing is delivered to it. The bay lines up with no courier exit and a dashed lane in its own hue points back at the room, but the old window-and-sill drawing said the asymmetry more plainly. The day performance does not depend on the bay either way.",
+      "id": "decide-on-the-morning-content-scoring",
+      "title": "Decide on the morning content scoring",
+      "plain": "CONTENT_GATE_ENABLED=true would have one comparative model call on the morning checkpoint score the day's published articles and dataset appends, recorded to state/ventures/<venture>/content-scores/. It is meant to cost at most $0.05 a call and is the first rung the budget ladder drops, so a tight month loses the scoring before it loses a room. Off is the default and off writes nothing. Setting th",
       "steps": [],
       "source": {
         "kind": "needed",
@@ -672,9 +446,9 @@
       "urgency": "whenever"
     },
     {
-      "id": "decide-whether-a-contest-alert-may-ever-be-published",
-      "title": "Decide whether a contest alert may ever be published",
-      "plain": "the promotion candidate, its eligibility gate and the sanitized profile projection are built, and the capability edge to Social Distribution is registered held by state/decisions/2026-08-30-contest-radar-promotion-posture.md. Moving it to allowed needs a further countersigned decision naming the profile, the contest, the rule evidence and the disclosure text. Nothing publishes meanwhile, and campa",
+      "id": "delete-the-merged-session-branches",
+      "title": "Delete the merged session branches",
+      "plain": "the session's git relay refuses deletions and tag pushes (HTTP 403), so these wait for you. In aifirst, react-express-app and own-dashboard: claude/gifted-albattani-p8suag, merged into each main (react-express-app's full list is its #232, own-dashboard's is its NEEDED.md). In quorum, #578's comment of 2026-09-26 re-derives all 49 remote branches with the evidence for each: 44 are merged into main ",
       "steps": [],
       "source": {
         "kind": "needed",
@@ -684,81 +458,9 @@
       "urgency": "whenever"
     },
     {
-      "id": "decide-whether-personal-growth-should-ever-use-buffer",
-      "title": "Decide whether Personal Growth should ever use Buffer.",
-      "plain": "The adapter, queue, purchase and publishing authorities are all held. If scheduling becomes useful, approve the exact plan, account and queue scope first; do not enable bufferQueue or select the buffer allocation merely because the seam exists.",
-      "steps": [],
-      "source": {
-        "kind": "needed",
-        "ref": "docs/NEEDED.md"
-      },
-      "since": null,
-      "urgency": "whenever"
-    },
-    {
-      "id": "decide-whether-python-enters-the-toolchain",
-      "title": "Decide whether Python enters the toolchain",
-      "plain": "three offline niches were named: the FightAIQ calibration lab, a wikitext parser and article extraction, each behind a JSON-contract boundary. Nothing in the runtime moves either way.",
-      "steps": [],
-      "source": {
-        "kind": "needed",
-        "ref": "docs/NEEDED.md"
-      },
-      "since": null,
-      "urgency": "whenever"
-    },
-    {
-      "id": "decide-whether-the-product-should-move-from-vercel-hobby-to-the-existing-pro-team",
-      "title": "Decide whether the product should move from Vercel Hobby to the existing Pro team",
-      "plain": "this is likely $0 marginal but remains a product-side owner decision. Tehdejší svět does not move the product, change its plan or infer permission from the BoardlessAI Pro subscription.",
-      "steps": [],
-      "source": {
-        "kind": "needed",
-        "ref": "docs/NEEDED.md"
-      },
-      "since": null,
-      "urgency": "whenever"
-    },
-    {
-      "id": "decide-whether-to-open-a-contest-radar-social-pilot-lane",
-      "title": "Decide whether to open a Contest Radar social pilot lane",
-      "plain": "the Instagram and TikTok slices are built, fixture-backed and disabled. Opening one needs a countersigned budget-capacity decision at state/decisions/2026-08-30-contest-radar-budget-capacity.md authorising the $0.10/month Apify rung, GoVIRAL's reservation against the shared quota, and your authority for the specific actors with their terms read at that time. Both lanes are undecided, which is the ",
-      "steps": [],
-      "source": {
-        "kind": "needed",
-        "ref": "docs/NEEDED.md"
-      },
-      "since": null,
-      "urgency": "whenever"
-    },
-    {
-      "id": "delete-two-merged-remote-branches",
-      "title": "Delete two merged remote branches",
-      "plain": "claude/venture-launch-review-7l5nkd and the branch of PR #511. Both are fully merged into main; the git relay in the agent environment refuses a branch deletion, so the sessions that merged them could not remove them.",
-      "steps": [],
-      "source": {
-        "kind": "needed",
-        "ref": "docs/NEEDED.md"
-      },
-      "since": null,
-      "urgency": "whenever"
-    },
-    {
-      "id": "enable-personal-growth-provider-flags-only-after-the-reviewed-connection-test",
-      "title": "Enable Personal Growth provider flags only after the reviewed connection test.",
-      "plain": "Once the exact read scopes, account ids, token storage and renewal path are verified, countersign the production change that enables only the required insight flags. Keep publishing false; Personal Growth has no posting authority.",
-      "steps": [],
-      "source": {
-        "kind": "needed",
-        "ref": "docs/NEEDED.md"
-      },
-      "since": null,
-      "urgency": "whenever"
-    },
-    {
-      "id": "mma-files-room-card-cannot-link-its-article",
-      "title": "MMA Files' room card cannot link its article",
-      "plain": "no delivery receipt under state/ventures/mma-files/deliveries/articles/ records an articleUrl, so the card shows a title and a date with no link and no thumbnail; DNESKAi's card is complete because its receipt records one. If the MMA delivery path starts writing articleUrl the card fills in with no further work — decide whether that path change is wanted.",
+      "id": "move-webdev-signal-s-health-node-off-planned-held",
+      "title": "Move WebDev Signal's health node off planned/held?",
+      "plain": "config/venture-slos.json still gives webdev-signal lifecycleStage: planned and a held cadence, and the operations release audit pins it, while the venture has been operating since 2026-09-15. Moving it is a decision about what its SLO promises, not a refactor.",
       "steps": [],
       "source": {
         "kind": "needed",
@@ -771,45 +473,6 @@
       "id": "optionally-apply-for-google-s-official-trends-api-alpha",
       "title": "Optionally apply for Google's official Trends API alpha",
       "plain": "free, application-gated. If granted it would replace the Trends RSS fetch with a supported endpoint. Nothing depends on it and nothing may be built assuming it — the RSS path is the design.",
-      "steps": [],
-      "source": {
-        "kind": "needed",
-        "ref": "docs/NEEDED.md"
-      },
-      "since": null,
-      "urgency": "whenever"
-    },
-    {
-      "id": "PODCASTINDEX_API_KEY",
-      "title": "Podcast Index key pair is missing",
-      "plain": "A few podcast shows cannot be resolved without this free key pair; the rest of the stream works without it.",
-      "steps": [
-        "Register at api.podcastindex.org",
-        "Add PODCASTINDEX_API_KEY and PODCASTINDEX_API_SECRET to Actions secrets"
-      ],
-      "source": {
-        "kind": "runtime",
-        "ref": "PODCASTINDEX_API_KEY"
-      },
-      "since": null,
-      "urgency": "whenever"
-    },
-    {
-      "id": "portraits-for-the-roles-that-have-none",
-      "title": "Portraits for the roles that have none",
-      "plain": "27 of 49 registered roles have an approved portrait; 22 still fall back to an initials tile on the team panel and to the anonymous silhouette in the workspace player, which is honest but plain.",
-      "steps": [],
-      "source": {
-        "kind": "needed",
-        "ref": "docs/NEEDED.md"
-      },
-      "since": null,
-      "urgency": "whenever"
-    },
-    {
-      "id": "public-urls-for-three-projects",
-      "title": "Public URLs for three projects",
-      "plain": "FightAIQ, GoVIRAL and Titty Tuesdays have no public address, so their cards on the home page render nothing in the link slot rather than a \"coming soon\". Supply a URL each and the line appears.",
       "steps": [],
       "source": {
         "kind": "needed",
@@ -843,9 +506,9 @@
       "urgency": "whenever"
     },
     {
-      "id": "real-office-photography",
-      "title": "Real office photography",
-      "plain": "the six backdrops behind the seven home-page sections are AI-generated placeholders committed at site/public/office/.{avif,webp}. The layout does not depend on them; replace the files at the same names and nothing else changes.",
+      "id": "read-the-three-new-closing-lines",
+      "title": "Read the three new closing lines",
+      "plain": "in config/marketingshark.json (postKinds..footer: the spotlight's, the teaser's and the weekly note's), written by #576 in the slide-5 line's register. Change them there if they do not sound like devShark; every post also waits for your approval in the Queue.",
       "steps": [],
       "source": {
         "kind": "needed",
@@ -855,93 +518,9 @@
       "urgency": "whenever"
     },
     {
-      "id": "replace-three-curated-mma-photographs-that-no-longer-exist-on-commons",
-      "title": "Replace three curated MMA photographs that no longer exist on Commons",
-      "plain": "probed on 2026-08-09: UFC Fight Night Belfast weigh-ins (29923390484).jpg, MMA gloves (Unsplash).jpg and O2 arena Praha 2019.jpg all return missing. The rotation in orchestrator/src/images/illustrative.ts skips them, so nothing breaks and every article that reaches that rung simply loses its first choice; six of the nine still resolve. Finding replacements is the curated-set rule: open a candidate",
-      "steps": [],
-      "source": {
-        "kind": "needed",
-        "ref": "docs/NEEDED.md"
-      },
-      "since": null,
-      "urgency": "whenever"
-    },
-    {
-      "id": "review-the-curated-scene-proposals-both-magazines-are-collecting",
-      "title": "Review the curated scene proposals both magazines are collecting",
-      "plain": "when the vision gate approves a licensed-search photograph at fit 8 or better with no vetoes, it is appended as an unchecked line to state/ventures/caught-up/media/scene-proposals.md or the mma-files file beside it, with its provider, licence, source URL and a drafted Czech scene line. Each one already ran above a published article. Ticking a line nominates it: a later session opens it at 640px, c",
-      "steps": [],
-      "source": {
-        "kind": "needed",
-        "ref": "docs/NEEDED.md"
-      },
-      "since": null,
-      "urgency": "whenever"
-    },
-    {
-      "id": "review-the-personal-growth-recurrence-anchors-in-admin",
-      "title": "Review the Personal Growth recurrence anchors in Admin.",
-      "plain": "Confirm the first OKRAJ and BBARAK dates and adjust them through the protected Timeline controls if the seeded dates no longer match the real publishing rhythm. The owner writes and publishes both artifacts.",
-      "steps": [],
-      "source": {
-        "kind": "needed",
-        "ref": "docs/NEEDED.md"
-      },
-      "since": null,
-      "urgency": "whenever"
-    },
-    {
-      "id": "review-the-q1-target-seeds",
-      "title": "Review the Q1 target seeds",
-      "plain": "confirm the 2026-08-03 quarter_start and the target values, or save your own, before using the quarter for decisions. Q1 lasts 90 days and content/social pace excludes the first 14. No code writes that file, so a target can only move if you move it.",
-      "steps": [],
-      "source": {
-        "kind": "needed",
-        "ref": "docs/NEEDED.md"
-      },
-      "since": null,
-      "urgency": "whenever"
-    },
-    {
-      "id": "the-react-compiler-costs-more-than-it-saves-here-one-line-to-reverse",
-      "title": "The React Compiler costs more than it saves here — one line to reverse",
-      "plain": "SI-09 turned reactCompiler on in site/next.config.ts as the programme specified, and it behaves: the wheel lock, all four panels, every room view and the whole day performance were walked by hand with it on and nothing desynchronised. But measured on the same build and machine it charges 24.2 kB of first-load JS (573.7 → 597.9 kB) and 7 kB more on the panel chunk, to save 14 ms of scripting across",
-      "steps": [],
-      "source": {
-        "kind": "needed",
-        "ref": "docs/NEEDED.md"
-      },
-      "since": null,
-      "urgency": "whenever"
-    },
-    {
-      "id": "turn-on-automatically-delete-head-branches-on-lukaskourilcz-quorum",
-      "title": "Turn on \"Automatically delete head branches\" on lukaskourilcz/quorum",
-      "plain": "Settings → General → Pull Requests. Sessions can push a branch but not delete one: the agent proxy answers a delete-ref push with HTTP 403, so the git-workflow rule about never leaving a stale branch behind is one no session can keep. The setting keeps it automatically.",
-      "steps": [],
-      "source": {
-        "kind": "needed",
-        "ref": "docs/NEEDED.md"
-      },
-      "since": null,
-      "urgency": "whenever"
-    },
-    {
-      "id": "two-workspace-controls-sit-under-the-9-5px-type-floor",
-      "title": "Two workspace controls sit under the 9.5px type floor",
-      "plain": "Jump to date and Show the delivered article are at 7.5px and the channel rail at 9.5px after several shrink-on-request rounds, against the documented mono floor. Decide whether the floor bends for these two controls or they grow back to it.",
-      "steps": [],
-      "source": {
-        "kind": "needed",
-        "ref": "docs/NEEDED.md"
-      },
-      "since": null,
-      "urgency": "whenever"
-    },
-    {
-      "id": "write-season-002-for-titty-tuesdays-before-2026-10-30",
-      "title": "Write season 002 for Titty Tuesdays before 2026-10-30",
-      "plain": "season 001 expires then and the marketing room works from the current season; with none it has a standing objective and no material. The warning appears in the room's own daily brief as the date approaches.",
+      "id": "review-the-curated-scene-proposals-dneskai-is-collecting",
+      "title": "Review the curated scene proposals DNESKAi is collecting",
+      "plain": "when the vision gate approves a licensed-search photograph at fit 8 or better with no vetoes, it is appended as an unchecked line to state/ventures/caught-up/media/scene-proposals.md, with its provider, licence, source URL and a drafted Czech scene line. Each one already ran above a published article. Ticking a line nominates it: a later session opens it at 640px, checks that no face in it is reco",
       "steps": [],
       "source": {
         "kind": "needed",
