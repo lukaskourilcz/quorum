@@ -5,7 +5,7 @@ description: Use when routing agent work, opening a room, choosing participants,
 
 # Boardroom routing
 
-1. Read section 0.1.3, `config/agent-routing.json`, active agent registry,
+1. Read `config/agent-routing.json`, `config/meeting-policy.json`, active agent registry,
    current objective, task type, risk tags and budget impact.
 2. Select one owner and the smallest capable review set. Add every mandatory
    control role; never invite all agents as a fallback. Record a short factual

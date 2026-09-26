@@ -5,9 +5,10 @@ description: Use for social strategy, calendars, channel drafts, media assets, q
 
 # Social operations
 
-1. Read the latest standup decision, PULSE brief, SOCIAL_STRATEGY, rolling
-   calendar, channel registry/policy, recent hashes and the project's activation
-   record before creating anything. Do not request reader or post metrics.
+1. Read the latest standup decision, PULSE brief, `state/SOCIAL_STRATEGY.md`, the packs
+   and queue under `state/social/`, `config/channels.json`,
+   `config/social-publisher-registry.json`, `config/social-policy.json`, recent hashes and
+   `state/social/activation.json` before creating anything. Do not request reader or post metrics.
 2. Choose NO_POST unless a verified company/project fact adds channel-native
    value and the project's deterministic health gate can be evaluated.
 3. PULSE decides what/why/where/when. The channel specialist drafts. QUILL

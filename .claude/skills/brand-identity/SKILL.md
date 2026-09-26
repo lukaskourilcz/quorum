@@ -6,13 +6,13 @@ description: Create or apply the BoardlessAI Refero/Awesomic zinc-and-Ember edit
 # Brand identity
 
 Source of truth: `state/BRAND.md` (voice, adjectives, rules) +
-`site/src/brand/tokens.css`. Goal: faithfully implement the corporate system in
-master-prompt section 0.7. Do not invent a different mood, palette or generic
+`site/src/brand/tokens.css`. Goal: faithfully implement the corporate system recorded in
+`state/BRAND.md`. Do not invent a different mood, palette or generic
 AI aesthetic.
 
 ## Creating (founding)
 
-1. Start from the exact zinc sRGB reference tokens in section 0.7, optionally
+1. Start from the exact zinc sRGB reference tokens in `site/src/brand/tokens.css`, optionally
    convert them to documented OKLCH, contrast-test and make only the smallest
    accessibility adjustment. Map them onto shadcn theme variables
    (`--background`, `--foreground`, `--primary`, `--secondary`, `--muted`,
@@ -29,8 +29,7 @@ AI aesthetic.
    open segment, pure SVG in `site/src/brand/logo.svg`, `currentColor`, legible
    at 16–24 px. Add a wordmark variant for `BoardlessAI`; distinguish `AI` by
    weight only if needed. No robot, brain, sparkle, gradient or external refs.
-4. Fill BRAND.md with the exact positioning/voice/personality and name-clearance
-   status from 0.7. Set `status: active`, `locked: true` and
+4. Keep BRAND.md's positioning, voice, personality and name-clearance status. Set `status: active`, `locked: true` and
    `nameStatus: provisional_clearance`. Clearance changes only `nameStatus`.
    Stop there — no visual polishing or venture-driven corporate rebrand.
 
@@ -40,4 +39,5 @@ Compose UI only from the pre-installed shadcn/ui components + theme variables �
 never raw hex/rgb/font names, never ad-hoc UI primitives. No card shadows,
 uncontrolled accent use or unlicensed reference assets. Optional dark mode uses
 `tokens.css`, not per-component overrides. Check contrast when placing text on
-primary/accent surfaces.
+primary/accent surfaces. The office walkthrough and the admin shell use literal hex by
+design (`docs/ENGINEERING.md` rule 11); do not token-swap them.

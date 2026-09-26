@@ -5,8 +5,8 @@ description: Use when PEOPLE reviews agent effectiveness or proposes/tests a rol
 
 # Organization operations
 
-1. Read section 0.9, role versions, minimum-window
-   outcome/quality/cost/routing scorecards, incidents and prior change
+1. Read `config/agents.json` (role versions), `orchestrator/src/org/maintenance.ts`,
+   minimum-window outcome/quality/cost/routing scorecards, incidents and prior change
    evaluations.
 2. Never score talk volume, invitations, proposal wins or visibility. Treat
    correct NO_ACTION/NO_POST and absence from irrelevant rooms as efficiency.

@@ -1,6 +1,6 @@
 ---
 name: financial-operations
-description: Use when LEDGER reconciles operating cost, reports daily/MTD finance, evaluates spend, or plans the approved $30 monthly all-in operating limit.
+description: Use when LEDGER reconciles operating cost, reports daily/MTD finance, evaluates spend, or plans the approved $50 monthly all-in operating limit (`budget-2026-08f`).
 ---
 
 # Financial operations
@@ -12,7 +12,7 @@ description: Use when LEDGER reconciles operating cost, reports daily/MTD financ
    n/a, never zero.
 3. Reconcile before advice. Block only unknown price, mismatch, double count,
    over-balance/under-reserve commitment or missing recurrence/all-in cost.
-4. Build a zero-based plan for the same $30 all-in monthly pool, including the
+4. Build a zero-based plan for the same $50 all-in monthly pool, including the
    $25 model/API ceiling. API, media,
    hosting and recurring forecasts reduce discretionary availability. Unused
    budget is valid; before positive gross profit reserve at least 20% of the

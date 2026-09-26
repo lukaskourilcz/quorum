@@ -8,8 +8,8 @@ description: Add or update a public page on the site the right way — routing, 
 1. Validate the page against current stage, one audience need/search intent and
    existing CONTENT_INVENTORY. Reject duplicate/keyword-variant/cannibalizing
    work.
-2. Route: `site/src/app/<slug>/page.tsx`; content-heavy pages read markdown from
-   `site/src/content/` at build time.
+2. Route: `site/src/app/<slug>/page.tsx`; page data comes from `state/` through a
+   `server-only` module in `site/src/lib/`.
 3. Metadata: export `metadata` — title (≤60 chars, ends with site name),
    description (≤155), OpenGraph. No page ships without metadata.
 4. Evidence: all factual claims map to evidence refs/source URLs; record author,
@@ -21,8 +21,8 @@ description: Add or update a public page on the site the right way — routing, 
 7. Quality gate: content/link/citation/cannibalization checks plus lint,
    typecheck, tests, build and canonical-light/optional-dark/accessibility
    smoke. Failure ⇒ noindex.
-8. Update CONTENT_INVENTORY atomically. `/log` reads only sanitized
-   `state/public/`.
+8. Update CONTENT_INVENTORY atomically. `/log` reads only what `site/src/lib/public-log.ts`
+   builds through the public sanitizers; `site/src/lib/public-surfaces.test.ts` guards it.
 
 ## Standup pages
 
