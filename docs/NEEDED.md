@@ -1,5 +1,15 @@
 # NEEDED — what the owner has to do
 
+## Focus sweep · 2026-09-26
+
+You asked on 2026-09-26 to keep "Waiting for you" to what DNESKAi, devShark, the Design Lab,
+GoVIRAL and marketingShark need, and to take Contest Radar out of the admin navigation. WebDev
+Signal stays in both: it runs as the `$0` pre-step of the DNESKAi day under `operations-2026-09b`.
+You will find everything else at the end of this file with its text and markers intact:
+paused ventures' items under **On hold — paused ventures**, and Contest Radar, the office page,
+and company process and engineering under **Parked — outside the current focus**. The admin counts
+neither section. To bring an item back, move it above them.
+
 ## The devShark social queue · 2026-09-25
 
 `SECOND-HANDOFF-25-9-2026.md` at the repository root designs the Queue workspace, the devShark profiles on LinkedIn, Instagram and Threads, the LinkedIn transport and the approval-to-publish path. The implementation issues are #568 to #576 (label `second-handoff-25-9-2026`); #556, #561 and #562 come first. Building it sends nothing; these are the steps only you can take, in order:
@@ -30,7 +40,6 @@ the steps. These are the owner's parts:
 
 - [ ] **Rename the repositories on GitHub** — `react-express-app → devShark`, `aifirst → DNESKAi`, `quorum → boardlessAI`, in that order. The prerequisites are met as of 2026-09-25: own-dashboard #75 and #555–#564 are merged, and OwnDashboard has the GitHub ids of all four repositories, so their projects survive the rename. After renaming, update the Claude Code environment's repository list, `git remote set-url` on local clones and `NEXT_PUBLIC_GITHUB_REPO` on the DNESKAi Vercel project. #565 does the repository side the same day. [imp:4] [owner:me] [time:30m] [kind:setup]
 - [x] **Deploy the site after #558** — done 2026-09-25: `pnpm deploy:check` passed on `c66700dc` and that commit is live on `boardless-ai.vercel.app` (deployment `dpl_4tur2dZG6Vt3tbMSpumaDfWZ46jd`). It was a Vercel cloud build triggered through the connector, because no linked Vercel CLI was available. [imp:4] [owner:me] [time:20m] [kind:deploy]
-- [ ] **Delete the dead Actions variables and secrets after #559** (the session had no tool for repository settings) — `MMA_FILES_LIVE_ENABLED`, `FIGHTAIQ_LIVE_ENABLED`, `FIGHTAIQ_ANALYSIS_ENABLED`, `MMA_FILES_INDEXING_ENABLED`, and the MMA Files and Titty Tuesdays Threads/Instagram variables and secrets in the repository settings. [imp:2] [owner:me] [time:10m] [kind:setup]
 - [x] **Decide DNESKAi's banner slots** — done 2026-09-25: option A, devShark in both slots (aifirst `50fce31`); the approval is recorded in `state/INBOX.md`. [imp:2] [owner:me] [time:10m] [kind:decision]
 - [ ] **Delete the merged session branches** — the session's git relay refuses deletions and tag pushes (HTTP 403), so these wait for you. In aifirst, react-express-app and own-dashboard: `claude/gifted-albattani-p8suag`, merged into each `main` (react-express-app's full list is its #232, own-dashboard's is its `NEEDED.md`). In quorum, #578's comment of 2026-09-26 re-derives all 49 remote branches with the evidence for each: 44 are merged into `main` or patch-equivalent to it, three obsolete ones are archived as tags before they go, `claude/compassionate-gates-xv2e0q` goes once `main` contains it, and `claude/elegant-cori-h9cdgb` stays until the next item is decided. The commands are below; run them from a clone with full history. Then turn on "Automatically delete head branches" (Settings → General → Pull Requests) in each repository so the next ones go by themselves. [imp:2] [owner:me] [time:15m] [kind:setup]
 
@@ -283,13 +292,6 @@ is the single thing standing between a proven path and a working one.
   does nothing yet: `cycle.yml` does not pass it to the job (the `[owner:ai]` wiring item below).
   [imp:2] [owner:me] [time:5m] [kind:decision]
 
-- [ ] **Decide on the Monday retro meeting** — `WEEKLY_RETRO_ENABLED=true` would have two seats
-  read the weekly report the Monday morning checkpoint writes and add a short summary plus up to
-  three fix tasks. Capped at $0.05 a week. With it off, the weekly report still gets written and
-  carries no written summary. Like the content scoring, the variable is not passed to the job yet.
-  The last weekly report written is `state/reports/weekly/2026-W34.json` (#577 audit).
-  [imp:2] [owner:me] [time:5m] [kind:decision]
-
 - [ ] **Confirm the curated source registry** — `config/caught-up-streams.json` seeds three Medium
   tags, nine Substacks and eight podcast shows. Eight shows ship `enabled: false` with a note
   because their channel id could not be resolved without guessing, and two empty slots wait for
@@ -320,23 +322,6 @@ is the single thing standing between a proven path and a working one.
 ## Yours to decide
 
 Judgement calls. Nothing is blocked on code for any of these.
-
-- [ ] **Decide whether to open a Contest Radar social pilot lane** — the Instagram and TikTok slices
-  are built, fixture-backed and disabled. Opening one needs a countersigned budget-capacity decision
-  at `state/decisions/2026-08-30-contest-radar-budget-capacity.md` authorising the `$0.10/month`
-  Apify rung, GoVIRAL's reservation against the shared quota, and your authority for the specific
-  actors with their terms read at that time. Both lanes are `undecided`, which is the only honest
-  verdict for a lane that has not run — a fixture proves the classification and the arithmetic and
-  can prove nothing about yield. Leaving them shut is a legitimate answer.
-  `docs/CONTEST-RADAR-OPTIONAL.md` has the detail. [imp:2] [owner:me] [time:20m] [kind:decision]
-
-- [ ] **Decide whether a contest alert may ever be published** — the promotion candidate, its
-  eligibility gate and the sanitized profile projection are built, and the capability edge to Social
-  Distribution is registered `held` by
-  `state/decisions/2026-08-30-contest-radar-promotion-posture.md`. Moving it to `allowed` needs a
-  further countersigned decision naming the profile, the contest, the rule evidence and the
-  disclosure text. Nothing publishes meanwhile, and campaign generation refuses every Contest Radar
-  release independently of the edge. [imp:2] [owner:me] [time:20m] [kind:decision]
 
 - [x] **Countersign or decline WebDev Signal's founding boundary** — countersigned on 2026-08-30
   ("Countersign everything thats left there for me"); the decision file records it and, since
@@ -384,14 +369,14 @@ Judgement calls. Nothing is blocked on code for any of these.
   receipts record the article URL they published to, so changing the project name means the older
   receipts point at the old host. [imp:3] [owner:me] [time:20m] [kind:setup]
 
-- [ ] **Review the curated scene proposals both magazines are collecting** — when the vision gate
+- [ ] **Review the curated scene proposals DNESKAi is collecting** — when the vision gate
   approves a licensed-search photograph at fit 8 or better with no vetoes, it is appended as an
-  unchecked line to `state/ventures/caught-up/media/scene-proposals.md` or the mma-files file
-  beside it, with its provider, licence, source URL and a drafted Czech scene line. Each one
-  already ran above a published article. Ticking a line nominates it: a later session opens it at
-  640px, checks that no face in it is recognisable, and moves it into the curated set, which is
-  the rung with the most predictable covers and currently the smallest. The queue stops at twenty
-  open lines, so an unreviewed backlog quietly stops the flywheel rather than growing.
+  unchecked line to `state/ventures/caught-up/media/scene-proposals.md`, with its provider,
+  licence, source URL and a drafted Czech scene line. Each one already ran above a published
+  article. Ticking a line nominates it: a later session opens it at 640px, checks that no face in
+  it is recognisable, and moves it into the curated set, which is the rung with the most
+  predictable covers and currently the smallest. The queue stops at twenty open lines, so an
+  unreviewed backlog quietly stops the flywheel rather than growing.
   [imp:2] [owner:me] [time:20m] [kind:content]
 
 - [ ] **Decide the two efficiency-review calls.** Both were measured against the ledger and both
@@ -412,100 +397,19 @@ Judgement calls. Nothing is blocked on code for any of these.
      punctual run gives five checks a day instead of three, with coverage that tracks the schedule
      automatically, and leaves a single midday dead-man's entry.
 
-- [ ] **Keep the pre-2026-08-29 calendar rows?** — finished weeks now render under the
-  one-row-per-venture clock. Preserving the old rows for dates before 2026-08-29 is a table of
-  retired hours and about an hour of work; leaving it is a fine answer.
-  [imp:1] [owner:me] [time:5m] [kind:decision]
-
 - [ ] **Move WebDev Signal's health node off `planned`/`held`?** — `config/venture-slos.json`
   still gives webdev-signal `lifecycleStage: planned` and a `held` cadence, and the operations
   release audit pins it, while the venture has been operating since 2026-09-15. Moving it is a
   decision about what its SLO promises, not a refactor.
   [imp:2] [owner:me] [time:10m] [kind:decision]
 
-- [ ] **Decide Board HQ's roster length** — the opened room lists all 23 roles scoped `global`,
-  correct by the registry but a long column beside rooms showing two or three. Restricting it to
-  the council is a one-line change. [imp:2] [owner:me] [time:5m] [kind:decision]
-
-- [ ] **Two workspace controls sit under the 9.5px type floor** — `Jump to date` and `Show the
-  delivered article` are at 7.5px and the channel rail at 9.5px after several shrink-on-request
-  rounds, against the documented mono floor. Decide whether the floor bends for these two controls
-  or they grow back to it. [imp:2] [owner:me] [time:5m] [kind:decision]
-
-- [ ] **The React Compiler costs more than it saves here — one line to reverse** — SI-09 turned
-  `reactCompiler` on in `site/next.config.ts` as the programme specified, and it behaves: the wheel
-  lock, all four panels, every room view and the whole day performance were walked by hand with it
-  on and nothing desynchronised. But measured on the same build and machine it charges 24.2 kB of
-  first-load JS (573.7 → 597.9 kB) and 7 kB more on the panel chunk, to save 14 ms of scripting
-  across a thirty-second performance that never came near dropping a frame — more than the
-  code-splitting in the same issue saved. The plan's motion is CSS and React only re-renders on the
-  beat tick, so there was little render pressure to remove. Deleting the flag line returns the
-  bytes; the measurement is recorded beside it in the config.
-  [imp:2] [owner:me] [time:5m] [kind:decision]
-
-- [ ] **Confirm the wallboard's five figures are the ones you want on the wall** — the home page's
-  TV shows published articles, publishing reliability, cost per article, spend against the $50
-  limit and ideas from meetings, all read from the record. Any figure the record cannot supply
-  prints an em dash rather than a zero. [imp:2] [owner:me] [time:10m] [kind:decision]
-
-- [ ] **Public URLs for three projects** — FightAIQ, GoVIRAL and Titty Tuesdays have no public
-  address, so their cards on the home page render nothing in the link slot rather than a "coming
-  soon". Supply a URL each and the line appears. [imp:2] [owner:me] [time:10m] [kind:content]
-
-- [ ] **Real office photography** — the six backdrops behind the seven home-page sections are
-  AI-generated placeholders committed at `site/public/office/*.{avif,webp}`. The layout does not
-  depend on them; replace the files at the same names and nothing else changes.
-  [imp:2] [owner:me] [time:2h] [kind:content]
-
-- [ ] **Portraits for the roles that have none** — 27 of 49 registered roles have an approved
-  portrait; 22 still fall back to an initials tile on the team panel and to the anonymous
-  silhouette in the workspace player, which is honest but plain.
-  [imp:1] [owner:me] [time:1h] [kind:content]
-
-- [ ] **Decide whether Python enters the toolchain** — three offline niches were named: the
-  FightAIQ calibration lab, a wikitext parser and article extraction, each behind a JSON-contract
-  boundary. Nothing in the runtime moves either way. [imp:2] [owner:me] [time:15m] [kind:decision]
-
-- [ ] **Decide how the engineering contract reaches the other repositories (#582)** — #146 asked
-  for one `docs/ENGINEERING.md` in every repository, but only this one has it, and it cannot be
-  copied as it stands: most rules cite quorum paths, and its deployment section says Git
-  deployments are off, which is false for react-express-app and own-dashboard. The proposal: split
-  a repo-neutral contract from a quorum-only `docs/DEPLOY.md`, then copy the neutral file into both
-  repositories with a `CLAUDE.md` pointer and a pinned-hash test in each. The other answer is that
-  it stays quorum's alone and the "meant for every repository" lines go.
-  [imp:2] [owner:me] [time:15m] [kind:decision]
-
-- [ ] **Analytics — deliberately deferred.** Name the exact decisions the data would change, then
-  approve the provider, legal posture and data minimisation before setting
-  `METRICS_INGESTION_ENABLED=true`. Until then follower and engagement KPIs stay honestly
-  unavailable, SPLIT stays off, the quarterly evaluator reports missing audience data as
-  unavailable, and no analytics credential is required.
-  [imp:1] [owner:me] [time:5m] [kind:decision]
-
 ### Verify once, then leave alone
 
 - [ ] **Vercel production settings** — BoardlessAI tracks `main` at `https://boardless-ai.vercel.app`;
-  DNESKAi at `https://caughtup-ai.vercel.app`; MMA Files at `https://mma-files.vercel.app` with
-  `NEXT_PUBLIC_DEMO_MODE=false`. The delivery step builds its clone with demo mode off (`cycle.yml`
-  passes `NEXT_PUBLIC_DEMO_MODE=false`), so leaving production on demo makes a delivered article's
-  route 404 and fails every page check. Keep `NEXT_PUBLIC_ALLOW_INDEXING=false` on both magazines
-  until each has a body of work worth indexing — that variable lives in the magazine projects, not
+  DNESKAi at `https://caughtup-ai.vercel.app`. Keep `NEXT_PUBLIC_ALLOW_INDEXING=false` on DNESKAi
+  until it has a body of work worth indexing — that variable lives in the magazine's project, not
   here, and `social-2026-08a` does not cover it. Your call, separate from the social stop, and the
   answer today is still no. [imp:4] [owner:me] [time:10m] [kind:setup]
-
-- [ ] **Review the Q1 target seeds** in `config/kpis/2026-Q1.json` — confirm the 2026-08-03
-  `quarter_start` and the target values, or save your own, before using the quarter for decisions.
-  Q1 lasts 90 days and content/social pace excludes the first 14. No code writes that file, so a
-  target can only move if you move it. [imp:2] [owner:me] [time:15m] [kind:decision]
-
-- [ ] **Add the first opportunity record to `state/OPPORTUNITIES.json`** — the file still holds only
-  fixtures, so the opportunity gate stays dormant and publishes one line rather than a daily
-  rejection. The task allowlist
-  deliberately does not let any agent write this file; the narrow write scope is a guard, so do not
-  widen it. Needs a score ≥35/50, no dimension below 2, and ≥3 independent non-fixture evidence
-  refs in `state/EVIDENCE.jsonl`. This is not what holds the stage: `config/stages.json` reads
-  `"current": "VALIDATION"` with `stageChangeAuthority: owner-only`.
-  [imp:3] [owner:me] [time:60m] [kind:decision]
 
 - [ ] **Re-verify the pinned Apify actor prices and success rates each quarter** — the prices in
   `config/goviral-sources.json` were verified live on 2026-08-06 and cannot be re-checked at
@@ -638,16 +542,6 @@ Nothing here needs your hands. It is recorded so it is not lost.
   rest. It is deliberately not batch-applied: it trades inferred tracing for a hand-maintained
   list, and a wrong entry is a route that 500s in production, so each one wants checking against a
   real deployment. [imp:2] [owner:ai] [time:2h] [kind:deploy]
-
-- [ ] **Run the admin e2e specs on every pull request, not only on `[full-e2e]`** — the site's
-  Playwright job in `.github/workflows/ci.yml` runs only when a PR title or commit message contains
-  `[full-e2e]`, so nothing has run it for weeks. In that time the navigation guard drifted two
-  destinations out of date, the visual guard was looking for baselines in a directory Playwright
-  never writes to, a WCAG AA contrast failure went unseen and three assertions about the admin's
-  privacy headers could never have passed against the dev server they run on. All are fixed, but
-  the reason they accumulated is that nobody was looking. The four admin specs take about four
-  minutes together; the venture-registry sweep is the slow one and could stay opt-in.
-  [imp:3] [owner:me] [time:20m] [kind:setup]
 
 - [ ] **Load the admin's panels behind the tab that needs them** — `/admin` is `force-dynamic` and
   resolves around thirty loaders in one `Promise.all` before it renders anything, so changing
@@ -1001,6 +895,130 @@ The completed DNESKAi redesign, article-image, SI and website-improvement progra
 and their branches removed. The article-image decision remains at
 `state/decisions/2026-08-08-article-image-fit.md`.
 
+## Parked — outside the current focus
+
+A session moved these here on 2026-09-26 with their text and markers intact. Nothing in
+DNESKAi, devShark, the Design Lab, GoVIRAL, marketingShark or WebDev Signal waits on them, and
+the admin does not count them. Move an item back above when you bring its topic into the focus.
+
+### Contest Radar
+
+- [ ] **Decide whether to open a Contest Radar social pilot lane** — the Instagram and TikTok slices
+  are built, fixture-backed and disabled. Opening one needs a countersigned budget-capacity decision
+  at `state/decisions/2026-08-30-contest-radar-budget-capacity.md` authorising the `$0.10/month`
+  Apify rung, GoVIRAL's reservation against the shared quota, and your authority for the specific
+  actors with their terms read at that time. Both lanes are `undecided`, which is the only honest
+  verdict for a lane that has not run — a fixture proves the classification and the arithmetic and
+  can prove nothing about yield. Leaving them shut is a legitimate answer.
+  `docs/CONTEST-RADAR-OPTIONAL.md` has the detail. [imp:2] [owner:me] [time:20m] [kind:decision]
+
+- [ ] **Decide whether a contest alert may ever be published** — the promotion candidate, its
+  eligibility gate and the sanitized profile projection are built, and the capability edge to Social
+  Distribution is registered `held` by
+  `state/decisions/2026-08-30-contest-radar-promotion-posture.md`. Moving it to `allowed` needs a
+  further countersigned decision naming the profile, the contest, the rule evidence and the
+  disclosure text. Nothing publishes meanwhile, and campaign generation refuses every Contest Radar
+  release independently of the edge. [imp:2] [owner:me] [time:20m] [kind:decision]
+
+### The office page and the public calendar
+
+- [ ] **Real office photography** — the six backdrops behind the seven home-page sections are
+  AI-generated placeholders committed at `site/public/office/*.{avif,webp}`. The layout does not
+  depend on them; replace the files at the same names and nothing else changes.
+  [imp:2] [owner:me] [time:2h] [kind:content]
+
+- [ ] **Portraits for the roles that have none** — 27 of 49 registered roles have an approved
+  portrait; 22 still fall back to an initials tile on the team panel and to the anonymous
+  silhouette in the workspace player, which is honest but plain.
+  [imp:1] [owner:me] [time:1h] [kind:content]
+
+- [ ] **Confirm the wallboard's five figures are the ones you want on the wall** — the home page's
+  TV shows published articles, publishing reliability, cost per article, spend against the $50
+  limit and ideas from meetings, all read from the record. Any figure the record cannot supply
+  prints an em dash rather than a zero. [imp:2] [owner:me] [time:10m] [kind:decision]
+
+- [ ] **Decide Board HQ's roster length** — the opened room lists all 23 roles scoped `global`,
+  correct by the registry but a long column beside rooms showing two or three. Restricting it to
+  the council is a one-line change. [imp:2] [owner:me] [time:5m] [kind:decision]
+
+- [ ] **Two workspace controls sit under the 9.5px type floor** — `Jump to date` and `Show the
+  delivered article` are at 7.5px and the channel rail at 9.5px after several shrink-on-request
+  rounds, against the documented mono floor. Decide whether the floor bends for these two controls
+  or they grow back to it. [imp:2] [owner:me] [time:5m] [kind:decision]
+
+- [ ] **Public URLs for three projects** — FightAIQ, GoVIRAL and Titty Tuesdays have no public
+  address, so their cards on the home page render nothing in the link slot rather than a "coming
+  soon". Supply a URL each and the line appears. [imp:2] [owner:me] [time:10m] [kind:content]
+
+- [ ] **Keep the pre-2026-08-29 calendar rows?** — finished weeks now render under the
+  one-row-per-venture clock. Preserving the old rows for dates before 2026-08-29 is a table of
+  retired hours and about an hour of work; leaving it is a fine answer.
+  [imp:1] [owner:me] [time:5m] [kind:decision]
+
+### Company process and engineering
+
+- [ ] **Decide on the Monday retro meeting** — `WEEKLY_RETRO_ENABLED=true` would have two seats
+  read the weekly report the Monday morning checkpoint writes and add a short summary plus up to
+  three fix tasks. Capped at $0.05 a week. With it off, the weekly report still gets written and
+  carries no written summary. Like the content scoring, the variable is not passed to the job yet.
+  The last weekly report written is `state/reports/weekly/2026-W34.json` (#577 audit).
+  [imp:2] [owner:me] [time:5m] [kind:decision]
+
+- [ ] **Review the Q1 target seeds** in `config/kpis/2026-Q1.json` — confirm the 2026-08-03
+  `quarter_start` and the target values, or save your own, before using the quarter for decisions.
+  Q1 lasts 90 days and content/social pace excludes the first 14. No code writes that file, so a
+  target can only move if you move it. [imp:2] [owner:me] [time:15m] [kind:decision]
+
+- [ ] **Add the first opportunity record to `state/OPPORTUNITIES.json`** — the file still holds only
+  fixtures, so the opportunity gate stays dormant and publishes one line rather than a daily
+  rejection. The task allowlist
+  deliberately does not let any agent write this file; the narrow write scope is a guard, so do not
+  widen it. Needs a score ≥35/50, no dimension below 2, and ≥3 independent non-fixture evidence
+  refs in `state/EVIDENCE.jsonl`. This is not what holds the stage: `config/stages.json` reads
+  `"current": "VALIDATION"` with `stageChangeAuthority: owner-only`.
+  [imp:3] [owner:me] [time:60m] [kind:decision]
+
+- [ ] **Analytics — deliberately deferred.** Name the exact decisions the data would change, then
+  approve the provider, legal posture and data minimisation before setting
+  `METRICS_INGESTION_ENABLED=true`. Until then follower and engagement KPIs stay honestly
+  unavailable, SPLIT stays off, the quarterly evaluator reports missing audience data as
+  unavailable, and no analytics credential is required.
+  [imp:1] [owner:me] [time:5m] [kind:decision]
+
+- [ ] **Run the admin e2e specs on every pull request, not only on `[full-e2e]`** — the site's
+  Playwright job in `.github/workflows/ci.yml` runs only when a PR title or commit message contains
+  `[full-e2e]`, so nothing has run it for weeks. In that time the navigation guard drifted two
+  destinations out of date, the visual guard was looking for baselines in a directory Playwright
+  never writes to, a WCAG AA contrast failure went unseen and three assertions about the admin's
+  privacy headers could never have passed against the dev server they run on. All are fixed, but
+  the reason they accumulated is that nobody was looking. The four admin specs take about four
+  minutes together; the venture-registry sweep is the slow one and could stay opt-in.
+  [imp:3] [owner:me] [time:20m] [kind:setup]
+
+- [ ] **The React Compiler costs more than it saves here — one line to reverse** — SI-09 turned
+  `reactCompiler` on in `site/next.config.ts` as the programme specified, and it behaves: the wheel
+  lock, all four panels, every room view and the whole day performance were walked by hand with it
+  on and nothing desynchronised. But measured on the same build and machine it charges 24.2 kB of
+  first-load JS (573.7 → 597.9 kB) and 7 kB more on the panel chunk, to save 14 ms of scripting
+  across a thirty-second performance that never came near dropping a frame — more than the
+  code-splitting in the same issue saved. The plan's motion is CSS and React only re-renders on the
+  beat tick, so there was little render pressure to remove. Deleting the flag line returns the
+  bytes; the measurement is recorded beside it in the config.
+  [imp:2] [owner:me] [time:5m] [kind:decision]
+
+- [ ] **Decide whether Python enters the toolchain** — three offline niches were named: the
+  FightAIQ calibration lab, a wikitext parser and article extraction, each behind a JSON-contract
+  boundary. Nothing in the runtime moves either way. [imp:2] [owner:me] [time:15m] [kind:decision]
+
+- [ ] **Decide how the engineering contract reaches the other repositories (#582)** — #146 asked
+  for one `docs/ENGINEERING.md` in every repository, but only this one has it, and it cannot be
+  copied as it stands: most rules cite quorum paths, and its deployment section says Git
+  deployments are off, which is false for react-express-app and own-dashboard. The proposal: split
+  a repo-neutral contract from a quorum-only `docs/DEPLOY.md`, then copy the neutral file into both
+  repositories with a `CLAUDE.md` pointer and a pinned-hash test in each. The other answer is that
+  it stays quorum's alone and the "meant for every repository" lines go.
+  [imp:2] [owner:me] [time:15m] [kind:decision]
+
 ## On hold — paused ventures
 
 `operations-2026-09b` paused these ventures on 2026-09-25 (Titty Tuesdays, BOOKSOFHISTORY, Door
@@ -1016,12 +1034,20 @@ ventures and resumes one.
   post-cycle gate and loses that cycle's records, as DNESKAi's drafts did until #583. Write them the
   way `orchestrator/src/social/pack-drafts.ts` writes DNESKAi's. [imp:3] [owner:ai] [time:2h] [kind:setup]
 
+- [ ] **Delete the dead Actions variables and secrets after #559** (the session had no tool for repository settings) — `MMA_FILES_LIVE_ENABLED`, `FIGHTAIQ_LIVE_ENABLED`, `FIGHTAIQ_ANALYSIS_ENABLED`, `MMA_FILES_INDEXING_ENABLED`, and the MMA Files and Titty Tuesdays Threads/Instagram variables and secrets in the repository settings. [imp:2] [owner:me] [time:10m] [kind:setup]
+
 ### MMA Files and FightAIQ
 
 mma-files `main` accepts image corrections since `1c276eb` (2026-08-12, "accept image corrections
 at the consumer"), so its old branch `claude/article-image-selection-61rs70` is superseded. The two
 corrected heroes deliver through the normal outbox once MMA Files resumes. The matching aifirst
 branch was merged into its `main` as `4bc270c8` on 2026-08-09 and then removed.
+
+MMA Files' Vercel production at `https://mma-files.vercel.app` needs `NEXT_PUBLIC_DEMO_MODE=false`
+once someone restores its delivery block in `cycle.yml`. That step built its clone with demo mode
+off, so a production left on demo 404s every delivered article and fails every page check. Keep
+its indexing variable `false` until the decision in step 7 of "How to prove a path once its
+account exists". Both lines stood in "Vercel production settings" until the 2026-09-26 sweep.
 
 - [x] **Approve the reviewed MMA scope for the same Apify token** — `APIFY-MMA-SOURCES-001` in
   `state/INBOX.md` authorizes only the terms-reviewed Tapology promotion-page reference step.
