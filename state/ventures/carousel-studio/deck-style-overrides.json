@@ -5,13 +5,13 @@
       "venture": "caught-up",
       "slug": "2026-09-25-ai-agenti-zlocin-google-avatar-microsoft-copilot",
       "date": "2026-09-25",
-      "style": "gutter",
-      "family": "gutter",
+      "style": "slab",
+      "family": "slab",
       "variant": "A",
       "accentSwap": false,
       "treatment": "duotone",
       "typeScale": 0.9,
-      "changedAt": "2026-09-26T20:04:56.081Z"
+      "changedAt": "2026-09-26T20:04:58.263Z"
     },
     {
       "venture": "caught-up",
@@ -86,5 +86,5 @@
       "changedAt": "2026-08-08T23:36:32.910Z"
     }
   ],
-  "updatedAt": "2026-09-26T20:04:56.081Z"
+  "updatedAt": "2026-09-26T20:04:58.263Z"
 }
