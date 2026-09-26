@@ -185,8 +185,6 @@ export const TaskTypeSchema = z.enum([
 ]);
 export type TaskType = z.infer<typeof TaskTypeSchema>;
 
-export const NullableNumberSchema = z.number().finite().nullable();
-
 export const EvidenceRefSchema = z
   .string()
   .min(1)

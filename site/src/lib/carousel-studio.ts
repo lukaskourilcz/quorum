@@ -264,7 +264,3 @@ export async function readCarouselStudio(root = repositoryRoot): Promise<Carouse
     inspirationLinks: parseInspiration(inspirationValue).sort((left, right) => right.addedAt.localeCompare(left.addedAt))
   };
 }
-
-export async function findCarouselTemplate(id: string, version: string, root = repositoryRoot): Promise<CarouselTemplate | null> {
-  return (await readCarouselStudio(root)).templates.find((entry) => entry.template.id === id && entry.template.version === version)?.template ?? null;
-}

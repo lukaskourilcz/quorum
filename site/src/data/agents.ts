@@ -774,6 +774,5 @@ export const agents: readonly Agent[] = registryAgents.map((agent) => {
 const adminOnlyAgentIds = new Set<AgentId>(["FOLIO", "PLOT"]);
 export const publicAgents = agents.filter((agent) => !adminOnlyAgentIds.has(agent.id));
 
-export const agentBySlug = new Map(agents.map((agent) => [agent.slug, agent]));
 export const agentById = new Map(agents.map((agent) => [agent.id, agent]));
 export const publicAgentBySlug = new Map(publicAgents.map((agent) => [agent.slug, agent]));

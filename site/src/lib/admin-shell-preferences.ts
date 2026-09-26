@@ -8,11 +8,6 @@ export interface AdminShellPreferences {
   collapsed: boolean;
 }
 
-export const DEFAULT_ADMIN_SHELL_PREFERENCES: AdminShellPreferences = {
-  theme: "light",
-  collapsed: false
-};
-
 export function parseAdminTheme(value: string | undefined): AdminTheme {
   return value === "dark" ? "dark" : "light";
 }

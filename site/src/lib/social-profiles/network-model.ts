@@ -94,7 +94,6 @@ function texts(value: unknown, max: number, pattern?: RegExp): string[] | null {
   const parsed = value.map((item) => text(item, 300)); if (parsed.some((item) => item === null)) return null;
   const result = parsed as string[]; return new Set(result).size === result.length && (!pattern || result.every((item) => pattern.test(item))) ? result : null;
 }
-function exactKeys(value: Record<string, unknown>, keys: readonly string[]): boolean { const actual = Object.keys(value).sort(); const expected = [...keys].sort(); return actual.length === expected.length && actual.every((key, index) => key === expected[index]); }
 
 function capability(value: unknown): SocialCapabilityReference | null {
   const item = rawRecord(value); const mapVersion = text(item?.mapVersion, 40); const source = text(item?.source, 100); const reference = text(item?.decisionReference, 300);
@@ -159,5 +158,3 @@ export function projectAdminSocialShareKit(base: SocialShareKitRecord, events: r
   if (!["shared", "declined", "expired"].includes(kit.status) && Date.parse(kit.expiresAt) <= now.getTime()) kit = { ...kit, status: "expired", deliveryEvidenceRef: null, outcome: { state: "expired", recordedAt: now.toISOString(), evidenceRef: null, attribution: "none", identityInferred: false, consentInferred: false }, updatedAt: now.toISOString() };
   return kit;
 }
-
-export function hasExactKeys(value: Record<string, unknown>, keys: readonly string[]): boolean { return exactKeys(value, keys); }

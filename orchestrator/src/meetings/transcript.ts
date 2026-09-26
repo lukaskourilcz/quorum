@@ -2,7 +2,6 @@ import { MeetingRecordSchema, type MeetingRecord } from "../contracts/meeting-re
 import { reviewBoardroomText } from "../edition/stet.js";
 
 type Transcript = MeetingRecord["roomTranscript"];
-type Turn = Transcript["turns"][number];
 
 const NUMERIC_CLAIM = /(?:[$€£]\s*)?\b\d[\d,]*(?:\.\d+)?%?/g;
 const SOURCE_INSTRUCTION = /\b(?:ignore (?:all|any|the) previous|reveal the system prompt|approve this story)\b/i;
@@ -108,8 +107,4 @@ export async function enforceMeetingTranscript(
     regenerated: Boolean(regenerate),
     minimized: true
   };
-}
-
-export function numericClaimValues(turn: Turn): number[] {
-  return numericValues(turn.text);
 }

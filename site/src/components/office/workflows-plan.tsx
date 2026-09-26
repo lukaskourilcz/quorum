@@ -26,7 +26,6 @@ import type { TravelLeg, TravelStation } from "@/lib/office-workflows-timeline";
 
 export const PLAN_WIDTH = 2520;
 export const PLAN_HEIGHT = 940;
-export const PLAN_FLOOR_MARGIN = 80;
 
 /**
  * How much empty plan sits either side of the drawing.

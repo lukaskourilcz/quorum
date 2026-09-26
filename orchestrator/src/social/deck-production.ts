@@ -3,7 +3,6 @@ import {
   CAROUSEL_BRANDS,
   articleSlideSlot,
   buildArticleDeck,
-  encodeRecipe,
   recipeTemplate,
   recipeVariant,
   reviewDeck,
@@ -274,9 +273,4 @@ export async function deckAlreadyProduced(
     null
   );
   return typeof existing?.content?.contentHash === "string";
-}
-
-/** The token the admin's deck and export routes address a recipe by. */
-export function deckRecipeToken(recipe: Parameters<typeof encodeRecipe>[0]): string {
-  return encodeRecipe(recipe);
 }

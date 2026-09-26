@@ -41,9 +41,6 @@ export function ideaDetailPath(
   return `ideas/${checkedNamespace(namespace)}/details/${ideaId}.md`;
 }
 
-export const IDEA_LEDGER_PATH = ideaLedgerPath();
-export const IDEA_INDEX_PATH = ideaIndexPath();
-
 export const IDEA_STOPWORDS = [
   "a",
   "about",

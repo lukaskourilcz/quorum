@@ -349,7 +349,3 @@ export function publicOpportunityTitle(value: string): string {
   };
   return labels[value] ?? publicAgentText(value);
 }
-
-export function publicReferenceLabel(value: string): string {
-  return publicAgentText(publicOpportunityTitle(value));
-}

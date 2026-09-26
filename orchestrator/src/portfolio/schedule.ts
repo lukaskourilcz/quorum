@@ -1,7 +1,7 @@
 import { COUNTERSIGNED_MONTHLY_OPERATING_USD } from "../budget.js";
 import type { VentureRegistry } from "../contracts/venture-registry.js";
 import { ScheduledPhaseSchema, type ScheduledPhase } from "../types.js";
-import { dayDispatchedKinds, parseCadenceHour, resolveMeetingClock, resolveScheduledClock } from "../ventures/registry.js";
+import { dayDispatchedKinds, resolveMeetingClock, resolveScheduledClock } from "../ventures/registry.js";
 
 export type BudgetShape = "A" | "B";
 
@@ -301,18 +301,6 @@ export function resolveEffectivePortfolioSchedule(input: {
     ].filter((phase) => active.has(phase)),
     envelopeByPhase
   };
-}
-
-export function assertCollisionFreeRegistry(registry: VentureRegistry): void {
-  const slots = resolveMeetingClock(registry);
-  for (let index = 1; index < slots.length; index += 1) {
-    if ((slots[index]!.hour - slots[index - 1]!.hour) * 60 < 60) {
-      throw new Error(`${slots[index - 1]!.label} collides with ${slots[index]!.label}`);
-    }
-  }
-  for (const venture of registry.ventures) {
-    for (const meeting of venture.meetings) parseCadenceHour(meeting.cadence);
-  }
 }
 
 export function phaseEnabled(

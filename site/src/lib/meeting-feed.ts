@@ -3,7 +3,6 @@ import type { PublicStandup } from "@/data/fixtures";
 import type { PublicArticleSlotOutcome, PublicMeetingSkip } from "@/lib/calendar-feed-model";
 import type { PublicMeetingKind, PublicMeetingRecord } from "@/lib/meeting-record-model";
 import { publicAgentText } from "@/components/agent-language";
-import { publicKindLabel } from "@/lib/slot-labels";
 
 /**
  * The meeting archive as a chat feed: one channel per public room, day dividers and replay.
@@ -350,14 +349,4 @@ export function buildMeetingFeed(input: {
       .sort(([left], [right]) => left.localeCompare(right))
       .map(([date, messages]) => ({ date, messages: sortMessages(messages) }))
   }));
-}
-
-/** The channels a room's phase can reach, for a viewer that wants to link the two. */
-export function channelLabel(id: WorkspaceChannelId): string {
-  return WORKSPACE_CHANNELS.find((channel) => channel.id === id)?.label ?? id;
-}
-
-/** What a room is called, for a viewer that shows the phase beside the channel. */
-export function roomLabel(kind: string): string {
-  return publicKindLabel(kind);
 }

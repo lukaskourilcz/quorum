@@ -1,11 +1,11 @@
-import { access, mkdir, readFile, writeFile } from "node:fs/promises";
+import { access, mkdir } from "node:fs/promises";
 import path from "node:path";
 import { BudgetError } from "../../budget.js";
-import { guardedJsonCall, ModelOutputParseError, ModelResponseTruncatedError } from "../../llm/call.js";
+import { ModelOutputParseError, ModelResponseTruncatedError } from "../../llm/call.js";
 import { configRoot, repoRoot, stateRoot } from "../../paths.js";
 import { atomicWriteBuffer, atomicWriteJson, readJson } from "../../state.js";
 import { loadQuestionBankSnapshot, truthSubjectOf, type NormalizedQuestion } from "./bank.js";
-import { brandLocales, enabledBrands, loadMarketingSharkConfig, type Brand, type MarketingSharkConfig, type MarketingSharkLocale } from "./config.js";
+import { brandLocales, type Brand, type MarketingSharkConfig, type MarketingSharkLocale } from "./config.js";
 import { runFitGate, runTruthGates, type GateViolation, type HookLines } from "./gates.js";
 import {
   EMPTY_LEDGER,
@@ -744,4 +744,4 @@ export function fixtureChumOutput(input: { brand: Brand; question: NormalizedQue
   });
 }
 
-export { enabledBrands, loadMarketingSharkConfig, guardedJsonCall, readFile, writeFile, topicLabel };
+export { topicLabel };

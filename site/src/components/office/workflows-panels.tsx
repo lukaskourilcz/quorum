@@ -2,7 +2,6 @@
 
 import type { CSSProperties } from "react";
 import type { OfficeWorkflows } from "@/lib/office-workflows-model";
-import type { PlanPlace } from "@/components/office/workflows-plan";
 
 /**
  * The places that own a depth-3 panel.
@@ -14,18 +13,13 @@ import type { PlanPlace } from "@/components/office/workflows-plan";
 // plan whose panel was a metaphor rather than a record.
 export type PanelPlace = "caught-up" | "carousel-studio" | "titty-tuesdays";
 
-export function hasPanel(place: PlanPlace): place is PanelPlace {
-  return place === "caught-up" || place === "carousel-studio"
-    || place === "titty-tuesdays";
-}
-
 /**
  * Depth 3's chrome: which places open, what their frames say, and the header chip.
  *
  * The four bodies themselves live in `workflows-panel-bodies.tsx` and are fetched on demand,
  * because a visitor who never opens a panel should never pay for one. What stays here is
- * everything the section needs before any press happens — the copy that titles a frame, the test
- * that decides whether a place has a panel at all, and the worked example's chip.
+ * everything the section needs before any press happens: the copy that titles a frame and the
+ * worked example's chip.
  *
  * Keeping the two apart is load-bearing rather than tidy: a lazy import of the bodies out of this
  * module would be defeated by the static import of `PANEL_COPY` beside it, and the whole weight

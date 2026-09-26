@@ -8,7 +8,6 @@ import { CarouselTemplateSchema } from "../contracts/carousel-template.js";
 import { VentureRegistrySchema } from "../contracts/venture-registry.js";
 import { BhResearchLedgerEntrySchema } from "../contracts/bh-dossier.js";
 import { TsResearchLedgerEntrySchema } from "../contracts/ts-research.js";
-import { configRoot } from "../paths.js";
 import { atomicWriteJson } from "../state.js";
 import { SEED_TEMPLATES } from "@boardlessai/carousel-studio";
 
@@ -452,8 +451,4 @@ export async function refreshAutonomySnapshot(input: {
   const snapshot = await computeAutonomySnapshot(input);
   await atomicWriteJson(input.stateRoot, AUTONOMY_SNAPSHOT_PATH, snapshot);
   return snapshot;
-}
-
-export async function refreshRepositoryAutonomySnapshot(stateRoot: string, now = new Date()): Promise<AutonomySnapshot> {
-  return refreshAutonomySnapshot({ repoRoot: path.dirname(configRoot), stateRoot, now });
 }

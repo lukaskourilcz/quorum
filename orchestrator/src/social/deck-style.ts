@@ -4,14 +4,11 @@ import {
   CarouselPresetFileSchema,
   CarouselRecipeSchema,
   DECK_DESIGNS,
-  DECK_STYLES,
   deriveRecipe,
-  isDeckStyle,
   livePresetsFor,
   type CarouselRecipe,
   type CarouselSummaryVenture,
   type PresetDraw,
-  type DeckStyle,
   type RecipeHistoryEntry
 } from "@boardlessai/carousel-studio";
 
@@ -192,23 +189,3 @@ export async function effectiveRecipe(input: {
     ...(pinned.typeScale !== undefined ? { typeScale: pinned.typeScale } : {})
   });
 }
-
-/**
- * The old answer, for the one caller that still asks the old question.
- *
- * `deckStyleFor` is gone from the derivation — nothing new picks one of five wallpapers — so this
- * reports a recorded style where the owner pinned one and the recipe's family otherwise. Kept
- * narrow deliberately: it exists so a legacy reference keeps resolving, not so the engine keeps
- * two ideas of what a deck looks like.
- */
-export async function effectiveDeckStyle(input: {
-  root: string;
-  venture: CarouselSummaryVenture;
-  slug: string;
-  date: string;
-}): Promise<DeckStyle | string> {
-  const recipe = await effectiveRecipe(input);
-  return isDeckStyle(recipe.family) ? (recipe.family as DeckStyle) : recipe.family;
-}
-
-export { DECK_STYLES };
