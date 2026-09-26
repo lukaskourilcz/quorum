@@ -45,6 +45,21 @@ describe("the deployed Vercel schedule matches the meeting clock", () => {
     expect((await vercelConfig()).git).toEqual({ deploymentEnabled: false });
   });
 
+  it("leaves no source comment saying a push redeploys the site", async () => {
+    // With the guard above a push builds nothing, and reasoning that assumed it did goes wrong
+    // quietly: the calendar's ongoing ceiling was explained by a redeploy per run (quorum#580).
+    // Comment markers are folded away first, because the claim ran across a line break.
+    const tracked = await new Promise<string>((resolve, reject) => {
+      execFile("git", ["ls-files", "--", "site/src", "orchestrator/src", "studio/src", "scripts"], { cwd: repoRoot }, (error, out) => (error ? reject(error) : resolve(out)));
+    });
+    const offenders: string[] = [];
+    for (const file of tracked.split("\n").filter((name) => /\.(?:ts|tsx|js|mjs)$/u.test(name))) {
+      const folded = (await readFile(path.join(repoRoot, file), "utf8")).replace(/\n\s*(?:\*|\/\/)\s*/gu, " ");
+      if (/\bpush\b.{0,40}\bredeploys?\b/iu.test(folded)) offenders.push(file);
+    }
+    expect(offenders).toEqual([]);
+  });
+
   it("carries both daylight-saving variants of every scheduled slot and nothing else", async () => {
     // Every meeting slot, plus one dispatch that is not a meeting: the edition slot's same-day
     // retry. It carries no Prague hour of its own on the clock -- 09:00 belongs to the story

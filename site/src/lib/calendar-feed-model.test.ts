@@ -234,9 +234,11 @@ describe("a slot whose run is still going says so", () => {
 });
 
 describe("the record, not the clock, ends the ongoing state", () => {
-  // The run commits its own record and that push redeploys the site, so the arrival of a record is
-  // the finish signal. These two assert the ordering that makes it one: a slot only three minutes
-  // into a fifteen-minute ceiling must still abandon "ongoing" the moment something is on file.
+  // The run commits its own record, and a page built with the record present takes it as the finish
+  // signal. A push builds nothing (`git.deploymentEnabled: false`); the record reaches production
+  // with the next deploy. These two assert the ordering that makes the record the finish signal: a
+  // slot only three minutes into a fifteen-minute ceiling must still abandon "ongoing" the moment
+  // something is on file.
   const slotAt = pragueSlotInstant("2026-08-04", 11);
   const threeMinutesIn = new Date(slotAt.getTime() + 3 * 60_000);
   const base = { weekOf: "2026-08-03", now: threeMinutesIn, standups: [], meetings: [] };

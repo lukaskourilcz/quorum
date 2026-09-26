@@ -212,12 +212,14 @@ function ventureKind(phase: PublicStandup["phase"]): CalendarKind | null {
 /**
  * How long a slot with no record may keep reading as in progress.
  *
- * This is a ceiling, not the mechanism. A run commits its own record and that push is what
- * redeploys the site, so on the healthy path a slot stops reading "ongoing" because the page was
- * rebuilt with the record present and an earlier branch of the chain below claimed it — the clock
- * is never consulted. The ceiling only decides the slot that never gets a record at all: a run
- * killed before it could commit, or a cron that never fired. Without it such a slot would keep
- * claiming to be in progress until some unrelated push happened to rebuild the site.
+ * This is a ceiling, not the mechanism. A run commits its own record, and a page built with that
+ * record present stops reading "ongoing" because an earlier branch of the chain below claims the
+ * slot; the clock is never consulted. The push that carries the record builds nothing:
+ * `site/vercel.json` sets `git.deploymentEnabled: false`, so the live site is rebuilt only when
+ * somebody runs `pnpm deploy:production`, and between deploys it shows the statuses its last build
+ * computed. The ceiling decides each slot a build finds no record for: a run killed before it could
+ * commit, a cron that never fired, or a run still working when the build ran. Without it such a slot
+ * would read as in progress in every build that finds no record for it.
  *
  * Fifteen minutes is far shorter than a scheduled run usually takes to land, because GitHub queues
  * these workflows for hours: see SLOT_DELIVERY_GRACE_MINUTES below for the delivery lag actually
