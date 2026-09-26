@@ -41,7 +41,7 @@ builds and on the morning room's day checkpoint. Never hand-edit the generated b
 <!-- GENERATED:CURRENT-OPERATING-TRUTH:START -->
 ## Current operating truth (generated)
 
-Refreshed from committed state: **2026-09-26T08:58:59.110Z**. This block is generated deterministically; edit the source state, not these lines.
+Refreshed from committed state: **2026-09-26T11:09:48.361Z**. This block is generated deterministically; edit the source state, not these lines.
 
 | Item | Current value |
 | --- | --- |
@@ -68,7 +68,7 @@ Refreshed from committed state: **2026-09-26T08:58:59.110Z**. This block is gene
 | BOOKSOFHISTORY | paused | bh-desk 12:00 | none | not applicable |
 | FightAIQ | paused | mma-intake 08:00; mma-analysis 19:00 | none | not applicable |
 | Design Lab | operating | deterministic service only | none | not applicable |
-| marketingShark | operating | ms-daily 07:00 | none | not applicable |
+| marketingShark | operating | ms-daily 07:00 | none | locked (0/3) |
 | MMA Files | paused | mag-editorial 09:00; mag-desk 20:00 | REACH | paused (10/10) |
 | Door Money | paused | dm-desk 15:00; dm-growth 16:00 | none | not applicable |
 | Tehdejší svět | paused | ts-desk 18:00 | none | not applicable |
