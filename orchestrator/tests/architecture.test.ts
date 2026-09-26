@@ -20,6 +20,7 @@ const expectedSkills = [
   "boardroom-routing",
   "brand-identity",
   "business-validation",
+  "caught-up-registers",
   "content-strategy",
   "copywriting",
   "financial-operations",

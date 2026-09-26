@@ -825,6 +825,7 @@
       "descriptionRef": "agent-profile:STET:v1",
       "skillRefs": [
         ".claude/skills/stop-slop/SKILL.md",
+        ".claude/skills/caught-up-registers/SKILL.md",
         ".claude/skills/page-publishing/SKILL.md"
       ],
       "visual": {

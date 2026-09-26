@@ -15,7 +15,7 @@ on:
   # `orchestrator/prompts/**` is read into a live room, so changing one changes what the company
   # does. `.claude/skills/**` and `.agents/skills/**` are mirrored byte-for-byte and
   # `architecture.test.ts` compares them file by file — editing one tree without the other is
-  # exactly the mistake that filter would hide, and there are nineteen mirrored skills now.
+  # exactly the mistake that filter would hide, and there are twenty mirrored skills now.
   push:
     paths-ignore:
       - "state/**"

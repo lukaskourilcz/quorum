@@ -320,7 +320,7 @@ describe("automation policy", () => {
     expect(pushBlock).not.toContain("config/");
     // The two skill trees are mirrored byte-for-byte and architecture.test.ts compares them file
     // by file, so editing one without the other is a real, testable break. Filtering them out
-    // would hide precisely the mistake the drift test exists to catch, and there are nineteen
+    // would hide precisely the mistake the drift test exists to catch, and there are twenty
     // mirrored skills now rather than eleven.
     expect(pushBlock, ".claude/** can break the mirror test").not.toContain('".claude/**"');
     expect(pushBlock, ".agents/** can break the mirror test").not.toContain('".agents/**"');

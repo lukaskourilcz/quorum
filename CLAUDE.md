@@ -225,9 +225,9 @@ rules here — a rule written in two places is two rules that will disagree.
 Twelve skills in `.claude/skills/` are vendored verbatim from upstream. Each carries an `UPSTREAM.md` with its
 source, pinned commit, and license — re-vendor rather than hand-editing them.
 
-Nineteen skills are mirrored byte-for-byte into `.agents/skills/` for Codex CLI
-sessions. Ten are this repository's own: agent-identity, boardroom-routing,
-brand-identity, business-validation, financial-operations,
+Twenty skills are mirrored byte-for-byte into `.agents/skills/` for Codex CLI
+sessions. Eleven are this repository's own: agent-identity, boardroom-routing,
+brand-identity, business-validation, caught-up-registers, financial-operations,
 organization-operations, page-publishing, safe-release, social-operations,
 and titty-tuesdays-brandbook. Nine are vendored: stop-slop plus eight from
 `coreyhaines31/marketingskills` at `7868cb9` (MIT): ai-seo, content-strategy,
