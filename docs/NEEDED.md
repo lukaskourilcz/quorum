@@ -32,7 +32,7 @@ the steps. These are the owner's parts:
 - [x] **Deploy the site after #558** — done 2026-09-25: `pnpm deploy:check` passed on `c66700dc` and that commit is live on `boardless-ai.vercel.app` (deployment `dpl_4tur2dZG6Vt3tbMSpumaDfWZ46jd`). It was a Vercel cloud build triggered through the connector, because no linked Vercel CLI was available. [imp:4] [owner:me] [time:20m] [kind:deploy]
 - [ ] **Delete the dead Actions variables and secrets after #559** (the session had no tool for repository settings) — `MMA_FILES_LIVE_ENABLED`, `FIGHTAIQ_LIVE_ENABLED`, `FIGHTAIQ_ANALYSIS_ENABLED`, `MMA_FILES_INDEXING_ENABLED`, and the MMA Files and Titty Tuesdays Threads/Instagram variables and secrets in the repository settings. [imp:2] [owner:me] [time:10m] [kind:setup]
 - [x] **Decide DNESKAi's banner slots** — done 2026-09-25: option A, devShark in both slots (aifirst `50fce31`); the approval is recorded in `state/INBOX.md`. [imp:2] [owner:me] [time:10m] [kind:decision]
-- [ ] **Delete the merged session branches** — `claude/gifted-albattani-p8suag` in quorum, aifirst, react-express-app and own-dashboard is merged into each `main`; the session's git relay refuses deletions. Turning on "Automatically delete head branches" prevents the next ones. [imp:1] [owner:me] [time:5m] [kind:setup]
+- [ ] **Delete the merged session branches** — the session's git relay refuses deletions (HTTP 403), so these wait for you: `claude/gifted-albattani-p8suag` in quorum, aifirst, react-express-app and own-dashboard, merged into each `main`; and in quorum `claude/venture-launch-review-7l5nkd` (the branch of PR #511) and `claude/tender-fermi-8tdzf1`, both contained in `main`. #578 re-derives the rest of the 50 remote branches. Then turn on "Automatically delete head branches" (Settings → General → Pull Requests) in each repository so the next ones go by themselves. [imp:2] [owner:me] [time:10m] [kind:setup]
 - [ ] **Countersign the DNESKAi yield proposals** — `state/decisions/2026-09-25-dneskai-yield-proposals.md` (`edition-2026-09a`, `Status: proposed`) lists five changes, each with its measured effect from `docs/reports/dneskai-yield-2026-09-25.md`; tick the ones you approve. Nothing in `config/edition-quality.json` changes before you do. [imp:3] [owner:me] [time:20m] [kind:decision]
 
 ## Focus and outage · 2026-09-15
@@ -48,16 +48,16 @@ credit is exhausted, so every model call fails at its first seat. The repository
 snapshots are committed with the cycle, CHUM's cap is no longer spent on thinking, and two evening
 sweeps reach the 23:00 desk. Each owner step is one GitHub issue:
 
-- [x] **Buy Anthropic API credit** — done by the owner on 2026-09-15 (#526). Record the purchase in `state/treasury/ledger.json` yourself; only the owner records payments. [imp:5] [owner:me] [time:10m] [kind:setup]
-- [ ] **Deploy `main` to Vercel and count the deployed cron jobs** — #527. The Design Lab update and the calendar are still undeployed; if the Hobby plan deploys two crons, decide the Pro move. [imp:5] [owner:me] [time:30m] [kind:deploy]
+- [x] **Buy Anthropic API credit** — done by the owner on 2026-09-15 (#526). Recording it is the next item. [imp:5] [owner:me] [time:10m] [kind:setup]
+- [ ] **Record three payments in `state/treasury/ledger.json`** — the fal.ai prepayment of 2026-08-08, the Anthropic credit bought on 2026-09-15 and the Apify subscription since 2026-09-15. The ledger is empty (`{"entries": [], "recurringCommitments": []}`), so the monthly all-in numbers leave all three out; only the owner records payments. [imp:3] [owner:me] [time:15m] [kind:decision]
+- [x] **Deploy `main` to Vercel and count the deployed cron jobs** — #527, done 2026-09-25: `c66700dc` is live (`dpl_4tur2dZG6Vt3tbMSpumaDfWZ46jd`) with the ten-entry table. The 2026-08-30 deployment's 24-entry table dispatched `cycle.yml` once per active slot on 2026-09-24, at twelve distinct UTC hours, so the Hobby two-cron limit did not bite (#577 audit, section 2). [imp:5] [owner:me] [time:30m] [kind:deploy]
 - [ ] **Confirm the Apify plan, set its spending limit and fill GoVIRAL's profile** — #528. The account is on a paid tier since 2026-09-15; the repository assumes Starter ($19 a month, $19 of credit). Confirm or correct the plan in `config/fixed-costs.json` and `APIFY_MONTHLY_CREDIT_USD`, set the console's monthly spending limit to the plan credit so overage can never reach the card, record the payment in the treasury ledger, and write `state/ventures/goviral/profile.md`. [imp:4] [owner:me] [time:30m] [kind:content]
-- [ ] **Add the free Podcast Index key pair** — #529. [imp:2] [owner:me] [time:15m] [kind:setup]
+- [ ] **Add the free Podcast Index key pair** — #529: register at api.podcastindex.org and add `PODCASTINDEX_API_KEY` and `PODCASTINDEX_API_SECRET` to the quorum Actions secrets. It is only used for shows with no workable RSS or YouTube surface; a dry run without it already returns nine episodes. [imp:2] [owner:me] [time:15m] [kind:setup]
 - [x] **Give Personal Growth the book and audiobook facts** — done 2026-09-15 from okraj.shop on the owner's instruction (#530): `state/ventures/personal-growth/publications.json` holds the book and the audiobook as facts, and every third day from 16 September the desk's Instagram recommendation frames one of them. [imp:4] [owner:me] [time:20m] [kind:content]
 - [x] **Write the devShark fact sheet for marketingShark** — done 2026-09-15 (#531): `config/marketingshark.json` carries the maturity, the call to action and the claims allowed and forbidden, and CHUM's packet states them. Correct it there if the app's state changes. [imp:3] [owner:me] [time:20m] [kind:content]
 - [x] **Clear WebDev Signal's name and handles** — done 2026-09-15 as product research (#532): `WebDev Signal` is the public name, `@webdevsignal` and `@webdevsignal.cz` are the proposed handles. Availability could not be verified without a login; the trademark check and the accounts are still yours. [imp:3] [owner:me] [time:20m] [kind:legal]
 - [x] **Reconcile the duplicate editions of 10 and 11 September** — done 2026-09-15 on the owner's instruction (#533): receipts restored, duplicates retired, meeting records repaired, inbox items closed. [imp:3] [owner:me] [time:20m] [kind:decision]
 - [ ] **Lift the `smol-toml` pin Dependabot cannot** — the Vercel CLI's packages pin `smol-toml` 1.5.2 exactly and the fixed version is 1.7.1, so Dependabot's security update on `main` ends in `security_update_not_possible`. Add `"smol-toml@<1.7.1": 1.7.1` to the overrides in `pnpm-workspace.yaml`, run the full gate, and have the owner run `pnpm deploy:check` once before the next deploy; or take a newer Vercel CLI that lifts the pin. Deploy-time tooling only, not runtime. [imp:2] [owner:ai] [time:30m] [kind:setup]
-- [ ] **Create the two WebDev Signal Instagram accounts** — `@webdevsignal` and `@webdevsignal.cz`, each with its Threads profile; do the trademark check first. Nothing in the repository can create them. [imp:3] [owner:me] [time:40m] [kind:setup]
 - [x] **Tell the repository the new Apify plan's numbers** — done 2026-09-15 on the owner's note that the account is on a paid tier: the guard and the fixed-cost registry now assume Starter, $19 a month for $19 of platform credit, the cheapest paid plan. With the $25 model share that leaves $6 of the $50 all-in cap for everything else. If the plan is another, the correction is one line in each of `config/fixed-costs.json` and `orchestrator/src/sources/apify.ts` (#528). [imp:4] [owner:me] [time:5m] [kind:decision]
 
 ## WebDev Signal · 2026-09-15
@@ -68,16 +68,15 @@ English package under `state/ventures/webdev-signal/packages/` with the rendered
 under `state/ventures/webdev-signal/design-lab/assets/`; the admin WebDev Signal workspace shows
 the day, and the run receipt under `state/ventures/webdev-signal/runs/` names what to do next.
 
-- [ ] **Confirm or reverse the daily-runner activation** — read
-  `state/decisions/2026-09-15-webdev-signal-daily-runner.md`. It is recorded as countersigned on
-  your 2026-09-15 instruction: it matches the config to the founding you countersigned on
-  2026-08-30, enables the deterministic render and makes the venture `operating` so it has a pause
-  switch in Settings. Reversing means reverting those three config lines; the runner then records
-  honest held receipts. [imp:4] [owner:me] [time:15m] [kind:decision]
-- [ ] **Create the four Instagram and Threads accounts and record the handles** — one Instagram and
-  one Threads account per edition, `cs` and `en`, created by you in the platforms' own UIs. Nothing
-  in the repository can create them, and no delivery feature is reconsidered before the handles
-  exist. Never paste a credential into Git. [imp:4] [owner:me] [time:1h] [kind:setup]
+- [x] **Confirm or reverse the daily-runner activation** — confirmed 2026-09-25: the
+  countersigned focus decision (`operations-2026-09b`) keeps WebDev Signal `operating`, with its
+  editions held, as a `$0` pre-step of the DNESKAi day.
+  [imp:4] [owner:me] [time:15m] [kind:decision]
+- [ ] **Create the WebDev Signal accounts and record the handles** — #532. Two Instagram
+  accounts, `@webdevsignal` (`en`) and `@webdevsignal.cz` (`cs`), each with its Threads profile,
+  created by you in the platforms' own UIs after the trademark check. Nothing in the repository
+  can create them, and no delivery feature is reconsidered before the handles exist. Never paste
+  a credential into Git. [imp:4] [owner:me] [time:1h] [kind:setup]
 - [ ] **Post the first rendered drafts by hand** — on a day the Design & delivery tab shows as
   rendered, copy the caption and Threads text from the draft card, take the panel PNGs from the
   repository paths the card lists under `state/ventures/webdev-signal/design-lab/assets/`, and
@@ -92,7 +91,7 @@ the day, and the run receipt under `state/ventures/webdev-signal/runs/` names wh
 ## Design Lab · 2026-09-15
 
 - [x] **Modernize the studio and create Canva examples** — canvas-focused editor, Folio/Press families, article-based Canva briefs and editable examples. Press follows the owner's @technology reference. [Research and links](design-lab/CANVA-RESEARCH.md). [imp:4] [owner:ai] [time:3h] [kind:content]
-- [ ] **Review and deploy the Design Lab update** — inspect the editor on desktop/mobile and compare Canva exports with reference PNGs; then use the existing production release gate. Local browser acceptance was blocked in this session. Git merge does not deploy. [imp:4] [owner:me] [time:30m] [kind:deploy]
+- [ ] **Review the Design Lab update** — it is live since the `c66700dc` deploy of 2026-09-25. Inspect the editor on desktop and mobile and compare the Canva exports with the reference PNGs. [imp:4] [owner:me] [time:30m] [kind:decision]
 
 ## Production review · 2026-09-07
 
@@ -113,7 +112,7 @@ own UI. Never paste a credential into Git, an issue, a meeting record or chat.
 Every task carries the shared marker format:
 `- [ ] **Title** — description. [imp:1-5] [owner:me|ai] [time:30m] [kind:setup|deploy|legal|content|decision]`
 
-Updated: 2026-09-25.
+Updated: 2026-09-26.
 
 ---
 
@@ -133,8 +132,10 @@ where it lives, not here.
 
 - [x] **Merge the release-gate repair** — done 2026-08-29 in #460 and #461. The gate had been red
   since 28 August 15:00 UTC and every council room since had recorded a skip.
+  [imp:5] [owner:me] [time:10m] [kind:deploy]
 - [x] **Create the launch issue program** — done 2026-08-29. #462 is the parent; #463–#473 are the
   eleven children, in working order. #463's outage half is already closed.
+  [imp:4] [owner:ai] [time:30m] [kind:setup]
 
 - [x] **Countersign the two drafted decision records** — both signed 2026-08-29. They were written and waiting only for your
   status line and signature. They are one story and should be signed together:
@@ -213,22 +214,6 @@ Then, in order, the existing items:
 In the order that unblocks the most. Each of these is a switch, a key or an account, and each one
 is the single thing standing between a proven path and a working one.
 
-- [ ] **Deploy the site — it is a schedule change behind** — `boardless-ai.vercel.app` still shows
-  the old calendar: eighteen rows, one per room per hour, with the DNESKAi edition at 05:00, the
-  MMA rooms spread across 08:00–20:00 and the afternoon and night company meetings that
-  `operations-2026-08c` retired. `main` has carried the consolidated nine-row calendar since
-  2026-08-29. Nothing is wrong with the code; nothing has deployed. `site/vercel.json` carries
-  `git.deploymentEnabled: false` on purpose, so a merge never redeploys, and an agent session has
-  no Vercel credentials to run the release itself. From a clean checkout of `main`:
-  `pnpm deploy:check` then `pnpm deploy:production`. Since 2026-09-15 the same release also
-  carries the Design Lab modernisation and the venture pauses; the steps are in #527.
-  [imp:5] [owner:me] [time:15m] [kind:deploy]
-
-- [ ] **Delete two merged remote branches** — `claude/venture-launch-review-7l5nkd` and the branch
-  of PR #511. Both are fully merged into `main`; the git relay in the agent environment refuses a
-  branch deletion, so the sessions that merged them could not remove them.
-  [imp:1] [owner:me] [time:1m] [kind:setup]
-
 - [ ] **Verify the linked Quorum Vercel project** — from the repository root run
   `pnpm exec vercel link`, select the existing Quorum team/project, and confirm in its settings
   that Root Directory is `site`. Do not create a duplicate project. [imp:5] [owner:me] [time:10m]
@@ -263,24 +248,20 @@ is the single thing standing between a proven path and a working one.
   only thing switching them on changes is that two committed JSON files start moving.
   [imp:3] [owner:me] [time:5m] [kind:setup]
 
-- [ ] **Decide on the nightly content scoring** — set the Actions variable
-  `CONTENT_GATE_ENABLED=true` to have one comparative model call score each day's published
-  articles and dataset appends, recorded to `state/ventures/<venture>/content-scores/`. It is
-  capped at $0.05 a call and is the first rung the budget ladder drops, so a tight month loses the
-  scoring before it loses a room. Off is the default and off writes nothing.
+- [ ] **Decide on the morning content scoring** — `CONTENT_GATE_ENABLED=true` would have one
+  comparative model call on the morning checkpoint score the day's published articles and dataset
+  appends, recorded to `state/ventures/<venture>/content-scores/`. It is meant to cost at most
+  $0.05 a call and is the first rung the budget ladder drops, so a tight month loses the scoring
+  before it loses a room. Off is the default and off writes nothing. Setting the Actions variable
+  does nothing yet: `cycle.yml` does not pass it to the job (the `[owner:ai]` wiring item below).
   [imp:2] [owner:me] [time:5m] [kind:decision]
 
-- [ ] **Decide on the Monday retro meeting** — set `WEEKLY_RETRO_ENABLED=true` to have two seats
-  read the weekly report the night writes and add a short summary plus up to three fix tasks.
-  Capped at $0.05 a week. With it off, the weekly report still gets written and simply carries no
-  written summary, which is a complete report rather than a gap.
+- [ ] **Decide on the Monday retro meeting** — `WEEKLY_RETRO_ENABLED=true` would have two seats
+  read the weekly report the Monday morning checkpoint writes and add a short summary plus up to
+  three fix tasks. Capped at $0.05 a week. With it off, the weekly report still gets written and
+  carries no written summary. Like the content scoring, the variable is not passed to the job yet.
+  The last weekly report written is `state/reports/weekly/2026-W34.json` (#577 audit).
   [imp:2] [owner:me] [time:5m] [kind:decision]
-
-- [ ] **Create the free Podcast Index key pair** — register at api.podcastindex.org and add
-  `PODCASTINDEX_API_KEY` and `PODCASTINDEX_API_SECRET` to the quorum Actions secrets. It is free
-  and it is only used for shows with no workable RSS or YouTube surface, so its absence degrades
-  a few shows rather than the podcast stream. A live dry run without it already returns nine
-  episodes. [imp:2] [owner:me] [time:15m] [kind:setup]
 
 - [ ] **Confirm the curated source registry** — `config/caught-up-streams.json` seeds three Medium
   tags, nine Substacks and eight podcast shows. Eight shows ship `enabled: false` with a note
@@ -294,7 +275,7 @@ is the single thing standing between a proven path and a working one.
   `BOARDLESSAI_GITHUB_REPOSITORY` and `BOARDLESSAI_GITHUB_BRANCH` if you are not using the
   defaults, which are `lukaskourilcz/quorum` and `main`. All of them are read by the site alone
   and belong on the Vercel project; no workflow references any of them, so putting them in Actions
-  secrets would leave the door shut.
+  secrets would leave the door shut. [imp:5] [owner:me] [time:10m] [kind:setup]
 
   **The token needs two permissions, not one.** This entry used to name only Contents read/write,
   which is what saves a record back. The same token also POSTs to
@@ -306,36 +287,6 @@ is the single thing standing between a proven path and a working one.
   HMAC keyed on `boardlessai-admin\0<user>\0<password>`, so prefer something long and random over
   something memorable. Changing either value invalidates every live session at once, which is the
   way to log yourself out everywhere. Sessions last eight hours.
-  [imp:5] [owner:me] [time:10m] [kind:setup]
-
-- [x] **Create an Apify account on the Free plan and add `APIFY_TOKEN` to Actions secrets** — the
-  single unblock for GoVIRAL's trend scouting. Free plan only: no card, and its $5 of monthly
-  platform credit is the budget guard — when the credit is spent the actors stop, so an overspend
-  is not possible. The weekly recipe uses about $1.03 of it and a month about $4.60, so the cash
-  cost is $0 now and on renewal. The six pinned actors read logged-out public Instagram and Threads
-  posts and none of them takes a login or a cookie, so your own accounts are never involved and
-  carry no ban risk from this. Without the token everything still runs: the Monday room opens,
-  finds no scout data, records that in one sentence and spends nothing. **Never upgrade the plan
-  without a new approval**: Starter is $29/month, which would consume more than half of the $50
-  all-in cap. `state/INBOX.md` carries this as `APIFY-ACCOUNT-001`.
-  [imp:4] [owner:me] [time:10m] [kind:setup]
-
-- [ ] **Fill in `state/ventures/goviral/profile.md`** — the writer half of the weekly brief: your
-  niches, your voice, your audiences, and what you never write about. Nothing in it is generated
-  and nothing should be; until you fill it in the room leans on the two magazine niches and says so
-  plainly in the brief rather than inventing a voice for you. Half-thoughts and bullets are fine;
-  it is read as data, never as instructions. Tracked with the Apify credit check in #528.
-  [imp:4] [owner:me] [time:20m] [kind:content]
-
-- [ ] **Record the fal.ai prepaid credit in the finance state** — the prepayment on 2026-08-08
-  is real operating spend under the $50 all-in cap, and only the owner records payments: add the
-  amount and date where LEDGER reconciles (`state/treasury/` / `state/FINANCE.md`) so the monthly
-  numbers include it. [imp:3] [owner:me] [time:5m] [kind:decision]
-
-- [ ] **Finish the Vercel half of the aifirst credential audit** — the retired `ANTHROPIC_API_KEY`
-  Actions secret is deleted; old source, image, promotion, heartbeat and generation-report
-  credentials in the aifirst Vercel project are still open, and keys pasted into chat still want
-  rotating. Tracked in `aifirst/NEEDED.md`. [imp:4] [owner:me] [time:15m] [kind:setup]
 
 ---
 
@@ -362,8 +313,8 @@ Judgement calls. Nothing is blocked on code for any of these.
 
 - [x] **Countersign or decline WebDev Signal's founding boundary** — countersigned on 2026-08-30
   ("Countersign everything thats left there for me"); the decision file records it and, since
-  2026-09-15, `config/webdev-signal.json` matches. The working name and exact handles are still
-  unresolved and belong to the account item above. [imp:4] [owner:me] [time:20m] [kind:decision]
+  2026-09-15, `config/webdev-signal.json` matches. The name is cleared as `WebDev Signal` (#532);
+  the handles belong to the account item above. [imp:4] [owner:me] [time:20m] [kind:decision]
 
 - [x] **Sign or decline `TS-RESEARCH-004`** — decide whether the existing shared
   provider may research the Ukrainian coverage gap, names and music at no more than
@@ -406,14 +357,6 @@ Judgement calls. Nothing is blocked on code for any of these.
   receipts record the article URL they published to, so changing the project name means the older
   receipts point at the old host. [imp:3] [owner:me] [time:20m] [kind:setup]
 
-- [ ] **Enter actual fixed monthly costs in `/admin` — or leave the flag as your answer** —
-  `config/fixed-costs.json` carries `confirmedNoFixedCosts: true`, which says "there are none"
-  rather than "nobody has entered any". If that is right, tick this. If you do pay for something,
-  enter each subscription with its monthly USD amount, category and first-paid date: that registry
-  feeds the non-API half of the all-in total measured against the $50 cap (`allInNonApiSpentUsd` in
-  `orchestrator/src/budget.ts`), so a wrong answer makes the company look cheaper than it is. Do
-  not enter example prices. [imp:3] [owner:me] [time:15m] [kind:setup]
-
 - [ ] **Review the curated scene proposals both magazines are collecting** — when the vision gate
   approves a licensed-search photograph at fit 8 or better with no vetoes, it is appended as an
   unchecked line to `state/ventures/caught-up/media/scene-proposals.md` or the mma-files file
@@ -425,24 +368,22 @@ Judgement calls. Nothing is blocked on code for any of these.
   [imp:2] [owner:me] [time:20m] [kind:content]
 
 - [ ] **Decide the two efficiency-review calls.** Both were measured against the ledger and both
-  are product decisions rather than engineering ones:
+  are product decisions rather than engineering ones. [imp:3] [owner:me] [time:15m] [kind:decision]
   1. *May the DNESKAi edition arrive at 09:00?* Every delivered edition except 6 August needed the
      09:00 retry, and every retry that ran succeeded — so 05:00 is a paid rehearsal for it. Moving
      the slot deletes the retry machinery (`config/ventures.json` `daily@05:00` → `daily@09:00`,
-     `EDITION_RETRY_HOUR` and its special-case dispatch, two `site/vercel.json` cron entries). Two
-     things to resolve first: 09:00 already belongs to `mag-editorial`, so either confirm
-     `cycle.yml` runs two dispatches in one hour without the concurrency group cancelling one, or
-     move `mag-editorial` to 08:00. If you want the 05:00 promise kept, the cheaper variant is a
-     $0 pre-flight at 05:00 that runs only the source and budget gates and records what would have
-     blocked, then produces at 09:00.
+     `EDITION_RETRY_HOUR` and its special-case dispatch, two `site/vercel.json` cron entries). The
+     09:00 hour holds only the retry now: `mag-editorial` is paused with MMA Files and holds no
+     slot. If you want the 05:00 promise kept, the cheaper variant is a $0 pre-flight at 05:00 that
+     runs only the source and budget gates and records what would have blocked, then produces at
+     09:00.
   2. *Do the three backstop sweeps shrink to one?* A Vercel dispatch lands on the hour and does the
-     work; a GitHub `schedule` firing lands 13 minutes to 3 hours 20 late and exits a guard. Each
+     work; a GitHub `schedule` firing lands 13 minutes to 5 hours late and exits a guard. Each
      sweep can only rescue a slot still inside its 6-hour window, and the three fixed times
      (`55 3`, `55 11`, `55 19` UTC in `cycle.yml`) still leave edge slots effectively uncovered.
-     Appending the sweep's "any unopened slot still in window?" check
-     as a $0 post-step of every punctual run gives eighteen checks a day instead of three, with
-     coverage that tracks the schedule automatically, and leaves a single midday dead-man's entry.
-  [imp:3] [owner:me] [time:15m] [kind:decision]
+     Appending the sweep's "any unopened slot still in window?" check as a $0 post-step of every
+     punctual run gives five checks a day instead of three, with coverage that tracks the schedule
+     automatically, and leaves a single midday dead-man's entry.
 
 - [ ] **Decide Board HQ's roster length** — the opened room lists all 23 roles scoped `global`,
   correct by the registry but a long column beside rooms showing two or three. Restricting it to
@@ -469,12 +410,6 @@ Judgement calls. Nothing is blocked on code for any of these.
   limit and ideas from meetings, all read from the record. Any figure the record cannot supply
   prints an em dash rather than a zero. [imp:2] [owner:me] [time:10m] [kind:decision]
 
-- [ ] **Turn on "Automatically delete head branches" on `lukaskourilcz/quorum`** — Settings →
-  General → Pull Requests. Sessions can push a branch but not delete one: the agent proxy answers a
-  delete-ref push with HTTP 403, so the git-workflow rule about never leaving a stale branch behind
-  is one no session can keep. The setting keeps it automatically.
-  [imp:2] [owner:me] [time:2m] [kind:setup]
-
 - [ ] **Public URLs for three projects** — FightAIQ, GoVIRAL and Titty Tuesdays have no public
   address, so their cards on the home page render nothing in the link slot rather than a "coming
   soon". Supply a URL each and the line appears. [imp:2] [owner:me] [time:10m] [kind:content]
@@ -498,7 +433,7 @@ Judgement calls. Nothing is blocked on code for any of these.
   `METRICS_INGESTION_ENABLED=true`. Until then follower and engagement KPIs stay honestly
   unavailable, SPLIT stays off, the quarterly evaluator reports missing audience data as
   unavailable, and no analytics credential is required.
-  [imp:1] [owner:me] [time:0m] [kind:decision]
+  [imp:1] [owner:me] [time:5m] [kind:decision]
 
 ### Verify once, then leave alone
 
@@ -567,6 +502,7 @@ Roughly a month out. Nothing here is needed until a channel actually opens, and 
   `amplifier-setup-packet/1` here: select one proposed brand name/handle, create the account
   manually and record only the generated credential reference name. Do not add an amplifier to the
   credential table before that owner decision. The Design Lab has no accounts and needs none.
+  [imp:2] [owner:me] [time:45m] [kind:setup]
 
   | Venture | Actions secrets | Repository variables |
   | --- | --- | --- |
@@ -586,7 +522,7 @@ Roughly a month out. Nothing here is needed until a channel actually opens, and 
   setting it to `false` removes only the owner stop, and each venture's counter, credentials, roles
   and safety checks still have to pass. Until a channel is enabled the composer writes DNESKAi's
   pack and draft queue items every edition day but no image files (#563); the admin renders the
-  frames from the pack. [imp:2] [owner:me] [time:45m] [kind:setup]
+  frames from the pack.
 
 - [ ] **Re-enable the social publisher's schedule trigger when a channel connects** — its hourly
   cron is commented out in `.github/workflows/social-publisher.yml` because it fired twenty-four
@@ -599,13 +535,32 @@ Roughly a month out. Nothing here is needed until a channel actually opens, and 
 
 Nothing here needs your hands. It is recorded so it is not lost.
 
-- [ ] **Finish the decomposition started in issue 147** — `orchestrator/src/cycle.ts` is now about
-  1,300 lines. Its remaining seams are the double-fire guards, morning shift, operations review,
+- [ ] **Finish the decomposition started in issue 147** — `orchestrator/src/cycle.ts` is now
+  1,397 lines. Its remaining seams are the double-fire guards, morning shift, operations review,
   artifact writers and night tail; extracting them requires one explicit context object rather
-  than another purportedly mechanical move. `orchestrator/src/portfolio/run.ts` is about 1,730
+  than another purportedly mechanical move. `orchestrator/src/portfolio/run.ts` is 1,805
   lines and still separates naturally into room lifecycle, room content and the
   `RoomStayedShut` family. Keep the work behavior-neutral and one extracted module per commit.
   [imp:2] [owner:ai] [time:3h] [kind:deploy]
+
+- [ ] **Pass the two decision switches to the cycle job** — `CONTENT_GATE_ENABLED`
+  (`orchestrator/src/quality/content-gate.ts`) and `WEEKLY_RETRO_ENABLED`
+  (`orchestrator/src/reports/retro.ts`) are read from `process.env`, but the job `env:` in
+  `.github/workflows/cycle.yml` maps neither, so the owner's two decisions above cannot take
+  effect. Add `${{ vars.… }}` lines for both, and apply the content gate's documented $0.05 call
+  cap (`CONTENT_GATE_CALL_CAP_USD`), which nothing reads today.
+  [imp:2] [owner:ai] [time:45m] [kind:setup]
+
+- [ ] **Triage the open Dependabot alerts on `main`** — on 2026-09-15 GitHub reported 24 (7 high,
+  13 moderate, 4 low) and nobody has triaged the list; `smol-toml` above is one of them. Work it in
+  one session with the frozen install and the studio's `sharp` pin in mind, one package per commit.
+  [imp:3] [owner:ai] [time:2h] [kind:setup]
+
+- [ ] **Give Implementation Plans data** — `state/programs/current.json` does not exist, so the
+  admin page renders its unavailable state. The live synchronizer never runs in the cycle job:
+  GitHub Actions sets `CI=true`, and `CI=true` disables it (`docs/IMPLEMENTATION-PLANS.md`). Settle
+  the refresh path of #419 and #431 before building one, so a second progress system is not built
+  by accident. [imp:2] [owner:ai] [time:1h] [kind:setup]
 
 - [x] **Repair marketingShark's live response contract** — done in #480. It was never the schema:
   seventeen of the nineteen failures billed at exactly 3,000 output tokens, the cap, and the two
@@ -707,7 +662,8 @@ That retry reuses the package and makes no model call. If the automated verifier
 reverts the target commit and pauses DNESKAi.
 
 Then run `morning` and `cu-product` once with dry mode off to populate the normal product path.
-Afternoon and night are `$0` checkpoints.
+The morning also writes the day checkpoint at `$0`; the afternoon and night phases are off the
+clock and run only when dispatched by hand.
 
 ### 4. Prove FightAIQ and MMA Files delivery
 
@@ -779,10 +735,9 @@ GitHub **repository variables** (Settings → Secrets and variables → Actions 
 secrets, read by `.github/workflows/cycle.yml`. A missing variable is not an error: the run either
 records a skip or drops to a fixture-only dry pass, and costs $0 either way — which is why a
 misconfigured repository looks healthy and produces nothing. Which kind you get:
-`CAUGHT_UP_LIVE_ENABLED` forces the dry pass; `PORTFOLIO_LIVE_ENABLED`, `MMA_FILES_LIVE_ENABLED`,
-`FIGHTAIQ_LIVE_ENABLED` and `FIGHTAIQ_ANALYSIS_ENABLED` set `skip`. The four newer venture rooms
-share `PORTFOLIO_LIVE_ENABLED`; their founding and approval gates still fail closed, so there is no
-separate live variable for BOOKSOFHISTORY, Door Money, Kvórum or Tehdejší svět.
+`CAUGHT_UP_LIVE_ENABLED` forces the dry pass; `PORTFOLIO_LIVE_ENABLED` sets `skip`. The four
+newer venture rooms share `PORTFOLIO_LIVE_ENABLED`; their founding and approval gates still fail
+closed, so there is no separate live variable for BOOKSOFHISTORY, Door Money, Kvórum or Tehdejší svět.
 `AUTONOMY_KILL_SWITCH` works the other way — it is a job-level `if`, so only setting it to `true`
 stops anything, and GitHub skips the job before any record is written. Since 2 August a skipped slot is written to
 `state/meetings/skips/` and shown on the calendar as **Skipped** with its reason.
@@ -792,15 +747,15 @@ stops anything, and GitHub skips the job before any record is written. Since 2 A
 | `AUTONOMY_KILL_SWITCH` | anything except `true` | every scheduled cycle; `true` halts all |
 | `PORTFOLIO_LIVE_ENABLED` | `true` | the global board and every venture room |
 | `CAUGHT_UP_LIVE_ENABLED` | `true` | `cu-edition`, `morning`, `cu-product` |
-| `MMA_FILES_LIVE_ENABLED` | `true` | `mag-editorial`, `mag-desk`, `article-am`, `article-pm`, MMA delivery |
-| `FIGHTAIQ_LIVE_ENABLED` | `true` | FightAIQ intake |
-| `FIGHTAIQ_ANALYSIS_ENABLED` | `true` | FightAIQ D8 analysis |
+| `CAUGHT_UP_STREAMS_ENABLED` | `true` | the talked-about, podcast and events deliveries |
+| `ARTICLE_ILLUSTRATION_ENABLED` | `true` | the paid illustration rung, with `FAL_KEY` (a secret of the same name also works) |
+| `DAILY_DIGEST_EMAIL_MODE` | `resend` | the digest e-mail; any other value only logs it |
 
-MMA Files needs **both** `PORTFOLIO_LIVE_ENABLED` and `MMA_FILES_LIVE_ENABLED`; either alone still
-skips. Leave `SOCIAL_KILL_SWITCH` as it is — it beats every per-channel unlock.
+`cycle.yml` reads no MMA Files or FightAIQ variable since #559; those return with the ventures.
+Leave `SOCIAL_KILL_SWITCH` as it is — it beats every per-channel unlock.
 
 Secrets for any model call: `ANTHROPIC_API_KEY`, `OPENAI_API_KEY`. Publishing additionally needs
-`DELIVERY_APP_ID` and `DELIVERY_APP_PRIVATE_KEY`. The six variables above and both model keys were
+`DELIVERY_APP_ID` and `DELIVERY_APP_PRIVATE_KEY`. The live variables and both model keys were
 confirmed present on 2026-08-02; the two delivery App secrets were already working before that.
 `THE_ODDS_API_KEY` and the optional `CITO_API_KEY` were also confirmed present on 2026-08-02.
 
@@ -840,19 +795,12 @@ confirmed present on 2026-08-02; the two delivery App secrets were already worki
 
 ### The day, and what it costs
 
-Eighteen primary hourly duties, plus an edition retry at 09:00: 05:00 edition production, 06:00 board, 07:00
-marketingShark carousel room, 08:00 fight data check, 09:00 story meeting, 10:00 article
-production, 11:00 Titty Tuesdays marketing, 12:00 BOOKSOFHISTORY desk, 13:00 GoVIRAL trend room
-(Mondays only — the other six days cost $0), 14:00 checkpoint, 15:00 Door Money desk, 16:00 Door
-Money growth room (Thursdays only), 17:00 DNESKAi product room, 18:00 Tehdejší svět desk, 19:00
-model check, 20:00 desk review, 21:00 Kvórum desk and 22:00 checkpoint. Vercel carries paired UTC
-cron entries for Prague daylight-saving time; `cycle.yml` keeps five backstop sweeps, the last
-two of them for the 23:00 desk. No full day
-under this clock has been measured: 6 August came to $0.363 across six slots and 4 August to $0.412
-across seven, both against a $1.00 daily pace and the $30 all-in monthly cap from `budget-2026-08e`.
-marketingShark adds about 6c to a day. BOOKSOFHISTORY advances one phase per working
-day; research remains capped at `$0.10` per call, `$0.50` per cycle and `$5.00` per
-month, while a shelf or stretched day may cost `$0`.
+Five slots a day: 05:00 DNESKAi day (the WebDev Signal pre-step, the edition and the product
+check), 06:00 board and day checkpoint, 07:00 marketingShark (weekdays), 09:00 DNESKAi retry and
+13:00 GoVIRAL (paid on Mondays only). Vercel carries two UTC entries per slot, ten in all, and
+`cycle.yml` keeps three backstop sweeps. The cap is $50 all-in with a $25 model share and a $1.00
+daily pace (`budget-2026-08f`). marketingShark adds about 6c to a weekday. Paused ventures hold
+no slot and cost $0; `scaling.md` keeps their envelopes for when they resume.
 
 ---
 
@@ -1011,10 +959,10 @@ ventures and resumes one.
 
 ### MMA Files and FightAIQ
 
-One branch is open in a consumer repository and is waiting on you, not on code:
-`lukaskourilcz/mma-files` `claude/article-image-selection-61rs70`. Merging it is what lets the two
-corrected MMA heroes reach the magazine. The matching aifirst branch was merged into its `main` as
-`4bc270c8` on 2026-08-09 and then removed.
+mma-files `main` accepts image corrections since `1c276eb` (2026-08-12, "accept image corrections
+at the consumer"), so its old branch `claude/article-image-selection-61rs70` is superseded. The two
+corrected heroes deliver through the normal outbox once MMA Files resumes. The matching aifirst
+branch was merged into its `main` as `4bc270c8` on 2026-08-09 and then removed.
 
 - [x] **Approve the reviewed MMA scope for the same Apify token** — `APIFY-MMA-SOURCES-001` in
   `state/INBOX.md` authorizes only the terms-reviewed Tapology promotion-page reference step.
@@ -1024,15 +972,9 @@ corrected MMA heroes reach the magazine. The matching aifirst branch was merged 
   no-op. Read the shared-credit warning before approving this alongside GoVIRAL.
   [imp:4] [owner:me] [time:5m] [kind:decision]
 
-- [ ] **Merge `claude/article-image-selection-61rs70` in the mma-files repository** — the two
-  wrong heroes are corrected on this side and cannot reach the magazine until that branch is on
-  its `main`. A delivered article is immutable there by date and slot, which is what stops a
-  published piece being swapped; the branch adds the one narrow exception, an
-  `article-image-correction/1` block whose claim the consumer re-checks itself, and refuses
-  anything where more than the picture differs. Its own `npm test` is green at 27, including two
-  new cases. Once merged, the next two cycles deliver the corrections through the normal outbox
-  and the government official and the firearms range stop being live assets.
-  [imp:4] [owner:me] [time:5m] [kind:deploy]
+- [ ] **Delete the superseded `claude/article-image-selection-61rs70` branch in mma-files** — its
+  correction path landed on `main` as `1c276eb`; the branch head `777ba7d` is not an ancestor of
+  `main` and nothing on it is needed. [imp:1] [owner:me] [time:2m] [kind:setup]
 
 - [ ] **Replace three curated MMA photographs that no longer exist on Commons** — probed on
   2026-08-09: `UFC Fight Night Belfast weigh-ins (29923390484).jpg`, `MMA gloves (Unsplash).jpg`
@@ -1117,11 +1059,9 @@ corrected MMA heroes reach the magazine. The matching aifirst branch was merged 
 
 ### Door Money
 
-- [ ] **Countersign or decline Door Money's founding decision** — Kvórum's, BOOKSOFHISTORY's and
-  Tehdejší svět's were signed on 2026-08-29, and Kvórum's capacity reallocation with them, so its
-  desk is open. `state/decisions/2026-08-12-door-money-founding.md` is the one left, and it is not
-  urgent: you paused Door Money in Settings, and a paused venture holds no meetings whether its
-  founding is signed or not. Sign it when you resume the venture.
+- [x] **Countersign or decline Door Money's founding decision** — countersigned 2026-08-30
+  ("Countersign everything thats left there for me");
+  `state/decisions/2026-08-12-door-money-founding.md` records it. The venture stays paused.
   [imp:2] [owner:me] [time:20m] [kind:decision]
 
 - [ ] **Create Door Money's private source repository** — `BOOK-SOURCE-001` was signed on
@@ -1239,11 +1179,10 @@ The desk was resumed on 2026-09-15 for the book and audiobook promotion on `luka
 plans and measures; it never drafts the book copy and never posts. Manual posting from the
 admin's recommendations is the launch mode.
 
-- [ ] **Give the desk the book and audiobook facts.** The state tree holds no title, retail link,
-  release date, narrator or publisher, so no plan can mention the launch. Put a `finalUrl` or
-  `articleUrl` on the OKRAJ and BBARAK occurrences in the admin Timeline, and send the facts in
-  #530; a dedicated "book launch" action type is a contract change a session can make once they
-  exist. [imp:4] [owner:me] [time:20m] [kind:content]
+- [x] **Give the desk the book and audiobook facts.** Done 2026-09-15 (#530):
+  `state/ventures/personal-growth/publications.json` holds both. A dedicated "book launch" action
+  type is still a contract change in `orchestrator/src/contracts/personal-growth-recommendations.ts`
+  that a session can make if you want it. [imp:4] [owner:me] [time:20m] [kind:content]
 
 - [ ] **Configure the separate Personal Growth private clone and ingest owner-selected journals.**
   Set `PERSONAL_GROWTH_PRIVATE_CLONE_PATH` to a private clone that does not overlap this
