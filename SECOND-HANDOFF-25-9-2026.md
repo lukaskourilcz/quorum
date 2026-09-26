@@ -11,8 +11,8 @@ challenges. Read its section 0 once; two of its facts change what marketingShark
 The kickoff issues of the same morning (#555 to #567, label `kickoff-25-9-2026`) still stand.
 Three of them are prerequisites here: #556 (the devShark carousel fits the canvas), #561
 (Design Lab lists operating ventures) and #562 (GoVIRAL edges to devShark). `HANDOFF.md`
-(30 August) and `HANDOFF-2026-09-15.md` are history and can be deleted once `docs/NEEDED.md`
-carries their open items.
+(30 August) and `HANDOFF-2026-09-15.md` were deleted on 2026-09-26 (#580) once `docs/NEEDED.md`
+carried their open items.
 
 ## 0. What the owner asked for
 

@@ -92,6 +92,18 @@ Council runs via API in `orchestrator/`; you are the human-invoked engineer.
   storage shape or neighboring package. BOOKSOFHISTORY and Tehdejší svět are mutually isolated;
   Personal Growth cannot enumerate the portfolio; Kvórum cannot export political content; and
   GoVIRAL supplies only bounded expiring intelligence, never final copy.
+- **The browser suites write into `state/`.** A run killed before its teardown leaves fixtures
+  behind; let it finish or clean up with `git checkout -- state/` and `git clean -fd state/`. In
+  the Claude cloud container the browser is preinstalled and `playwright install` is disabled;
+  `docs/ADMIN-VISUAL-QA.md` has the one-time link the suites need there.
+- **Read the last day of failed cycle runs before reading state.** The credit outage of
+  2026-09-13 was one call away in the GoVIRAL run log while every skip record said only that the
+  run failed.
+- **A public record's summary carries no slugs, hashes or proof ids.** Identifiers belong in the
+  receipt. The site drops a record whose summary reads as machine text, and
+  `site/src/lib/public-surfaces.test.ts` guards it.
+- **Cron counts come from the generator.** Tests read `deployedCronExpressions()`, so a backstop
+  sweep changes in `BACKSTOP_SWEEP_HOURS` and `.github/workflows/cycle.yml` together.
 - **The monetization catalog is reference material, not a queue.** Its v2 posture is
   `information-only`, `executionEnabled` is false and every runtime method remains locked even
   when a readiness KPI is met. Catalog reads must never create a proposal, experiment, agenda,

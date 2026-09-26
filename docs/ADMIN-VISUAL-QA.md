@@ -122,3 +122,33 @@ The build retained the repository's existing broad dynamic filesystem trace warn
 Live and verified capabilities are protected Admin navigation, responsive light/dark presentation, keyboard-accessible overlays, read-only workflow inspection, canonical owner-gated writes through their existing routes, manual Design Lab exports, and protected file/binder views.
 
 Automatic social publishing, replies, account creation, credential entry, purchases, and plan upgrades remain disabled. No new human-only action was introduced, so `docs/NEEDED.md` is unchanged.
+
+## Running the browser suites in a Claude cloud container
+
+The Claude cloud environment preinstalls Chromium under `/opt/pw-browsers`
+(`PLAYWRIGHT_BROWSERS_PATH`) and disables `playwright install`; do not run it. The image ships
+browser build 1194, while the site's `@playwright/test` expects the build named in its
+`playwright-core` `browsers.json` (1234 for 1.62). No suite launches until that path exists, so
+link the installed headless shell under the expected revision once per container:
+
+```sh
+REV=1234  # "chromium-headless-shell" in node_modules/.pnpm/playwright-core@*/node_modules/playwright-core/browsers.json
+mkdir -p /opt/pw-browsers/chromium_headless_shell-$REV/chrome-headless-shell-linux64
+ln -sf /opt/pw-browsers/chromium_headless_shell-1194/chrome-linux/headless_shell \
+  /opt/pw-browsers/chromium_headless_shell-$REV/chrome-headless-shell-linux64/chrome-headless-shell
+touch /opt/pw-browsers/chromium_headless_shell-$REV/INSTALLATION_COMPLETE
+```
+
+A local machine needs none of this; `pnpm -C site exec playwright install chromium` once is enough.
+
+Three things every run shares:
+
+- `site/tests/e2e/operating-surfaces.spec.ts` and the write journeys write real fixtures into the
+  repository's own `state/` and remove them in `test.afterAll`. A run killed before teardown
+  leaves them behind. Let a run finish, or clean up after killing one: read `git status`, then
+  `git checkout -- state/` and `git clean -fd state/`.
+- `pnpm build` and a running dev server share `site/.next`, so running the root gate while an E2E
+  run is up stalls the run.
+- CI tests a pull request's merge commit, not the branch head. A browser failure that does not
+  reproduce on the branch often does after merging `main`, because the merge brings its state
+  files.

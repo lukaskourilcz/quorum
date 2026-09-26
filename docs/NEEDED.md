@@ -385,6 +385,17 @@ Judgement calls. Nothing is blocked on code for any of these.
      punctual run gives five checks a day instead of three, with coverage that tracks the schedule
      automatically, and leaves a single midday dead-man's entry.
 
+- [ ] **Keep the pre-2026-08-29 calendar rows?** — finished weeks now render under the
+  one-row-per-venture clock. Preserving the old rows for dates before 2026-08-29 is a table of
+  retired hours and about an hour of work; leaving it is a fine answer.
+  [imp:1] [owner:me] [time:5m] [kind:decision]
+
+- [ ] **Move WebDev Signal's health node off `planned`/`held`?** — `config/venture-slos.json`
+  still gives webdev-signal `lifecycleStage: planned` and a `held` cadence, and the operations
+  release audit pins it, while the venture has been operating since 2026-09-15. Moving it is a
+  decision about what its SLO promises, not a refactor.
+  [imp:2] [owner:me] [time:10m] [kind:decision]
+
 - [ ] **Decide Board HQ's roster length** — the opened room lists all 23 roles scoped `global`,
   correct by the registry but a long column beside rooms showing two or three. Restricting it to
   the council is a one-line change. [imp:2] [owner:me] [time:5m] [kind:decision]
@@ -561,6 +572,11 @@ Nothing here needs your hands. It is recorded so it is not lost.
   GitHub Actions sets `CI=true`, and `CI=true` disables it (`docs/IMPLEMENTATION-PLANS.md`). Settle
   the refresh path of #419 and #431 before building one, so a second progress system is not built
   by accident. [imp:2] [owner:ai] [time:1h] [kind:setup]
+
+- [ ] **Say the admin's unreadable files in a sentence** — the attention rail's "Unreadable
+  files" entry (`site/src/app/admin/page.tsx`) reads as a counter even at zero. Show one plain
+  sentence when something is unreadable and nothing when nothing is.
+  [imp:1] [owner:ai] [time:30m] [kind:setup]
 
 - [x] **Repair marketingShark's live response contract** — done in #480. It was never the schema:
   seventeen of the nineteen failures billed at exactly 3,000 output tokens, the cap, and the two
