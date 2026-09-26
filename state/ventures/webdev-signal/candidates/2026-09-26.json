@@ -1,0 +1,3124 @@
+[
+  {
+    "schemaVersion": "webdev-candidate/1",
+    "sourceId": "next-releases",
+    "sourceItemId": "sha256:7a9210c55dc7ded00391928427860923",
+    "listingUrl": "https://api.github.com/repos/vercel/next.js/releases",
+    "targetUrl": "https://github.com/vercel/next.js/releases/tag/v16.4.0-canary.48",
+    "canonicalProjectUrl": "https://github.com/vercel/next.js",
+    "title": "v16.4.0-canary.48",
+    "summary": "### Misc Changes - Hoist resolved pathname into app page route match: #99259 - docs: papercuts in image API reference: #99256 - test: run the TypeScript version warning suites in deploy: #99195 - test: drop skipDeployment where another gate already excludes deploy: #99194 - bundle-analyzer: suspend while loading analyzer data: #98535 - Fix Server Actions hanging after navigation to PPR pages: #99252 - Fix blurry bundle analyzer treemap on low-DPI displays: #99197 - Rename bundle analyzer snapshot naming option: #99251 - Reduce stacked PR gate polling and use ts-jest: #99215 - Name the internal trace server process: #99257 - test: enable deploy coverage for asset and compiler errors: #98850 - test: consolidate duplicate mode branches in build error tests: #99135 - test: snapshot the proxy-r",
+    "author": "next-js-bot[bot]",
+    "project": "Next.js",
+    "publishedAt": "2026-09-25T23:43:36.000Z",
+    "updatedAt": "2026-09-25T23:43:36.000Z",
+    "versionText": "v16.4.0-canary.48",
+    "securityText": null,
+    "topicHints": [
+      "meta-framework",
+      "deployment-platform"
+    ],
+    "changeKindHints": [
+      "beta-preview"
+    ],
+    "language": "en",
+    "contentHash": "fb4c9339b7a1c4dd3194901b8d96a5ecf94a54317eda55ca8ff3f70e38abf587",
+    "provenance": {
+      "authority": "official-primary",
+      "parserId": "github-releases",
+      "parserVersion": "1.0.0",
+      "fetchedAt": "2026-09-26T08:51:03.425Z",
+      "evidenceRefs": [
+        "source:next-releases:864ebd3867c506b6b40d3eef"
+      ],
+      "fixture": false
+    }
+  },
+  {
+    "schemaVersion": "webdev-candidate/1",
+    "sourceId": "github-npm-advisories",
+    "sourceItemId": "GHSA-9gfj-28hw-jchp",
+    "listingUrl": "https://api.github.com/advisories?ecosystem=npm",
+    "targetUrl": "https://github.com/advisories/GHSA-9gfj-28hw-jchp",
+    "canonicalProjectUrl": "https://github.com/advisories",
+    "title": "Knowns Unrestricted Path Traversal leading to out-of-bounds arbitrary .md file read, write, and deletion in MCP Docs + Memory Tools",
+    "summary": "## Overview Verified. Multiple **Unrestricted Path Traversal** vulnerabilities exist in the Knowns MCP `docs` and `memory` tools, allowing arbitrary file read, write, and deletion operations outside the project sandbox. The storage layer functions (`Get`, `Create`, `Update`, `Rename`, `Delete`) in both `doc_store.go` and `memory_store.go` concatenate user-controlled paths with `filepath.Join()` without any containment validation. Additionally, the `docs.update` action with a `newPath` parameter performs a file deletion via `Rename()`, but is classified as `CapWrite` in the permission registry rather than `CapDelete`. This allows an attacker with a `read-write-no-delete` preset to bypass deletion restrictions and destroy arbitrary files outside the project root. ## Affected paths | File Pat",
+    "author": "GitHub Advisory Database",
+    "project": "knowns",
+    "publishedAt": "2026-09-25T19:32:05.000Z",
+    "updatedAt": "2026-09-25T19:32:06.000Z",
+    "versionText": "knowns affected <= 0.29.1 fixed 0.30.0",
+    "securityText": "GHSA-9gfj-28hw-jchp; severity high; knowns affected <= 0.29.1 fixed 0.30.0",
+    "topicHints": [
+      "security",
+      "package-manager"
+    ],
+    "changeKindHints": [
+      "security-advisory"
+    ],
+    "language": "en",
+    "contentHash": "a642025f9a6b2778f2640e80ff7de86d43d5a41da9622c979a4fa7017781dfd3",
+    "provenance": {
+      "authority": "official-advisory",
+      "parserId": "github-advisories",
+      "parserVersion": "1.0.0",
+      "fetchedAt": "2026-09-26T08:51:03.425Z",
+      "evidenceRefs": [
+        "source:github-npm-advisories:163beccac0118cfdb24566d1"
+      ],
+      "fixture": false
+    }
+  },
+  {
+    "schemaVersion": "webdev-candidate/1",
+    "sourceId": "github-npm-advisories",
+    "sourceItemId": "GHSA-29h2-jr22-frmh",
+    "listingUrl": "https://api.github.com/advisories?ecosystem=npm",
+    "targetUrl": "https://github.com/advisories/GHSA-29h2-jr22-frmh",
+    "canonicalProjectUrl": "https://github.com/advisories",
+    "title": "OpenZeppelin Confidential Contracts `VestingWalletConfidential`: a malicious ERC-7984 token is able to extract private data from the vesting wallet",
+    "summary": "### Impact Two locations consume an encrypted handle returned by an untrusted external party and use it without verifying that the party is ACL-authorized on it. #### `VestingWalletConfidential` Malicious users can call `release` with a malicious token. This token could return an alternative handle on `confidentialBalanceOf`, which represents the balance of the vesting wallet on an alternative ERC-7984 token (or any other handle that the vesting wallet has access to). The vesting wallet does not check that the token has ACL access and grants access to a new handle derived from the returned handle. Effectively, this bug allows a malicious user to gain information about any private `euint64` handle that the vesting wallet has access to via a malicious ERC-7984 token. There is no loss of fund",
+    "author": "GitHub Advisory Database",
+    "project": "@openzeppelin/confidential-contracts",
+    "publishedAt": "2026-09-25T19:31:08.000Z",
+    "updatedAt": "2026-09-25T19:31:09.000Z",
+    "versionText": "@openzeppelin/confidential-contracts affected < 0.3.2 fixed 0.3.2; @openzeppelin/confidential-contracts affected >= 0.4.0-rc.0, < 0.4.2 fixed 0.4.2; @openzeppel",
+    "securityText": "GHSA-29h2-jr22-frmh; severity high; @openzeppelin/confidential-contracts affected = 0.4.0-rc.0, < 0.4.2 fixed 0.4.2; @openzeppel",
+    "topicHints": [
+      "security",
+      "package-manager"
+    ],
+    "changeKindHints": [
+      "security-advisory"
+    ],
+    "language": "en",
+    "contentHash": "6ba61d74abc63a94c018f732974a6357cafc662709c900e6520a76f12c14b33f",
+    "provenance": {
+      "authority": "official-advisory",
+      "parserId": "github-advisories",
+      "parserVersion": "1.0.0",
+      "fetchedAt": "2026-09-26T08:51:03.425Z",
+      "evidenceRefs": [
+        "source:github-npm-advisories:48a3da9e48c14d9e6e086ddc"
+      ],
+      "fixture": false
+    }
+  },
+  {
+    "schemaVersion": "webdev-candidate/1",
+    "sourceId": "next-releases",
+    "sourceItemId": "sha256:1952f7631521fe44a6b6503eacedbad6",
+    "listingUrl": "https://api.github.com/repos/vercel/next.js/releases",
+    "targetUrl": "https://github.com/vercel/next.js/releases/tag/v16.4.0-canary.47",
+    "canonicalProjectUrl": "https://github.com/vercel/next.js",
+    "title": "v16.4.0-canary.47",
+    "summary": "### Misc Changes - Prepare `'use cache'` for static root-param tracking: #99239 - [test] Adjust the prerender-encoding open fallback gate for non-adapter deploys: #99240 - Turbopack: avoid project-wide traces from package directories: #99238 ### Credits Huge thanks to @unstubbable, @eps1lon, and @sokra for helping!",
+    "author": "next-js-bot[bot]",
+    "project": "Next.js",
+    "publishedAt": "2026-09-25T16:16:24.000Z",
+    "updatedAt": "2026-09-25T16:16:24.000Z",
+    "versionText": "v16.4.0-canary.47",
+    "securityText": null,
+    "topicHints": [
+      "meta-framework",
+      "deployment-platform"
+    ],
+    "changeKindHints": [
+      "beta-preview"
+    ],
+    "language": "en",
+    "contentHash": "037aafd879a1b244e04a4a228ca4d4ff35c7d60b3536d7a8e716f1e53feb9e76",
+    "provenance": {
+      "authority": "official-primary",
+      "parserId": "github-releases",
+      "parserVersion": "1.0.0",
+      "fetchedAt": "2026-09-26T08:51:03.425Z",
+      "evidenceRefs": [
+        "source:next-releases:3988b6b2d22d9bf900ad9c4f"
+      ],
+      "fixture": false
+    }
+  },
+  {
+    "schemaVersion": "webdev-candidate/1",
+    "sourceId": "next-releases",
+    "sourceItemId": "sha256:567108a5921a978eae63990d156f96ec",
+    "listingUrl": "https://api.github.com/repos/vercel/next.js/releases",
+    "targetUrl": "https://github.com/vercel/next.js/releases/tag/v16.4.0-canary.46",
+    "canonicalProjectUrl": "https://github.com/vercel/next.js",
+    "title": "v16.4.0-canary.46",
+    "summary": "### Misc Changes - Revert \"Add experimental custom webpack support\": #99227 - test: stabilize lazy dynamic import error overlay: #98730 - turbo-tasks-gc: tear down reverse edges when collecting a task: #99145 - Sequence CI for branch-based PR stacks: #99086 - Prefetch scheduler mirrors the navigation's tree walk: #98975 - Separate route structure comparison from param comparison: #98974 - Store the head as its own CacheNode: #98973 - Record which params a CacheNode's data depends on: #98972 - Use RouteTree for CacheNode tree: #98971 - Remove the page/layout distinction from RouteTree: #98970 - Fix root predicates: #98942 - [turbopack] only remove followers if they are actually removed as children: #98843 - turbo-tasks-backend: simplify the collectibility predicate and collect transient tas",
+    "author": "next-js-bot[bot]",
+    "project": "Next.js",
+    "publishedAt": "2026-09-25T11:38:07.000Z",
+    "updatedAt": "2026-09-25T11:38:07.000Z",
+    "versionText": "v16.4.0-canary.46",
+    "securityText": null,
+    "topicHints": [
+      "meta-framework",
+      "deployment-platform"
+    ],
+    "changeKindHints": [
+      "beta-preview"
+    ],
+    "language": "en",
+    "contentHash": "4ddd8962810089c7d5b10bfd97720bacfd2106a2d4520dd30cb56882e169b5a2",
+    "provenance": {
+      "authority": "official-primary",
+      "parserId": "github-releases",
+      "parserVersion": "1.0.0",
+      "fetchedAt": "2026-09-26T08:51:03.425Z",
+      "evidenceRefs": [
+        "source:next-releases:dd28688fda034ccad7fe824f"
+      ],
+      "fixture": false
+    }
+  },
+  {
+    "schemaVersion": "webdev-candidate/1",
+    "sourceId": "next-releases",
+    "sourceItemId": "sha256:f5a68e424193a675e725813de21fdc47",
+    "listingUrl": "https://api.github.com/repos/vercel/next.js/releases",
+    "targetUrl": "https://github.com/vercel/next.js/releases/tag/v16.4.0-canary.45",
+    "canonicalProjectUrl": "https://github.com/vercel/next.js",
+    "title": "v16.4.0-canary.45",
+    "summary": "### Misc Changes - [test] Fix new deploy suites: #99162 - Provide only the relevant context for agent upgrade: #99189 - Turbopack: Add support for additionalRoots to deployment adapters: #99015 - Use Sonnet 5 with 1M context for AI upgrade handoff: #99183 - docs: font per-call preload scope and the declarations font-family override: #99167 ### Credits Huge thanks to @eps1lon, @devjiwonchoi, @bgw, and @icyJoseph for helping!",
+    "author": "next-js-bot[bot]",
+    "project": "Next.js",
+    "publishedAt": "2026-09-24T23:48:13.000Z",
+    "updatedAt": "2026-09-24T23:48:13.000Z",
+    "versionText": "v16.4.0-canary.45",
+    "securityText": null,
+    "topicHints": [
+      "meta-framework",
+      "deployment-platform"
+    ],
+    "changeKindHints": [
+      "beta-preview"
+    ],
+    "language": "en",
+    "contentHash": "09e49d778e55025ad27f9754250289be995372f88f2bfcfdccebf931a1b851cc",
+    "provenance": {
+      "authority": "official-primary",
+      "parserId": "github-releases",
+      "parserVersion": "1.0.0",
+      "fetchedAt": "2026-09-26T08:51:03.425Z",
+      "evidenceRefs": [
+        "source:next-releases:cee95e01e6838b7c6f4f5afa"
+      ],
+      "fixture": false
+    }
+  },
+  {
+    "schemaVersion": "webdev-candidate/1",
+    "sourceId": "github-npm-advisories",
+    "sourceItemId": "GHSA-3cj3-hqcr-g934",
+    "listingUrl": "https://api.github.com/advisories?ecosystem=npm",
+    "targetUrl": "https://github.com/advisories/GHSA-3cj3-hqcr-g934",
+    "canonicalProjectUrl": "https://github.com/advisories",
+    "title": "Cline: Cross-Origin WebSocket Hijacking in Cline Hub Dashboard (`/browser` endpoint)",
+    "summary": "### Summary The Cline Hub dashboard server (`@cline/cline-hub`), launched via the `cline dashboard` CLI command, accepts WebSocket connections on the `/browser` endpoint without validating the HTTP `Origin` header. When `ROOM_SECRET` is not set—the default for local (`127.0.0.1`) binds—`isAuthorizedBrowserRequest()` returns `true` unconditionally, allowing any website a developer visits to open a cross-origin WebSocket to `ws://127.0.0.1:8787/browser`. An attacker-controlled page can then send `desktopCommand` frames to read workspace/session state, mutate MCP and provider settings, and—because dashboard sessions default to `autoApprove: true` for all tools—trigger arbitrary command execution when a provider/model is configured. Dynamically confirmed: an `upsert_mcp_server` frame injected",
+    "author": "GitHub Advisory Database",
+    "project": "cline",
+    "publishedAt": "2026-09-24T19:48:34.000Z",
+    "updatedAt": "2026-09-24T19:48:35.000Z",
+    "versionText": "cline affected < 3.0.30 fixed 3.0.30",
+    "securityText": "GHSA-3cj3-hqcr-g934; severity high; cline affected < 3.0.30 fixed 3.0.30",
+    "topicHints": [
+      "security",
+      "package-manager"
+    ],
+    "changeKindHints": [
+      "security-advisory"
+    ],
+    "language": "en",
+    "contentHash": "05880461fb5a8df79d27baa193ffd75ef2bd27bf7f341ad7eea35eaf236f84b1",
+    "provenance": {
+      "authority": "official-advisory",
+      "parserId": "github-advisories",
+      "parserVersion": "1.0.0",
+      "fetchedAt": "2026-09-26T08:51:03.425Z",
+      "evidenceRefs": [
+        "source:github-npm-advisories:f471548f1b10256ca90d4b60"
+      ],
+      "fixture": false
+    }
+  },
+  {
+    "schemaVersion": "webdev-candidate/1",
+    "sourceId": "github-npm-advisories",
+    "sourceItemId": "GHSA-jmg2-rcxh-w8q3",
+    "listingUrl": "https://api.github.com/advisories?ecosystem=npm",
+    "targetUrl": "https://github.com/advisories/GHSA-jmg2-rcxh-w8q3",
+    "canonicalProjectUrl": "https://github.com/advisories",
+    "title": "@rsdoctor/rspack-plugin has Unauthenticated HTTP API that Exposes Project Source Code and Build Metadata",
+    "summary": "### Summary The default Rsdoctor report HTTP server started by `@rsdoctor/rspack-plugin` binds to all network interfaces (`0.0.0.0`) and serves a `POST /api/data/key` endpoint with no authentication and wildcard CORS (`Access-Control-Allow-Origin: *`). Any network-adjacent or remote attacker can send a single unauthenticated request to retrieve the full source code of all compiled JavaScript modules (`moduleCodeMap`), serialized build configuration (`configs`), error details, and other sensitive build metadata. This server is enabled by default in non-CI environments, requiring no special configuration from the victim developer. ### Details **Root cause: server binds to all interfaces with no authentication and no key allowlist.** The vulnerability is composed of four independently observa",
+    "author": "GitHub Advisory Database",
+    "project": "@rsdoctor/rspack-plugin",
+    "publishedAt": "2026-09-24T19:42:10.000Z",
+    "updatedAt": "2026-09-24T19:42:13.000Z",
+    "versionText": "@rsdoctor/rspack-plugin affected <= 1.5.15 fixed 1.5.16",
+    "securityText": "GHSA-jmg2-rcxh-w8q3; severity high; @rsdoctor/rspack-plugin affected <= 1.5.15 fixed 1.5.16",
+    "topicHints": [
+      "security",
+      "package-manager"
+    ],
+    "changeKindHints": [
+      "security-advisory"
+    ],
+    "language": "en",
+    "contentHash": "c9916a4e4d15f3c287ddf9a5cb39f50eafe3c7d6496de98434e180870f73ec5e",
+    "provenance": {
+      "authority": "official-advisory",
+      "parserId": "github-advisories",
+      "parserVersion": "1.0.0",
+      "fetchedAt": "2026-09-26T08:51:03.425Z",
+      "evidenceRefs": [
+        "source:github-npm-advisories:18979f28cc2220b18735d28f"
+      ],
+      "fixture": false
+    }
+  },
+  {
+    "schemaVersion": "webdev-candidate/1",
+    "sourceId": "github-npm-advisories",
+    "sourceItemId": "GHSA-mwwr-p57h-56pf",
+    "listingUrl": "https://api.github.com/advisories?ecosystem=npm",
+    "targetUrl": "https://github.com/advisories/GHSA-mwwr-p57h-56pf",
+    "canonicalProjectUrl": "https://github.com/advisories",
+    "title": "@bytebase/dbhub's read-only mode does not prevent database writes",
+    "summary": "### Summary Setting `readonly = true` on the `execute_sql` tool does not make the connection read-only. The connectors are written to set PostgreSQL `default_transaction_read_only=on` (and open SQLite in `readOnly` mode), but that code is gated on a config value that is never populated, so it never runs. The only thing left enforcing read-only is a classifier that inspects the first keyword of each statement. Any `SELECT` that writes or has side effects through a function call passes it. With an ordinary role this allows sequence tampering; with a privileged role it allows writing arbitrary files on the server (`lo_export`), reading arbitrary host files (`pg_read_file`), and remote code execution (`dblink` + `COPY ... TO PROGRAM`). The HTTP transport is unauthenticated and binds to `0.0.0.",
+    "author": "GitHub Advisory Database",
+    "project": "@bytebase/dbhub",
+    "publishedAt": "2026-09-24T19:37:59.000Z",
+    "updatedAt": "2026-09-24T19:38:02.000Z",
+    "versionText": "@bytebase/dbhub affected < 0.22.6 fixed 0.22.6",
+    "securityText": "GHSA-mwwr-p57h-56pf; severity high; @bytebase/dbhub affected < 0.22.6 fixed 0.22.6",
+    "topicHints": [
+      "security",
+      "package-manager"
+    ],
+    "changeKindHints": [
+      "security-advisory"
+    ],
+    "language": "en",
+    "contentHash": "442f3c18cf106696b5f7003d331ca73d5cd9f22af976a82867cbcaf9e65b94e7",
+    "provenance": {
+      "authority": "official-advisory",
+      "parserId": "github-advisories",
+      "parserVersion": "1.0.0",
+      "fetchedAt": "2026-09-26T08:51:03.425Z",
+      "evidenceRefs": [
+        "source:github-npm-advisories:fc973b160158c66c4b302d86"
+      ],
+      "fixture": false
+    }
+  },
+  {
+    "schemaVersion": "webdev-candidate/1",
+    "sourceId": "github-npm-advisories",
+    "sourceItemId": "GHSA-fm8p-53ww-hf6w",
+    "listingUrl": "https://api.github.com/advisories?ecosystem=npm",
+    "targetUrl": "https://github.com/advisories/GHSA-fm8p-53ww-hf6w",
+    "canonicalProjectUrl": "https://github.com/advisories",
+    "title": "DBHub HTTP transport DNS rebinding allows unauthenticated browser-origin SQL execution",
+    "summary": "### Summary DBHub `0.21.2` exposes an unauthenticated HTTP MCP endpoint when started with the documented HTTP transport mode, for example `--transport http --port 8080`. The HTTP server attempts to protect browser-origin access by checking whether the `Origin` hostname equals the `Host` hostname, then reflecting the validated `Origin` into `Access-Control-Allow-Origin`. This does not stop DNS rebinding. After an attacker-controlled hostname rebinds to a victim-accessible DBHub HTTP server, both `Origin` and `Host` can contain the attacker-controlled hostname, so DBHub accepts the request and dispatches MCP tool calls. As a result, a malicious website can deterministically invoke DBHub MCP tools from the victim's browser without prompt injection or model involvement. With the default demo c",
+    "author": "GitHub Advisory Database",
+    "project": "@bytebase/dbhub",
+    "publishedAt": "2026-09-24T19:36:57.000Z",
+    "updatedAt": "2026-09-24T19:36:58.000Z",
+    "versionText": "@bytebase/dbhub affected <= 0.22.4 fixed 0.22.5",
+    "securityText": "GHSA-fm8p-53ww-hf6w; severity critical; @bytebase/dbhub affected <= 0.22.4 fixed 0.22.5",
+    "topicHints": [
+      "security",
+      "package-manager"
+    ],
+    "changeKindHints": [
+      "security-advisory"
+    ],
+    "language": "en",
+    "contentHash": "99ffd156118e74525a2394d57271e0bd251b3dde9969f4c33cc0c19dfe4a473a",
+    "provenance": {
+      "authority": "official-advisory",
+      "parserId": "github-advisories",
+      "parserVersion": "1.0.0",
+      "fetchedAt": "2026-09-26T08:51:03.425Z",
+      "evidenceRefs": [
+        "source:github-npm-advisories:2adeef814f022754e97adcaa"
+      ],
+      "fixture": false
+    }
+  },
+  {
+    "schemaVersion": "webdev-candidate/1",
+    "sourceId": "github-npm-advisories",
+    "sourceItemId": "GHSA-j8r4-32c5-33rc",
+    "listingUrl": "https://api.github.com/advisories?ecosystem=npm",
+    "targetUrl": "https://github.com/advisories/GHSA-j8r4-32c5-33rc",
+    "canonicalProjectUrl": "https://github.com/advisories",
+    "title": "xhtml-purifier has HTML attribute-injection (sanitizer bypass) that leads to XSS",
+    "summary": "xhtml-purifier does not HTML-entity-encode attribute values when serializing its sanitized output. In attributeString() (XHTMLPurifier.js, around line 148) the attribute value is concatenated directly into a double-quoted attribute without encoding. As a result, an attacker-controlled value in any allowed attribute (class, style, title, alt, src, href) can include a double-quote character to break out of the attribute and inject an additional attribute, such as a JavaScript event handler (for example onmouseover or onerror). The injected handler survives sanitization and executes when the output is rendered, which is a sanitizer bypass leading to cross-site scripting. The fix HTML-entity-encodes attribute values before serialization.",
+    "author": "GitHub Advisory Database",
+    "project": "xhtml-purifier",
+    "publishedAt": "2026-09-24T19:33:23.000Z",
+    "updatedAt": "2026-09-24T19:33:25.000Z",
+    "versionText": "xhtml-purifier affected <= 0.4.1 fixed 0.4.3",
+    "securityText": "GHSA-j8r4-32c5-33rc; severity medium; xhtml-purifier affected <= 0.4.1 fixed 0.4.3",
+    "topicHints": [
+      "security",
+      "package-manager"
+    ],
+    "changeKindHints": [
+      "security-advisory"
+    ],
+    "language": "en",
+    "contentHash": "581eb7e42b301f6dbdaf95a63d80348a7e33336695915a13c02d1e9b699b0e2d",
+    "provenance": {
+      "authority": "official-advisory",
+      "parserId": "github-advisories",
+      "parserVersion": "1.0.0",
+      "fetchedAt": "2026-09-26T08:51:03.425Z",
+      "evidenceRefs": [
+        "source:github-npm-advisories:55009882244ca0579b62e835"
+      ],
+      "fixture": false
+    }
+  },
+  {
+    "schemaVersion": "webdev-candidate/1",
+    "sourceId": "github-npm-advisories",
+    "sourceItemId": "GHSA-36f9-7rg5-cpf8",
+    "listingUrl": "https://api.github.com/advisories?ecosystem=npm",
+    "targetUrl": "https://github.com/advisories/GHSA-36f9-7rg5-cpf8",
+    "canonicalProjectUrl": "https://github.com/advisories",
+    "title": "`@bsv/wallet-toolbox` / `-client` / `-mobile` don't verify storage-supplied recipient output scripts against caller-requested outputs in createAction",
+    "summary": "Reported by @echennells (Eric Chennells). Migrated from public issue #191 to a private advisory. **Affected:** `@bsv/wallet-toolbox` / `-client` / `-mobile`. Verified in `2.1.21` and `2.1.21-parity-fix.2`; the relevant code is the same at current HEAD **Summary:** When `createAction` runs against a remote `StorageClient`, the storage server returns the outputs to build. `buildSignableTransaction` takes each non-change output's `lockingScript` from the storage response and signs it, without comparing it to the `lockingScript` the caller supplied in `args.outputs`. `WalletPermissionsManager.createAction` parses the built transaction and has `args.outputs` available, but uses the tx only for `inputs` and `getFee()`; it does not inspect `tx.outputs`. A storage provider that returns a different",
+    "author": "GitHub Advisory Database",
+    "project": "@bsv/wallet-toolbox",
+    "publishedAt": "2026-09-24T19:32:00.000Z",
+    "updatedAt": "2026-09-24T19:32:03.000Z",
+    "versionText": "@bsv/wallet-toolbox affected >= 1.1.47, < 2.4.0 fixed 2.4.0; @bsv/wallet-toolbox-client affected >= 1.1.47, < 2.4.0 fixed 2.4.0; @bsv/wallet-toolbox-mobile affe",
+    "securityText": "GHSA-36f9-7rg5-cpf8; severity high; @bsv/wallet-toolbox affected >= 1.1.47, = 1.1.47, < 2.4.0 fixed 2.4.0; @bsv/wallet-toolbox-mobile affe",
+    "topicHints": [
+      "security",
+      "package-manager"
+    ],
+    "changeKindHints": [
+      "security-advisory"
+    ],
+    "language": "en",
+    "contentHash": "3e66cd5fd000e9b715a71e3342c03e3ad5c562c1872de3f756328b783a932dff",
+    "provenance": {
+      "authority": "official-advisory",
+      "parserId": "github-advisories",
+      "parserVersion": "1.0.0",
+      "fetchedAt": "2026-09-26T08:51:03.425Z",
+      "evidenceRefs": [
+        "source:github-npm-advisories:54bb6f1b91e190e5cdcf7551"
+      ],
+      "fixture": false
+    }
+  },
+  {
+    "schemaVersion": "webdev-candidate/1",
+    "sourceId": "github-npm-advisories",
+    "sourceItemId": "GHSA-fx6f-382r-j72c",
+    "listingUrl": "https://api.github.com/advisories?ecosystem=npm",
+    "targetUrl": "https://github.com/advisories/GHSA-fx6f-382r-j72c",
+    "canonicalProjectUrl": "https://github.com/advisories",
+    "title": "CyberChef: Prototype pollution in Series Chart operation",
+    "summary": "On 5 June 2026 CyberChef received a security vulnerability report from @hyuunnn detailing a vulnerability in the Series Chart operation, where malicious input could result in prototype pollution of the data structures outputted from the operation. Other operations following Series Chart could have their behaviour manipulated by the attacker-controlled prototype, for example, injecting malicious content into their HTML output. In this case, a demonstration was provided that chained the Series Chart operation with the Parse UDP operation to cause attacker controlled JavaScript to be executed. ## Details When the Series Chart operation parses user-supplied CSV, it accepts `__proto__` as a key and uses it to pollute the object. The objToTbale function in src/core/lib/Protocol.mjs, used in a nu",
+    "author": "GitHub Advisory Database",
+    "project": "cyberchef",
+    "publishedAt": "2026-09-24T19:24:30.000Z",
+    "updatedAt": "2026-09-24T19:24:31.000Z",
+    "versionText": "cyberchef affected < 11.2.0 fixed 11.2.0",
+    "securityText": "GHSA-fx6f-382r-j72c; severity medium; cyberchef affected < 11.2.0 fixed 11.2.0",
+    "topicHints": [
+      "security",
+      "package-manager"
+    ],
+    "changeKindHints": [
+      "security-advisory"
+    ],
+    "language": "en",
+    "contentHash": "fc6d7488c25460ab1868c0c2025762809f7d0bf964e10dc31a6b2bd7244539d7",
+    "provenance": {
+      "authority": "official-advisory",
+      "parserId": "github-advisories",
+      "parserVersion": "1.0.0",
+      "fetchedAt": "2026-09-26T08:51:03.425Z",
+      "evidenceRefs": [
+        "source:github-npm-advisories:6a96607977894281fe32af73"
+      ],
+      "fixture": false
+    }
+  },
+  {
+    "schemaVersion": "webdev-candidate/1",
+    "sourceId": "github-npm-advisories",
+    "sourceItemId": "GHSA-6v3r-4p5c-mrp5",
+    "listingUrl": "https://api.github.com/advisories?ecosystem=npm",
+    "targetUrl": "https://github.com/advisories/GHSA-6v3r-4p5c-mrp5",
+    "canonicalProjectUrl": "https://github.com/advisories",
+    "title": "Language Servers for AWS vulnerable to arbitrary file write",
+    "summary": "## Summary Language Servers for AWS (the aws/language-servers project) provides the Language Server Protocol implementations that power AWS developer tooling, including the Amazon Q Developer agentic chat experience, across IDEs such as VS Code, JetBrains, Visual Studio, and Eclipse. Missing symlink validation in Language Servers for AWS may allow an arbitrary file write outside of the workspace trust boundary. This may occur when a local user opens a workspace containing a maliciously crafted symlink that resolves to a file path outside the workspace trust boundary. ## Impact If a user opens a maliciously crafted workspace containing a symlink that resides within the workspace but resolves to a location outside the workspace trust boundary, the agent may follow that symlink and write to t",
+    "author": "GitHub Advisory Database",
+    "project": "@aws/lsp-codewhisperer",
+    "publishedAt": "2026-09-24T19:15:39.000Z",
+    "updatedAt": "2026-09-24T19:15:40.000Z",
+    "versionText": "@aws/lsp-codewhisperer affected < 0.0.117 fixed 0.0.117",
+    "securityText": "GHSA-6v3r-4p5c-mrp5; severity high; @aws/lsp-codewhisperer affected < 0.0.117 fixed 0.0.117",
+    "topicHints": [
+      "security",
+      "package-manager"
+    ],
+    "changeKindHints": [
+      "security-advisory"
+    ],
+    "language": "en",
+    "contentHash": "21d4290aeeff13d9d757058e4345c9250241b81beaa90a8c8927431d8fd39bf2",
+    "provenance": {
+      "authority": "official-advisory",
+      "parserId": "github-advisories",
+      "parserVersion": "1.0.0",
+      "fetchedAt": "2026-09-26T08:51:03.425Z",
+      "evidenceRefs": [
+        "source:github-npm-advisories:c286b2cd315b7c47fa525670"
+      ],
+      "fixture": false
+    }
+  },
+  {
+    "schemaVersion": "webdev-candidate/1",
+    "sourceId": "github-npm-advisories",
+    "sourceItemId": "GHSA-xhcr-j4j9-3gh7",
+    "listingUrl": "https://api.github.com/advisories?ecosystem=npm",
+    "targetUrl": "https://github.com/advisories/GHSA-xhcr-j4j9-3gh7",
+    "canonicalProjectUrl": "https://github.com/advisories",
+    "title": "Language Servers for AWS Vulnerable to Arbitrary Code Execution",
+    "summary": "### Summary Language Servers for AWS (the aws/language-servers project) provide the underlying language-server runtime that powers Amazon Q Developer's AI coding assistance across its IDE plugins (Visual Studio Code, JetBrains, Eclipse, and Visual Studio). Improper trust boundary enforcement in Language Servers for AWS may allow for arbitrary code execution. If a local user opens a maliciously crafted workspace, any commands within the project configuration files may be automatically executed. ### Impact When a local user opens a maliciously crafted workspace and trusts it when prompted, commands defined in the workspace's project-level configuration files may be executed automatically, resulting in arbitrary code execution on the user's host. This issue is triggered when a user opens a wo",
+    "author": "GitHub Advisory Database",
+    "project": "@aws/lsp-codewhisperer",
+    "publishedAt": "2026-09-24T19:13:53.000Z",
+    "updatedAt": "2026-09-24T19:13:54.000Z",
+    "versionText": "@aws/lsp-codewhisperer affected < 0.0.113 fixed 0.0.113",
+    "securityText": "GHSA-xhcr-j4j9-3gh7; severity high; @aws/lsp-codewhisperer affected < 0.0.113 fixed 0.0.113",
+    "topicHints": [
+      "security",
+      "package-manager"
+    ],
+    "changeKindHints": [
+      "security-advisory"
+    ],
+    "language": "en",
+    "contentHash": "2d5b39371258f9b06f6b835da5477db05343de97424ea1fb210e18f97b0c6526",
+    "provenance": {
+      "authority": "official-advisory",
+      "parserId": "github-advisories",
+      "parserVersion": "1.0.0",
+      "fetchedAt": "2026-09-26T08:51:03.425Z",
+      "evidenceRefs": [
+        "source:github-npm-advisories:adf017e18ff13113f879ef3c"
+      ],
+      "fixture": false
+    }
+  },
+  {
+    "schemaVersion": "webdev-candidate/1",
+    "sourceId": "next-releases",
+    "sourceItemId": "sha256:e791dbe50bc4ca076dde8c626697642e",
+    "listingUrl": "https://api.github.com/repos/vercel/next.js/releases",
+    "targetUrl": "https://github.com/vercel/next.js/releases/tag/v16.4.0-canary.44",
+    "canonicalProjectUrl": "https://github.com/vercel/next.js",
+    "title": "v16.4.0-canary.44",
+    "summary": "### Misc Changes - Turbopack: chunk each layout segment once in production: #99100 - bundle-analyzer: exclude traces from output types: #98536 - turbo-tasks-gc: Defer most aggregation graph management until after GC has settled: #98591 - Skip ESLint migration when scripts do not use next lint: #99103 - Turbopack: pass RcStr to AnalyzeIssue: #99166 - Use graph-backed codegen for client proxies and WASM loaders: #99115 - [PPF] Instant validation for `ensureStatic = \"shell\" | \"prefetch\"`: #98249 - Fix flaky lazy-dynamic-imports.test: #99057 - [test] Skip flaky deploy tests: #99156 - [cd] Tolerate 409 when uploading preview tarballs: #99091 ### Credits Huge thanks to @sokra, @wbinnssmith, @lukesandberg, @devjiwonchoi, @mischnic, @lubieowoce, @jimmyhmiller, and @eps1lon for helping!",
+    "author": "next-js-bot[bot]",
+    "project": "Next.js",
+    "publishedAt": "2026-09-24T17:05:03.000Z",
+    "updatedAt": "2026-09-24T17:05:03.000Z",
+    "versionText": "v16.4.0-canary.44",
+    "securityText": null,
+    "topicHints": [
+      "meta-framework",
+      "deployment-platform"
+    ],
+    "changeKindHints": [
+      "beta-preview"
+    ],
+    "language": "en",
+    "contentHash": "c5ec1d02711248dcd4e162559434b58ac95b17bc57b3311c77b52a726b1f8590",
+    "provenance": {
+      "authority": "official-primary",
+      "parserId": "github-releases",
+      "parserVersion": "1.0.0",
+      "fetchedAt": "2026-09-26T08:51:03.425Z",
+      "evidenceRefs": [
+        "source:next-releases:51aa43681168b9111aae0c49"
+      ],
+      "fixture": false
+    }
+  },
+  {
+    "schemaVersion": "webdev-candidate/1",
+    "sourceId": "github-npm-advisories",
+    "sourceItemId": "GHSA-6rf4-v2fh-m6p4",
+    "listingUrl": "https://api.github.com/advisories?ecosystem=npm",
+    "targetUrl": "https://github.com/advisories/GHSA-6rf4-v2fh-m6p4",
+    "canonicalProjectUrl": "https://github.com/advisories",
+    "title": "SunEditor: Critical XSS vulnerability - sanitizer bypass",
+    "summary": "## Summary SUNEDITOR `v2.47.10` appears to allow JavaScript execution through crafted namespaced HTML elements. The sanitization logic does not fully remove executable event-handler attributes from certain custom/namespaced tags. As a result, an attacker may be able to inject HTML content that executes JavaScript when the rendered element is interacted with. This behavior was observed after the changes introduced in this commit: https://github.com/JiHong88/suneditor/commit/9ed405fb0de676e56cd0e6a13c19c103ad5948d3 --- ## Affected Version Confirmed vulnerable: * SUNEDITOR = click ``` Simplified PoC: ```html click ``` ```html 📎 Click here for solutions ``` --- ## Steps to Reproduce 1. Open SUNEDITOR using version `2.47.10`. 2. Insert the payload above into the editor. 3. Save or render the g",
+    "author": "GitHub Advisory Database",
+    "project": "suneditor",
+    "publishedAt": "2026-09-24T14:57:55.000Z",
+    "updatedAt": "2026-09-24T14:57:55.000Z",
+    "versionText": "suneditor affected <= 2.47.10 fixed 2.47.11",
+    "securityText": "GHSA-6rf4-v2fh-m6p4; severity critical; suneditor affected <= 2.47.10 fixed 2.47.11",
+    "topicHints": [
+      "security",
+      "package-manager"
+    ],
+    "changeKindHints": [
+      "security-advisory"
+    ],
+    "language": "en",
+    "contentHash": "fbf42f220d29bc82eee66c9900e1ac8dfbc52fb99b4653cf1c8213e6e33cfb01",
+    "provenance": {
+      "authority": "official-advisory",
+      "parserId": "github-advisories",
+      "parserVersion": "1.0.0",
+      "fetchedAt": "2026-09-26T08:51:03.425Z",
+      "evidenceRefs": [
+        "source:github-npm-advisories:789ee23421b896a31bced803"
+      ],
+      "fixture": false
+    }
+  },
+  {
+    "schemaVersion": "webdev-candidate/1",
+    "sourceId": "vite-releases",
+    "sourceItemId": "sha256:54b311940695a83ecd5e777980d7ac77",
+    "listingUrl": "https://api.github.com/repos/vitejs/vite/releases",
+    "targetUrl": "https://github.com/vitejs/vite/releases/tag/v8.3.1",
+    "canonicalProjectUrl": "https://github.com/vitejs/vite",
+    "title": "v8.3.1",
+    "summary": "### Bug Fixes * **deps:** update all non-major dependencies ([#23482](https://github.com/vitejs/vite/issues/23482)) ([3c752c8](https://github.com/vitejs/vite/commit/3c752c8932bc0599465ba4a6d8f44aaf1e934c3d)) * **deps:** update all non-major dependencies ([#23537](https://github.com/vitejs/vite/issues/23537)) ([e8990c4](https://github.com/vitejs/vite/commit/e8990c4d6101dfaca2654ed8ab4d0574ee920248)) * **deps:** update rolldown-related dependencies ([#23483](https://github.com/vitejs/vite/issues/23483)) ([9aecbbf](https://github.com/vitejs/vite/commit/9aecbbfa5fb5da4b9981c099cb9746a9fd210806)) * handle `server.ws: false` in mergeConfig ([#23511](https://github.com/vitejs/vite/issues/23511)) ([f68c0d5](https://github.com/vitejs/vite/commit/f68c0d5a28c96555431413e3e2cbe644337b087f)) * merge `b",
+    "author": "github-actions[bot]",
+    "project": "Vite",
+    "publishedAt": "2026-09-24T12:23:55.000Z",
+    "updatedAt": "2026-09-24T12:23:55.000Z",
+    "versionText": "v8.3.1",
+    "securityText": null,
+    "topicHints": [
+      "build-tooling"
+    ],
+    "changeKindHints": [
+      "stable-release"
+    ],
+    "language": "en",
+    "contentHash": "e502507880424ea20f1a9813181e5330b18a492047715489511f4cf328ea1cc8",
+    "provenance": {
+      "authority": "official-primary",
+      "parserId": "github-releases",
+      "parserVersion": "1.0.0",
+      "fetchedAt": "2026-09-26T08:51:03.425Z",
+      "evidenceRefs": [
+        "source:vite-releases:0b0496357d4b22aca2d1ad1e"
+      ],
+      "fixture": false
+    }
+  },
+  {
+    "schemaVersion": "webdev-candidate/1",
+    "sourceId": "next-releases",
+    "sourceItemId": "sha256:3c6fec9e8882d4bd2f88c568e1b2f37f",
+    "listingUrl": "https://api.github.com/repos/vercel/next.js/releases",
+    "targetUrl": "https://github.com/vercel/next.js/releases/tag/v16.4.0-canary.43",
+    "canonicalProjectUrl": "https://github.com/vercel/next.js",
+    "title": "v16.4.0-canary.43",
+    "summary": "### Misc Changes - Tune Node server chunking for require overhead: #99120 - Turbopack: fix another \"ModuleId not found for ident\" regression: #99102 - test: enable deploy coverage for TypeScript config errors: #98849 - test: enable deploy coverage for routing build errors: #98848 - test: enable deploy coverage for cache build errors: #98847 ### Credits Huge thanks to @sokra, @mischnic, and @jamiboym for helping!",
+    "author": "next-js-bot[bot]",
+    "project": "Next.js",
+    "publishedAt": "2026-09-24T10:48:17.000Z",
+    "updatedAt": "2026-09-24T10:48:17.000Z",
+    "versionText": "v16.4.0-canary.43",
+    "securityText": null,
+    "topicHints": [
+      "meta-framework",
+      "deployment-platform"
+    ],
+    "changeKindHints": [
+      "beta-preview"
+    ],
+    "language": "en",
+    "contentHash": "18a132e73bd8859fb0b72389fda6e02a50e937915d4d76fff2874a5766012932",
+    "provenance": {
+      "authority": "official-primary",
+      "parserId": "github-releases",
+      "parserVersion": "1.0.0",
+      "fetchedAt": "2026-09-26T08:51:03.425Z",
+      "evidenceRefs": [
+        "source:next-releases:de7ce5343bbd2890fbd4c090"
+      ],
+      "fixture": false
+    }
+  },
+  {
+    "schemaVersion": "webdev-candidate/1",
+    "sourceId": "next-releases",
+    "sourceItemId": "sha256:918a6042cd189f75c373d5e565951d71",
+    "listingUrl": "https://api.github.com/repos/vercel/next.js/releases",
+    "targetUrl": "https://github.com/vercel/next.js/releases/tag/v16.4.0-canary.42",
+    "canonicalProjectUrl": "https://github.com/vercel/next.js",
+    "title": "v16.4.0-canary.42",
+    "summary": "### Misc Changes - [ci] Skip preview tarball upload when the artifact is missing: #98713 - [cd] Retry preview tarball uploads with backoff and richer diagnostics: #99060 - Promote next analyze command: #99074 - [ai-upgrade] Remind the agent to report the nudge: #99127 ### Credits Huge thanks to @eps1lon, @wbinnssmith, and @devjiwonchoi for helping!",
+    "author": "next-js-bot[bot]",
+    "project": "Next.js",
+    "publishedAt": "2026-09-24T00:30:48.000Z",
+    "updatedAt": "2026-09-24T00:30:48.000Z",
+    "versionText": "v16.4.0-canary.42",
+    "securityText": null,
+    "topicHints": [
+      "meta-framework",
+      "deployment-platform"
+    ],
+    "changeKindHints": [
+      "beta-preview"
+    ],
+    "language": "en",
+    "contentHash": "4565da1a6b15d5e71f5bbfe6864f10d5467279954000564a3f3dd32f69bf1de6",
+    "provenance": {
+      "authority": "official-primary",
+      "parserId": "github-releases",
+      "parserVersion": "1.0.0",
+      "fetchedAt": "2026-09-26T08:51:03.425Z",
+      "evidenceRefs": [
+        "source:next-releases:d4169a76906ba2ff6220c69d"
+      ],
+      "fixture": false
+    }
+  },
+  {
+    "schemaVersion": "webdev-candidate/1",
+    "sourceId": "next-releases",
+    "sourceItemId": "sha256:44e2d3c86cfe99b53ee49542ca442391",
+    "listingUrl": "https://api.github.com/repos/vercel/next.js/releases",
+    "targetUrl": "https://github.com/vercel/next.js/releases/tag/v16.4.0-canary.41",
+    "canonicalProjectUrl": "https://github.com/vercel/next.js",
+    "title": "v16.4.0-canary.41",
+    "summary": "### Misc Changes - Add experimental custom webpack support: #98862 - Default agentic upgrades to a separate worktree: #99111 - Improve agent upgrade failure message for missing app: #99117 - Preserve error boundaries in on-demand partial prerenders: #99051 - Preserve error boundaries during on-demand prerendering: #99037 - docs: clarify Turbopack ModulePart export examples: #99104 - Add some more verification and safety rules around custom `distDir`: #98997 - Preserve closed-route admission across cache misses: #98964 - Move suspension into operation guard: #99053 - [agent-feedback] Shorten managed agent instructions: #99065 - docs: clarify Cache Components build output: #98274 - Update Rust namespace re-export snapshots: #99106 ### Credits Huge thanks to @sokra, @devjiwonchoi, @unstubbabl",
+    "author": "next-js-bot[bot]",
+    "project": "Next.js",
+    "publishedAt": "2026-09-23T23:46:41.000Z",
+    "updatedAt": "2026-09-23T23:46:41.000Z",
+    "versionText": "v16.4.0-canary.41",
+    "securityText": null,
+    "topicHints": [
+      "meta-framework",
+      "deployment-platform"
+    ],
+    "changeKindHints": [
+      "beta-preview"
+    ],
+    "language": "en",
+    "contentHash": "f76246103f81648165ceb0ff35712b2eeef084c7aa4a94a2cb34a2503746258e",
+    "provenance": {
+      "authority": "official-primary",
+      "parserId": "github-releases",
+      "parserVersion": "1.0.0",
+      "fetchedAt": "2026-09-26T08:51:03.425Z",
+      "evidenceRefs": [
+        "source:next-releases:17db8cf52e2ccfecf923c5ef"
+      ],
+      "fixture": false
+    }
+  },
+  {
+    "schemaVersion": "webdev-candidate/1",
+    "sourceId": "github-npm-advisories",
+    "sourceItemId": "GHSA-9643-4qgh-g8mx",
+    "listingUrl": "https://api.github.com/advisories?ecosystem=npm",
+    "targetUrl": "https://github.com/advisories/GHSA-9643-4qgh-g8mx",
+    "canonicalProjectUrl": "https://github.com/advisories",
+    "title": "elysia has Inefficient Algorithmic Complexity and Interpretation Conflict",
+    "summary": "Elysia v1.4.28 is vulnerable to denial-of-service attacks due to CPU exhaustion in the form data normalization code. Elysia uses `getAll` to retrieve value from FormData. It is called directly relative to the total number of key-value pairs in the form data. The total amount of work the for loop has to do grows quadratically, so doubling the number of unique key-value pairs quadruples the amount of work. In the above PoC, each .getAll call scans through all of the `n` key-value pairs in the form data. Because there are `n` unique keys in the form data, there are .getAll calls, so in total the form data normalizer has to scan `n` x `n` key-value pairs. ### Impact Endpoints using `multipart/form-data` ### Patches 1.4.29 ### Workarounds no 100% confirm workaround beside updating the patch",
+    "author": "GitHub Advisory Database",
+    "project": "elysia",
+    "publishedAt": "2026-09-23T21:54:50.000Z",
+    "updatedAt": "2026-09-23T21:54:51.000Z",
+    "versionText": "elysia affected < 1.4.29 fixed 1.4.29",
+    "securityText": "GHSA-9643-4qgh-g8mx; severity high; elysia affected < 1.4.29 fixed 1.4.29",
+    "topicHints": [
+      "security",
+      "package-manager"
+    ],
+    "changeKindHints": [
+      "security-advisory"
+    ],
+    "language": "en",
+    "contentHash": "af51d892f0e672842621ab876e8cedc367bd4fc085bc5e78e9cdfba5370893f5",
+    "provenance": {
+      "authority": "official-advisory",
+      "parserId": "github-advisories",
+      "parserVersion": "1.0.0",
+      "fetchedAt": "2026-09-26T08:51:03.425Z",
+      "evidenceRefs": [
+        "source:github-npm-advisories:18efe7bec17809e604def327"
+      ],
+      "fixture": false
+    }
+  },
+  {
+    "schemaVersion": "webdev-candidate/1",
+    "sourceId": "github-npm-advisories",
+    "sourceItemId": "GHSA-wmw4-mw6x-6vfm",
+    "listingUrl": "https://api.github.com/advisories?ecosystem=npm",
+    "targetUrl": "https://github.com/advisories/GHSA-wmw4-mw6x-6vfm",
+    "canonicalProjectUrl": "https://github.com/advisories",
+    "title": "ReactPress has SQL injection via dynamic column names in TypeORM query builders",
+    "summary": "## Summary ReactPress API list endpoints build TypeORM `QueryBuilder` conditions using unsanitized HTTP query parameter *names* as SQL column identifiers (e.g. `` `article.${key}` ``). TypeORM parameterizes values but not column names, allowing unauthenticated attackers to inject SQL through crafted query string keys. ## Impact An unauthenticated remote attacker can perform blind SQL injection against the application database, potentially exfiltrating sensitive data (users, settings, API keys, article content, etc.). ## Affected endpoints (unauthenticated GET) - `GET /api/article` - `GET /api/comment` - `GET /api/file` - `GET /api/page` - `GET /api/Knowledge` ## Affected code Vulnerable pattern in `findAll()` methods, including but not limited to: - `server/src/modules/article/article.serv",
+    "author": "GitHub Advisory Database",
+    "project": "@fecommunity/reactpress",
+    "publishedAt": "2026-09-23T21:51:59.000Z",
+    "updatedAt": "2026-09-23T21:52:00.000Z",
+    "versionText": "@fecommunity/reactpress affected <= 3.6.0 fixed 3.7.0",
+    "securityText": "GHSA-wmw4-mw6x-6vfm; severity high; @fecommunity/reactpress affected <= 3.6.0 fixed 3.7.0",
+    "topicHints": [
+      "security",
+      "package-manager"
+    ],
+    "changeKindHints": [
+      "security-advisory"
+    ],
+    "language": "en",
+    "contentHash": "1b6e88c1c4fc8ba37c517e233dbc91ddeb3f1a253d29405f535af571443467b4",
+    "provenance": {
+      "authority": "official-advisory",
+      "parserId": "github-advisories",
+      "parserVersion": "1.0.0",
+      "fetchedAt": "2026-09-26T08:51:03.425Z",
+      "evidenceRefs": [
+        "source:github-npm-advisories:2aeeaf06c5a13405791d3089"
+      ],
+      "fixture": false
+    }
+  },
+  {
+    "schemaVersion": "webdev-candidate/1",
+    "sourceId": "github-npm-advisories",
+    "sourceItemId": "GHSA-gvf2-2rh5-mpgf",
+    "listingUrl": "https://api.github.com/advisories?ecosystem=npm",
+    "targetUrl": "https://github.com/advisories/GHSA-gvf2-2rh5-mpgf",
+    "canonicalProjectUrl": "https://github.com/advisories",
+    "title": "OpenC3 COSMOS: Stored, cross-user XSS via Telemetry screen BUTTON widget",
+    "summary": "## Summary A user who can save a telemetry **screen** (permission `system_set`) can embed JavaScript in a screen `BUTTON` widget. The `BUTTON` widget **`eval()`s the stored button text in the browser** when the button is activated, and screens are **shared content rendered to other users in the scope**. As a result, an attacker's stored JavaScript executes **in a different operator's authenticated session** — a **stored, cross-user XSS** (not self-XSS). The payload runs in the COSMOS origin and can read `localStorage.openc3Token` (the victim's session token), enabling **session/account takeover** and, via the victim's privileges, a path to server-side code execution through the Script Runner. The site's Content-Security-Policy permits `'unsafe-inline'`/`'unsafe-eval'` (see \"Contributing fa",
+    "author": "GitHub Advisory Database",
+    "project": "@openc3/vue-common",
+    "publishedAt": "2026-09-23T21:24:11.000Z",
+    "updatedAt": "2026-09-23T21:24:12.000Z",
+    "versionText": "@openc3/vue-common affected >= 5.0.6, <= 7.2.1 fixed 7.3.0",
+    "securityText": "GHSA-gvf2-2rh5-mpgf; severity high; @openc3/vue-common affected >= 5.0.6, <= 7.2.1 fixed 7.3.0",
+    "topicHints": [
+      "security",
+      "package-manager"
+    ],
+    "changeKindHints": [
+      "security-advisory"
+    ],
+    "language": "en",
+    "contentHash": "e9a73acf06a2b989099465b10105fa9c26ae4e22b1038a59ab62ca42ea6560aa",
+    "provenance": {
+      "authority": "official-advisory",
+      "parserId": "github-advisories",
+      "parserVersion": "1.0.0",
+      "fetchedAt": "2026-09-26T08:51:03.425Z",
+      "evidenceRefs": [
+        "source:github-npm-advisories:7f2d80cbb45c87f812902feb"
+      ],
+      "fixture": false
+    }
+  },
+  {
+    "schemaVersion": "webdev-candidate/1",
+    "sourceId": "github-npm-advisories",
+    "sourceItemId": "GHSA-vmjq-hvgq-2wv4",
+    "listingUrl": "https://api.github.com/advisories?ecosystem=npm",
+    "targetUrl": "https://github.com/advisories/GHSA-vmjq-hvgq-2wv4",
+    "canonicalProjectUrl": "https://github.com/advisories",
+    "title": "9router: Mass assignment in PATCH /api/settings allows authenticated authorization downgrade",
+    "summary": "### Summary The `PATCH /api/settings` endpoint writes the entire request body to persistent settings without a field whitelist. An authenticated user can set security-critical fields that are not meant to be modifiable here — notably `requireLogin`. Setting `requireLogin: false` disables authentication for the whole application, exposing all protected routes (e.g. `/api/keys`, `/api/providers`) to unauthenticated access. ### Details Root cause is unfiltered mass assignment (CWE-915): - `src/app/api/settings/route.js` (PATCH handler) parses the body and passes it to `updateSettings(body)`, with special handling only for `newPassword` and `oidcClientSecret`. All other fields pass through. - `src/lib/db/repos/settingsRepo.js` — `updateSettings` does `next = { ...current, ...updates }`, so any",
+    "author": "GitHub Advisory Database",
+    "project": "9router",
+    "publishedAt": "2026-09-23T18:12:33.000Z",
+    "updatedAt": "2026-09-23T18:12:34.000Z",
+    "versionText": "9router affected <= 0.5.2 fixed 0.5.4",
+    "securityText": "GHSA-vmjq-hvgq-2wv4; severity high; 9router affected <= 0.5.2 fixed 0.5.4",
+    "topicHints": [
+      "security",
+      "package-manager"
+    ],
+    "changeKindHints": [
+      "security-advisory"
+    ],
+    "language": "en",
+    "contentHash": "a0679824fa379f85058d82cc00a6b7d7a31878e6a76c8cff5a188d48462f3374",
+    "provenance": {
+      "authority": "official-advisory",
+      "parserId": "github-advisories",
+      "parserVersion": "1.0.0",
+      "fetchedAt": "2026-09-26T08:51:03.425Z",
+      "evidenceRefs": [
+        "source:github-npm-advisories:3606083280ddd8b6dd8aa247"
+      ],
+      "fixture": false
+    }
+  },
+  {
+    "schemaVersion": "webdev-candidate/1",
+    "sourceId": "github-npm-advisories",
+    "sourceItemId": "GHSA-6mwv-4mrm-5p3m",
+    "listingUrl": "https://api.github.com/advisories?ecosystem=npm",
+    "targetUrl": "https://github.com/advisories/GHSA-6mwv-4mrm-5p3m",
+    "canonicalProjectUrl": "https://github.com/advisories",
+    "title": "9router: Kiro region injection allows authenticated SSRF with Authorization header forwarding",
+    "summary": "### Summary The Kiro API-key validation endpoint builds an upstream URL using a user-controlled `region` value. By supplying a crafted region such as `kiro-canary.local:8443#`, an authenticated attacker can cause 9router to send the Kiro validation request to an attacker-controlled host under the constructed `codewhisperer. ` hostname. The request forwards the submitted Kiro API key as an `Authorization: Bearer` header. ### Details - **Affected version / commit:** 9router v0.5.2 @ `5da508a`. - **Endpoint:** `POST /api/oauth/kiro/api-key`. - **Correct runtime payload:** `region: \"kiro-canary.local:8443#\"`. - Do **not** use the old `@host#` payload (`region: \"@kiro-canary.local:8443#\"`); it is blocked by Node/undici `fetch()` because it creates URL credentials (`\"Request cannot be constructe",
+    "author": "GitHub Advisory Database",
+    "project": "9router",
+    "publishedAt": "2026-09-23T18:12:30.000Z",
+    "updatedAt": "2026-09-23T18:12:32.000Z",
+    "versionText": "9router affected <= 0.5.2 fixed 0.5.6",
+    "securityText": "GHSA-6mwv-4mrm-5p3m; severity medium; 9router affected <= 0.5.2 fixed 0.5.6",
+    "topicHints": [
+      "security",
+      "package-manager"
+    ],
+    "changeKindHints": [
+      "security-advisory"
+    ],
+    "language": "en",
+    "contentHash": "be52711e1e043181eafc73212a4f46e3285fc887935386bd93db236a9915e4e4",
+    "provenance": {
+      "authority": "official-advisory",
+      "parserId": "github-advisories",
+      "parserVersion": "1.0.0",
+      "fetchedAt": "2026-09-26T08:51:03.425Z",
+      "evidenceRefs": [
+        "source:github-npm-advisories:196c1ba56b89dc3fb355c9fa"
+      ],
+      "fixture": false
+    }
+  },
+  {
+    "schemaVersion": "webdev-candidate/1",
+    "sourceId": "github-npm-advisories",
+    "sourceItemId": "GHSA-cmhj-wh2f-9cgx",
+    "listingUrl": "https://api.github.com/advisories?ecosystem=npm",
+    "targetUrl": "https://github.com/advisories/GHSA-cmhj-wh2f-9cgx",
+    "canonicalProjectUrl": "https://github.com/advisories",
+    "title": "9router: Image prefetch DNS rebinding allows SSRF to internal services",
+    "summary": "## Summary 9router validates image URLs by resolving the host before fetching, but the later server-side fetch performs a separate DNS resolution. An attacker-controlled DNS name can resolve to a public IP during validation and then rebind to an internal Docker/private IP during the fetch. This allows the server-side image prefetch to reach internal-only HTTP services (SSRF). ## Details - **Affected version / commit:** 9router `v0.4.80` @ `b282f05`. - **Reachable through** `/v1/chat/completions` with a **vision-capable model** and an `image_url` content part. A vision-capable model name is required so the image survives modality stripping and the server-side prefetch is armed. - The provider used in this reproduction is the bundled **mock provider** — **no real API key and no real provider",
+    "author": "GitHub Advisory Database",
+    "project": "9router",
+    "publishedAt": "2026-09-23T18:12:28.000Z",
+    "updatedAt": "2026-09-23T18:12:29.000Z",
+    "versionText": "9router affected <= 0.4.80 fixed 0.5.2",
+    "securityText": "GHSA-cmhj-wh2f-9cgx; severity high; 9router affected <= 0.4.80 fixed 0.5.2",
+    "topicHints": [
+      "security",
+      "package-manager"
+    ],
+    "changeKindHints": [
+      "security-advisory"
+    ],
+    "language": "en",
+    "contentHash": "c634256badaf73b2074d482d501770087e61d8a73e59e6667a15d01b4f093d32",
+    "provenance": {
+      "authority": "official-advisory",
+      "parserId": "github-advisories",
+      "parserVersion": "1.0.0",
+      "fetchedAt": "2026-09-26T08:51:03.425Z",
+      "evidenceRefs": [
+        "source:github-npm-advisories:fd26c705050f2f51ed07280a"
+      ],
+      "fixture": false
+    }
+  },
+  {
+    "schemaVersion": "webdev-candidate/1",
+    "sourceId": "github-npm-advisories",
+    "sourceItemId": "GHSA-x5c9-v98j-722r",
+    "listingUrl": "https://api.github.com/advisories?ecosystem=npm",
+    "targetUrl": "https://github.com/advisories/GHSA-x5c9-v98j-722r",
+    "canonicalProjectUrl": "https://github.com/advisories",
+    "title": "9router /v1 APIs has unauthenticated access via reverse proxy locality collapse",
+    "summary": "## Summary 9router treats local loopback requests as trusted and allows access to `/v1/*` without an API key. In a documented/common reverse-proxy deployment where nginx forwards public traffic to the backend via `127.0.0.1`, external non-`Origin` requests are misclassified as local. This allows unauthenticated access to `/v1` APIs such as `/v1/models`, and may allow abuse of configured upstream provider credentials depending on the enabled providers. ## Details - **Affected version / commit:** 9router `v0.4.80` @ `b282f05`. - **Deployment precondition:** a same-host reverse proxy (e.g. nginx) forwarding public traffic to the backend on `127.0.0.1` / `localhost`. This mirrors the documented cloud deployment (`proxy_pass http://localhost:20128` with `X-Real-IP` / `X-Forwarded-For`). - **Obs",
+    "author": "GitHub Advisory Database",
+    "project": "9router",
+    "publishedAt": "2026-09-23T18:12:26.000Z",
+    "updatedAt": "2026-09-23T18:12:27.000Z",
+    "versionText": "9router affected <= 0.4.80 fixed 0.5.2",
+    "securityText": "GHSA-x5c9-v98j-722r; severity high; 9router affected <= 0.4.80 fixed 0.5.2",
+    "topicHints": [
+      "security",
+      "package-manager"
+    ],
+    "changeKindHints": [
+      "security-advisory"
+    ],
+    "language": "en",
+    "contentHash": "2e017a7b65509ec0d72db3a60aa859562ea92f78107a63ae5a7e6e016f4695a5",
+    "provenance": {
+      "authority": "official-advisory",
+      "parserId": "github-advisories",
+      "parserVersion": "1.0.0",
+      "fetchedAt": "2026-09-26T08:51:03.425Z",
+      "evidenceRefs": [
+        "source:github-npm-advisories:079fb6bf45d8e014b668d278"
+      ],
+      "fixture": false
+    }
+  },
+  {
+    "schemaVersion": "webdev-candidate/1",
+    "sourceId": "next-releases",
+    "sourceItemId": "sha256:907087b9bb404a67a0832550b6e3687b",
+    "listingUrl": "https://api.github.com/repos/vercel/next.js/releases",
+    "targetUrl": "https://github.com/vercel/next.js/releases/tag/v16.4.0-canary.40",
+    "canonicalProjectUrl": "https://github.com/vercel/next.js",
+    "title": "v16.4.0-canary.40",
+    "summary": "### Misc Changes - Keep cached root parameters out of generic fallback shells: #98950 - Fix missing content in Cached Navigations: #98767 - [turbopack] Track members across namespace re-exports: #96396 - [PPF] Implement `unstable_ensureStatic = \"shell\" | \"prefetch\"`: #98191 - [PPF] Validate `unstable_ensureStatic` nesting: #98357 - Replace lerna task-runner usage with pnpm: #99040 - [cd] Fix release branch gate and drop dead lerna publish config: #99039 - Turbopack: fix \"ModuleId not found for ident\" regression: #99090 - Fix private-cache segment reuse across root params: #98810 - Turbopack: fix `Unknown module type` error for imports in webpack loaders: #99088 - Nudge future defaults upgrades for manual `next dev|build`: #98874 - Nudge latest version upgrades for manual `next dev|build`:",
+    "author": "next-js-bot[bot]",
+    "project": "Next.js",
+    "publishedAt": "2026-09-23T15:25:23.000Z",
+    "updatedAt": "2026-09-23T15:25:23.000Z",
+    "versionText": "v16.4.0-canary.40",
+    "securityText": null,
+    "topicHints": [
+      "meta-framework",
+      "deployment-platform"
+    ],
+    "changeKindHints": [
+      "beta-preview"
+    ],
+    "language": "en",
+    "contentHash": "eba5dc9b20a694d7c3903860b1aa6c4674b97988a0d4adf52885d68edfe9fe6a",
+    "provenance": {
+      "authority": "official-primary",
+      "parserId": "github-releases",
+      "parserVersion": "1.0.0",
+      "fetchedAt": "2026-09-26T08:51:03.425Z",
+      "evidenceRefs": [
+        "source:next-releases:46ddd925e2049f74b6b4b06a"
+      ],
+      "fixture": false
+    }
+  },
+  {
+    "schemaVersion": "webdev-candidate/1",
+    "sourceId": "next-releases",
+    "sourceItemId": "sha256:b90ecda787be428d0afeaaf56b199afd",
+    "listingUrl": "https://api.github.com/repos/vercel/next.js/releases",
+    "targetUrl": "https://github.com/vercel/next.js/releases/tag/v16.4.0-canary.39",
+    "canonicalProjectUrl": "https://github.com/vercel/next.js",
+    "title": "v16.4.0-canary.39",
+    "summary": "### Misc Changes - [PPF] Scaffold `unstable_ensureStatic` segment config: #98190 - [agent-feedback] Respect CI and telemetry opt-out: #99062 - Fix prefetch loop when a predicted route redirects: #98998 - Fix dev overlay header layout on small screens: #99049 - [PPF] Separate tracking of runtime data accesses for shells and prefetches: #98129 - Harden `next/og` SVG serialization: #99061 - test: clarify dev-only intent of duplicate Sass warning test: #98917 - test: enable upward distDir deployment coverage: #98886 - test: remove redundant deployment skips from mode-guarded suites: #98908 - Turbopack: trace static project files referenced by packages: #98712 - Durable use cache: fix next/image pulling in NEXT_DEPLOYMENT_ID: #98739 - Unify hydration error tree details: #99008 - Turbopack: forw",
+    "author": "next-js-bot[bot]",
+    "project": "Next.js",
+    "publishedAt": "2026-09-22T23:51:32.000Z",
+    "updatedAt": "2026-09-22T23:51:32.000Z",
+    "versionText": "v16.4.0-canary.39",
+    "securityText": null,
+    "topicHints": [
+      "meta-framework",
+      "deployment-platform"
+    ],
+    "changeKindHints": [
+      "beta-preview"
+    ],
+    "language": "en",
+    "contentHash": "29df5fda7a27147833dd4667c9a12c32cebc5739055f9af231f1cb145484002e",
+    "provenance": {
+      "authority": "official-primary",
+      "parserId": "github-releases",
+      "parserVersion": "1.0.0",
+      "fetchedAt": "2026-09-26T08:51:03.425Z",
+      "evidenceRefs": [
+        "source:next-releases:a78e8165e5a277c970862108"
+      ],
+      "fixture": false
+    }
+  },
+  {
+    "schemaVersion": "webdev-candidate/1",
+    "sourceId": "github-npm-advisories",
+    "sourceItemId": "GHSA-72h8-wp98-7hch",
+    "listingUrl": "https://api.github.com/advisories?ecosystem=npm",
+    "targetUrl": "https://github.com/advisories/GHSA-72h8-wp98-7hch",
+    "canonicalProjectUrl": "https://github.com/advisories",
+    "title": "Unleash: Missing await on permission check + cross-project IDOR in admin API",
+    "summary": "## Summary Multiple authorization vulnerabilities in Unleash admin API, including a critical missing `await` that completely bypasses a permission check. ## Vulnerability 1: Missing `await` on Permission Check (HIGH) **File:** `src/lib/features/segment/segment-controller.ts` (line 345) `POST /api/admin/segments/strategies` has `permission: NONE` at the route level. The handler performs its own check via `this.accessService.hasPermission()`, but **omits the `await` keyword**. Since `hasPermission()` is async (returns `Promise `), the variable always receives a truthy Promise object. The `if (!hasFeatureStrategyPermission)` check never triggers. ```typescript // BUG: missing await - hasPermission() returns Promise const hasFeatureStrategyPermission = this.accessService.hasPermission( req.use",
+    "author": "GitHub Advisory Database",
+    "project": "unleash-server",
+    "publishedAt": "2026-09-22T20:36:42.000Z",
+    "updatedAt": "2026-09-22T20:36:48.000Z",
+    "versionText": "unleash-server affected < 8.0.3 fixed 8.0.3",
+    "securityText": "GHSA-72h8-wp98-7hch; severity high; unleash-server affected < 8.0.3 fixed 8.0.3",
+    "topicHints": [
+      "security",
+      "package-manager"
+    ],
+    "changeKindHints": [
+      "security-advisory"
+    ],
+    "language": "en",
+    "contentHash": "20f5ff8792609afa3488af35d1bb5c80ef5169855554eed69d5856d7fc0d6657",
+    "provenance": {
+      "authority": "official-advisory",
+      "parserId": "github-advisories",
+      "parserVersion": "1.0.0",
+      "fetchedAt": "2026-09-26T08:51:03.425Z",
+      "evidenceRefs": [
+        "source:github-npm-advisories:bcb78f55ffc172ef7e9cf901"
+      ],
+      "fixture": false
+    }
+  },
+  {
+    "schemaVersion": "webdev-candidate/1",
+    "sourceId": "github-npm-advisories",
+    "sourceItemId": "GHSA-5ffh-6f9q-5hhr",
+    "listingUrl": "https://api.github.com/advisories?ecosystem=npm",
+    "targetUrl": "https://github.com/advisories/GHSA-5ffh-6f9q-5hhr",
+    "canonicalProjectUrl": "https://github.com/advisories",
+    "title": "Unleash: A project member can reorder activation strategies belonging to any other project / environment (cross-project integrity write), bypassing project RBAC and the audit log",
+    "summary": "## Summary Unleash scopes write permissions per project and per environment: a user with the `UPDATE_FEATURE_STRATEGY` permission on project `A` is supposed to be able to mutate activation strategies only within project `A`. The endpoint `POST /api/admin/projects/:projectId/features/:featureName/environments/:environment/strategies/set-sort-order` violates this. The RBAC middleware authorizes the request against the `:projectId` taken from the URL, but the handler then writes the strategy IDs supplied in the request *body* directly to the database by primary key, **without ever verifying that those strategy IDs actually belong to the URL's project / feature / environment**. A low-privilege member of any one project can therefore reorder the activation strategies of features in *any other p",
+    "author": "GitHub Advisory Database",
+    "project": "unleash-server",
+    "publishedAt": "2026-09-22T20:36:39.000Z",
+    "updatedAt": "2026-09-22T20:36:41.000Z",
+    "versionText": "unleash-server affected < 8.0.3 fixed 8.0.3",
+    "securityText": "GHSA-5ffh-6f9q-5hhr; severity medium; unleash-server affected < 8.0.3 fixed 8.0.3",
+    "topicHints": [
+      "security",
+      "package-manager"
+    ],
+    "changeKindHints": [
+      "security-advisory"
+    ],
+    "language": "en",
+    "contentHash": "47edbb472d0748dee8d55faa7a27674545e6ba97031b39b0e7b8906bc3cac317",
+    "provenance": {
+      "authority": "official-advisory",
+      "parserId": "github-advisories",
+      "parserVersion": "1.0.0",
+      "fetchedAt": "2026-09-26T08:51:03.425Z",
+      "evidenceRefs": [
+        "source:github-npm-advisories:4accfcff6e203504a676ef6f"
+      ],
+      "fixture": false
+    }
+  },
+  {
+    "schemaVersion": "webdev-candidate/1",
+    "sourceId": "github-npm-advisories",
+    "sourceItemId": "GHSA-8xcj-9hfr-fh9j",
+    "listingUrl": "https://api.github.com/advisories?ecosystem=npm",
+    "targetUrl": "https://github.com/advisories/GHSA-8xcj-9hfr-fh9j",
+    "canonicalProjectUrl": "https://github.com/advisories",
+    "title": "Unleash: Clone-feature lets a user copy a feature from a project they cannot read",
+    "summary": "### Summary The clone-feature endpoint supports copying features across projects, but it does not verify that the caller can access the source project. A user with _create_ permissions in one project can clone a feature from another project they cannot read and then inspect the copied configuration. This vulnerability cannot be confirmed without Enterprise access. Report is based on a circumstantial evidence in the open-source repository. ### Details `src/lib/features/feature-toggle/feature-toggle-service.ts` implements `cloneFeatureToggle`. This operation needs authorization for both sides: permission to read/copy the source feature and permission to create the destination feature. The clone path validates permissions against the destination project, but not against the source project tha",
+    "author": "GitHub Advisory Database",
+    "project": "unleash-server",
+    "publishedAt": "2026-09-22T20:34:40.000Z",
+    "updatedAt": "2026-09-22T20:34:41.000Z",
+    "versionText": "unleash-server affected < 8.0.3 fixed 8.0.3",
+    "securityText": "GHSA-8xcj-9hfr-fh9j; severity medium; unleash-server affected < 8.0.3 fixed 8.0.3",
+    "topicHints": [
+      "security",
+      "package-manager"
+    ],
+    "changeKindHints": [
+      "security-advisory"
+    ],
+    "language": "en",
+    "contentHash": "85fef9aa8336151bb55ac3384acdcafccc92d138a0501f44ab416b1937d46c58",
+    "provenance": {
+      "authority": "official-advisory",
+      "parserId": "github-advisories",
+      "parserVersion": "1.0.0",
+      "fetchedAt": "2026-09-26T08:51:03.425Z",
+      "evidenceRefs": [
+        "source:github-npm-advisories:9b1969957ed9e23a050a9506"
+      ],
+      "fixture": false
+    }
+  },
+  {
+    "schemaVersion": "webdev-candidate/1",
+    "sourceId": "github-npm-advisories",
+    "sourceItemId": "GHSA-7hvx-28gp-mf6j",
+    "listingUrl": "https://api.github.com/advisories?ecosystem=npm",
+    "targetUrl": "https://github.com/advisories/GHSA-7hvx-28gp-mf6j",
+    "canonicalProjectUrl": "https://github.com/advisories",
+    "title": "Unleash: CR-approval email renders user-controlled raw HTML",
+    "summary": "### Summary The change-request approval HTML email template renders fields as raw HTML. User who can create a change request can inject HTML into approval notification emails. I was not able to confirm Enterprise platform is using vulnerable code nor that it doesn't sanitize input. ### Details `src/mailtemplates/requested-cr-approval/requested-cr-approval.html.mustache` uses Mustache triple-stash syntax for fields that can originate from users: ```mustache {{{ changeRequestTitle }}} {{{ requesterName }}} {{{ requesterEmail }}} {{{ changeRequestLink }}} ``` Triple-stash disables HTML escaping even when Mustache's global escape function is safe. The related renderer is `sendRequestedCRApprovalEmail` in `src/lib/services/email-service.ts`, which renders the template with `Mustache.render`. ##",
+    "author": "GitHub Advisory Database",
+    "project": "unleash-server",
+    "publishedAt": "2026-09-22T20:34:38.000Z",
+    "updatedAt": "2026-09-22T20:34:39.000Z",
+    "versionText": "unleash-server affected < 8.0.3 fixed 8.0.3",
+    "securityText": "GHSA-7hvx-28gp-mf6j; severity low; unleash-server affected < 8.0.3 fixed 8.0.3",
+    "topicHints": [
+      "security",
+      "package-manager"
+    ],
+    "changeKindHints": [
+      "security-advisory"
+    ],
+    "language": "en",
+    "contentHash": "43c4919d93f49fa4b55279ccb8aa88891e89e88d771b56b4ace7380869d51d9e",
+    "provenance": {
+      "authority": "official-advisory",
+      "parserId": "github-advisories",
+      "parserVersion": "1.0.0",
+      "fetchedAt": "2026-09-26T08:51:03.425Z",
+      "evidenceRefs": [
+        "source:github-npm-advisories:5d8f8af500592c1270abd30c"
+      ],
+      "fixture": false
+    }
+  },
+  {
+    "schemaVersion": "webdev-candidate/1",
+    "sourceId": "github-npm-advisories",
+    "sourceItemId": "GHSA-8gr3-5j6f-25gp",
+    "listingUrl": "https://api.github.com/advisories?ecosystem=npm",
+    "targetUrl": "https://github.com/advisories/GHSA-8gr3-5j6f-25gp",
+    "canonicalProjectUrl": "https://github.com/advisories",
+    "title": "Novu: Stored XSS in In-App Inbox via notification redirect.url javascript: scheme",
+    "summary": "## Summary The `@novu/js` In-App Inbox renderer passes a notification's `redirect.url` to `window.open()` with no URL-scheme validation. The value originates from a notification's call-to-action and is delivered to the recipient verbatim. An authenticated organization member (or any holder of the environment API key) creates a v1 in-app workflow whose step CTA stores `cta.data = { url: \"javascript: \", target: \"_self\" }`. The v1 message-template `cta.data` field is a Mongoose `Mixed` type, so the arbitrary `target` key is accepted and persisted. The server-side inbox mapper copies `cta.data.url` and `cta.data.target` into the notification's `redirect` object with no scheme check. Novu's v2 control schema validates redirect URLs against `redirectUrlRegex` (which rejects `javascript:`), provi",
+    "author": "GitHub Advisory Database",
+    "project": "@novu/js",
+    "publishedAt": "2026-09-22T20:34:35.000Z",
+    "updatedAt": "2026-09-22T20:34:36.000Z",
+    "versionText": "@novu/js affected <= 3.17.0 fixed 3.18.0",
+    "securityText": "GHSA-8gr3-5j6f-25gp; severity medium; @novu/js affected <= 3.17.0 fixed 3.18.0",
+    "topicHints": [
+      "security",
+      "package-manager"
+    ],
+    "changeKindHints": [
+      "security-advisory"
+    ],
+    "language": "en",
+    "contentHash": "6b569661b3a42b60673bece8bedd8e64fc7d1201eea7f7854abeecf0126eec9b",
+    "provenance": {
+      "authority": "official-advisory",
+      "parserId": "github-advisories",
+      "parserVersion": "1.0.0",
+      "fetchedAt": "2026-09-26T08:51:03.425Z",
+      "evidenceRefs": [
+        "source:github-npm-advisories:26d040ca3e211c3870b89647"
+      ],
+      "fixture": false
+    }
+  },
+  {
+    "schemaVersion": "webdev-candidate/1",
+    "sourceId": "github-npm-advisories",
+    "sourceItemId": "GHSA-vc9j-9wph-qghj",
+    "listingUrl": "https://api.github.com/advisories?ecosystem=npm",
+    "targetUrl": "https://github.com/advisories/GHSA-vc9j-9wph-qghj",
+    "canonicalProjectUrl": "https://github.com/advisories",
+    "title": "mppx: Gas Draining with access list",
+    "summary": "### Details When the server acts as the fee_payer, `mppx` 0.6.27 copies the client-supplied EIP-2930 access list verbatim into the cosigned fee-payer transaction. The TypeScript SDK's fee-payer cosigning path accepts any `access_list` the client includes in the 0x78 `FeePayerEnvelope` without inspecting its length or contents. Access list gas is charged **intrinsically** — before any opcode executes — regardless of whether the listed addresses are ever touched. An attacker submits a valid `transferWithMemo` alongside fabricated address-only access list entries. The server validates calldata and gas parameters but never inspects `access_list` length. It cosigns and broadcasts a transaction that costs the fee-payer wallet `N × 2,400` extra gas per request with no corresponding work performed",
+    "author": "GitHub Advisory Database",
+    "project": "mppx",
+    "publishedAt": "2026-09-22T20:34:19.000Z",
+    "updatedAt": "2026-09-22T20:34:21.000Z",
+    "versionText": "mppx affected < 0.8.2 fixed 0.8.2",
+    "securityText": "GHSA-vc9j-9wph-qghj; severity medium; mppx affected < 0.8.2 fixed 0.8.2",
+    "topicHints": [
+      "security",
+      "package-manager"
+    ],
+    "changeKindHints": [
+      "security-advisory"
+    ],
+    "language": "en",
+    "contentHash": "9f4ac5225de683fe33b46ee95e4a5f73a72a33e0e760e192c63cda1a148b3dac",
+    "provenance": {
+      "authority": "official-advisory",
+      "parserId": "github-advisories",
+      "parserVersion": "1.0.0",
+      "fetchedAt": "2026-09-26T08:51:03.425Z",
+      "evidenceRefs": [
+        "source:github-npm-advisories:962624c0df2c4c680e286106"
+      ],
+      "fixture": false
+    }
+  },
+  {
+    "schemaVersion": "webdev-candidate/1",
+    "sourceId": "github-npm-advisories",
+    "sourceItemId": "GHSA-727h-3vm5-qwq6",
+    "listingUrl": "https://api.github.com/advisories?ecosystem=npm",
+    "targetUrl": "https://github.com/advisories/GHSA-727h-3vm5-qwq6",
+    "canonicalProjectUrl": "https://github.com/advisories",
+    "title": "mppx: Gas Draining with padding",
+    "summary": "### Details When the server acts as the fee_payer, `mppx` 0.6.27 validates calldata using viem's `decodeFunctionData`, which is lenient about trailing bytes. The `FeePayerPolicy` caps `gas_limit` (≤ 2 M) and `max_fee_per_gas` (≤ 100 Gwei) but does **not** check calldata length. Tempo uses legacy calldata gas pricing: **16 gas per non-zero byte**. Appending `N` bytes of `0x01` padding inflates actual gas used by `N × 16` while keeping `gas_limit` and `max_fee_per_gas` within policy caps. The server cosigns and broadcasts the padded transaction, draining its fee-payer wallet. **Vulnerable code path:** `FeePayerPolicy` in `fee-payer.ts` (mppx 0.6.27) enforces `maxGas = 2_000_000` and `maxFeePerGas = 100 Gwei` but has no `calldata.length` bound. The policy check passes because the inflated gas",
+    "author": "GitHub Advisory Database",
+    "project": "mppx",
+    "publishedAt": "2026-09-22T20:34:17.000Z",
+    "updatedAt": "2026-09-22T20:34:19.000Z",
+    "versionText": "mppx affected < 0.8.1 fixed 0.8.2",
+    "securityText": "GHSA-727h-3vm5-qwq6; severity medium; mppx affected < 0.8.1 fixed 0.8.2",
+    "topicHints": [
+      "security",
+      "package-manager"
+    ],
+    "changeKindHints": [
+      "security-advisory"
+    ],
+    "language": "en",
+    "contentHash": "b8cecca653d8ae90e122cd92ab4dbcd815f8bb0b862bcc0de588d9bd832787f4",
+    "provenance": {
+      "authority": "official-advisory",
+      "parserId": "github-advisories",
+      "parserVersion": "1.0.0",
+      "fetchedAt": "2026-09-26T08:51:03.425Z",
+      "evidenceRefs": [
+        "source:github-npm-advisories:ee9c5a168b0231d7903febb2"
+      ],
+      "fixture": false
+    }
+  },
+  {
+    "schemaVersion": "webdev-candidate/1",
+    "sourceId": "github-npm-advisories",
+    "sourceItemId": "GHSA-89vx-jh4q-vg3w",
+    "listingUrl": "https://api.github.com/advisories?ecosystem=npm",
+    "targetUrl": "https://github.com/advisories/GHSA-89vx-jh4q-vg3w",
+    "canonicalProjectUrl": "https://github.com/advisories",
+    "title": "deepstream: PATCH_MULTI action bypasses Valve permission system allowing unauthorized record writes",
+    "summary": "## Summary The `RECORD_ACTION.PATCH_MULTI` action is not registered in the Valve permission system's `RULES_MAP` (`src/services/permission/valve/rules-map.ts`). When `ConfigPermission.canPerformAction()` is called for a PATCH_MULTI message, `getRulesForMessage()` returns `null` because the action is missing from the map. This triggers an unconditional allow (`callback(..., null, true)`), completely bypassing all configured Valve permission rules. Any authenticated user — regardless of their configured permissions — can write arbitrary data to any record using the PATCH_MULTI action. ## Root Cause In `src/services/permission/valve/rules-map.ts` lines 38-54, the `RULES_MAP[TOPIC.RECORD].actions` dictionary maps record actions to permission rule types. The actions registered include: SUBSCRIB",
+    "author": "GitHub Advisory Database",
+    "project": "@deepstream/server",
+    "publishedAt": "2026-09-22T19:56:34.000Z",
+    "updatedAt": "2026-09-22T19:56:34.000Z",
+    "versionText": "@deepstream/server affected = 10.1.0 fixed 10.1.1",
+    "securityText": "GHSA-89vx-jh4q-vg3w; severity high; @deepstream/server affected = 10.1.0 fixed 10.1.1",
+    "topicHints": [
+      "security",
+      "package-manager"
+    ],
+    "changeKindHints": [
+      "security-advisory"
+    ],
+    "language": "en",
+    "contentHash": "7528a03fbf42d5f3dfd326d749c52a7ff6bd775ef911d90830112c7499f3d139",
+    "provenance": {
+      "authority": "official-advisory",
+      "parserId": "github-advisories",
+      "parserVersion": "1.0.0",
+      "fetchedAt": "2026-09-26T08:51:03.425Z",
+      "evidenceRefs": [
+        "source:github-npm-advisories:b75955a6d2af410f4d15d2f1"
+      ],
+      "fixture": false
+    }
+  },
+  {
+    "schemaVersion": "webdev-candidate/1",
+    "sourceId": "github-npm-advisories",
+    "sourceItemId": "GHSA-r3r9-wp5j-pq5g",
+    "listingUrl": "https://api.github.com/advisories?ecosystem=npm",
+    "targetUrl": "https://github.com/advisories/GHSA-r3r9-wp5j-pq5g",
+    "canonicalProjectUrl": "https://github.com/advisories",
+    "title": "request-filtering-agent: Synchronous throw from createConnection() for literal private-IP hosts bypasses req.on('error'), crashing the Node.js process",
+    "summary": "### Summary `RequestFilteringHttpAgent` / `RequestFilteringHttpsAgent` block requests to private IPs, but the blocking happens via a **synchronous `throw`** inside `createConnection()` for literal private-IP hostnames (e.g. `169.254.169.254`, `127.0.0.1`). Node.js's `http.request` / `http.get` expects `createConnection` to emit an error asynchronously; a synchronous throw instead escapes the caller's `req.on('error', ...)` handler entirely and becomes an **unhandled exception** that crashes the process. ### Affected `request-filtering-agent` { console.log('CRASH:', e.message); // fires — process dies }); const req = http.get({ hostname: '169.254.169.254', port: 80, agent }); req.on('error', e => { /* never reached for literal IPs */ }); ``` Actual output: ``` request-filtering-agent@3.2.0",
+    "author": "GitHub Advisory Database",
+    "project": "request-filtering-agent",
+    "publishedAt": "2026-09-22T19:54:18.000Z",
+    "updatedAt": "2026-09-22T19:54:19.000Z",
+    "versionText": "request-filtering-agent affected < 3.2.1 fixed 3.2.1",
+    "securityText": "GHSA-r3r9-wp5j-pq5g; severity high; request-filtering-agent affected < 3.2.1 fixed 3.2.1",
+    "topicHints": [
+      "security",
+      "package-manager"
+    ],
+    "changeKindHints": [
+      "security-advisory"
+    ],
+    "language": "en",
+    "contentHash": "075277fd0f1c7847b63fddf5d0d3c0b337f492b6cbb4bfa828b18bfcfd543d0a",
+    "provenance": {
+      "authority": "official-advisory",
+      "parserId": "github-advisories",
+      "parserVersion": "1.0.0",
+      "fetchedAt": "2026-09-26T08:51:03.425Z",
+      "evidenceRefs": [
+        "source:github-npm-advisories:8c454abead68fe1066d10c20"
+      ],
+      "fixture": false
+    }
+  },
+  {
+    "schemaVersion": "webdev-candidate/1",
+    "sourceId": "next-releases",
+    "sourceItemId": "sha256:df93dab15cc9351e0e165e399eb125bd",
+    "listingUrl": "https://api.github.com/repos/vercel/next.js/releases",
+    "targetUrl": "https://github.com/vercel/next.js/releases/tag/v16.3.6",
+    "canonicalProjectUrl": "https://github.com/vercel/next.js",
+    "title": "v16.3.6",
+    "summary": "This release contains a security fix for [GHSA-vcvr-r3jv-pc5j: Remote Code Execution in next/og ImageResponse](https://github.com/vercel/next.js/security/advisories/GHSA-vcvr-r3jv-pc5j)",
+    "author": "eps1lon",
+    "project": "Next.js",
+    "publishedAt": "2026-09-22T17:15:10.000Z",
+    "updatedAt": "2026-09-22T17:15:10.000Z",
+    "versionText": "v16.3.6",
+    "securityText": "This release contains a security fix for [GHSA-vcvr-r3jv-pc5j: Remote Code Execution in next/og ImageResponse](https://github.com/vercel/next.js/security/advisories/GHSA-vcvr-r3jv-pc5j)",
+    "topicHints": [
+      "meta-framework",
+      "deployment-platform"
+    ],
+    "changeKindHints": [
+      "security-advisory"
+    ],
+    "language": "en",
+    "contentHash": "5dc36043b1e6356665a6ab7c9c28a7194836333c1c742b61330676a8487ff9c8",
+    "provenance": {
+      "authority": "official-primary",
+      "parserId": "github-releases",
+      "parserVersion": "1.0.0",
+      "fetchedAt": "2026-09-26T08:51:03.425Z",
+      "evidenceRefs": [
+        "source:next-releases:0798c63b70f39da6c56285fe"
+      ],
+      "fixture": false
+    }
+  },
+  {
+    "schemaVersion": "webdev-candidate/1",
+    "sourceId": "next-releases",
+    "sourceItemId": "sha256:7d355130cb2dff000ccfbfb5d9802d22",
+    "listingUrl": "https://api.github.com/repos/vercel/next.js/releases",
+    "targetUrl": "https://github.com/vercel/next.js/releases/tag/v15.5.26",
+    "canonicalProjectUrl": "https://github.com/vercel/next.js",
+    "title": "v15.5.26",
+    "summary": "This release contains additional security hardening for `next/og`. For more information, check out https://nextjs.org/blog/nextjs-security-update-september-22-2026",
+    "author": "eps1lon",
+    "project": "Next.js",
+    "publishedAt": "2026-09-22T17:14:57.000Z",
+    "updatedAt": "2026-09-22T17:15:57.000Z",
+    "versionText": "v15.5.26",
+    "securityText": "This release contains additional security hardening for `next/og`. For more information, check out https://nextjs.org/blog/nextjs-security-update-september-22-2026",
+    "topicHints": [
+      "meta-framework",
+      "deployment-platform"
+    ],
+    "changeKindHints": [
+      "security-advisory"
+    ],
+    "language": "en",
+    "contentHash": "0ba83590a9974bceac896eaf6cca481c5f854825df6503114187260b416752a0",
+    "provenance": {
+      "authority": "official-primary",
+      "parserId": "github-releases",
+      "parserVersion": "1.0.0",
+      "fetchedAt": "2026-09-26T08:51:03.425Z",
+      "evidenceRefs": [
+        "source:next-releases:d04892418cbfeb80b6013b12"
+      ],
+      "fixture": false
+    }
+  },
+  {
+    "schemaVersion": "webdev-candidate/1",
+    "sourceId": "github-npm-advisories",
+    "sourceItemId": "GHSA-32gc-64m7-hj7v",
+    "listingUrl": "https://api.github.com/advisories?ecosystem=npm",
+    "targetUrl": "https://github.com/advisories/GHSA-32gc-64m7-hj7v",
+    "canonicalProjectUrl": "https://github.com/advisories",
+    "title": "9Router has a Login Brute-Force Lockout Bypass via Spoofable X-9r-Real-Ip Header",
+    "summary": "# Summary 9router enforces a progressive login lockout (5 failed attempts → temporary 30s+ lock) keyed on the client IP. The client IP used for this limiter is taken from the X-9r-Real-Ip request header, which is intended to be set only by the bundled custom-server.js layer from the unspoofable TCP socket address. In deployment modes where requests reach Next.js directly, a remote attacker controls this header and can assign a unique value to every request. Because each distinct header value maps to a fresh limiter bucket, the lockout never triggers, enabling unlimited password guessing against the dashboard login endpoint. This was reproduced against a live instance: a fixed header value was locked out (429) after 5 attempts, while rotating the header produced unlimited 401 responses with",
+    "author": "GitHub Advisory Database",
+    "project": "9router",
+    "publishedAt": "2026-09-22T16:34:18.000Z",
+    "updatedAt": "2026-09-22T16:34:20.000Z",
+    "versionText": "9router affected <= 0.5.4 fixed 0.5.8",
+    "securityText": "GHSA-32gc-64m7-hj7v; severity medium; 9router affected <= 0.5.4 fixed 0.5.8",
+    "topicHints": [
+      "security",
+      "package-manager"
+    ],
+    "changeKindHints": [
+      "security-advisory"
+    ],
+    "language": "en",
+    "contentHash": "812d08dcdc171d5088fe201b5c666b57d00be0a52b837338dfff8ca3e91d04a2",
+    "provenance": {
+      "authority": "official-advisory",
+      "parserId": "github-advisories",
+      "parserVersion": "1.0.0",
+      "fetchedAt": "2026-09-26T08:51:03.425Z",
+      "evidenceRefs": [
+        "source:github-npm-advisories:76d783c4b43c158489597138"
+      ],
+      "fixture": false
+    }
+  },
+  {
+    "schemaVersion": "webdev-candidate/1",
+    "sourceId": "github-npm-advisories",
+    "sourceItemId": "GHSA-5mj8-gf6m-fhw8",
+    "listingUrl": "https://api.github.com/advisories?ecosystem=npm",
+    "targetUrl": "https://github.com/advisories/GHSA-5mj8-gf6m-fhw8",
+    "canonicalProjectUrl": "https://github.com/advisories",
+    "title": "9Router has an Authentication Bypass in Public LLM API via Spoofable X-9r-Real-Ip Header",
+    "summary": "## Summary 9router determines whether an incoming request originates from localhost by trusting the X-9r-Real-Ip HTTP request header. This header is intended to be produced and sanitized exclusively by the bundled custom-server.js layer from the TCP socket address. In deployment modes where requests reach Next.js directly (the header is never stripped/regenerated), a remote, unauthenticated attacker can simply send X-9r-Real-Ip: 127.0.0.1 and be treated as a local client. This bypasses the API-key requirement on the public LLM API (/api/v1/*), granting unauthenticated access to the instance owner's configured provider resources. ## Affected Component - src/dashboardGuard.js - isLocalRequest() — trusts the client-supplied X-9r-Real-Ip header to decide loopback origin - canAccessPublicLlmApi",
+    "author": "GitHub Advisory Database",
+    "project": "9router",
+    "publishedAt": "2026-09-22T16:34:06.000Z",
+    "updatedAt": "2026-09-22T16:34:10.000Z",
+    "versionText": "9router affected <= 0.5.4 fixed 0.5.8",
+    "securityText": "GHSA-5mj8-gf6m-fhw8; severity high; 9router affected <= 0.5.4 fixed 0.5.8",
+    "topicHints": [
+      "security",
+      "package-manager"
+    ],
+    "changeKindHints": [
+      "security-advisory"
+    ],
+    "language": "en",
+    "contentHash": "af5551e40a082798cf069e3d3a277665b3066e371e692377c813a26f3ff4adee",
+    "provenance": {
+      "authority": "official-advisory",
+      "parserId": "github-advisories",
+      "parserVersion": "1.0.0",
+      "fetchedAt": "2026-09-26T08:51:03.425Z",
+      "evidenceRefs": [
+        "source:github-npm-advisories:bb6b6e8e33953638ab019061"
+      ],
+      "fixture": false
+    }
+  },
+  {
+    "schemaVersion": "webdev-candidate/1",
+    "sourceId": "next-releases",
+    "sourceItemId": "sha256:926f314a7b6d6f20d345dacd0792da2d",
+    "listingUrl": "https://api.github.com/repos/vercel/next.js/releases",
+    "targetUrl": "https://github.com/vercel/next.js/releases/tag/v16.4.0-canary.38",
+    "canonicalProjectUrl": "https://github.com/vercel/next.js",
+    "title": "v16.4.0-canary.38",
+    "summary": "### Core Changes - feat(turbopack): support `false` values for `resolveAlias` config: #93331 ### Misc Changes - Enable AI upgrade for canary: #99001 - fix(turbo-persistence): preserve write errors on writer drop: #98840 - Skip slow valued tombstone test under Miri: #98992 - Improve the agent feedback review flow: #98937 - Run AI upgrades with the latest official canary: #98870 - test: move whole development-only suites out of e2e: #98842 - Fix `instant-false` codemod to run on route segment filenames: #98880 - test: migrate legacy deployment exclusion callers: #98473 - Split revalidation errors by execution context: #98993 - Enable strict route matching by default: #97397 - Surface agent feedback gate connection failures: #98991 - Generalize the build-time generator work-unit store name: #",
+    "author": "next-js-bot[bot]",
+    "project": "Next.js",
+    "publishedAt": "2026-09-22T08:53:08.000Z",
+    "updatedAt": "2026-09-22T08:53:08.000Z",
+    "versionText": "v16.4.0-canary.38",
+    "securityText": null,
+    "topicHints": [
+      "meta-framework",
+      "deployment-platform"
+    ],
+    "changeKindHints": [
+      "beta-preview"
+    ],
+    "language": "en",
+    "contentHash": "5d8c3d68d0e63b123f129873ba90b1313d7ddeafa39c4756fe9e9c7972c23d11",
+    "provenance": {
+      "authority": "official-primary",
+      "parserId": "github-releases",
+      "parserVersion": "1.0.0",
+      "fetchedAt": "2026-09-26T08:51:03.425Z",
+      "evidenceRefs": [
+        "source:next-releases:3b36660d8ec6790265bb86f2"
+      ],
+      "fixture": false
+    }
+  },
+  {
+    "schemaVersion": "webdev-candidate/1",
+    "sourceId": "next-releases",
+    "sourceItemId": "sha256:8084dab7a95ddc5ae704529c18f1b21f",
+    "listingUrl": "https://api.github.com/repos/vercel/next.js/releases",
+    "targetUrl": "https://github.com/vercel/next.js/releases/tag/v16.4.0-canary.37",
+    "canonicalProjectUrl": "https://github.com/vercel/next.js",
+    "title": "v16.4.0-canary.37",
+    "summary": "### Misc Changes - Preserve closed-parameter restrictions in client route prediction: #98889 - [test] Fix deployment tests that relied on implicit startup: #98935 - Turbopack: Add support for specifying additional roots: #98003 - Turbopack: Add symlinks and additional roots to NFT metadata: #98469 ### Credits Huge thanks to @gnoff, @unstubbable, and @bgw for helping!",
+    "author": "next-js-bot[bot]",
+    "project": "Next.js",
+    "publishedAt": "2026-09-19T23:46:04.000Z",
+    "updatedAt": "2026-09-19T23:46:04.000Z",
+    "versionText": "v16.4.0-canary.37",
+    "securityText": null,
+    "topicHints": [
+      "meta-framework",
+      "deployment-platform"
+    ],
+    "changeKindHints": [
+      "beta-preview"
+    ],
+    "language": "en",
+    "contentHash": "916933cce7e82d0d02b505bbb0bcb7395e2b1758bb4bedf0f3c03dacd91dc019",
+    "provenance": {
+      "authority": "official-primary",
+      "parserId": "github-releases",
+      "parserVersion": "1.0.0",
+      "fetchedAt": "2026-09-26T08:51:03.425Z",
+      "evidenceRefs": [
+        "source:next-releases:cea625366d96bfec0a8de80a"
+      ],
+      "fixture": false
+    }
+  },
+  {
+    "schemaVersion": "webdev-candidate/1",
+    "sourceId": "next-releases",
+    "sourceItemId": "sha256:8745e9a237238f108f7092dd0b666d74",
+    "listingUrl": "https://api.github.com/repos/vercel/next.js/releases",
+    "targetUrl": "https://github.com/vercel/next.js/releases/tag/v16.4.0-canary.36",
+    "canonicalProjectUrl": "https://github.com/vercel/next.js",
+    "title": "v16.4.0-canary.36",
+    "summary": "### Misc Changes - Persist resurrected tasks as new tasks: #98729 - Rspack: Remove bincode dependency from rspack by way of turbo-unix-path: #98855 - Pin tasks across restore waiter handoff: #98728 - test: honor skipStart for Vercel deployments: #98776 - Use internal prefix for Turbopack shutdown env: #98747 - test: retry waiting for ISR fallback in prefetch-static-shell: #98884 - Fix generated Turbopack GC option docs: #98888 - Add agent feedback behavior evals: #98887 - Add experimental agent feedback workflow: #98582 - Clean up unnecessary output asset creation: #98834 - Properly disable laziness on next/dynamic: #98828 - Set `experimental.agenticAutoUpgrade` after successful upgrade: #98871 - example(cache-handler-redis): fix connection leak, hangs on a down Redis, and cross-page tag i",
+    "author": "next-js-bot[bot]",
+    "project": "Next.js",
+    "publishedAt": "2026-09-18T23:47:18.000Z",
+    "updatedAt": "2026-09-18T23:47:18.000Z",
+    "versionText": "v16.4.0-canary.36",
+    "securityText": null,
+    "topicHints": [
+      "meta-framework",
+      "deployment-platform"
+    ],
+    "changeKindHints": [
+      "beta-preview"
+    ],
+    "language": "en",
+    "contentHash": "651132223bc053575f030cb7609291b8f615ea7b7345bcb95852d0c315b4600e",
+    "provenance": {
+      "authority": "official-primary",
+      "parserId": "github-releases",
+      "parserVersion": "1.0.0",
+      "fetchedAt": "2026-09-26T08:51:03.425Z",
+      "evidenceRefs": [
+        "source:next-releases:299b99013fc6a4229916d96a"
+      ],
+      "fixture": false
+    }
+  },
+  {
+    "schemaVersion": "webdev-candidate/1",
+    "sourceId": "next-releases",
+    "sourceItemId": "sha256:ec8fa7d13dc2d61f706e7ef18916ff5a",
+    "listingUrl": "https://api.github.com/repos/vercel/next.js/releases",
+    "targetUrl": "https://github.com/vercel/next.js/releases/tag/v16.4.0-canary.35",
+    "canonicalProjectUrl": "https://github.com/vercel/next.js",
+    "title": "v16.4.0-canary.35",
+    "summary": "### Misc Changes - Nudge the agents for future defaults adoption: #98721 - Add future defaults upgrade coverage for `next upgrade --ai`: #98643 - Nudge the agents for latest version upgrade: #98640 - Add \"latest\" upgrade coverage for `next upgrade --ai`: #98633 - Nudge the agents for security vulnerable version upgrade: #98637 - Add `next upgrade --ai` and security vulnerability coverage: #98562 - agents: Add a `--comments-only` flag to `pr-status` script, trim down context bloat in AGENTS.md: #98781 - Keep guards across restore owner handoff: #98700 - [turbopack] Track webpack loader build dependency files: #98777 - Replace lzzzz with lz4_flex: #98799 - Fix metadata propagation for deduplicated nested caches: #98808 - Bump to swc v79: #98809 - [PPF] Fix unnecessary runtime prefetch with p",
+    "author": "next-js-bot[bot]",
+    "project": "Next.js",
+    "publishedAt": "2026-09-17T23:43:31.000Z",
+    "updatedAt": "2026-09-17T23:43:31.000Z",
+    "versionText": "v16.4.0-canary.35",
+    "securityText": "### Misc Changes - Nudge the agents for future defaults adoption: #98721 - Add future defaults upgrade coverage for `next upgrade --ai`: #98643 - Nudge the agents for latest version upgrade: #98640 - Add \"latest\" upgrade coverage for `next upgrade --ai`: #98633 - Nudge the agents for security vulnerable version upgrade: #98637 - Add `next upgrade --ai` and security vulnerability coverage: #98562 - agents: Add a `--comments-only` flag to `pr-status` script, trim down context bloat in AGENTS.md: #",
+    "topicHints": [
+      "meta-framework",
+      "deployment-platform"
+    ],
+    "changeKindHints": [
+      "security-advisory",
+      "beta-preview"
+    ],
+    "language": "en",
+    "contentHash": "751067cc1ef53ea283e973e5a7173a3120a075028705222434de202de7340e08",
+    "provenance": {
+      "authority": "official-primary",
+      "parserId": "github-releases",
+      "parserVersion": "1.0.0",
+      "fetchedAt": "2026-09-26T08:51:03.425Z",
+      "evidenceRefs": [
+        "source:next-releases:3f12fd40d202f1f0987bce45"
+      ],
+      "fixture": false
+    }
+  },
+  {
+    "schemaVersion": "webdev-candidate/1",
+    "sourceId": "next-releases",
+    "sourceItemId": "sha256:a5045f75a1dc7285a95bcf47fe384731",
+    "listingUrl": "https://api.github.com/repos/vercel/next.js/releases",
+    "targetUrl": "https://github.com/vercel/next.js/releases/tag/v16.4.0-canary.34",
+    "canonicalProjectUrl": "https://github.com/vercel/next.js",
+    "title": "v16.4.0-canary.34",
+    "summary": "### Misc Changes - Store code generation AST paths in a shared trie: #98581 - Turbopack: Remove wasmer from lockfile by deleting dead feature option from our wasm crate: #98761 - Prefer using join over try_join when you don't want a vec: #98547 - Preserve committed app route response status during fallback: #98649 - docs: scope React cache() guidance to the render pass: #98741 - fix(next-custom-transforms): never place generated imports before directives: #98717 - Pin tasks during construction: #98688 - fix(use-cache): track root params read in \"use cache\" as vary params: #98674 - [test] Fix Webpack deployment failures in PostCSS tests: #98710 - Revert \"Fix App Router locale path matching with Pages i18n\": #98715 ### Credits Huge thanks to @lukesandberg, @bgw, @alangenfeld, @icyJoseph, @mi",
+    "author": "next-js-bot[bot]",
+    "project": "Next.js",
+    "publishedAt": "2026-09-16T23:46:51.000Z",
+    "updatedAt": "2026-09-16T23:46:51.000Z",
+    "versionText": "v16.4.0-canary.34",
+    "securityText": null,
+    "topicHints": [
+      "meta-framework",
+      "deployment-platform"
+    ],
+    "changeKindHints": [
+      "beta-preview"
+    ],
+    "language": "en",
+    "contentHash": "bb6092b78361a607a3a8ce4dbf449876c340da3cc8386e3f1ed5172d0cf9eaa4",
+    "provenance": {
+      "authority": "official-primary",
+      "parserId": "github-releases",
+      "parserVersion": "1.0.0",
+      "fetchedAt": "2026-09-26T08:51:03.425Z",
+      "evidenceRefs": [
+        "source:next-releases:46c7a9e5e5d0652b1bc3f3d4"
+      ],
+      "fixture": false
+    }
+  },
+  {
+    "schemaVersion": "webdev-candidate/1",
+    "sourceId": "next-releases",
+    "sourceItemId": "sha256:6b4f458671a65725612d800c20d9d896",
+    "listingUrl": "https://api.github.com/repos/vercel/next.js/releases",
+    "targetUrl": "https://github.com/vercel/next.js/releases/tag/v16.4.0-canary.33",
+    "canonicalProjectUrl": "https://github.com/vercel/next.js",
+    "title": "v16.4.0-canary.33",
+    "summary": "### Misc Changes - Fix App Router locale path matching with Pages i18n: #98095 - Upgrade React from `019019be-20260911` to `ff8f88fc-20260915`: #98693 ### Credits Huge thanks to @timneutkens for helping!",
+    "author": "next-js-bot[bot]",
+    "project": "Next.js",
+    "publishedAt": "2026-09-16T09:06:18.000Z",
+    "updatedAt": "2026-09-16T09:06:18.000Z",
+    "versionText": "v16.4.0-canary.33",
+    "securityText": null,
+    "topicHints": [
+      "meta-framework",
+      "deployment-platform"
+    ],
+    "changeKindHints": [
+      "beta-preview"
+    ],
+    "language": "en",
+    "contentHash": "99aae885ffe7fbb4849f404cd81dcbc51a9bb0ddbaa0efa1bf1e26eaff04251d",
+    "provenance": {
+      "authority": "official-primary",
+      "parserId": "github-releases",
+      "parserVersion": "1.0.0",
+      "fetchedAt": "2026-09-26T08:51:03.425Z",
+      "evidenceRefs": [
+        "source:next-releases:cdcea4eee935bb328455ce88"
+      ],
+      "fixture": false
+    }
+  },
+  {
+    "schemaVersion": "webdev-candidate/1",
+    "sourceId": "next-releases",
+    "sourceItemId": "sha256:31c2ebab7626e6382782dd9bf9402b37",
+    "listingUrl": "https://api.github.com/repos/vercel/next.js/releases",
+    "targetUrl": "https://github.com/vercel/next.js/releases/tag/v16.4.0-canary.32",
+    "canonicalProjectUrl": "https://github.com/vercel/next.js",
+    "title": "v16.4.0-canary.32",
+    "summary": "### Misc Changes - fix(turbopack): trace cyclic modules to explicit entries: #98661 - Use default pnpm package import method: #98703 - Fix constant inlining in shorthand properties: #98662 - test(turbopack): add strong read operation roots: #98248 - Use pnpm for isolated test installs: #98425 - [turbopack] Forward usage information across re-exports: #96282 - [turbopack] Use options object for ESM references: #98680 - test: enable verified runtime deploy tests: #98457 - test: enable verified assets deploy tests: #98527 - test: enable verified pages-router deploy tests: #98526 - test: enable verified tooling deploy tests: #98525 - test: enable verified app-router deploy tests: #98524 - test: enable verified caching deploy tests: #98523 - Fix unexpected query parameters in adapter deployment",
+    "author": "next-js-bot[bot]",
+    "project": "Next.js",
+    "publishedAt": "2026-09-15T23:47:19.000Z",
+    "updatedAt": "2026-09-15T23:47:19.000Z",
+    "versionText": "v16.4.0-canary.32",
+    "securityText": null,
+    "topicHints": [
+      "meta-framework",
+      "deployment-platform"
+    ],
+    "changeKindHints": [
+      "beta-preview"
+    ],
+    "language": "en",
+    "contentHash": "99e45d83c897b08a5e5da5ec8e3df0f9186bcf17f0b36838565d1adac6e9d40b",
+    "provenance": {
+      "authority": "official-primary",
+      "parserId": "github-releases",
+      "parserVersion": "1.0.0",
+      "fetchedAt": "2026-09-26T08:51:03.425Z",
+      "evidenceRefs": [
+        "source:next-releases:64bb87dd2c0e1cfeb475ddeb"
+      ],
+      "fixture": false
+    }
+  },
+  {
+    "schemaVersion": "webdev-candidate/1",
+    "sourceId": "next-releases",
+    "sourceItemId": "sha256:84ae3693411044531ae9e4cbaa2212bc",
+    "listingUrl": "https://api.github.com/repos/vercel/next.js/releases",
+    "targetUrl": "https://github.com/vercel/next.js/releases/tag/v16.4.0-canary.31",
+    "canonicalProjectUrl": "https://github.com/vercel/next.js",
+    "title": "v16.4.0-canary.31",
+    "summary": "### Core Changes - fix: detect proxy.ts correctly with compound pageExtensions: #93246 ### Misc Changes - test(turbopack): strongly read test operations: #98247 - Add `next dev` wait for Turbopack shutdown: #98646 - docs: document default turbopack.resolveExtensions: #98627 - test: migrate package CSS side-effects coverage: #98635 - Improve tree shaking through Next.js module wrappers: #98638 - Trace export usage through client component proxies: #98621 ### Credits Huge thanks to @lukesandberg, @wbinnssmith, @icyJoseph, @sokra, and @bmorros94 for helping!",
+    "author": "next-js-bot[bot]",
+    "project": "Next.js",
+    "publishedAt": "2026-09-14T23:44:56.000Z",
+    "updatedAt": "2026-09-14T23:44:56.000Z",
+    "versionText": "v16.4.0-canary.31",
+    "securityText": null,
+    "topicHints": [
+      "meta-framework",
+      "deployment-platform"
+    ],
+    "changeKindHints": [
+      "beta-preview"
+    ],
+    "language": "en",
+    "contentHash": "300a1e7bc48589561ddf24a02448472849f9b90dd17edc3e6ffa54b5fc7d75ff",
+    "provenance": {
+      "authority": "official-primary",
+      "parserId": "github-releases",
+      "parserVersion": "1.0.0",
+      "fetchedAt": "2026-09-26T08:51:03.425Z",
+      "evidenceRefs": [
+        "source:next-releases:27d66273db72ee82eb00abff"
+      ],
+      "fixture": false
+    }
+  },
+  {
+    "schemaVersion": "webdev-candidate/1",
+    "sourceId": "next-releases",
+    "sourceItemId": "sha256:607a16a0e16e3653fa3cf8c035253300",
+    "listingUrl": "https://api.github.com/repos/vercel/next.js/releases",
+    "targetUrl": "https://github.com/vercel/next.js/releases/tag/v16.4.0-canary.30",
+    "canonicalProjectUrl": "https://github.com/vercel/next.js",
+    "title": "v16.4.0-canary.30",
+    "summary": "### Misc Changes - Expose App Router runtime errors over HMR: #98438 - test: avoid OpenTelemetry collector socket reuse: #98632 - fix: Bump vendored @mswjs/interceptors from 0.42.0 to 0.42.5: #98607 - Document codemod errors and intentional migration exceptions: #98565 - Unify TODO markers for codemods and skip adoption-only codemods for upgrade: #98560 - Optimize strict module factory chunks: #98421 - Sort batched chunk items globally by path: #98433 ### Credits Huge thanks to @devjiwonchoi, @sokra, and @ranger-ross for helping!",
+    "author": "next-js-bot[bot]",
+    "project": "Next.js",
+    "publishedAt": "2026-09-14T14:59:35.000Z",
+    "updatedAt": "2026-09-14T14:59:35.000Z",
+    "versionText": "v16.4.0-canary.30",
+    "securityText": null,
+    "topicHints": [
+      "meta-framework",
+      "deployment-platform"
+    ],
+    "changeKindHints": [
+      "beta-preview"
+    ],
+    "language": "en",
+    "contentHash": "69ff6a29d126eab018bd5f2b76afffb8bac6165845bd4849ae02b16917e27a76",
+    "provenance": {
+      "authority": "official-primary",
+      "parserId": "github-releases",
+      "parserVersion": "1.0.0",
+      "fetchedAt": "2026-09-26T08:51:03.425Z",
+      "evidenceRefs": [
+        "source:next-releases:cb46ef8d44358b760b0033ac"
+      ],
+      "fixture": false
+    }
+  },
+  {
+    "schemaVersion": "webdev-candidate/1",
+    "sourceId": "next-releases",
+    "sourceItemId": "sha256:7bb05cebd6d50186e8e6842aa9b43df3",
+    "listingUrl": "https://api.github.com/repos/vercel/next.js/releases",
+    "targetUrl": "https://github.com/vercel/next.js/releases/tag/v16.4.0-canary.29",
+    "canonicalProjectUrl": "https://github.com/vercel/next.js",
+    "title": "v16.4.0-canary.29",
+    "summary": "### Misc Changes - Durable use cache: fix runtime env var mutation: #98558 - refactor(turbopack): drop the generic on `new_atom`, and stop it copying an owned string: #98520 - Serialize turbo-tasks trybuild tests: #98415 ### Credits Huge thanks to @mischnic and @sokra for helping!",
+    "author": "next-js-bot[bot]",
+    "project": "Next.js",
+    "publishedAt": "2026-09-14T10:40:23.000Z",
+    "updatedAt": "2026-09-14T10:40:23.000Z",
+    "versionText": "v16.4.0-canary.29",
+    "securityText": null,
+    "topicHints": [
+      "meta-framework",
+      "deployment-platform"
+    ],
+    "changeKindHints": [
+      "beta-preview"
+    ],
+    "language": "en",
+    "contentHash": "79bd6128d768f334275c19b099339dfc7ef83de1e5899d5249b8d1b5c0abb6fe",
+    "provenance": {
+      "authority": "official-primary",
+      "parserId": "github-releases",
+      "parserVersion": "1.0.0",
+      "fetchedAt": "2026-09-26T08:51:03.425Z",
+      "evidenceRefs": [
+        "source:next-releases:ff8da79684371934050e27fb"
+      ],
+      "fixture": false
+    }
+  },
+  {
+    "schemaVersion": "webdev-candidate/1",
+    "sourceId": "next-releases",
+    "sourceItemId": "sha256:fb8853b21938b87f0d5114bfd8bca5d8",
+    "listingUrl": "https://api.github.com/repos/vercel/next.js/releases",
+    "targetUrl": "https://github.com/vercel/next.js/releases/tag/v16.4.0-canary.28",
+    "canonicalProjectUrl": "https://github.com/vercel/next.js",
+    "title": "v16.4.0-canary.28",
+    "summary": "### Misc Changes - test: stabilize OpenTelemetry collector lifecycle: #98427 - Make TurbopackResult payloads disjoint: #98575 ### Credits Huge thanks to @sokra and @wbinnssmith for helping!",
+    "author": "next-js-bot[bot]",
+    "project": "Next.js",
+    "publishedAt": "2026-09-12T23:43:37.000Z",
+    "updatedAt": "2026-09-12T23:43:37.000Z",
+    "versionText": "v16.4.0-canary.28",
+    "securityText": null,
+    "topicHints": [
+      "meta-framework",
+      "deployment-platform"
+    ],
+    "changeKindHints": [
+      "beta-preview"
+    ],
+    "language": "en",
+    "contentHash": "107dee6be588cfe4c0d236bae2bb3b20e0498f4bdd7a266deabe6e091ca159de",
+    "provenance": {
+      "authority": "official-primary",
+      "parserId": "github-releases",
+      "parserVersion": "1.0.0",
+      "fetchedAt": "2026-09-26T08:51:03.425Z",
+      "evidenceRefs": [
+        "source:next-releases:8ecd0818a2bf8111996ecbdc"
+      ],
+      "fixture": false
+    }
+  },
+  {
+    "schemaVersion": "webdev-candidate/1",
+    "sourceId": "next-releases",
+    "sourceItemId": "sha256:82e1a30115cc4db35deb3d57c7223abe",
+    "listingUrl": "https://api.github.com/repos/vercel/next.js/releases",
+    "targetUrl": "https://github.com/vercel/next.js/releases/tag/v16.4.0-canary.27",
+    "canonicalProjectUrl": "https://github.com/vercel/next.js",
+    "title": "v16.4.0-canary.27",
+    "summary": "### Misc Changes - Durable use cache: optimize env var existence checks: #98504 - Adds this.mode for webpack loaders: #98532 - Upgrade React from `6c0e1047-20260908` to `019019be-20260911`: #98576 - feat(next/image): Add experimental imgOptMozjpeg config: #98571 - [turbopack] Lazily compile dynamic imports in development (client side): #97203 - fix(devtools): handle pointercancel when dragging the indicator: #98506 - [ci] Show full logs under GitHub Actions debug logging: #98501 - fix(typegen): merge cacheLife types into next/cache instead of shadowing it: #98252 - [test] Fix `proxy-request-with-middleware` deploy test: #98553 - [ci] Remove the broken Test examples workflow and its test suite: #98517 - Align fallback parameter staging with shell validation: #98512 - Prevent synchronous IO",
+    "author": "next-js-bot[bot]",
+    "project": "Next.js",
+    "publishedAt": "2026-09-11T23:43:04.000Z",
+    "updatedAt": "2026-09-11T23:43:04.000Z",
+    "versionText": "v16.4.0-canary.27",
+    "securityText": null,
+    "topicHints": [
+      "meta-framework",
+      "deployment-platform"
+    ],
+    "changeKindHints": [
+      "beta-preview"
+    ],
+    "language": "en",
+    "contentHash": "5cf443ccb65f13b906bccadb123920e1255e134916ad70277f0050f7b4fadae7",
+    "provenance": {
+      "authority": "official-primary",
+      "parserId": "github-releases",
+      "parserVersion": "1.0.0",
+      "fetchedAt": "2026-09-26T08:51:03.425Z",
+      "evidenceRefs": [
+        "source:next-releases:50d6df870b7a6b187b347020"
+      ],
+      "fixture": false
+    }
+  },
+  {
+    "schemaVersion": "webdev-candidate/1",
+    "sourceId": "next-releases",
+    "sourceItemId": "sha256:77e3de73fcbae54c9f97ed4e92f8f3b8",
+    "listingUrl": "https://api.github.com/repos/vercel/next.js/releases",
+    "targetUrl": "https://github.com/vercel/next.js/releases/tag/v16.3.5",
+    "canonicalProjectUrl": "https://github.com/vercel/next.js",
+    "title": "v16.3.5",
+    "summary": "The following bug fixes have been backported. It does not include all pending features/changes on canary. - next/image: Skip 0-byte entries when initializing disk LRU cache (#98185) - next/image: Reject empty images when reading/writing to the disk cache (#98186) - Emit whole-app server NFTs when `output: 'standalone'` is used with an adapter (#98167) - Add CSP nonce to script tags of loading and template files (#98403) - Fix `use cache` prerender signal retention (#98448)",
+    "author": "samselikoff",
+    "project": "Next.js",
+    "publishedAt": "2026-09-11T19:15:50.000Z",
+    "updatedAt": "2026-09-11T19:15:50.000Z",
+    "versionText": "v16.3.5",
+    "securityText": null,
+    "topicHints": [
+      "meta-framework",
+      "deployment-platform"
+    ],
+    "changeKindHints": [
+      "beta-preview"
+    ],
+    "language": "en",
+    "contentHash": "624ef2399f2b6e0a7d71573d6415d3e786e4a7491d8c0c0cb6b9d99c547c6763",
+    "provenance": {
+      "authority": "official-primary",
+      "parserId": "github-releases",
+      "parserVersion": "1.0.0",
+      "fetchedAt": "2026-09-26T08:51:03.425Z",
+      "evidenceRefs": [
+        "source:next-releases:d4db71aad0a10615ff57f5c9"
+      ],
+      "fixture": false
+    }
+  },
+  {
+    "schemaVersion": "webdev-candidate/1",
+    "sourceId": "next-releases",
+    "sourceItemId": "sha256:492990843d2f026fe33e5870b1665838",
+    "listingUrl": "https://api.github.com/repos/vercel/next.js/releases",
+    "targetUrl": "https://github.com/vercel/next.js/releases/tag/v16.4.0-canary.26",
+    "canonicalProjectUrl": "https://github.com/vercel/next.js",
+    "title": "v16.4.0-canary.26",
+    "summary": "### Misc Changes - Add in warning for workers around the fsevents bug: #98447 - skill: add Partial Prefetching optimizer: #96471 - bundle-analyzer: add table view to single-build analyzer: #93523 - bundle-analyzer: add table view to compare mode: #93522 - bundle-analyzer: add compare view with treemap diff: #93521 - [testmode] Stop using deprecated `url.parse`: #98194 - fix(next/image): don't share the requester's socket with the internal image response: #98168 - Fix duplicate background revalidation for `'use cache'`: #98446 - Turbopack: Deduplicate project options documentation: #98465 - Report incompatible parallel route slots: #97430 - Require canonical routes for interception routes: #97428 - Error when app pages do not match any route: #97401 - fix(turbopack): add `get_relative_reque",
+    "author": "next-js-bot[bot]",
+    "project": "Next.js",
+    "publishedAt": "2026-09-10T23:42:29.000Z",
+    "updatedAt": "2026-09-10T23:42:29.000Z",
+    "versionText": "v16.4.0-canary.26",
+    "securityText": null,
+    "topicHints": [
+      "meta-framework",
+      "deployment-platform"
+    ],
+    "changeKindHints": [
+      "deprecation",
+      "beta-preview"
+    ],
+    "language": "en",
+    "contentHash": "14e01921be3c20f43c6c3b79cc0057e7eb45dd71a17e9a333b3567dd767da53e",
+    "provenance": {
+      "authority": "official-primary",
+      "parserId": "github-releases",
+      "parserVersion": "1.0.0",
+      "fetchedAt": "2026-09-26T08:51:03.425Z",
+      "evidenceRefs": [
+        "source:next-releases:bc2eb8e988b80d90354ef367"
+      ],
+      "fixture": false
+    }
+  },
+  {
+    "schemaVersion": "webdev-candidate/1",
+    "sourceId": "vite-releases",
+    "sourceItemId": "sha256:f885e46ff3d751912641bdff03ab76b7",
+    "listingUrl": "https://api.github.com/repos/vitejs/vite/releases",
+    "targetUrl": "https://github.com/vitejs/vite/releases/tag/create-vite%409.2.1",
+    "canonicalProjectUrl": "https://github.com/vitejs/vite",
+    "title": "create-vite@9.2.1",
+    "summary": "### Bug Fixes * **deps:** update all non-major dependencies ([#23404](https://github.com/vitejs/vite/issues/23404)) ([238ad81](https://github.com/vitejs/vite/commit/238ad811c7fb9e4730cbd317d0657867ed3447b3)) * **deps:** update all non-major dependencies ([#23445](https://github.com/vitejs/vite/issues/23445)) ([fc7c104](https://github.com/vitejs/vite/commit/fc7c104e74d35a97fa313d5dd6f1b5e7d5b26159))",
+    "author": "github-actions[bot]",
+    "project": "Vite",
+    "publishedAt": "2026-09-10T11:41:17.000Z",
+    "updatedAt": "2026-09-10T11:41:17.000Z",
+    "versionText": "create-vite@9.2.1",
+    "securityText": null,
+    "topicHints": [
+      "build-tooling"
+    ],
+    "changeKindHints": [
+      "stable-release"
+    ],
+    "language": "en",
+    "contentHash": "44aba081550caa958dda7f0bd3fd9f99b96036dfb43a5e3bb9610b17b1ba9c4a",
+    "provenance": {
+      "authority": "official-primary",
+      "parserId": "github-releases",
+      "parserVersion": "1.0.0",
+      "fetchedAt": "2026-09-26T08:51:03.425Z",
+      "evidenceRefs": [
+        "source:vite-releases:589d49f7753aa167daed7d14"
+      ],
+      "fixture": false
+    }
+  },
+  {
+    "schemaVersion": "webdev-candidate/1",
+    "sourceId": "vite-releases",
+    "sourceItemId": "sha256:27d92b9e24d11adb9fadf3184943d3b0",
+    "listingUrl": "https://api.github.com/repos/vitejs/vite/releases",
+    "targetUrl": "https://github.com/vitejs/vite/releases/tag/v8.3.0",
+    "canonicalProjectUrl": "https://github.com/vitejs/vite",
+    "title": "v8.3.0",
+    "summary": "### Features * **build:** avoid settling seen preload dependencies for performance ([#23446](https://github.com/vitejs/vite/issues/23446)) ([e6f6b3e](https://github.com/vitejs/vite/commit/e6f6b3e3119256daa837b2dc399058c8aa45b470)) ### Bug Fixes * handle CRLF line endings in code frame positions ([#23219](https://github.com/vitejs/vite/issues/23219)) ([9913672](https://github.com/vitejs/vite/commit/9913672bee9c34a2df7fff4c2538783cd4f43b4e)) * only treat whole `node_modules` path segments as dependencies (fix [#17467](https://github.com/vitejs/vite/issues/17467)) ([#23437](https://github.com/vitejs/vite/issues/23437)) ([ef0dc17](https://github.com/vitejs/vite/commit/ef0dc17ada53d1169ae5a89cb8f6482831466755)) ### Performance Improvements * **proxy:** pre-compile context matchers at server cre",
+    "author": "github-actions[bot]",
+    "project": "Vite",
+    "publishedAt": "2026-09-10T11:25:16.000Z",
+    "updatedAt": "2026-09-10T11:25:16.000Z",
+    "versionText": "v8.3.0",
+    "securityText": null,
+    "topicHints": [
+      "build-tooling"
+    ],
+    "changeKindHints": [
+      "stable-release"
+    ],
+    "language": "en",
+    "contentHash": "0a866095b57a4a6712f836dd7ec9ceb1be6dd26a58a188aebc52eb7c86a4ee7a",
+    "provenance": {
+      "authority": "official-primary",
+      "parserId": "github-releases",
+      "parserVersion": "1.0.0",
+      "fetchedAt": "2026-09-26T08:51:03.425Z",
+      "evidenceRefs": [
+        "source:vite-releases:6f2148b23c7941bf23e3518b"
+      ],
+      "fixture": false
+    }
+  },
+  {
+    "schemaVersion": "webdev-candidate/1",
+    "sourceId": "next-releases",
+    "sourceItemId": "sha256:e3acdb56f62a84ec0843eb559853a044",
+    "listingUrl": "https://api.github.com/repos/vercel/next.js/releases",
+    "targetUrl": "https://github.com/vercel/next.js/releases/tag/v16.4.0-canary.25",
+    "canonicalProjectUrl": "https://github.com/vercel/next.js",
+    "title": "v16.4.0-canary.25",
+    "summary": "### Core Changes - bundle-analyzer: record historical snapshots on each analyze run: #93520 ### Misc Changes - test: restore deployment exclusion for shared Cache Components tests: #98464 - Resolve metadata independently across parallel routes: #97345 - docs: preserve route behavior during Cache Components adoption: #98275 - Add a fast-path to 'get_relative_path_to' for a potential common case when 'from' is empty: #98440 - docs: document React browser API: #97621 - Enable React browser bailout by default: #98439 - [evals] Cover focused Cache Components and Partial Prefetching cases: #97813 - Deflake gc_interrupt_is_self_healing: #98445 - Adds this.target for webpack loaders: #98436 - test(evals): validate delegated error boundary components: #98387 - test: stabilize deferred entries HMR a",
+    "author": "next-js-bot[bot]",
+    "project": "Next.js",
+    "publishedAt": "2026-09-09T23:46:52.000Z",
+    "updatedAt": "2026-09-09T23:46:52.000Z",
+    "versionText": "v16.4.0-canary.25",
+    "securityText": null,
+    "topicHints": [
+      "meta-framework",
+      "deployment-platform"
+    ],
+    "changeKindHints": [
+      "beta-preview"
+    ],
+    "language": "en",
+    "contentHash": "8f5568126d9ff336870d61d94b0151db7917cdca7e3c941b2666e17dc7364edb",
+    "provenance": {
+      "authority": "official-primary",
+      "parserId": "github-releases",
+      "parserVersion": "1.0.0",
+      "fetchedAt": "2026-09-26T08:51:03.425Z",
+      "evidenceRefs": [
+        "source:next-releases:3a8977a60fd96c321a74a338"
+      ],
+      "fixture": false
+    }
+  },
+  {
+    "schemaVersion": "webdev-candidate/1",
+    "sourceId": "next-releases",
+    "sourceItemId": "sha256:0a311e4b902d99c29f9da14a1140d84b",
+    "listingUrl": "https://api.github.com/repos/vercel/next.js/releases",
+    "targetUrl": "https://github.com/vercel/next.js/releases/tag/v16.4.0-canary.24",
+    "canonicalProjectUrl": "https://github.com/vercel/next.js",
+    "title": "v16.4.0-canary.24",
+    "summary": "### Misc Changes - Re-enable @vercel/devlow-bench publishing: #98236 - test: migrate caching deploy exclusions to force gates: #98154 - Typecheck the Turbopack ECMAScript runtime in CI: #98422 - Fix initial Turbopack HMR update handling: #98385 - Skip bundler config validation in next/jest and under test: #98392 - Remove `tsec`: #98423 - Stabilize scope_unbounded panic test: #98416 ### Credits Huge thanks to @wbinnssmith, @gnoff, @sokra, and @eps1lon for helping!",
+    "author": "next-js-bot[bot]",
+    "project": "Next.js",
+    "publishedAt": "2026-09-09T16:30:57.000Z",
+    "updatedAt": "2026-09-09T16:30:57.000Z",
+    "versionText": "v16.4.0-canary.24",
+    "securityText": null,
+    "topicHints": [
+      "meta-framework",
+      "deployment-platform"
+    ],
+    "changeKindHints": [
+      "beta-preview"
+    ],
+    "language": "en",
+    "contentHash": "112aeb274116bf7baae7846362b4172bd0f199c20418055d2e64d7a2d99c869d",
+    "provenance": {
+      "authority": "official-primary",
+      "parserId": "github-releases",
+      "parserVersion": "1.0.0",
+      "fetchedAt": "2026-09-26T08:51:03.425Z",
+      "evidenceRefs": [
+        "source:next-releases:8a1ba28f80694041561eaeed"
+      ],
+      "fixture": false
+    }
+  },
+  {
+    "schemaVersion": "webdev-candidate/1",
+    "sourceId": "next-releases",
+    "sourceItemId": "sha256:7b538910b4c41c161601d90fdce2a129",
+    "listingUrl": "https://api.github.com/repos/vercel/next.js/releases",
+    "targetUrl": "https://github.com/vercel/next.js/releases/tag/v16.4.0-canary.23",
+    "canonicalProjectUrl": "https://github.com/vercel/next.js",
+    "title": "v16.4.0-canary.23",
+    "summary": "### Misc Changes - Turbopack: fix require handling with alternative: #98258 - docs: clarify ISR with Suspense params: #98210 - [cd] Update `peerDependencies` in prereleases to accept the current prerelease: #98411 - test: stabilize error recovery snapshot timing: #98414 - example: Use a Redis cacheHandler w/o dependencies: #95346 - Support durable use-cache entries with client components: #98140 - Upgrade React from `f4e439e1-20260902` to `6c0e1047-20260908`: #98363 - fix: preserve repeated --require/--import flags when forking workers: #96651 - ci: check that Turbopack compiles for wasm: #97588 - feat(next-napi-bindings): build Turbopack for wasm: #97586 - Add CSP nonce to script tags of loading and template files: #98398 - Turbopack: fix output tracing include glob traversal: #98382 - te",
+    "author": "next-js-bot[bot]",
+    "project": "Next.js",
+    "publishedAt": "2026-09-09T15:09:57.000Z",
+    "updatedAt": "2026-09-09T15:09:57.000Z",
+    "versionText": "v16.4.0-canary.23",
+    "securityText": null,
+    "topicHints": [
+      "meta-framework",
+      "deployment-platform"
+    ],
+    "changeKindHints": [
+      "beta-preview"
+    ],
+    "language": "en",
+    "contentHash": "93b548034644a47c62a274b2ae4d5f7b4ec7ec8e3c00adac016dbfe08a016a94",
+    "provenance": {
+      "authority": "official-primary",
+      "parserId": "github-releases",
+      "parserVersion": "1.0.0",
+      "fetchedAt": "2026-09-26T08:51:03.425Z",
+      "evidenceRefs": [
+        "source:next-releases:c56dc0d271d7695aaf13a9b2"
+      ],
+      "fixture": false
+    }
+  },
+  {
+    "schemaVersion": "webdev-candidate/1",
+    "sourceId": "next-releases",
+    "sourceItemId": "sha256:b72193eca32927c39dea88a94be5e76d",
+    "listingUrl": "https://api.github.com/repos/vercel/next.js/releases",
+    "targetUrl": "https://github.com/vercel/next.js/releases/tag/v16.4.0-canary.22",
+    "canonicalProjectUrl": "https://github.com/vercel/next.js",
+    "title": "v16.4.0-canary.22",
+    "summary": "### Misc Changes - Add version for loaders api: #98377 - turbo-tasks-backend: let a GC pass wind down when it is blocking an operation: #96676 - docs: preserve Next.js development state: #98276 - Adds .resolve to loaders api: #98361 ### Credits Huge thanks to @jimmyhmiller, @lukesandberg, and @aurorascharff for helping!",
+    "author": "next-js-bot[bot]",
+    "project": "Next.js",
+    "publishedAt": "2026-09-08T23:43:20.000Z",
+    "updatedAt": "2026-09-08T23:43:20.000Z",
+    "versionText": "v16.4.0-canary.22",
+    "securityText": null,
+    "topicHints": [
+      "meta-framework",
+      "deployment-platform"
+    ],
+    "changeKindHints": [
+      "beta-preview"
+    ],
+    "language": "en",
+    "contentHash": "4b3d08873107d77f673656ff3a40b329278ef371b42ad02382e86dd5ec070c33",
+    "provenance": {
+      "authority": "official-primary",
+      "parserId": "github-releases",
+      "parserVersion": "1.0.0",
+      "fetchedAt": "2026-09-26T08:51:03.425Z",
+      "evidenceRefs": [
+        "source:next-releases:d7ab32d9ac9e6bf5b520fb58"
+      ],
+      "fixture": false
+    }
+  },
+  {
+    "schemaVersion": "webdev-candidate/1",
+    "sourceId": "vite-releases",
+    "sourceItemId": "sha256:304442ceb7b0f83361ad9f3bef39c6fc",
+    "listingUrl": "https://api.github.com/repos/vitejs/vite/releases",
+    "targetUrl": "https://github.com/vitejs/vite/releases/tag/v8.3.0-beta.1",
+    "canonicalProjectUrl": "https://github.com/vitejs/vite",
+    "title": "v8.3.0-beta.1",
+    "summary": "### Features * **devtools:** enable dev server integration ([#23333](https://github.com/vitejs/vite/issues/23333)) ([68aeb8a](https://github.com/vitejs/vite/commit/68aeb8a3b5a5a2ccd505288999bae1a5e6942ee1)) ### Bug Fixes * **build:** keep hash placeholders as-is in `resolveFileUrl` hook ([#23422](https://github.com/vitejs/vite/issues/23422)) ([e8d6a4d](https://github.com/vitejs/vite/commit/e8d6a4d3399c739772080d70c7f3c4d548a637c9)) * **bundled-dev:** mark payload delivered on client report ([#23373](https://github.com/vitejs/vite/issues/23373)) ([a6d43bc](https://github.com/vitejs/vite/commit/a6d43bc9e3464faa4d49f090e75e1ab334ffb7b0)) * **deps:** update all non-major dependencies ([#23445](https://github.com/vitejs/vite/issues/23445)) ([fc7c104](https://github.com/vitejs/vite/commit/fc7c10",
+    "author": "github-actions[bot]",
+    "project": "Vite",
+    "publishedAt": "2026-09-07T11:38:41.000Z",
+    "updatedAt": "2026-09-07T11:38:41.000Z",
+    "versionText": "v8.3.0-beta.1",
+    "securityText": null,
+    "topicHints": [
+      "build-tooling"
+    ],
+    "changeKindHints": [
+      "beta-preview"
+    ],
+    "language": "en",
+    "contentHash": "06d69826fbc81ebce65ccb2299932fe7e56c26939bafafec4edf87ac684e6df8",
+    "provenance": {
+      "authority": "official-primary",
+      "parserId": "github-releases",
+      "parserVersion": "1.0.0",
+      "fetchedAt": "2026-09-26T08:51:03.425Z",
+      "evidenceRefs": [
+        "source:vite-releases:4dc0fe3a89b11b7e636807d1"
+      ],
+      "fixture": false
+    }
+  },
+  {
+    "schemaVersion": "webdev-candidate/1",
+    "sourceId": "vite-releases",
+    "sourceItemId": "sha256:d376c465aa70a1b9fa4ed9ded54f672c",
+    "listingUrl": "https://api.github.com/repos/vitejs/vite/releases",
+    "targetUrl": "https://github.com/vitejs/vite/releases/tag/v8.3.0-beta.0",
+    "canonicalProjectUrl": "https://github.com/vitejs/vite",
+    "title": "v8.3.0-beta.0",
+    "summary": "### Features * accept Rolldown watch options in `server.watch` ([#23133](https://github.com/vitejs/vite/issues/23133)) ([1b5cfe3](https://github.com/vitejs/vite/commit/1b5cfe3d3777d4ceb7f35fcee9d3c4279316a084)) * add closeServer and closePreviewServer hooks ([#23110](https://github.com/vitejs/vite/issues/23110)) ([e17d2d5](https://github.com/vitejs/vite/commit/e17d2d565b0288f169c7995adb2b192f917548e7)) * add top-level `tsconfig` option ([#23310](https://github.com/vitejs/vite/issues/23310)) ([93164c3](https://github.com/vitejs/vite/commit/93164c3530a7b4fc7bbedfb986d6afa9546cdef3)) * add warning for unsupported hooks in plugin returned from `applyToEnvironment` hook ([#23191](https://github.com/vitejs/vite/issues/23191)) ([fdef04f](https://github.com/vitejs/vite/commit/fdef04f112aadfea40ad3",
+    "author": "github-actions[bot]",
+    "project": "Vite",
+    "publishedAt": "2026-09-02T08:42:32.000Z",
+    "updatedAt": "2026-09-02T08:42:32.000Z",
+    "versionText": "v8.3.0-beta.0",
+    "securityText": null,
+    "topicHints": [
+      "build-tooling"
+    ],
+    "changeKindHints": [
+      "beta-preview"
+    ],
+    "language": "en",
+    "contentHash": "8a6fb3bb1465b54d75e874f7ef90895c2ecd963f3d75d3392eb85dd190d337f7",
+    "provenance": {
+      "authority": "official-primary",
+      "parserId": "github-releases",
+      "parserVersion": "1.0.0",
+      "fetchedAt": "2026-09-26T08:51:03.425Z",
+      "evidenceRefs": [
+        "source:vite-releases:7a7b7439f0bd773051b30e84"
+      ],
+      "fixture": false
+    }
+  },
+  {
+    "schemaVersion": "webdev-candidate/1",
+    "sourceId": "vite-releases",
+    "sourceItemId": "sha256:9891f0c478befb84479a85580d35f3ec",
+    "listingUrl": "https://api.github.com/repos/vitejs/vite/releases",
+    "targetUrl": "https://github.com/vitejs/vite/releases/tag/create-vite%409.2.0",
+    "canonicalProjectUrl": "https://github.com/vitejs/vite",
+    "title": "create-vite@9.2.0",
+    "summary": "### Features * **create-vite:** add nub package manager support ([#23019](https://github.com/vitejs/vite/issues/23019)) ([c31c499](https://github.com/vitejs/vite/commit/c31c499ca04c7557d9093291b08b6e3087df0542)) ### Bug Fixes * **create-vite:** update moved eslint-react plugin links in generated README ([#23284](https://github.com/vitejs/vite/issues/23284)) ([1cbf7d6](https://github.com/vitejs/vite/commit/1cbf7d63e14845541dcbbc8e393cfd82a0cb25b6)) * **deps:** update all non-major dependencies ([#23136](https://github.com/vitejs/vite/issues/23136)) ([14454fd](https://github.com/vitejs/vite/commit/14454fd8c9a399bc3fdc193e28465b6fcf001e4d)) * **deps:** update all non-major dependencies ([#23217](https://github.com/vitejs/vite/issues/23217)) ([ba958bd](https://github.com/vitejs/vite/commit/ba9",
+    "author": "github-actions[bot]",
+    "project": "Vite",
+    "publishedAt": "2026-08-24T04:58:55.000Z",
+    "updatedAt": "2026-08-24T04:58:55.000Z",
+    "versionText": "create-vite@9.2.0",
+    "securityText": null,
+    "topicHints": [
+      "build-tooling"
+    ],
+    "changeKindHints": [
+      "stable-release"
+    ],
+    "language": "en",
+    "contentHash": "93e40aecc0ff898c63ef5818447157c3789417d7336d9c5418ac293fa995fb5e",
+    "provenance": {
+      "authority": "official-primary",
+      "parserId": "github-releases",
+      "parserVersion": "1.0.0",
+      "fetchedAt": "2026-09-26T08:51:03.425Z",
+      "evidenceRefs": [
+        "source:vite-releases:b6c7810c209b77a2c05fc22f"
+      ],
+      "fixture": false
+    }
+  },
+  {
+    "schemaVersion": "webdev-candidate/1",
+    "sourceId": "vite-releases",
+    "sourceItemId": "sha256:b2265837e4df0a5e24ecc820644bf5cc",
+    "listingUrl": "https://api.github.com/repos/vitejs/vite/releases",
+    "targetUrl": "https://github.com/vitejs/vite/releases/tag/v8.2.2",
+    "canonicalProjectUrl": "https://github.com/vitejs/vite",
+    "title": "v8.2.2",
+    "summary": "Please refer to [CHANGELOG.md](https://github.com/vitejs/vite/blob/v8.2.2/packages/vite/CHANGELOG.md) for details.",
+    "author": "github-actions[bot]",
+    "project": "Vite",
+    "publishedAt": "2026-08-20T04:08:13.000Z",
+    "updatedAt": "2026-08-20T04:08:13.000Z",
+    "versionText": "v8.2.2",
+    "securityText": null,
+    "topicHints": [
+      "build-tooling"
+    ],
+    "changeKindHints": [
+      "stable-release"
+    ],
+    "language": "en",
+    "contentHash": "0279251b79cf81e16aec14ccde5cb4732f87e4f32820641020d1ac6191b6f343",
+    "provenance": {
+      "authority": "official-primary",
+      "parserId": "github-releases",
+      "parserVersion": "1.0.0",
+      "fetchedAt": "2026-09-26T08:51:03.425Z",
+      "evidenceRefs": [
+        "source:vite-releases:4a68f21386590de63f48b285"
+      ],
+      "fixture": false
+    }
+  },
+  {
+    "schemaVersion": "webdev-candidate/1",
+    "sourceId": "vite-releases",
+    "sourceItemId": "sha256:9f5fd8db21c416c9f9408af69ca895d0",
+    "listingUrl": "https://api.github.com/repos/vitejs/vite/releases",
+    "targetUrl": "https://github.com/vitejs/vite/releases/tag/plugin-legacy%408.2.3",
+    "canonicalProjectUrl": "https://github.com/vitejs/vite",
+    "title": "plugin-legacy@8.2.3",
+    "summary": "Please refer to [CHANGELOG.md](https://github.com/vitejs/vite/blob/plugin-legacy@8.2.3/packages/plugin-legacy/CHANGELOG.md) for details.",
+    "author": "github-actions[bot]",
+    "project": "Vite",
+    "publishedAt": "2026-08-06T13:44:50.000Z",
+    "updatedAt": "2026-08-06T13:44:50.000Z",
+    "versionText": "plugin-legacy@8.2.3",
+    "securityText": null,
+    "topicHints": [
+      "build-tooling"
+    ],
+    "changeKindHints": [
+      "stable-release"
+    ],
+    "language": "en",
+    "contentHash": "a8a33f2a87478bcd420f4c3072e3063de5f34be43af11936ea0d8ee193d68089",
+    "provenance": {
+      "authority": "official-primary",
+      "parserId": "github-releases",
+      "parserVersion": "1.0.0",
+      "fetchedAt": "2026-09-26T08:51:03.425Z",
+      "evidenceRefs": [
+        "source:vite-releases:f1bbcfa2b60546764f8fa579"
+      ],
+      "fixture": false
+    }
+  },
+  {
+    "schemaVersion": "webdev-candidate/1",
+    "sourceId": "vite-releases",
+    "sourceItemId": "sha256:91527ee1eafc3144e79bb9143f195485",
+    "listingUrl": "https://api.github.com/repos/vitejs/vite/releases",
+    "targetUrl": "https://github.com/vitejs/vite/releases/tag/v8.2.1",
+    "canonicalProjectUrl": "https://github.com/vitejs/vite",
+    "title": "v8.2.1",
+    "summary": "Please refer to [CHANGELOG.md](https://github.com/vitejs/vite/blob/v8.2.1/packages/vite/CHANGELOG.md) for details.",
+    "author": "github-actions[bot]",
+    "project": "Vite",
+    "publishedAt": "2026-08-06T13:44:35.000Z",
+    "updatedAt": "2026-08-06T13:44:35.000Z",
+    "versionText": "v8.2.1",
+    "securityText": null,
+    "topicHints": [
+      "build-tooling"
+    ],
+    "changeKindHints": [
+      "stable-release"
+    ],
+    "language": "en",
+    "contentHash": "11a92e358c2eeb58cfd8585650dd064667043668d03f8b84590ba3ebf7b400cd",
+    "provenance": {
+      "authority": "official-primary",
+      "parserId": "github-releases",
+      "parserVersion": "1.0.0",
+      "fetchedAt": "2026-09-26T08:51:03.425Z",
+      "evidenceRefs": [
+        "source:vite-releases:fee48eb809d1c07a6a2c2e01"
+      ],
+      "fixture": false
+    }
+  },
+  {
+    "schemaVersion": "webdev-candidate/1",
+    "sourceId": "vite-releases",
+    "sourceItemId": "sha256:6b6d73ce0958a69165e6deca87d84a02",
+    "listingUrl": "https://api.github.com/repos/vitejs/vite/releases",
+    "targetUrl": "https://github.com/vitejs/vite/releases/tag/create-vite%409.1.2",
+    "canonicalProjectUrl": "https://github.com/vitejs/vite",
+    "title": "create-vite@9.1.2",
+    "summary": "Please refer to [CHANGELOG.md](https://github.com/vitejs/vite/blob/create-vite@9.1.2/packages/create-vite/CHANGELOG.md) for details.",
+    "author": "github-actions[bot]",
+    "project": "Vite",
+    "publishedAt": "2026-07-30T12:03:27.000Z",
+    "updatedAt": "2026-07-30T12:03:27.000Z",
+    "versionText": "create-vite@9.1.2",
+    "securityText": null,
+    "topicHints": [
+      "build-tooling"
+    ],
+    "changeKindHints": [
+      "stable-release"
+    ],
+    "language": "en",
+    "contentHash": "0afe6f219ddf067153e01fd158749e97b36ba49d38245e400e7154851cc5abd5",
+    "provenance": {
+      "authority": "official-primary",
+      "parserId": "github-releases",
+      "parserVersion": "1.0.0",
+      "fetchedAt": "2026-09-26T08:51:03.425Z",
+      "evidenceRefs": [
+        "source:vite-releases:d74343bcff7c5149518be79e"
+      ],
+      "fixture": false
+    }
+  },
+  {
+    "schemaVersion": "webdev-candidate/1",
+    "sourceId": "vite-releases",
+    "sourceItemId": "sha256:971d767123f5bd46892ca9e08ccbdd75",
+    "listingUrl": "https://api.github.com/repos/vitejs/vite/releases",
+    "targetUrl": "https://github.com/vitejs/vite/releases/tag/v8.2.0",
+    "canonicalProjectUrl": "https://github.com/vitejs/vite",
+    "title": "v8.2.0",
+    "summary": "Please refer to [CHANGELOG.md](https://github.com/vitejs/vite/blob/v8.2.0/packages/vite/CHANGELOG.md) for details.",
+    "author": "github-actions[bot]",
+    "project": "Vite",
+    "publishedAt": "2026-07-30T12:00:47.000Z",
+    "updatedAt": "2026-07-30T12:00:47.000Z",
+    "versionText": "v8.2.0",
+    "securityText": null,
+    "topicHints": [
+      "build-tooling"
+    ],
+    "changeKindHints": [
+      "stable-release"
+    ],
+    "language": "en",
+    "contentHash": "f0648d244504191c952d64e1d27d94e7a30f5dc72306c62de94037307bd64e23",
+    "provenance": {
+      "authority": "official-primary",
+      "parserId": "github-releases",
+      "parserVersion": "1.0.0",
+      "fetchedAt": "2026-09-26T08:51:03.425Z",
+      "evidenceRefs": [
+        "source:vite-releases:40bc01d3fc9abb254a91128d"
+      ],
+      "fixture": false
+    }
+  },
+  {
+    "schemaVersion": "webdev-candidate/1",
+    "sourceId": "vite-releases",
+    "sourceItemId": "sha256:5b455220b36caeb8e9be1334ec5b121b",
+    "listingUrl": "https://api.github.com/repos/vitejs/vite/releases",
+    "targetUrl": "https://github.com/vitejs/vite/releases/tag/plugin-legacy%408.2.2",
+    "canonicalProjectUrl": "https://github.com/vitejs/vite",
+    "title": "plugin-legacy@8.2.2",
+    "summary": "Please refer to [CHANGELOG.md](https://github.com/vitejs/vite/blob/plugin-legacy@8.2.2/packages/plugin-legacy/CHANGELOG.md) for details.",
+    "author": "github-actions[bot]",
+    "project": "Vite",
+    "publishedAt": "2026-07-23T04:45:07.000Z",
+    "updatedAt": "2026-07-23T04:45:07.000Z",
+    "versionText": "plugin-legacy@8.2.2",
+    "securityText": null,
+    "topicHints": [
+      "build-tooling"
+    ],
+    "changeKindHints": [
+      "stable-release"
+    ],
+    "language": "en",
+    "contentHash": "8b163fa56b41d0810843d2f631f7eff2903273b8049f87a70c2a670cbf1dc332",
+    "provenance": {
+      "authority": "official-primary",
+      "parserId": "github-releases",
+      "parserVersion": "1.0.0",
+      "fetchedAt": "2026-09-26T08:51:03.425Z",
+      "evidenceRefs": [
+        "source:vite-releases:387d282c6f1496a0112f5469"
+      ],
+      "fixture": false
+    }
+  },
+  {
+    "schemaVersion": "webdev-candidate/1",
+    "sourceId": "vite-releases",
+    "sourceItemId": "sha256:c6d25b6ec7274f2fdc6175c71569e0b6",
+    "listingUrl": "https://api.github.com/repos/vitejs/vite/releases",
+    "targetUrl": "https://github.com/vitejs/vite/releases/tag/v8.2.0-beta.0",
+    "canonicalProjectUrl": "https://github.com/vitejs/vite",
+    "title": "v8.2.0-beta.0",
+    "summary": "Please refer to [CHANGELOG.md](https://github.com/vitejs/vite/blob/v8.2.0-beta.0/packages/vite/CHANGELOG.md) for details.",
+    "author": "github-actions[bot]",
+    "project": "Vite",
+    "publishedAt": "2026-07-22T06:41:43.000Z",
+    "updatedAt": "2026-07-22T06:41:43.000Z",
+    "versionText": "v8.2.0-beta.0",
+    "securityText": null,
+    "topicHints": [
+      "build-tooling"
+    ],
+    "changeKindHints": [
+      "beta-preview"
+    ],
+    "language": "en",
+    "contentHash": "f6285e5a7f709ea5106dcc17259f293901bbd7ff712c5f30976531cb21047f05",
+    "provenance": {
+      "authority": "official-primary",
+      "parserId": "github-releases",
+      "parserVersion": "1.0.0",
+      "fetchedAt": "2026-09-26T08:51:03.425Z",
+      "evidenceRefs": [
+        "source:vite-releases:37b46aa0ef15dc0f88776405"
+      ],
+      "fixture": false
+    }
+  },
+  {
+    "schemaVersion": "webdev-candidate/1",
+    "sourceId": "vite-releases",
+    "sourceItemId": "sha256:085beb7b9c04a73bb711393543261456",
+    "listingUrl": "https://api.github.com/repos/vitejs/vite/releases",
+    "targetUrl": "https://github.com/vitejs/vite/releases/tag/v8.1.5",
+    "canonicalProjectUrl": "https://github.com/vitejs/vite",
+    "title": "v8.1.5",
+    "summary": "Please refer to [CHANGELOG.md](https://github.com/vitejs/vite/blob/v8.1.5/packages/vite/CHANGELOG.md) for details.",
+    "author": "github-actions[bot]",
+    "project": "Vite",
+    "publishedAt": "2026-07-16T06:50:05.000Z",
+    "updatedAt": "2026-07-16T06:50:05.000Z",
+    "versionText": "v8.1.5",
+    "securityText": null,
+    "topicHints": [
+      "build-tooling"
+    ],
+    "changeKindHints": [
+      "stable-release"
+    ],
+    "language": "en",
+    "contentHash": "6636b8f08cfa0c4d3fa837b143a5873fcc57cdb9c4ca0b1f09b2eae542047e0e",
+    "provenance": {
+      "authority": "official-primary",
+      "parserId": "github-releases",
+      "parserVersion": "1.0.0",
+      "fetchedAt": "2026-09-26T08:51:03.425Z",
+      "evidenceRefs": [
+        "source:vite-releases:0b36e0b7a379e407ec052d2b"
+      ],
+      "fixture": false
+    }
+  },
+  {
+    "schemaVersion": "webdev-candidate/1",
+    "sourceId": "vite-releases",
+    "sourceItemId": "sha256:501322757da8492fe558e85a45cc63e2",
+    "listingUrl": "https://api.github.com/repos/vitejs/vite/releases",
+    "targetUrl": "https://github.com/vitejs/vite/releases/tag/plugin-legacy%408.2.1",
+    "canonicalProjectUrl": "https://github.com/vitejs/vite",
+    "title": "plugin-legacy@8.2.1",
+    "summary": "Please refer to [CHANGELOG.md](https://github.com/vitejs/vite/blob/plugin-legacy@8.2.1/packages/plugin-legacy/CHANGELOG.md) for details.",
+    "author": "github-actions[bot]",
+    "project": "Vite",
+    "publishedAt": "2026-07-16T06:49:00.000Z",
+    "updatedAt": "2026-07-16T06:49:00.000Z",
+    "versionText": "plugin-legacy@8.2.1",
+    "securityText": null,
+    "topicHints": [
+      "build-tooling"
+    ],
+    "changeKindHints": [
+      "stable-release"
+    ],
+    "language": "en",
+    "contentHash": "dc02154f335a9a4574a9f595440dbaa42f6d880ccbecfcf5cf202670f8bc893f",
+    "provenance": {
+      "authority": "official-primary",
+      "parserId": "github-releases",
+      "parserVersion": "1.0.0",
+      "fetchedAt": "2026-09-26T08:51:03.425Z",
+      "evidenceRefs": [
+        "source:vite-releases:c5617ad82e00b9cf178f6846"
+      ],
+      "fixture": false
+    }
+  },
+  {
+    "schemaVersion": "webdev-candidate/1",
+    "sourceId": "vite-releases",
+    "sourceItemId": "sha256:aa9b6ac57ec55ed7aef4f52ec721c4dc",
+    "listingUrl": "https://api.github.com/repos/vitejs/vite/releases",
+    "targetUrl": "https://github.com/vitejs/vite/releases/tag/plugin-legacy%408.2.0",
+    "canonicalProjectUrl": "https://github.com/vitejs/vite",
+    "title": "plugin-legacy@8.2.0",
+    "summary": "Please refer to [CHANGELOG.md](https://github.com/vitejs/vite/blob/plugin-legacy@8.2.0/packages/plugin-legacy/CHANGELOG.md) for details.",
+    "author": "github-actions[bot]",
+    "project": "Vite",
+    "publishedAt": "2026-07-09T04:45:33.000Z",
+    "updatedAt": "2026-07-09T04:45:33.000Z",
+    "versionText": "plugin-legacy@8.2.0",
+    "securityText": null,
+    "topicHints": [
+      "build-tooling"
+    ],
+    "changeKindHints": [
+      "stable-release"
+    ],
+    "language": "en",
+    "contentHash": "57ba0bac630d95552e79dd27baa9d6517902ca2c212ba2642675378d8068443c",
+    "provenance": {
+      "authority": "official-primary",
+      "parserId": "github-releases",
+      "parserVersion": "1.0.0",
+      "fetchedAt": "2026-09-26T08:51:03.425Z",
+      "evidenceRefs": [
+        "source:vite-releases:8e0c963b551df1022da60d72"
+      ],
+      "fixture": false
+    }
+  },
+  {
+    "schemaVersion": "webdev-candidate/1",
+    "sourceId": "vite-releases",
+    "sourceItemId": "sha256:a14749e6e44500c372f0339489268d7f",
+    "listingUrl": "https://api.github.com/repos/vitejs/vite/releases",
+    "targetUrl": "https://github.com/vitejs/vite/releases/tag/v8.1.4",
+    "canonicalProjectUrl": "https://github.com/vitejs/vite",
+    "title": "v8.1.4",
+    "summary": "Please refer to [CHANGELOG.md](https://github.com/vitejs/vite/blob/v8.1.4/packages/vite/CHANGELOG.md) for details.",
+    "author": "github-actions[bot]",
+    "project": "Vite",
+    "publishedAt": "2026-07-09T04:40:56.000Z",
+    "updatedAt": "2026-07-09T04:40:56.000Z",
+    "versionText": "v8.1.4",
+    "securityText": null,
+    "topicHints": [
+      "build-tooling"
+    ],
+    "changeKindHints": [
+      "stable-release"
+    ],
+    "language": "en",
+    "contentHash": "a730b9f46d8ea0a72287b392c6b96a0cb47340a3536048fe1c0dd88f85c9b203",
+    "provenance": {
+      "authority": "official-primary",
+      "parserId": "github-releases",
+      "parserVersion": "1.0.0",
+      "fetchedAt": "2026-09-26T08:51:03.425Z",
+      "evidenceRefs": [
+        "source:vite-releases:42d2853adee717ca28d58eb0"
+      ],
+      "fixture": false
+    }
+  },
+  {
+    "schemaVersion": "webdev-candidate/1",
+    "sourceId": "vite-releases",
+    "sourceItemId": "sha256:4fde8b3af1dcaecb78ef62a1a4f72d1f",
+    "listingUrl": "https://api.github.com/repos/vitejs/vite/releases",
+    "targetUrl": "https://github.com/vitejs/vite/releases/tag/v8.1.3",
+    "canonicalProjectUrl": "https://github.com/vitejs/vite",
+    "title": "v8.1.3",
+    "summary": "Please refer to [CHANGELOG.md](https://github.com/vitejs/vite/blob/v8.1.3/packages/vite/CHANGELOG.md) for details.",
+    "author": "github-actions[bot]",
+    "project": "Vite",
+    "publishedAt": "2026-07-02T04:44:20.000Z",
+    "updatedAt": "2026-07-02T04:44:20.000Z",
+    "versionText": "v8.1.3",
+    "securityText": null,
+    "topicHints": [
+      "build-tooling"
+    ],
+    "changeKindHints": [
+      "stable-release"
+    ],
+    "language": "en",
+    "contentHash": "621766b5552d855a057c300f929d40485ea90df11fad8a5f3b146693b837e509",
+    "provenance": {
+      "authority": "official-primary",
+      "parserId": "github-releases",
+      "parserVersion": "1.0.0",
+      "fetchedAt": "2026-09-26T08:51:03.425Z",
+      "evidenceRefs": [
+        "source:vite-releases:9b8febdac073d99e69cffd1b"
+      ],
+      "fixture": false
+    }
+  },
+  {
+    "schemaVersion": "webdev-candidate/1",
+    "sourceId": "vite-releases",
+    "sourceItemId": "sha256:04b1b9fdfaa7c6f4181d761a5c323350",
+    "listingUrl": "https://api.github.com/repos/vitejs/vite/releases",
+    "targetUrl": "https://github.com/vitejs/vite/releases/tag/v8.1.2",
+    "canonicalProjectUrl": "https://github.com/vitejs/vite",
+    "title": "v8.1.2",
+    "summary": "Please refer to [CHANGELOG.md](https://github.com/vitejs/vite/blob/v8.1.2/packages/vite/CHANGELOG.md) for details.",
+    "author": "github-actions[bot]",
+    "project": "Vite",
+    "publishedAt": "2026-06-30T16:46:03.000Z",
+    "updatedAt": "2026-06-30T16:46:03.000Z",
+    "versionText": "v8.1.2",
+    "securityText": null,
+    "topicHints": [
+      "build-tooling"
+    ],
+    "changeKindHints": [
+      "stable-release"
+    ],
+    "language": "en",
+    "contentHash": "ed3a4222b502a64c6b1a98b731d2e749b41de30747b735f0067fd35480292bf3",
+    "provenance": {
+      "authority": "official-primary",
+      "parserId": "github-releases",
+      "parserVersion": "1.0.0",
+      "fetchedAt": "2026-09-26T08:51:03.425Z",
+      "evidenceRefs": [
+        "source:vite-releases:cd26359bf32d67c6b8d0f8a6"
+      ],
+      "fixture": false
+    }
+  },
+  {
+    "schemaVersion": "webdev-candidate/1",
+    "sourceId": "vite-releases",
+    "sourceItemId": "sha256:59dcda6aa0db48b34e4b6e3975cb037c",
+    "listingUrl": "https://api.github.com/repos/vitejs/vite/releases",
+    "targetUrl": "https://github.com/vitejs/vite/releases/tag/create-vite%409.1.1",
+    "canonicalProjectUrl": "https://github.com/vitejs/vite",
+    "title": "create-vite@9.1.1",
+    "summary": "Please refer to [CHANGELOG.md](https://github.com/vitejs/vite/blob/create-vite@9.1.1/packages/create-vite/CHANGELOG.md) for details.",
+    "author": "github-actions[bot]",
+    "project": "Vite",
+    "publishedAt": "2026-06-30T10:32:54.000Z",
+    "updatedAt": "2026-06-30T10:32:54.000Z",
+    "versionText": "create-vite@9.1.1",
+    "securityText": null,
+    "topicHints": [
+      "build-tooling"
+    ],
+    "changeKindHints": [
+      "stable-release"
+    ],
+    "language": "en",
+    "contentHash": "cb0c308b7ea54d1360eeeb1d941cf5424f0afb15d11ea63d7484dfb6843f9f2c",
+    "provenance": {
+      "authority": "official-primary",
+      "parserId": "github-releases",
+      "parserVersion": "1.0.0",
+      "fetchedAt": "2026-09-26T08:51:03.425Z",
+      "evidenceRefs": [
+        "source:vite-releases:f7e11aeea681878ef0f6545a"
+      ],
+      "fixture": false
+    }
+  },
+  {
+    "schemaVersion": "webdev-candidate/1",
+    "sourceId": "vite-releases",
+    "sourceItemId": "sha256:ae4e29520f46abebb1b513a5e8212000",
+    "listingUrl": "https://api.github.com/repos/vitejs/vite/releases",
+    "targetUrl": "https://github.com/vitejs/vite/releases/tag/v8.1.1",
+    "canonicalProjectUrl": "https://github.com/vitejs/vite",
+    "title": "v8.1.1",
+    "summary": "Please refer to [CHANGELOG.md](https://github.com/vitejs/vite/blob/v8.1.1/packages/vite/CHANGELOG.md) for details.",
+    "author": "github-actions[bot]",
+    "project": "Vite",
+    "publishedAt": "2026-06-30T10:31:05.000Z",
+    "updatedAt": "2026-06-30T10:31:05.000Z",
+    "versionText": "v8.1.1",
+    "securityText": null,
+    "topicHints": [
+      "build-tooling"
+    ],
+    "changeKindHints": [
+      "stable-release"
+    ],
+    "language": "en",
+    "contentHash": "a4f7e717d476a79311be60884743a22aa8832b1f20bafbd5cbe1ad5ff0eae5e1",
+    "provenance": {
+      "authority": "official-primary",
+      "parserId": "github-releases",
+      "parserVersion": "1.0.0",
+      "fetchedAt": "2026-09-26T08:51:03.425Z",
+      "evidenceRefs": [
+        "source:vite-releases:ef554abd3e56930011f64f70"
+      ],
+      "fixture": false
+    }
+  },
+  {
+    "schemaVersion": "webdev-candidate/1",
+    "sourceId": "vite-releases",
+    "sourceItemId": "sha256:7e82996467ebf44626c0d9f3139cf514",
+    "listingUrl": "https://api.github.com/repos/vitejs/vite/releases",
+    "targetUrl": "https://github.com/vitejs/vite/releases/tag/v7.3.6",
+    "canonicalProjectUrl": "https://github.com/vitejs/vite",
+    "title": "v7.3.6",
+    "summary": "Please refer to [CHANGELOG.md](https://github.com/vitejs/vite/blob/v7.3.6/packages/vite/CHANGELOG.md) for details.",
+    "author": "github-actions[bot]",
+    "project": "Vite",
+    "publishedAt": "2026-06-25T01:50:44.000Z",
+    "updatedAt": "2026-06-25T01:50:44.000Z",
+    "versionText": "v7.3.6",
+    "securityText": null,
+    "topicHints": [
+      "build-tooling"
+    ],
+    "changeKindHints": [
+      "stable-release"
+    ],
+    "language": "en",
+    "contentHash": "718f5ff09bfa19a6b7b6c366493e4e18e3ac25bfe348bdbed13ec31be9dcf933",
+    "provenance": {
+      "authority": "official-primary",
+      "parserId": "github-releases",
+      "parserVersion": "1.0.0",
+      "fetchedAt": "2026-09-26T08:51:03.425Z",
+      "evidenceRefs": [
+        "source:vite-releases:f278d7a06411de33222010a5"
+      ],
+      "fixture": false
+    }
+  },
+  {
+    "schemaVersion": "webdev-candidate/1",
+    "sourceId": "vite-releases",
+    "sourceItemId": "sha256:671f4ca80f0eb489f9a720e8195d6e2b",
+    "listingUrl": "https://api.github.com/repos/vitejs/vite/releases",
+    "targetUrl": "https://github.com/vitejs/vite/releases/tag/create-vite%409.1.0",
+    "canonicalProjectUrl": "https://github.com/vitejs/vite",
+    "title": "create-vite@9.1.0",
+    "summary": "Please refer to [CHANGELOG.md](https://github.com/vitejs/vite/blob/create-vite@9.1.0/packages/create-vite/CHANGELOG.md) for details.",
+    "author": "github-actions[bot]",
+    "project": "Vite",
+    "publishedAt": "2026-06-23T11:43:13.000Z",
+    "updatedAt": "2026-06-23T11:43:13.000Z",
+    "versionText": "create-vite@9.1.0",
+    "securityText": null,
+    "topicHints": [
+      "build-tooling"
+    ],
+    "changeKindHints": [
+      "stable-release"
+    ],
+    "language": "en",
+    "contentHash": "e7d147793ffc9c4e2fa4c2661fe24fba2401e960af970834bf10886d5f649e8c",
+    "provenance": {
+      "authority": "official-primary",
+      "parserId": "github-releases",
+      "parserVersion": "1.0.0",
+      "fetchedAt": "2026-09-26T08:51:03.425Z",
+      "evidenceRefs": [
+        "source:vite-releases:0577e792bb22102e69d4e5b3"
+      ],
+      "fixture": false
+    }
+  },
+  {
+    "schemaVersion": "webdev-candidate/1",
+    "sourceId": "vite-releases",
+    "sourceItemId": "sha256:6f9b6c251f8912e3c8eef0499cec4952",
+    "listingUrl": "https://api.github.com/repos/vitejs/vite/releases",
+    "targetUrl": "https://github.com/vitejs/vite/releases/tag/plugin-legacy%408.1.0",
+    "canonicalProjectUrl": "https://github.com/vitejs/vite",
+    "title": "plugin-legacy@8.1.0",
+    "summary": "Please refer to [CHANGELOG.md](https://github.com/vitejs/vite/blob/plugin-legacy@8.1.0/packages/plugin-legacy/CHANGELOG.md) for details.",
+    "author": "github-actions[bot]",
+    "project": "Vite",
+    "publishedAt": "2026-06-23T11:40:54.000Z",
+    "updatedAt": "2026-06-23T11:40:54.000Z",
+    "versionText": "plugin-legacy@8.1.0",
+    "securityText": null,
+    "topicHints": [
+      "build-tooling"
+    ],
+    "changeKindHints": [
+      "stable-release"
+    ],
+    "language": "en",
+    "contentHash": "1a853724d2dcd6b491ff13362421cb9eeb3c928c580158bf74cfe99922af2867",
+    "provenance": {
+      "authority": "official-primary",
+      "parserId": "github-releases",
+      "parserVersion": "1.0.0",
+      "fetchedAt": "2026-09-26T08:51:03.425Z",
+      "evidenceRefs": [
+        "source:vite-releases:84b67c43b1424d7e07f0258a"
+      ],
+      "fixture": false
+    }
+  },
+  {
+    "schemaVersion": "webdev-candidate/1",
+    "sourceId": "vite-releases",
+    "sourceItemId": "sha256:4ee5572c1aa9284c016010e24a4d953c",
+    "listingUrl": "https://api.github.com/repos/vitejs/vite/releases",
+    "targetUrl": "https://github.com/vitejs/vite/releases/tag/v8.1.0",
+    "canonicalProjectUrl": "https://github.com/vitejs/vite",
+    "title": "v8.1.0",
+    "summary": "Please refer to [CHANGELOG.md](https://github.com/vitejs/vite/blob/v8.1.0/packages/vite/CHANGELOG.md) for details.",
+    "author": "github-actions[bot]",
+    "project": "Vite",
+    "publishedAt": "2026-06-23T11:32:13.000Z",
+    "updatedAt": "2026-06-23T11:32:13.000Z",
+    "versionText": "v8.1.0",
+    "securityText": null,
+    "topicHints": [
+      "build-tooling"
+    ],
+    "changeKindHints": [
+      "stable-release"
+    ],
+    "language": "en",
+    "contentHash": "4d033d2371eeb6657522807225bf9dbe3d005be4012f2fe2bc306cede7198c12",
+    "provenance": {
+      "authority": "official-primary",
+      "parserId": "github-releases",
+      "parserVersion": "1.0.0",
+      "fetchedAt": "2026-09-26T08:51:03.425Z",
+      "evidenceRefs": [
+        "source:vite-releases:f6b2c3c2c229cc6119663a16"
+      ],
+      "fixture": false
+    }
+  },
+  {
+    "schemaVersion": "webdev-candidate/1",
+    "sourceId": "vite-releases",
+    "sourceItemId": "sha256:ca0341914022ebee37140ae88a49c4c2",
+    "listingUrl": "https://api.github.com/repos/vitejs/vite/releases",
+    "targetUrl": "https://github.com/vitejs/vite/releases/tag/plugin-legacy%408.1.0-beta.0",
+    "canonicalProjectUrl": "https://github.com/vitejs/vite",
+    "title": "plugin-legacy@8.1.0-beta.0",
+    "summary": "Please refer to [CHANGELOG.md](https://github.com/vitejs/vite/blob/plugin-legacy@8.1.0-beta.0/packages/plugin-legacy/CHANGELOG.md) for details.",
+    "author": "github-actions[bot]",
+    "project": "Vite",
+    "publishedAt": "2026-06-15T03:07:19.000Z",
+    "updatedAt": "2026-06-15T03:07:19.000Z",
+    "versionText": "plugin-legacy@8.1.0-beta.0",
+    "securityText": null,
+    "topicHints": [
+      "build-tooling"
+    ],
+    "changeKindHints": [
+      "beta-preview"
+    ],
+    "language": "en",
+    "contentHash": "491a4b8033091e708e8399266caa39cdcd32d29152b1966ede1d4ae6a796a8d5",
+    "provenance": {
+      "authority": "official-primary",
+      "parserId": "github-releases",
+      "parserVersion": "1.0.0",
+      "fetchedAt": "2026-09-26T08:51:03.425Z",
+      "evidenceRefs": [
+        "source:vite-releases:92082e56099e90b4ec1bede2"
+      ],
+      "fixture": false
+    }
+  },
+  {
+    "schemaVersion": "webdev-candidate/1",
+    "sourceId": "vite-releases",
+    "sourceItemId": "sha256:86c401094a5daf438e57ff309d0276c9",
+    "listingUrl": "https://api.github.com/repos/vitejs/vite/releases",
+    "targetUrl": "https://github.com/vitejs/vite/releases/tag/v8.1.0-beta.0",
+    "canonicalProjectUrl": "https://github.com/vitejs/vite",
+    "title": "v8.1.0-beta.0",
+    "summary": "Please refer to [CHANGELOG.md](https://github.com/vitejs/vite/blob/v8.1.0-beta.0/packages/vite/CHANGELOG.md) for details.",
+    "author": "github-actions[bot]",
+    "project": "Vite",
+    "publishedAt": "2026-06-15T03:06:07.000Z",
+    "updatedAt": "2026-06-15T03:06:07.000Z",
+    "versionText": "v8.1.0-beta.0",
+    "securityText": null,
+    "topicHints": [
+      "build-tooling"
+    ],
+    "changeKindHints": [
+      "beta-preview"
+    ],
+    "language": "en",
+    "contentHash": "2753a245c5d8bac2dd004b376211672687e50b348faaf1ea7cc5a4290e146cfe",
+    "provenance": {
+      "authority": "official-primary",
+      "parserId": "github-releases",
+      "parserVersion": "1.0.0",
+      "fetchedAt": "2026-09-26T08:51:03.425Z",
+      "evidenceRefs": [
+        "source:vite-releases:a52f4aeab70fc753b2653baf"
+      ],
+      "fixture": false
+    }
+  },
+  {
+    "schemaVersion": "webdev-candidate/1",
+    "sourceId": "vite-releases",
+    "sourceItemId": "sha256:ef11d7587c7a06986d500c7f61ca7e09",
+    "listingUrl": "https://api.github.com/repos/vitejs/vite/releases",
+    "targetUrl": "https://github.com/vitejs/vite/releases/tag/v7.3.5",
+    "canonicalProjectUrl": "https://github.com/vitejs/vite",
+    "title": "v7.3.5",
+    "summary": "Please refer to [CHANGELOG.md](https://github.com/vitejs/vite/blob/v7.3.5/packages/vite/CHANGELOG.md) for details.",
+    "author": "github-actions[bot]",
+    "project": "Vite",
+    "publishedAt": "2026-06-01T10:16:24.000Z",
+    "updatedAt": "2026-06-01T10:16:24.000Z",
+    "versionText": "v7.3.5",
+    "securityText": null,
+    "topicHints": [
+      "build-tooling"
+    ],
+    "changeKindHints": [
+      "stable-release"
+    ],
+    "language": "en",
+    "contentHash": "6ea7f9b463c782916a42536457bf88c04a3e44153cd6c0446a002a92370ef496",
+    "provenance": {
+      "authority": "official-primary",
+      "parserId": "github-releases",
+      "parserVersion": "1.0.0",
+      "fetchedAt": "2026-09-26T08:51:03.425Z",
+      "evidenceRefs": [
+        "source:vite-releases:f0cd2fd75b2c947bce7ac955"
+      ],
+      "fixture": false
+    }
+  },
+  {
+    "schemaVersion": "webdev-candidate/1",
+    "sourceId": "vite-releases",
+    "sourceItemId": "sha256:7520a2b5aeeeb41724c3ba27fefda103",
+    "listingUrl": "https://api.github.com/repos/vitejs/vite/releases",
+    "targetUrl": "https://github.com/vitejs/vite/releases/tag/v8.0.16",
+    "canonicalProjectUrl": "https://github.com/vitejs/vite",
+    "title": "v8.0.16",
+    "summary": "Please refer to [CHANGELOG.md](https://github.com/vitejs/vite/blob/v8.0.16/packages/vite/CHANGELOG.md) for details.",
+    "author": "github-actions[bot]",
+    "project": "Vite",
+    "publishedAt": "2026-06-01T09:50:08.000Z",
+    "updatedAt": "2026-06-01T09:50:08.000Z",
+    "versionText": "v8.0.16",
+    "securityText": null,
+    "topicHints": [
+      "build-tooling"
+    ],
+    "changeKindHints": [
+      "stable-release"
+    ],
+    "language": "en",
+    "contentHash": "b38296f5411292fd02aa64dcb4062e931c4c421e886accd1f33fbb88ac56f843",
+    "provenance": {
+      "authority": "official-primary",
+      "parserId": "github-releases",
+      "parserVersion": "1.0.0",
+      "fetchedAt": "2026-09-26T08:51:03.425Z",
+      "evidenceRefs": [
+        "source:vite-releases:b6614a57e043c306b4f76dcc"
+      ],
+      "fixture": false
+    }
+  },
+  {
+    "schemaVersion": "webdev-candidate/1",
+    "sourceId": "vite-releases",
+    "sourceItemId": "sha256:f1656225cbbe7f6ad60e69a8f53d8d31",
+    "listingUrl": "https://api.github.com/repos/vitejs/vite/releases",
+    "targetUrl": "https://github.com/vitejs/vite/releases/tag/v8.0.15",
+    "canonicalProjectUrl": "https://github.com/vitejs/vite",
+    "title": "v8.0.15",
+    "summary": "Please refer to [CHANGELOG.md](https://github.com/vitejs/vite/blob/v8.0.15/packages/vite/CHANGELOG.md) for details.",
+    "author": "github-actions[bot]",
+    "project": "Vite",
+    "publishedAt": "2026-06-01T04:14:37.000Z",
+    "updatedAt": "2026-06-01T04:14:37.000Z",
+    "versionText": "v8.0.15",
+    "securityText": null,
+    "topicHints": [
+      "build-tooling"
+    ],
+    "changeKindHints": [
+      "stable-release"
+    ],
+    "language": "en",
+    "contentHash": "f5c16cfbdba43be0aa156f8b0f86d4595b04a969b15b213d4c68c39186f8e4e6",
+    "provenance": {
+      "authority": "official-primary",
+      "parserId": "github-releases",
+      "parserVersion": "1.0.0",
+      "fetchedAt": "2026-09-26T08:51:03.425Z",
+      "evidenceRefs": [
+        "source:vite-releases:f96dcfddbee42d880aed297a"
+      ],
+      "fixture": false
+    }
+  }
+]
