@@ -110,29 +110,87 @@ describe("reading the owner's task list", () => {
     expect(tasks[0]?.urgency).toBe("blocking");
     expect(tasks[1]?.urgency).toBe("whenever");
   });
+
+  /*
+   * Parked work stays in the one owner document and stops counting as waiting.
+   *
+   * The parse used to read every unchecked owner item in the file, wherever it lived: on
+   * 2026-09-26, 18 of the 77 it found sat under "On hold — paused ventures".
+   */
+  it("leaves the parked sections out, subsections included, and reads the sections after them", () => {
+    const tasks = parseNeededTasks(`# NEEDED
+
+## Focus
+
+- [ ] **Keep this one** — a focus venture waits on it. [imp:3] [owner:me] [time:5m] [kind:setup]
+
+## On hold — paused ventures
+
+- [ ] **Paused venture item** — waits for its venture. [imp:5] [owner:me] [time:5m] [kind:setup]
+
+### MMA Files and FightAIQ
+
+- [ ] **Paused subsection item** — also waits. [imp:4] [owner:me] [time:5m] [kind:decision]
+
+## Parked — outside the current focus
+
+### The office page
+
+- [ ] **Parked office item** — outside the focus. [imp:2] [owner:me] [time:1h] [kind:content]
+
+## Reference
+
+- [ ] **Read after the parked sections** — still waiting. [imp:2] [owner:me] [time:5m] [kind:setup]
+`);
+    expect(tasks.map((task) => task.title)).toEqual(["Keep this one", "Read after the parked sections"]);
+  });
 });
 
 describe("probing the runtime", () => {
   it("reports a missing key without ever touching a value", () => {
-    const gaps = runtimeGaps({ ADMIN_USER: "owner", ADMIN_PASSWORD: "hunter2", CAUGHT_UP_STREAMS_ENABLED: "true" });
+    const gaps = runtimeGaps({ APIFY_TOKEN: "hunter2-apify" });
     const ids = gaps.map((gap) => gap.id);
-    expect(ids).not.toContain("ADMIN_USER");
-    expect(ids).not.toContain("CAUGHT_UP_STREAMS_ENABLED");
-    expect(ids).toContain("THE_ODDS_API_KEY");
+    expect(ids).not.toContain("APIFY_TOKEN");
+    expect(ids).toContain("FAL_KEY");
     // The secret's value must not appear anywhere in what this writes.
     expect(JSON.stringify(gaps)).not.toContain("hunter2");
-    expect(JSON.stringify(gaps)).not.toContain("owner");
   });
 
-  it("treats a switch that is not 'true' as off", () => {
-    expect(runtimeGaps({ CAUGHT_UP_STREAMS_ENABLED: "false" }).map((gap) => gap.id))
-      .toContain("CAUGHT_UP_STREAMS_ENABLED");
+  it("treats a blank key as missing", () => {
+    expect(runtimeGaps({ APIFY_TOKEN: "  ", FAL_KEY: "" }).map((gap) => gap.id))
+      .toEqual(["APIFY_TOKEN", "FAL_KEY"]);
   });
 
-  it("collapses two keys that are one job into one row", () => {
+  it("writes one row per job", () => {
     const gaps = runtimeGaps({});
-    const podcast = gaps.filter((gap) => gap.plain.includes("podcast shows"));
-    expect(podcast).toHaveLength(1);
+    expect(new Set(gaps.map((gap) => gap.plain)).size).toBe(gaps.length);
+  });
+
+  /*
+   * The collector runs inside the cycle job, so it can only see a key that job maps. The admin
+   * credentials, the stream switch and the Podcast Index pair never reached it, and each one sat in
+   * "Waiting for you" from the first snapshot on 2026-08-10, after the owner set the credentials and
+   * the switch on 2026-08-29 as well.
+   */
+  it("probes only keys the cycle job maps into its environment", async () => {
+    const cycle = await readFile(path.resolve(import.meta.dirname, "../../.github/workflows/cycle.yml"), "utf8");
+    const probed = runtimeGaps({}).map((gap) => gap.id);
+    expect(probed.length).toBeGreaterThan(0);
+    for (const id of probed) {
+      // Anchored at the job env's indentation: a step's own `env:` or an `if:` does not reach the collector.
+      expect(new RegExp(`^ {6}${id}: `, "mu").test(cycle), `${id} is not in the cycle job's env`).toBe(true);
+    }
+    for (const id of ["ADMIN_USER", "ADMIN_PASSWORD", "BOARDLESSAI_GITHUB_TOKEN", "CAUGHT_UP_STREAMS_ENABLED", "PODCASTINDEX_API_KEY", "PODCASTINDEX_API_SECRET"]) {
+      expect(probed, id).not.toContain(id);
+    }
+  });
+
+  it("does not ask for FightAIQ's odds key while FightAIQ is paused", async () => {
+    const registry = JSON.parse(
+      await readFile(path.resolve(import.meta.dirname, "../../config/ventures.json"), "utf8")
+    ) as { ventures: Array<{ id: string; status: string }> };
+    if (registry.ventures.find((venture) => venture.id === "fightaiq")?.status !== "paused") return;
+    expect(runtimeGaps({}).map((gap) => gap.id)).not.toContain("THE_ODDS_API_KEY");
   });
 });
 
@@ -160,7 +218,7 @@ describe("the collected file", () => {
     const { repoRoot, stateRoot } = await root({ inbox: INBOX, needed: NEEDED });
     const before = (await collectOwnerAttention({ repoRoot, stateRoot, now: NOW, env: {} })).record;
     expect(before.approvals.map((entry) => entry.id)).toContain("APIFY-ACCOUNT-001");
-    expect(before.manualTasks.map((task) => task.id)).toContain("THE_ODDS_API_KEY");
+    expect(before.manualTasks.map((task) => task.id)).toContain("APIFY_TOKEN");
 
     // Countersign the inbox entry and set the key: the next run must forget both, with no second
     // place to update.
@@ -169,11 +227,11 @@ describe("the collected file", () => {
       INBOX.replace("- [ ] HUMAN_APPROVAL APIFY-ACCOUNT-001", "- [x] HUMAN_APPROVAL APIFY-ACCOUNT-001")
     );
     const after = (await collectOwnerAttention({
-      repoRoot, stateRoot, now: NOW, env: { THE_ODDS_API_KEY: "set" }
+      repoRoot, stateRoot, now: NOW, env: { APIFY_TOKEN: "set" }
     })).record;
 
     expect(after.approvals.map((entry) => entry.id)).not.toContain("APIFY-ACCOUNT-001");
-    expect(after.manualTasks.map((task) => task.id)).not.toContain("THE_ODDS_API_KEY");
+    expect(after.manualTasks.map((task) => task.id)).not.toContain("APIFY_TOKEN");
   });
 
   it("reads a missing source as an empty one rather than failing the cycle", async () => {

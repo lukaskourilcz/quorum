@@ -14,7 +14,8 @@ import { atomicWriteJson, readJson, withFileLock } from "../state.js";
  * writes one file:
  *
  *   `state/INBOX.md` — every unchecked HUMAN_APPROVAL entry becomes an approval.
- *   `docs/NEEDED.md` — every unchecked `[owner:me]` task becomes a manual task.
+ *   `docs/NEEDED.md` — every unchecked `[owner:me]` task outside the parked sections becomes a
+ *     manual task.
  *   the environment — presence only, never a value, for the keys that gate a path.
  *
  * The environment probes follow the `ImageProgramReadiness` posture exactly: they ask whether a
@@ -142,59 +143,37 @@ const PLAIN_COPY: Readonly<Record<string, { plain: string; steps?: string[]; urg
     steps: ["Tick DEVSHARK-SOCIAL-001 first", "Then tick DEVSHARK-SOCIAL-002 in state/INBOX.md in your own commit"],
     urgency: "soon"
   },
-  ADMIN_USER: {
-    plain: "The admin door will not open in production until a username and password are set.",
-    steps: ["Open the quorum-site project in Vercel", "Add ADMIN_USER and ADMIN_PASSWORD to Production", "Redeploy"],
-    urgency: "blocking"
-  },
-  ADMIN_PASSWORD: {
-    plain: "The admin door will not open in production until a username and password are set.",
-    steps: ["Open the quorum-site project in Vercel", "Add ADMIN_USER and ADMIN_PASSWORD to Production", "Redeploy"],
-    urgency: "blocking"
-  },
-  BOARDLESSAI_GITHUB_TOKEN: {
-    plain: "Nothing you save in the admin can be written back to the repository without this token.",
-    steps: ["Create a fine-grained token with Contents read/write on this repository", "Add BOARDLESSAI_GITHUB_TOKEN to the site's Production environment"],
-    urgency: "blocking"
-  },
   APIFY_TOKEN: {
     plain: "GoVIRAL's Monday meeting has no trend data until the Apify API token is in the repository's Actions secrets.",
     steps: ["Sign in at apify.com and open Settings, then API & Integrations", "Copy the API token", "Add APIFY_TOKEN to the repository's Actions secrets"],
     urgency: "blocking"
   },
-  THE_ODDS_API_KEY: {
-    plain: "FightAIQ has no price source to check its model against, so its readiness files stay empty.",
-    steps: ["Get a free key at the-odds-api.com", "Add THE_ODDS_API_KEY to the repository's Actions secrets"],
-    urgency: "soon"
-  },
-  PODCASTINDEX_API_KEY: {
-    plain: "A few podcast shows cannot be resolved without this free key pair; the rest of the stream works without it.",
-    steps: ["Register at api.podcastindex.org", "Add PODCASTINDEX_API_KEY and PODCASTINDEX_API_SECRET to Actions secrets"],
-    urgency: "whenever"
-  },
-  CAUGHT_UP_STREAMS_ENABLED: {
-    plain: "DNESKAi's 'what people are talking about' and podcast pages stay empty until this switch is on.",
-    steps: ["Set the Actions variable CAUGHT_UP_STREAMS_ENABLED to true"],
-    urgency: "soon"
-  },
   FAL_KEY: {
-    plain: "Rendered illustrations and the Titty Tuesdays image pipeline stay off without this key.",
+    plain: "Without this key DNESKAi skips its illustration rung, so an article with no usable photograph gets the drawn FRAME plate.",
     steps: ["Create a fal.ai key", "Add FAL_KEY to the repository's Actions secrets"],
     urgency: "whenever"
   }
 };
 
-/** Runtime probes: presence only. The value is never read, never logged, never recorded. */
-const RUNTIME_PROBES: ReadonlyArray<{ id: string; title: string; kind: "secret" | "switch" }> = [
-  { id: "ADMIN_USER", title: "Admin username is not set in production", kind: "secret" },
-  { id: "ADMIN_PASSWORD", title: "Admin password is not set in production", kind: "secret" },
-  { id: "BOARDLESSAI_GITHUB_TOKEN", title: "The admin cannot write back to the repository", kind: "secret" },
-  { id: "THE_ODDS_API_KEY", title: "FightAIQ has no odds source", kind: "secret" },
-  { id: "APIFY_TOKEN", title: "GoVIRAL has no trend data source", kind: "secret" },
-  { id: "PODCASTINDEX_API_KEY", title: "Podcast Index key pair is missing", kind: "secret" },
-  { id: "PODCASTINDEX_API_SECRET", title: "Podcast Index key pair is missing", kind: "secret" },
-  { id: "FAL_KEY", title: "No image rendering key is configured", kind: "secret" },
-  { id: "CAUGHT_UP_STREAMS_ENABLED", title: "The DNESKAi streams are switched off", kind: "switch" }
+/**
+ * Runtime probes: presence only. The value is never read, never logged, never recorded.
+ *
+ * The collector runs in the cycle job's "Run cycle" step, so a probe can only see a key that job
+ * maps in its `env:` in `.github/workflows/cycle.yml`, and the collector's test holds every id here
+ * to that. The 2026-09-26 sweep removed the probes that could never pass, because each one sat in
+ * the admin as a permanent "Waiting for you" row:
+ *
+ * - `ADMIN_USER`, `ADMIN_PASSWORD` and `BOARDLESSAI_GITHUB_TOKEN` live on the Vercel project, and
+ *   no workflow maps them.
+ * - `CAUGHT_UP_STREAMS_ENABLED` reaches only the stream step's `if:`, and `PODCASTINDEX_API_KEY`
+ *   and `PODCASTINDEX_API_SECRET` only the stream step's own `env:`. The Podcast Index job is one
+ *   entry in `docs/NEEDED.md`.
+ * - `THE_ODDS_API_KEY` serves FightAIQ alone, which is paused (`operations-2026-09b`). Whoever
+ *   resumes FightAIQ restores this probe in the change that returns its switches to `cycle.yml`.
+ */
+const RUNTIME_PROBES: ReadonlyArray<{ id: string; title: string }> = [
+  { id: "APIFY_TOKEN", title: "GoVIRAL has no trend data source" },
+  { id: "FAL_KEY", title: "No image rendering key is configured" }
 ];
 
 function isoDay(value: string | undefined): string | null {
@@ -236,11 +215,25 @@ export function parseInboxApprovals(markdown: string): OwnerAttention["approvals
   return approvals;
 }
 
-/** Unchecked `[owner:me]` tasks. `[owner:ai]` is work this system does itself. */
+/**
+ * The `docs/NEEDED.md` sections whose entries wait for a venture or a focus to come back.
+ *
+ * A paused venture's items live under "On hold — paused ventures", and work outside the current
+ * focus under "Parked — outside the current focus" (2026-09-26). They stay in the one owner
+ * document, so whoever resumes a venture finds its list there, and nothing in them waits on the
+ * owner today. A section runs from its `## ` heading to the next one, `### ` subsections included.
+ */
+const PARKED_SECTION = /^## (?:On hold|Parked)\b/u;
+
+/** Unchecked `[owner:me]` tasks outside the parked sections. `[owner:ai]` is work this system does itself. */
 export function parseNeededTasks(markdown: string): OwnerAttention["manualTasks"] {
   const tasks: OwnerAttention["manualTasks"] = [];
+  const active = markdown
+    .split(/\n(?=## )/u)
+    .filter((section) => !PARKED_SECTION.test(section))
+    .join("\n");
   // Entries wrap across lines, so split on the bullet rather than reading line by line.
-  for (const block of markdown.split(/\n(?=- \[)/u)) {
+  for (const block of active.split(/\n(?=- \[)/u)) {
     if (!/^- \[ \]/u.test(block.trim())) continue;
     if (!/\[owner:me\]/u.test(block)) continue;
     const title = /\*\*(.+?)\*\*/su.exec(block)?.[1]?.replace(/[`]/gu, "").replace(/\s+/gu, " ").trim();
@@ -286,13 +279,10 @@ export function runtimeGaps(env: NodeJS.ProcessEnv): OwnerAttention["manualTasks
   const seen = new Set<string>();
   for (const probe of RUNTIME_PROBES) {
     const value = env[probe.id];
-    const missing = probe.kind === "switch"
-      ? value !== "true" && value !== "1"
-      : typeof value !== "string" || value.trim().length === 0;
-    if (!missing) continue;
+    if (typeof value === "string" && value.trim().length > 0) continue;
     const known = PLAIN_COPY[probe.id];
-    // One entry per plain sentence: the two Podcast Index keys and the two admin credentials are
-    // each one job for the owner, not two rows to tick off separately.
+    // One entry per plain sentence: two keys that are one job for the owner share a sentence and
+    // make one row to tick, not two.
     const key = known?.plain ?? probe.id;
     if (seen.has(key)) continue;
     seen.add(key);
