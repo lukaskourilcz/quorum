@@ -5,9 +5,10 @@ ukládá výsledky tak, aby šlo zpětně dohledat, proč něco navrhla. Pevná 
 důkazy, náklady, bezpečnost a to, co smí udělat jen majitel.
 
 Aktuální stav: **v provozu, bez příjmů, ve fázi ověřování**. Web běží na Vercel Pro:
-<https://boardless-ai.vercel.app>. Systém má jedenáct pracovních projektů: Caught Up
-(veřejně DNESKAi), Titty Tuesdays, GoVIRAL, marketingShark, BOOKSOFHISTORY,
-FightAIQ, Design Lab, MMA Files, Door Money, Tehdejší svět a Kvórum.
+<https://boardless-ai.vercel.app>. Rejstřík má čtrnáct položek: jedenáct veřejných projektů
+(Caught Up — veřejně DNESKAi, Titty Tuesdays, GoVIRAL, marketingShark, BOOKSOFHISTORY,
+FightAIQ, Design Lab, MMA Files, Door Money, Tehdejší svět a Kvórum), dvě soukromé
+(Personal Growth a WebDev Signal) a průzkum Contest Radar.
 Magazine Incubator byl uzavřen — nové magazíny se už nevymýšlejí.
 
 **Od 25. září 2026 (`operations-2026-09b`) běží jen DNESKAi, marketingShark (devShark),
@@ -17,18 +18,12 @@ Tehdejší svět, Kvórum a Personal Growth jsou pozastavené: kód a stav zůst
 nemají žádný slot, v navigaci adminu chybí a vypisuje je jen Nastavení v tabulce „Paused
 ventures“. Popis níže platí pro ně jen do obnovení.
 
-**Co už publikuje (k 12. srpnu 2026):** publikují dva projekty — DNESKAi denní vydání a
-MMA Files jeden článkový slot denně. Oba posílají hotový článek zároveň do Carousel
-Studia jako *summary* (titulek, perex a vybrané pasáže), ze kterého se skládají sociální
-karusely. Ostatní projekty zatím nepublikují; na co každý čeká, je v
-`docs/NEEDED.md`. marketingShark nepublikuje vůbec: jeho karusely vznikají rovnou
-jako koncepty ve frontě ke schválení a rozhoduje o nich majitel. BOOKSOFHISTORY také
-jen připravuje koncepty; majitel každou jazykovou verzi schválí, vykreslí v Design
-Labu a zveřejní ručně. Tehdejší svět také připravuje jen návrhy: česko-ukrajinské
-rodinné příběhy vznikají z jednoho ručně spravovaného souboru faktů a majitel je
-zveřejňuje ručně. Kvórum má hotovou cestu pro zdrojované české politické návrhy, ale
-jeho placený běh čeká na podpis zakládajícího a kapacitního rozhodnutí. Ani jeden z
-těchto projektů neumí publikovat sám.
+**Co publikuje (k 26. září 2026):** jen DNESKAi, jedno denní vydání. Hotový článek posílá
+zároveň do Design Labu jako *summary* (titulek, perex a vybrané pasáže), ze kterého se
+skládají sociální karusely. MMA Files publikovalo do konce srpna a od 15. září je
+pozastavené. marketingShark zatím nepublikuje: jeho příspěvky pro devShark čekají jako
+koncepty ve frontě a rozhoduje o nich majitel. Na co který projekt čeká, je v
+`docs/NEEDED.md`.
 
 ## Jak je systém poskládaný
 
@@ -39,7 +34,7 @@ GitHub Actions / příkazová řádka
      TypeScript řízení porad
      ├─ rozpis, agendy a výběr rolí
      ├─ limity nákladů a kontrola zdrojů
-     ├─ porady všech jedenácti projektů
+     ├─ porady běžících projektů
      └─ jeden denní souhrn
               │
               ▼
@@ -69,32 +64,35 @@ modelům ani do podkladů porad.
 
 ## Projekty
 
-- **Caught Up** připravuje anglický a český článek a právě jeden hlavní obrázek z
-  povolené licencované knihovny nebo z bezpečné náhradní grafiky. Hotový balíček přes
-  omezenou GitHub App zapíše do `lukaskourilcz/aifirst` a po nasazení automaticky
-  ověří oba jazyky, obrázek, zdroj fotografie a otisk obsahu.
+- **Caught Up** připravuje český článek a právě jeden hlavní obrázek z povolené
+  licencované knihovny nebo z bezpečné náhradní grafiky. Hotový balíček přes omezenou
+  GitHub App zapíše do `lukaskourilcz/aifirst` a po nasazení automaticky ověří článek,
+  obrázek, zdroj fotografie a otisk obsahu.
 - **Titty Tuesdays** připravuje značku, témata a marketing. Nemá e-shop, sklad,
   platby, reklamy ani automatické zveřejňování.
 - **GoVIRAL** je týdenní trendová porada (pondělí 13:00). Ze zdrojovaných dat udělá
-  jeden brief pro majitele, marketingové nápady pro oba magazíny a nejvýše jednu agendu
-  předanou jiné poradě. Stávající zdroje bere z Apify na Free plánu, jehož měsíční kredit
-  5 dolarů je zároveň limitem — žádná karta není v systému. Anglické termíny Door Money
-  měří zvláštní bezklíčovou cestou přes Google News, takže nepřidávají aktor, kvótu ani
-  placený zdroj.
-- **marketingShark** dělá marketingové podklady pro produkty z portfolia. Jedna porada
-  denně v 07:00 vezme jednu otázku z kvízu devSharku a udělá z ní jeden český a jeden
-  anglický pětislidový karusel. Vykreslí ho Design Lab a hotový balíček skončí jako
-  koncept ve frontě ke schválení; marketingShark nemá sociální účet ani přihlašovací
-  údaje, takže zveřejnit nic neumí. devShark je jediná značka — jeho banku 3 633 otázek
-  o webovém vývoji systém jen čte z připnutého otisku a v jeho repozitáři nic nemění.
+  jeden brief pro majitele, marketingové nápady pro DNESKAi a devShark a nejvýše jednu
+  agendu předanou jiné poradě. Stávající zdroje bere z Apify na placeném plánu; repozitář
+  předpokládá Starter za 19 dolarů měsíčně s 19 dolary kreditu (`config/fixed-costs.json`),
+  dokud majitel plán nepotvrdí (#528).
+- **marketingShark** dělá marketingové podklady pro devShark. Porada v 07:00 každý
+  pracovní den připraví jeden anglický pětislidový příspěvek podle dne v týdnu: kvízovou
+  otázku v pondělí a ve čtvrtek, jednu obrazovku produktu v úterý, snadnou programovací
+  výzvu ve středu a shrnutí týdne v pátek. Dokud devShark neoznačí výzvy obtížností, středa
+  připraví kvíz. Vykreslí ho Design Lab a tři koncepty (LinkedIn, Instagram a Threads)
+  čekají ve frontě na schválení. Cesta k publikování je registrovaná a držená: otevře ji
+  až podpis rozhodnutí, připojené profily a schválení konkrétního příspěvku. devShark je
+  jediná značka a od 24. září je jen anglicky; majitel 25. září rozhodl, že bude freemium,
+  a cenu příspěvky neuvedou, dokud Premium není v prodeji. Jeho banku 2 447 otázek o
+  webovém vývoji systém jen čte z připnutého otisku a v jeho repozitáři nic nemění.
   Vypnutá značka geoShark pro zeměpisnou banku StudyShark skončila spolu se StudyShark
   a z konfigurace zmizela.
 - **FightAIQ** spravuje zdrojovaná data o UFC a Oktagonu a počítá analýzy v kódu.
   Analýzy smí spustit jen pro ověřené zápasy a karty: neumí sázet, otevírat sázkové
   účty ani slibovat výhru.
 - **Design Lab** je pracovní nástroj na sociální obsah, ne galerie šablon. Jedna
-  záložka `studio` v administraci ukazuje každý doručený článek obou magazínů i schválené
-  summary podporovaných projektů, vykreslí jejich karusely skutečným enginem ve všech
+  záložka `studio` v administraci ukazuje každý doručený článek DNESKAi i schválené
+  summary běžících projektů, vykreslí jejich karusely skutečným enginem ve všech
   čtyřech formátech a nechá majitele přepnout
   rodinu, variantu, úpravu fotky, velikost písma a fázi rytmu — a to všechno je jeden
   zapsaný recept, který si pipeline sama odvodí při doručení. Deset rodin šablon
@@ -132,39 +130,26 @@ modelům ani do podkladů porad.
 - **Kvórum** má v 21:00 připravovat jeden nebo dva původní české politické návrhy z
   potvrzeného denního digestu. Jeden TRIBUN call obklopují deterministické kontroly
   zdrojů, typů tvrzení, opakování, veřejných osob a českého rejstříku. Design Lab je
-  jediná cesta k obrázku a zveřejnění zůstává ruční. Dokud majitel nepodepíše zakládající
-  rozhodnutí a zvláštní přesun denní rozpočtové kapacity, běží jen fixture monitor za
-  `$0`; nevznikne externí ani modelové volání.
+  jediná cesta k obrázku a zveřejnění zůstává ruční. Zakládající rozhodnutí i přesun denní
+  rozpočtové kapacity jsou podepsané (29. 8.), ale Kvórum je pozastavené, takže nic nevolá
+  a stojí `$0`.
 
 ## Denní rozpis a peníze
 
-Společný pražský rozpis má osmnáct denních oken, jedno každou hodinu od 05:00 do
-22:00:
+Od 25. září (`operations-2026-09b`) má pražský rozpis pět slotů:
 
-| Praha | Okno | Kdy skutečně pracuje |
+| Praha | Slot | Kdy skutečně pracuje |
 | ---: | --- | --- |
-| 05:00 | DNESKAi vydání | pevná služba; jen s důkazy a otevřenými live branami |
-| 06:00 | ranní rada | rozhodovací porada; nejvýše jedna odborná zakázka |
-| 07:00 | marketingShark | jeden koncept pro každou zapnutou značku |
-| 08:00 | FightAIQ intake | jen při změně zdrojů nebo platné agendě |
-| 09:00 | MMA Files redakce | přidělí nebo zruší jeden denní článkový slot |
-| 10:00 | MMA Files článek | jen přidělený slot s úplnými důkazy |
-| 11:00 | Titty Tuesdays | stálé pre-commerce marketingové okno |
-| 12:00 | BOOKSOFHISTORY | pokračuje v rozepsaném výběru, výzkumu nebo tvorbě |
+| 05:00 | den DNESKAi (`cu-day`) | krok WebDev Signal za `$0`, vydání a hned po něm produktová kontrola |
+| 06:00 | ranní rada | rozhodovací porada, denní kontrolní zápis a souhrn předchozího dne |
+| 07:00 | marketingShark | jeden příspěvek devSharku každý pracovní den; o víkendu se neschází |
+| 09:00 | opakování vydání DNESKAi | jen když vydání z 05:00 neprošlo |
 | 13:00 | GoVIRAL | placený brief jen v pondělí; jinak `$0` |
-| 14:00 | odpolední rada | deterministický kontrolní zápis za `$0` |
-| 15:00 | Door Money návrhy | denní stůl za soukromou znalostní a rozpočtovou branou |
-| 16:00 | Door Money růst | placený balíček jen ve čtvrtek; jinak `$0` |
-| 17:00 | DNESKAi produkt | pevná produktová kontrola |
-| 18:00 | Tehdejší svět | jedna plánovací nebo dvojjazyčná produkční fáze; live běh je zatím zamčený |
-| 19:00 | FightAIQ analýza | jen s agendou a splněnými důkazními branami |
-| 20:00 | MMA Files desk | jen s platnou agendou |
-| 21:00 | Kvórum | registrovaný fixture-only stůl, dokud chybí dva podpisy |
-| 22:00 | noční rada | kontrolní zápis a digest za `$0` |
 
-Vercel drží dvě UTC varianty každého okna kvůli letnímu a zimnímu času; DNESKAi má
-navíc dvě retry varianty. Z 38 cron záznamů proto vzniká 18 cest a 19 unikátních UTC
-výrazů. Program přijme jen variantu, která odpovídá dnešnímu času v Praze.
+Vercel drží pro každý slot dvě UTC varianty kvůli letnímu a zimnímu času, celkem deset
+záznamů v `site/vercel.json`. Tři záložní běhy GitHubu (03:55, 11:55 a 19:55 UTC) zachytí
+zmeškaný slot. Program přijme jen variantu, která odpovídá dnešnímu času v Praze.
+Pozastavené projekty na hodinách nemají žádný slot a `cycle.yml` jejich fáze nenabízí.
 
 Kterou poradu spustit, určuje **spouštěč, který se ozval**, ne hodiny v okamžiku startu.
 GitHub úlohy podle rozpisu často odloží — 2. srpna o 13 až 54 minut — a dřívější odvození
@@ -172,13 +157,9 @@ z nástěnných hodin mělo toleranci jen dvacet minut: sedm ze čtrnácti porad
 nekonalo a jedna se spustila jako sousední porada. Spouštěč poradu pojmenuje sám, takže
 zpoždění už nevadí.
 
-V 06:00 rozhodne hlavní rada, které odborné porady jsou opravdu potřeba. Odpoledne a večer
-se už jen bez placených modelů zapíše stav. GoVIRAL platí model jen v pondělí; Door Money
-má denní návrhový stůl v 15:00 a růstová porada platí model jen ve čtvrtek. Večerní
-analýzy FightAIQ a redakční kontrola MMA Files vyžadují platnou agendu. BOOKSOFHISTORY
-má stálé denní okno, ale pokračuje jen v aktuální fázi; zmeškanou práci nepřeskočí a při
-nedostatku rozpočtu cyklus protáhne za `$0`. Tehdejší svět v 18:00 střídá plánování a
-produkci; nedělní učení je v aktuálním kódu deterministické a stojí `$0`.
+V 06:00 rozhodne ranní rada, které odborné porady jsou opravdu potřeba, a zapíše denní
+kontrolu bez placeného modelu. GoVIRAL platí model jen v pondělí a marketingShark jen ve
+všední dny.
 
 Když nějaká brána poradu vypne, zapíše se do `state/meetings/skips/` důvod a kalendář slot
 označí jako **Skipped** s vysvětlením v popisku. Prázdný den tak řekne, kterou bránu

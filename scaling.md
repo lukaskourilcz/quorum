@@ -8,9 +8,9 @@ Technický přehled je v `about-project.md`; účetnictví je v `state/finance/`
 
 - Zaznamenané náklady se počítají z uložené historie API volání. Podepsané rozhodnutí `budget-2026-08f` nastavuje společný limit **$50 / měsíc**, z toho $25 pro modely a $1.00 denně. Personal Growth má v tomto limitu vlastní strop $20. Při 80 % systém varuje; při 100 % nebo po třech vyčerpaných dnech další náklady zastaví. Soubor fixních nákladů uvádí od 15. září 2026 předplatné Apify Starter za $19 měsíčně (nejlevnější placený plán; majitel plán zaplatil a repozitář ho předpokládá, dokud nepotvrdí jiný), takže z limitu $50 zbývá po modelovém podílu $25 šest dolarů na vše ostatní. Předplacený kredit fal.ai ještě není smířený, takže nejde o úplně odsouhlasený all-in účet.
 - Každý externí výdaj schvaluje člověk (položka `HUMAN_APPROVAL` / `SPEND`); agent nedrží platební údaje.
-- Obrázky vytvářené přímo v kódu mají plánovaný náklad $0. Denní souhrn se nikam
-  neposílá e-mailem — čte se na webu v sekci **Results**, takže nevyžaduje žádného
-  poskytovatele ani jeho tarif. Projekty používají existující Vercel Pro, proto je jejich dodatečný
+- Obrázky vytvářené přímo v kódu mají plánovaný náklad $0. Denní souhrn předchozího dne
+  zapíše ranní běh a nikam ho neposílá e-mailem — čte se na webu v sekci **Results**, takže
+  nevyžaduje žádného poskytovatele ani jeho tarif. Projekty používají existující Vercel Pro, proto je jejich dodatečný
   náklad na hosting $0. Změna tarifu nebo rozdělení faktury znovu otevře kontrolu limitu.
 
 ## Odkud brát peníze
@@ -31,31 +31,27 @@ podílu `$25` a tempu `$1.00` denně. Obálka je nejvyšší povolená částka,
 
 | Projekt | Aktuální nákladová hranice |
 | --- | --- |
-| **DNESKAi / Caught Up** | Rejstřík vyhrazuje `$0.08` pro vydání v 05:00 a `$0.08` pro produktovou kontrolu v 17:00. Kvalitativní kroky používají stávající modely a společný ledger. |
-| **MMA Files** | Redakce má `$0.05`, jeden denní článek `$0.16` a desk s povinnou agendou `$0.05`. Chybějící důkazy článek ukončí před voláním. |
-| **FightAIQ** | Intake i analýza mají po `$0.06`; predikce samotná je deterministický kód. Zdrojová vrstva má `$3` podíl na společném Apify kreditu (plán Starter, `$19` měsíčně), ale povolené keyless a free-tier zdroje nesmějí vytvořit hotovostní náklad. |
+| **DNESKAi / Caught Up** | Rejstřík vyhrazuje `$0.08` pro vydání a `$0.08` pro produktovou kontrolu, která běží hned po vydání v rámci dne DNESKAi v 05:00. Kvalitativní kroky používají stávající modely a společný ledger. |
+| **MMA Files** | Redakce má `$0.05`, jeden denní článek `$0.16` a desk s povinnou agendou `$0.05`. Chybějící důkazy článek ukončí před voláním. Pozastaveno. |
+| **FightAIQ** | Intake i analýza mají po `$0.06`; predikce samotná je deterministický kód. Zdrojová vrstva má `$3` podíl na společném Apify kreditu (plán Starter, `$19` měsíčně), ale povolené keyless a free-tier zdroje nesmějí vytvořit hotovostní náklad. Pozastaveno. |
 | **Design Lab** | Šablony, písma, SVG, PNG, recepty a exporty běží lokálně za `$0`; není tu modelový, výzkumný ani hostingový příplatek. |
 | **marketingShark** | Jedno volání za zapnutou značku má obálku `$0.10`; jedna aktivní značka vychází přibližně na `$1.50` měsíčně. |
 | **GoVIRAL** | Pondělní modelová porada má `$0.06`, ostatní dny `$0`. Apify recept je odhadnutý na `$4.60` měsíčně a tvrdě jej zastaví sdílený kredit plánu Starter (`$19`), který je na placeném plánu jedinou hranicí před přečerpáním na kartu; Door Money a Tehdejší svět používají bezklíčové měření za `$0`. |
-| **Titty Tuesdays** | Denní pre-commerce porada má `$0.08`. Volitelná úterní vizuální cesta je vypnutá bez šesti podpisů, obou klíčů a přepínače; po otevření má vlastní strop `$2.00` měsíčně. |
-| **BOOKSOFHISTORY** | Desk smí utratit nejvýše `$0.50` za cyklus; výzkum `$0.10` za volání a `$5.00` měsíčně. Celkový modelový plán je `$6–8` měsíčně, ale živá cesta čeká na zakládající podpis a do té doby stojí `$0`. |
-| **Door Money** | Jednorázová ingestace má strop `$3.00` celkem. Denní desk má `$0.08`, čtvrteční BOOKER `$0.06`; běžný modelový odhad je přibližně `$2.50` měsíčně. GoVIRAL termíny používají bezklíčový zdroj za `$0`. |
-| **Tehdejší svět** | Běh sdílí obálku `$0.25`; výzkum má `$0.30` za brief a `$2.00` měsíčně, modelový cíl nejvýše `$4.00` měsíčně. Zakládající rozhodnutí je nepodepsané, takže live náklad je zatím `$0`. |
-| **Kvórum** | Deklarovaná denní obálka je `$0.10`, modelový KPI strop `$3.00` měsíčně a Apify podíl `$2.00` uvnitř stejného `$19` kreditu plánu Starter. Zakládající i kapacitní rozhodnutí chybí, takže externí a modelová cesta stojí `$0`. |
+| **Titty Tuesdays** | Denní pre-commerce porada má `$0.08`. Volitelná úterní vizuální cesta je vypnutá bez šesti podpisů, obou klíčů a přepínače; po otevření má vlastní strop `$2.00` měsíčně. Pozastaveno. |
+| **BOOKSOFHISTORY** | Desk smí utratit nejvýše `$0.50` za cyklus; výzkum `$0.10` za volání a `$5.00` měsíčně. Celkový modelový plán je `$6–8` měsíčně; zakládající rozhodnutí je podepsané (29. 8.), ale projekt je pozastavený a stojí `$0`. |
+| **Door Money** | Jednorázová ingestace má strop `$3.00` celkem. Denní desk má `$0.08`, čtvrteční BOOKER `$0.06`; běžný modelový odhad je přibližně `$2.50` měsíčně. GoVIRAL termíny používají bezklíčový zdroj za `$0`. Pozastaveno. |
+| **Tehdejší svět** | Běh sdílí obálku `$0.25`; výzkum má `$0.30` za brief a `$2.00` měsíčně, modelový cíl nejvýše `$4.00` měsíčně. Zakládající rozhodnutí je podepsané (29. 8.); projekt je pozastavený, takže stojí `$0`. |
+| **Kvórum** | Deklarovaná denní obálka je `$0.10`, modelový KPI strop `$3.00` měsíčně a Apify podíl `$2.00` uvnitř stejného `$19` kreditu plánu Starter. Zakládající i kapacitní rozhodnutí jsou podepsaná (29. 8.); projekt je pozastavený, takže stojí `$0`. |
 
 ## Kontrola nákladů
 
-- Placená firemní rada se schází jednou v 06:00. Časy 14:00 a 22:00 jsou kontrolní
-  zápisy bez modelu. Odborné porady se otevřou jen s konkrétní agendou; FightAIQ také
-  při skutečné změně zdrojových dat. marketingShark a návrhový stůl Door Money běží
-  denně, GoVIRAL platí model jen v pondělí a růstová porada Door Money jen ve čtvrtek.
-  BOOKSOFHISTORY má stálé denní okno a vždy naváže jen na svou rozepsanou fázi.
-  Tehdejší svět má denní dvoufázové okno v 18:00; jeho aktuální nedělní učení je
-  deterministické a stojí $0. Nepotřebný čas stojí $0.
-- GitHub Actions běží na **pěti** rozvrzích místo dřívějších desítek překrývajících se
-  letních a zimních záznamů: jeden hodinový dispatcher pojmenuje poradu podle spouštěče,
-  který se ozval, takže zpoždění nevadí a nepotřebné běhy nevznikají. Zálohování je
-  jedno místo osmnácti.
+- Placená firemní rada se schází jednou v 06:00 a zapíše i denní kontrolu bez modelu.
+  Odborné porady se otevřou jen s konkrétní agendou. marketingShark běží každý pracovní
+  den a GoVIRAL platí model jen v pondělí. Pozastavené projekty nemají na hodinách slot a
+  stojí $0. Nepotřebný čas stojí $0.
+- Porady spouští Vercel cron, dva UTC záznamy pro každý z pěti slotů. GitHub Actions běží
+  jen na **třech** záložních rozvrzích (03:55, 11:55 a 19:55 UTC), které zachytí zmeškaný
+  slot. Spouštěč poradu pojmenuje sám, takže zpoždění nevadí a nepotřebné běhy nevznikají.
 - Přepínače agentů v `/admin` vynechají vypnuté volitelné role ještě před API voláním. U obou magazínů vznikají sociální texty uvnitř stávajícího článkového volání, takže kvůli nim nevzniká další volání modelu.
 - Sociální obrázky vykresluje jediný engine Design Labu z živé šablony, obsahu a
   barev konkrétní značky; stejný vstup má stejný otisk a nestojí žádné API peníze.
@@ -87,13 +83,13 @@ podílu `$25` a tempu `$1.00` denně. Obálka je nejvyšší povolená částka,
   Door Money do tohoto receptu nepřidává aktor ani kvótu: jeho čtyři anglické termíny
   rotují po třech přes bezklíčový Google News sběr a brief smí označit jen skutečně
   změřený termín.
-- Doručený článek posílá do Carousel Studia jen *summary*, ne celý text, a skládá se
+- Doručený článek posílá do Design Labu jen *summary*, ne celý text, a skládá se
   aritmeticky bez volání modelu. Karusel proto nestojí nic navíc a stejný článek dá vždy
   stejné slidy.
-- marketingShark má poradu každý den v 07:00 a v ní jediný placený krok: jedno volání
-  modelu na značku a den pro české a anglické texty. Výběr otázky, přiřazení háčku,
-  kontroly pravdivosti, vykreslení i zápis do fronty jsou deterministický kód za $0.
-  Vychází to zhruba na **$1.50 měsíčně** s jednou zapnutou značkou a **$3.00** se dvěma.
+- marketingShark má poradu každý pracovní den v 07:00 a v ní jediný placený krok: jedno
+  volání modelu na značku a den pro anglické texty. Výběr druhu příspěvku a otázky,
+  přiřazení háčku, kontroly pravdivosti, vykreslení i zápis do fronty jsou deterministický
+  kód za $0. Vychází to zhruba na **$1.50 měsíčně**; devShark je jediná značka.
   MAKO má týdenní kontrolu popsanou v `orchestrator/prompts/marketingshark/strategy.md`,
   ale zatím ji nemá kam poslat — žádná porada ji nespouští, takže se nic neúčtuje. Až se
   zapojí, přidá zhruba $0.16 měsíčně. Žádné fixní náklady, žádná hotovost, žádná položka
@@ -123,14 +119,13 @@ podílu `$25` a tempu `$1.00` denně. Obálka je nejvyšší povolená částka,
   takže nevzniká nový hosting, databáze, analytika ani placený kanál.
 - Kvórum má deklarovanou obálku **$0.10 na den**, modelový KPI strop **$3.00 měsíčně**
   a vlastní **$2.00 měsíční podíl** uvnitř stejného Apify kreditu plánu Starter. Odhadovaný
-  modelový běh je přibližně $2.20 měsíčně. Zakládající rozhodnutí i oddělený přesun
-  nejméně $0.08 denní kapacity jsou nepodepsané, takže monitor zůstává fixture-only,
-  nevolá Apify ani model a stojí $0. Kvórum nesmí samo upgradovat tarif ani přesunout
-  rozpočet.
-- Caught Up dál používá Claude Sonnet pro výběr tématu, anglický článek a českou verzi. Tyto tři kroky přímo určují kvalitu vydání, takže je bez srovnávacího testu nepřepínáme na levnější model.
-- Anglický writer dostává vybrané zdroje a nejvýše 12 dalších položek pro Watchlist. Dříve dostával dlouhý seznam všech URL, i když z něj nemohl čerpat další obsah.
+  modelový běh je přibližně $2.20 měsíčně. Zakládající rozhodnutí i přesun $0.08 denní
+  kapacity jsou podepsané (29. 8.), ale Kvórum je pozastavené, takže nic nevolá a stojí
+  $0. Kvórum nesmí samo upgradovat tarif ani přesunout rozpočet.
+- Caught Up dál používá Claude Sonnet pro výběr tématu a český článek. Oba kroky přímo určují kvalitu vydání, takže je bez srovnávacího testu nepřepínáme na levnější model. Anglickou verzi už nepíše.
+- Writer dostává vybrané zdroje a nejvýše 12 dalších položek pro Watchlist. Dříve dostával dlouhý seznam všech URL, i když z něj nemohl čerpat další obsah.
 
-Kvalitativně důležité modely pro výběr tématu, psaní a českou verzi zůstávají stejné.
+Kvalitativně důležité modely pro výběr tématu a psaní zůstávají stejné.
 Největší bezpečná úspora je méně zbytečných volání, ne levnější model na finální text.
 
 Týdně kontrolujte historii nákladů. Před větším výdajem nebo hledáním investora znovu projděte schválení a společný limit.
