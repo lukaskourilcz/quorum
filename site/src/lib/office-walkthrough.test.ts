@@ -1,7 +1,14 @@
-import { describe, expect, it } from "vitest";
+import { describe, expect, it, vi } from "vitest";
 import ventureRegistry from "../../../config/ventures.json";
+import { getDailyResults, type DailyResult } from "./daily-results";
 import { WORKSPACE_CHANNELS } from "./meeting-feed";
 import { projectForKind, readOfficeWalkthrough } from "./office-walkthrough";
+
+// The real reader stays in place; one case below swaps in two receipts for a single call.
+vi.mock("./daily-results", async (importOriginal) => {
+  const actual = await importOriginal<typeof import("./daily-results")>();
+  return { ...actual, getDailyResults: vi.fn(actual.getDailyResults) };
+});
 
 describe("the home-page venture registry projection", () => {
   it("keeps every operating venture on the wall, in results and in facilities", async () => {
@@ -38,5 +45,30 @@ describe("the home-page venture registry projection", () => {
     expect(projectForKind("dm-growth")).toBe("door-money");
     expect(projectForKind("ts-desk")).toBe("tehdejsi-svet");
     expect(projectForKind("kv-desk")).toBe("kvorum");
+  });
+
+  it("puts the newest daily receipt on the TV, not the oldest", async () => {
+    const day = (date: string, costUsd: number): DailyResult => ({
+      date,
+      portfolioLine: "",
+      rows: [{
+        ventureId: "caught-up",
+        ventureLabel: "DNESKAi",
+        kind: "DNESKAi daily desk",
+        output: "The edition was published.",
+        roomLink: null,
+        status: "produced",
+        costUsd,
+        failureReason: null
+      }],
+      totalCostUsd: costUsd
+    });
+    // Newest first, which is the order getDailyResults returns. The screen used to read the last
+    // entry and so showed the oldest receipt on file for as long as the digest kept writing.
+    vi.mocked(getDailyResults).mockResolvedValueOnce([day("2026-09-25", 0.2989), day("2026-08-01", 0.1998)]);
+    const data = await readOfficeWalkthrough(new Date("2026-09-26T06:00:00.000Z"));
+    expect(data.reports.daily.date).toBe("2026-09-25");
+    expect(data.reports.daily.spendUsd).toBe(0.2989);
+    expect(data.reports.daily.roomsHeld).toBe(1);
   });
 });

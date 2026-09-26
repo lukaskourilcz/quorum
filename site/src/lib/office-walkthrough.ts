@@ -846,7 +846,13 @@ export async function readOfficeWalkthrough(now = new Date()): Promise<OfficeWal
    * summarised and a week that has not closed both arrive here as nulls, and the screen renders
    * them as dashes rather than inventing a quiet day.
    */
-  const latestDay = dailyResults.at(-1) ?? null;
+  // The newest receipt, picked by date. `getDailyResults` sorts newest first, and `.at(-1)` read
+  // the other end: the TV kept showing 2026-08-01, the oldest receipt on file, while /results
+  // showed the new day. Choosing by date holds whichever order the reader returns.
+  const latestDay = dailyResults.reduce<(typeof dailyResults)[number] | null>(
+    (newest, day) => (newest === null || day.date > newest.date ? day : newest),
+    null
+  );
   const latestWeek = periodReports.weekly[0] ?? null;
   const reports: OfficeReports = {
     daily: {
