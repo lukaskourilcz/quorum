@@ -5,6 +5,7 @@ import {
   type DailyDigest
 } from "../contracts/daily-digest.js";
 import type { MeetingRecord } from "../contracts/meeting-record.js";
+import { DAY_STEPS } from "../meetings/clock.js";
 import type { ResolvedMeetingSlot } from "../ventures/registry.js";
 import { safeFetch } from "../security/url.js";
 import { atomicWriteJson, atomicWriteText, readJson, readText } from "../state.js";
@@ -46,6 +47,18 @@ function roomLink(date: string, record: MeetingRecord | undefined, phase: string
   return `/meetings/${date}-${phase}`;
 }
 
+function heldRecord(record: MeetingRecord): boolean {
+  return !["PAUSED", "FAILED"].includes(record.status);
+}
+
+type ArticleOutcome = { date: string; slot: "am" | "pm"; status: string; reason?: string };
+
+function articleLine(article: ArticleOutcome): string {
+  return article.status === "published"
+    ? "The desk published this slot's article."
+    : article.reason ?? `The desk did not publish this slot: ${article.status}.`;
+}
+
 export function buildDailyDigest(input: {
   date: string;
   weekOf: string;
@@ -56,7 +69,7 @@ export function buildDailyDigest(input: {
   finalMeetingFailed?: boolean;
   operations?: readonly DigestOperation[];
   /** What the two article slots did. They have no meeting record to read. */
-  articleSlots?: readonly { date: string; slot: "am" | "pm"; status: string; reason?: string }[];
+  articleSlots?: readonly ArticleOutcome[];
   /** The day's recorded API spend, from the ledger rather than from per-meeting totals. */
   spentUsd?: number;
 }): DailyDigest {
@@ -64,6 +77,45 @@ export function buildDailyDigest(input: {
     ? (input.articleSlots ?? []).find((entry) => entry.date === input.date && `article-${entry.slot}` === phase)
     : undefined;
   const meetings = input.schedule.map((slot, index) => {
+    const finalFailure = input.finalMeetingFailed === true && index === input.schedule.length - 1;
+    const steps = DAY_STEPS[slot.phase] ?? [];
+    if (steps.length > 0) {
+      /*
+       * A venture day writes no record of its own; its rooms write theirs (see slot-record.ts).
+       * Looking the day's own kind up found nothing, so every digest after the day kinds arrived
+       * on 2026-08-29 said the DNESKAi desk "was not held" at $0 on days both its rooms met and
+       * the edition published. The calendar reads a day through the same DAY_STEPS map; so does
+       * this. The day met when any of its rooms met, or when its article slot published; its
+       * line is the first room that met, in the day's own order; its cost is every room's.
+       */
+      const stepRecords = steps.flatMap((step) => {
+        const record = slotRecord(input.records, input.date, step);
+        return record ? [{ step, record }] : [];
+      });
+      const firstHeld = stepRecords.find((entry) => heldRecord(entry.record));
+      const article = steps.map(articleOutcome).find((entry) => entry !== undefined);
+      const shown = firstHeld ?? stepRecords[0];
+      const held = !finalFailure && (firstHeld !== undefined || article?.status === "published");
+      const summary = finalFailure
+        ? "Final scheduled cycle failed; inspect the workflow and public room index."
+        : firstHeld
+          ? firstHeld.record.decision.summary
+          : article
+            ? articleLine(article)
+            : shown
+              ? shown.record.decision.summary
+              : `${slot.label} was not held; inspect the public week schedule.`;
+      return {
+        ventureId: ventureId(undefined, slot.phase),
+        kind: slot.phase,
+        held,
+        bullets: [{
+          text: truncateWords(summary, 20),
+          roomLink: shown ? roomLink(input.date, shown.record, shown.step, input.weekOf) : `/calendar/${input.weekOf}`
+        }],
+        costUsd: Number(stepRecords.reduce((sum, entry) => sum + (entry.record.ledger.actualCycleUsd ?? 0), 0).toFixed(8))
+      };
+    }
     const article = articleOutcome(slot.phase);
     if (article) {
       // Article production writes a run file and no meeting record, so both slots reported
@@ -73,17 +125,14 @@ export function buildDailyDigest(input: {
         kind: slot.phase,
         held: article.status === "published",
         bullets: [{
-          text: truncateWords(article.status === "published"
-            ? "The desk published this slot's article."
-            : article.reason ?? `The desk did not publish this slot: ${article.status}.`, 20),
+          text: truncateWords(articleLine(article), 20),
           roomLink: `/calendar/${input.weekOf}`
         }],
         costUsd: 0
       };
     }
     const record = slotRecord(input.records, input.date, slot.phase);
-    const finalFailure = input.finalMeetingFailed === true && index === input.schedule.length - 1;
-    const held = Boolean(record && !finalFailure && !["PAUSED", "FAILED"].includes(record.status));
+    const held = Boolean(record && !finalFailure && heldRecord(record));
     const summary = finalFailure
       ? "Final scheduled cycle failed; inspect the workflow and public room index."
       : record

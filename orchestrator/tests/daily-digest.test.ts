@@ -2,7 +2,7 @@ import { mkdtemp, readFile, rm } from "node:fs/promises";
 import os from "node:os";
 import path from "node:path";
 import { afterEach, describe, expect, it, vi } from "vitest";
-import { MeetingRecordSchema } from "../src/contracts/meeting-record.js";
+import { MeetingRecordSchema, type MeetingRecord } from "../src/contracts/meeting-record.js";
 import { allInBudgetStatus } from "../src/finance/budget-alert.js";
 import { loadMeetingRecords, mondayOfWeek } from "../src/meetings/calendar.js";
 import { MEETING_CLOCK } from "../src/meetings/clock.js";
@@ -17,6 +17,7 @@ import {
 } from "../src/notify/digest.js";
 import { resolveDigestDay } from "../src/notify/digest-day.js";
 import { repoRoot } from "../src/paths.js";
+import { ScheduledPhaseSchema } from "../src/types.js";
 import { loadVentureRegistry, resolveScheduledClock } from "../src/ventures/registry.js";
 import { DigestOperationSchema } from "../src/contracts/daily-digest.js";
 
@@ -54,6 +55,53 @@ describe("one daily portfolio digest", () => {
     expect(digest.meetings.filter((meeting) => meeting.kind.startsWith("mma-")).every((meeting) => meeting.ventureId === "fightaiq")).toBe(true);
     expect(digest.meetings.filter((meeting) => meeting.kind.startsWith("article-")).every((meeting) => meeting.ventureId === "mma-files")).toBe(true);
     expect(renderDailyDigestHtml(digest, renderDailyDigestText(digest))).toContain("background:#09090b");
+  });
+
+  it("reads a venture day through the rooms it dispatched, since the day writes no record", async () => {
+    // Every digest from the day kinds' arrival on 2026-08-29 said the DNESKAi desk was not held
+    // at $0, because it looked for a `cu-day` record nothing writes. Its rooms record under
+    // `cu-edition` and `cu-product`, and those are what the day's line has to read.
+    const registry = await loadVentureRegistry();
+    const venture = registry.ventures.find((candidate) => candidate.day?.kind === "cu-day");
+    expect(venture?.day?.steps).toEqual(["cu-edition", "cu-product"]);
+    const archive = (await loadMeetingRecords(path.join(repoRoot, "state")))
+      .filter((record) => record.date === "2026-08-01");
+    const room = (kind: "cu-edition" | "cu-product", status: string, usd: number) => {
+      const source = archive.find((record) => record.kind === kind)!;
+      return MeetingRecordSchema.parse({ ...source, status, ledger: { ...source.ledger, actualCycleUsd: usd } });
+    };
+    const schedule = [{
+      phase: ScheduledPhaseSchema.parse("cu-day"),
+      hour: 5,
+      label: venture!.day!.label,
+      ventureId: venture!.id
+    }];
+    const digestFor = (records: MeetingRecord[]) => buildDailyDigest({
+      date: "2026-08-01",
+      weekOf: mondayOfWeek("2026-08-01"),
+      records,
+      schedule,
+      dailyBudgetUsd: 0.7
+    }).meetings[0]!;
+
+    const edition = room("cu-edition", "HELD", 0.2988915);
+    const product = room("cu-product", "HELD", 0.0125);
+    const both = digestFor([product, edition]);
+    expect(both).toMatchObject({ kind: "cu-day", ventureId: "caught-up", held: true, costUsd: 0.3113915 });
+    // The edition is the day's first room, so its decision is the line and its room the link.
+    expect(both.bullets[0]?.text).toBe(digestFor([edition]).bullets[0]?.text);
+    expect(both.bullets[0]?.text).not.toContain("was not held");
+    expect(both.bullets[0]?.roomLink).toBe("/meetings/2026-08-01-cu-edition");
+
+    // A paused edition does not make the day unheld when the product room met.
+    const pausedEdition = digestFor([room("cu-edition", "PAUSED", 0), product]);
+    expect(pausedEdition).toMatchObject({ held: true, costUsd: 0.0125 });
+    expect(pausedEdition.bullets[0]?.roomLink).toBe("/meetings/2026-08-01-cu-product");
+
+    // Only a day with no room record at all is a day that did not happen.
+    const none = digestFor([]);
+    expect(none).toMatchObject({ held: false, costUsd: 0 });
+    expect(none.bullets[0]?.text).toContain("DNESKAi daily desk was not held");
   });
 
   it("reports a final-cycle failure in the digest instead of suppressing delivery", async () => {
