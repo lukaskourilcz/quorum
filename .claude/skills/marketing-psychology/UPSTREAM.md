@@ -9,5 +9,5 @@ Re-vendor from upstream rather than hand-editing; edit both copies in the same
 commit, because `orchestrator/tests/architecture.test.ts` fails on any drift.
 
 This is generic marketing advice. **This repository's own contracts always win**
-where the two disagree — the $30 all-in operating cap, the social triple-lock, the
+where the two disagree — the $50 all-in operating cap, the social triple-lock, the
 truth gates and the treasury rules are not negotiable by a vendored skill.
