@@ -19,7 +19,7 @@ the admin's Settings rather than its navigation.
 | Running | What it produces |
 | --- | --- |
 | **DNESKAi** | One sourced Czech AI edition a day, or `NO_EDITION` with a reason, and its social pack. |
-| **marketingShark** | One native Czech and English `devShark` quiz package a day. |
+| **marketingShark** | One English `devShark` post each weekday, its kind set by the weekday, drafted into the Queue for the owner's approval. |
 | **GoVIRAL** | A measured weekly trend brief for DNESKAi and devShark from bounded paid and free sources; it posts nothing. |
 | **Design Lab** | Deterministic templates, presets, decks, and renders for the running brands. |
 | **WebDev Signal** | A $0 pre-step of the DNESKAi day; its editions are held. |
