@@ -92,7 +92,8 @@ export async function MarketingSharkVenturePage() {
               <p className="text-lg leading-8 text-[var(--muted-foreground)]">
                 One meeting every weekday morning drafts one devShark post in English: a quiz
                 question on Monday and Thursday, one screen of the product on Tuesday, an Easy
-                coding challenge on Wednesday and the week&apos;s recap on Friday. Each is five
+                coding challenge on Wednesday and the week&apos;s recap on Friday. Until devShark
+                labels its challenges by difficulty, Wednesday drafts a quiz instead. Each is five
                 slides with its own caption for LinkedIn, Instagram and Threads.
               </p>
             </div>

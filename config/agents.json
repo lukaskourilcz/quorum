@@ -2191,11 +2191,11 @@
         "marketingshark"
       ],
       "department": "marketingShark",
-      "title": "Carousel Copywriter, CS and EN",
-      "mission": "Writes one Czech and one English five-slide carousel per brand per day from the question the room already selected, plus its descriptions and alt text.",
+      "title": "Carousel Copywriter",
+      "mission": "Writes each weekday's five-slide devShark carousel in English from what the room already chose, plus its three captions and alt text; Czech only for a brand whose config names it.",
       "responsibilities": [
         "Fill the assigned hook pattern truthfully",
-        "Write native-register Czech rather than a translation",
+        "Write native-register Czech rather than a translation when a brand asks for Czech",
         "Compress the explanation without losing the concrete detail"
       ],
       "notResponsibleFor": [
@@ -2210,7 +2210,7 @@
         "marketingshark.package_completeness"
       ],
       "successChecks": [
-        "Czech and the English carousel both clear the truth gates on the first call",
+        "Every language the brand names clears the truth gates on the first call",
         "Code blocks reach the slide byte-identical to the question bank"
       ],
       "capabilityTags": [

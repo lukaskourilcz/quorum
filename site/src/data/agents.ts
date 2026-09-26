@@ -694,9 +694,9 @@ const profileCopy: Record<
     publicTrackRecord: null
   },
   CHUM: {
-    operatingPrinciple: "Write the Czech, do not translate it.",
-    output: "One day's carousel copy, in two languages",
-    currentFocus: "devShark quiz carousels",
+    operatingPrinciple: "Write what the day's facts support, and nothing more.",
+    output: "One weekday's carousel copy and its three captions",
+    currentFocus: "devShark's weekday posts",
     publicTrackRecord: null
   },
   TRIBUN: {

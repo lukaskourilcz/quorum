@@ -49,7 +49,7 @@ gap between "I should know this" and the answer — never withheld information, 
 fabricated stake. At most one slide may use loss framing. The captions say the answer is in
 the carousel.
 
-You also receive an alternate pattern B. Write its filled hook line (both languages),
+You also receive an alternate pattern B. Write its filled hook line (per language written),
 same truth rule. It is recorded for later comparison; nothing is measured yet, so do not
 optimize toward either — write both as well as you can.
 

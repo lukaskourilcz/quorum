@@ -94,7 +94,7 @@ const mandates: Record<AgentId, string> = {
   MOTIF: "Studies approved individual links as text-only visual observations without copying or storing external images.",
   PIVOT: "Carries sourced findings between FightAIQ and MMA Files without turning reader interest into a hidden model input.",
   MAKO: "Reviews what the daily carousel room shipped and keeps its hook rotation and its numbers honest.",
-  CHUM: "Writes each day's quiz carousel twice, once for Czech readers and once for English ones.",
+  CHUM: "Writes each weekday's devShark carousel in English, with one caption each for LinkedIn, Instagram and Threads.",
   TRIBUN: "Turns corroborated political monitoring into one cited Czech recommendation draft, or records that the evidence supports no package.",
   FOLIO: "Selects which recorded book candidate earns bounded research and keeps priors separate from verified facts.",
   PLOT: "Turns one verified dossier story into separate native social drafts for the cs and en locales without rendering cover art.",
