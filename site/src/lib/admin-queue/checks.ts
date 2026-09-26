@@ -39,8 +39,19 @@ export function copyBreaksEngagementRule(copy: { text: string; altText: string |
 
 const LIVE_STATUSES = new Set(["draft", "approved", "queued", "publishing", "published"]);
 
+/**
+ * The sources that need their exact capability edge even on their own primary profile: the mirror of
+ * `EDGE_BOUND_SOURCES` in `orchestrator/src/social/publisher-targets.ts`, which `checks.test.ts`
+ * reads and compares, so the Queue approves exactly what the publisher's target resolver accepts.
+ */
+export const EDGE_BOUND_SOURCES = ["door-money", "webdev-signal", "marketingshark"] as const;
+
 function capabilityPasses(item: QueueItemV2, context: QueueRegistryContext): boolean {
   if (item.migration !== null) return true;
+  // A venture posting to its own primary profile crosses no edge, as DNESKAi's pack drafts do
+  // (quorum#583). Whether the profile is really the venture's own is decided here, not assumed.
+  const ownPrimary = item.target.role === "primary" && context.profiles.get(item.target.profileId)?.ventureRef === item.sourceVentureId;
+  if (ownPrimary && !(EDGE_BOUND_SOURCES as readonly string[]).includes(item.sourceVentureId)) return true;
   const reference = item.target.capabilityRef;
   const edge = context.capabilityEdges.get(item.sourceVentureId);
   return reference !== null && edge !== undefined && context.capabilityMapVersion !== null

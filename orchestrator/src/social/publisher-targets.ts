@@ -89,6 +89,15 @@ export const SocialPublisherRegistrySchema = z.strictObject({
 export type SocialPublisherRegistry = z.infer<typeof SocialPublisherRegistrySchema>;
 
 /**
+ * The sources whose posts need their exact capability edge even on their own primary profile: Door
+ * Money and WebDev Signal hand bounded packages over #424's edges, and marketingShark drafts for
+ * devShark under its own (quorum#568). Any other venture posts to its own primary profile without
+ * one, as DNESKAi's pack drafts do. The Admin Queue's approval mirrors this list in
+ * `site/src/lib/admin-queue/checks.ts`, and `checks.test.ts` beside it fails when the two differ.
+ */
+export const EDGE_BOUND_SOURCES = ["door-money", "webdev-signal", "marketingshark"] as const;
+
+/**
  * A venture's own primary profile and its one connection on a platform, as the registry records
  * them: the target a venture's own drafts are bound to (DNESKAi's pack, quorum#583). Anything other
  * than exactly one owned-brand primary connection throws; the drafter never chooses between
@@ -267,7 +276,7 @@ export function resolvePublisherTarget(input: {
   }
   // marketingShark drafts for devShark under its own edge (quorum#568), so even its primary targets
   // need the exact, current capability reference the edge governs.
-  const capabilityRequired = queue.target.role !== "primary" || ["door-money", "webdev-signal", "marketingshark"].includes(queue.sourceVentureId);
+  const capabilityRequired = queue.target.role !== "primary" || (EDGE_BOUND_SOURCES as readonly string[]).includes(queue.sourceVentureId);
   if (capabilityRequired && !exactCapabilityAllowed(queue, input.capabilityMap)) return resolution("denied", ["missing-stale-held-or-denied-capability"]);
   if (queue.sourceVentureId === "door-money" && queue.sourcePackage?.schemaVersion !== "approved-publish-package/1") {
     return resolution("denied", ["door-money-private-payload-forbidden"]);

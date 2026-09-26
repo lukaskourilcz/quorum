@@ -8,7 +8,7 @@ import { caughtUpEditionMeeting as caughtUpMeetingFixture, czechOnlyEdition } fr
 import { EditionPackageSchema } from "../contracts/edition-package.js";
 import { SocialPackSchema } from "../contracts/social-pack.js";
 import { canonicalJson, sha256 } from "../hashing.js";
-import { configRoot } from "../paths.js";
+import { configRoot, repoRoot } from "../paths.js";
 import { readRecordedAssetHashes } from "./media/recorded-hashes.js";
 import { composeEditionSocialPack } from "./pack.js";
 import { loadSocialPublisherRegistry, SocialPublisherRegistrySchema } from "./publisher-targets.js";
@@ -348,4 +348,27 @@ describe("drafts bound to DNESKAi's own profile (quorum#583)", () => {
     await expect(readdir(stateRoot)).rejects.toMatchObject({ code: "ENOENT" });
     await expect(readdir(path.join(root, "site"))).rejects.toMatchObject({ code: "ENOENT" });
   });
+});
+
+describe("the Queue's DNESKAi handshake fixture (quorum#583)", () => {
+  // `contracts/fixtures/caught-up-queue-threads.valid.json` is the Threads draft this composes, and
+  // the site's Queue tests approve that file. So the Queue is proved against the draft the pack
+  // really writes. After a deliberate change to the pack, rewrite it with UPDATE_CAUGHT_UP_FIXTURES=1.
+  it("composes exactly the Threads draft the fixture holds", async () => {
+    const root = await mkdtemp(path.join(os.tmpdir(), "boardless-social-pack-fixture-"));
+    roots.push(root);
+    const result = await composeEditionSocialPack({
+      editionPackage: czechOnlyEdition(),
+      meeting: caughtUpMeetingFixture,
+      destinations: { cs: "https://caught-up.example/articles/2026-08-04-measured-model-price-cut" },
+      repoRoot: root,
+      stateRoot: path.join(root, "state"),
+      now: new Date("2026-08-04T04:00:00.000Z"),
+      hostFrames: false
+    });
+    const threads = JSON.parse(JSON.stringify(result!.queueItems.find(({ channel }) => channel === "threads"))) as unknown;
+    const fixture = path.join(repoRoot, "contracts/fixtures/caught-up-queue-threads.valid.json");
+    if (process.env.UPDATE_CAUGHT_UP_FIXTURES === "1") await writeFile(fixture, `${JSON.stringify(threads, null, 2)}\n`);
+    expect(threads).toEqual(JSON.parse(await readFile(fixture, "utf8")));
+  }, RENDER_TIMEOUT_MS);
 });

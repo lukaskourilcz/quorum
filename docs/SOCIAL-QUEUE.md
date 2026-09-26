@@ -36,8 +36,9 @@ with more says how many it left out under `unavailable`. Nothing prunes closed i
 
 The publisher treats as due only what an approval made `queued`, plus a legacy v1 draft whose
 checks all pass: DNESKAi's pack wrote those before the Queue existed, and they send once their
-connection is live, as they always would have. Their card says so and offers hold and reject. A v2
-draft is never due, so an unapproved sibling cannot hold up the approved post beside it.
+connection is live, as they always would have. Their card says so and offers hold and reject. Since
+#583 the pack writes v2 drafts, which wait for an approval like marketingShark's. A v2 draft is never
+due, so an unapproved sibling cannot hold up the approved post beside it.
 
 A hold record is the publisher's own: a frame that did not answer at its public URL, a full
 publishing limit, text longer than the platform takes, or a failed publishable check. Only its reason
@@ -57,13 +58,16 @@ item whose frames were never written is re-rendered from its social pack instead
 `site/public/social` into that one route only.
 
 The site does not depend on the orchestrator, so `site/src/lib/admin-queue/item.ts` mirrors
-`CapabilityAwareQueueItemSchema` and `capabilityAwareQueuePayloadHash` by hand. Three shared
+`CapabilityAwareQueueItemSchema` and `capabilityAwareQueuePayloadHash` by hand. Shared
 fixtures keep the two sides in step. `contracts/fixtures/social-queue-item-v2.valid.json` is a
 devShark draft hashed by the orchestrator. `social-queue-item-v2-approved.valid.json` and
 `social-queue-event.valid.json` are that draft as the site approves it.
 `orchestrator/tests/social-queue-event.test.ts` proves the approved item passes
 `assertQueueItemPublishable`. `site/src/lib/admin-queue/item.test.ts` proves the site still
-produces exactly those bytes.
+produces exactly those bytes. A fourth, `caught-up-queue-threads.valid.json`, is the Threads draft
+DNESKAi's edition pack composes for the contract's edition fixture:
+`orchestrator/src/social/pack.test.ts` composes it again and compares, and the site's tests approve
+it.
 
 ## Actions
 
@@ -78,7 +82,7 @@ conflict on any of the three writes none of them.
 
 | Action | Applies to | Effect |
 | --- | --- | --- |
-| `approve` | v2 `draft` or `approved`, window open | Reruns the six deterministic checks: `schema` (the hash matches), `duplicate` (the caption is not already live on the profile), `accessibility` (alt text wherever there are images), `budget` (an approval spends nothing), `capability` (the exact edge in `config/venture-capabilities.json`) and `authority` (the profile and connection belong to the venture and platform). Any failure refuses the approval and names it. So does copy that promises a reward for engagement (below). The owner's approval is the evidence for `brand`, `claims`, `quill`, `keeper` and `policy`. The event id becomes `approvalProvenance.approvalRef`, the status becomes `queued` and the hash is recomputed. `mode: "now"` narrows the window to the next hour, never past its end. |
+| `approve` | v2 `draft` or `approved`, window open | Reruns the six deterministic checks: `schema` (the hash matches), `duplicate` (the caption is not already live on the profile), `accessibility` (alt text wherever there are images), `budget` (an approval spends nothing), `capability` (the exact edge in `config/venture-capabilities.json`; a venture posting to its own primary profile needs none unless it is Door Money, WebDev Signal or marketingShark, the `EDGE_BOUND_SOURCES` the publisher's target resolver names too) and `authority` (the profile and connection belong to the venture and platform). Any failure refuses the approval and names it. So does copy that promises a reward for engagement (below). The owner's approval is the evidence for `brand`, `claims`, `quill`, `keeper` and `policy`. The event id becomes `approvalProvenance.approvalRef`, the status becomes `queued` and the hash is recomputed. `mode: "now"` narrows the window to the next hour, never past its end. |
 | `edit` | v2 `draft`, `approved`, `queued` or `failed`, window open | Writes `<id>-r<n>` as a fresh draft with the edited caption or alt text, pending checks and its own hash. The original becomes `cancelled`. An approved item is never changed in place. |
 | `hold` | `draft`, `approved`, `queued` (v1 too) | `cancelled`, with the owner's reason. |
 | `reject` | as hold, plus `failed` and `expired` | `cancelled`, with the reason recorded as a `tasteNote` addressed to the venture that drafted the item. |
@@ -214,8 +218,12 @@ from GitHub, not from the deployment's copy.
   references in the snapshot. Also: a legacy v1 draft whose checks pass is scheduled, the newest
   2,000 files are kept with the rest named, the publisher's holds move an approved item to Held in
   fixed words, and copy that promises a reward for engagement is named on the card.
+- `site/src/lib/admin-queue/checks.test.ts`: the capability check's edge-bound sources equal the
+  target resolver's, DNESKAi's composed draft passes on its own profile with no edge, and the
+  exemption covers no other profile and no edge-bound source.
 - `site/src/lib/admin-queue/actions.test.ts` and `site/src/app/admin/api/queue/actions/route.test.ts`:
-  the hash guard, approval, the supersede chain, event shape, hold and reject, v1 handling, and the
+  the hash guard, approval (DNESKAi's composed draft included), the supersede chain, event shape,
+  hold and reject, v1 handling, and the
   write-disabled refusal, a LinkedIn edit held to 3,000 less its tracked link, and an edit or an
   approval refused for promising a reward for engagement. The route test also shows a failed wake-up
   answered as a saved 201. `site/src/lib/admin-queue/linkedin.test.ts` pins the tracked link the

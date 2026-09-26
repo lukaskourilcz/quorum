@@ -107,6 +107,33 @@ describe("the Queue's approval", () => {
   });
 });
 
+describe("the Queue's approval of a DNESKAi draft (quorum#583)", () => {
+  it("queues the pack's own draft on DNESKAi's own profile, with no capability edge to cross", async () => {
+    // The Threads draft DNESKAi's edition pack composes, byte for byte (orchestrator pack.test.ts).
+    const draft = await readQueueFixture("caught-up-queue-threads.valid.json");
+    const file = "state/social/queue/2026-08-04-cs-threads.json";
+    await writeFile(path.join(root, file), `${JSON.stringify(draft, null, 2)}\n`);
+    const drafted = parseQueueItemV2(draft)!;
+    const result = await applyQueueAction(
+      { action: "approve", itemId: drafted.id, expectedContentHash: drafted.content.contentHash, mode: "window" },
+      { root, now: new Date("2026-08-04T05:00:00.000Z") }
+    );
+    expect(result).toMatchObject({ changed: true, event: { action: "approve", nextStatus: "queued" } });
+    const approved = parseQueueItemV2(await readJson(file))!;
+    expect(approved).toMatchObject({ status: "queued", publishWindow: drafted.publishWindow, target: drafted.target, sourcePackage: drafted.sourcePackage });
+    expect(Object.values(approved.checks).every((state) => state === "pass")).toBe(true);
+    expect(approved.approvalProvenance.approvalRef).toBe(result.event.id);
+    expect(queueItemV2Hash(approved)).toBe(approved.content.contentHash);
+    const [event] = await events();
+    expect(parseSocialQueueEvent(await readJson(`state/social/queue-events/${event}`))).toMatchObject({
+      itemId: drafted.id,
+      sourceVentureId: "caught-up",
+      expectedContentHash: drafted.content.contentHash,
+      resultingContentHash: approved.content.contentHash
+    });
+  });
+});
+
 describe("the Queue's edit", () => {
   it("writes a superseding draft, cancels the original and never changes an approved item in place", async () => {
     await applyQueueAction({ action: "approve", itemId: "ms-2026-09-26-devshark-en-linkedin", expectedContentHash: hash, mode: "window" }, { root, now });

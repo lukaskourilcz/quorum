@@ -1,0 +1,73 @@
+{
+  "schemaVersion": 2,
+  "id": "caught-up-2026-08-04-cs-threads",
+  "sourceVentureId": "caught-up",
+  "releaseId": "caught-up-2026-08-04-cs",
+  "campaignId": "caught-up-2026-08-04-cs",
+  "experimentId": null,
+  "target": {
+    "profileId": "social-profile-caught-up",
+    "profileRole": "venture-primary",
+    "role": "primary",
+    "connectionBindingRef": "social-connection-caught-up-threads",
+    "capabilityRef": null,
+    "amplifierEligibilityRef": null,
+    "campaignApprovalRef": null
+  },
+  "action": "publish-original",
+  "sourcePackage": {
+    "schemaVersion": "approved-publish-package/1",
+    "artifactRef": "state/social/packs/2026-08-04.json",
+    "packageHash": "a5dbfe2b8ad0175b6e2fa16221a6c146c9698b6aa5ed69e8881e6732f2ea5c0f"
+  },
+  "locale": "cs",
+  "variant": "B",
+  "channel": "threads",
+  "objective": "trust",
+  "audience": "Caught Up readers (cs)",
+  "destination": "https://caught-up.example/articles/2026-08-04-measured-model-price-cut",
+  "utm": {
+    "source": "threads",
+    "medium": "organic_social",
+    "campaign": "caught-up-2026-08-04-cs",
+    "content": "edition-carousel-cs"
+  },
+  "content": {
+    "text": "Poskytovatel zveřejnil nižší cenu API.\n\nTýmy mohou upravit provozní rozpočty.\n\nOtevřené zůstává: Množstevní slevy zůstávají nedostupné.\n\nhttps://caught-up.example/articles/2026-08-04-measured-model-price-cut",
+    "altText": "Textový příspěvek bez obrázku.",
+    "assetPaths": [],
+    "factualClaimRefs": [
+      "source:provider-news"
+    ],
+    "rendererVersion": "carousel-studio-1",
+    "contentHash": "12ac6cc20ecbaca1f037da15f702a80084a803ced18b9c5a4f57d3b98efb0ae5"
+  },
+  "publishWindow": {
+    "notBefore": "2026-08-04T04:00:00.000Z",
+    "notAfter": "2026-08-07T04:00:00.000Z"
+  },
+  "status": "draft",
+  "checks": {
+    "schema": "pending",
+    "brand": "pending",
+    "claims": "pending",
+    "quill": "pending",
+    "keeper": "pending",
+    "duplicate": "pending",
+    "accessibility": "pending",
+    "budget": "pending",
+    "capability": "pending",
+    "authority": "pending",
+    "policy": "pending"
+  },
+  "approvalProvenance": {
+    "approvalRef": "awaiting-owner-approval",
+    "selectionRef": "state/meetings/2026-08-04-cu-edition.json",
+    "policyRef": "D2-autonomy-build-2026-08-01"
+  },
+  "selectedBy": "PULSE",
+  "createdAt": "2026-08-04T04:00:00.000Z",
+  "attempt": null,
+  "receiptId": null,
+  "migration": null
+}
