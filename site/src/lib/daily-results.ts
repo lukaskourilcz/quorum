@@ -61,7 +61,11 @@ const VENTURE_LABELS: Record<string, string> = {
   "titty-tuesdays": "Titty Tuesdays",
   goviral: "GoVIRAL",
   booksofhistory: "BOOKSOFHISTORY",
-  "carousel-studio": "Design Lab"
+  "carousel-studio": "Design Lab",
+  marketingshark: "marketingShark",
+  "tehdejsi-svet": "Tehdejší svět",
+  kvorum: "Kvórum",
+  "webdev-signal": "WebDev Signal"
 };
 
 export function ventureLabel(ventureId: string): string {

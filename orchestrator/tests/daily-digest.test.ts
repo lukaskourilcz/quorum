@@ -52,8 +52,6 @@ describe("one daily portfolio digest", () => {
     expect(digest.meetings.every((meeting) => meeting.bullets.length === 1)).toBe(true);
     expect(digest.bodyWordCount).toBeLessThanOrEqual(400);
     expect(renderDailyDigestText(digest)).toContain("Skipped:");
-    expect(digest.meetings.filter((meeting) => meeting.kind.startsWith("mma-")).every((meeting) => meeting.ventureId === "fightaiq")).toBe(true);
-    expect(digest.meetings.filter((meeting) => meeting.kind.startsWith("article-")).every((meeting) => meeting.ventureId === "mma-files")).toBe(true);
     expect(renderDailyDigestHtml(digest, renderDailyDigestText(digest))).toContain("background:#09090b");
   });
 
@@ -102,6 +100,50 @@ describe("one daily portfolio digest", () => {
     const none = digestFor([]);
     expect(none).toMatchObject({ held: false, costUsd: 0 });
     expect(none.bullets[0]?.text).toContain("DNESKAi daily desk was not held");
+  });
+
+  it("files every slot under the venture config/ventures.json names for it", async () => {
+    // A prefix list used to decide this and sent ms-daily, gv-brief and pg-desk to "global". The
+    // expectation is derived from the registry here, independently of the clock, so a new room
+    // or day cannot fall through to the board again without this failing.
+    const registry = await loadVentureRegistry();
+    const owner = (phase: string): string => registry.ventures.find((venture) =>
+      venture.day?.kind === phase
+      || venture.meetings.some((meeting) => meeting.kind === phase)
+      || (phase.startsWith("article-") && venture.productionJobs?.some((job) => job.kind === "article-production"))
+    )?.id ?? "global";
+    const filed = (schedule: ReturnType<typeof resolveScheduledClock>) => new Map(buildDailyDigest({
+      date: "2026-09-25",
+      weekOf: mondayOfWeek("2026-09-25"),
+      records: [],
+      schedule,
+      dailyBudgetUsd: 1
+    }).meetings.map((meeting) => [meeting.kind, meeting.ventureId]));
+
+    const today = resolveScheduledClock(registry);
+    const todayFiled = filed(today);
+    for (const slot of today) expect(todayFiled.get(slot.phase), slot.phase).toBe(owner(slot.phase));
+    for (const [phase, venture] of [["ms-daily", "marketingshark"], ["gv-brief", "goviral"], ["cu-day", "caught-up"]] as const) {
+      if (todayFiled.has(phase)) expect(todayFiled.get(phase), phase).toBe(venture);
+    }
+    expect(todayFiled.get("morning")).toBe("global");
+
+    // With every paused venture resumed, the owner-only Personal Growth desk is filed under its own
+    // id, which is what lets /results keep it off the public page.
+    const resumed = {
+      ...registry,
+      ventures: registry.ventures.map((venture) => ({
+        ...venture,
+        status: venture.status === "paused" ? "operating" as const : venture.status
+      }))
+    };
+    const everySlot = resolveScheduledClock(resumed);
+    const everyFiled = filed(everySlot);
+    for (const slot of everySlot) expect(everyFiled.get(slot.phase), slot.phase).toBe(owner(slot.phase));
+    expect(everyFiled.get("pg-desk")).toBe("personal-growth");
+    expect(everyFiled.get("mma-day")).toBe("mma-files");
+    expect(everyFiled.get("dm-day")).toBe("door-money");
+    expect(everyFiled.get("tt-marketing")).toBe("titty-tuesdays");
   });
 
   it("reports a final-cycle failure in the digest instead of suppressing delivery", async () => {

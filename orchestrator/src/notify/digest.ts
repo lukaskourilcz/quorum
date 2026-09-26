@@ -30,15 +30,19 @@ function slotRecord(records: readonly MeetingRecord[], date: string, phase: stri
   );
 }
 
-function ventureId(record: MeetingRecord | undefined, phase: string): string {
-  if (record?.kind === "venture" || ["morning", "afternoon", "night"].includes(phase)) return "global";
-  if (phase.startsWith("cu-")) return "caught-up";
-  if (phase === "tt-marketing") return "titty-tuesdays";
-  if (phase.startsWith("mma-")) return "fightaiq";
-  if (phase.startsWith("mag-") || phase.startsWith("article-")) return "mma-files";
-  // Every live phase is named above. A record whose phase is not — one of the two retired
-  // incubator kinds, read back from the August archive — belongs to no current venture.
-  return "global";
+/**
+ * The venture a digest line belongs to: the one the registry put on the clock for this slot.
+ *
+ * A list of phase prefixes used to answer this and fell behind the registry: `ms-daily`,
+ * `gv-brief` and `pg-desk` all landed under "global". /results then labelled marketingShark and
+ * GoVIRAL "Global board", and its owner-only filter, which reads this id, would have let a
+ * Personal Growth row through. `resolveScheduledClock` already resolves every slot from
+ * `config/ventures.json` (a room or a day from the venture that declares it, an article slot from
+ * the venture that runs article production), so the digest takes that answer. Only the portfolio
+ * board's own slots carry no venture.
+ */
+function slotVentureId(slot: ResolvedMeetingSlot): string {
+  return slot.ventureId ?? "global";
 }
 
 function roomLink(date: string, record: MeetingRecord | undefined, phase: string, weekOf: string): string {
@@ -106,7 +110,7 @@ export function buildDailyDigest(input: {
               ? shown.record.decision.summary
               : `${slot.label} was not held; inspect the public week schedule.`;
       return {
-        ventureId: ventureId(undefined, slot.phase),
+        ventureId: slotVentureId(slot),
         kind: slot.phase,
         held,
         bullets: [{
@@ -121,7 +125,7 @@ export function buildDailyDigest(input: {
       // Article production writes a run file and no meeting record, so both slots reported
       // "was not held" on the day one of them published.
       return {
-        ventureId: "mma-files",
+        ventureId: slotVentureId(slot),
         kind: slot.phase,
         held: article.status === "published",
         bullets: [{
@@ -139,7 +143,7 @@ export function buildDailyDigest(input: {
         ? record.decision.summary
         : `${slot.label} was not held; inspect the public week schedule.`;
     return {
-      ventureId: ventureId(record, slot.phase),
+      ventureId: slotVentureId(slot),
       kind: slot.phase,
       held,
       bullets: [{
