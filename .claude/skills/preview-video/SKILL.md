@@ -9,14 +9,22 @@ Generates a smooth-scroll recording of the deployed project (Refero-style) and s
 
 ## Prerequisites
 
-- `ffmpeg` available on PATH (`ffmpeg -version`)
-- Playwright Chromium installed: `npx playwright install chromium` (once per machine)
+- `ffmpeg` available on PATH (`ffmpeg -version`). The Claude cloud container has none on
+  PATH, so run the capture on a machine that does.
+- Playwright Chromium. Locally: `npx playwright install chromium` once per machine. In the
+  Claude cloud environment the browser is preinstalled under `/opt/pw-browsers` and
+  `playwright install` is disabled: skip it and set
+  `CAPTURE_EXECUTABLE_PATH=/opt/pw-browsers/chromium-1194/chrome-linux/chrome`.
+- The `playwright` package must resolve from the script's folder. This monorepo installs it
+  only inside the pnpm store (for `site/`'s `@playwright/test`), so link it once from the
+  repository root; `node_modules/` is git-ignored:
+  `mkdir -p .claude/skills/preview-video/node_modules && ln -sfn "$PWD/node_modules/.pnpm/node_modules/playwright" .claude/skills/preview-video/node_modules/playwright`
 
 ## Steps
 
 1. Open `preview.config.json` in this skill folder and verify `url` is still correct.
-   For local capture set `devServer` (e.g. `{ "command": "npm run dev", "port": 3000 }`)
-   and point `url` to `http://localhost:<port>`.
+   The committed config points at `http://localhost:3000/` with no `devServer`, so start
+   `pnpm dev` first or set `"devServer": { "command": "pnpm dev", "port": 3000 }`.
 2. From the repo root run:
    `npx -y tsx .claude/skills/preview-video/scripts/capture-preview.ts`
 3. QA: open `media/preview-poster.png` and 2–3 frames from the temp dir printed by the
@@ -53,6 +61,7 @@ proxy):
 - `CAPTURE_INSECURE=1` — ignore TLS certificate errors. Only meaningful together with a
   re-signing MITM proxy; never needed for a direct connection.
 - `CAPTURE_EXTRA_ARGS` — extra comma-separated Chromium flags.
+- `CAPTURE_EXECUTABLE_PATH` — launch this Chromium binary instead of Playwright's download.
 
 `--no-sandbox` is added automatically when the script runs as root (required by Chromium),
 and `--disable-quic` is always set to keep HTTP-proxy captures reliable.

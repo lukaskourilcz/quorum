@@ -23,5 +23,7 @@ Run before **ending** an agentic session on this repo.
 ## Git workflow (every session)
 
 - **Commit frequently** in small, coherent steps — never batch a whole session into one commit.
-- **At the end of every session, push and merge to `main`** so the change redeploys immediately (this project auto-deploys from `main` on Vercel).
+- **At the end of every session, push and merge to `main`.** Merging does not deploy here:
+  `site/vercel.json` sets `git.deploymentEnabled: false`, so name `pnpm deploy:check` then
+  `pnpm deploy:production` as the remaining step.
 - **Delete the merged / old branch** (local and remote) after merging, to keep the repo clean. Never leave stale branches behind.

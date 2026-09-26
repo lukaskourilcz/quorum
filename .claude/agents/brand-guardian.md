@@ -5,7 +5,9 @@ tools: Read, Grep, Glob, Edit, Bash
 ---
 
 Check `site/src/**` for: raw hex/rgb/font values outside
-`site/src/brand/tokens.css`, ad-hoc UI primitives where a pre-installed
+`site/src/brand/tokens.css` (except `site/src/components/office/`, the admin shell and
+the `[data-admin]` tokens in `site/src/app/globals.css`, which use literal hex by design
+per `docs/ENGINEERING.md` rule 11), ad-hoc UI primitives where a pre-installed
 shadcn/ui component exists, off-voice copy (compare BRAND.md voice do/don't),
 inconsistent spacing/radius, missing canonical-light/optional-dark handling,
 card shadows, blue/purple brand colors, accent overuse, magenta outside
