@@ -19,7 +19,7 @@ import { resolveDigestDay } from "../src/notify/digest-day.js";
 import { repoRoot } from "../src/paths.js";
 import { ScheduledPhaseSchema } from "../src/types.js";
 import { loadVentureRegistry, resolveScheduledClock } from "../src/ventures/registry.js";
-import { DigestOperationSchema } from "../src/contracts/daily-digest.js";
+import { DailyDigestSchema, DigestOperationSchema } from "../src/contracts/daily-digest.js";
 
 const roots: string[] = [];
 afterEach(async () => {
@@ -100,6 +100,54 @@ describe("one daily portfolio digest", () => {
     const none = digestFor([]);
     expect(none).toMatchObject({ held: false, costUsd: 0 });
     expect(none.bullets[0]?.text).toContain("DNESKAi daily desk was not held");
+  });
+
+  it("carries the outcome the line's record decided, so a reader never parses the line (#577)", async () => {
+    // /results and the office counted 2026-09-24 as a DNESKAi day that produced something: the
+    // edition room met and recorded NO_EDITION, but its summary is plain language now, and the
+    // reader recognised only lines that start with NO_EDITION or NO_ACTION.
+    const registry = await loadVentureRegistry();
+    const venture = registry.ventures.find((candidate) => candidate.day?.kind === "cu-day")!;
+    const archive = (await loadMeetingRecords(path.join(repoRoot, "state")))
+      .filter((record) => record.date === "2026-08-01");
+    const record = (kind: string, status: string, outcome: string, summary?: string) => {
+      const source = archive.find((entry) => entry.kind === kind)!;
+      return MeetingRecordSchema.parse({ ...source, status, decision: { ...source.decision, outcome, ...(summary ? { summary } : {}) } });
+    };
+    const slot = (phase: string, ventureId: string | null, label: string) => ({ phase: ScheduledPhaseSchema.parse(phase), hour: 5, label, ventureId });
+    const schedule = [
+      slot("cu-day", venture.id, venture.day!.label),
+      slot("article-am", venture.id, "Morning article"),
+      slot("tt-marketing", "titty-tuesdays", "Titty Tuesdays marketing")
+    ];
+    const digestFor = (records: MeetingRecord[], options: { finalMeetingFailed?: boolean; published?: boolean } = {}) => buildDailyDigest({
+      date: "2026-08-01",
+      weekOf: mondayOfWeek("2026-08-01"),
+      records,
+      schedule,
+      dailyBudgetUsd: 0.7,
+      finalMeetingFailed: options.finalMeetingFailed ?? false,
+      articleSlots: options.published ? [{ date: "2026-08-01", slot: "am", status: "published" }] : []
+    });
+    const rows = (digest: ReturnType<typeof digestFor>) => digest.meetings.map(({ kind, held, outcome }) => ({ kind, held, outcome }));
+
+    const nothingWritten = "Today's candidate stories did not meet the source rules, so nothing was written.";
+    const noEdition = digestFor([record("cu-edition", "NO_EDITION", "NO_EDITION", nothingWritten), record("tt-marketing", "PLAN", "SEASON_BOOTSTRAP")], { published: true });
+    expect(rows(noEdition)).toEqual([
+      { kind: "cu-day", held: true, outcome: "NO_EDITION" },
+      // An article slot writes no meeting record, so no decision speaks for its line.
+      { kind: "article-am", held: true, outcome: null },
+      { kind: "tt-marketing", held: true, outcome: "SEASON_BOOTSTRAP" }
+    ]);
+    expect(noEdition.meetings[0]!.bullets[0]!.text).toBe(nothingWritten);
+    expect(rows(digestFor([record("cu-edition", "HELD", "EDITION")]))[0]).toEqual({ kind: "cu-day", held: true, outcome: "EDITION" });
+    // No record, no outcome; a failed final cycle writes its own line and carries none either.
+    const empty = digestFor([]);
+    expect(rows(empty).map(({ outcome }) => outcome)).toEqual([null, null, null]);
+    expect(rows(digestFor([record("tt-marketing", "PLAN", "SEASON_BOOTSTRAP")], { finalMeetingFailed: true }))[2]).toEqual({ kind: "tt-marketing", held: false, outcome: null });
+    // Every row names the key, so a reader can tell "nothing decided" from a receipt older than it.
+    expect(empty.meetings.every((meeting) => Object.hasOwn(meeting, "outcome"))).toBe(true);
+    expect(DailyDigestSchema.safeParse({ ...noEdition, meetings: [{ ...noEdition.meetings[0], outcome: "" }] }).success).toBe(false);
   });
 
   it("files every slot under the venture config/ventures.json names for it", async () => {

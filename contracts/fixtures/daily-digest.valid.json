@@ -6,6 +6,7 @@
       "ventureId": "titty-tuesdays",
       "kind": "tt-marketing",
       "held": true,
+      "outcome": "PLAN",
       "bullets": [
         {
           "text": "PULSE approved the draft campaign brief.",

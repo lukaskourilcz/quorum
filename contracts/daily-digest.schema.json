@@ -36,6 +36,18 @@
           "held": {
             "type": "boolean"
           },
+          "outcome": {
+            "anyOf": [
+              {
+                "type": "string",
+                "minLength": 1,
+                "maxLength": 80
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
           "bullets": {
             "minItems": 1,
             "type": "array",

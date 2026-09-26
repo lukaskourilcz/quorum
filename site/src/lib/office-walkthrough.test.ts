@@ -1,6 +1,7 @@
 import { describe, expect, it, vi } from "vitest";
 import ventureRegistry from "../../../config/ventures.json";
-import { getDailyResults, type DailyResult } from "./daily-results";
+import { getDailyResults, parseDailyResult, type DailyResult } from "./daily-results";
+import { getPublicMoneySnapshot } from "./money-records";
 import { WORKSPACE_CHANNELS } from "./meeting-feed";
 import { projectForKind, readOfficeWalkthrough } from "./office-walkthrough";
 
@@ -70,5 +71,26 @@ describe("the home-page venture registry projection", () => {
     expect(data.reports.daily.date).toBe("2026-09-25");
     expect(data.reports.daily.spendUsd).toBe(0.2989);
     expect(data.reports.daily.roomsHeld).toBe(1);
+  });
+
+  it("counts a DNESKAi day as an article only when its edition room recorded one (#577)", async () => {
+    // The section counts this month's produced DNESKAi rows as articles. A day whose edition room
+    // recorded NO_EDITION used to count too, because its plain-language line hid the outcome.
+    const month = (await getPublicMoneySnapshot())?.costs.api.month ?? "2026-09";
+    const day = (date: string, outcome: string, line: string) => parseDailyResult({
+      digest: {
+        date,
+        meetings: [{ ventureId: "caught-up", kind: "cu-day", held: true, outcome, bullets: [{ text: line, roomLink: `/meetings/${date}-cu-edition` }], costUsd: 0.05 }],
+        operations: [],
+        portfolioLine: "Recorded API spend $0.0500 against the $1.00 daily budget."
+      }
+    })!;
+    vi.mocked(getDailyResults).mockResolvedValueOnce([
+      day(`${month}-25`, "EDITION", "The desk explained a verified model price cut."),
+      day(`${month}-24`, "NO_EDITION", "Today's candidate stories did not meet the source rules, so nothing was written.")
+    ]);
+    const data = await readOfficeWalkthrough(new Date(`${month}-26T06:00:00.000Z`));
+    expect(data.results.articles).toBe(1);
+    expect(data.results.costPerArticle).toBe(0.05);
   });
 });

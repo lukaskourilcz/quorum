@@ -77,6 +77,7 @@ interface DigestMeeting {
   ventureId?: unknown;
   kind?: unknown;
   held?: unknown;
+  outcome?: unknown;
   bullets?: unknown;
   costUsd?: unknown;
 }
@@ -96,14 +97,29 @@ const text = (value: unknown, fallback = ""): string => (typeof value === "strin
 const num = (value: unknown): number => (typeof value === "number" && Number.isFinite(value) ? value : 0);
 
 /**
+ * The decisions a room records when it met and made nothing: DNESKAi's edition room without an
+ * article, marketingShark without a package, a room that closed with no action or no proposal.
+ */
+const NO_OUTPUT_OUTCOMES = new Set(["NO_EDITION", "NO_ACTION", "NO_PROPOSAL"]);
+
+/**
  * A meeting that was held but produced nothing is not the same as one that failed, and
  * neither is the same as a slot that never ran. Keeping them distinct is the point of the
  * column: "no-output" is frequently the correct outcome under the evidence gates.
+ *
+ * The digest carries the record's own `decision.outcome` (quorum#577), and that decides. The line
+ * cannot: the rooms write plain language now, so 2026-09-24's edition room, which recorded
+ * NO_EDITION, read "Today's candidate stories did not meet the source rules, so nothing was
+ * written." and counted as produced. A receipt written before the digest carried the outcome has
+ * only its line. The earliest wrote the outcome at the start of it ("NO_EDITION. …"), so the line
+ * is read as written: `publicAgentText` turns that token into words, and the prefix test on the
+ * public text never matched.
  */
-function rowStatus(held: boolean, output: string, failure: string | null): DailyResultRow["status"] {
+function rowStatus(held: boolean, outcome: string | null, written: string, failure: string | null): DailyResultRow["status"] {
   if (!held) return "not-held";
   if (failure) return "failed";
-  if (/^NO_EDITION|^NO_ACTION|\bno externally consequential\b|\bzero candidate\b/iu.test(output)) return "no-output";
+  if (outcome !== null) return NO_OUTPUT_OUTCOMES.has(outcome) ? "no-output" : "produced";
+  if (/^NO_EDITION|^NO_ACTION|\bno externally consequential\b|\bzero candidate\b/iu.test(written)) return "no-output";
   return "produced";
 }
 
@@ -146,13 +162,15 @@ export function parseDailyResult(raw: unknown): DailyResult | null {
     const roomLink = bullets.map((bullet) => text(bullet.roomLink)).find((link) => link.startsWith("/")) ?? null;
     const held = meeting.held === true;
     const failureReason = failureByVenture.get(ventureId) ?? null;
+    const outcome = typeof meeting.outcome === "string" && meeting.outcome.trim().length > 0 ? meeting.outcome.trim() : null;
+    const written = bullets.map((bullet) => text(bullet.text).trim()).join(" · ");
     return {
       ventureId,
       ventureLabel: ventureLabel(ventureId),
       kind: publicKindLabel(text(meeting.kind, "unknown")),
       output,
       roomLink,
-      status: rowStatus(held, output, failureReason),
+      status: rowStatus(held, outcome, written, failureReason),
       costUsd: num(meeting.costUsd),
       failureReason
     };

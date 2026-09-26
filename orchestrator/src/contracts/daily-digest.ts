@@ -29,6 +29,14 @@ export const DailyDigestSchema = openObject({
     ventureId: z.union([VentureIdSchema, z.literal("global")]),
     kind: z.string().regex(/^[a-z0-9]+(?:-[a-z0-9]+)*$/),
     held: z.boolean(),
+    /**
+     * The `decision.outcome` of the meeting record whose summary is this row's line (`EDITION`,
+     * `NO_EDITION`, `NO_ACTION`, `PLAN` …), or null when no record wrote the line: a slot nobody
+     * held, an article slot, a failed final cycle. A reader tells a room that produced nothing
+     * from one that produced something by this, never by the wording of the line. Receipts
+     * written before quorum#577's follow-up carry no such field, so it stays optional.
+     */
+    outcome: z.string().trim().min(1).max(80).nullable().optional(),
     bullets: z.array(DigestBulletSchema).min(1),
     costUsd: z.number().finite().nonnegative()
   })),

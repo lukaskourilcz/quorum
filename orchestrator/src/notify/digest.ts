@@ -100,19 +100,20 @@ export function buildDailyDigest(input: {
       const article = steps.map(articleOutcome).find((entry) => entry !== undefined);
       const shown = firstHeld ?? stepRecords[0];
       const held = !finalFailure && (firstHeld !== undefined || article?.status === "published");
+      // The record whose summary becomes the line, and so whose outcome the row carries.
+      const speaking = finalFailure ? undefined : firstHeld ?? (article ? undefined : shown);
       const summary = finalFailure
         ? "Final scheduled cycle failed; inspect the workflow and public room index."
-        : firstHeld
-          ? firstHeld.record.decision.summary
+        : speaking
+          ? speaking.record.decision.summary
           : article
             ? articleLine(article)
-            : shown
-              ? shown.record.decision.summary
-              : `${slot.label} was not held; inspect the public week schedule.`;
+            : `${slot.label} was not held; inspect the public week schedule.`;
       return {
         ventureId: slotVentureId(slot),
         kind: slot.phase,
         held,
+        outcome: speaking?.record.decision.outcome ?? null,
         bullets: [{
           text: truncateWords(summary, 20),
           roomLink: shown ? roomLink(input.date, shown.record, shown.step, input.weekOf) : `/calendar/${input.weekOf}`
@@ -128,6 +129,7 @@ export function buildDailyDigest(input: {
         ventureId: slotVentureId(slot),
         kind: slot.phase,
         held: article.status === "published",
+        outcome: null,
         bullets: [{
           text: truncateWords(articleLine(article), 20),
           roomLink: `/calendar/${input.weekOf}`
@@ -146,6 +148,7 @@ export function buildDailyDigest(input: {
       ventureId: slotVentureId(slot),
       kind: slot.phase,
       held,
+      outcome: record && !finalFailure ? record.decision.outcome : null,
       bullets: [{
         text: truncateWords(summary, 20),
         roomLink: roomLink(input.date, record, slot.phase, input.weekOf)
