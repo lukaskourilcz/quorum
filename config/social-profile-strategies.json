@@ -1471,7 +1471,7 @@
         {
           "id": "devshark-packages",
           "label": "devShark packages",
-          "description": "marketingShark's devShark packages, drafted once a day and approved by the owner in the Queue: the daily quiz now, a feature spotlight once quorum#576 adds it.",
+          "description": "marketingShark's devShark packages, one each weekday, approved by the owner in the Queue: the quiz on Monday and Thursday, a feature spotlight on Tuesday, a challenge teaser on Wednesday (the quiz until devShark's challenge snapshot is imported) and the week's note on Friday (quorum#576).",
           "allowedSourceClasses": [
             "strategy-owned",
             "approved-package"
@@ -1515,7 +1515,7 @@
           ],
           "evidenceRequirements": [
             "Every fact about devShark comes from the dated fact sheet in config/marketingshark.json.",
-            "Arrives with quorum#576; until then nothing is drafted in this format."
+            "Drafted on Tuesdays since quorum#576: one screen the fact sheet in effect names, a new one each week."
           ],
           "sourceClasses": [
             "strategy-owned",
@@ -1652,7 +1652,7 @@
         {
           "id": "devshark-packages",
           "label": "devShark packages",
-          "description": "marketingShark's devShark packages, drafted once a day and approved by the owner in the Queue: the daily quiz now, a feature spotlight once quorum#576 adds it.",
+          "description": "marketingShark's devShark packages, one each weekday, approved by the owner in the Queue: the quiz on Monday and Thursday, a feature spotlight on Tuesday, a challenge teaser on Wednesday (the quiz until devShark's challenge snapshot is imported) and the week's note on Friday (quorum#576).",
           "allowedSourceClasses": [
             "strategy-owned",
             "approved-package"
@@ -1696,7 +1696,7 @@
           ],
           "evidenceRequirements": [
             "Every fact about devShark comes from the dated fact sheet in config/marketingshark.json.",
-            "Arrives with quorum#576; until then nothing is drafted in this format."
+            "Drafted on Tuesdays since quorum#576: one screen the fact sheet in effect names, a new one each week."
           ],
           "sourceClasses": [
             "strategy-owned",
@@ -1829,7 +1829,7 @@
         {
           "id": "devshark-packages",
           "label": "devShark packages",
-          "description": "marketingShark's devShark packages, drafted once a day and approved by the owner in the Queue: the daily quiz now, a feature spotlight once quorum#576 adds it.",
+          "description": "marketingShark's devShark packages, one each weekday, approved by the owner in the Queue: the quiz on Monday and Thursday, a feature spotlight on Tuesday, a challenge teaser on Wednesday (the quiz until devShark's challenge snapshot is imported) and the week's note on Friday (quorum#576).",
           "allowedSourceClasses": [
             "strategy-owned",
             "approved-package"
@@ -1873,7 +1873,7 @@
           ],
           "evidenceRequirements": [
             "Every fact about devShark comes from the dated fact sheet in config/marketingshark.json.",
-            "Arrives with quorum#576; until then nothing is drafted in this format."
+            "Drafted on Tuesdays since quorum#576: one screen the fact sheet in effect names, a new one each week."
           ],
           "sourceClasses": [
             "strategy-owned",

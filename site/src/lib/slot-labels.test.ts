@@ -18,7 +18,10 @@ describe("a slot is called the same thing everywhere", () => {
     ["dm-growth", "Door Money growth meeting"],
     ["bh-desk", "BOOKSOFHISTORY editorial desk"],
     ["ts-desk", "Tehdejší svět editorial desk"],
-    ["article-am", "Morning MMA Files article"]
+    ["article-am", "Morning MMA Files article"],
+    // One post each weekday since quorum#576, of the kind the weekday names; the quiz carousel is
+    // two days of five.
+    ["ms-daily", "marketingShark weekday post meeting"]
   ])("names %s", (kind, label) => {
     expect(publicKindLabel(kind)).toBe(label);
   });

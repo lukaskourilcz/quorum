@@ -4,11 +4,12 @@ import os from "node:os";
 import path from "node:path";
 import { afterEach, describe, expect, it } from "vitest";
 import { configRoot, repoRoot } from "../src/paths.js";
+import { loadSocialProfileStrategies } from "../src/social/strategies.js";
 import { GoViralTrendsSchema } from "../src/sources/goviral-trends.js";
 import { atomicWriteJson } from "../src/state.js";
 import { enabledBrands, loadMarketingSharkConfig, type Brand } from "../src/ventures/marketingshark/config.js";
 import { craftRulesFor, readCraftRules } from "../src/ventures/marketingshark/packet.js";
-import { POST_KINDS, type PostKind } from "../src/ventures/marketingshark/kinds.js";
+import { POST_KINDS, ROTATION_KINDS, type PostKind } from "../src/ventures/marketingshark/kinds.js";
 import { AnyMarketingSharkPackage, isPostPackage, MarketingSharkPackage, PostPackageSchema, type PostWriterOutput } from "../src/ventures/marketingshark/package.js";
 import { runPostGates } from "../src/ventures/marketingshark/post-gates.js";
 import { buildPostPacket } from "../src/ventures/marketingshark/post-packet.js";
@@ -122,6 +123,26 @@ describe("the weekday rotation", () => {
     expect((await readdir(path.join(where.state, "ventures/marketingshark/packages"))).sort()).toEqual(WEEK.slice(0, 5));
     const written = await Promise.all(WEEK.slice(0, 5).map((date) => packageOn(where, date)));
     expect(written.map((built) => (isPostPackage(built) ? built.kind : "quiz"))).toEqual(["quiz", "feature-spotlight", "challenge-teaser", "quiz", "this-week"]);
+  });
+
+  it("is the rotation each devShark profile's strategy describes, now that #576 has built it (#580)", async () => {
+    // All three strategies still promised "a feature spotlight once quorum#576 adds it", and their
+    // spotlight format said nothing was drafted in it, after the whole rotation had shipped.
+    const words: Record<(typeof ROTATION_KINDS)[number], string> = {
+      quiz: "quiz",
+      "feature-spotlight": "feature spotlight",
+      "challenge-teaser": "challenge teaser",
+      "this-week": "week's note"
+    };
+    const rotated = new Set(Object.values((await devshark()).rotation).filter((kind) => kind !== null));
+    const strategies = (await loadSocialProfileStrategies(configRoot)).strategies
+      .filter(({ profileId }) => profileId.startsWith("social-profile-devshark-"));
+    expect(strategies).toHaveLength(3);
+    for (const strategy of strategies) {
+      const pillar = strategy.contentPillars.find(({ id }) => id === "devshark-packages");
+      for (const kind of rotated) expect(pillar?.description, `${strategy.id}: ${kind}`).toContain(words[kind]);
+      expect(JSON.stringify(strategy), strategy.id).not.toMatch(/once quorum#576|Arrives with quorum#576/u);
+    }
   });
 
   it("gives each kind three queue drafts that cite its subject, and a frame per slide that matches its hash", async () => {

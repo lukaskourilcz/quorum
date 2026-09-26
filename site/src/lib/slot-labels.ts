@@ -9,7 +9,7 @@ const labels: Record<CalendarKind, string> = {
   "incubator-scan": "Magazine idea research",
   "tt-marketing": "Titty Tuesdays marketing meeting",
   "gv-brief": "GoVIRAL trend and marketing meeting",
-  "ms-daily": "marketingShark daily carousel meeting",
+  "ms-daily": "marketingShark weekday post meeting",
   "bh-desk": "BOOKSOFHISTORY editorial desk",
   "ts-desk": "Tehdejší svět editorial desk",
   "venture-afternoon": "Afternoon company meeting",
