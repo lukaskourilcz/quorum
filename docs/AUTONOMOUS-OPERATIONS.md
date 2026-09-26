@@ -126,7 +126,7 @@ monetization plan or deployment. The full program/work-item interface remains ow
 Monetization is information-only and design-template sales remain absent.
 
 The live cycle materializes `state/operations/current.json` and one current health record per node at
-the existing night checkpoint, or sooner for a valid Admin refresh request. It reads the common
+the morning day checkpoint, or sooner for a valid Admin refresh request. It reads the common
 append-only receipt ledger and canonical owner-attention incidents only. Dependency health settles
 to a deterministic snapshot before persistence, so a retry at the same checkpoint is idempotent.
 

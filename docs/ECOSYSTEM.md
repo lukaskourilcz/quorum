@@ -1,14 +1,14 @@
 # BoardlessAI ecosystem — standing full-context brief
 
-Updated: 2026-08-26
-Status: autonomy-first capability boundaries are active; established publication paths operate, while the four 12 August ventures remain behind pending countersignatures and owner-only setup in `docs/NEEDED.md`
+Updated: 2026-09-26
+Status: since `operations-2026-09b` only DNESKAi, marketingShark, GoVIRAL, the Design Lab and WebDev Signal run; every other venture is paused with its code and state kept
 Audience: owner, product partners and Fable brainstorming  
-Authority: current code, committed state, decisions D1–D14, the 2026-08-26 autonomy-first decision and the four pending venture founding records
+Authority: current code, committed state, decisions D1–D14, the 2026-08-26 autonomy-first decision, the countersigned founding records and `operations-2026-09b`
 
 ## What BoardlessAI is
 
-BoardlessAI is a Git-backed operating system for eleven AI-assisted projects. It is not
-an always-on group chat and it does not reward agent activity for its own sake. A
+BoardlessAI is a Git-backed operating system for fourteen registered AI-assisted projects,
+five of them running. It is not an always-on group chat and it does not reward agent activity for its own sake. A
 small board chooses bounded work, specialist rooms open only for a concrete agenda or
 service need, deterministic code handles checks wherever judgment is unnecessary,
 and human-only gates retain control of money, accounts, legal scope and personal data.
@@ -27,8 +27,8 @@ archive, database, newsletter, storefront, account, channel or posting path.
 Door Money, Tehdejší svět and Kvórum are also drafts-only. Tehdejší svět adopts marketing for
 an existing product without connecting to its separate repository: this repository
 reads one hand-committed, hash-verified facts file and never reads or writes the product.
-Kvórum's implementation is present, but both its founding and daily-capacity decisions
-remain unsigned, so its scheduled monitor is fixture-only and costs `$0`.
+Kvórum's founding and daily-capacity decisions are countersigned, and the registry pause
+holds it: it runs nothing and costs `$0`.
 
 ## How to maintain this document
 
@@ -36,7 +36,7 @@ This file has two layers. The sections outside the generated markers are curated
 design truth. Every future implementation handoff must update them when it changes a
 project, role, decision, clock window, gate, cost rule or owner action. The generated
 block is rebuilt at `$0` from committed state by `pnpm docs:refresh`, during production
-builds and after a real 22:00 checkpoint. Never hand-edit the generated block.
+builds and on the morning room's day checkpoint. Never hand-edit the generated block.
 
 <!-- GENERATED:CURRENT-OPERATING-TRUTH:START -->
 ## Current operating truth (generated)
@@ -111,11 +111,11 @@ with evidence and expiry, never final copy, campaigns or a publish package.
 Door Money has exactly a held GoVIRAL intelligence input, a bounded approved render
 summary to Design Lab and an immutable approved package reference to Social Distribution;
 no manuscript, chunk, embedding, private annotation or style exemplar can cross. The
-planned `webdev-signal` node has the same three Instagram/Threads relationships and exact held
+`webdev-signal` node has the same three Instagram/Threads relationships and exact held
 own-metrics, progress, health and owner-attention service edges. It has no content edge to Caught
 Up, devShark or any other venture. Website and house-promotion edges are outside the program.
 
-## The eleven projects
+## The projects
 
 ### Caught Up
 
@@ -152,9 +152,10 @@ the global kill switch still wins.
 
 Promise: turn a bounded weekly trend snapshot into one owner brief, rated marketing
 plays and at most one allowlisted follow-up agenda. Its 13:00 room runs on Mondays;
-the other six scheduled firings are deterministic `$0` no-ops. Apify remains on its
-Free plan, whose `$5` monthly credit is the hard source ceiling, with no card in the
-system and no authority to upgrade a plan.
+the other six scheduled firings are deterministic `$0` no-ops. Apify is on a paid plan since
+2026-09-15. The repository assumes Starter (`$19` a month for `$19` of credit,
+`config/fixed-costs.json`) until #528 confirms it, and the reservation in
+`orchestrator/src/sources/apify.ts` is the only ceiling before overage reaches the card.
 
 Door Money's English book and music-business terms and Tehdejší svět's configured
 history terms use separate keyless Google News collection, so they do not add an actor,
@@ -323,12 +324,12 @@ evidence itself. Deterministic clustering, repeat detection, public-person scope
 claim-reference, originality and Czech-register gates surround the single TRIBUN call;
 HACEK and AUDIT cannot waive a failed gate.
 
-The shipped path is deliberately held. The founding record and a separate capacity
-reallocation are not countersigned, and `KV-APIFY-001`, `KV-SOURCES-002`,
-`KV-ACCOUNTS-003` and `KV-EDITORIAL-004` remain owner gates. Until those gates pass,
-the monitor uses committed fixtures, makes no external or model call and spends `$0`.
+The shipped path is held by the registry pause. The founding record and the separate
+capacity reallocation are countersigned, and `KV-APIFY-001`, `KV-SOURCES-002`,
+`KV-ACCOUNTS-003` and `KV-EDITORIAL-004` are approved. While the venture is paused the desk
+makes no external or model call and spends `$0`.
 The declared room envelope is `$0.10`; an authorized call is estimated at `$0.05–0.07`.
-The actor share is capped at `$2.00` inside Apify's existing Free-plan credit, but its
+The actor share is capped at `$2.00` inside the Apify plan's monthly credit, but its
 current `$0.151` maximum run reservation cannot support daily cadence under that share,
 so the quota guard stops rather than upgrading the plan or overspending.
 
@@ -404,39 +405,31 @@ is only a locked future earning possibility.
 
 ## Prague operating clock
 
-Every row is a wake-up, not a promise to spend. The schedule has 38 Vercel entries across
-19 unique UTC cron expressions covering Prague winter and summer time. Runtime DST resolution accepts
-only the entry matching the intended local hour. Calendar validation rejects
-collisions and the public calendar uses the same source.
+Every row is a wake-up, not a promise to spend. `site/vercel.json` holds ten entries, two
+UTC variants per running slot for Prague winter and summer time, and the sweep and dispatch
+options derive from the registry, so a paused venture holds no slot. Runtime DST resolution
+accepts only the entry matching the intended local hour. Three GitHub backstop sweeps (03:55,
+11:55 and 19:55 UTC) rescue a missed slot. Calendar validation rejects collisions and the
+public calendar uses the same source.
 
-| Prague | Window | Behavior | Maximum paid envelope |
+| Prague | Slot | Behavior | Maximum paid envelope |
 | ---: | --- | --- | ---: |
-| 05:00 | Caught Up edition | fixed service; evidence and live gates | room `$0.08` |
-| 06:00 | Morning board | decision room; one specialist commission | cycle cap `$0.20` |
-| 07:00 | marketingShark carousel | weekdays, kind by weekday; one paid call per enabled brand, none at the weekend | `$0.10` per enabled brand |
-| 08:00 | FightAIQ intake | material change or due agenda | `$0.06` |
-| 09:00 | MMA Files editorial | fixed assignment service | `$0.05` |
-| 10:00 | MMA Files article | assigned slot and evidence only | production cap `$0.16` |
-| 11:00 | Titty Tuesdays | standing future-eshop marketing ideation; optional focused agenda | `$0.08` |
-| 12:00 | BOOKSOFHISTORY desk | standing daily; resumes the current selection, research or production phase | research `$0.10` per call, `$0.50` per cycle and `$5.00` per month |
-| 13:00 | GoVIRAL trend room | standing weekly; Mondays only, the other six days are `$0` no-ops | `$0.06` |
-| 14:00 | Afternoon board | deterministic checkpoint | `$0` |
-| 15:00 | Door Money desk | standing daily; private knowledge, evidence and budget gates | `$0.08` |
-| 16:00 | Door Money growth | standing weekly; Thursdays only, the other six days are `$0` no-ops | `$0.06` |
-| 17:00 | Caught Up product | fixed service | `$0.08` |
-| 18:00 | Tehdejší svět desk | standing daily; one planning or bilingual-production step, pending founding/live gates | room `$0.25`, nested research `$0.30` per brief |
-| 19:00 | FightAIQ analysis | due agenda + D8/evidence gates | `$0.06` |
-| 20:00 | MMA Files desk | due agenda only | `$0.05` |
-| 21:00 | Kvórum political desk | registered daily; fixture-only while authority and capacity decisions are pending | declared `$0.10`; payable `$0` while held |
-| 22:00 | Night board | `$0` checkpoint, digest and document truth refresh | `$0` |
+| 05:00 | DNESKAi day (`cu-day`) | WebDev Signal pre-step at `$0`, then the edition and the product check | room `$0.08` each |
+| 06:00 | Morning board | decision room; day checkpoint, previous day's digest and document truth refresh | cycle cap `$0.20` |
+| 07:00 | marketingShark | weekdays, kind by weekday; one paid call per enabled brand, none at the weekend | `$0.10` per enabled brand |
+| 09:00 | DNESKAi edition retry | runs only when the 05:00 edition has not published | production cap `$0.50` |
+| 13:00 | GoVIRAL trend room | Mondays only; the other six days are `$0` no-ops | `$0.06` |
+
+A paused venture keeps its rooms and envelopes in the registry and returns to the clock when it
+resumes; the ladders below still name its rooms for that reason.
 
 The sum of room envelopes is not expected daily spend: idle agenda rooms make no
 provider call, evidence-killed production stops before generation, and checkpoints,
 rendering, KPI evaluation, delivery verification and publishing verification are
 deterministic. More importantly, the live payable shape is capped: existing room
 envelopes, article production and the morning cap reserve `$0.98`. Adding Kvórum's
-declared envelope would make `$1.08`, so the runner excludes it until a countersigned
-record frees at least `$0.08`. The daily API pace remains `$1.00`; the monthly
+declared envelope would make `$1.08`, so the runner excluded it until `budget-2026-08g`
+(countersigned 2026-08-29) freed `$0.08` by holding the Titty Tuesdays room. The daily API pace remains `$1.00`; the monthly
 model/API share remains `$25` inside the `$50` all-in ceiling.
 
 There are two deterministic degradation checks. Monthly API headroom first disables
@@ -448,8 +441,7 @@ minimal transcript; below `$1` the MMA Files editorial, desk and article phases 
 below `$0.50` Titty Tuesdays pauses. Independently, if one date's due room envelopes
 would exceed the `$1.00` daily pace after non-room reservations, they fall in this
 order: Door Money growth, Kvórum, Door Money desk, Tehdejší svět, BOOKSOFHISTORY,
-GoVIRAL, Titty Tuesdays. The unsigned Kvórum authority gates remove that room before
-either ladder today.
+GoVIRAL, Titty Tuesdays. Kvórum is paused, so neither ladder reaches it today.
 
 ## Public and admin presentation
 
@@ -683,10 +675,10 @@ implementation readiness.
 | D11 Design Lab | sixth project, monorepo engine, 23 live template families, deterministic service and public showcase |
 | D12 Original presentation | approved agent photographs and plain interface labels; no workplace-show framing |
 | D13 marketingShark founding | seventh project, `ms-daily` at 07:00, MAKO and CHUM, devShark folded in as a portfolio product, geoShark present and disabled, drafts only |
-| D14 BOOKSOFHISTORY founding | pending owner signature; eighth project, `bh-desk` at 12:00, FOLIO and PLOT, reusable dossiers, independent Czech/English drafts, manual posting and no public surface |
-| Door Money founding | pending owner signature; ninth project, `dm-desk` at 15:00 and Thursday-only `dm-growth` at 16:00, private manuscript boundary, Design Lab-only rendering and drafts/actions only |
-| Tehdejší svět founding | pending owner signature; tenth project and first adoption, `ts-desk` at 18:00, hand-committed facts, independent Czech/Ukrainian drafts, no product-repository link, Design Lab-only rendering and manual posting/results |
-| Kvórum founding | pending owner and capacity signatures; eleventh project, `kv-desk` at 21:00, TRIBUN over corroborated political clusters, Design Lab-only rendering and manual approval/post/result records |
+| D14 BOOKSOFHISTORY founding | countersigned 2026-08-29; paused; eighth project, `bh-desk` at 12:00, FOLIO and PLOT, reusable dossiers, independent Czech/English drafts, manual posting and no public surface |
+| Door Money founding | countersigned 2026-08-30; paused; ninth project, `dm-desk` at 15:00 and Thursday-only `dm-growth` at 16:00, private manuscript boundary, Design Lab-only rendering and drafts/actions only |
+| Tehdejší svět founding | countersigned 2026-08-29; paused; tenth project and first adoption, `ts-desk` at 18:00, hand-committed facts, independent Czech/Ukrainian drafts, no product-repository link, Design Lab-only rendering and manual posting/results |
+| Kvórum founding | countersigned with its capacity record 2026-08-29; paused; eleventh project, `kv-desk` at 21:00, TRIBUN over corroborated political clusters, Design Lab-only rendering and manual approval/post/result records |
 | Autonomy-first capabilities (`operations-2026-08a`) | correctness/privacy/evidence first; versioned deny-by-default directional capability map; no monetization execution before a new owner decision |
 
 Historical records remain append-only under `state/decisions/`; later decisions may

@@ -1,7 +1,9 @@
 # BoardlessAI project model
 
 BoardlessAI is one guarded operating system with eleven public project workspaces and
-one owner-only Personal Growth workspace. Shared
+three owner-only entries: Personal Growth, WebDev Signal and the Contest Radar exploration.
+Since `operations-2026-09b` only DNESKAi, marketingShark, GoVIRAL, the Design Lab and WebDev
+Signal run; the other ventures are paused. Shared
 infrastructure owns the agent registry, budget, source policy, meeting records,
 specialist agendas, calendar, admin, delivery checks and public explanation. Each
 project keeps a narrow output boundary rather than cloning the orchestrator.
@@ -87,7 +89,8 @@ each project can hold at most eight pending items. Any project without a consume
 agenda for seven days becomes a mandatory board item with either a commission or a
 saved `why-not` reason.
 
-Not every clock entry is a meeting:
+Not every clock entry is a meeting. The kinds below describe each venture's registered
+cadence; a paused venture holds no slot until it resumes.
 
 - **Decision:** the 06:00 board decides company priorities and may commission a room.
 - **Service:** Caught Up production, Caught Up product review, MMA Files story
@@ -104,13 +107,11 @@ Not every clock entry is a meeting:
 - **Agenda-gated:** FightAIQ analysis and the MMA Files desk run only when requested.
 - **Change-triggered:** FightAIQ intake runs when its source snapshot materially
   changes or an agenda requests it.
-- **Checkpoint:** 14:00 and 22:00 update the operating trail deterministically and
-  make no model call.
+- **Checkpoint:** the 06:00 morning room updates the operating trail deterministically after
+  its decision and makes no extra model call.
 
-Kvórum's 21:00 desk is registered but not payable: its founding record and separate
-capacity reallocation are pending. Even after those pass, external monitoring still
-requires the source approvals. A scheduled wake-up therefore fails closed before a
-provider call rather than consuming the remaining daily budget.
+Kvórum's 21:00 desk is paused (`operations-2026-09b`). Its founding and capacity records are
+countersigned; resuming it needs a registry switch, and its source approvals still apply.
 
 An unused scheduled window records `not-needed` at `$0`. A manual workflow run is an
 explicit operator request, so it bypasses only the agenda check—not live switches,
@@ -118,32 +119,19 @@ credentials, evidence, cost limits or safety rules.
 
 ## One Prague clock
 
-| Prague | Window | Runtime behavior |
+| Prague | Slot | Runtime behavior |
 | ---: | --- | --- |
-| 05:00 | Caught Up edition | fixed service |
-| 06:00 | Board morning | decision room |
-| 07:00 | marketingShark carousel room | fixed weekday service, kind by weekday; one paid copy call per enabled brand, none at the weekend |
-| 08:00 | FightAIQ data check | material change or agenda |
-| 09:00 | MMA Files story meeting | fixed service |
-| 10:00 | MMA Files daily article | assigned slot and evidence only |
-| 11:00 | Titty Tuesdays campaign room | standing future-eshop marketing ideation; optional focused agenda |
-| 12:00 | BOOKSOFHISTORY editorial desk | persistent daily cycle; resumes its current phase |
+| 05:00 | DNESKAi day (`cu-day`) | WebDev Signal pre-step at `$0`, then the edition and the product meeting |
+| 06:00 | Board morning | decision room; day checkpoint and the previous day's summary |
+| 07:00 | marketingShark | fixed weekday service, kind by weekday; one paid copy call per enabled brand, none at the weekend |
+| 09:00 | DNESKAi edition retry | runs only when the 05:00 edition has not published |
 | 13:00 | GoVIRAL trend room | Mondays only; an off-day firing is a `$0` no-op |
-| 14:00 | Board afternoon | `$0` checkpoint |
-| 15:00 | Door Money recommendation desk | daily drafts; private-knowledge and budget gates |
-| 16:00 | Door Money growth room | Thursdays only; other days are `$0` no-ops |
-| 17:00 | Caught Up product meeting | fixed service |
-| 18:00 | Tehdejší svět editorial desk | persistent two-day bilingual cycle; drafts only and pending countersignature |
-| 19:00 | FightAIQ model check | due agenda; D8 analysis and evidence gates apply |
-| 20:00 | MMA Files desk review | due agenda only |
-| 21:00 | Kvórum political desk | registered daily; live work held by authority and budget-capacity gates |
-| 22:00 | Board night | `$0` checkpoint and daily summary |
 
-A Vercel cron dispatches each window on its own Prague hour and does the work. The 38
-entries are paired winter/summer variants for 18 paths plus two DNESKAi retries, across
-19 unique UTC expressions. Three GitHub backstop sweeps a day rescue anything that
-path missed. Schedule validation
-still rejects collisions under 60 minutes. The public five-day calendar reads the same
+A Vercel cron dispatches each slot on its own Prague hour and does the work. `site/vercel.json`
+carries ten entries, two UTC variants per slot, and three GitHub backstop sweeps (03:55, 11:55
+and 19:55 UTC) rescue a slot the cron missed. A paused venture keeps its registry cadence but
+holds no slot. The registry contract still rejects two meetings under 60 minutes apart
+(`orchestrator/src/contracts/venture-registry.ts`). The public five-day calendar reads the same
 resolved table.
 
 ## Spending behavior
@@ -174,8 +162,7 @@ Door Money has a one-time ingestion ceiling of `$3.00`, a `$0.08` daily desk and
 `$0.06` Thursday growth room. Its routine model estimate is about `$2.50` monthly;
 off-day growth records, selection, weights and keyless GoVIRAL collection cost `$0`.
 Kvórum declares a `$0.10` room, a `$3.00` monthly model KPI ceiling and a `$2.00`
-share inside the existing Apify Free credit. Its founding and capacity records are
-unsigned, so its payable total remains `$0`.
+share inside the Apify plan's monthly credit. It is paused, so its payable total is `$0`.
 
 Monthly headroom degrades in code, not by discretion: optional content scoring below
 `$3`; one BOOKSOFHISTORY research candidate plus no Door Money growth below `$2.75`;
@@ -238,10 +225,10 @@ Perfect, Good and Bad ratings keep their full history. A rating cannot found
 a project or publish an item. The queue and its archive are editable by the owner, but
 owner input is optional.
 
-At 22:00 the runtime builds one idempotent, 400-word maximum summary for the Prague
-date. Held, paused, failed and not-needed windows remain distinguishable. The summary
-also lists delivery receipts, deploy proofs, failures and each social unlock counter,
-then refreshes the generated truth block in `docs/ECOSYSTEM.md` at `$0`.
+Each morning the runtime builds one idempotent, 400-word maximum summary for the previous
+Prague date. Held, paused, failed and not-needed windows remain distinguishable. The summary
+also lists delivery receipts, deploy proofs, failures and each social unlock counter, and the
+morning checkpoint refreshes the generated truth block in `docs/ECOSYSTEM.md` at `$0`.
 
 ## Delivery boundaries
 
@@ -286,5 +273,5 @@ then refreshes the generated truth block in `docs/ECOSYSTEM.md` at `$0`.
 Missing variables deny the action. The owner checklist and the ordered setup path are
 both in `docs/NEEDED.md`.
 
-The canonical, standalone description of all eleven projects, 49 roles, D1–D14 and
+The canonical, standalone description of all fourteen registered projects, 49 roles, D1–D14 and
 current generated state is `docs/ECOSYSTEM.md`.

@@ -47,7 +47,7 @@ guesses.
 
 ## Synchronization and persistence
 
-The normal live synchronizer joins the night checkpoint when either `GITHUB_TOKEN` is present or
+The normal live synchronizer joins the morning day checkpoint when either `GITHUB_TOKEN` is present or
 `PROGRAMS_PUBLIC_GITHUB_SYNC=1` explicitly allows anonymous public reads. `CI=true` always disables
 live GitHub synchronization. Per-item reads are concurrency-bounded, ETag-aware and failure
 isolated; arbitrary issue bodies and credentials are never persisted.
