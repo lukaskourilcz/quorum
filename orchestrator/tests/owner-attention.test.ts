@@ -5,6 +5,7 @@ import { describe, expect, it } from "vitest";
 import { OwnerAttentionSchema } from "../src/contracts/owner-attention.js";
 import {
   collectOwnerAttention,
+  insertNeededItem,
   parseInboxApprovals,
   parseNeededTasks,
   runtimeGaps
@@ -143,6 +144,18 @@ describe("reading the owner's task list", () => {
 - [ ] **Read after the parked sections** — still waiting. [imp:2] [owner:me] [time:5m] [kind:setup]
 `);
     expect(tasks.map((task) => task.title)).toEqual(["Keep this one", "Read after the parked sections"]);
+  });
+
+  it("files a written item above the parked sections, where the collector reads it", () => {
+    const item = "- [ ] **Add a key** — a focus venture waits on it. [imp:4] [owner:me] [time:5m] [kind:setup]";
+    const parked = "# NEEDED\n\n## Focus\n\n- [ ] **Keep this one** — waits. [imp:3] [owner:me] [time:5m] [kind:setup]\n\n"
+      + "## On hold — paused ventures\n\n### Personal Growth\n\n- [ ] **Paused item** — waits. [imp:2] [owner:me] [time:5m] [kind:setup]\n";
+    const written = insertNeededItem(parked, item);
+    expect(parseNeededTasks(written).map((task) => task.title)).toEqual(["Keep this one", "Add a key"]);
+    expect(written.indexOf(item)).toBeLessThan(written.indexOf("## On hold"));
+    expect(written.endsWith("- [ ] **Paused item** — waits. [imp:2] [owner:me] [time:5m] [kind:setup]\n")).toBe(true);
+    // A file with no parked section gets the item at its end, as before.
+    expect(insertNeededItem("# NEEDED\n", item)).toBe(`# NEEDED\n\n${item}\n`);
   });
 });
 

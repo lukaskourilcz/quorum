@@ -5,6 +5,7 @@ import { MarketingSharkActivationSchema, SocialActivationSchema, type SocialActi
 import { MarketingPlanSchema } from "../contracts/marketing-plan.js";
 import { ReleaseProofSchema } from "../contracts/autonomy.js";
 import { MARKETINGSHARK_PACKAGE_VERSIONS } from "../ventures/marketingshark/package-version.js";
+import { insertNeededItem } from "../org/owner-attention.js";
 import { atomicWriteJson, atomicWriteText, readJson, readText } from "../state.js";
 import {
   loadSocialPublisherRegistry,
@@ -303,7 +304,8 @@ function marketingSharkActivation(input: {
  * called this lived in a workflow whose schedule is commented out. The daily cycle refreshes the
  * counters now, so the item lands for real and has to be a real one.
  *
- * Still written once. The marker check is what keeps a daily run from growing a daily copy.
+ * Still written once. The marker check is what keeps a daily run from growing a daily copy. It goes
+ * above the parked sections, because the owner-attention collector skips them.
  */
 async function recordMissingCredentials(repoRoot: string, missing: Record<SocialVenture, string[]>): Promise<void> {
   const names = Object.entries(missing)
@@ -314,14 +316,13 @@ async function recordMissingCredentials(repoRoot: string, missing: Record<Social
   const current = await readText(repoRoot, "docs/NEEDED.md", "# Needs your help now\n");
   if (current.includes(marker)) return;
   const item = [
-    "",
     `- [ ] **Add the Instagram and Threads credentials** (\`${marker}\`) — each brand needs its`,
     "  account ID and access token as GitHub Actions secrets before any channel can be considered.",
     `  Missing now — ${names.join("; ")}.`,
     "  Until they exist every per-venture gate stays locked and no post is attempted, whatever the",
     "  readiness counters say. [imp:4] [owner:me] [time:45m] [kind:setup]"
   ].join("\n");
-  await atomicWriteText(repoRoot, "docs/NEEDED.md", `${current.trimEnd()}\n${item}\n`);
+  await atomicWriteText(repoRoot, "docs/NEEDED.md", insertNeededItem(current, item));
 }
 
 export async function refreshSocialActivation(input: {

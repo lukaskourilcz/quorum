@@ -225,6 +225,18 @@ export function parseInboxApprovals(markdown: string): OwnerAttention["approvals
  */
 const PARKED_SECTION = /^## (?:On hold|Parked)\b/u;
 
+/**
+ * Adds an owner item to `docs/NEEDED.md` where this collector reads it: above the parked sections.
+ *
+ * The parked sections close the file, so a writer that appends at the end files its item under a
+ * paused venture, and "Waiting for you" never shows it. With no parked section, it appends.
+ */
+export function insertNeededItem(markdown: string, item: string): string {
+  const parked = new RegExp(PARKED_SECTION.source, "mu").exec(markdown);
+  if (!parked) return `${markdown.trimEnd()}\n\n${item.trim()}\n`;
+  return `${markdown.slice(0, parked.index).trimEnd()}\n\n${item.trim()}\n\n${markdown.slice(parked.index)}`;
+}
+
 /** Unchecked `[owner:me]` tasks outside the parked sections. `[owner:ai]` is work this system does itself. */
 export function parseNeededTasks(markdown: string): OwnerAttention["manualTasks"] {
   const tasks: OwnerAttention["manualTasks"] = [];
