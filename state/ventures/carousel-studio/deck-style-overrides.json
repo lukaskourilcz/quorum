@@ -7,11 +7,11 @@
       "date": "2026-09-25",
       "style": "folio",
       "family": "folio",
-      "variant": "A",
-      "accentSwap": false,
+      "variant": "B",
+      "accentSwap": true,
       "treatment": "duotone",
       "typeScale": 1,
-      "changedAt": "2026-09-26T20:04:18.726Z"
+      "changedAt": "2026-09-26T20:04:19.868Z"
     },
     {
       "venture": "caught-up",
@@ -86,5 +86,5 @@
       "changedAt": "2026-08-08T23:36:32.910Z"
     }
   ],
-  "updatedAt": "2026-09-26T20:04:18.726Z"
+  "updatedAt": "2026-09-26T20:04:19.868Z"
 }
