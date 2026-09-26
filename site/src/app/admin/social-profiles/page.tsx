@@ -4,7 +4,7 @@ import { AdminShell, type AdminSection, type AdminWorkspace } from "@/components
 import { SocialProfilesWorkspace } from "@/components/admin/social-profiles-workspace";
 import { AdminWriteProvider } from "@/components/admin/admin-write-mode";
 import { adminWritesEnabled } from "@/lib/admin-write-permission";
-import { readAdminPortfolio } from "@/lib/admin-portfolio";
+import { navigableVentures, readAdminPortfolio } from "@/lib/admin-portfolio";
 import { resolveSocialProfileSection } from "@/lib/social-profiles/model";
 import { readAdminSocialProfiles } from "@/lib/social-profiles/snapshot";
 
@@ -30,7 +30,7 @@ export default async function SocialProfilesPage({
   const section = resolveSocialProfileSection(query.section);
   const workspaces: AdminWorkspace[] = [
     { id: "global", name: "Company Overview", count: 0, href: "/admin", active: false },
-    ...portfolio.ventures.map((venture) => ({ id: venture.id, name: venture.name, count: venture.cards.length, href: `/admin?venture=${venture.id}`, active: false }))
+    ...navigableVentures(portfolio).map((venture) => ({ id: venture.id, name: venture.name, count: venture.cards.length, href: `/admin?venture=${venture.id}`, active: false }))
   ];
   const sections: AdminSection[] = adminSections(null);
   const dropped = Object.values(snapshot.dropped).reduce((total, value) => total + value, 0);

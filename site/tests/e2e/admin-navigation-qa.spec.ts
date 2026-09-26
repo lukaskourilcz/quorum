@@ -25,7 +25,9 @@ const registry = JSON.parse(
  * footer; none of them is something the owner has to check, which is the difference between a
  * link and a destination.
  */
-// A paused venture leaves the navigation (operations-2026-09b); Settings lists it instead.
+// Only an operating venture is a destination. A paused venture left the navigation with
+// operations-2026-09b and Settings lists it instead; the owner took Contest Radar, an exploration,
+// out on 2026-09-26. Both still open at their own URL.
 const canonicalDestinations = [
   "/admin",
   "/admin?view=waiting",
@@ -33,11 +35,11 @@ const canonicalDestinations = [
   "/admin/settings",
   "/admin?venture=carousel-studio",
   ...registry.ventures
-    .filter(({ id, status }) => id !== "carousel-studio" && status !== "paused")
+    .filter(({ id, status }) => id !== "carousel-studio" && status === "operating")
     .map(({ id }) => `/admin?venture=${id}`)
 ];
 const pausedDestinations = registry.ventures
-  .filter(({ status }) => status === "paused")
+  .filter(({ status }) => status !== "operating")
   .map(({ id }) => `/admin?venture=${id}`);
 
 /**
@@ -120,6 +122,8 @@ test("the command palette exposes every destination and opens the active workspa
   // A paused venture is not a destination any more; its archive is reached from Settings.
   await search.fill("kvorum");
   await expect(palette.getByRole("option")).toHaveCount(0);
+  await search.fill("contest");
+  await expect(palette.getByRole("option")).toHaveCount(0);
   await search.fill("marketingshark");
   await expect(palette.getByRole("option")).toHaveCount(1);
   await search.press("Enter");
@@ -155,6 +159,7 @@ test("mobile More keeps safe targets and exposes every canonical destination", a
   const more = page.getByRole("dialog", { name: "More" });
   await expectCanonicalLinks(more.locator('a[href^="/admin"]'));
   await expect(more.locator('a[href="/admin?venture=tehdejsi-svet"]')).toHaveCount(0);
+  await expect(more.locator('a[href="/admin?venture=contest-radar"]')).toHaveCount(0);
   await more.locator('a[href="/admin?venture=goviral"]').click();
 
   await expect(page).toHaveURL(/\/admin\?venture=goviral$/u, { timeout: ADMIN_NAVIGATION_TIMEOUT });

@@ -31,9 +31,10 @@ const adminDestinations = [
   "/admin/queue",
   "/admin/settings",
   "/admin?venture=carousel-studio",
-  // A paused venture leaves the navigation (operations-2026-09b); Settings lists it instead.
+  // Only an operating venture is a destination: a paused one left with operations-2026-09b and
+  // Settings lists it instead, and the owner took Contest Radar, an exploration, out on 2026-09-26.
   ...registry.ventures
-    .filter(({ id, status }) => id !== "carousel-studio" && status !== "paused")
+    .filter(({ id, status }) => id !== "carousel-studio" && status === "operating")
     .map(({ id }) => `/admin?venture=${id}`)
 ];
 
@@ -123,9 +124,20 @@ test("mobile Admin navigation has safe targets and exposes every live destinatio
   await expect(workspaces).toBeVisible();
   await expect(workspaces.getByRole("link", { name: "marketingShark" })).toHaveAttribute("href", "/admin?venture=marketingshark");
   await expect(workspaces.getByRole("link", { name: "GoVIRAL" })).toHaveAttribute("href", "/admin?venture=goviral");
-  // Paused ventures are listed in Settings, not here.
+  // Paused ventures are listed in Settings, not here, and Contest Radar is not running.
   await expect(workspaces.getByRole("link", { name: /Kvórum/ })).toHaveCount(0);
   await expect(workspaces.getByRole("link", { name: "Lukáš Growth Desk" })).toHaveCount(0);
+  await expect(workspaces.getByRole("link", { name: "Contest Radar" })).toHaveCount(0);
+});
+
+test("Contest Radar is out of every admin navigation and still opens at its own address", async ({ page }) => {
+  for (const route of ["/admin", "/admin/queue", "/admin/settings", "/admin/operations", "/admin/implementation-plans", "/admin/social-profiles"]) {
+    await page.goto(route, { waitUntil: "networkidle" });
+    await expect(page.getByRole("navigation", { name: "Admin destinations" }).locator('a[href="/admin?venture=contest-radar"]'), route)
+      .toHaveCount(0);
+  }
+  await page.goto("/admin?venture=contest-radar", { waitUntil: "networkidle" });
+  await expect(page.getByRole("heading", { level: 1, name: /Contest Radar/u })).toBeVisible();
 });
 
 test("new Admin shell chrome and mobile sheet pass the accessibility gate", async ({ page }) => {

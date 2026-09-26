@@ -5,7 +5,7 @@ import { describe, expect, it, vi } from "vitest";
 
 vi.mock("server-only", () => ({}));
 
-import { readAdminLaunchBinder, readAdminPortfolio } from "./admin-portfolio";
+import { navigableVentures, readAdminLaunchBinder, readAdminPortfolio, type AdminVenture } from "./admin-portfolio";
 
 describe("admin portfolio projection", () => {
   it("projects every review card kind and a Perfect owner-rated binder plan", async () => {
@@ -236,6 +236,37 @@ describe("declared tabs against stored cards", () => {
       visibility: "owner-only",
       tabs: ["today", "timeline", "threads", "instagram", "reels", "trend-radar", "results", "experiments", "voice-strategy", "budget"]
     });
+  });
+});
+
+/*
+ * The navigation lists what runs. A paused venture left it with `operations-2026-09b`; the owner
+ * took Contest Radar, an exploration, out on 2026-09-26. Both keep their workspace at
+ * `/admin?venture=<id>`, which is why the portfolio itself still carries them.
+ */
+describe("the admin navigation", () => {
+  const venture = (id: string, status: AdminVenture["status"]): AdminVenture => ({
+    id, name: id, status, visibility: "public", tabs: [], cards: [], unreadableFiles: []
+  });
+
+  it("offers operating ventures only", () => {
+    const portfolio = {
+      ventures: [venture("running", "operating"), venture("exploring", "exploration"), venture("resting", "paused")]
+    };
+    expect(navigableVentures(portfolio).map(({ id }) => id)).toEqual(["running"]);
+  });
+
+  it("leaves Contest Radar out of the real registry's navigation and keeps its workspace", async () => {
+    const portfolio = await readAdminPortfolio();
+    const registry = JSON.parse(await readFile(path.resolve(process.cwd(), "../config/ventures.json"), "utf8")) as {
+      ventures: Array<{ id: string; status: string }>;
+    };
+    const navigable = navigableVentures(portfolio).map(({ id }) => id);
+    expect(navigable).toEqual(registry.ventures.filter(({ status }) => status === "operating").map(({ id }) => id));
+    expect(navigable).not.toContain("contest-radar");
+    // WebDev Signal runs as the DNESKAi day's pre-step (`operations-2026-09b`), so it stays.
+    expect(navigable).toContain("webdev-signal");
+    expect(portfolio.ventures.map(({ id }) => id)).toContain("contest-radar");
   });
 });
 
