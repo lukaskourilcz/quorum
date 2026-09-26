@@ -63,14 +63,6 @@ Below 35/50: revise.
 
 See [references/examples.md](references/examples.md) for before/after transformations.
 
-## Caught Up Registers
-
-For Caught Up articles and public boardroom transcripts, apply the blocking
-rules and acceptance fixtures in
-[references/caught-up-registers.md](references/caught-up-registers.md). These
-project rules take precedence when an approved fixture conflicts with a broad
-heuristic above.
-
 ## License
 
 MIT

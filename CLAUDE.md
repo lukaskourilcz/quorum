@@ -239,6 +239,12 @@ review and interactive sessions. Runtime prompts do not load skill files —
 GoVIRAL's craft rules are distilled into `orchestrator/prompts/goviral.md`
 instead.
 
+`stop-slop` carries no local additions: it matches upstream `8da1f03` and the copies in
+react-express-app and own-dashboard byte for byte, and `architecture.test.ts` pins its hashes.
+STET's Caught Up article and boardroom-transcript registers live in the house skill
+`caught-up-registers`. Project rules for any vendored skill go in a house skill, never into the
+vendored folder.
+
 The vendored marketing skills are generic advice. **This repository's contracts always
 win**: the $50 all-in operating cap, the social triple-lock, the truth gates and
 the treasury rules are not negotiable by a skill file. Each carries an

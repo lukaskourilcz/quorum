@@ -53,11 +53,25 @@ const stopSlopFiles = [
   "LICENSE",
   "SKILL.md",
   "UPSTREAM.md",
-  "references/caught-up-registers.md",
   "references/examples.md",
   "references/phrases.md",
   "references/structures.md"
 ] as const;
+
+/**
+ * The upstream bytes of hardikpandya/stop-slop at `8da1f03`, the commit UPSTREAM.md pins.
+ * react-express-app and own-dashboard vendor the same bytes, and no test can read a sibling
+ * repository, so this one checks its own copy against the recorded hashes. quorum once added a
+ * local register file here; that lives in `caught-up-registers` now. A re-vendor at a new pin
+ * updates these hashes, UPSTREAM.md and the other two repositories in one change set.
+ */
+const stopSlopUpstreamSha256 = {
+  LICENSE: "2e2b2beaf41cc0ce28485455a62aed81777cdcdf68702e142427aef1cd720f2c",
+  "SKILL.md": "7432a1d9ebdd42b27666da8458af252edf549f723fb14bcd4791425103930310",
+  "references/examples.md": "49c592899eb4457f95d0767e15e3143569e2cef50f2927c3174e62432984cd3d",
+  "references/phrases.md": "4ca1b7e97123b5c67eff3dc97e5e977332e0b24021265c1553888a93ec33fa93",
+  "references/structures.md": "ffbf1316c7fb5aaf552de005609a64a9639b546ecd76bfb0e482864d5bbe6f58"
+} as const;
 
 const tittyTuesdaysBrandbookFiles = [
   "SKILL.md",
@@ -195,6 +209,25 @@ describe("agent architecture", () => {
         const claudeBytes = await readFile(path.join(claudeRoot, skill, file));
         const codexBytes = await readFile(path.join(codexRoot, skill, file));
         expect(codexBytes.equals(claudeBytes), `${skill}/${file} mirror differs`).toBe(true);
+      }
+    }
+  });
+
+  it("keeps stop-slop at its pinned upstream bytes, with no local additions", async () => {
+    for (const tree of [".claude", ".agents"]) {
+      const skillRoot = path.join(repoRoot, tree, "skills", "stop-slop");
+      const files = (await readdir(skillRoot, { recursive: true, withFileTypes: true }))
+        .filter((entry) => entry.isFile())
+        .map((entry) => path.join(path.relative(skillRoot, entry.parentPath), entry.name))
+        .sort();
+      expect(files, `${tree}/skills/stop-slop holds a file outside the vendored set`).toEqual(
+        [...stopSlopFiles].sort()
+      );
+      for (const [file, sha256] of Object.entries(stopSlopUpstreamSha256)) {
+        const digest = createHash("sha256")
+          .update(await readFile(path.join(skillRoot, file)))
+          .digest("hex");
+        expect(digest, `${tree}/skills/stop-slop/${file} differs from upstream 8da1f03`).toBe(sha256);
       }
     }
   });
