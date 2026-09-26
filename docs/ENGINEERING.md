@@ -1,8 +1,9 @@
 # The engineering contract
 
-One ruleset, written once, the same in every repository this owner runs. Each rule carries the
-incident that created it — a rule whose reason has been forgotten is followed until it is
-inconvenient and then dropped.
+One ruleset, written once and meant for every repository this owner runs (#146). Today only this
+repository carries it; copying it anywhere else waits for the owner's decision in #582. Each rule
+carries the incident that created it — a rule whose reason has been forgotten is followed until it
+is inconvenient and then dropped.
 
 Where a generic recommendation and a rule here disagree, this file wins. Where this file and a
 documented product invariant disagree, the invariant wins and this file gets amended.
@@ -57,9 +58,9 @@ protected Admin reader share one rule: an issue state is evidence, never complet
 
 ## Modules
 
-**8. A soft cap of about 400 lines per hand-written file.** Named debt, at the time of writing:
-`orchestrator/src/cycle.ts` (2,194), `orchestrator/src/portfolio/run.ts` (1,720),
-`site/src/components/decision-replay.tsx` (1,340), `site/src/lib/office-walkthrough.ts` (831).
+**8. A soft cap of about 400 lines per hand-written file.** Named debt, measured 2026-09-26:
+`orchestrator/src/cycle.ts` (1,397), `orchestrator/src/portfolio/run.ts` (1,805),
+`site/src/components/decision-replay.tsx` (1,342), `site/src/lib/office-walkthrough.ts` (888).
 *Why:* the cap is not about beauty — every one of those files has had a bug that survived review
 because the reviewer could not hold the file in their head.
 
@@ -99,8 +100,9 @@ diverge.
 **16. Small commits, one concern each.** Board findings become `- [ ]` tasks in a dated decision
 file under `state/decisions/`, and a session ticks them off one commit at a time.
 
-**17. Every repository carries this file.** `CLAUDE.md`, `AGENTS.md` and `CONTRIBUTING.md` point at
-it rather than restating it, because a rule stated in four places is four rules that will drift.
+**17. Every repository is meant to carry this file.** Only this one does today (#582).
+`CLAUDE.md`, `AGENTS.md` and `CONTRIBUTING.md` point at it rather than restating it, because a rule
+stated in four places is four rules that will drift.
 
 ## Deployment and Vercel cost control
 

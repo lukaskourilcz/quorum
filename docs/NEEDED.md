@@ -439,6 +439,15 @@ Judgement calls. Nothing is blocked on code for any of these.
   FightAIQ calibration lab, a wikitext parser and article extraction, each behind a JSON-contract
   boundary. Nothing in the runtime moves either way. [imp:2] [owner:me] [time:15m] [kind:decision]
 
+- [ ] **Decide how the engineering contract reaches the other repositories (#582)** — #146 asked
+  for one `docs/ENGINEERING.md` in every repository, but only this one has it, and it cannot be
+  copied as it stands: most rules cite quorum paths, and its deployment section says Git
+  deployments are off, which is false for react-express-app and own-dashboard. The proposal: split
+  a repo-neutral contract from a quorum-only `docs/DEPLOY.md`, then copy the neutral file into both
+  repositories with a `CLAUDE.md` pointer and a pinned-hash test in each. The other answer is that
+  it stays quorum's alone and the "meant for every repository" lines go.
+  [imp:2] [owner:me] [time:15m] [kind:decision]
+
 - [ ] **Analytics — deliberately deferred.** Name the exact decisions the data would change, then
   approve the provider, legal posture and data minimisation before setting
   `METRICS_INGESTION_ENABLED=true`. Until then follower and engagement KPIs stay honestly

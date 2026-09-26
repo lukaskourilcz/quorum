@@ -214,9 +214,10 @@ program's stated order wins over opportunistic work elsewhere.
 
 ## Engineering rules
 
-`docs/ENGINEERING.md` is the clean-code contract. It is meant to be the same file in every
-repository this owner runs; until #582 copies it, only this repository carries it. It is
-mirrored byte-for-byte at `.agents/ENGINEERING.md` for Codex sessions and
+`docs/ENGINEERING.md` is the clean-code contract. #146 asked for one ruleset in every repository
+this owner runs, but only this repository carries it: several rules cite quorum-only paths and its
+deployment section describes this repository's Vercel guard, so it cannot be copied as it stands.
+Splitting and copying it waits for the owner's decision (#582). It is mirrored byte-for-byte at `.agents/ENGINEERING.md` for Codex sessions and
 `orchestrator/tests/architecture.test.ts` fails on any drift between the two. Do not restate its
 rules here — a rule written in two places is two rules that will disagree.
 

@@ -156,7 +156,8 @@ async function directoryNames(directory: string): Promise<string[]> {
 
 describe("agent architecture", () => {
   it("keeps the engineering contract byte-identical in both trees", async () => {
-    // The same file in every repository this owner runs, and in both of this one's agent trees.
+    // Meant for every repository this owner runs (#146); only this one carries it today (#582),
+    // in both of its agent trees.
     // A rule that drifts between copies is two rules, and the copy a session happens to read
     // decides which one it follows.
     const canonical = await readFile(path.join(repoRoot, "docs", "ENGINEERING.md"));
