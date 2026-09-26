@@ -49,6 +49,21 @@ describe("the public venture index", () => {
     expect(cards.find((card) => card.id === "goviral")?.metric.count).toBe(1);
   });
 
+  it("describes marketingShark's weekday English post, not the retired bilingual quiz", async () => {
+    // The card kept promising two language versions of a daily quiz after the room moved to one
+    // English post each weekday, contradicting the marketingShark page one click away.
+    const venture = ventureRegistry.ventures.find((entry) => entry.id === "marketingshark");
+    const root = await mkdtemp(path.join(tmpdir(), "venture-index-marketingshark-"));
+    const card = (await readVentureIndex(root)).find((entry) => entry.id === "marketingshark");
+    if (venture?.status === "paused") {
+      expect(card).toBeUndefined();
+      return;
+    }
+    const copy = `${card?.promise ?? ""} ${card?.boundary ?? ""}`;
+    expect(copy).toContain("English devShark post each weekday");
+    expect(copy).not.toMatch(/two language|daily quiz|czech/iu);
+  });
+
   it("refuses to present a partial count when a ledger line is unreadable", async () => {
     const root = await mkdtemp(path.join(tmpdir(), "venture-index-poison-"));
     await put(root, "state/ideas/goviral/ledger.jsonl", "{}\nnot-json\n");

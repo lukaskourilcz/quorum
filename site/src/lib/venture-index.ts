@@ -107,8 +107,8 @@ const COPY: Record<string, CardCopy> = {
     href: "/ventures/titty-tuesdays"
   },
   marketingshark: {
-    promise: "Two language versions of one daily quiz carousel, both left as drafts.",
-    boundary: "Questions come from a pinned bank; the standalone source app receives nothing back.",
+    promise: "One English devShark post each weekday, its kind set by the weekday, drafted into the Queue for the owner's approval.",
+    boundary: "Quiz questions come from a pinned bank and every other fact from devShark's own records and fact sheet; devShark receives nothing back.",
     group: "Research, growth and product",
     color: "#a5d8f3",
     metric: { kind: "files", directory: "state/ventures/marketingshark/packages", label: "draft packages", recursive: true, fileName: "package.json" },
