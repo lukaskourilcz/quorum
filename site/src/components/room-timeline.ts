@@ -1,21 +1,9 @@
-import type { PublicStandup, RoomTranscript } from "@/data/fixtures";
-import {
-  DISPLAY_TIME_ZONE_LABEL,
-  formatClock,
-  formatDate,
-  formatDateTime
-} from "../lib/utils";
-
-export const BOARDROOM_TIME_ZONE = DISPLAY_TIME_ZONE_LABEL;
+import type { RoomTranscript } from "@/data/fixtures";
+import { formatClock, formatDateTime } from "../lib/utils";
 
 export interface RoomTurnTiming {
   iso: string;
   source: "recorded" | "fixture-sequence";
-}
-
-export function formatRoomDate(value: string) {
-  const result = formatDate(value);
-  return result === "Date unavailable" ? "Unknown date" : result;
 }
 
 export function formatRoomClock(value: string) {
@@ -26,12 +14,6 @@ export function formatRoomClock(value: string) {
 export function formatRoomDateTime(value: string) {
   const result = formatDateTime(value, true);
   return result === "Date and time unavailable" ? "Unknown date and time" : result;
-}
-
-export function roomIdForStandup(
-  standup: Pick<PublicStandup, "date" | "phase">
-) {
-  return `ROOM-${standup.date.replaceAll("-", "")}-${standup.phase.toUpperCase()}`;
 }
 
 export function resolveRoomTurnTiming(
@@ -70,14 +52,4 @@ export function resolveRoomTurnTiming(
     iso: new Date(openedAt + offset).toISOString(),
     source: "fixture-sequence"
   };
-}
-
-export function sortBoardroomsNewestFirst(
-  records: readonly PublicStandup[]
-) {
-  return [...records].sort(
-    (left, right) =>
-      new Date(right.roomTranscript.openedAt).getTime() -
-      new Date(left.roomTranscript.openedAt).getTime()
-  );
 }

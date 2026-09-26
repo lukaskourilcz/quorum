@@ -12,7 +12,7 @@ import {
 import { PageShell } from "@/components/page-shell";
 import { publicAgentGroup, publicAgentText, publicAgentTitle, publicDecisionLabel, publicStageLabel } from "@/components/agent-language";
 import { SectionHeading } from "@/components/section-heading";
-import { formatPhaseLabel } from "@/components/standup-countdown-model";
+import { formatPhaseLabel } from "@/components/phase-label";
 import { Badge } from "@/components/ui/badge";
 import { buttonVariants } from "@/components/ui/button";
 import { Callout } from "@/components/ui/callout";

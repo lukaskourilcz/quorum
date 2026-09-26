@@ -17,7 +17,7 @@ export function formatUsd(value: number | null): string {
 }
 
 export const DISPLAY_TIME_ZONE = "Europe/Prague";
-export const DISPLAY_TIME_ZONE_LABEL = "Prague time";
+const DISPLAY_TIME_ZONE_LABEL = "Prague time";
 
 function displayDate(value: string | number | Date): Date {
   if (value instanceof Date || typeof value === "number") return new Date(value);

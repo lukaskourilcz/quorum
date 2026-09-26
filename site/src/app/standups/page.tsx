@@ -4,7 +4,7 @@ import { ArrowRight } from "lucide-react";
 import { PageIntro } from "@/components/page-intro";
 import { publicAgentText, publicDecisionLabel, publicStageLabel } from "@/components/agent-language";
 import { PageShell } from "@/components/page-shell";
-import { formatPhaseLabel } from "@/components/standup-countdown-model";
+import { formatPhaseLabel } from "@/components/phase-label";
 import { Badge } from "@/components/ui/badge";
 import { buttonVariants } from "@/components/ui/button";
 import { getPublicStandups } from "@/lib/standup-records";

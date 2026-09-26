@@ -303,77 +303,8 @@ img {
   background: var(--border);
 }
 
-.signal-bars {
-  display: flex;
-  height: 3.5rem;
-  align-items: flex-end;
-  gap: 0.3125rem;
-}
-
-.signal-bars > span {
-  min-width: 0;
-  flex: 1;
-  transform-origin: bottom;
-  background: var(--slate);
-  animation: signal-bar 2.6s ease-in-out infinite;
-}
-
-.signal-bars > span:nth-child(2) {
-  animation-delay: 0.2s;
-}
-
-.signal-bars > span:nth-child(3) {
-  animation-delay: 0.4s;
-}
-
-.signal-bars > span:nth-child(4) {
-  animation-delay: 0.6s;
-}
-
-.signal-bars > span:nth-child(5) {
-  animation-delay: 0.8s;
-}
-
-.signal-bars > span:nth-child(6) {
-  background: var(--accent);
-  animation: none;
-}
-
-.signal-bars > span:nth-child(7) {
-  animation-delay: 1.2s;
-}
-
-.signal-bars > span:nth-child(8) {
-  animation-delay: 1.4s;
-}
-
-.signal-bars > span:nth-child(9) {
-  animation-delay: 1.6s;
-}
-
-.signal-bars > span:nth-child(10) {
-  animation-delay: 1.8s;
-}
-
-.scan-line {
-  animation: scan-line 11s linear infinite;
-}
-
 .status-pulse {
   animation: status-pulse 1.8s ease-in-out infinite;
-}
-
-.marquee-track {
-  animation: status-marquee 42s linear infinite;
-}
-
-@keyframes status-marquee {
-  from {
-    transform: translateX(0);
-  }
-  to {
-    transform: translateX(-50%);
-  }
 }
 
 @keyframes status-pulse {
@@ -385,25 +316,6 @@ img {
   50% {
     opacity: 0.35;
     transform: scale(0.8);
-  }
-}
-
-@keyframes scan-line {
-  from {
-    transform: translateY(-100%);
-  }
-  to {
-    transform: translateY(900%);
-  }
-}
-
-@keyframes signal-bar {
-  0%,
-  100% {
-    transform: scaleY(0.28);
-  }
-  50% {
-    transform: scaleY(1);
   }
 }
 

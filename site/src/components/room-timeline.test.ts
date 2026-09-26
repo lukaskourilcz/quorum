@@ -1,19 +1,8 @@
 import { describe, expect, it } from "vitest";
 import { standups, type RoomTranscript } from "../data/fixtures";
-import {
-  formatRoomDateTime,
-  resolveRoomTurnTiming,
-  roomIdForStandup,
-  sortBoardroomsNewestFirst
-} from "./room-timeline";
+import { formatRoomDateTime, resolveRoomTurnTiming } from "./room-timeline";
 
 describe("Boardroom timeline", () => {
-  it("creates stable room IDs from date and phase", () => {
-    expect(roomIdForStandup(standups[0]!)).toBe(
-      "ROOM-20260723-FOUNDING"
-    );
-  });
-
   it("places fixture messages in order within the recorded room bounds", () => {
     const transcript = standups[0]!.roomTranscript;
     const timestamps = transcript.turns.map((_, index) =>
@@ -70,9 +59,5 @@ describe("Boardroom timeline", () => {
     expect(formatRoomDateTime("2026-07-23T05:28:00.000Z")).toBe(
       "Jul 23, 2026 · 07:28:00 Prague time"
     );
-  });
-
-  it("sorts rooms by their opening timestamp", () => {
-    expect(sortBoardroomsNewestFirst(standups)[0]).toBe(standups[0]);
   });
 });
