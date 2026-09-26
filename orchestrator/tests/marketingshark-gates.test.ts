@@ -3,7 +3,7 @@ import path from "node:path";
 import { describe, expect, it } from "vitest";
 import { repoRoot } from "../src/paths.js";
 import { NormalizedQuestionSchema, type NormalizedQuestion } from "../src/ventures/marketingshark/bank.js";
-import { enabledBrands, ENGAGEMENT_NEVER_CLAIM, factSheetFor, loadMarketingSharkConfig, MarketingSharkConfig, type Brand } from "../src/ventures/marketingshark/config.js";
+import { enabledBrands, ENGAGEMENT_NEVER_CLAIM, factSheetFor, factSheetText, loadMarketingSharkConfig, MarketingSharkConfig, type Brand } from "../src/ventures/marketingshark/config.js";
 import { fencedBlocks, LIMITS, promisesEngagementReward, runTruthGates, violationReport } from "../src/ventures/marketingshark/gates.js";
 import { LINKEDIN_LINK_RESERVE, LINKEDIN_TEXT_LIMIT, LINKEDIN_UTM_CONTENT_MAX, linkedinTrackedLink } from "../src/social/linkedin-text.js";
 import { buildChumPacket, craftRulesFor, outputShape, readCraftRules } from "../src/ventures/marketingshark/packet.js";
@@ -401,6 +401,21 @@ describe("marketingShark CHUM packet", () => {
     const shuffled = { ...config, brands: [{ ...brand, factSheets: [launched, current] }] };
     expect(MarketingSharkConfig.safeParse(shuffled).success).toBe(false);
     expect(MarketingSharkConfig.safeParse({ ...config, brands: [later] }).success).toBe(true);
+  });
+
+  it("records the freemium decision without letting a price or a free claim through", async () => {
+    // The owner decided on 2026-09-25 that devShark becomes freemium, with Premium planned at a
+    // monthly price. Premium is not on sale and billing is off, so the block in effect names no
+    // price anywhere a post may quote from, and forbids both the price and the old "free" claim.
+    const brand = await devshark();
+    const facts = factSheetFor(brand, "2026-09-26")!;
+    expect(facts.effectiveFrom).toBe("2026-09-25");
+    expect(facts.maturity).toContain("English only");
+    expect(factSheetText(facts)).not.toMatch(/\b\d+\.\d{2}\b|€|\bEUR\b|\bUSD\b|per month|a month/iu);
+    expect([facts.whatVisitorsCanDo, ...facts.allowedClaims].join("\n")).not.toMatch(/\bfree\b|bilingual|czech/iu);
+    expect(facts.neverClaim.some((claim) => claim.startsWith("A price"))).toBe(true);
+    expect(facts.neverClaim.some((claim) => claim.startsWith("That learning is free"))).toBe(true);
+    expect(facts.neverClaim).toContain(ENGAGEMENT_NEVER_CLAIM);
   });
 
   it("keeps the craft rules small enough to ride on every daily call", async () => {

@@ -230,6 +230,34 @@
             "A mobile app, an offline mode, or an interface language beyond English and Czech.",
             "Coins, discounts, access or any other reward for following, liking, sharing or commenting: no slide, caption or hashtag may promise one."
           ]
+        },
+        {
+          "effectiveFrom": "2026-09-25",
+          "recordedAt": "2026-09-26",
+          "source": "Owner decision of 2026-09-25 (react-express-app SECOND-HANDOFF-25-9-2026.md, section 0): freemium, Premium planned at 3.99 a month, billing off until Stripe is set up. English only since 2026-09-24 (its CLAUDE.md).",
+          "maturity": "Live at devshark.app in English only and in testing by the owner: not publicly launched, no launch date public. The owner has decided to make it freemium; Premium is not on sale, and billing stays off until the owner sets up Stripe.",
+          "whatVisitorsCanDo": "Learn web development in English, in the browser: guided Learn paths with spaced mastery, a daily Today queue, quizzes with an explanation on every answer, a daily challenge, multiplayer rooms, flashcards, a typing racer and server-graded coding tasks in JavaScript, TypeScript, React, system design and algorithms. Google sign-in saves progress; without it nothing is saved.",
+          "callToAction": "Try one question at devshark.app. Promise no download, app-store listing, launch date or price, and never say that learning is free.",
+          "allowedClaims": [
+            "devShark is an English web-development learning platform at devshark.app, live and in testing before its public launch.",
+            "Its questions cover JavaScript, TypeScript, HTML, CSS, React, Node.js, Git, databases, testing, security, DSA and algorithms, system design and how the internet works.",
+            "Every question comes with an explanation of the right answer, and guided Learn paths, a daily challenge, quizzes, flashcards, multiplayer rooms and a typing racer all run in the browser.",
+            "The Coding section grades JavaScript, TypeScript, React and system-design tasks on the server, with hint ladders that end in documentation.",
+            "Every registered account gets HTML, CSS and JavaScript in full, the first half of React and a starter set of coding challenges; a Google sign-in saves progress across devices.",
+            "The bank holds more than 2,400 authored web-development questions, the product's own count on 25 September 2026."
+          ],
+          "neverClaim": [
+            "That it is launched, finished, out of testing or available in an app store, or any launch date.",
+            "User counts, rankings, ratings, testimonials, awards or press.",
+            "A price, subscription, Premium tier or discount: Premium is not on sale, and no price may be named until it is.",
+            "That learning is free, free forever or free for everything: devShark is becoming freemium, so name only what every account gets.",
+            "Any AI feature: devShark has no AI tutor, hint coach or generated content.",
+            "A certificate, certification, job guarantee or interview-pass promise; the learning paths state that they certify nothing.",
+            "That the content was reviewed by a person; the item-by-item review is by a model and the product says so.",
+            "That grading is abuse-resistant or tamper-proof; that boundary is still being hardened.",
+            "Any subject beyond web development, a mobile app, an offline mode, or an interface language other than English.",
+            "Coins, discounts, access or any other reward for following, liking, sharing or commenting: no slide, caption or hashtag may promise one."
+          ]
         }
       ]
     }

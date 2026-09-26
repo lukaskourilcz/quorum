@@ -223,7 +223,8 @@ describe("the kinds' own content", () => {
     expect(screens.map((screen) => screen.id)).toContain(built.spotlight!.screen.id);
     expect(built.carousels.en.slides[0]!.headline).toBe(`Inside devShark: ${built.spotlight!.screen.name}`);
     expect(built.carousels.en.slides[4]!.headline).toBe(brand.postKinds["feature-spotlight"]!.footer.en);
-    expect(built.spotlight!.factSheetEffectiveFrom).toBe("2026-09-15");
+    // The block in effect on 2026-09-29 is the owner's 2026-09-25 freemium record.
+    expect(built.spotlight!.factSheetEffectiveFrom).toBe("2026-09-25");
     // A new screen each week.
     const next = await plan(brand, "2026-10-06", where);
     expect(next.kind === "feature-spotlight" && next.subject.ref).not.toBe(built.subject.ref);

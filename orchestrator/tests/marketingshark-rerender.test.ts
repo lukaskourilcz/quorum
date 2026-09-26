@@ -202,7 +202,7 @@ describe("every post kind can be rendered again from what its package records", 
 
   it("records where each kind's facts came from", async () => {
     const spotlight = PostPackageSchema.parse(await fixture("marketingshark-package-feature-spotlight.valid.json"));
-    expect(spotlight.spotlight).toMatchObject({ factSheetEffectiveFrom: "2026-09-15" });
+    expect(spotlight.spotlight).toMatchObject({ factSheetEffectiveFrom: "2026-09-25" });
     const teaser = PostPackageSchema.parse(await fixture("marketingshark-package-challenge-teaser.valid.json"));
     expect(teaser.challenge).toMatchObject({ difficulty: "easy", sourceCommit: expect.stringMatching(/^[a-f0-9]{40}$/u) });
     const note = PostPackageSchema.parse(await fixture("marketingshark-package-this-week.valid.json"));
