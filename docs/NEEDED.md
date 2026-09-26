@@ -982,6 +982,13 @@ runs and nothing here is needed while they are paused. The items moved here verb
 finished alike, so resuming a venture starts from its own list. `/admin/settings` lists the paused
 ventures and resumes one.
 
+- [ ] **Move MMA Files' and Titty Tuesdays' social drafts to queue v2 before either resumes** —
+  `composeMmaFilesSocialQueue` and `composeTittyTuesdaysSocialQueue` in
+  `orchestrator/src/social/venture-packs.ts` still write queue v1. The migration audit counts every
+  v1 file as legacy evidence, so the first draft either venture writes after it resumes fails the
+  post-cycle gate and loses that cycle's records, as DNESKAi's drafts did until #583. Write them the
+  way `orchestrator/src/social/pack-drafts.ts` writes DNESKAi's. [imp:3] [owner:ai] [time:2h] [kind:setup]
+
 ### MMA Files and FightAIQ
 
 mma-files `main` accepts image corrections since `1c276eb` (2026-08-12, "accept image corrections

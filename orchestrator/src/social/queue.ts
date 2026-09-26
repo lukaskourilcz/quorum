@@ -233,6 +233,14 @@ export const CapabilityAwareQueueItemSchema = z.strictObject({
 export type CapabilityAwareQueueItem = z.infer<typeof CapabilityAwareQueueItemSchema>;
 export type RuntimeQueueItem = QueueItem | CapabilityAwareQueueItem;
 
+/**
+ * Stands in `approvalProvenance.approvalRef` until the owner approves an item in the Queue
+ * workspace (quorum#573), which replaces it with the approval event's id. Not an approval: the item
+ * stays a draft with every check pending, and the publisher sends neither. marketingShark's and
+ * DNESKAi's drafts both carry it; `site/src/lib/admin-queue/item.ts` holds the same string.
+ */
+export const AWAITING_OWNER_APPROVAL = "awaiting-owner-approval";
+
 export function parseRuntimeQueueItem(value: unknown): RuntimeQueueItem {
   const version = typeof value === "object" && value !== null && "schemaVersion" in value
     ? (value as { schemaVersion?: unknown }).schemaVersion

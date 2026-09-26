@@ -56,6 +56,14 @@ profile that owns its channel's connection (#569). A mapped connection must belo
 venture's own primary profiles, which lets a venture keep one profile per platform. An unmapped
 legacy producer stays a manual draft and cannot silently become a publisher.
 
+DNESKAi's edition pack stopped writing queue v1 in #583. From #563 it wrote two v1 drafts for every
+published edition, and this audit counted each as a migrated record, so each publishing day moved
+the totals below and failed the post-cycle gate. It now writes two queue v2 drafts: bound to
+DNESKAi's own profile and connection, carrying `state/social/packs/<date>.json` by hash, every check
+`pending` until the owner approves them in the Queue. MMA Files and Titty Tuesdays still compose v1
+drafts in `orchestrator/src/social/venture-packs.ts`; both ventures are paused, and a draft from
+either would fail the same totals.
+
 `pnpm social:migration-audit` is the deterministic, read-only release check for that compatibility
 path. `--write` may persist its one hash-addressed receipt at
 `state/social/migrations/social-distribution-core-v1.json`; rerunning the same inputs does not write
@@ -67,6 +75,11 @@ ventures; marketingShark's record (#569) is new, not migration evidence. Unavail
 malformed counts remain explicit. The categories describe migration evidence, not live
 authority: all profiles, connections and bindings remain held. Rollback keeps the original queue files and the `QueueItemSchema` and
 `SocialActivationSchema` readers intact.
+
+The four committed v1 items are the whole of the queue evidence. `social-migration-audit.test.ts`
+pins these totals against the committed state, composes a real DNESKAi pack into a copy of `state/`
+and requires the same totals and a passing `idempotent-migration-rollback` check on it, and then
+adds one v1 file to that copy and requires the check to fail.
 
 ## Deny-by-default target resolution
 

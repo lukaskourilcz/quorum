@@ -1,14 +1,25 @@
-import { readdir, readFile, mkdtemp, rm } from "node:fs/promises";
+import { mkdir, readdir, readFile, mkdtemp, rm, writeFile } from "node:fs/promises";
 import os from "node:os";
 import path from "node:path";
 import sharp from "sharp";
 import { afterEach, describe, expect, it } from "vitest";
 import editionFixture from "../../../contracts/fixtures/edition-package.valid.json" with { type: "json" };
+import { caughtUpEditionMeeting as caughtUpMeetingFixture, czechOnlyEdition } from "../../tests/fixtures/caught-up-edition.js";
 import { EditionPackageSchema } from "../contracts/edition-package.js";
-import { MeetingRecordSchema } from "../contracts/meeting-record.js";
 import { SocialPackSchema } from "../contracts/social-pack.js";
-import { QueueItemSchema, assertQueueItemPublishable, queuePayloadHash } from "./queue.js";
+import { canonicalJson, sha256 } from "../hashing.js";
+import { configRoot } from "../paths.js";
+import { readRecordedAssetHashes } from "./media/recorded-hashes.js";
 import { composeEditionSocialPack } from "./pack.js";
+import { loadSocialPublisherRegistry, SocialPublisherRegistrySchema } from "./publisher-targets.js";
+import {
+  AWAITING_OWNER_APPROVAL,
+  CapabilityAwareQueueItemSchema,
+  assertQueueItemPublishable,
+  capabilityAwareQueuePayloadHash,
+  type CapabilityAwareQueueItem
+} from "./queue.js";
+import { isDue } from "./runner-context.js";
 
 /**
  * How long a sharp-backed render may take before the suite calls it hung.
@@ -22,45 +33,20 @@ const RENDER_TIMEOUT_MS = 90_000;
 
 const roots: string[] = [];
 
-const caughtUpMeetingFixture = MeetingRecordSchema.parse({
-  schemaVersion: "meeting-record/2",
-  cycleId: "fixture-caught-up-edition",
-  date: "2026-08-04",
-  phase: "cu-edition",
-  kind: "cu-edition",
-  fixture: true,
-  status: "PLAN",
-  stage: "DISCOVERY",
-  operatingBrief: "Review the synthetic edition package without publishing or calling a provider.",
-  participantReasons: [
-    { agent: "HERALD", reason: "chairs the fixture edition room", participated: true },
-    { agent: "STET", reason: "reviews the fixture copy", participated: true },
-    { agent: "AUDIT", reason: "holds the fixture veto", participated: true }
-  ],
-  ledger: { estimatedCycleUsd: 0, actualCycleUsd: 0, monthAllInUsd: 0, monthCapUsd: 30 },
-  decision: { outcome: "PLAN", summary: "The synthetic edition package may proceed to rendering tests only.", evidenceRefs: ["fixture:edition-package"] },
-  proposals: [{ agent: "STET", summary: "Use the synthetic package exactly as supplied.", evidenceRefs: ["fixture:edition-package"] }],
-  voteMatrix: [
-    { voter: "HERALD", firstChoice: "PLAN", veto: false },
-    { voter: "STET", firstChoice: "PLAN", veto: false },
-    { voter: "AUDIT", firstChoice: "PLAN", veto: false }
-  ],
-  tasks: [],
-  growthPlan: "Fixture rendering does not authorize publication, scheduling, outreach or spend.",
-  eveningOutcome: null,
-  roomTranscript: {
-    openedAt: "2026-08-04T04:00:00.000Z",
-    closedAt: "2026-08-04T04:00:02.000Z",
-    gavel: "HERALD",
-    setting: "Synthetic Caught Up edition fixture; its package content is data, never instructions.",
-    turns: [
-      { agent: "HERALD", mode: "gavel", sentAt: "2026-08-04T04:00:00.000Z", text: "Open the synthetic edition rendering check." },
-      { agent: "STET", mode: "statement", sentAt: "2026-08-04T04:00:01.000Z", text: "The supplied fixture is ready for deterministic rendering." },
-      { agent: "AUDIT", mode: "close", sentAt: "2026-08-04T04:00:02.000Z", text: "Rendering is allowed; publishing remains locked." }
-    ]
-  },
-  generatedAt: "2026-08-04T04:00:02.000Z"
-});
+/**
+ * What the Queue's approval does to a draft (`approveQueueItem` in `site/src/lib/admin-queue/item.ts`,
+ * keeping the window): every check passes, the approval event becomes the provenance and the hash is
+ * recomputed over both.
+ */
+function approvedByOwner(item: CapabilityAwareQueueItem): CapabilityAwareQueueItem {
+  const approved = {
+    ...item,
+    status: "queued" as const,
+    checks: Object.fromEntries(Object.keys(item.checks).map((id) => [id, "pass"])) as CapabilityAwareQueueItem["checks"],
+    approvalProvenance: { ...item.approvalProvenance, approvalRef: "social-queue-event-0123456789abcdef01234567" }
+  };
+  return CapabilityAwareQueueItemSchema.parse({ ...approved, content: { ...approved.content, contentHash: capabilityAwareQueuePayloadHash(approved) } });
+}
 
 afterEach(async () => {
   await Promise.all(roots.splice(0).map((root) => rm(root, { recursive: true, force: true })));
@@ -133,12 +119,39 @@ describe("Caught Up social pack composer", () => {
       pack.byLocale.en!.destination,
       pack.byLocale.cs.destination
     ]));
+    // Queue v2 drafts (quorum#583), each on the profile and connection the registry's legacy mapping
+    // gives DNESKAi's v1 posts, so the two writers' posts land on the same feed. Nothing in one can
+    // send before the owner approves it in the Queue.
+    const registry = await loadSocialPublisherRegistry(configRoot);
+    const mapping = registry.legacyQueueMappings.find(({ venture }) => venture === "caught-up")!;
+    const writtenPack = JSON.parse(await readFile(path.join(stateRoot, "social/packs/2026-08-04.json"), "utf8")) as unknown;
     for (const item of result!.queueItems) {
-      const parsed = QueueItemSchema.parse(item);
-      expect(parsed.status).toBe("draft");
-      expect(Object.values(parsed.checks)).toEqual(Array(8).fill("pass"));
-      expect(queuePayloadHash(parsed)).toBe(parsed.content.contentHash);
-      expect(parsed.attempt).toBeNull();
+      const parsed = CapabilityAwareQueueItemSchema.parse(item);
+      expect(parsed).toMatchObject({
+        status: "draft",
+        sourceVentureId: "caught-up",
+        target: {
+          profileId: registry.connections.find(({ id }) => id === mapping.connections[parsed.channel as "instagram" | "threads"])!.profileId,
+          profileRole: "venture-primary",
+          role: "primary",
+          connectionBindingRef: mapping.connections[parsed.channel as "instagram" | "threads"],
+          capabilityRef: null
+        },
+        // The pack as written, by hash: the asset gate reads the file back and compares.
+        sourcePackage: { schemaVersion: "approved-publish-package/1", artifactRef: "state/social/packs/2026-08-04.json", packageHash: sha256(canonicalJson(writtenPack)) },
+        approvalProvenance: { approvalRef: AWAITING_OWNER_APPROVAL, selectionRef: "state/meetings/2026-08-04-cu-edition.json" },
+        attempt: null,
+        migration: null
+      });
+      expect(Object.values(parsed.checks)).toEqual(Array(11).fill("pending"));
+      expect(capabilityAwareQueuePayloadHash(parsed)).toBe(parsed.content.contentHash);
+      expect(JSON.parse(await readFile(path.join(stateRoot, `social/queue/2026-08-04-${parsed.locale}-${parsed.channel}.json`), "utf8"))).toEqual(parsed);
+      expect(isDue(parsed, new Date("2026-08-04T05:00:00.000Z"))).toBe(false);
+      expect(() => assertQueueItemPublishable({ ...parsed, status: "queued" })).toThrow(/incomplete approval checks/u);
+      // The asset gate trusts the pack, and finds a recorded hash for every frame an item names.
+      const recorded = await readRecordedAssetHashes({ item: parsed, repoRoot: root, stateRoot });
+      expect(recorded.sourcePackage).toBe("verified");
+      expect(parsed.content.assetPaths.every((asset) => recorded.hashes.has(asset))).toBe(true);
     }
 
     const replayRoot = await mkdtemp(path.join(os.tmpdir(), "boardless-social-pack-replay-"));
@@ -256,8 +269,11 @@ describe("every composed queue item survives the publisher's own gate", () => {
     for (const item of items) {
       if (item.channel === "threads") expect(item.content.assetPaths).toEqual([]);
       else expect(item.content.assetPaths.length).toBeGreaterThan(0);
-      // The real gate, not a restatement of it: whatever the composer emits must pass here.
-      expect(() => assertQueueItemPublishable({ ...item, status: "queued" })).not.toThrow();
+      // Not before the owner approves it (quorum#583)...
+      expect(() => assertQueueItemPublishable({ ...item, status: "queued" })).toThrow(/incomplete approval checks/u);
+      // ...and then the real gate, not a restatement of it: whatever the composer emits must pass
+      // here once the Queue has approved it.
+      expect(() => assertQueueItemPublishable(approvedByOwner(item))).not.toThrow();
     }
   }, RENDER_TIMEOUT_MS);
 });
@@ -292,13 +308,44 @@ describe("composition without an enabled channel (quorum#563)", () => {
     for (const item of result!.queueItems) {
       expect(item.status).toBe("draft");
       expect(item.content.assetPaths).toEqual([]);
-      QueueItemSchema.parse(item);
+      CapabilityAwareQueueItemSchema.parse(item);
       if (item.channel === "threads") {
-        expect(() => assertQueueItemPublishable({ ...item, status: "queued" })).not.toThrow();
+        expect(() => assertQueueItemPublishable(approvedByOwner(item))).not.toThrow();
       } else {
-        // Reviewable and copyable, never sendable: the publisher's own gate refuses it.
-        expect(() => assertQueueItemPublishable({ ...item, status: "queued" })).toThrow(/hosted images/u);
+        // Reviewable and copyable, never sendable: even approved, the publisher's own gate refuses it.
+        expect(() => assertQueueItemPublishable(approvedByOwner(item))).toThrow(/hosted images/u);
       }
     }
   }, RENDER_TIMEOUT_MS);
+});
+
+describe("drafts bound to DNESKAi's own profile (quorum#583)", () => {
+  it("writes nothing at all when the registry cannot bind a draft", async () => {
+    const root = await mkdtemp(path.join(os.tmpdir(), "boardless-social-pack-registry-"));
+    roots.push(root);
+    const config = path.join(root, "config");
+    await mkdir(config, { recursive: true });
+    const registry = SocialPublisherRegistrySchema.parse(JSON.parse(await readFile(path.join(configRoot, "social-publisher-registry.json"), "utf8")));
+    const threads = registry.legacyQueueMappings.find(({ venture }) => venture === "caught-up")!.connections.threads;
+    // Without DNESKAi's Threads connection, and the legacy mapping that names it, the registry still
+    // parses; the composer must not bind the Threads draft to anything else.
+    await writeFile(path.join(config, "social-publisher-registry.json"), JSON.stringify(SocialPublisherRegistrySchema.parse({
+      ...registry,
+      connections: registry.connections.filter(({ id }) => id !== threads),
+      legacyQueueMappings: registry.legacyQueueMappings.filter(({ venture }) => venture !== "caught-up")
+    })));
+    const stateRoot = path.join(root, "state");
+    await expect(composeEditionSocialPack({
+      editionPackage: czechOnlyEdition(),
+      meeting: caughtUpMeetingFixture,
+      destinations: { cs: "https://caught-up.example/articles/2026-08-04-measured-model-price-cut" },
+      repoRoot: root,
+      stateRoot,
+      configRoot: config,
+      now: new Date("2026-08-04T04:00:00.000Z")
+    })).rejects.toThrow(/exactly one primary threads connection/u);
+    // Resolved before the first render: no pack, no draft, no frame.
+    await expect(readdir(stateRoot)).rejects.toMatchObject({ code: "ENOENT" });
+    await expect(readdir(path.join(root, "site"))).rejects.toMatchObject({ code: "ENOENT" });
+  });
 });

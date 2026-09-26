@@ -88,6 +88,27 @@ export const SocialPublisherRegistrySchema = z.strictObject({
 
 export type SocialPublisherRegistry = z.infer<typeof SocialPublisherRegistrySchema>;
 
+/**
+ * A venture's own primary profile and its one connection on a platform, as the registry records
+ * them: the target a venture's own drafts are bound to (DNESKAi's pack, quorum#583). Anything other
+ * than exactly one owned-brand primary connection throws; the drafter never chooses between
+ * candidates, and never falls back to another venture's profile.
+ */
+export function ownPrimaryTarget(
+  registry: SocialPublisherRegistry,
+  venture: string,
+  platform: SocialConnection["platform"]
+): { profileId: string; connectionBindingRef: string } {
+  const owned = new Set(registry.profiles
+    .filter(({ role, kind, ventureRef }) => role === "venture-primary" && kind === "owned-brand" && ventureRef === venture)
+    .map(({ id }) => id));
+  const connections = registry.connections.filter((connection) => connection.platform === platform && owned.has(connection.profileId));
+  if (connections.length !== 1) {
+    throw new Error(`${venture} needs exactly one primary ${platform} connection in the publisher registry; it has ${connections.length}`);
+  }
+  return { profileId: connections[0]!.profileId, connectionBindingRef: connections[0]!.id };
+}
+
 export interface ResolvedPublisherTarget {
   profile: SocialProfile;
   connection: SocialConnection;

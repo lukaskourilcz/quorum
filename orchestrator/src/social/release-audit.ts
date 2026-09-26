@@ -54,14 +54,17 @@ async function readRunnerSource(repoRoot: string): Promise<string> {
   return (await Promise.all(RUNNER_MODULES.map((file) => readFile(path.join(repoRoot, file), "utf8")))).join("\n");
 }
 
-export async function auditSocialPrivacy(repoRoot = defaultRepoRoot): Promise<SocialPrivacyAudit> {
+export async function auditSocialPrivacy(repoRoot = defaultRepoRoot, stateRoot = path.join(repoRoot, "state")): Promise<SocialPrivacyAudit> {
   const configFiles = (await readdir(path.join(repoRoot, "config"), { withFileTypes: true }))
     .filter((entry) => entry.isFile() && entry.name.startsWith("social-") && entry.name.endsWith(".json"))
     .map(({ name }) => path.join(repoRoot, "config", name));
-  const files = [...configFiles, ...await jsonFiles(path.join(repoRoot, "state/social"))].sort();
+  // A state file is named as the repository holds it, wherever this state tree lives.
+  const files = [
+    ...configFiles.map((file) => ({ file, ref: path.relative(repoRoot, file) })),
+    ...(await jsonFiles(path.join(stateRoot, "social"))).map((file) => ({ file, ref: path.join("state", path.relative(stateRoot, file)) }))
+  ].sort((left, right) => (left.ref < right.ref ? -1 : left.ref > right.ref ? 1 : 0));
   const findings: SocialPrivacyFinding[] = [];
-  for (const file of files) {
-    const ref = path.relative(repoRoot, file);
+  for (const { file, ref } of files) {
     try {
       const source = await readFile(file, "utf8");
       inspectPrivateKeys(JSON.parse(source) as unknown, ref, findings);
@@ -71,12 +74,18 @@ export async function auditSocialPrivacy(repoRoot = defaultRepoRoot): Promise<So
   return { scannedFiles: files.length, findings, passed: findings.length === 0 };
 }
 
-export async function auditSocialRelease(repoRoot = defaultRepoRoot): Promise<SocialReleaseAudit> {
+/**
+ * The final release gate over the repository's config and source and one state tree: the committed
+ * `state/` unless `stateRoot` names another. A test points it at a copy of `state/` that a composed
+ * pack has written into, so the gate is asked about the state a cycle will leave (quorum#583).
+ */
+export async function auditSocialRelease(repoRoot = defaultRepoRoot, options: { stateRoot?: string } = {}): Promise<SocialReleaseAudit> {
+  const stateRoot = options.stateRoot ?? path.join(repoRoot, "state");
   const configRoot = path.join(repoRoot, "config");
   const [publisher, providers, strategies, routineScopes, capabilities, slos, recoveryConfig, manifest, migration, privacy, queueSource, targetSource, providerSource, runnerSource, indexSource, campaignSource, dailySource, resultsSource, learningSource, healthSource, cycleSource, adminModel, adminSnapshot, adminWorkspace, proxySource, releaseDoc, neededDoc] = await Promise.all([
     loadSocialPublisherRegistry(configRoot), loadSocialProviderRegistry(configRoot), loadSocialProfileStrategies(configRoot), loadSocialRoutineScopeRegistry(path.join(configRoot, "social-routine-scopes.json")),
     loadVentureCapabilityMap(configRoot), loadVentureSloRegistry(configRoot), loadOperationsRecoveryRegistry(configRoot), readImplementationManifestRegistry(repoRoot),
-    auditSocialDistributionMigration({ repoRoot }), auditSocialPrivacy(repoRoot),
+    auditSocialDistributionMigration({ repoRoot, stateRoot }), auditSocialPrivacy(repoRoot, stateRoot),
     readFile(path.join(repoRoot, "orchestrator/src/social/queue.ts"), "utf8"), readFile(path.join(repoRoot, "orchestrator/src/social/publisher-targets.ts"), "utf8"),
     readFile(path.join(repoRoot, "orchestrator/src/social/providers.ts"), "utf8"), readRunnerSource(repoRoot), readFile(path.join(repoRoot, "orchestrator/src/social/index.ts"), "utf8"),
     readFile(path.join(repoRoot, "orchestrator/src/social/campaigns.ts"), "utf8"), readFile(path.join(repoRoot, "orchestrator/src/social/daily.ts"), "utf8"), readFile(path.join(repoRoot, "orchestrator/src/social/results.ts"), "utf8"),

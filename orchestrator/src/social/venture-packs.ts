@@ -6,7 +6,7 @@ import type { MarketingPlan } from "../contracts/marketing-plan.js";
 import type { ArticlePackage, SocialVariantPack } from "../contracts/mma-files.js";
 import { parseSafeHttpsUrl } from "../security/url.js";
 import { atomicWriteBuffer, atomicWriteJson } from "../state.js";
-import { deterministicVariant } from "./pack.js";
+import { deterministicVariant } from "./pack-drafts.js";
 import { QueueItemSchema, queuePayloadHash, type QueueItem } from "./queue.js";
 import { assignPackHook, channelRecordFor } from "../studio/hook-brain.js";
 import { recordPost, writeHookChannels } from "../studio/hook-channels.js";

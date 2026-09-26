@@ -2,6 +2,7 @@ import type { SocialCapabilityRef } from "../../contracts/social-distribution.js
 import type { VentureCapabilityMap } from "../../contracts/venture-capability.js";
 import { canonicalJson, sha256 } from "../../hashing.js";
 import {
+  AWAITING_OWNER_APPROVAL,
   CapabilityAwareQueueItemSchema,
   capabilityAwareQueuePayloadHash,
   type CapabilityAwareQueueItem
@@ -10,12 +11,7 @@ import { resolveVentureCapabilityInMap } from "../capabilities.js";
 import type { Brand } from "./config.js";
 import { isPostPackage, packagePath, type AnyMarketingSharkPackage } from "./package.js";
 
-/**
- * Stands in `approvalProvenance.approvalRef` until the owner approves an item in the Queue
- * workspace (quorum#573), which replaces it with the approval event's id. Not an approval: the item
- * stays a draft with every check pending, and the publisher sends neither.
- */
-export const AWAITING_OWNER_APPROVAL = "awaiting-owner-approval";
+export { AWAITING_OWNER_APPROVAL };
 
 /** One draft per platform, in the order the Queue workspace lists them. */
 export const MARKETINGSHARK_PLATFORMS = ["linkedin", "instagram", "threads"] as const;

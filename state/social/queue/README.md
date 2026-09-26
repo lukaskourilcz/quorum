@@ -9,10 +9,16 @@ are migrated in memory through the explicit mapping in `config/social-publisher-
 their source hash and mapping reference are preserved. New writers use capability-aware queue v2.
 marketingShark writes three v2 drafts per devShark package, `<date>-devshark-en-<platform>.json` for
 LinkedIn, Instagram and Threads, each bound to devShark's own profile and carrying the package hash.
+DNESKAi's edition pack writes two per published edition since #583, `<date>-cs-instagram.json` and
+`<date>-cs-threads.json`, bound to DNESKAi's own profile and connection and carrying the hash of
+`../packs/<date>.json`. Every check on them stays `pending` until the owner approves them. A v1 file
+written today would count as migration evidence and fail the audit's pinned totals, which is how
+the post-cycle gate caught the pack still writing v1 after #563.
 
 The lifecycle is `draft` → `approved` → `queued` → `publishing`, followed by
 `published`, `failed`, `expired`, or `needs_reconciliation`. A human may also
-set `cancelled`. Only a `queued` item is due, plus a legacy v1 draft whose checks all pass. The
+set `cancelled`. Only a `queued` item is due, plus a legacy v1 draft whose checks all pass (the
+committed four, whose windows closed in August). The
 publisher's claim phase writes `publishing` with its attempt and pushes it before any provider is
 called; a claim that never finished stays `publishing` and is never sent again by itself.
 

@@ -379,6 +379,7 @@ export async function runCaughtUpLiveEditionCycle(
           destinations,
           repoRoot,
           stateRoot,
+          configRoot,
           now,
           hostFrames: socialFramesHosted
         });

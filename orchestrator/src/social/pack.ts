@@ -18,7 +18,9 @@ import { SocialPackSchema, type SocialPack } from "../contracts/social-pack.js";
 import { parseSafeHttpsUrl } from "../security/url.js";
 import { atomicWriteBuffer, atomicWriteJson, atomicWriteText, readText } from "../state.js";
 import { validateSocialImage } from "./media/validate.js";
-import { QueueItemSchema, queuePayloadHash, type QueueItem } from "./queue.js";
+import { buildPackDraft, socialPackHash } from "./pack-drafts.js";
+import { loadSocialPublisherRegistry, ownPrimaryTarget } from "./publisher-targets.js";
+import type { CapabilityAwareQueueItem } from "./queue.js";
 import { assignPackHook, channelRecordFor } from "../studio/hook-brain.js";
 import { recordPost, writeHookChannels } from "../studio/hook-channels.js";
 
@@ -26,10 +28,6 @@ const COMPOSER_VERSION = "carousel-studio-1" as const;
 
 function sha256(value: string | Uint8Array): string {
   return createHash("sha256").update(value).digest("hex");
-}
-
-export function deterministicVariant(value: string): "A" | "B" {
-  return Number.parseInt(sha256(value).slice(0, 2), 16) % 2 === 0 ? "A" : "B";
 }
 
 type SocialLocale = "en" | "cs";
@@ -59,96 +57,13 @@ function boundedCopy(body: string, suffix: string, maximum: number): string {
   return `${clipped}…${suffix}`;
 }
 
-function queueAltText(pack: SocialPack, locale: SocialLocale, channel: "instagram" | "threads"): string {
-  const frames = pack.byLocale[locale]![channel].frames;
-  // A Threads item carries no frames at all, so it has nothing to describe. The schema still
-  // wants a sentence; the honest one says the post is words.
-  if (frames.length === 0) {
-    return locale === "cs" ? "Textový příspěvek bez obrázku." : "A text post with no image.";
-  }
-  return frames
-    .map((frame, index) => `Frame ${index + 1}: ${pack.altTexts[frame]}`)
-    .join(" ")
-    .slice(0, 1_000);
-}
-
-function queueItem(input: {
-  pack: SocialPack;
-  locale: SocialLocale;
-  channel: "instagram" | "threads";
-  destination: string;
-  evidenceRefs: string[];
-  now: Date;
-  framesHosted: boolean;
-}): QueueItem {
-  const notBefore = input.now.toISOString();
-  const notAfter = new Date(input.now.getTime() + 72 * 60 * 60 * 1_000).toISOString();
-  const localized = input.pack.byLocale[input.locale]!;
-  const platform = localized[input.channel];
-  const id = `caught-up-${input.pack.date}-${input.locale}-${input.channel}`;
-  const variant = deterministicVariant(id);
-  const base = {
-    schemaVersion: 1 as const,
-    id,
-    venture: "caught-up" as const,
-    locale: input.locale,
-    variant,
-    campaignId: `caught-up-${input.pack.date}-${input.locale}`,
-    experimentId: null,
-    channel: input.channel,
-    objective: "trust" as const,
-    audience: `Caught Up readers (${input.locale})`,
-    destination: input.destination,
-    utm: {
-      source: input.channel,
-      medium: "organic_social" as const,
-      campaign: `caught-up-${input.pack.date}-${input.locale}`,
-      content: `edition-carousel-${input.locale}`
-    },
-    content: {
-      text: input.channel === "instagram" ? localized.instagram.variants[variant] : localized.threads.variants[variant],
-      altText: queueAltText(input.pack, input.locale, input.channel),
-      // DNESKAi's Threads post is text and a link, and its frames belong to the carousel, which
-      // is Instagram's. The connector has taken Threads images since #572; DNESKAi renders no
-      // Threads deck to give it.
-      //
-      // An Instagram draft composed while no channel is enabled carries no image either: its
-      // frames were rendered for the manifest and never written under `site/public/social`, so
-      // there is nothing hosted to point at. `assertQueueItemPublishable` refuses an Instagram
-      // item without one, exactly as it refuses marketingShark's drafts, so this item can be
-      // reviewed and copied from the admin but never sent.
-      assetPaths: input.channel === "threads" || !input.framesHosted ? [] : platform.frames,
-      factualClaimRefs: input.evidenceRefs,
-      rendererVersion: COMPOSER_VERSION,
-      contentHash: "0".repeat(64)
-    },
-    publishWindow: { notBefore, notAfter },
-    status: "draft" as const,
-    checks: {
-      schema: "pass" as const,
-      brand: "pass" as const,
-      claims: "pass" as const,
-      quill: "pass" as const,
-      keeper: "pass" as const,
-      duplicate: "pass" as const,
-      accessibility: "pass" as const,
-      budget: "pass" as const
-    },
-    selectedBy: "PULSE" as const,
-    createdAt: input.now.toISOString(),
-    attempt: null,
-    receiptId: null
-  };
-  return QueueItemSchema.parse({
-    ...base,
-    content: { ...base.content, contentHash: queuePayloadHash(base) }
-  });
-}
-
 export interface SocialPackComposition {
   pack: SocialPack;
-  /** One per published locale and channel. Two while the desk publishes one language. */
-  queueItems: QueueItem[];
+  /**
+   * One queue v2 draft per published locale and channel, waiting for the owner's approval in the
+   * Queue (quorum#583). Two while the desk publishes one language.
+   */
+  queueItems: CapabilityAwareQueueItem[];
   artifactPaths: string[];
 }
 
@@ -170,6 +85,8 @@ export async function composeEditionSocialPack(input: {
    * channel exists to consume them. Defaults to true, the behaviour before the split.
    */
   hostFrames?: boolean;
+  /** Where the publisher registry is read from; the repository's `config/` unless a test says otherwise. */
+  configRoot?: string;
 }): Promise<SocialPackComposition | null> {
   const hostFrames = input.hostFrames ?? true;
   const editionPackage = input.editionPackage;
@@ -180,6 +97,14 @@ export async function composeEditionSocialPack(input: {
   const destinations = {
     ...(input.destinations.en ? { en: parseSafeHttpsUrl(input.destinations.en).toString() } : {}),
     cs: parseSafeHttpsUrl(input.destinations.cs).toString()
+  };
+  // DNESKAi's own profile and connection on each channel, resolved before anything is rendered or
+  // written: a registry the drafts cannot be bound to stops the pack here, and the caller records
+  // why, instead of leaving a pack behind whose drafts point nowhere.
+  const registry = await loadSocialPublisherRegistry(input.configRoot);
+  const targets = {
+    instagram: ownPrimaryTarget(registry, "caught-up", "instagram"),
+    threads: ownPrimaryTarget(registry, "caught-up", "threads")
   };
   const bestTurnIndex = input.meeting.roomTranscript.turns.findIndex((turn) => turn.agent === "STET") >= 0
     ? input.meeting.roomTranscript.turns.findIndex((turn) => turn.agent === "STET")
@@ -391,6 +316,10 @@ export async function composeEditionSocialPack(input: {
   const evidenceRefs = editionPackage.article.cs.frontmatter.sources
     .map((source) => `source:${source.source_id ?? source.id}`);
   const now = input.now ?? new Date();
+  // The pack exactly as it is written below: each draft binds this hash, and the asset gate reads
+  // the file back and compares before it trusts anything the pack says.
+  const packageHash = socialPackHash(pack);
+  const selectionRef = `state/meetings/${input.meeting.date}-cu-edition.json`;
   // A queue item carries its destination all the way to the platform and cannot be edited
   // after it publishes. Items are built only for locales that have a destination, so nothing
   // in the queue can outlive the route it points at.
@@ -400,7 +329,18 @@ export async function composeEditionSocialPack(input: {
     return (["instagram", "threads"] as const).map((channel) => ({
       locale,
       channel,
-      item: queueItem({ pack, locale, channel, destination, evidenceRefs, now, framesHosted: hostFrames })
+      item: buildPackDraft({
+        pack,
+        packageHash,
+        locale,
+        channel,
+        target: targets[channel],
+        destination,
+        evidenceRefs,
+        selectionRef,
+        now,
+        framesHosted: hostFrames
+      })
     }));
   });
   const csVisual = visualRefs.cs ?? visualRefs.en!;
