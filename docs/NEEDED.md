@@ -32,7 +32,34 @@ the steps. These are the owner's parts:
 - [x] **Deploy the site after #558** — done 2026-09-25: `pnpm deploy:check` passed on `c66700dc` and that commit is live on `boardless-ai.vercel.app` (deployment `dpl_4tur2dZG6Vt3tbMSpumaDfWZ46jd`). It was a Vercel cloud build triggered through the connector, because no linked Vercel CLI was available. [imp:4] [owner:me] [time:20m] [kind:deploy]
 - [ ] **Delete the dead Actions variables and secrets after #559** (the session had no tool for repository settings) — `MMA_FILES_LIVE_ENABLED`, `FIGHTAIQ_LIVE_ENABLED`, `FIGHTAIQ_ANALYSIS_ENABLED`, `MMA_FILES_INDEXING_ENABLED`, and the MMA Files and Titty Tuesdays Threads/Instagram variables and secrets in the repository settings. [imp:2] [owner:me] [time:10m] [kind:setup]
 - [x] **Decide DNESKAi's banner slots** — done 2026-09-25: option A, devShark in both slots (aifirst `50fce31`); the approval is recorded in `state/INBOX.md`. [imp:2] [owner:me] [time:10m] [kind:decision]
-- [ ] **Delete the merged session branches** — the session's git relay refuses deletions (HTTP 403), so these wait for you: `claude/gifted-albattani-p8suag` in quorum, aifirst, react-express-app and own-dashboard, merged into each `main`; and in quorum `claude/venture-launch-review-7l5nkd` (the branch of PR #511) and `claude/tender-fermi-8tdzf1`, both contained in `main`. #578 re-derives the rest of the 50 remote branches. Then turn on "Automatically delete head branches" (Settings → General → Pull Requests) in each repository so the next ones go by themselves. [imp:2] [owner:me] [time:10m] [kind:setup]
+- [ ] **Delete the merged session branches** — the session's git relay refuses deletions and tag pushes (HTTP 403), so these wait for you. In aifirst, react-express-app and own-dashboard: `claude/gifted-albattani-p8suag`, merged into each `main` (react-express-app's full list is its #232, own-dashboard's is its `NEEDED.md`). In quorum, #578's comment of 2026-09-26 re-derives all 49 remote branches with the evidence for each: 44 are merged into `main` or patch-equivalent to it, three obsolete ones are archived as tags before they go, `claude/compassionate-gates-xv2e0q` goes once `main` contains it, and `claude/elegant-cori-h9cdgb` stays until the next item is decided. The commands are below; run them from a clone with full history. Then turn on "Automatically delete head branches" (Settings → General → Pull Requests) in each repository so the next ones go by themselves. [imp:2] [owner:me] [time:15m] [kind:setup]
+
+  ```bash
+  git fetch origin --prune
+  for b in claude/busy-carson-lc5ise claude/czech-politics-venture-pggp9b claude/viral-carousel-trends-u6f3q8; do
+    git push origin "refs/remotes/origin/$b:refs/tags/archive/$b"
+  done
+  git ls-remote origin 'refs/tags/archive/*'   # all three tags must be listed before the last delete
+  git push origin --delete \
+    agent/booksofhistory-program agent/door-money agent/issue-369-public-spotlight agent/issue-370-admin-qa-gates \
+    agent/kvorum agent/tehdejsi-svet claude/admin-launch-board claude/admin-nav-guards claude/carousel-template-families-fj6eay \
+    claude/chum-cap-and-shape claude/curated-rung-batch claude/design-lab-launch-bound claude/finance-page-generator \
+    claude/gifted-albattani-p8suag claude/goviral-magazine-edges claude/idea-room-hold claude/launch-approvals-recorded \
+    claude/marketingshark-truncation claude/mma-files-article-rendering-hm64pk claude/mma-repeat-before-the-call \
+    claude/photo-forward-families claude/private-desk-accounting claude/production-audit-2026-09-07 \
+    claude/render-summary-edges claude/social-activation-counters claude/tender-fermi-8tdzf1 claude/trend-radar-empty-state \
+    claude/venture-launch-review-7l5nkd codex/autonomy-backbone-425-427 codex/autonomy-capability-424 \
+    codex/fix-cycle-workflow-upload codex/issue-366-admin-design-foundation codex/issue-367-admin-shell-navigation \
+    codex/issue-368-admin-panels-views codex/operations-admin-428-429 codex/ops-admin-428-429 codex/personal-growth-372-374 \
+    codex/personal-growth-375-378 codex/personal-growth-admin-379-382 codex/personal-growth-foundation-371 \
+    codex/programs-admin-419-431 codex/vercel-local-deploy-422 fix/issue-521-release-check-filter \
+    integration/door-money-main
+  git push origin --delete claude/busy-carson-lc5ise claude/czech-politics-venture-pggp9b claude/viral-carousel-trends-u6f3q8
+  git merge-base --is-ancestor origin/claude/compassionate-gates-xv2e0q origin/main \
+    && git push origin --delete claude/compassionate-gates-xv2e0q
+  ```
+
+- [ ] **Decide what happens to `claude/elegant-cori-h9cdgb`** — it holds the only implementation of most of #534 to #554 in 11 commits: the Design Lab's 4:5 master canvas, per-room and per-desk budget caps, GoVIRAL signal scoring with a weekly brief and play library, portfolio RICE, DNESKAi practical items and the edition rubric in CI. It is 557 commits behind `main` and not merge-ready, and its own `docs/NEEDED.md` carries 29 owner decisions that apply only to that code. Per issue, say whether an agent ports the work onto `main` or the issue closes as declined; the branch goes once nothing on it is wanted. Its digest restore `90f175c0` is already on `main` as `b3b2cddc`. [imp:3] [owner:me] [time:30m] [kind:decision]
 - [ ] **Countersign the DNESKAi yield proposals** — `state/decisions/2026-09-25-dneskai-yield-proposals.md` (`edition-2026-09a`, `Status: proposed`) lists five changes, each with its measured effect from `docs/reports/dneskai-yield-2026-09-25.md`; tick the ones you approve. Nothing in `config/edition-quality.json` changes before you do. [imp:3] [owner:me] [time:20m] [kind:decision]
 
 ## Focus and outage · 2026-09-15
