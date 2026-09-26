@@ -43,11 +43,12 @@ countersigned `$50` all-in monthly limit. No more than `$25` is reserved for mod
 use. At a hard limit the runtime stops rather than borrowing or quietly reducing
 accounting accuracy.
 
-The 06:00 decision room may assign one specialist agenda. Agenda-gated rooms open
-only for a due request; FightAIQ intake can also open for a material source change.
-Afternoon and night are deterministic checkpoints. Manual live runs remain explicit
-owner/operator actions and therefore bypass the scheduled agenda check without
-bypassing any budget, evidence or live-switch gate.
+The 06:00 morning room may assign one specialist agenda and also runs the day's
+deterministic checkpoint. Agenda-gated rooms open only for a due request; FightAIQ intake
+can also open for a material source change. The afternoon and night phases are off the
+clock since `operations-2026-08c` and run only when dispatched by hand. Manual live runs
+remain explicit owner/operator actions and therefore bypass the scheduled agenda check
+without bypassing any budget, evidence or live-switch gate.
 
 ## External actions
 
@@ -60,6 +61,6 @@ access. Visitor, reader and engagement ingestion remains disabled for Phase 3.
 Historical decision records are append-only evidence. If a decision changes, add a
 new superseding record rather than rewriting the old one.
 
-The decision map, eleven-venture operating model and generated current-state block live in
+The decision map, venture operating model and generated current-state block live in
 `docs/ECOSYSTEM.md`. A handoff that changes governance updates its curated sections and runs
 `pnpm docs:refresh`.

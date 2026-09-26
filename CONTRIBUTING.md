@@ -1,8 +1,8 @@
 # Contributing
 
-Working rules for this repository live in `CLAUDE.md` (and its mirror `AGENTS.md`) — the map,
-the golden rules, the commands and the git workflow. This file covers the conventions that are
-easy to get wrong because they cross a repository boundary.
+Working rules for this repository live in `CLAUDE.md` (Codex sessions reach it through
+`AGENTS.md`): the map, the golden rules, the commands and the git workflow. This file covers the
+conventions that are easy to get wrong because they cross a repository boundary.
 
 ## The engineering contract
 

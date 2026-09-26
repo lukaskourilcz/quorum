@@ -11,13 +11,17 @@ Council runs via API in `orchestrator/`; you are the human-invoked engineer.
 - `orchestrator/` — cycle engine + council prompts. `site/` — Next.js app.
 - `config/ventures.json` — the canonical public venture set: Caught Up (DNESKAi), Titty
   Tuesdays, GoVIRAL, BOOKSOFHISTORY, FightAIQ, Design Lab, marketingShark, MMA Files,
-  Door Money, Tehdejší svět and Kvórum, plus the owner-only Personal Growth workspace.
+  Door Money, Tehdejší svět and Kvórum, plus three owner-only entries: the Personal Growth
+  workspace, WebDev Signal and the Contest Radar exploration.
   Since `operations-2026-09b` only DNESKAi, marketingShark (devShark), GoVIRAL, the Design Lab
   and WebDev Signal run; every other venture is `paused`. A paused venture leaves the clock
   (`site/vercel.json` and the sweep derive from the registry), the admin navigation and the
-  Design Lab, and is listed in Settings. It also owns each venture room and envelope. `config/venture-capabilities.json` is the
-  separate deny-by-default graph for exact cross-boundary data and service handoffs;
-  it also reserves the planned `webdev-signal` boundary without founding that venture.
+  Design Lab, and is listed in Settings. The registry also owns each venture room and envelope.
+  `config/venture-capabilities.json` is the separate deny-by-default graph for exact
+  cross-boundary data and service handoffs. Its `webdev-signal` node is live: the founding
+  record (`state/decisions/2026-08-28-webdev-signal-founding.md`) is countersigned, and
+  `2026-09-15-webdev-signal-daily-runner.md` runs the desk as a `$0` pre-step of `cu-day` with
+  its editions held.
 - `studio/` — `@boardlessai/carousel-studio`, the deterministic render package. It is
   consumed as built output (`dist/`, gitignored). `pnpm install` builds it through the
   studio's `prepare`, and the gates rebuild it through `pre*` scripts in `site` and
@@ -129,7 +133,9 @@ Council runs via API in `orchestrator/`; you are the human-invoked engineer.
 ## Magazine datasets
 
 The magazines' daily widgets read append-only JSON datasets: `data/ai-facts.json`
-and `data/ai-lessons.json` in aifirst, `src/data/mma-facts.json` in mma-files.
+and `data/ai-lessons.json` in aifirst, and `src/data/mma-facts.json` in mma-files. The
+MMA dataset's delivery step left `cycle.yml` with the MMA Files pause (#559) and returns
+when that venture resumes.
 `boardless-dataset/1` is the contract and `orchestrator/src/datasets/` owns the
 append path.
 
@@ -196,8 +202,9 @@ program's stated order wins over opportunistic work elsewhere.
 
 ## Engineering rules
 
-`docs/ENGINEERING.md` is the clean-code contract, and it is the same file in every repository this
-owner runs. It is mirrored byte-for-byte at `.agents/ENGINEERING.md` for Codex sessions and
+`docs/ENGINEERING.md` is the clean-code contract. It is meant to be the same file in every
+repository this owner runs; until #582 copies it, only this repository carries it. It is
+mirrored byte-for-byte at `.agents/ENGINEERING.md` for Codex sessions and
 `orchestrator/tests/architecture.test.ts` fails on any drift between the two. Do not restate its
 rules here — a rule written in two places is two rules that will disagree.
 
@@ -256,7 +263,8 @@ This repo follows a shared markdown contract (see the `session-start`,
   `[kind:K]` is one of `setup` `deploy` `legal` `content` `decision`.
 - **`about-project.md`** — project summary + the tech stack.
 - **`scaling.md`** — cost & scaling only (renamed from `stack-and-scaling.md`).
-- **`monetization.md`** — how the project could earn (options table).
+- **`monetization.md`** — how the project could earn; the catalog itself is
+  `config/monetization-options.json`.
 
 At session start, check `docs/NEEDED.md` for `[owner:ai]` tasks that can now be
 done; at session end, update it (finished + newly-needed owner items).
@@ -274,3 +282,5 @@ done; at session end, update it (finished + newly-needed owner items).
   the opposite, and the site sat a full schedule change behind while three sessions reported it
   shipped.
 - **Delete the merged / old branch** (local and remote) after merging, to keep the repo clean. Never leave stale branches behind.
+  When the git relay refuses the remote delete (HTTP 403), add the branch name to the owner item
+  "Delete the merged session branches" in `docs/NEEDED.md`.
