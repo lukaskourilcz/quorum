@@ -14,7 +14,8 @@ Council runs via API in `orchestrator/`; you are the human-invoked engineer.
   Door Money, Tehdejší svět and Kvórum, plus three owner-only entries: the Personal Growth
   workspace, WebDev Signal and the Contest Radar exploration.
   Since `operations-2026-09b` only DNESKAi, marketingShark (devShark), GoVIRAL, the Design Lab
-  and WebDev Signal run; every other venture is `paused`. A paused venture leaves the clock
+  and WebDev Signal run; every other public venture and Personal Growth are `paused`, and
+  Contest Radar stays an `exploration` with no room. A paused venture leaves the clock
   (`site/vercel.json` and the sweep derive from the registry), the admin navigation and the
   Design Lab, and is listed in Settings. The registry also owns each venture room and envelope.
   `config/venture-capabilities.json` is the separate deny-by-default graph for exact

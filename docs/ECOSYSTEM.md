@@ -1,7 +1,7 @@
 # BoardlessAI ecosystem — standing full-context brief
 
 Updated: 2026-09-26
-Status: since `operations-2026-09b` only DNESKAi, marketingShark, GoVIRAL, the Design Lab and WebDev Signal run; every other venture is paused with its code and state kept
+Status: since `operations-2026-09b` only DNESKAi, marketingShark, GoVIRAL, the Design Lab and WebDev Signal run; every other public venture and Personal Growth are paused with their code and state kept, and Contest Radar stays an exploration with no room
 Audience: owner, product partners and Fable brainstorming  
 Authority: current code, committed state, decisions D1–D14, the 2026-08-26 autonomy-first decision, the countersigned founding records and `operations-2026-09b`
 

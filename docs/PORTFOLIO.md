@@ -3,7 +3,8 @@
 BoardlessAI is one guarded operating system with eleven public project workspaces and
 three owner-only entries: Personal Growth, WebDev Signal and the Contest Radar exploration.
 Since `operations-2026-09b` only DNESKAi, marketingShark, GoVIRAL, the Design Lab and WebDev
-Signal run; the other ventures are paused. Shared
+Signal run; every other public venture and Personal Growth are paused, and Contest Radar stays
+an exploration with no room. Shared
 infrastructure owns the agent registry, budget, source policy, meeting records,
 specialist agendas, calendar, admin, delivery checks and public explanation. Each
 project keeps a narrow output boundary rather than cloning the orchestrator.
