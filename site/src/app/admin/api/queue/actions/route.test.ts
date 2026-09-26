@@ -27,9 +27,13 @@ beforeEach(async () => {
   vi.stubEnv("NODE_ENV", "test");
   vi.stubEnv("ADMIN_USER", "owner");
   vi.stubEnv("ADMIN_PASSWORD", "secret");
+  // The fixture's publish window closes at 2026-09-26T21:00Z. On the real clock every approval
+  // after that instant is refused, so the file pins the morning the library tests use.
+  vi.setSystemTime(new Date("2026-09-26T08:00:00.000Z"));
 });
 
 afterEach(async () => {
+  vi.useRealTimers();
   vi.unstubAllEnvs();
   vi.unstubAllGlobals();
   await Promise.all(roots.splice(0).map((entry) => rm(entry, { recursive: true, force: true })));
@@ -93,13 +97,8 @@ describe("POST /admin/api/queue/actions", () => {
       headline: "Why JSON", body: "Browsers parse JSON natively.", alt: "Slide 4: why JSON"
     }] });
     const draft = await readQueueFixture("marketingshark-queue-linkedin.valid.json");
-    vi.setSystemTime(new Date("2026-09-26T08:00:00.000Z"));
-    try {
-      const response = await POST(request({ action: "rerender", itemId: draft.id, expectedContentHash: (draft.content as { contentHash: string }).contentHash }));
-      expect(response.status).toBe(201);
-      expect(await response.json()).toMatchObject({ ok: true, changed: true, supersedingItemId: `${String(draft.id)}-r1`, event: { action: "rerender" }, dispatch: null });
-    } finally {
-      vi.useRealTimers();
-    }
+    const response = await POST(request({ action: "rerender", itemId: draft.id, expectedContentHash: (draft.content as { contentHash: string }).contentHash }));
+    expect(response.status).toBe(201);
+    expect(await response.json()).toMatchObject({ ok: true, changed: true, supersedingItemId: `${String(draft.id)}-r1`, event: { action: "rerender" }, dispatch: null });
   });
 });
