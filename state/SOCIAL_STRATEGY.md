@@ -5,7 +5,7 @@
 - People evaluating agent governance and practical AI operations.
 - DNESKAi readers reviewing Czech AI news and its decision trail.
 - Adults evaluating Titty Tuesdays concept work; no audience under 18.
-- Developers who want one real question a day, through devShark's carousels.
+- Developers who want one useful devShark post each weekday.
 - Future magazine audiences only after an evidenced proposal and owner decision.
 
 ## Content pillars

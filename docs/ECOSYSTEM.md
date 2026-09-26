@@ -531,7 +531,7 @@ envelope before any call.
 | MOTIF | retired | stood down with EASEL; nothing reads layout observations |
 | PIVOT | evidence bridge between FightAIQ and MMA Files | cannot turn response/context into hidden model input |
 | MAKO | marketingShark direction and KPI honesty; its weekly package review is specified, not yet wired | cannot post, cannot edit the hook library silently, cannot invent a metric |
-| CHUM | one day's carousel copy per brand, Czech and English | cannot choose the question, the hook, the template or the closing line |
+| CHUM | each weekday's devShark carousel copy in English, with three captions | cannot choose the question, the hook, the template or the closing line |
 | FOLIO | BOOKSOFHISTORY selection, bounded research briefs and dossier-backed story choice | cannot call research outside a recorded decision, post or override claim state |
 | PLOT | dossier story mining, one canonical brief and independent Czech/English packages | cannot invent claims, change verification state or post |
 | GHOST | evidence-linked English Door Money storytelling drafts | cannot select passages, alter the private knowledge profile or publish |
