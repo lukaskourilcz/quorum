@@ -3,6 +3,18 @@
   "overrides": [
     {
       "venture": "caught-up",
+      "slug": "2026-09-25-ai-agenti-zlocin-google-avatar-microsoft-copilot",
+      "date": "2026-09-25",
+      "style": "folio",
+      "family": "folio",
+      "variant": "B",
+      "accentSwap": true,
+      "treatment": "duotone",
+      "typeScale": 1,
+      "changedAt": "2026-09-26T20:04:17.431Z"
+    },
+    {
+      "venture": "caught-up",
       "slug": "2026-08-26-openai-odchody-robotika-valuace",
       "date": "2026-08-26",
       "style": "terrace",
@@ -74,5 +86,5 @@
       "changedAt": "2026-08-08T23:36:32.910Z"
     }
   ],
-  "updatedAt": "2026-08-29T18:05:27.051Z"
+  "updatedAt": "2026-09-26T20:04:17.431Z"
 }
