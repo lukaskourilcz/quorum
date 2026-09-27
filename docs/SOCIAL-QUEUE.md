@@ -216,6 +216,42 @@ the export. Exporting writes nothing: no event, no status and no receipt. The Qu
 the post was sent, and the manifest says so. `site/src/lib/admin-queue/export.ts` owns it; the build
 traces `site/public/social` into this route as it does into the frame route.
 
+## What else drafts into the Queue (#592)
+
+Two producers besides the edition carousels and marketingShark's decks draft here, ahead of the
+November launch. All of them are code over committed records at $0, and all of them wait for the
+owner like every other draft.
+
+| Draft | Written by | When | What it binds |
+| --- | --- | --- | --- |
+| devShark's code question of the day (`ms-<date>-devshark-en-threads-qotd`) | the `ms-daily` room, beside the carousel | every day the room wakes; the window opens at 09:00 Prague | `state/ventures/marketingshark/qotd/<date>/devshark.json` (`marketingshark-qotd/1`) |
+| DNESKAi's evening Threads question (`caught-up-<date>-cs-threads-question`) | the edition pack | with the pack; opens at 20:30 Prague on the edition's day | the day's social pack |
+| DNESKAi recipes (`caught-up-<date>-cs-recipe-<recipe>-instagram` and `-threads`) | `pnpm delivery -- reviewed` (also `pnpm delivery -- recipes --date YYYY-MM-DD`) | Friday `friday-tools`, Saturday `how-it-was-made`, Sunday `weekly-recap`, and `no-edition` on a day the edition room recorded `NO_EDITION` | `state/social/recipes/<date>-<recipe>.json` (`dneskai-recipe/1`) |
+
+- **The code question** is a Threads text post: the question and its lettered options from the
+  served bank, no code and no link. Its answer, the explanation and the tracked link
+  (`utm_medium=reply`, `utm_campaign=qotd`) are the package's `firstReply`. The publisher sends one
+  post, so the owner posts the reply under it; the export carries it as `first-reply.txt`. The pick
+  skips questions with code, anything the carousel served and earlier questions of the day.
+- **The evening question** asks about the edition's first open question, with the edition's link
+  tagged for Threads.
+- **The story card** (1080 × 1920, the `story-quote` template) is in the social pack: the edition's
+  practical item, or the lesson the reader reveals that day. It has no queue item, because the
+  publisher posts feed media and a story sent as a feed post would be the wrong post. The export
+  of the edition's Instagram or Threads draft carries it as `story.png` with `story-link.txt`.
+- **The recipes** are 4:5 decks from the article splitter in the edition's recorded design family,
+  or a quote card, rendered as JPEG frames under `site/public/social/caught-up/<date>/<recipe>/`
+  and recorded in the package by hash, so the asset gate proves them like any package's. A carousel
+  recipe also writes a Design Lab summary. A recipe whose records are missing (no tool item in the
+  week, fewer than two editions, no room record) writes
+  `state/social/recipes/<date>-<recipe>.skipped.json` with the reason and no draft. The no-edition
+  recipe adds a 9:16 story, exported like the pack's.
+- **An owner slot blocks approval.** The Friday tools caption carries `[DOPLNIT: ověřit u výrobce]`
+  for each tool's price. An approval refuses copy that still has a `[DOPLNIT` slot, and the card
+  says so; edit the price in (or remove the line) and approve the edited draft.
+- **No re-render.** The evening question and the recipe drafts are not an article's deck, so the
+  card offers no re-render and the action refuses one. Their captions are edited here.
+
 ## The Design Lab link
 
 "Open in Design Lab" opens the brand's section. For a marketingShark quiz draft it opens the package
@@ -244,6 +280,11 @@ from GitHub, not from the deployment's copy.
 
 ## QA
 
+- `orchestrator/tests/marketingshark-qotd.test.ts`, `orchestrator/src/social/pack-extras.test.ts` and
+  `orchestrator/tests/dneskai-recipes.test.ts`: the code question, the pack's story card, hook and
+  evening question, and the four recipes, each drafted, idempotent, unsendable before approval and
+  proved by the asset gate. `site/src/lib/admin-queue/checks.test.ts` refuses an approval with an
+  unfilled owner slot and pins the marker to the orchestrator's.
 - `site/src/lib/admin-queue.test.ts`: the loader. A missing directory, counted malformed files, v1
   mapped, v2 read, supersession, failure reasons, pause holds, and no file names or credential
   references in the snapshot. Also: a legacy v1 draft whose checks pass is scheduled, the newest

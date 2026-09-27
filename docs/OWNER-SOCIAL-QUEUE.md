@@ -22,6 +22,12 @@ Implementation: quorum #585–#588 and react-express-app #237. Authority is the
    adds (the first reply of devShark's code question, DNESKAi's story card with its UTM link and
    Threads question). Post it from the phone. The download records nothing, so the Queue does not
    know the post went out.
+6. devShark's code question of the day (Threads, 09:00) is a text post; after posting it, post
+   `first-reply.txt` as the first reply, which holds the answer and the only link.
+7. DNESKAi's Friday tools post waits on you for facts: each tool has a `[DOPLNIT: …]` price slot the
+   Queue will not approve until it is replaced. Saturday brings the "how it was made" card with the
+   day's model cost from the ledger, Sunday the week's recap, and a day without an edition a lesson
+   post and story. Each is a draft; nothing posts on its own.
 
 Article rejection sends nothing. Leave a card pending to hold it. Article approval does not
 approve Instagram or Threads. A provider timeout is reconciled rather than blindly retried.
