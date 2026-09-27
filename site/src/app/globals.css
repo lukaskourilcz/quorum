@@ -631,4 +631,28 @@ img {
   .print-break {
     break-before: page;
   }
+
+  /*
+   * The admin shell is one viewport high with an inner scroller, which prints as one clipped
+   * page. Printing an admin page (the Calendar's plan, quorum#592) lets the content flow instead
+   * and leaves the chrome off the paper.
+   */
+  [data-admin],
+  [data-admin-window],
+  [data-admin-workspace],
+  [data-admin-content] {
+    display: block !important;
+    height: auto !important;
+    min-height: 0 !important;
+    overflow: visible !important;
+    padding: 0 !important;
+    background: white !important;
+    box-shadow: none !important;
+  }
+
+  [data-admin-sidebar],
+  [data-admin-toolbar],
+  [data-admin-mobile-nav] {
+    display: none !important;
+  }
 }

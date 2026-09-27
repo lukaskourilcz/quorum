@@ -4,6 +4,7 @@ import type { CSSProperties } from "react";
 import Link from "next/link";
 import {
   Activity,
+  CalendarDays,
   CheckCheck,
   ChevronLeft,
   ChevronRight,
@@ -32,6 +33,7 @@ import type {
 
 const ICONS = {
   approvals: CheckCheck,
+  calendar: CalendarDays,
   settings: Settings,
   future: Sparkles,
   manual: KeyRound,

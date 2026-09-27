@@ -1,5 +1,9 @@
 import { addCalendarDays, mondayOfCalendarWeek } from "@/lib/calendar-feed-model";
 import {
+  CALENDAR_KINDS,
+  CALENDAR_PLATFORMS,
+  CALENDAR_PRODUCERS,
+  CALENDAR_STATUSES,
   CALENDAR_WORK_KINDS,
   calendarDaysBetween,
   type CalendarDocument,
@@ -229,6 +233,31 @@ export function filterCounts<K extends "platform" | "kind" | "status" | "pillar"
     counts[value] = (counts[value] ?? 0) + 1;
   }
   return counts;
+}
+
+export type CalendarView = "week" | "month";
+
+export const CALENDAR_FILTER_PARAMS = ["platform", "kind", "status", "pillar", "producer"] as const;
+
+function oneOf<T extends string>(values: readonly T[], value: string | null): T | null {
+  return value !== null && (values as readonly string[]).includes(value) ? value as T : null;
+}
+
+/** Query state → panel state; an unknown value falls back to its default, as the Queue does. */
+export function calendarStateFromQuery(query: URLSearchParams, pillars: readonly string[]): { view: CalendarView; entry: string | null; filters: CalendarFilters } {
+  return {
+    view: query.get("view") === "month" ? "month" : "week",
+    entry: query.get("entry"),
+    filters: {
+      platform: oneOf(CALENDAR_PLATFORMS, query.get("platform")),
+      kind: oneOf(CALENDAR_KINDS, query.get("kind")),
+      status: oneOf(CALENDAR_STATUSES, query.get("status")),
+      pillar: oneOf([...pillars, "p0", "none"], query.get("pillar")),
+      producer: oneOf(CALENDAR_PRODUCERS, query.get("producer")),
+      query: (query.get("q") ?? "").slice(0, 120),
+      upcomingOnly: query.get("upcoming") === "1"
+    }
+  };
 }
 
 /** Splits a body written as "Slide 1: …; slide 2 = …" into its beats; anything else stays one paragraph. */

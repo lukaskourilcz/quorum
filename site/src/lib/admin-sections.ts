@@ -20,7 +20,7 @@ export interface AdminNavSection {
   count?: number | null;
 }
 
-export type AdminDestination = "waiting" | "queue" | "settings" | null;
+export type AdminDestination = "waiting" | "queue" | "calendar" | "settings" | null;
 
 export function adminSections(
   active: AdminDestination,
@@ -44,6 +44,17 @@ export function adminSections(
       href: "/admin/queue",
       active: active === "queue",
       count: counts.queue ?? null
+    },
+    /*
+     * The 30-day marketing plans for devShark and DNESKAi (quorum#592). The owner's decision to add
+     * one destination to a deliberately short list: it is where he reads what should go out and
+     * when. It plans and reads back; it publishes nothing and is no second scheduler.
+     */
+    {
+      id: "calendar",
+      name: "Calendar",
+      href: "/admin/calendar",
+      active: active === "calendar"
     },
     {
       id: "settings",

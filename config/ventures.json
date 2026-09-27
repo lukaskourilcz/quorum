@@ -19,7 +19,8 @@
         "plans",
         "visuals",
         "events",
-        "ideas"
+        "ideas",
+        "calendar"
       ],
       "day": {
         "kind": "cu-day",
@@ -313,7 +314,8 @@
         ]
       },
       "adminTabs": [
-        "packages"
+        "packages",
+        "calendar"
       ],
       "meetings": [
         {

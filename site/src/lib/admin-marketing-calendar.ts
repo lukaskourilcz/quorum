@@ -111,6 +111,8 @@ export function mergeCalendarEntries(input: {
     .sort((left, right) => left.publishWindow.notBefore.localeCompare(right.publishWindow.notBefore));
   for (const item of items) {
     const date = pragueCalendarDate(new Date(item.publishWindow.notBefore));
+    // A post from before or after the plan is not the plan's business, and not a mismatch either.
+    if (date < input.period.start || date > input.period.end) continue;
     const candidates = views
       .filter((view) => view.date === date && view.platform === item.platform && view.queue === null && kindFits(view, item))
       .sort((left, right) => Number(left.producer === "owner") - Number(right.producer === "owner"));
@@ -192,7 +194,7 @@ async function readPackageDates(root: string): Promise<Set<string> | null> {
   try {
     const dates = await readdir(path.join(root, "state", "ventures", "marketingshark", "packages"));
     const present = await Promise.all(dates.filter((name) => /^\d{4}-\d{2}-\d{2}$/u.test(name)).map(async (date) => {
-      const brands = await readdir(path.join(root, "state", "ventures", "marketingshark", "packages", date)).catch(() => []);
+      const brands = await readdir(path.join(root, "state", "ventures", "marketingshark", "packages", date)).catch((): string[] => []);
       return brands.includes("devshark") ? date : null;
     }));
     return new Set(present.filter((date): date is string => date !== null));

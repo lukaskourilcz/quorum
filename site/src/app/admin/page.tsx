@@ -4,6 +4,8 @@ import Link from "next/link";
 import { AdminFileBrowser } from "@/components/admin/admin-file-browser";
 import { AdminShell, type AdminSection, type AdminWorkspace } from "@/components/admin/admin-shell";
 import { AdminWriteProvider } from "@/components/admin/admin-write-mode";
+import { VentureViewChip } from "@/components/admin/venture-view-chip";
+import { MarketingCalendarScreen } from "@/components/admin/marketing-calendar/marketing-calendar-screen";
 import { DesignLabSectionNav, DesignLabVentureSection } from "@/components/admin/design-lab-section";
 import { DesignLabBrandPanel } from "@/components/admin/design-lab-brand";
 import { readBrandKitSnapshot } from "@/lib/admin-design-lab-brand";
@@ -125,55 +127,6 @@ function tabLabel(tab: AdminVentureTab): string {
   return tab;
 }
 
-/**
- * One chip in a workspace's view switcher.
- *
- * The tint resolves against the current Admin surface rather than the old near-black canvas, so
- * the same brand signal reads in both themes while the shared foreground token keeps the label
- * legible. `small` is the archive's second row, which is subordinate to the two above it.
- */
-function VentureViewChip({
-  brand,
-  current,
-  href,
-  label,
-  on,
-  small = false
-}: {
-  brand: string;
-  /**
-   * Whether this chip is the page the reader is on.
-   *
-   * Separate from `on`, which is only the tint. `Archive` is lit while the reader is inside it and
-   * points at its first view, so marking it current put `aria-current="page"` on two links with
-   * the same href — the group's chip and the view's own. The view's is the true one.
-   */
-  current?: boolean;
-  href: string;
-  label: string;
-  on: boolean;
-  small?: boolean;
-}) {
-  return (
-    <Link
-      aria-current={(current ?? on) ? "page" : undefined}
-      className={`admin-focus-ring min-h-[var(--admin-touch-target)] rounded-[var(--admin-radius)] border px-3 py-2 font-semibold uppercase tracking-[var(--admin-tracking-label)] transition-colors duration-[var(--admin-motion-fast)] md:min-h-[var(--admin-control-height)] ${small ? "text-[length:var(--admin-type-micro)]" : "text-[length:var(--admin-type-label)]"}`}
-      data-admin-view-chip={label}
-      href={href}
-      scroll={false}
-      style={{
-        borderColor: on ? brand : "var(--admin-border-strong)",
-        background: on
-          ? `color-mix(in srgb, ${brand} 15%, var(--admin-surface-secondary))`
-          : "var(--admin-surface-secondary)",
-        color: "var(--admin-foreground)"
-      }}
-    >
-      {label}
-    </Link>
-  );
-}
-
 /** Company-level views: their heading and the one sentence that says what the page is for. */
 /*
  * `approvals` and `manual-tasks` were two destinations for one question — what is waiting for me.
@@ -221,9 +174,10 @@ function recordedDay(day: string): string {
 export default async function AdminPage({
   searchParams
 }: {
-  searchParams: Promise<{ venture?: string; tab?: string; view?: string; brand?: string; article?: string }>;
+  searchParams: Promise<{ venture?: string; tab?: string; view?: string; brand?: string; article?: string } & Record<string, string | string[] | undefined>>;
 }) {
-  const { venture: requestedVenture, tab: requestedTab, view: requestedView, brand: requestedBrand, article: requestedArticle } = await searchParams;
+  const rawQuery = await searchParams;
+  const { venture: requestedVenture, tab: requestedTab, view: requestedView, brand: requestedBrand, article: requestedArticle } = rawQuery;
   const wantsStudio = ((requestedVenture ? VENTURE_ALIASES[requestedVenture] : undefined) ?? requestedVenture) === "carousel-studio";
   const [
     state,
@@ -842,6 +796,14 @@ export default async function AdminPage({
     }
     if (id === "tehdejsi-svet" && selectedTab === "signals") {
       return { node: <TehdejsiSvetSignalsPanel view={tehdejsiSignals} />, count: tehdejsiSignalsItemCount };
+    }
+    // The same Calendar as /admin/calendar, held to this workspace's venture (quorum#592).
+    if ((id === "marketingshark" || id === "caught-up") && selectedTab === "calendar") {
+      const query = new URLSearchParams(Object.entries(rawQuery).flatMap(([key, value]) => typeof value === "string" ? [[key, value]] : []));
+      return {
+        node: <MarketingCalendarScreen query={query} switchHref={null} venture={id} writesConfigured={writesEnabled} />,
+        count: 0
+      };
     }
     if (id === "caught-up" && selectedTab === "events") {
       return {
