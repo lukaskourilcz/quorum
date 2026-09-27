@@ -35,6 +35,17 @@ export interface EffectivePortfolioSchedule {
   booksofHistoryStretch: boolean;
   activePhases: ScheduledPhase[];
   envelopeByPhase: Partial<Record<ScheduledPhase, number>>;
+  /**
+   * Each venture's own monthly allowance, for the ventures the owner has allocated one.
+   *
+   * Empty is the correct and current answer. A desk cap is an allocation of the signed $25
+   * model share between ventures, and nothing here may invent that split — the registry is
+   * read, never extrapolated from. An earlier draft of this derived a default from the sum of
+   * a venture's room envelopes times thirty-one days; the ledger says that would have refused
+   * DNESKAi in August, when the desk billed $6.82 against a derived $4.96, because the daily
+   * edition pipeline spends outside the room envelopes the rooms declare.
+   */
+  deskMonthlyUsdByVenture: Partial<Record<string, number>>;
 }
 
 /** Lowest-priority room first. A daily plan removes entries only in this order. */
@@ -177,7 +188,9 @@ export function resolveEffectivePortfolioSchedule(input: {
     ...dayDispatchedKinds(input.registry)
   ]);
   const envelopeByPhase: Partial<Record<ScheduledPhase, number>> = {};
+  const deskMonthlyUsdByVenture: Partial<Record<string, number>> = {};
   for (const venture of input.registry.ventures) {
+    if (venture.budget) deskMonthlyUsdByVenture[venture.id] = venture.budget.monthlyDeskUsd;
     for (const meeting of venture.meetings) {
       envelopeByPhase[meeting.kind as ScheduledPhase] = meeting.envelopeUsd;
     }
@@ -299,7 +312,8 @@ export function resolveEffectivePortfolioSchedule(input: {
         .map((kind) => ScheduledPhaseSchema.safeParse(kind))
         .flatMap((parsed) => parsed.success ? [parsed.data] : [])
     ].filter((phase) => active.has(phase)),
-    envelopeByPhase
+    envelopeByPhase,
+    deskMonthlyUsdByVenture
   };
 }
 

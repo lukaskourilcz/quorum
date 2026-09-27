@@ -6,17 +6,19 @@ import {
   BudgetLedgerEntrySchema,
   type BudgetErrorCode,
   DEFAULT_BUDGET_LIMITS,
+  budgetStopCode,
   budgetStopReason,
   dailyBudgetStatus,
   estimateTextCall,
   exceedsDailyCap,
   type BudgetLedgerEntry,
-  type BudgetLimits
+  type BudgetLimits,
+  type ReserveContext
 } from "../budget.js";
 import { loadRoutingConfig, routeBoardroom } from "../boardroom/router.js";
 import { AgendaPhaseSchema, type MeetingAgenda } from "../contracts/meeting-agenda.js";
 import { MeetingRecordSchema, type MeetingRecord } from "../contracts/meeting-record.js";
-import { MeetingSkipSchema } from "../contracts/meeting-skip.js";
+import { MeetingSkipSchema, type MeetingStopReason } from "../contracts/meeting-skip.js";
 import { EditorialSlateSchema, mmaOrganizationFromRef, type EditorialSlate } from "../contracts/mma-files.js";
 import { MarketingPlanSchema, type MarketingPlan } from "../contracts/marketing-plan.js";
 import { guardedJsonCall, ModelOutputParseError } from "../llm/call.js";
@@ -70,7 +72,7 @@ import {
   resolveEffectivePortfolioSchedule,
   signedOwnerDecision
 } from "./schedule.js";
-import { environmentBudgetLimits } from "./limits.js";
+import { deskMonthlyCapUsd, environmentBudgetLimits } from "./limits.js";
 import { renderMarketingPlanMarkdown } from "./marketing-plan.js";
 import { buildGoViralWeeklyBrief } from "./goviral-brief.js";
 import { composeTittyTuesdaysSocialQueue } from "../social/venture-packs.js";
@@ -411,6 +413,11 @@ export async function recordBudgetStop(input: {
   reason: string;
   /** True when the daily cap is the one that refused, which is what the alert counts. */
   dailyCapReached: boolean;
+  /**
+   * The same fact as `reason`, as a code a program can read. Left off when no code describes
+   * the refusal, because a wrong code is worse than no code on a record the calendar counts.
+   */
+  stopReason?: MeetingStopReason;
 }): Promise<string[]> {
   const skipPath = `meetings/skips/${input.date}-${input.phase}.json`;
   await atomicWriteJson(input.root, skipPath, MeetingSkipSchema.parse({
@@ -418,6 +425,7 @@ export async function recordBudgetStop(input: {
     date: input.date,
     phase: input.phase,
     reason: input.reason.slice(0, 240),
+    ...(input.stopReason ? { stopReason: input.stopReason } : {}),
     decidedAt: input.now.toISOString()
   }));
   const artifacts = [skipPath];
@@ -436,7 +444,7 @@ export async function recordBudgetStop(input: {
     articleSlots: await loadArticleSlotOutcomes(input.root),
     now: input.now
   })));
-  console.warn(JSON.stringify({ event: "budget_stop", phase: input.phase, date: input.date, reason: input.reason }));
+  console.warn(JSON.stringify({ event: "budget_stop", phase: input.phase, date: input.date, stopReason: input.stopReason ?? null, reason: input.reason }));
   return artifacts;
 }
 
@@ -1071,6 +1079,21 @@ export async function runPortfolioCycle(input: {
   }
   const limits = environmentBudgetLimits(schedule);
   const roomEnvelopeUsd = schedule.envelopeByPhase[input.phase] ?? definition.envelopeUsd;
+  /**
+   * The two scoped rungs every paid call of this room reserves against.
+   *
+   * `roomCapUsd` is the same envelope the pre-check below compares the worst-case estimate to
+   * and the same one the meeting record publishes, now asked of the ledger on each seat rather
+   * than once before the first one. No run of these rooms on the committed ledger has ever
+   * billed past its envelope — orchestrator/tests/budget-scoped-caps.test.ts checks that
+   * against the real file — so this refuses nothing that has happened; it bounds what can.
+   */
+  const deskMonthlyUsd = deskMonthlyCapUsd(schedule, definition.ventureId);
+  const roomBudgetScope = {
+    roomCapUsd: roomEnvelopeUsd,
+    ventureId: definition.ventureId,
+    ...(deskMonthlyUsd === undefined ? {} : { deskMonthlyUsd })
+  } satisfies Partial<ReserveContext>;
   /** End this room as a stated skip rather than as an uncaught BudgetError and exit 1. */
   const stoppedByBudget = async (stop: {
     /** The room's reservation when it was refused before opening; null once seats were called. */
@@ -1094,7 +1117,8 @@ export async function runPortfolioCycle(input: {
         reservationUsd: stop.reservationUsd,
         code: stop.code
       }),
-      dailyCapReached: stop.code === "DAILY_CAP"
+      dailyCapReached: stop.code === "DAILY_CAP",
+      stopReason: budgetStopCode(stop.code)
     });
     return {
       cycleId: input.cycleId,
@@ -1291,7 +1315,8 @@ export async function runPortfolioCycle(input: {
             allInCommittedUsd: 0,
             knownMonthlyForecastUsd: 0,
             remainingScheduledCycles: 60,
-            limits
+            limits,
+            ...roomBudgetScope
           }
         })
       });
@@ -1373,7 +1398,7 @@ export async function runPortfolioCycle(input: {
         system: call.system,
         input: call.prompt,
         maxOutputTokens: call.model.maxOutputTokens,
-        budgetContext: { now: input.now, cycleId: input.cycleId, stage: stages.current, ledger: currentLedger, allInNonApiSpentUsd: fixedMonthlyUsd, allInCommittedUsd: 0, knownMonthlyForecastUsd: 0, remainingScheduledCycles: 60, limits },
+        budgetContext: { now: input.now, cycleId: input.cycleId, stage: stages.current, ledger: currentLedger, allInNonApiSpentUsd: fixedMonthlyUsd, allInCommittedUsd: 0, knownMonthlyForecastUsd: 0, remainingScheduledCycles: 60, limits, ...roomBudgetScope },
         parse: (text) => parsePortfolioContribution({ phase: input.phase, agent: call.agent, text })
       }).catch((error: unknown) => {
         // One seat returning unparsable JSON must cost that seat, not the room. A live

@@ -197,7 +197,18 @@ export async function guardedJsonCall<T>(
     webSearchUses: request.webSearch?.maxUses,
     maxSearchContentTokens: request.webSearch?.maxSearchContentTokens
   });
-  assertTextReservation(estimate, request.budgetContext);
+  /*
+   * One answer for "whose month is this?", used by the cap and by the ledger row it authorises.
+   *
+   * The ledger row resolved this below and the reservation never asked at all, so a per-desk
+   * rung reading `budgetContext.ventureId` could have refused one venture's call and then
+   * billed a different venture for it. Resolving once, here, makes that impossible: whatever a
+   * desk allowance is measured against is exactly what the row it admits will say.
+   */
+  const ventureId = request.ventureId
+    ?? request.budgetContext.ventureId
+    ?? ventureIdForPhase(readVentureRegistry(), request.phase);
+  assertTextReservation(estimate, { ...request.budgetContext, ventureId });
   if (request.dry) {
     throw new Error("A dry cycle attempted a paid LLM call");
   }
@@ -261,10 +272,7 @@ export async function guardedJsonCall<T>(
       cycleId: request.cycleId,
       requestHash: hash,
       phase: request.phase,
-      ventureId: request.ventureId ?? ventureIdForPhase(
-        readVentureRegistry(),
-        request.phase
-      ),
+      ventureId,
       agent: request.agent,
       provider: request.provider,
       model: response.model,

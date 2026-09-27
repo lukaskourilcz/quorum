@@ -116,6 +116,20 @@ export async function loadEffectivePortfolioSchedule(
   });
 }
 
+/**
+ * A venture's own monthly allowance, or undefined when the owner has allocated it none.
+ *
+ * Here for the same reason `tightenedBy` is here: the phases must not each decide what a desk
+ * may spend. A phase that restated a desk allowance would keep enforcing it after the owner
+ * moved the number, which is the failure this file exists to prevent.
+ */
+export function deskMonthlyCapUsd(
+  schedule: Pick<EffectivePortfolioSchedule, "deskMonthlyUsdByVenture">,
+  ventureId: string
+): number | undefined {
+  return schedule.deskMonthlyUsdByVenture[ventureId];
+}
+
 /** Tighten resolved caps for a phase. A phase may lower a cap; it may never raise one. */
 export function tightenedBy(limits: BudgetLimits, phase: Partial<BudgetLimits>): BudgetLimits {
   const tightened = { ...limits };

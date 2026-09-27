@@ -120,7 +120,10 @@ export async function guardedEmbeddingCall(
     inputChars: items.reduce((sum, { text }) => sum + text.length, 0),
     at: input.budgetContext.now
   });
-  assertEmbeddingReservation(estimate, input.budgetContext);
+  // The ledger row below is hard-coded to door-money, so the reservation is asked about
+  // door-money too. A desk allowance that measured a different venture than the row it admits
+  // would be a cap on nobody.
+  assertEmbeddingReservation(estimate, { ...input.budgetContext, ventureId: "door-money" });
   if (input.dry) throw new Error("A dry cycle attempted a paid embedding call");
 
   const response = await (input.provider ?? new OpenAiEmbeddingClient()).embed({

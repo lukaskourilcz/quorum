@@ -18,6 +18,7 @@ import { CalendarFeedSchema } from "./calendar.js";
 import { BookKbIndexSchema } from "./book-kb-index.js";
 import { CampaignBriefSchema } from "./campaign-brief.js";
 import { CarouselTemplateSchema } from "./carousel-template.js";
+import { CostReportSchema } from "./cost-report.js";
 import { DailyDigestSchema } from "./daily-digest.js";
 import { DesignProposalSchema } from "./design-proposal.js";
 import { DoorMoneyPlaybookSchema } from "./door-money-playbook.js";
@@ -199,6 +200,7 @@ export const ContractSchemas = {
   "calendar": CalendarFeedSchema,
   "campaign-brief": CampaignBriefSchema,
   "carousel-template": CarouselTemplateSchema,
+  "cost-report": CostReportSchema,
   "daily-digest": DailyDigestSchema,
   "design-proposal": DesignProposalSchema,
   "door-money-playbook": DoorMoneyPlaybookSchema,

@@ -58,6 +58,7 @@
     "datasets:append": "pnpm --filter @boardlessai/orchestrator datasets:append",
     "streams:fetch": "pnpm --filter @boardlessai/orchestrator streams:fetch",
     "finance:page": "pnpm --filter @boardlessai/orchestrator finance:page",
+    "cost:report": "pnpm --filter @boardlessai/orchestrator cost:report",
     "mma:retire": "pnpm --filter @boardlessai/orchestrator mma:retire",
     "social:activation": "pnpm --filter @boardlessai/orchestrator social:activation"
   },
