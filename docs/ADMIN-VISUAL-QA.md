@@ -37,7 +37,7 @@ At widths of 768px and above, the window has a 30px horizontal and 20px vertical
 
 Every matrix entry asserts that the document is no more than one CSS pixel wider than its client width and reports the first uncontained element if one exists. Additional 360px stress cases cover long owner labels, technical envelope identifiers, money values, and keyboard-focusable dense table regions.
 
-The test captures browser console errors and uncaught page errors with their source URL. Every Admin tab declared by `config/ventures.json` is opened from the production artifact and must show their canonical active route without a runtime recovery state or attempted mutation.
+The test captures browser console errors and uncaught page errors with their source URL. Every Admin tab declared by `config/ventures.json` is opened from the production artifact and must show its canonical active route without a runtime recovery state or attempted mutation.
 
 ### Personal Growth matrix
 
