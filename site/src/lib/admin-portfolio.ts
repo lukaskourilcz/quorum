@@ -24,7 +24,7 @@ const venturePattern = /^[a-z0-9]+(?:-[a-z0-9]+)*$/;
 const adminTabs = [
   "ideas", "plans", "visuals",
   "fighters", "bouts", "events", "slates", "sources",
-  "articles", "predictions", "banners", "calendar", "social-lab", "studio", "templates", "inspiration", "hooks",
+  "articles", "predictions", "banners", "calendar", "social-lab", "studio", "brand", "templates", "inspiration", "hooks",
   "packages",
   "shortlist", "dossiers", "features", "recommendations", "actions", "knowledge",
   "library", "signals", "monitor", "claims",

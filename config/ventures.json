@@ -291,6 +291,7 @@
       },
       "adminTabs": [
         "studio",
+        "brand",
         "templates",
         "inspiration",
         "hooks"

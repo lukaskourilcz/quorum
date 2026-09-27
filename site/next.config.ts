@@ -23,7 +23,16 @@ const hookLibraryFiles = ["../studio/hooks/**/*"];
  */
 const fontFiles = ["../studio/fonts/**/*.ttf"];
 
-const adminRuntimeFiles = ["../config/**/*", "../state/**/*", ...hookLibraryFiles, ...fontFiles];
+/**
+ * The venture brand kits, traced for the same reason as the fonts.
+ *
+ * The renderer draws a kit's outlined logotype in place of a set wordmark and finds the kit
+ * through a path derived from its own module URL. Untraced, a deployed render of a caught-up deck
+ * would find no kit and fall back to text, which is the identity the kit replaced.
+ */
+const brandKitFiles = ["../studio/brand-kits/**/*"];
+
+const adminRuntimeFiles = ["../config/**/*", "../state/**/*", ...hookLibraryFiles, ...fontFiles, ...brandKitFiles];
 
 const nextConfig: NextConfig = {
   outputFileTracingRoot: path.join(__dirname, ".."),
@@ -37,7 +46,7 @@ const nextConfig: NextConfig = {
     // function otherwise never sees: Vercel serves `public/` from its CDN, not from the bundle.
     // Only this route carries them, so the other admin functions stay their size.
     "/admin/api/queue/frame/**": ["./public/social/**/*"],
-    "/api/carousel-studio/preview/[templateId]/[version]/[brand]/[format]/[slide]": [...hookLibraryFiles, ...fontFiles],
+    "/api/carousel-studio/preview/[templateId]/[version]/[brand]/[format]/[slide]": [...hookLibraryFiles, ...fontFiles, ...brandKitFiles],
     "/money": ["../state/money/public.json"],
     "/results": ["../state/notify/digest/**/*", "../state/reports/**/*"],
     // The cron route reads the venture registry at request time to learn which Prague hour each

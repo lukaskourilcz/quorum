@@ -5,6 +5,8 @@ import { AdminFileBrowser } from "@/components/admin/admin-file-browser";
 import { AdminShell, type AdminSection, type AdminWorkspace } from "@/components/admin/admin-shell";
 import { AdminWriteProvider } from "@/components/admin/admin-write-mode";
 import { DesignLabSectionNav, DesignLabVentureSection } from "@/components/admin/design-lab-section";
+import { DesignLabBrandPanel } from "@/components/admin/design-lab-brand";
+import { readBrandKitSnapshot } from "@/lib/admin-design-lab-brand";
 import { CarouselStudioAdminPanel } from "@/components/admin/carousel-studio-panel";
 import { HookBrainAdminPanel } from "@/components/admin/hook-brain-panel";
 import { KvorumClaimsPanel } from "@/components/admin/kvorum-claims-panel";
@@ -357,6 +359,8 @@ export default async function AdminPage({
     : labSections[0]?.id ?? "caught-up";
   const labVentureListed = labSections.some((section) => section.id === labVentureId);
   const labVenture = wantsStudio ? await readDesignLabVenture(labVentureId) : null;
+  // Kits are read only when the Brand tab is open: the verification hashes every file.
+  const brandKits = wantsStudio && requestedTab === "brand" ? await readBrandKitSnapshot() : null;
   const brandId = selectedVenture?.id ?? "global";
   const brand = ventureBrand(brandId);
   const doorMoneyActionCount = doorMoney.actions.packets.reduce((sum, packet) => sum + packet.tasks.length, 0) +
@@ -761,6 +765,12 @@ export default async function AdminPage({
           </div>
         ),
         count: labVenture.publishesArticles ? labVenture.articleCount : labVenture.presetCount
+      };
+    }
+    if (id === "carousel-studio" && selectedTab === "brand" && brandKits) {
+      return {
+        node: <DesignLabBrandPanel snapshot={brandKits} />,
+        count: brandKits.kits.filter((kit) => kit.status === "ready").length
       };
     }
     if (id === "carousel-studio" && selectedTab === "templates") {

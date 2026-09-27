@@ -104,6 +104,8 @@ const VentureDefinitionSchema = openObject({
     // rates it. Two jobs, two tabs — collapsing them left the gallery with no route to it.
     // `decks` was retired with the question it answered and is not accepted any more.
     "studio",
+    // The venture brand kits: approved logo files and the rules for using them.
+    "brand",
     "templates",
     "inspiration",
     "hooks",

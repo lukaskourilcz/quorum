@@ -102,6 +102,11 @@ const BRAND_VENTURE: Readonly<Record<string, string>> = {
   geoshark: "marketingshark"
 };
 
+/** The venture that owns a studio brand: marketingShark for the brands it markets, else the brand's own. */
+export function designLabBrandVenture(id: string): string {
+  return BRAND_VENTURE[id] ?? id;
+}
+
 /**
  * The brands whose sections the Design Lab offers (`operations-2026-09b`).
  *

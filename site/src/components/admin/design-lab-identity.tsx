@@ -26,7 +26,7 @@ function swatchText(value: string): string {
   return luminance > 0.179 ? "var(--admin-swatch-on-light)" : "var(--admin-swatch-on-dark)";
 }
 
-function Swatch({ token, value }: { token: string; value: string }) {
+export function DesignLabSwatchTile({ token, value }: { token: string; value: string }) {
   return (
     <li className="flex flex-col gap-1">
       <span
@@ -53,7 +53,7 @@ export function DesignLabIdentity({ venture }: { venture: DesignLabVenture }) {
         <h3 className={LABEL}>Barvy značky</h3>
         <ul className="grid grid-cols-3 gap-3 sm:grid-cols-4 lg:grid-cols-7">
           {venture.swatches.map((swatch) => (
-            <Swatch key={swatch.token} token={swatch.token} value={swatch.value} />
+            <DesignLabSwatchTile key={swatch.token} token={swatch.token} value={swatch.value} />
           ))}
         </ul>
       </div>
