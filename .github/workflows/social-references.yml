@@ -1,0 +1,56 @@
+name: Public Instagram reference monitor
+on:
+  schedule:
+    - cron: "55 2,8,14,20 * * *"
+  workflow_dispatch:
+permissions:
+  contents: write
+concurrency:
+  # Share the cycle lock because both use the existing Apify account credit.
+  group: guarded-cycle-${{ github.ref }}
+  cancel-in-progress: false
+jobs:
+  monitor:
+    if: ${{ vars.AUTONOMY_KILL_SWITCH != 'true' }}
+    runs-on: ubuntu-latest
+    timeout-minutes: 8
+    env:
+      APIFY_TOKEN: ${{ secrets.APIFY_TOKEN }}
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          ref: ${{ github.ref }}
+      - name: Honor pause
+        run: test ! -e state/PAUSED
+      - uses: pnpm/action-setup@0ebf47130e4866e96fce0953f49152a61190b271 # v6.0.9
+      - uses: actions/setup-node@249970729cb0ef3589644e2896645e5dc5ba9c38 # v6.5.0
+        with:
+          node-version: "22"
+          package-manager-cache: false
+      - run: pnpm install --frozen-lockfile
+      - name: Reserve bounded account credit
+        id: reserve
+        run: |
+          pnpm --silent -C orchestrator exec tsx src/sources/social-references-cli.ts --reserve > "$RUNNER_TEMP/reference-reservation.json"
+          cat "$RUNNER_TEMP/reference-reservation.json"
+          echo "ready=$(jq -r .ready "$RUNNER_TEMP/reference-reservation.json")" >> "$GITHUB_OUTPUT"
+      - name: Persist the reservation before a paid request
+        if: steps.reserve.outputs.ready == 'true'
+        run: |
+          git config user.name "boardlessai-cycle[bot]"
+          git config user.email "boardlessai-cycle[bot]@users.noreply.github.com"
+          git add state/goviral/reference-monitor/quota.json
+          git commit -m "goviral: reserve bounded Instagram reference poll"
+          git push origin "HEAD:$GITHUB_REF_NAME"
+      - name: Read public reference posts
+        id: read
+        if: steps.reserve.outputs.ready == 'true'
+        run: pnpm --silent -C orchestrator exec tsx src/sources/social-references-cli.ts --run
+      - name: Record observations or failure without refunding the reservation
+        if: ${{ always() && steps.read.outcome != 'skipped' && steps.reserve.outputs.ready == 'true' }}
+        run: |
+          git add state/goviral/reference-monitor
+          if ! git diff --cached --quiet; then
+            git commit -m "goviral: record public Instagram format observations"
+            git push origin "HEAD:$GITHUB_REF_NAME"
+          fi

@@ -843,6 +843,19 @@
       "governingReference": "state/decisions/2026-08-30-contest-radar-promotion-posture.md",
       "runtimeEnforcementPoint": "orchestrator/src/ventures/contest-radar/promotion.ts",
       "testProbeReference": "orchestrator/tests/contest-radar-promotion.test.ts"
+    },
+    {
+      "schemaVersion": "venture-capability-edge/1",
+      "source": "goviral",
+      "target": "design-lab",
+      "capability": "intelligence-read",
+      "dataSchemaVersion": "social-reference-monitor/1",
+      "direction": "source-to-target",
+      "decision": "allowed",
+      "reason": "Owner-requested public Instagram format measurements for original Czech DNESKAi designs. No copied captions, image bytes, publishing authority or new spending envelope.",
+      "governingReference": "state/decisions/2026-09-27-owner-editorial-queue.md",
+      "runtimeEnforcementPoint": "orchestrator/src/sources/social-references.ts",
+      "testProbeReference": "orchestrator/tests/social-references.test.ts"
     }
   ],
   "isolationRules": [
