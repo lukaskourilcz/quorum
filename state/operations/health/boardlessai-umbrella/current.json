@@ -3,8 +3,8 @@
   "nodeId": "boardlessai-umbrella",
   "displayName": "BoardlessAI umbrella",
   "policyVersion": "1.0.0",
-  "generatedAt": "2026-09-25T09:07:15.398Z",
-  "observedAt": "2026-09-25T09:07:15.398Z",
+  "generatedAt": "2026-09-27T09:39:53.422Z",
+  "observedAt": "2026-09-27T09:39:53.422Z",
   "lifecycleStage": "planned",
   "state": "held",
   "reason": "The node is not yet scheduled for live operation.",
@@ -45,5 +45,5 @@
   "unavailableReasons": [],
   "ownerAttentionRefs": [],
   "latestRunReceiptRefs": [],
-  "snapshotHash": "1854ae2b8c6c300f1973218205bc9e5b6235abf82acfc4b20bff61323292abd0"
+  "snapshotHash": "0e77d222de9685acd36003a1ebbf45702285c6b1e80d8fa65dcfdaec778a887e"
 }

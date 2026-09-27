@@ -2,7 +2,7 @@
   "schemaVersion": "monetization-readiness/2",
   "posture": "information-only",
   "executionEnabled": false,
-  "generatedAt": "2026-09-25T09:07:15.398Z",
+  "generatedAt": "2026-09-27T09:39:53.422Z",
   "methods": [
     {
       "id": "caught-up-sponsorship",
