@@ -182,7 +182,7 @@ the reader has no memory of the previous copy. Sharing one contract would make
 | Reader file | Contract | Written by |
 | --- | --- | --- |
 | `data/talked-about.json`, `data/podcasts.json` | `boardless-stream/1` | `orchestrator/src/streams/` |
-| `data/events.json` | `boardless-events/1` | the owner, through the admin Akce tab |
+| `data/events.json` | `boardless-events/1` | the owner, through the admin Akce tab or `pnpm events:import` |
 
 - **Two more delivery kinds, two more allowlists.** `^data/(talked-about|podcasts)\.json$`
   and `^data/events\.json$` in `.github/workflows/cycle.yml`, beside the edition
@@ -205,6 +205,9 @@ the reader has no memory of the previous copy. Sharing one contract would make
 - **Events are the manual category.** Past events are immutable in the store
   unless the save explicitly says it is a correction, which stamps `corrected`.
   That flag is the difference between fixing a record and rewriting history.
+  `pnpm events:import -- --file <curated.json>` merges a file the owner has read under the same
+  rules and writes a receipt under `state/ventures/caught-up/events/receipts/`; `pnpm
+  events:candidates` only suggests (the ČAUI Luma iCalendar, aiakce.cz, confs.tech), #554.
 
 ## When asked to "do the tasks"
 
