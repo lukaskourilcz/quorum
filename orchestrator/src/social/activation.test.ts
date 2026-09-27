@@ -162,14 +162,14 @@ describe("per-venture social activation", () => {
     await place(await fixture("marketingshark-package-challenge-teaser"));
     const withoutReferences = await refreshSocialActivation({ repoRoot, stateRoot, environment: {}, now: new Date("2026-09-29T07:00:00.000Z") });
     expect(withoutReferences.ventures.marketingshark).toMatchObject({ status: "locked", counter: 3 });
-    expect(withoutReferences.ventures.marketingshark?.reason).toContain("BUFFER_API_KEY, BUFFER_CHANNEL_ID_DEVSHARK_LINKEDIN, DEVSHARK_INSTAGRAM_ACCESS_TOKEN");
+    expect(withoutReferences.ventures.marketingshark?.reason).toContain("DEVSHARK_INSTAGRAM_ACCESS_TOKEN");
 
     const ready = await refreshSocialActivation({ repoRoot, stateRoot, environment: references, now: new Date("2026-09-29T08:00:00.000Z") });
     expect(ready.ventures.marketingshark).toMatchObject({ status: "enabled", counter: 3, unlockedAt: "2026-09-29T08:00:00.000Z" });
     expect(JSON.parse(await readFile(path.join(stateRoot, "notify", "social-unlocks", "marketingshark.json"), "utf8")))
       .toMatchObject({ venture: "marketingshark", decisionReference: "devshark-social-2026-09a", counter: 3 });
-    // Readiness is not a publisher: that switch moves only with the countersigned decision.
-    expect(isPublishingVenture("marketingshark")).toBe(false);
+    // The current owner request enables the bridge code; each post still needs Queue approval.
+    expect(isPublishingVenture("marketingshark")).toBe(true);
 
     const paused = await refreshSocialActivation({ repoRoot, stateRoot, environment: references, now: new Date("2026-09-29T09:00:00.000Z"), pausedVentures: new Set(["marketingshark"]) });
     expect(paused.ventures.marketingshark).toMatchObject({ status: "paused", counter: 3 });

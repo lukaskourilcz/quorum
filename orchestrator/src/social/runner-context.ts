@@ -143,7 +143,7 @@ export function isDue(item: CapabilityAwareQueueItem, now: Date): boolean {
 
 function sourceVentureActive(item: CapabilityAwareQueueItem, activation: SocialActivation): boolean {
   return isPublishingVenture(item.sourceVentureId)
-    && activation.ventures[item.sourceVentureId].status === "enabled";
+    && activation.ventures[item.sourceVentureId]?.status === "enabled";
 }
 
 /**

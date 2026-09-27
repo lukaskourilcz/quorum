@@ -199,7 +199,7 @@ export const ReleaseProofSchema = openObject({
 export const SocialPostReceiptSchema = openObject({
   schemaVersion: z.literal("social-post-receipt/1"),
   id: z.string().regex(/^social-receipt-[a-f0-9]{16}$/),
-  venture: z.enum(["caught-up", "mma-files", "titty-tuesdays"]),
+  venture: z.enum(["caught-up", "mma-files", "titty-tuesdays", "marketingshark"]),
   queueItemId: z.string().trim().min(1).max(160),
   // LinkedIn since quorum#571: the Buffer adapter sends it, and a send whose receipt cannot be
   // written would stay queued and go out again. The venture list stays the publishing ventures.
