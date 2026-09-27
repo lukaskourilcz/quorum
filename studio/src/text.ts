@@ -1,5 +1,6 @@
-import { measureEm, resolveFace } from "./fonts.js";
+import { capacityAverage, measureEm, resolveFace } from "./fonts.js";
 import type { FaceMetrics } from "./font-metrics.generated.js";
+import type { PublishingLocale } from "./schema.js";
 
 export interface FittedText {
   lines: string[];
@@ -149,16 +150,30 @@ export function fitText(input: {
 }
 
 /**
- * How many characters of a face fit one line, at a size, tracked.
+ * How many characters of a face fit one line, at a size, tracked, in one language.
  *
  * The overflow check's question, and it needs one number rather than a measured string: it is
  * asking whether a slot's declared character limit *could* fit, not whether one particular
  * passage does. The face's own mean letter width is the honest answer — a condensed headline is
  * charged what it saves, rather than every face being charged one constant fitted to Czech
  * sentence case in a grotesque.
+ *
+ * The language is part of the question for the same reason the face is. Literata sets Cyrillic
+ * eight per cent wider than Latin, so a Ukrainian slot measured against the Latin mean is told it
+ * holds twelve characters it cannot. Omitting the language charges the Latin mean, which is what
+ * every slot was charged before languages were declared at all.
  */
-export function charactersPerLine(widthPx: number, fontSize: number, family: string, weight: number, tracking = 0): number {
-  const face = resolveFace(family, weight);
-  const advance = face.average / 1_000 + tracking;
-  return Math.max(1, Math.floor(widthPx / (fontSize * advance)));
+export function charactersPerLine(input: {
+  widthPx: number;
+  fontSize: number;
+  /** The family the slot draws in, as the brand names it. */
+  family: string;
+  weight: number;
+  /** Letter-spacing in em, which widens every character and so shortens every line. */
+  tracking?: number;
+  locale?: PublishingLocale;
+}): number {
+  const face = resolveFace(input.family, input.weight);
+  const advance = capacityAverage(face, input.locale ?? "en") / 1_000 + (input.tracking ?? 0);
+  return Math.max(1, Math.floor(input.widthPx / (input.fontSize * advance)));
 }

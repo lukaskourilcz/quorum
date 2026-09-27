@@ -1,6 +1,8 @@
 import path from "node:path";
 import { fileURLToPath } from "node:url";
 import { FONT_METRICS, type FaceMetrics } from "./font-metrics.generated.js";
+import { lettersFor } from "./locales.js";
+import type { PublishingLocale } from "./schema.js";
 
 /**
  * The typefaces the engine ships with, and the arithmetic it measures them by.
@@ -106,6 +108,46 @@ export function measureEm(face: FaceMetrics, value: string): number {
   let total = 0;
   for (const character of value) total += advances.get(character) ?? fallback;
   return total;
+}
+
+const averages = new Map<FaceMetrics, Map<string, number>>();
+
+/**
+ * The mean advance of one character of a sample, in thousandths of an em.
+ *
+ * Only the characters the face actually carries are averaged. A character with no entry would
+ * otherwise be charged the fallback, which would quietly turn "this face cannot set this
+ * alphabet" into "this alphabet measures a bit differently" — a coverage failure disguised as
+ * arithmetic. The word space is always in the sample, because a line is words rather than a word.
+ *
+ * `font-metrics.generated.ts` computes each face's `average` this way over `LATIN_LETTERS`, and
+ * `script-capacity.test.ts` asserts the two agree for every committed face. That equality is what
+ * keeps the generated table and this function from drifting into two different answers.
+ */
+export function averageAdvance(face: FaceMetrics, sample: string): number {
+  const cached = averages.get(face) ?? new Map<string, number>();
+  averages.set(face, cached);
+  const previous = cached.get(sample);
+  if (previous !== undefined) return previous;
+  const advances = advancesOf(face);
+  const widths = [...sample, " "]
+    .map((character) => advances.get(character))
+    .filter((advance): advance is number => advance !== undefined);
+  const mean = Math.round((widths.reduce((total, advance) => total + advance, 0) * 1_000) / Math.max(1, widths.length));
+  cached.set(sample, mean);
+  return mean;
+}
+
+/**
+ * What a capacity question should charge per character for a line set in this language.
+ *
+ * The Latin mean is the floor rather than the answer. Czech measures marginally *narrower* than
+ * ASCII in every committed face — its accented vowels are the narrow ones — and lowering a
+ * declared slot limit's headroom on that basis would be a loosening dressed up as precision. A
+ * language that measures wider raises the charge; one that measures narrower does not lower it.
+ */
+export function capacityAverage(face: FaceMetrics, locale: PublishingLocale): number {
+  return Math.max(face.average, averageAdvance(face, lettersFor(locale)));
 }
 
 /** True only when the committed face contains the glyph; the fitter's width fallback does not count. */

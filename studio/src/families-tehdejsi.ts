@@ -152,6 +152,7 @@ function languagePair(index: number, band: Band): CarouselLayerInput[] {
     text(tehdejsiCsSlot(index), LEFT, band.top, MEASURE, band.csHeight, {
       fontToken: "headline",
       fontWeight: 700,
+      lang: "cs",
       minFontSize: band.csMin,
       maxFontSize: band.csMax,
       maxChars: band.csChars,
@@ -161,6 +162,9 @@ function languagePair(index: number, band: Band): CarouselLayerInput[] {
     text(tehdejsiUaSlot(index), LEFT, uaTop, MEASURE, band.uaHeight, {
       fontToken: "headline",
       fontWeight: 400,
+      // Declared, not inferred from the slot's `-ua` suffix: the capacity arithmetic charges
+      // Cyrillic advances here, and a naming convention is a poor place to keep a measurement.
+      lang: "uk",
       // Muted rather than foreground: the same ink at less weight, which is what "reduced
       // opacity" means in a token system that has no opacity on text.
       colorToken: "muted",

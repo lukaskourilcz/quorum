@@ -433,6 +433,14 @@
                     "glow": {
                       "default": false,
                       "type": "boolean"
+                    },
+                    "lang": {
+                      "type": "string",
+                      "enum": [
+                        "cs",
+                        "en",
+                        "uk"
+                      ]
                     }
                   },
                   "required": [

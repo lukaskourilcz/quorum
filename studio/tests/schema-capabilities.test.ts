@@ -150,14 +150,16 @@ describe("a document written before any of this parses and renders unchanged", (
   const stored = JSON.parse(readFileSync(path.join(here, "fixtures/v1-article-deck.json"), "utf8")) as CarouselTemplateInput;
 
   it("carries none of the new fields", () => {
-    expect(JSON.stringify(stored)).not.toMatch(/tracking|glow|dash|padText|padding|treatment|reprise|clip/u);
+    expect(JSON.stringify(stored)).not.toMatch(/tracking|glow|dash|padText|padding|treatment|reprise|clip|lang/u);
   });
 
   it("parses, and every new field arrives at its old-behaviour default", () => {
     const parsed = CarouselTemplateSchema.parse(stored);
     for (const slide of parsed.slides) {
       for (const layer of slide.layers) {
-        if (layer.type === "text") { expect(layer.tracking).toBe(0); expect(layer.glow).toBe(false); }
+        // `lang` is the one field with no default: absent means "the brand's primary language",
+        // and the brand is not knowable from the template.
+        if (layer.type === "text") { expect(layer.tracking).toBe(0); expect(layer.glow).toBe(false); expect(layer.lang).toBeUndefined(); }
         if (layer.type === "rule") expect(layer.dash).toBe(false);
         if (layer.type === "shape") expect(layer.padText).toBeUndefined();
         if (layer.type === "image") { expect(layer.treatment).toBe("none"); expect(layer.reprise).toBe(false); }
