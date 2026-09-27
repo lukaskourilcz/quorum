@@ -78,7 +78,8 @@
         "dek": "Four providers and research teams published lower rates, with limits that matter for production budgets.",
         "alternative_headlines": [
           "API price cuts change the inference budget",
-          "Lower model prices arrive with throughput limits"
+          "Lower model prices arrive with throughput limits",
+          "What lower model prices mean for production budgets"
         ],
         "body_mdx": "## The published change\n\n[Anthropic](https://www.anthropic.com/news/example-price-update) and [OpenAI](https://openai.com/index/example-api-pricing) posted lower production prices. Each provider controls its own rate card, so teams need to recalculate against their workload.\n\n## The limits\n\n[DeepMind](https://deepmind.google/blog/example-inference-tier/) tied its lower-cost tier to throughput limits. [Google Research](https://research.google/blog/example-serving-costs/) supplied measured context for the serving costs. Buyers can compare the published claims with their own latency targets.\n\n## The open question\n\nThe sources do not show how long the prices will hold or whether large customers receive separate terms.",
         "illustration_alt": "Four paper price tables arranged beside a calculator",
@@ -114,7 +115,8 @@
         "dek": "Čtyři poskytovatelé a výzkumné týmy zveřejnili nižší sazby s limity důležitými pro produkční rozpočty.",
         "alternative_headlines": [
           "Nižší ceny API mění rozpočet inference",
-          "Levnější modely přicházejí s limity propustnosti"
+          "Levnější modely přicházejí s limity propustnosti",
+          "Co nižší ceny modelů znamenají pro produkční rozpočet"
         ],
         "body_mdx": "## Zveřejněná změna\n\n[Anthropic](https://www.anthropic.com/news/example-price-update) a [OpenAI](https://openai.com/index/example-api-pricing) zveřejnily nižší produkční ceny. Každý poskytovatel ovládá vlastní ceník, takže týmy musí přepočítat náklady podle své zátěže.\n\n## Limity\n\n[DeepMind](https://deepmind.google/blog/example-inference-tier/) spojil levnější tarif s limity propustnosti. [Google Research](https://research.google/blog/example-serving-costs/) doplnil naměřený kontext nákladů na provoz. Zákazníci mohou porovnat zveřejněná tvrzení se svými požadavky na odezvu.\n\n## Otevřená otázka\n\nZdroje neuvádějí, jak dlouho ceny vydrží ani zda velcí zákazníci dostávají jiné podmínky.",
         "illustration_alt": "Čtyři papírové ceníky položené vedle kalkulačky",

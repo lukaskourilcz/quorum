@@ -1,8 +1,8 @@
 {
   "schemaVersion": "social-publisher-registry/1",
-  "version": "1.2.0",
+  "version": "1.3.0",
   "providerApiVersion": "v26.0",
-  "updatedAt": "2026-09-25T00:00:00.000Z",
+  "updatedAt": "2026-09-27T00:00:00.000Z",
   "ownerDecisionRef": "GitHub #409",
   "profiles": [
     {
@@ -56,7 +56,7 @@
         ],
         "fixtureKey": null
       },
-      "notes": "Legacy queue identity only; held until the owner verifies the real account and connection."
+      "notes": "Owner named Instagram @dneskai and @devshark.app on 2026-09-27. The relevant handle is recorded on each connection. OAuth identity and professional status still need verification; every post needs Queue approval. Threads remains unverified."
     },
     {
       "schemaVersion": "social-profile/1",
@@ -653,7 +653,7 @@
       "id": "social-connection-caught-up-instagram",
       "profileId": "social-profile-caught-up",
       "platform": "instagram",
-      "publicHandle": null,
+      "publicHandle": "@dneskai",
       "nativeAccountId": null,
       "connector": {
         "id": "meta-instagram",
@@ -886,7 +886,7 @@
       "id": "social-connection-devshark-instagram",
       "profileId": "social-profile-devshark-instagram",
       "platform": "instagram",
-      "publicHandle": null,
+      "publicHandle": "@devshark.app",
       "nativeAccountId": null,
       "connector": {
         "id": "meta-instagram",

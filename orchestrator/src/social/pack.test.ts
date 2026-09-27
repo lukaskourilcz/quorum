@@ -107,7 +107,7 @@ describe("Caught Up social pack composer", () => {
       pack.quoteCard.frame
     ]) {
       const metadata = await sharp(await readFile(path.join(root, "site", "public", frame.slice(1)))).metadata();
-      expect(metadata.format).toBe("png");
+      expect(metadata.format).toBe(frame.endsWith(".jpg") ? "jpeg" : "png");
       expect(metadata).toMatchObject({ width: 1080, height: 1350 });
       expect(pack.altTexts[frame]).toBeTruthy();
     }

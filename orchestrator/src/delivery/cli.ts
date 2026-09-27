@@ -1,3 +1,4 @@
+import { releaseReviewedArticles } from "../edition/review-release.js";
 import { appendFile, readFile } from "node:fs/promises";
 import path from "node:path";
 import { pathToFileURL } from "node:url";
@@ -42,6 +43,10 @@ async function main(): Promise<void> {
   const rawArgs = process.argv.slice(2);
   const args = rawArgs[0] === "--" ? rawArgs.slice(1) : rawArgs;
   const command = args[0] ?? "next";
+  if (command === "reviewed") {
+    console.log(JSON.stringify({ artifacts: await releaseReviewedArticles() }));
+    return;
+  }
   if (command === "next") {
     const pending = await oldestPendingDelivery();
     const output = valueAfter(args, "--github-output");

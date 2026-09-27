@@ -330,8 +330,10 @@ export async function treatImage(
   const grey = sharp(bytes).greyscale();
   if (treatment === "mono") return grey.png().toBuffer();
   const [red, green, blue] = [1, 3, 5].map((offset) => Number.parseInt(accentHex.slice(offset, offset + 2), 16));
-  return grey
-    .toColourspace("srgb")
+  // Materialize RGB first: greyscale temporarily has one band inside a sharp pipeline,
+  // while toColourspace is an output conversion and runs after linear.
+  const rgb = await grey.toColourspace("srgb").png().toBuffer();
+  return sharp(rgb)
     .linear([red! / 255, green! / 255, blue! / 255], [0, 0, 0])
     .png()
     .toBuffer();

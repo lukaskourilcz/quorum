@@ -1,4 +1,5 @@
 import "server-only";
+import { readAdminJson } from "@/lib/admin-repository";
 import { readdir, readFile } from "node:fs/promises";
 import path from "node:path";
 import {
@@ -105,7 +106,7 @@ export interface LabArticle {
 
 async function readJsonFile(relative: string): Promise<unknown | null> {
   try {
-    return JSON.parse(await readFile(path.join(repositoryRoot(), relative), "utf8")) as unknown;
+    return await readAdminJson(repositoryRoot(), relative);
   } catch {
     return null;
   }

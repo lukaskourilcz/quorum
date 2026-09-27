@@ -1,3 +1,4 @@
+import { reviewFiles } from "../edition/review.js";
 import path from "node:path";
 import { readJson } from "../state.js";
 import { stateRoot } from "../paths.js";
@@ -113,6 +114,10 @@ export async function hasDeliveredPublishedEdition(
 export async function editionRecordForDay(date: string, root = stateRoot): Promise<string | null> {
   if (await hasDeliveredPublishedEdition(date, root)) return `edition/deliveries/${date}.json`;
   if (manualEditionOverride()) return null;
+  for (const file of await reviewFiles(root)) {
+    const review = await readJson<{ package?: { date?: string } } | null>(root, `editorial/reviews/${file}`, null);
+    if (review?.package?.date === date) return `editorial/reviews/${file}`;
+  }
   const queued = (await editionQueue(root)).find((entry) =>
     entry.date === date && entry.editionStatus === "edition" && entry.state === "pending");
   return queued ? `edition/outbox/${date}-${queued.packageHash}.json` : null;

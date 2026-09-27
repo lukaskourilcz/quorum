@@ -1,3 +1,5 @@
+import { EditorialQueuePanel } from "@/components/admin/editorial-queue-panel";
+import { readEditorialQueue } from "@/lib/admin-queue/editorial";
 import type { Metadata } from "next";
 import { AdminShell, type AdminWorkspace } from "@/components/admin/admin-shell";
 import { AdminWriteProvider } from "@/components/admin/admin-write-mode";
@@ -22,6 +24,7 @@ export default async function QueuePage({
   searchParams: Promise<{ status?: string; venture?: string; platform?: string }>;
 }) {
   const [query, snapshot, portfolio] = await Promise.all([searchParams, readAdminQueue(), readAdminPortfolio()]);
+  const editorial = await readEditorialQueue();
   const writesConfigured = adminWritesEnabled();
   // An unknown filter value falls back to the whole list, the way an unknown tab falls back to a venture's first.
   const filters: QueueFilters = {
@@ -49,12 +52,14 @@ export default async function QueuePage({
       ]}
       brandId="global"
       breadcrumb="Queue"
-      lead="Every social post that waits for your approval. Edit the text here, open the graphic in the Design Lab, and approve it for its window or for the next hour. An approval queues the post and starts the publisher, which sends it only while every lock is open."
+      lead="Review article headlines and images first, then approve each social post. Edit the text here, open the graphic in the Design Lab, and approve it for its window or for the next hour. An approval queues the post and starts the publisher, which sends it only while every lock is open."
       sections={adminSections("queue", { queue: snapshot.counts.waiting })}
       title="Queue"
       workspaces={workspaces}
     >
       <AdminWriteProvider enabled={writesConfigured}>
+        <EditorialQueuePanel {...editorial} />
+        <h2 className="mb-4 text-xl font-semibold">Step 2 · Social posts</h2>
         <QueuePanel filters={filters} snapshot={snapshot} writesConfigured={writesConfigured} />
       </AdminWriteProvider>
     </AdminShell>

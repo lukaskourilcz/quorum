@@ -74,7 +74,8 @@ describe("automation policy", () => {
       "cycle.yml",
       "delivery-doctor.yml",
       "health.yml",
-      "social-publisher.yml"
+      "social-publisher.yml",
+      "social-references.yml"
     ]);
 
     for (const name of names) {
@@ -339,10 +340,10 @@ describe("automation policy", () => {
     }
     // 18, not 19: the hourly social publisher is commented out until a channel exists, so its
     // twenty-four daily firings no longer confirm there is nothing to publish.
-    // The backstop sweeps in cycle.yml, one daily health run, and nothing else: the social
+    // The backstop sweeps, daily health run and bounded reference polling: the social
     // publisher's hourly schedule is commented out until a channel exists.
     expect(schedules.length, "no schedules found; the cron guard is asserting nothing")
-      .toBe(deployedCronExpressions().length + 1);
+      .toBe(deployedCronExpressions().length + 2);
 
     for (const { file, expression } of schedules) {
       const minute = expression.trim().split(/\s+/u)[0]!;

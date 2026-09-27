@@ -1,5 +1,5 @@
 import { createHash } from "node:crypto";
-import { mkdir, readFile, writeFile } from "node:fs/promises";
+import { mkdir, readFile, readdir, writeFile } from "node:fs/promises";
 import path from "node:path";
 
 /**
@@ -102,6 +102,12 @@ export function fakeGitHub(root: string): FakeGitHub {
       const file = path.join(root, relative);
       const current = await readFile(file).catch(() => null);
       if (method === "GET") {
+        if (!current) {
+          const names = await readdir(file).catch(() => null);
+          if (names) return json(names.map(name => ({ name, type: "file" })), 200);
+        }
+        const accept = new Headers(init?.headers).get("accept");
+        if (current && accept?.includes("github.raw")) return new Response(current.toString("utf8"), { status: 200 });
         const answer = current
           ? json({ content: current.toString("base64"), encoding: "base64", sha: version(current) }, 200)
           : json({ message: "Not Found" }, 404);

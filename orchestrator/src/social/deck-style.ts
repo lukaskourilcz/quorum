@@ -1,3 +1,5 @@
+import { configRoot } from "../paths.js";
+import { referenceFormat } from "../sources/social-references.js";
 import { readFile, readdir } from "node:fs/promises";
 import path from "node:path";
 import {
@@ -168,7 +170,7 @@ export async function effectiveRecipe(input: {
     readRecordedRecipe(input.root, input.venture, input.slug, input.date),
     readLivePresets(input.root, input.venture)
   ]);
-  const derived = recorded ?? deriveRecipe(
+  let derived = recorded ?? deriveRecipe(
     {
       venture: input.venture,
       slug: input.slug,
@@ -178,6 +180,12 @@ export async function effectiveRecipe(input: {
     },
     history
   );
+  if (!recorded && pool.length === 0 && input.venture === "caught-up") {
+    const reference = await referenceFormat(input.root, configRoot).catch(() => null);
+    // Existing photo-capable Design Lab families; no borrowed artwork or third-party copy.
+    if (reference) derived = CarouselRecipeSchema.parse({ ...derived, family: reference.carouselLed ? "press" : "halo",
+      typeScale: reference.shortCaptions ? 1.1 : 1 });
+  }
   const pinned = matchRecipeOverride(overrides, input.venture, input.slug, input.date);
   if (!pinned) return derived;
   return CarouselRecipeSchema.parse({

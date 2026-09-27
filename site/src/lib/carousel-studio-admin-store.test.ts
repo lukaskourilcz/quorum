@@ -34,11 +34,12 @@ function githubFetch(reads: Array<{ status: number; sha?: string }>, writes: Arr
       } as unknown as Response;
     }
     const read = reads[Math.min(readIndex, reads.length - 1)]!;
-    readIndex += 1;
+    const rawRead = (init?.headers as Record<string, string> | undefined)?.Accept === "application/vnd.github.raw+json";
+    if (!rawRead) readIndex += 1;
     return {
       ok: read.status >= 200 && read.status < 300,
       status: read.status,
-      json: async () => (read.sha ? { sha: read.sha } : {})
+      json: async () => (rawRead ? { overrides: [] } : read.sha ? { sha: read.sha } : {})
     } as unknown as Response;
   });
   return { calls, fetcher };

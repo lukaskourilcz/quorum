@@ -4,6 +4,7 @@ import {
   ARTICLE_HERO_SLOT,
   CAROUSEL_BRANDS,
   renderCarouselPng,
+  quizFrameJpeg,
   toRenderablePng,
   type TemplateReference
 } from "@boardlessai/carousel-studio";
@@ -135,7 +136,7 @@ export async function composeEditionSocialPack(input: {
     if (!article) return null;
     const slides = buildArticleDeck({
       title: article.title,
-      coverLine: article.alternative_headlines?.[0],
+      coverLine: article.generation.human_reviewed ? article.title : article.alternative_headlines?.[0],
       dek: article.dek,
       points: [
         ...article.what_changed.slice(0, 3),
@@ -223,16 +224,18 @@ export async function composeEditionSocialPack(input: {
         ...(heroBytes ? { images: { [ARTICLE_HERO_SLOT]: heroBytes } } : {})
       });
       for (const slide of rendered) {
-        const name = `frame-${String(slide.index + 1).padStart(2, "0")}.png`;
+        const bytes = channel === "instagram" ? await quizFrameJpeg(slide.png, CAROUSEL_BRANDS["caught-up"].colors.background ?? "#000000") : slide.png;
+        const extension = channel === "instagram" ? "jpg" : "png";
+        const name = `frame-${String(slide.index + 1).padStart(2, "0")}.${extension}`;
         const publicPath = `${publicDirectory}/${locale}/${channel}/${name}`;
-        const validation = await validateSocialImage(slide.png);
+        const validation = await validateSocialImage(bytes);
         const expected = template.formats[carouselCanvas(format)];
         if (validation.width !== expected.width || validation.height !== expected.height) {
           throw new Error(`Social frame ${publicPath} has the wrong canvas`);
         }
-        if (hostFrames) await atomicWriteBuffer(input.repoRoot, `${relativeDirectory}/${locale}/${channel}/${name}`, slide.png);
+        if (hostFrames) await atomicWriteBuffer(input.repoRoot, `${relativeDirectory}/${locale}/${channel}/${name}`, bytes);
         framePaths[locale][channel].push(publicPath);
-        frameHashes[publicPath] = slide.pngHash;
+        frameHashes[publicPath] = createHash("sha256").update(bytes).digest("hex");
         const slots = Object.values(reference.content.strings);
         altTexts[publicPath] = `${locale === "cs" ? "Slide" : "Slide"} ${slide.index + 1}: ${slots[Math.min(slide.index, slots.length - 1)]}`.slice(0, 300);
       }
@@ -266,7 +269,8 @@ export async function composeEditionSocialPack(input: {
       const readLabel = locale === "cs" ? "Celý článek" : "Read the edition";
       const openLabel = locale === "cs" ? "Otevřené zůstává" : "Still open";
       const instagramBody = `${article.title}\n\n${article.dek}\n\n${article.what_changed[0]}\n\n${article.why_it_matters[0]}\n\n${openLabel}: ${article.uncertainty[0]}`;
-      const instagramSuffix = `\n\n${readLabel}: ${destinations[locale]}\n\n${tagList.map((tag) => `#${tag}`).join(" ")}`;
+      const credit = editionPackage.image.license.attribution_html.replace(/<[^>]*>/gu, " ").replace(/\s+/gu, " ").trim();
+      const instagramSuffix = `\n\n${readLabel}: ${destinations[locale]}\n\n${tagList.map((tag) => `#${tag}`).join(" ")}\n\n${credit}`;
       const threadsBody = `${article.title}\n\n${article.why_it_matters[0]}\n\n${openLabel}: ${article.uncertainty[0]}`;
       const threadsSuffix = `\n\n${destinations[locale]}`;
       const instagramA = boundedCopy(instagramBody, instagramSuffix, 2_200);

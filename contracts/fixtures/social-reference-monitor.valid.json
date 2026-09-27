@@ -1,0 +1,20 @@
+{
+  "schemaVersion": "social-reference-monitor/1",
+  "sampledAt": "2026-09-27T08:00:00.000Z",
+  "expiresAt": "2026-10-04T08:00:00.000Z",
+  "posts": [
+    {
+      "id": "Example1",
+      "account": "evolving.ai",
+      "url": "https://www.instagram.com/p/Example1/",
+      "postedAt": "2026-09-27T07:00:00.000Z",
+      "slideCount": 5,
+      "captionWords": 50,
+      "questionHook": false
+    }
+  ],
+  "newPostIds": [
+    "evolving.ai:Example1"
+  ],
+  "publishingAuthorized": false
+}

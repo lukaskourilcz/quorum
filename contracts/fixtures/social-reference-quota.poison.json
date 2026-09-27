@@ -1,0 +1,8 @@
+{
+  "schemaVersion": "poison",
+  "month": "2026-09",
+  "reservedUsd": 0.03,
+  "attemptedAt": "2026-09-27T08:00:00.000Z",
+  "pending": true,
+  "status": "reserved"
+}

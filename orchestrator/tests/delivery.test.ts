@@ -1,3 +1,5 @@
+import { approvedEditorialPackage, editorialReviewHash, storeEditorialReview } from "../src/edition/review.js";
+import { EditorialReviewSchema } from "../src/contracts/editorial-review.js";
 import { mkdir, mkdtemp, readFile, writeFile } from "node:fs/promises";
 import os from "node:os";
 import path from "node:path";
@@ -247,6 +249,15 @@ describe("delivery outbox", () => {
       "utf8"
     ));
     validateEditionForDelivery(editionPackage);
+    const reviewPath = await storeEditorialReview(root, editionPackage, [
+      { id: "photo-1", image: null, unavailableReason: "Fixture" },
+      { id: "photo-2", image: null, unavailableReason: "Fixture" },
+      { id: "fal", image: { ...editionPackage.image, origin: "illustration", license: { ...editionPackage.image.license, name: "BoardlessAI illustration" } }, unavailableReason: null }
+    ], new Date("2026-08-04T08:00:00Z"));
+    const review = EditorialReviewSchema.parse(JSON.parse(await readFile(path.join(root, reviewPath!), "utf8")));
+    const decision = { schemaVersion: "editorial-decision/1", reviewId: review.id, reviewHash: editorialReviewHash(review), action: "approve", title: editionPackage.article.cs.frontmatter.title, imageId: "fal", decidedAt: "2026-08-04T08:01:00.000Z", actor: "owner" };
+    await writeJson(path.join(root, `editorial/decisions/${review.id}.json`), decision);
+    Object.assign(editionPackage, approvedEditorialPackage(review, decision));
     const packagePath = `edition/outbox/2026-08-04-${editionPackage.idempotencyKey}.json`;
     await writeJson(path.join(root, packagePath), editionPackage);
     await writeJson(
@@ -282,6 +293,15 @@ describe("delivery outbox", () => {
       "utf8"
     ));
     validateEditionForDelivery(editionPackage);
+    const reviewPath = await storeEditorialReview(root, editionPackage, [
+      { id: "photo-1", image: null, unavailableReason: "Fixture" },
+      { id: "photo-2", image: null, unavailableReason: "Fixture" },
+      { id: "fal", image: { ...editionPackage.image, origin: "illustration", license: { ...editionPackage.image.license, name: "BoardlessAI illustration" } }, unavailableReason: null }
+    ], new Date("2026-08-04T08:00:00Z"));
+    const review = EditorialReviewSchema.parse(JSON.parse(await readFile(path.join(root, reviewPath!), "utf8")));
+    const decision = { schemaVersion: "editorial-decision/1", reviewId: review.id, reviewHash: editorialReviewHash(review), action: "approve", title: editionPackage.article.cs.frontmatter.title, imageId: "fal", decidedAt: "2026-08-04T08:01:00.000Z", actor: "owner" };
+    await writeJson(path.join(root, `editorial/decisions/${review.id}.json`), decision);
+    Object.assign(editionPackage, approvedEditorialPackage(review, decision));
     const packagePath = `edition/outbox/2026-08-04-${editionPackage.idempotencyKey}.json`;
     await writeJson(path.join(root, packagePath), editionPackage);
     await writeJson(

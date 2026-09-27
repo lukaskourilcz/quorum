@@ -787,14 +787,16 @@ export async function fetchApifyMonthlyUsageUsd(input: {
   fetchImpl?: typeof fetch;
 }): Promise<number | null> {
   try {
-    const response = await safeFetch("https://api.apify.com/v2/users/me/usage/monthly", {
+    const response = await safeFetch("https://api.apify.com/v2/users/me/limits", {
       allowHosts: [APIFY_HOST],
       headers: { authorization: `Bearer ${input.token}`, accept: "application/json" },
       timeoutMs: 8_000,
       ...(input.fetchImpl ? { fetchImpl: input.fetchImpl } : {})
     });
     const payload = JSON.parse(new TextDecoder().decode(response.body)) as unknown;
-    const total = (payload as { data?: { monthlyUsageUsd?: unknown } })?.data?.monthlyUsageUsd;
+    // The limits endpoint exposes the current billing-cycle total; the historical
+    // usage endpoint has a different aggregate schema. Never infer zero on failure.
+    const total = (payload as { data?: { current?: { monthlyUsageUsd?: unknown } } })?.data?.current?.monthlyUsageUsd;
     return typeof total === "number" && Number.isFinite(total) && total >= 0 ? total : null;
   } catch {
     return null;

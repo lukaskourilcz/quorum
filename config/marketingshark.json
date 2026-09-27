@@ -55,8 +55,8 @@
         "wednesday": "challenge-teaser",
         "thursday": "quiz",
         "friday": "this-week",
-        "saturday": null,
-        "sunday": null
+        "saturday": "quiz",
+        "sunday": "feature-spotlight"
       },
       "postKinds": {
         "quiz": {

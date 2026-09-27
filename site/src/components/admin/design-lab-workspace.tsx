@@ -1,4 +1,5 @@
 "use client";
+import { ArticleQueueActions } from "./article-queue-actions";
 
 import { useEffect, useMemo, useRef, useState } from "react";
 import { useRouter } from "next/navigation";
@@ -152,6 +153,7 @@ function Workspace({ article, presets }: { article: LabArticle; presets: LabPres
         </div>
       </div>
       {changed ? <Callout tone="warning">Export obsahuje uložené texty. Před stažením uložte upravené slidy.</Callout> : null}
+      {article.venture === "caught-up" && <ArticleQueueActions date={article.date} unsaved={changed || busy || JSON.stringify(saveable(recipe)) !== JSON.stringify(saveable(persistedRecipe ?? article.recipe))} />}
       <details><summary className="admin-focus-ring cursor-pointer py-2 text-sm text-[var(--admin-foreground-muted)]">Popisek a texty pro sociální sítě</summary>
         <div className="mt-3 grid gap-3">
           <div className="flex flex-wrap items-center gap-2 text-xs"><span>Popisek</span><CopySocialText text={article.caption} /><span>Threads</span><CopySocialText text={article.copy.copy.threadsText} /><span>Story</span><CopySocialText text={article.copy.copy.storyLine} /></div>
@@ -223,6 +225,6 @@ export function DesignLabWorkspace({ articles, presets, emptyTitle, initialArtic
     {!filtered.length ? <AdminStateMessage state="filtered-empty" title="Žádný článek neodpovídá hledání." /> : null}
     {article?.kind === "package" ? <DesignLabPackageWorkspace article={article} key={article.id} /> : article ? <Workspace article={article} key={article.id} presets={presets} /> : null}
     {/* A package's Send to Queue drafts posts for approval; its own footer says so in its place. */}
-    {article?.kind !== "package" ? <p className="text-xs leading-relaxed text-[var(--admin-foreground-muted)]">Karusely se odsud nikam neposílají. Publikování řídí samostatné schválení a nastavení sociálních profilů.</p> : null}
+    {article?.kind !== "package" ? <p className="text-xs leading-relaxed text-[var(--admin-foreground-muted)]">Úpravy vytvoří nový koncept v Queue. Každé publikování vyžaduje samostatné schválení a připojený sociální profil.</p> : null}
   </div>;
 }

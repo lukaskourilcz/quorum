@@ -83,6 +83,7 @@ export async function unlockedRunnerRoot(roots: string[]): Promise<{ root: strin
   const migrated = migrateLegacyQueueItem(await readJsonFile(path.join(repoRoot, "state/social/queue/2026-08-05-cs-threads.json")), publisher);
   const approved = hashedQueueItem({
     ...migrated,
+    approvalProvenance: { ...migrated.approvalProvenance, approvalRef: "social-queue-event-0123456789abcdef01234567" },
     id: "fixture-approved",
     status: "queued",
     publishWindow: { notBefore: "2026-08-27T09:00:00.000Z", notAfter: "2026-08-27T11:00:00.000Z" }

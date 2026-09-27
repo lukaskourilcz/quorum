@@ -188,8 +188,8 @@ test("Design Lab renders a manual export workspace and keeps social publishing c
   expect(response?.status()).toBe(200);
   await expect(page.getByRole("heading", { level: 1, name: "Design Lab." }))
     .toBeVisible();
-  // The 52a0b8b2 redesign says it in one sentence under the workspace: nothing is sent from here.
-  await expect(page.getByText("Karusely se odsud nikam neposílají", { exact: false }))
+  // Design changes become drafts; actual publishing still needs separate Queue approval.
+  await expect(page.getByText("Každé publikování vyžaduje samostatné schválení", { exact: false }))
     .toBeVisible();
   await expect(page.locator("[data-article-rail]")).toBeVisible();
   const canvas = page.locator("[data-slide-canvas]");
@@ -211,9 +211,9 @@ test("Design Lab renders a manual export workspace and keeps social publishing c
     return lookTab.getAttribute("aria-pressed");
   }).toBe("true");
   await expect(page.locator("[data-save-preset]")).toBeDisabled();
-  // Whole English words: the article rail's buttons carry Czech headlines, and "postavený"
-  // (built) is not a publishing control.
-  await expect(page.getByRole("button", { name: /\b(?:publish(?:ing)?|post(?:ing|s)?|send(?:ing|s)?)\b/iu }))
+  // Loading draft metadata is a read control; there is still no publishing action here.
+  await expect(page.getByRole("button", { name: "Load current posts and images", exact: true })).toBeDisabled();
+  await expect(page.getByRole("button", { name: /\b(?:publish(?:ing)?|post(?:ing|s)?|send(?:ing|s)?)\b/iu }).filter({ hasNotText: "Load current posts and images" }))
     .toHaveCount(0);
 
   expect(failures).toEqual([]);

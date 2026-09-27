@@ -1,5 +1,21 @@
 # NEEDED — what the owner has to do
 
+## Owner-reviewed social bridge · 2026-09-27
+
+Current scope: Instagram @dneskai, Instagram @devshark.app and a new DNESKAi Threads profile.
+The owner authorized implementation and Meta developer registration in-session; this authority
+is recorded in `state/decisions/2026-09-27-owner-editorial-queue.md` without signing old forms.
+The [setup and Queue runbook](OWNER-SOCIAL-QUEUE.md) is the current account checklist.
+
+- [ ] **Finish the Meta connection app** — developer registration is complete on the account confirmed in-session. The BoardlessAI Social Studio form is ready with Instagram and Threads; final app creation and account OAuth remain pending. [imp:5] [owner:me] [time:10m] [kind:setup]
+- [ ] **Convert @devshark.app to a professional Instagram account** — DNESKAi is already professional, as confirmed in-session. [imp:5] [owner:me] [time:10m] [kind:setup]
+- [ ] **Create the DNESKAi Threads profile and authorize the exact Meta connections** — neither account has Threads yet. Store only tokens as secrets and IDs as variables, using the runbook. Verify identity before activating a connection. [imp:5] [owner:me] [time:30m] [kind:setup]
+- [ ] **Approve the first article and each actual social post in Queue** — no account setup, agent instruction or dry check substitutes for those approvals. [imp:5] [owner:me] [time:15m] [kind:decision]
+
+The older devShark checklist below also includes LinkedIn/Buffer, outside this session's requested
+activation. Its proposed countersignature is not a blocker for the now-authorized implementation;
+it remains relevant if the owner later expands that older scope.
+
 ## Focus sweep · 2026-09-26
 
 You asked on 2026-09-26 to keep "Waiting for you" to what DNESKAi, devShark, the Design Lab,

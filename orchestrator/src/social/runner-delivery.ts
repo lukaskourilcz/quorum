@@ -1,7 +1,7 @@
 import { createHash } from "node:crypto";
 import { SocialPostReceiptSchema } from "../contracts/autonomy.js";
 import { atomicWriteJson, atomicWriteText } from "../state.js";
-import { pauseVentureSocial, type SocialVenture } from "./activation.js";
+import { pauseVentureSocial, type PublishingVenture } from "./activation.js";
 import type { PublishProviderId } from "./provider-platforms.js";
 import { createProviderDeliveryReceipt, createProviderHealthSnapshot } from "./providers.js";
 import { ProviderRejectedError, SocialPublishHoldError, type PublishAdapter } from "./publish.js";
@@ -183,7 +183,7 @@ export async function deliverClaimedItem(input: {
       reason,
       pausedAt: now.toISOString()
     }),
-    pauseVentureSocial({ stateRoot, venture: claimed.sourceVentureId as SocialVenture, reason, now })
+    pauseVentureSocial({ stateRoot, venture: claimed.sourceVentureId as PublishingVenture, reason, now })
   ]);
   return rejection ? "rejected" : "ambiguous";
 }

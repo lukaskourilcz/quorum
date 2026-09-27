@@ -85,7 +85,7 @@ function approvedItem(frames: number, packageHash: string): CapabilityAwareQueue
     publishWindow: { notBefore: "2026-09-26T06:00:00.000Z", notAfter: "2026-09-26T21:00:00.000Z" },
     status: "queued" as const,
     checks: Object.fromEntries(["schema", "brand", "claims", "quill", "keeper", "duplicate", "accessibility", "budget", "capability", "authority", "policy"].map((name) => [name, "pass"])) as CapabilityAwareQueueItem["checks"],
-    approvalProvenance: { approvalRef: "fixture:owner-approval", selectionRef: "fixture:selection", policyRef: null },
+    approvalProvenance: { approvalRef: "social-queue-event-0123456789abcdef01234567", selectionRef: "fixture:selection", policyRef: null },
     selectedBy: "PULSE" as const,
     createdAt: "2026-09-26T05:00:00.000Z",
     attempt: null,

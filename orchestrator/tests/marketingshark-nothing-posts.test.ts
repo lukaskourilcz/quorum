@@ -98,11 +98,11 @@ describe("marketingShark cannot post", () => {
     }
   });
 
-  it("is not a publishing venture, so the runner never reaches its items", () => {
+  it("registers marketingShark as a publisher while its account and owner-approval locks remain", () => {
     // The third lock. The publisher iterates ventures that own an activation record; a venture
     // with no social account has none, and the guard says so by name rather than by crashing on
     // an undefined lookup.
-    expect(isPublishingVenture("marketingshark")).toBe(false);
+    expect(isPublishingVenture("marketingshark")).toBe(true);
     expect(SOCIAL_VENTURES).toEqual(["caught-up", "mma-files", "titty-tuesdays"]);
     for (const venture of SOCIAL_VENTURES) expect(isPublishingVenture(venture)).toBe(true);
   });

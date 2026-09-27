@@ -1,5 +1,5 @@
 import "server-only";
-import { readFile } from "node:fs/promises";
+import { readAdminSocialImage } from "@/lib/admin-repository";
 import path from "node:path";
 import { CAROUSEL_BRANDS, liveTemplateByReference, renderCarouselSlidePng } from "@boardlessai/carousel-studio";
 import { readSocialPackVisual } from "@/lib/social-pack-visual";
@@ -28,7 +28,7 @@ async function committedFrame(root: string, asset: string): Promise<QueueFrame |
   const file = path.join(publicRoot, asset);
   if (path.relative(publicRoot, file).startsWith("..")) return null;
   try {
-    return { bytes: new Uint8Array(await readFile(file)), contentType: match[1] === "png" ? "image/png" : "image/jpeg" };
+    return { bytes: new Uint8Array(await readAdminSocialImage(root, `site/public${asset}`)), contentType: match[1] === "png" ? "image/png" : "image/jpeg" };
   } catch {
     return null;
   }

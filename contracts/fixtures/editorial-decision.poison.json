@@ -1,0 +1,10 @@
+{
+  "schemaVersion": "poison",
+  "reviewId": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+  "reviewHash": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+  "action": "approve",
+  "title": "Titulek vybraný majitelem",
+  "imageId": "fal",
+  "decidedAt": "2026-09-27T10:01:00.000Z",
+  "actor": "owner"
+}

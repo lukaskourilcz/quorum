@@ -11,7 +11,7 @@ import {
 
 // A pack records the original render manifest for evidence and frame count. Admin review renders
 // from `visual` on demand, so these are never served as public `/social` URLs after delivery.
-const FramePathSchema = z.string().regex(/^\/social\/[a-zA-Z0-9/_-]+\.png$/);
+const FramePathSchema = z.string().regex(/^\/social\/[a-zA-Z0-9/_-]+\.(?:png|jpg)$/);
 
 const InstagramSchema = openObject({
   caption: z.string().trim().min(1).max(2200),

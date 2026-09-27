@@ -13,21 +13,14 @@ import {
 } from "./publisher-targets.js";
 
 export type DeliveryHealth = "passed" | "failed" | "no-edition";
+export type PublishingVenture = SocialVenture | "marketingshark";
 export type SocialVenture = "caught-up" | "mma-files" | "titty-tuesdays";
 
 export const SOCIAL_VENTURES: readonly SocialVenture[] = ["caught-up", "mma-files", "titty-tuesdays"];
 
-/**
- * Whether a queue item's venture may publish at all.
- *
- * Not every venture that writes a queue item publishes from one. marketingShark drafts carousels
- * for a human to review. Since quorum#569 it has held devShark connections and an activation record
- * that counts its drafted packages, but it is still not a publishing venture: that changes only in
- * the commit that records the owner's countersignature of `devshark-social-2026-09a`. The
- * publisher has to be able to tell "switched off" from "not a publisher", and this is that test.
- */
-export function isPublishingVenture(venture: string): venture is SocialVenture {
-  return (SOCIAL_VENTURES as readonly string[]).includes(venture);
+/** The owner requested devShark's Instagram bridge on 2026-09-27. All account and per-post locks still apply. */
+export function isPublishingVenture(venture: string): venture is PublishingVenture {
+  return venture === "marketingshark" || (SOCIAL_VENTURES as readonly string[]).includes(venture);
 }
 
 export const SOCIAL_DECISION_REFERENCE = "D2-autonomy-build-2026-08-01" as const;
@@ -74,7 +67,7 @@ export function socialCredentialReferences(venture: string, registry: SocialPubl
     .filter((profile) => profile.role === "venture-primary" && profile.ventureRef === venture)
     .map(({ id }) => id));
   return [...new Set(registry.connections
-    .filter((connection) => profileIds.has(connection.profileId))
+    .filter((connection) => profileIds.has(connection.profileId) && (venture !== "marketingshark" || connection.platform === "instagram"))
     .flatMap((connection) => connection.credentialRef && connection.nativeAccountIdRef
       ? [connection.credentialRef, connection.nativeAccountIdRef]
       : []))];
@@ -257,8 +250,8 @@ function initialActivation(now: Date): SocialActivation {
 
 /**
  * marketingShark's record: drafted devShark packages against the floor of three, and the reference
- * names of the three devShark connections. "enabled" here is readiness only; the runner still
- * refuses marketingShark's items until `isPublishingVenture` says otherwise.
+ * names of the requested devShark Instagram connection. Account activation and Queue approval
+ * remain independent checks in the publisher.
  */
 function marketingSharkActivation(input: {
   prior: SocialActivation["ventures"]["marketingshark"];
@@ -283,7 +276,7 @@ function marketingSharkActivation(input: {
   const ready = input.drafted >= MARKETINGSHARK_REQUIRED_PACKAGES;
   const enabled = ready && input.missing.length === 0;
   const reason = enabled
-    ? `Three drafted packages and every devShark reference present under ${MARKETINGSHARK_SOCIAL_DECISION_REFERENCE}; nothing sends before the owner countersigns it.`
+    ? `Three drafted packages and every devShark reference present under ${MARKETINGSHARK_SOCIAL_DECISION_REFERENCE}; each post still needs owner approval and a verified active connection.`
     : ready
       ? `Drafted ${input.drafted}/${MARKETINGSHARK_REQUIRED_PACKAGES}; missing ${input.missing.join(", ")}.`
       : `Drafted packages ${input.drafted}/${MARKETINGSHARK_REQUIRED_PACKAGES}.`;
@@ -430,7 +423,7 @@ export async function refreshSocialActivation(input: {
 
 export async function pauseVentureSocial(input: {
   stateRoot: string;
-  venture: SocialVenture;
+  venture: PublishingVenture;
   reason: string;
   now?: Date;
 }): Promise<SocialActivation> {

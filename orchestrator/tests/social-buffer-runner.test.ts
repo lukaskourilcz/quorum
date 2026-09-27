@@ -100,6 +100,8 @@ async function linkedInRoot(bindingMode: "held" | "active"): Promise<string> {
   const migrated = migrateLegacyQueueItem(legacy, publisher);
   const draft = {
     ...migrated,
+    approvalProvenance: { ...migrated.approvalProvenance, approvalRef: "social-queue-event-0123456789abcdef01234567" },
+    status: "queued" as const,
     id: "caught-up-2026-09-26-cs-linkedin",
     channel: "linkedin" as const,
     utm: { ...migrated.utm, source: "linkedin" as const },

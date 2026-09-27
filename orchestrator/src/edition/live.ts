@@ -25,13 +25,15 @@ import type { SourceRegistry } from "../sources/types.js";
 import { atomicWriteJson, atomicWriteText, readJson, readText } from "../state.js";
 import { caughtUpBudgetMode } from "../finance/budget-plan.js";
 import { ImageProgramBudget, readImageProgramSpendToday } from "../images/budget.js";
-import { selectEditionHero, type HeroLadderResult } from "../images/ladder.js";
+import { type HeroLadderResult } from "../images/ladder.js";
 import type { VisualBrief } from "../images/visual-brief.js";
 import { recordSkippedProviders } from "../images/skipped-providers.js";
 import { imageProgramReadiness } from "../images/readiness.js";
 import { storeImageSelection } from "../images/verdict-store.js";
 import { loadFixedMonthlyUsd } from "../money/fixed-costs.js";
-import { storeEditionCarouselSummary } from "../studio/carousel-summary-store.js";
+import { storeEditorialReview } from "./review.js";
+import { selectEditorialCandidates, unavailableEditorialImages } from "../images/editorial-candidates.js";
+import type { EditorialReview } from "../contracts/editorial-review.js";
 
 interface NetworkAllowlist {
   runtimeHosts: string[];
@@ -89,8 +91,8 @@ export interface LiveEditionResult {
  * by a real edition the same day, the retry slot exists to attempt exactly that repair, and a
  * day that ends with nothing is a day the reader is owed a sentence about.
  */
-export function shouldQueueEditionDelivery(_editionPackage: EditionPackage): boolean {
-  return true;
+export function shouldQueueEditionDelivery(editionPackage: EditionPackage): boolean {
+  return editionPackage.status === "no_edition";
 }
 
 function sameUtcMonth(left: Date, right: Date): boolean {
@@ -278,6 +280,7 @@ export async function runLiveEdition(input: {
     monthApiUsd + config.budgets.editionProductionUsd > monthlyCap ||
     monthApiUsd + fixedMonthlyUsd + config.budgets.editionProductionUsd > operatingCap ||
     budgetMode === "no_edition";
+  let reviewImages: EditorialReview["images"] = unavailableEditorialImages();
   let editionPackage: EditionPackage;
   let report: EditionRunReport;
   if (budgetBlocked || sourceGateReason) {
@@ -304,7 +307,7 @@ export async function runLiveEdition(input: {
     let imageSelection: { slug: string; result: HeroLadderResult } | null = null;
     const walkLadder = input.dependencies?.selectHero;
     const selectHero: NonNullable<EditionProductionInput["selectHero"]> = async (request) => {
-      const result = walkLadder ? await walkLadder(request) : await selectEditionHero({
+      const result = walkLadder ? await walkLadder(request) : await selectEditorialCandidates({
         venture: "caught-up",
         stateRoot: root,
         cycleId: input.cycleId,
@@ -315,6 +318,7 @@ export async function runLiveEdition(input: {
         illustrationSlug: request.slug,
         subjectQuery: request.subjectQuery
       });
+      if ("reviewImages" in result) reviewImages = result.reviewImages as EditorialReview["images"];
       imageSelection = { slug: request.slug, result };
       reporter.imageProgram = {
         readiness: imageReadiness,
@@ -460,6 +464,6 @@ export async function runLiveEdition(input: {
   // headline, the standfirst and the editor's own points, in the order they made them. A
   // `no_edition` package writes nothing, because an edition that did not go out has nothing to
   // put on a slide, and its reason is already recorded above.
-  await storeEditionCarouselSummary(root, editionPackage);
+  await storeEditorialReview(root, editionPackage, reviewImages, input.now);
   return { package: editionPackage, report, sourceRun, outboxPath, reportPath, monthApiUsd };
 }

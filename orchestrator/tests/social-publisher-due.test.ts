@@ -34,7 +34,7 @@ describe("only an approved item is due", () => {
     await expect(readFile(path.join(root, "state/social/publish-holds/a-draft.json"))).rejects.toMatchObject({ code: "ENOENT" });
   });
 
-  it("still sends a legacy v1 draft whose checks all pass, as it always would have", async () => {
+  it("holds a legacy v1 draft even when its connection and automated checks are live", async () => {
     const { root, approved } = await unlockedRunnerRoot(roots);
     await rm(path.join(root, "state/social/queue/b-approved.json"));
     const legacy = await readJsonFile(path.join(repoRoot, "state/social/queue/2026-08-05-cs-threads.json")) as Record<string, unknown>;
@@ -43,8 +43,8 @@ describe("only an approved item is due", () => {
 
     const report = await runSocialPublisher(runnerOptions(root, adapter));
 
-    expect(report).toMatchObject({ due: 1, published: 1 });
-    expect(adapter.publish.mock.calls[0]![1]).toMatchObject({ id: "caught-up-2026-08-05-cs-threads", migration: { sourceSchemaVersion: 1 } });
+    expect(report).toMatchObject({ due: 0, published: 0 });
+    expect(adapter.publish).not.toHaveBeenCalled();
   });
 
   it("leaves DNESKAi's pack draft to the owner, and sends it once the Queue approves it (#583)", async () => {

@@ -516,8 +516,9 @@ describe("edition dry production", () => {
     // own headline in type; the cover fingerprint moved to the Czech title; the package stopped
     // carrying an English half; and now the plate is branded DNESKAi with readable labels and no
     // hex fingerprint, and illustration.prompt is gone from the package altogether. Same
-    // bytes-in, bytes-out contract throughout.
-    expect(result.packageHash).toBe("b9f26659ca497383584d7aab8f60ec4413b2f94508be82d17e6bd8545f57f7bb");
+    // bytes-in, bytes-out contract throughout. Owner review now adds a third alternative
+    // headline so the article offers four distinct choices.
+    expect(result.packageHash).toBe("7a2f47323c0627147b58989b390d0f2512c823d99ae454b8079b02d4ddcee540");
     // The shape itself, not just its hash: one article file, and it is the Czech one.
     const mdx = result.files.filter((file) => file.endsWith(".mdx")).map((file) => file.split("/").pop());
     expect(mdx).toHaveLength(1);

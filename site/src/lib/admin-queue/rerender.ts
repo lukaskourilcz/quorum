@@ -1,4 +1,5 @@
 import "server-only";
+import { rerenderArticleQueueItem } from "./rerender-article";
 import { createHash } from "node:crypto";
 import { CAROUSEL_BRANDS, quizFrameJpeg, quizSlideRenderInput, renderCarouselSlidePng } from "@boardlessai/carousel-studio";
 import {
@@ -108,7 +109,7 @@ async function writeRevision(store: QueueStore, record: QuizPackageRecord, slide
   return { artifactRef, hash, frames };
 }
 
-export async function rerenderQueueItem(input: {
+export interface RerenderInput {
   request: QueueActionRequest;
   current: QueueItemV2;
   state: QueueState;
@@ -118,9 +119,12 @@ export async function rerenderQueueItem(input: {
   root: string;
   now: Date;
   event: SocialQueueEventRecord;
-}): Promise<QueueActionResult> {
+}
+
+export async function rerenderQueueItem(input: RerenderInput): Promise<QueueActionResult> {
   const { current, store } = input;
   if (!SUPERSEDABLE.includes(current.status)) throw new QueueActionError("REFUSED", `A ${current.status} item cannot be re-rendered.`);
+  if (current.sourceVentureId === "caught-up") return rerenderArticleQueueItem(input);
   const address = packageAddress(current.releaseId);
   if (current.sourceVentureId !== "marketingshark" || current.content.assetPaths.length === 0 || !address) {
     throw new QueueActionError("REFUSED", "Only a marketingShark carousel is re-rendered from the Design Lab.");

@@ -176,7 +176,7 @@ export async function storeEditionCarouselSummary(
     slug: frontmatter.slug,
     date: editionPackage.date,
     title: frontmatter.title,
-    coverLine: frontmatter.alternative_headlines?.[0],
+    coverLine: editionPackage.article.cs.frontmatter.generation.human_reviewed ? frontmatter.title : frontmatter.alternative_headlines?.[0],
     dek: frontmatter.dek,
     // The editor's own structure is the argument, in the order they made it.
     points: [

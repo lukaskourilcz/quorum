@@ -61,6 +61,8 @@ import {
 import { ArticlePackageSchema, EditorialSlateSchema, SocialVariantPackSchema } from "./mma-files.js";
 import { RatingRecordSchema } from "./rating.js";
 import { SeasonFileSchema } from "./season.js";
+import { EditorialReviewSchema, EditorialDecisionSchema } from "./editorial-review.js";
+import { SocialReferenceMonitorSchema, SocialReferenceQuotaSchema } from "./social-reference-monitor.js";
 import { SocialPackSchema } from "./social-pack.js";
 import { SocialAssetHoldSchema, SocialAssetRetentionSchema } from "./social-assets.js";
 import { SocialQueueRetentionSchema } from "./social-queue-retention.js";
@@ -240,6 +242,10 @@ export const ContractSchemas = {
   "rating": RatingRecordSchema,
   "season": SeasonFileSchema,
   "social-pack": SocialPackSchema,
+  "social-reference-monitor": SocialReferenceMonitorSchema,
+  "social-reference-quota": SocialReferenceQuotaSchema,
+  "editorial-review": EditorialReviewSchema,
+  "editorial-decision": EditorialDecisionSchema,
   "style-profile": StyleProfileSchema,
   "venture-registry": VentureRegistrySchema,
   "venture-capability-map": VentureCapabilityMapSchema,

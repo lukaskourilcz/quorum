@@ -36,7 +36,7 @@ describe("marketingShark configuration", () => {
     expect(raw).not.toHaveProperty("hookLibrary");
   });
 
-  it("rotates the post kind by weekday: quiz Monday and Thursday, then spotlight, challenge and the week's note, no weekend room (#576)", async () => {
+  it("rotates the post kind by weekday: quiz Monday and Thursday, then spotlight, challenge and the week's note, weekend quiz and feature drafts (#588)", async () => {
     const brand = enabledBrands(await loadMarketingSharkConfig())[0]!;
     expect(brand.rotation).toEqual({
       monday: "quiz",
@@ -44,14 +44,14 @@ describe("marketingShark configuration", () => {
       wednesday: "challenge-teaser",
       thursday: "quiz",
       friday: "this-week",
-      saturday: null,
-      sunday: null
+      saturday: "quiz",
+      sunday: "feature-spotlight"
     });
     // The week of 28 September 2026, Monday to Sunday, read as calendar dates.
     const week = ["2026-09-28", "2026-09-29", "2026-09-30", "2026-10-01", "2026-10-02", "2026-10-03", "2026-10-04"];
     expect(week.map(weekdayOf)).toEqual(["monday", "tuesday", "wednesday", "thursday", "friday", "saturday", "sunday"]);
     expect(week.map((date) => scheduledKind(brand, date)))
-      .toEqual(["quiz", "feature-spotlight", "challenge-teaser", "quiz", "this-week", null, null]);
+      .toEqual(["quiz", "feature-spotlight", "challenge-teaser", "quiz", "this-week", "quiz", "feature-spotlight"]);
   });
 
   it("gives every kind a slide-1 pattern that names only facts code fills", async () => {

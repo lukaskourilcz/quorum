@@ -107,7 +107,7 @@ function trendSnapshot(date: string, tags: Array<[string, number, number | null]
 }
 
 describe("the weekday rotation", () => {
-  it("plans the kind each weekday names, and no room at the weekend", async () => {
+  it("plans and drafts all seven days", async () => {
     const brand = await devshark();
     const where = await rooms();
     const kinds: string[] = [];
@@ -116,13 +116,13 @@ describe("the weekday rotation", () => {
       kinds.push(day.kind);
       if (outcome) expect(outcome.status, date).toBe("drafted");
     }
-    expect(kinds).toEqual(["quiz", "feature-spotlight", "challenge-teaser", "quiz", "this-week", "none", "none"]);
+    expect(kinds).toEqual(["quiz", "feature-spotlight", "challenge-teaser", "quiz", "this-week", "quiz", "feature-spotlight"]);
     const saturday = await plan(brand, "2026-10-03", where);
-    expect(saturday).toMatchObject({ kind: "none", reason: expect.stringContaining("Saturday has no marketingShark room") });
-    // Five packages, one a weekday, each the kind its day names; nothing for the weekend.
-    expect((await readdir(path.join(where.state, "ventures/marketingshark/packages"))).sort()).toEqual(WEEK.slice(0, 5));
-    const written = await Promise.all(WEEK.slice(0, 5).map((date) => packageOn(where, date)));
-    expect(written.map((built) => (isPostPackage(built) ? built.kind : "quiz"))).toEqual(["quiz", "feature-spotlight", "challenge-teaser", "quiz", "this-week"]);
+    expect(saturday).toMatchObject({ kind: "quiz" });
+    // Seven packages, all still awaiting the owner.
+    expect((await readdir(path.join(where.state, "ventures/marketingshark/packages"))).sort()).toEqual(WEEK);
+    const written = await Promise.all(WEEK.map((date) => packageOn(where, date)));
+    expect(written.map((built) => (isPostPackage(built) ? built.kind : "quiz"))).toEqual(["quiz", "feature-spotlight", "challenge-teaser", "quiz", "this-week", "quiz", "feature-spotlight"]);
   });
 
   it("is the rotation each devShark profile's strategy describes, now that #576 has built it (#580)", async () => {
@@ -148,9 +148,9 @@ describe("the weekday rotation", () => {
   it("gives each kind three queue drafts that cite its subject, and a frame per slide that matches its hash", async () => {
     const brand = await devshark();
     const where = await rooms();
-    for (const date of WEEK.slice(0, 5)) await draft(brand, date, where);
+    for (const date of WEEK) await draft(brand, date, where);
     const subjects = new Map<string, string>();
-    for (const date of WEEK.slice(0, 5)) {
+    for (const date of WEEK) {
       const built = await packageOn(where, date);
       const items = await Promise.all(["linkedin", "instagram", "threads"].map(async (channel) =>
         JSON.parse(await readFile(path.join(where.state, `social/queue/${date}-devshark-en-${channel}.json`), "utf8")) as { status: string; content: { factualClaimRefs: string[]; assetPaths: string[] }; checks: Record<string, string> }));
@@ -228,9 +228,9 @@ describe("the weekday rotation", () => {
     expect(record.roomTranscript!.turns.every((turn) => turn.text.length <= 800)).toBe(true);
   });
 
-  it("opens no room at the weekend and writes nothing", async () => {
+  it("opens a weekend draft room without publishing", async () => {
     const result = await runMarketingSharkCycle({ cycleId: "t", dry: true, now: new Date("2026-10-03T05:00:00.000Z"), date: "2026-10-03", stage: "DISCOVERY" });
-    expect(result).toMatchObject({ brands: [], spendUsd: 0, artifacts: [], skipped: { reason: expect.stringContaining("Saturday") } });
+    expect(result).toMatchObject({ spendUsd: 0, skipped: null, brands: [expect.objectContaining({ kind: "quiz", status: expect.stringMatching(/^(?:drafted|already-served)$/u) })] });
   });
 });
 

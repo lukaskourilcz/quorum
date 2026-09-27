@@ -87,7 +87,8 @@ async function instagramFixture(): Promise<string> {
   const migrated = migrateLegacyQueueItem({ ...legacy, content: { ...legacy.content, assetPaths: [FRAME] } }, publisher);
   const draft = {
     ...migrated,
-    status: "draft" as const,
+    approvalProvenance: { ...migrated.approvalProvenance, approvalRef: "social-queue-event-0123456789abcdef01234567" },
+    status: "queued" as const,
     publishWindow: { notBefore: "2026-08-27T09:00:00.000Z", notAfter: "2026-08-27T11:00:00.000Z" },
     content: { ...migrated.content, contentHash: "0".repeat(64) }
   };
