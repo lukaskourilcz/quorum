@@ -220,6 +220,34 @@ test("Design Lab renders a manual export workspace and keeps social publishing c
   expect(mutationAttempts).toEqual([]);
 });
 
+test("Design Lab Brand tab shows each kit's logos on their grounds with downloads", async ({
+  page
+}) => {
+  const failures = captureAdminRuntimeFailures(page);
+  const mutationAttempts = await guardAdminWrites(page);
+  for (const theme of ["light", "dark"] as const) {
+    await setAdminPreferences(page, { theme });
+    for (const viewport of [{ width: 1440, height: 900 }, { width: 390, height: 844 }]) {
+      await page.setViewportSize(viewport);
+      const response = await page.goto("/admin?venture=design-lab&tab=brand", { waitUntil: "domcontentloaded" });
+      expect(response?.status()).toBe(200);
+      const dneskai = page.locator('[data-brand-kit="caught-up"]');
+      await expect(dneskai).toHaveAttribute("data-brand-kit-status", "ready");
+      await expect(page.locator('[data-brand-kit="marketingshark"]')).toHaveAttribute("data-brand-kit-status", "ready");
+      await expect(dneskai.getByText("Carousels draw this logo")).toBeVisible();
+      const logo = dneskai.locator('[data-brand-asset="logo-on-light"] img');
+      await expect.poll(() => logo.evaluate((image: HTMLImageElement) => image.complete && image.naturalWidth > 0)).toBe(true);
+      await expect(dneskai.locator('[data-brand-asset="logo-on-dark"] a[download]'))
+        .toHaveAttribute("href", "/admin/api/brand-kits/caught-up/DNESKAi-logo-dark.svg?download=1");
+      await expectNoDocumentOverflow(page, `${theme} ${viewport.width}px Brand tab`);
+      await expectNoHighImpactAxeViolations(page, `${theme} ${viewport.width}px Brand tab`, ["[data-design-lab-brand]"]);
+      await page.screenshot({ path: `test-results/admin-qa/brand-tab-${theme}-${viewport.width}.png`, fullPage: true });
+    }
+  }
+  expect(failures).toEqual([]);
+  expect(mutationAttempts).toEqual([]);
+});
+
 test("money, fixed costs, file details and launch binder remain truthful and contained", async ({
   page
 }) => {
