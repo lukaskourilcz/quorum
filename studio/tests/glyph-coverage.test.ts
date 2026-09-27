@@ -119,7 +119,7 @@ describe("alphabet coverage", () => {
     // it to a brand, or deleting it from fonts.ts with its files and metrics, empties this list.
     const unbound = [...FONT_FAMILIES].filter((family) => !BOUND_FAMILIES.includes(family)).sort();
     expect(unbound).toEqual(["Outfit"]);
-    expect(BOUND_FAMILIES).toHaveLength(12);
+    expect(BOUND_FAMILIES).toHaveLength(16);
   });
 
   it("derives Cyrillic for exactly the faces the Ukrainian brand binds", () => {

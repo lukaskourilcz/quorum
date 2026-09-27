@@ -102,6 +102,10 @@ describe("DNESKAi renders from its kit", () => {
         if (hasLogoLayer(template, slide.index)) expect(slide.svg, label).toContain(LOGO_VIEWBOX["caught-up"]);
         expectFlat(slide.svg, label);
         expect(slide.svg, `${label}: a rounded panel`).not.toMatch(/<rect[^>]*\srx="(?!0")/);
+        // The faces DNESKAi's own site sets, and no other.
+        for (const family of slide.svg.matchAll(/font-family="([^"]+)"/g)) {
+          expect(family[1], label).toMatch(/^(Space Grotesk|Source Serif 4|IBM Plex Mono)/);
+        }
       }
     }
   });
@@ -147,6 +151,9 @@ describe("devShark renders from its kit", () => {
         const logo = slide.svg.includes(LOGO_VIEWBOX.devshark);
         expect(logo, label).toBe(index === 4 && hasLogoLayer(template, 0));
         expect(slide.svg, label).not.toMatch(/DEVSHARK|DevShark|>devShark<\/(?:text|tspan)>/);
+        for (const family of slide.svg.matchAll(/font-family="([^"]+)"/g)) {
+          expect(family[1], label).toMatch(/^(Manrope|Inter|JetBrains Mono)/);
+        }
         expectFlat(slide.svg, label);
       }
     }

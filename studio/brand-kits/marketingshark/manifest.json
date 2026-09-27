@@ -155,6 +155,20 @@
       "source": "--brand-ink as the second mark colour on pale: the green fails 4.5:1 on the line tone."
     }
   },
+  "carouselFonts": {
+    "headline": {
+      "family": "Manrope",
+      "source": "brand-guidelines.md: Manrope 800 and 700 for headings and display; the logo lettering started as Manrope ExtraBold."
+    },
+    "body": {
+      "family": "Inter",
+      "source": "brand-guidelines.md: Inter 400 and 500 for body text and interface."
+    },
+    "mono": {
+      "family": "JetBrains Mono",
+      "source": "brand-guidelines.md and social-skill.md: JetBrains Mono for code on a pale or ink panel."
+    }
+  },
   "carouselStyle": {
     "flat": true,
     "squareCorners": false,

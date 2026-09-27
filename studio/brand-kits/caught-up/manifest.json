@@ -164,6 +164,20 @@
       "source": "The Ai colour of the logotype (brandAi in lib/og-theme.ts)."
     }
   },
+  "carouselFonts": {
+    "headline": {
+      "family": "Space Grotesk",
+      "source": "BRAND_SYSTEM.md: display headlines, section headings, navigation and controls."
+    },
+    "body": {
+      "family": "Source Serif 4",
+      "source": "BRAND_SYSTEM.md: article prose, deks, definitions and descriptive card copy."
+    },
+    "mono": {
+      "family": "IBM Plex Mono",
+      "source": "BRAND_SYSTEM.md: dates, issue identifiers, source ids, tags, captions and measured values."
+    }
+  },
   "carouselStyle": {
     "flat": true,
     "squareCorners": true,
@@ -187,13 +201,17 @@
     "Do not add shadows or gradients.",
     "Do not resize the Ai.",
     "Do not set the name in a font.",
-    "Do not stretch or squash the logotype."
+    "Do not stretch or squash the logotype.",
+    "Do not use gradients, glass, glow, neon or cyberpunk ornament; surfaces are flat.",
+    "Do not round panels: zero radii, no decorative elevation."
   ],
   "socialRules": [],
   "typography": [
     "The logotype is Poppins Black converted to outlines. Poppins is not a web font here and does not need to be installed.",
-    "DNESKAi's own site sets display type in Space Grotesk, prose in Source Serif 4 and data in IBM Plex Mono.",
-    "The studio does not carry Space Grotesk or Source Serif 4 yet, so carousels keep Archivo, IBM Plex Sans and IBM Plex Mono until those faces are committed to studio/fonts."
+    "Space Grotesk sets display headlines, section headings, navigation and controls.",
+    "Source Serif 4 sets article prose, deks, definitions and descriptive card copy.",
+    "IBM Plex Mono sets dates, issue identifiers, source ids, tags, captions and measured values.",
+    "Carousels set headlines in Space Grotesk, words in Source Serif 4 and labels in IBM Plex Mono, from the OFL files in studio/fonts."
   ],
   "assets": [
     {

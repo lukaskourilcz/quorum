@@ -606,7 +606,7 @@ export const CAROUSEL_BRANDS: Readonly<Record<BrandTokens["id"], BrandTokens>> =
       accent: "#2f5ae6",
       secondary: "#1a3ab0"
     },
-    fonts: { headline: "Archivo", body: "IBM Plex Sans", mono: "IBM Plex Mono" }
+    fonts: { headline: "Space Grotesk", body: "Source Serif 4", mono: "IBM Plex Mono" }
   }),
   "mma-files": BrandTokensSchema.parse({
     schemaVersion: "carousel-brand/1",
@@ -663,7 +663,7 @@ export const CAROUSEL_BRANDS: Readonly<Record<BrandTokens["id"], BrandTokens>> =
       accent: "#236123",
       secondary: "#132019"
     },
-    fonts: { headline: "Figtree", body: "Public Sans", mono: "IBM Plex Mono" }
+    fonts: { headline: "Manrope", body: "Inter", mono: "JetBrains Mono" }
   }),
   // Both colour tokens stay on one highlighter-yellow axis: `secondary` is the paler
   // alternate required by existing A/B recipes, not a second political-brand hue.

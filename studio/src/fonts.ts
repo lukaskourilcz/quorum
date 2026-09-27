@@ -45,7 +45,13 @@ const familySlugs: Readonly<Record<string, string>> = {
   // here is Latin-only in practice, and a missing glyph does not fail — it draws a box, which is
   // the one rendering failure that looks deliberate.
   Literata: "literata",
-  Inter: "inter"
+  Inter: "inter",
+  // The faces the two kitted brands' own products set (`studio/brand-kits/*/manifest.json`):
+  // DNESKAi's display and reading faces, and devShark's display and code faces.
+  "Space Grotesk": "space-grotesk",
+  "Source Serif 4": "source-serif-4",
+  Manrope: "manrope",
+  "JetBrains Mono": "jetbrains-mono"
 };
 
 /** The families a brand may name. Anything else is a typo, and the schema will not catch it. */
