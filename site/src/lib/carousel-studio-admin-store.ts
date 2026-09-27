@@ -1,6 +1,7 @@
 import "server-only";
+import { readAdminJson } from "@/lib/admin-repository";
 import { randomUUID } from "node:crypto";
-import { mkdir, readFile, rename, rm, writeFile } from "node:fs/promises";
+import { mkdir, rename, rm, writeFile } from "node:fs/promises";
 import path from "node:path";
 import {
   CarouselPresetFileSchema,
@@ -50,8 +51,9 @@ export const GITHUB_TOKEN_ENV = "BOARDLESSAI_GITHUB_TOKEN";
 
 async function readJson(relative: string, root = repositoryRoot): Promise<unknown> {
   try {
-    return JSON.parse(await readFile(path.join(root, relative), "utf8")) as unknown;
+    return await readAdminJson(root, relative);
   } catch (error) {
+    if ([401, 403].includes((error as { status?: number }).status ?? 0)) throw new CarouselStudioPersistenceError("REFUSED", `${GITHUB_TOKEN_ENV} was refused; check its expiry and repository permissions.`);
     if ((error as NodeJS.ErrnoException).code === "ENOENT") throw new CarouselStudioPersistenceError("UNAVAILABLE", `Missing ${relative}.`);
     throw error;
   }

@@ -7,9 +7,9 @@ import { MarketingPlanSchema } from "../contracts/marketing-plan.js";
 import { atomicWriteJson } from "../state.js";
 import { AnyMarketingSharkPackage } from "../ventures/marketingshark/package.js";
 import { caughtUpUnlockCounter, isPublishingVenture, mmaFilesUnlockCounter, refreshSocialActivation } from "./activation.js";
-import { QueueItemSchema, queuePayloadHash, type QueueItem } from "./queue.js";
+import { CapabilityAwareQueueItemSchema, capabilityAwareQueuePayloadHash, QueueItemSchema, queuePayloadHash, type QueueItem } from "./queue.js";
 import { runSocialPublisher } from "./runner.js";
-import { loadSocialPublisherRegistry } from "./publisher-targets.js";
+import { migrateLegacyQueueItem, loadSocialPublisherRegistry } from "./publisher-targets.js";
 import { loadSocialProviderRegistry } from "./providers.js";
 import { providerBindingHash } from "../contracts/social-provider.js";
 import { checkTittyTuesdaysPost } from "./tt-safety.js";
@@ -261,7 +261,9 @@ describe("per-venture social activation", () => {
     ] }));
     await writeActivePublisherConfig(configRoot);
     for (let index = 1; index <= 7; index += 1) await atomicWriteJson(stateRoot, `release-proofs/caught-up/${index}.json`, proof(index));
-    await atomicWriteJson(stateRoot, "social/queue/fixture.json", queueItem());
+    const migrated = migrateLegacyQueueItem(queueItem(), await loadSocialPublisherRegistry(configRoot));
+    const approved = { ...migrated, status: "queued" as const, approvalProvenance: { ...migrated.approvalProvenance, approvalRef: "social-queue-event-0123456789abcdef01234567" } };
+    await atomicWriteJson(stateRoot, "social/queue/fixture.json", CapabilityAwareQueueItemSchema.parse({ ...approved, content: { ...approved.content, contentHash: capabilityAwareQueuePayloadHash(approved) } }));
     const adapter = {
       publish: vi.fn(async () => ({ remoteId: "fixture-post-1" })),
       verify: vi.fn(async () => ({ remoteId: "fixture-post-1", remoteUrl: "https://www.threads.net/@fixture/post/1" }))
@@ -285,7 +287,9 @@ describe("per-venture social activation", () => {
     ] }));
     await writeActivePublisherConfig(configRoot);
     for (let index = 1; index <= 7; index += 1) await atomicWriteJson(stateRoot, `release-proofs/caught-up/${index}.json`, proof(index));
-    await atomicWriteJson(stateRoot, "social/queue/fixture.json", queueItem());
+    const migrated = migrateLegacyQueueItem(queueItem(), await loadSocialPublisherRegistry(configRoot));
+    const approved = { ...migrated, status: "queued" as const, approvalProvenance: { ...migrated.approvalProvenance, approvalRef: "social-queue-event-0123456789abcdef01234567" } };
+    await atomicWriteJson(stateRoot, "social/queue/fixture.json", CapabilityAwareQueueItemSchema.parse({ ...approved, content: { ...approved.content, contentHash: capabilityAwareQueuePayloadHash(approved) } }));
     const adapter = {
       findByIdempotencyKey: vi.fn(async () => null),
       publish: vi.fn(async () => { throw new Error("Timeout after access_token=fixture-token may have reached Meta"); }),

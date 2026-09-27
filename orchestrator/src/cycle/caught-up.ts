@@ -20,12 +20,7 @@ import {
 import { appendEditionUsage, runLiveEdition } from "../edition/live.js";
 import { PRODUCT_ROOM_RESERVE_USD, decideLiveProductRoom, toIdeaRoomVerdict } from "../ideas/live.js";
 import { CAUGHT_UP_IDEA_NAMESPACE, GLOBAL_IDEA_NAMESPACE, applyIdeaRoomVerdict, currentIdeaEntries, ensureIdeaInNamespace, ideaIndexPath, ideaLedgerPath, readIdeaLedger, readIdeaIndexSlice, regenerateIdeaIndex } from "../ideas/ledger.js";
-import {
-  composeEditionSocialPack,
-  recordMissingSocialPackConfiguration,
-  recordSocialPackFailure
-} from "../social/pack.js";
-import { socialChannelsEnabled, socialContentGenerationEnabled } from "../social/activation.js";
+import { socialContentGenerationEnabled } from "../social/activation.js";
 import { StandupSchema } from "../standup/schema.js";
 import { composeMeetingRouteDefinition, loadVentureRegistry } from "../ventures/registry.js";
 import { caughtUpSocialProductionEnabled, disabledAgentsForVenture, loadVentureAgentControls } from "../ventures/agent-controls.js";
@@ -289,7 +284,6 @@ export async function runCaughtUpLiveEditionCycle(
   // megabytes of committed inventory the admin re-renders from the pack on request anyway.
   const socialContentEnabled = caughtUpSocialProductionEnabled(agentControls) &&
     await socialContentGenerationEnabled(stateRoot, "caught-up");
-  const socialFramesHosted = await socialChannelsEnabled(configRoot);
   const produced = await runLiveEdition({
     cycleId,
     date,
@@ -359,38 +353,7 @@ export async function runCaughtUpLiveEditionCycle(
     })
   ]);
   const socialArtifacts: string[] = [];
-  if (produced.package.status === "edition" && socialContentEnabled) {
-    const caughtUpBaseUrl = process.env.CAUGHT_UP_SITE_URL;
-    if (!caughtUpBaseUrl) {
-      await recordMissingSocialPackConfiguration(stateRoot);
-      console.warn("Caught Up social pack skipped: CAUGHT_UP_SITE_URL is not configured");
-    } else {
-      try {
-        const slug = produced.package.article.cs.frontmatter.slug;
-        // Czech is served at the site root now, and /cs 308s there. A queue item carries its
-        // destination to the platform and cannot be edited afterwards, so it points at the
-        // final URL rather than at a redirect.
-        const destinations = {
-          cs: new URL(`/articles/${slug}`, caughtUpBaseUrl).toString()
-        };
-        const social = await composeEditionSocialPack({
-          editionPackage: produced.package,
-          meeting: record,
-          destinations,
-          repoRoot,
-          stateRoot,
-          configRoot,
-          now,
-          hostFrames: socialFramesHosted
-        });
-        if (social) socialArtifacts.push(...social.artifactPaths);
-      } catch (error) {
-        const detail = error instanceof Error ? error.message : "unknown composer failure";
-        console.warn(`Caught Up social pack failed: ${detail}`);
-        await recordSocialPackFailure(stateRoot, detail);
-      }
-    }
-  }
+  // Social composition runs only after the owner approves the article in Queue.
   if (options.explainBudget) {
     console.log(JSON.stringify({
       cycleId,
@@ -417,6 +380,7 @@ export async function runCaughtUpLiveEditionCycle(
     calendarPath,
     ...(produced.outboxPath ? [produced.outboxPath] : []),
     produced.reportPath,
+    ...(produced.package.status === "edition" ? [`editorial/reviews/${produced.package.idempotencyKey}.json`] : []),
     "budget/ledger.json",
     ...socialArtifacts
   ];

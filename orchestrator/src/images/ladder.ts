@@ -290,7 +290,7 @@ async function advise(
  * refuses cost exactly what an accepted one cost, so the attempt burns: the day's two are two
  * renders, not two successes.
  */
-async function illustrationRung(
+export async function illustrationRung(
   context: LadderContext,
   dependencies: LadderDependencies
 ): Promise<{ image: ArticleImage | null; verdict: GateVerdict | null }> {

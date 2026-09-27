@@ -1,5 +1,5 @@
 import "server-only";
-import { readdir, readFile } from "node:fs/promises";
+import { readAdminJson, listAdminJson } from "@/lib/admin-repository";
 import path from "node:path";
 import {
   buildCarouselSummary,
@@ -87,12 +87,12 @@ function creditOf(image: unknown): string | null {
   return credit.length > 0 ? credit : null;
 }
 
-async function readJsonFiles(directory: string): Promise<Array<{ name: string; value: unknown }>> {
+async function readJsonFiles(root: string, directory: string): Promise<Array<{ name: string; value: unknown }>> {
   try {
-    const names = (await readdir(directory)).filter((name) => name.endsWith(".json")).sort().reverse();
+    const names = (await listAdminJson(root, path.relative(root, directory))).filter((name) => name.endsWith(".json")).sort().reverse();
     return await Promise.all(names.map(async (name) => ({
       name,
-      value: JSON.parse(await readFile(path.join(directory, name), "utf8")) as unknown
+      value: await readAdminJson(root, path.relative(root, path.join(directory, name)))
     })));
   } catch {
     return [];
@@ -104,7 +104,7 @@ async function recordedSummaries(root: string): Promise<Map<string, CarouselSumm
   const recorded = new Map<string, CarouselSummary>();
   for (const venture of ["caught-up", "mma-files", "kvorum", "booksofhistory", "door-money", "tehdejsi-svet", "devshark"] as const) {
     const directory = path.join(root, "state", "ventures", "carousel-studio", "summaries", venture);
-    for (const { value } of await readJsonFiles(directory)) {
+    for (const { value } of await readJsonFiles(root, directory)) {
       const summary = value as Partial<CarouselSummary>;
       if (summary?.schemaVersion !== "carousel-summary/1") continue;
       if (summary.venture !== venture || typeof summary.slug !== "string" || !Array.isArray(summary.passages)) continue;
@@ -120,7 +120,7 @@ async function recordedSummaries(root: string): Promise<Map<string, CarouselSumm
 /** MMA Files articles, derived from the packages the desk delivered. */
 async function mmaFilesSummaries(root: string): Promise<CarouselSummary[]> {
   const summaries: CarouselSummary[] = [];
-  for (const { value } of await readJsonFiles(path.join(root, "state/ventures/mma-files/articles"))) {
+  for (const { value } of await readJsonFiles(root, path.join(root, "state/ventures/mma-files/articles"))) {
     const article = value as {
       slug?: string;
       publishAt?: string;
@@ -154,7 +154,7 @@ async function dneskaiSummaries(root: string): Promise<CarouselSummary[]> {
   ];
   const seen = new Set<string>();
   for (const directory of directories) {
-    for (const { value } of await readJsonFiles(directory)) {
+    for (const { value } of await readJsonFiles(root, directory)) {
       const pkg = value as {
         date?: string;
         status?: string;

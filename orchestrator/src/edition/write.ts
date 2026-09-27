@@ -25,7 +25,7 @@ const SLUG = new RegExp(SLUG_SOURCE);
 export const LocalizedOutputSchema = z.object({
   title: z.string().trim().min(1),
   dek: z.string().trim().min(1),
-  alternative_headlines: z.array(z.string().trim().min(1)).min(2).max(3),
+  alternative_headlines: z.array(z.string().trim().min(1)).length(3),
   body_mdx: z.string().trim().min(1),
   illustration_alt: z.string().trim().min(1).max(300),
   why_it_matters: z.array(z.string().trim().min(1)).min(2).max(3),
@@ -79,6 +79,9 @@ const ToolOutputSchema = z.object({
   image_negatives: z.array(z.string().trim().min(1)).max(5).optional(),
   wire: z.array(WireItemSchema).min(4).max(6),
   ...LocalizedOutputSchema.shape
+}).superRefine((article, context) => {
+  const titles = [article.title, ...article.alternative_headlines].map(title => removeEmptyCzechAdverbs(title).normalize("NFC").trim().toLocaleLowerCase("cs"));
+  if (new Set(titles).size !== 4) context.addIssue({ code: "custom", path: ["alternative_headlines"], message: "Provide four distinct Czech headlines, including the main title" });
 });
 
 /** Fewest tags ToolOutputSchema accepts. Repairs may not take the array below it. */
@@ -90,8 +93,9 @@ export const localeSchema = {
     title: { type: "string" },
     dek: { type: "string" },
     alternative_headlines: {
+      description: "Exactly three distinct alternatives, each different from the main title. Together they provide four headline choices.",
       type: "array",
-      minItems: 2,
+      minItems: 3,
       maxItems: 3,
       items: { type: "string" }
     },

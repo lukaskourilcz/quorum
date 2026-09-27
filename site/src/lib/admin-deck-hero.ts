@@ -1,5 +1,6 @@
 import "server-only";
-import { readdir, readFile } from "node:fs/promises";
+import { readAdminJson, listAdminJson } from "@/lib/admin-repository";
+import { readFile } from "node:fs/promises";
 import path from "node:path";
 import { toRenderablePng, type CarouselSummaryVenture } from "@boardlessai/carousel-studio";
 
@@ -26,13 +27,13 @@ async function heroBase64(venture: CarouselSummaryVenture, slug: string, date: s
   // Door Money records carry no manuscript or private source material into the public repo, and
   // its approval path currently writes text-only summaries. A missing hero is the honest result.
   if (venture === "booksofhistory" || venture === "door-money" || venture === "tehdejsi-svet") return null;
-  const directory = venture === "mma-files"
-    ? path.join(repositoryRoot, "state/ventures/mma-files/articles")
-    : path.join(repositoryRoot, "state/edition/outbox");
+  const directories = venture === "mma-files" ? ["state/ventures/mma-files/articles"] : ["state/edition/outbox", "state/edition/archive"];
+  for (const relative of directories) {
+    const directory = path.join(repositoryRoot, relative);
   try {
-    for (const name of await readdir(directory)) {
+    for (const name of await listAdminJson(repositoryRoot, path.relative(repositoryRoot, directory))) {
       if (!name.endsWith(".json")) continue;
-      const raw = JSON.parse(await readFile(path.join(directory, name), "utf8")) as {
+      const raw = await readAdminJson(repositoryRoot, path.relative(repositoryRoot, path.join(directory, name))) as {
         slug?: string;
         publishAt?: string;
         date?: string;
@@ -46,7 +47,8 @@ async function heroBase64(venture: CarouselSummaryVenture, slug: string, date: s
       }
     }
   } catch {
-    return null;
+    continue;
+  }
   }
   return null;
 }

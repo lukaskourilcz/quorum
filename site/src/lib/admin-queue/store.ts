@@ -23,11 +23,13 @@ export class QueueActionError extends Error {
 }
 
 const WRITABLE_JSON = [
+  /^state\/social\/design-revisions\/\d{4}-\d{2}-\d{2}-[a-f0-9]{12}\.json$/u,
+  /^state\/editorial\/decisions\/[a-f0-9]{64}\.json$/u,
   /^state\/social\/(?:queue|queue-events)\/[A-Za-z0-9][A-Za-z0-9._-]*\.json$/u,
   /^state\/ventures\/marketingshark\/packages\/\d{4}-\d{2}-\d{2}\/[a-z0-9-]+\/revisions\/[a-f0-9]{12}\.json$/u
 ];
-const READ_ONLY_JSON = [/^state\/ventures\/carousel-studio\/slide-overrides\.json$/u];
-const WRITABLE_BYTES = [/^site\/public\/social\/[a-z0-9-]+\/\d{4}-\d{2}-\d{2}\/(?:en|cs)\/[a-f0-9]{12}\/slide-0[1-9]\.(?:png|jpg)$/u];
+const READ_ONLY_JSON = [/^state\/editorial\/reviews\/[a-f0-9]{64}\.json$/u, /^state\/ventures\/carousel-studio\/slide-overrides\.json$/u];
+const WRITABLE_BYTES = [/^site\/public\/social\/[a-z0-9-]+\/\d{4}-\d{2}-\d{2}\/(?:en|cs)\/[a-f0-9]{12}\/slide-(?:0[1-9]|10)\.(?:png|jpg)$/u];
 const TOKEN_ENV = "BOARDLESSAI_GITHUB_TOKEN";
 
 export interface StoredQueueFile {
@@ -169,6 +171,13 @@ function githubStore(token: string): QueueStore {
     if (response.status === 404) return null;
     if (!response.ok) throw refused(response.status, "read");
     const body = await response.json() as { content?: unknown; encoding?: unknown; sha?: unknown };
+    if (body.encoding === "none" && typeof body.sha === "string") {
+      const raw = await fetch(`${endpoint(relative, access)}?ref=${encodeURIComponent(branch)}`, {
+        headers: { ...headers, Accept: "application/vnd.github.raw+json" }, cache: "no-store"
+      });
+      if (!raw.ok) throw refused(raw.status, "read");
+      return { bytes: Buffer.from(await raw.arrayBuffer()), sha: body.sha };
+    }
     if (typeof body.content !== "string" || body.encoding !== "base64" || typeof body.sha !== "string") throw new QueueActionError("CORRUPT", "GitHub returned a queue file without readable content.");
     return { bytes: Buffer.from(body.content.replaceAll("\n", ""), "base64"), sha: body.sha };
   };

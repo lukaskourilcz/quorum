@@ -1,5 +1,6 @@
 import "server-only";
-import { access, readFile, readdir } from "node:fs/promises";
+import { readAdminJson, listAdminJson } from "@/lib/admin-repository";
+import { access, readdir } from "node:fs/promises";
 import path from "node:path";
 import { parseSocialConnection, parseSocialProfile, rawRecord } from "@/lib/social-profiles/model";
 import { parseProviderHealth, type ProviderHealthRecord } from "@/lib/social-profiles/provider-model";
@@ -86,22 +87,24 @@ export function queueRepositoryRoot(): string {
  * sorts after its original), and events by timestamp, so the first 2,000 were the oldest and a year
  * in the Queue would have shown nothing waiting. `excluded` says how many were left out.
  */
-async function jsonFiles(directory: string): Promise<{ files: Array<{ file: string; value: unknown | undefined }>; state: "present" | "missing" | "unavailable"; excluded: number }> {
+async function jsonFiles(root: string, relative: string): Promise<{ files: Array<{ file: string; value: unknown | undefined }>; state: "present" | "missing" | "unavailable"; excluded: number }> {
   let names: string[];
   try {
-    names = await readdir(directory);
+    names = await listAdminJson(root, relative);
   } catch (error) {
     return { files: [], state: (error as NodeJS.ErrnoException).code === "ENOENT" ? "missing" : "unavailable", excluded: 0 };
   }
   const candidates = names.filter((name) => name.endsWith(".json") && !name.startsWith(".")).sort();
   const excluded = Math.max(0, candidates.length - MAX_FILES);
-  const files = await Promise.all(candidates.slice(excluded).map(async (file) => {
-    try {
-      return { file, value: JSON.parse(await readFile(path.join(directory, file), "utf8")) as unknown };
-    } catch {
-      return { file, value: undefined };
-    }
-  }));
+  const files: Array<{ file: string; value: unknown | undefined }> = [];
+  const selected = candidates.slice(excluded);
+  // Bound GitHub fan-out on busy queues; each page remains an uncached current-state read.
+  for (let offset = 0; offset < selected.length; offset += 8) {
+    files.push(...await Promise.all(selected.slice(offset, offset + 8).map(async (file) => {
+      try { return { file, value: await readAdminJson(root, `${relative}/${file}`) }; }
+      catch { return { file, value: undefined }; }
+    })));
+  }
   return { files, state: "present", excluded };
 }
 
@@ -111,7 +114,7 @@ function excludedNote(relative: string, excluded: number): string[] {
 
 async function jsonConfig(root: string, relative: string, unavailable: string[]): Promise<Record<string, unknown> | null> {
   try {
-    const value = rawRecord(JSON.parse(await readFile(path.join(root, relative), "utf8")) as unknown);
+    const value = rawRecord(await readAdminJson(root, relative));
     if (!value) unavailable.push(`${relative} is not an object`);
     return value;
   } catch {
@@ -183,7 +186,7 @@ function registryContext(registry: Record<string, unknown> | null, capabilities:
 
 /** Only the queue items, for a caller that needs one item's frames and nothing around it. */
 export async function readQueueEntries(root = queueRepositoryRoot()): Promise<{ entries: QueueEntry[]; unreadable: number; dropped: number; excluded: number; listing: "present" | "missing" | "unavailable" }> {
-  const queue = await jsonFiles(path.join(root, "state", "social", "queue"));
+  const queue = await jsonFiles(root, "state/social/queue");
   let unreadable = 0;
   let dropped = 0;
   const entries: QueueEntry[] = [];
@@ -205,11 +208,11 @@ export async function readQueueState(root = queueRepositoryRoot()): Promise<Queu
   const socialRoot = path.join(root, "state", "social");
   const [queue, events, receipts, health, assetHolds, publishHolds, registry, capabilities, channels, ventures, globalPause, socialPause, profilePauses, connectionPauses, profileKills, connectionKills] = await Promise.all([
     readQueueEntries(root),
-    jsonFiles(path.join(socialRoot, "queue-events")),
-    jsonFiles(path.join(socialRoot, "posts")),
-    jsonFiles(path.join(socialRoot, "provider-health")),
-    jsonFiles(path.join(socialRoot, "asset-holds")),
-    jsonFiles(path.join(socialRoot, "publish-holds")),
+    jsonFiles(root, "state/social/queue-events"),
+    jsonFiles(root, "state/social/posts"),
+    jsonFiles(root, "state/social/provider-health"),
+    jsonFiles(root, "state/social/asset-holds"),
+    jsonFiles(root, "state/social/publish-holds"),
     jsonConfig(root, "config/social-publisher-registry.json", unavailable),
     jsonConfig(root, "config/venture-capabilities.json", unavailable),
     jsonConfig(root, "config/channels.json", unavailable),

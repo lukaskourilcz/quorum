@@ -25,6 +25,7 @@ import { dispatchSocialPublisher, type QueueDispatchOutcome } from "@/lib/queue-
  * would check out a queue without it.
  */
 export interface QueueActionRequest {
+  imageId?: "photo-1" | "photo-2" | "fal";
   action: QueueActionName;
   itemId: string;
   expectedContentHash: string;
@@ -46,7 +47,7 @@ export interface QueueActionResult {
 
 const HASH = /^[a-f0-9]{64}$/u;
 const SENSITIVE = /(access[_ -]?token|client[_ -]?secret|authorization\s*[:=]|bearer\s+[a-z0-9._-]+|gh[opsu]_[a-z0-9]+|session[_ -]?cookie)/iu;
-const REQUEST_KEYS = new Set(["action", "itemId", "expectedContentHash", "reason", "edits", "mode"]);
+const REQUEST_KEYS = new Set(["action", "itemId", "expectedContentHash", "reason", "edits", "mode", "imageId"]);
 const APPROVE_NOW_HOURS = 1;
 
 /** Owner text as it will be stored: NFC, Unix line ends, trimmed; null when empty. */
@@ -80,7 +81,8 @@ export function parseQueueActionRequest(value: unknown): QueueActionRequest | nu
   if (action === "edit" && (edits === null || mode !== null || (edits.caption === null && edits.altText === null))) return null;
   if ((action === "hold" || action === "reject") && (reason === null || edits !== null || mode !== null)) return null;
   if (action === "rerender" && (edits !== null || mode !== null)) return null;
-  return { action, itemId: raw.itemId, expectedContentHash: raw.expectedContentHash, reason, edits, mode };
+  if (raw.imageId !== undefined && (action !== "rerender" || !["photo-1", "photo-2", "fal"].includes(String(raw.imageId)))) return null;
+  return { ...(raw.imageId === undefined ? {} : { imageId: raw.imageId as "photo-1" | "photo-2" | "fal" }), action, itemId: raw.itemId, expectedContentHash: raw.expectedContentHash, reason, edits, mode };
 }
 
 function siblingsOf(state: QueueState, current: QueueItem): QueueSibling[] {
@@ -204,6 +206,7 @@ export async function applyQueueAction(value: unknown, options: { root?: string;
 
   if (request.action === "rerender") {
     const current = requireV2(item, "re-rendered here");
+    if (request.imageId && current.sourceVentureId !== "caught-up") throw new QueueActionError("INVALID", "Article image choices apply to DNESKAi only.");
     if (!windowOpen) throw new QueueActionError("REFUSED", "The publish window has closed, so a re-rendered copy could not be sent.");
     return rerenderQueueItem({ request, current, state, store, stored, relative, root, now, event });
   }

@@ -131,11 +131,13 @@ export function insideWindow(item: CapabilityAwareQueueItem, now: Date): boolean
  * v1 draft. A v2 `draft` is never due: its checks wait for the owner, and the runner no longer
  * promotes it to `queued` by itself. DNESKAi's pack wrote v1 drafts with every check `pass` until
  * quorum#583 and writes v2 drafts since, so its new posts wait for the Queue like any other. A v1
- * draft already in the queue predates the Queue and sends once its connection is live, as it always
- * would have; the Queue says so.
+ * draft from DNESKAi or marketingShark is now held too: account activation cannot substitute for
+ * the owner approving the exact post in Queue.
  */
 export function isDue(item: CapabilityAwareQueueItem, now: Date): boolean {
-  const approved = item.status === "queued" || (item.status === "draft" && item.migration !== null);
+  const requiresOwner = item.sourceVentureId === "caught-up" || item.sourceVentureId === "marketingshark";
+  if (requiresOwner && !/^social-queue-event-[a-f0-9]{24}$/u.test(item.approvalProvenance.approvalRef)) return false;
+  const approved = item.status === "queued" || (!requiresOwner && item.status === "draft" && item.migration !== null);
   return approved && insideWindow(item, now);
 }
 

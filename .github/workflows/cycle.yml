@@ -765,7 +765,7 @@ jobs:
           # committed at all. When a phase starts writing a new artifact, its path belongs here.
           runtime_paths=(
             config/visual-weights config/ventures.json state/autonomy state/budget state/standups state/meetings
-            state/scorecards state/decisions state/calendar state/edition state/ideas state/meeting-agendas state/priority-queue.json
+            state/scorecards state/decisions state/calendar state/edition state/editorial state/ideas state/meeting-agendas state/priority-queue.json
             state/kpis state/money state/mma state/marketingshark state/notify state/social state/taste state/ventures state/INBOX.md
             state/reports state/owner-attention.json state/operations state/programs
             state/goviral state/kvorum
@@ -836,6 +836,21 @@ jobs:
           if test "$pushed" != "true"; then
             echo "Runtime state could not be pushed after two refetches. The existing cycle commit was not regenerated."
             exit 1
+          fi
+
+      - name: Prepare owner-reviewed articles and social drafts
+        if: ${{ steps.guard.outputs.proceed == 'true' && steps.mode.outputs.skip != 'true' && steps.mode.outputs.caught_up_delivery == 'true' && steps.mode.outputs.dry != 'true' }}
+        run: |
+          pnpm delivery -- reviewed
+          git config user.name "boardlessai-cycle[bot]"
+          git config user.email "boardlessai-cycle[bot]@users.noreply.github.com"
+          for reviewed_path in state/editorial state/edition state/social state/ventures/carousel-studio site/public/social; do
+            if test -e "$reviewed_path"; then git add -A -- "$reviewed_path"; fi
+          done
+          if ! git diff --cached --quiet; then
+            git commit -m "queue: prepare owner-approved articles and social drafts"
+            # A concurrent owner decision must not be folded into a delivery implicitly.
+            git push origin "HEAD:$GITHUB_REF_NAME"
           fi
 
       - name: Select the oldest Caught Up delivery

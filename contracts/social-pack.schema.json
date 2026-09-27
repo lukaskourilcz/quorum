@@ -68,7 +68,7 @@
                   "type": "array",
                   "items": {
                     "type": "string",
-                    "pattern": "^\\/social\\/[a-zA-Z0-9/_-]+\\.png$"
+                    "pattern": "^\\/social\\/[a-zA-Z0-9/_-]+\\.(?:png|jpg)$"
                   }
                 },
                 "visual": {
@@ -173,7 +173,7 @@
                   "type": "array",
                   "items": {
                     "type": "string",
-                    "pattern": "^\\/social\\/[a-zA-Z0-9/_-]+\\.png$"
+                    "pattern": "^\\/social\\/[a-zA-Z0-9/_-]+\\.(?:png|jpg)$"
                   }
                 },
                 "visual": {
@@ -295,7 +295,7 @@
                   "type": "array",
                   "items": {
                     "type": "string",
-                    "pattern": "^\\/social\\/[a-zA-Z0-9/_-]+\\.png$"
+                    "pattern": "^\\/social\\/[a-zA-Z0-9/_-]+\\.(?:png|jpg)$"
                   }
                 },
                 "visual": {
@@ -400,7 +400,7 @@
                   "type": "array",
                   "items": {
                     "type": "string",
-                    "pattern": "^\\/social\\/[a-zA-Z0-9/_-]+\\.png$"
+                    "pattern": "^\\/social\\/[a-zA-Z0-9/_-]+\\.(?:png|jpg)$"
                   }
                 },
                 "visual": {
@@ -501,7 +501,7 @@
           "type": "array",
           "items": {
             "type": "string",
-            "pattern": "^\\/social\\/[a-zA-Z0-9/_-]+\\.png$"
+            "pattern": "^\\/social\\/[a-zA-Z0-9/_-]+\\.(?:png|jpg)$"
           }
         },
         "visual": {
@@ -585,7 +585,7 @@
           "type": "array",
           "items": {
             "type": "string",
-            "pattern": "^\\/social\\/[a-zA-Z0-9/_-]+\\.png$"
+            "pattern": "^\\/social\\/[a-zA-Z0-9/_-]+\\.(?:png|jpg)$"
           }
         },
         "visual": {
@@ -653,7 +653,7 @@
       "properties": {
         "frame": {
           "type": "string",
-          "pattern": "^\\/social\\/[a-zA-Z0-9/_-]+\\.png$"
+          "pattern": "^\\/social\\/[a-zA-Z0-9/_-]+\\.(?:png|jpg)$"
         },
         "sourceTurnRef": {
           "type": "string",
@@ -742,7 +742,7 @@
       "type": "object",
       "propertyNames": {
         "type": "string",
-        "pattern": "^\\/social\\/[a-zA-Z0-9/_-]+\\.png$"
+        "pattern": "^\\/social\\/[a-zA-Z0-9/_-]+\\.(?:png|jpg)$"
       },
       "additionalProperties": {
         "type": "string",

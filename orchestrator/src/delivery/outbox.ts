@@ -2,6 +2,7 @@ import { readdir, readFile, rm } from "node:fs/promises";
 import path from "node:path";
 import type { EditionPackage } from "../contracts/edition-package.js";
 import { MeetingRecordSchema } from "../contracts/meeting-record.js";
+import { hasEditorialApproval } from "../edition/review.js";
 import { stateRoot } from "../paths.js";
 import { atomicWriteJson, atomicWriteText, readJson, readText, resolveStatePath } from "../state.js";
 import { DeliveryPackageError, validateEditionForDelivery } from "./validate.js";
@@ -153,6 +154,7 @@ export async function oldestPendingDelivery(
   for (const file of await packageFiles(root)) {
     const editionPackage = await readQueuedPackage(root, file, new Date());
     if (!editionPackage) continue;
+    if (!(await hasEditorialApproval(root, editionPackage))) continue;
     const receipt = await readJson<
       { status?: unknown; packageHash?: unknown; code?: unknown; deliveryAttempts?: unknown } | null
     >(

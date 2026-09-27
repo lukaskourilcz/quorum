@@ -240,7 +240,7 @@ function itemView(entry: QueueEntry, siblings: readonly QueueSibling[], state: Q
       hold: (reviewable || item.status === "queued") && !supersededBy,
       reject: (reviewable || ["queued", "failed", "expired"].includes(item.status)) && !supersededBy,
       // A marketingShark carousel is redrawn from the slides saved in the Design Lab (quorum#575).
-      rerender: packageOf(item) !== null && assets.length > 0 && (reviewable || item.status === "queued" || item.status === "failed") && open
+      rerender: (packageOf(item) !== null || (item.schemaVersion === 2 && item.sourceVentureId === "caught-up")) && (reviewable || item.status === "queued" || item.status === "failed") && open
     }
   };
 }
