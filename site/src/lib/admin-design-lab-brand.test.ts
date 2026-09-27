@@ -26,8 +26,8 @@ async function repository(statuses: Record<string, string>) {
   await cp(committedKits, path.join(root, "studio", "brand-kits"), { recursive: true });
   vi.stubEnv("BOARDLESSAI_REPO_ROOT", root);
   vi.resetModules();
-  const module = await import("@/lib/admin-design-lab-brand");
-  return { root, ...module };
+  const snapshot = await import("@/lib/admin-design-lab-brand");
+  return { root, ...snapshot };
 }
 
 describe("the Design Lab brand kit snapshot", () => {
