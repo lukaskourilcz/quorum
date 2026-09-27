@@ -41,6 +41,12 @@ export const EventSourceEntrySchema = openObject({
   license: z.string().trim().min(1).max(200),
   maxCandidates: z.number().int().positive().max(60).default(20),
   enabled: z.boolean().default(true),
+  /**
+   * `ics` only: hosts whose link, found in an event's description, may stand in for a missing
+   * `URL` property. Luma's export puts the event page there and nowhere else; any other link in
+   * the prose is somebody's slide deck, not the event.
+   */
+  eventLinkHosts: z.array(z.string().trim().min(1).max(120)).max(5).optional(),
   note: z.string().trim().min(1).max(300).optional(),
 });
 

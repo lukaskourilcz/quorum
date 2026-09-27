@@ -116,6 +116,11 @@ export interface SafeFetchOptions {
   resolveImpl?: (hostname: string) => Promise<string[]>;
   responseHeaderNames?: readonly string[];
   acceptedStatuses?: readonly number[];
+  /**
+   * Media types this one call accepts beyond the shared list. Narrow on purpose: an iCalendar
+   * export is `text/calendar`, and widening the global list would let every feed reader take it.
+   */
+  extraContentTypes?: readonly string[];
 }
 
 export async function safeFetch(
@@ -160,8 +165,10 @@ export async function safeFetch(
     try {
       response = await fetchImpl(url, {
         headers: {
-          Accept:
-            "application/json, application/atom+xml, application/rss+xml, application/xml, text/plain;q=0.9, text/html;q=0.7",
+          Accept: [
+            ...(options.extraContentTypes ?? []),
+            "application/json, application/atom+xml, application/rss+xml, application/xml, text/plain;q=0.9, text/html;q=0.7"
+          ].join(", "),
           ...options.headers
         },
         method,
@@ -188,7 +195,7 @@ export async function safeFetch(
       throw new UnsafeUrlError(`Source returned HTTP ${response.status}`);
     }
     const contentType = response.headers.get("content-type")?.split(";")[0] ?? "";
-    if (response.ok && !ALLOWED_CONTENT_TYPES.includes(contentType)) {
+    if (response.ok && !ALLOWED_CONTENT_TYPES.includes(contentType) && !(options.extraContentTypes ?? []).includes(contentType)) {
       throw new UnsafeUrlError(`Unexpected content type: ${contentType}`);
     }
     const declaredLength = Number(response.headers.get("content-length") ?? 0);

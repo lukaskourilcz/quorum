@@ -2,6 +2,7 @@ import { createHash } from "node:crypto";
 import { EventCandidateSchema, type EventCandidate, type EventCandidateDraft } from "../contracts/event-candidates.js";
 import type { MagazineEvent } from "../contracts/boardless-events.js";
 import { canonicalUrl } from "../streams/normalize.js";
+import { parseIcsEvents, type IcsEvent } from "./ics.js";
 import type { EventSourceEntry } from "./registry.js";
 
 /**
@@ -158,9 +159,8 @@ function build(
 /**
  * The WordPress "The Events Calendar" REST payload.
  *
- * The same site also publishes an `?ical=1` export. `safeFetch` accepts no
- * `text/calendar`, and widening that allowlist for one source buys less than
- * this endpoint already gives: the JSON carries the venue, the city, the price
+ * The same site also publishes an `?ical=1` export, registered disabled: it
+ * lists the same events, and the JSON carries the venue, the city, the price
  * and the organiser that the export folds into one free-text line.
  */
 export function normalizeEventsCalendar(
@@ -257,6 +257,86 @@ export function normalizeConfsTech(
   }
 
   return filter(candidates, payload.length, source, context, czechIds);
+}
+
+const ONLINE = /\b(online|zoom|google meet|meet\.google|teams|livestream|stream)\b/iu;
+
+/**
+ * The event's own https page: the `URL` property, a UID that is itself a link, or a link in the
+ * description on one of the source's own event hosts. Nothing else, because a guessed link is a
+ * dead link the owner has to catch by hand.
+ */
+function icsUrl(event: IcsEvent, source: EventSourceEntry): string | undefined {
+  const direct = httpsUrl(event.url) ?? httpsUrl(event.uid);
+  if (direct) return direct;
+  const hosts = source.eventLinkHosts ?? [];
+  for (const match of `${event.description ?? ""}\n${event.location ?? ""}`.matchAll(/https:\/\/[^\s<>"')]+/gu)) {
+    const candidate = httpsUrl(match[0].replace(/[.,;]+$/u, ""));
+    if (!candidate) continue;
+    try {
+      if (hosts.includes(new URL(candidate).hostname)) return candidate;
+    } catch {
+      continue;
+    }
+  }
+  return undefined;
+}
+
+/**
+ * The city in a written address: the last part that is not a country, without its postcode.
+ * "Na Příkopě 388/1, 110 00 Praha 1, Czechia" is Praha 1.
+ */
+export function cityOf(address: string, countries: readonly string[]): string | undefined {
+  const skip = new Set(countries.map((country) => country.toLocaleLowerCase("cs")));
+  const parts = address.split(",").map((part) => part.trim()).filter((part) => part && !skip.has(part.toLocaleLowerCase("cs")));
+  return clamp(parts.at(-1)?.replace(/^\d{3}\s?\d{2}\s*/u, ""), 80);
+}
+
+/**
+ * An iCalendar export: the ČAUI Luma calendar, or any other calendar that publishes one.
+ *
+ * `LOCATION` is a place or a meeting link. A link or an online word makes the event online; a
+ * place fills the venue, and its last comma-separated part the city. The description is the
+ * listing's own prose, clamped like every other source's.
+ */
+export function normalizeIcs(
+  payload: unknown,
+  source: EventSourceEntry,
+  context: CandidateContext,
+): CandidateBatch {
+  if (typeof payload !== "string") return { candidates: [], read: 0, dropped: 0 };
+  const events = parseIcsEvents(payload);
+  const candidates: EventCandidate[] = [];
+  for (const event of events) {
+    const title = clamp(event.summary, 120);
+    const url = icsUrl(event, source);
+    if (!title || !event.starts || !url) continue;
+    const location = clamp(event.location, 120);
+    const locationIsLink = location ? /^https?:\/\//iu.test(location) : false;
+    const online = locationIsLink || ONLINE.test(location ?? "");
+    const place = location && !locationIsLink && !online ? location : undefined;
+    const city = place ? cityOf(place, context.czechCountries) : undefined;
+    const description = plainText(event.description
+      ?.split("\n")
+      .filter((line) => !/^get up-to-date information at/iu.test(line.trim()))
+      .join("\n")
+      .replace(/https?:\/\/\S+/gu, " "));
+    const candidate = build({
+      source: source.id,
+      sourceName: source.name,
+      scope: source.scope,
+      title,
+      starts: event.starts,
+      online,
+      url,
+      ...(event.ends && event.ends > event.starts ? { ends: event.ends } : {}),
+      ...(description ? { description } : {}),
+      ...(city ? { city } : {}),
+      ...(place && place !== city ? { venue: place } : {}),
+    }, source);
+    if (candidate) candidates.push(candidate);
+  }
+  return filter(candidates, events.length, source, context, undefined);
 }
 
 /**

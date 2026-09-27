@@ -26,7 +26,36 @@
       "topicFilter": false,
       "maxCandidates": 20,
       "license": "Public Czech AI event listing. Read for candidates only; the Czech title and description the owner publishes are rewritten in the admin.",
-      "note": "The same calendar exports iCalendar at /seznam/?ical=1. safeFetch accepts no text/calendar and this endpoint carries the venue, city, price and organiser the export folds into free text, so the site's own JSON is what is read."
+      "note": "The same calendar exports iCalendar at /seznam/?ical=1, registered below as aiakce-ics and disabled: it lists the same events, and this JSON also carries the venue, city, price and organiser the export folds into free text."
+    },
+    {
+      "id": "caui-luma",
+      "kind": "ics",
+      "name": "ČAUI · Luma",
+      "url": "https://api.lu.ma/ics/get?entity=calendar&id=cal-sgsAMWB0wsH6IGI",
+      "host": "api.lu.ma",
+      "scope": "cz",
+      "topicFilter": false,
+      "maxCandidates": 30,
+      "eventLinkHosts": [
+        "luma.com",
+        "lu.ma"
+      ],
+      "license": "Public Luma calendar of the Czech AI association (ČAUI). Read for candidates only; the owner rewrites title and description in the admin.",
+      "note": "quorum#554 and #592. The export answers text/calendar and puts each event's page in the description as a luma.com link; that link is the candidate URL. Verified 2026-09-28: HTTP 200, 46 VEVENTs."
+    },
+    {
+      "id": "aiakce-ics",
+      "kind": "ics",
+      "name": "AI Akce.cz · iCalendar",
+      "url": "https://www.aiakce.cz/seznam/?ical=1",
+      "host": "www.aiakce.cz",
+      "scope": "cz",
+      "topicFilter": false,
+      "maxCandidates": 20,
+      "enabled": false,
+      "license": "Public Czech AI event listing. Read for candidates only.",
+      "note": "Disabled: the same events as the aiakce JSON source (checked 2026-09-28, same /akce/ URLs), which carries more fields. Enable only if that endpoint goes away."
     },
     {
       "id": "confs-tech-general",

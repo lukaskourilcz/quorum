@@ -14,7 +14,7 @@ import { DateSchema, HttpsUrlSchema, openObject } from "./common.js";
  * reason, because "we asked and got nothing" and "we never asked" have to stay
  * distinguishable in the admin.
  */
-export const EVENT_CANDIDATE_SOURCE_KINDS = ["events-calendar", "confs-tech"] as const;
+export const EVENT_CANDIDATE_SOURCE_KINDS = ["events-calendar", "confs-tech", "ics"] as const;
 export type EventCandidateSourceKind = (typeof EVENT_CANDIDATE_SOURCE_KINDS)[number];
 
 export const EventCandidateSchema = openObject({

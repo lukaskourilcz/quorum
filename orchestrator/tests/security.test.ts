@@ -50,6 +50,15 @@ describe("untrusted source security", () => {
     ).rejects.toBeInstanceOf(UnsafeUrlError);
   });
 
+  it("accepts text/calendar only for a call that names it", async () => {
+    const calendar = (async () =>
+      new Response("BEGIN:VCALENDAR\r\nEND:VCALENDAR\r\n", { status: 200, headers: { "content-type": "text/calendar; charset=utf-8" } })) as typeof fetch;
+    const base = { allowHosts: ["source.example"], fetchImpl: calendar, resolveImpl: async () => ["203.0.113.10"] };
+    await expect(safeFetch("https://source.example/cal.ics", base)).rejects.toThrowError(/Unexpected content type: text\/calendar/);
+    await expect(safeFetch("https://source.example/cal.ics", { ...base, extraContentTypes: ["text/calendar"] }))
+      .resolves.toMatchObject({ contentType: "text/calendar" });
+  });
+
   it("caps decompressed content and content type", async () => {
     await expect(
       safeFetch("https://source.example/feed", {

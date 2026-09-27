@@ -13,6 +13,7 @@ import {
   capCandidates,
   normalizeConfsTech,
   normalizeEventsCalendar,
+  normalizeIcs,
   withoutKnown,
   type CandidateBatch,
   type CandidateContext,
@@ -61,12 +62,13 @@ export function readEventsStore(root = stateRoot): MagazineEvent[] {
 }
 
 function normalize(payload: unknown, source: EventSourceEntry, context: CandidateContext): CandidateBatch {
+  if (source.kind === "ics") return normalizeIcs(payload, source, context);
   return source.kind === "confs-tech"
     ? normalizeConfsTech(payload, source, context)
     : normalizeEventsCalendar(payload, source, context);
 }
 
-async function readListing(url: string, allowHosts: readonly string[], deps: EventFetchDeps): Promise<unknown> {
+async function readListing(url: string, allowHosts: readonly string[], deps: EventFetchDeps, kind: EventSourceEntry["kind"]): Promise<unknown> {
   const response = await safeFetch(url, {
     allowHosts,
     maxBytes: MAX_LISTING_BYTES,
@@ -75,11 +77,14 @@ async function readListing(url: string, allowHosts: readonly string[], deps: Eve
     // it. Asking for one that does not exist yet is an expected answer, not an
     // outage, so 404 is read rather than thrown.
     acceptedStatuses: [404],
+    // An iCalendar export is the one listing that is not JSON, and only its call accepts the type.
+    ...(kind === "ics" ? { extraContentTypes: ["text/calendar"] } : {}),
     ...(deps.fetchImpl ? { fetchImpl: deps.fetchImpl } : {}),
     ...(deps.resolveImpl ? { resolveImpl: deps.resolveImpl } : {}),
   });
   if (response.status === 404) return null;
-  return JSON.parse(new TextDecoder().decode(response.body)) as unknown;
+  const text = new TextDecoder().decode(response.body);
+  return kind === "ics" ? text : (JSON.parse(text) as unknown);
 }
 
 export interface CollectInput {
@@ -110,7 +115,7 @@ export async function collectEventCandidates(input: CollectInput): Promise<Event
 
     for (const url of sourceUrls(source, deps.now)) {
       try {
-        const payload = await readListing(url, allowHosts, deps);
+        const payload = await readListing(url, allowHosts, deps, source.kind);
         if (payload === null) continue;
         const batch = normalize(payload, source, context);
         read += batch.read;

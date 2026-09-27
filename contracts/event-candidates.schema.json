@@ -130,7 +130,8 @@
             "type": "string",
             "enum": [
               "events-calendar",
-              "confs-tech"
+              "confs-tech",
+              "ics"
             ]
           },
           "host": {
