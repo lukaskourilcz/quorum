@@ -178,6 +178,11 @@ function designLabHref(brand: string, pkg: { slug: string; date: string } | null
   return `/admin?${query}`;
 }
 
+/** A DNESKAi draft that is not an edition's carousel: the evening question or a recipe post. */
+function isDneskaiExtra(id: string): boolean {
+  return /-question$|-cs-recipe-/u.test(id);
+}
+
 function itemView(entry: QueueEntry, siblings: readonly QueueSibling[], state: QueueState, labLabels: ReadonlySet<string>, now: Date): AdminQueueItemView {
   const { item } = entry;
   const target = queueItemTarget(item, state);
@@ -241,7 +246,10 @@ function itemView(entry: QueueEntry, siblings: readonly QueueSibling[], state: Q
       hold: (reviewable || item.status === "queued") && !supersededBy,
       reject: (reviewable || ["queued", "failed", "expired"].includes(item.status)) && !supersededBy,
       // A marketingShark carousel is redrawn from the slides saved in the Design Lab (quorum#575).
-      rerender: (packageOf(item) !== null || (item.schemaVersion === 2 && item.sourceVentureId === "caught-up")) && (reviewable || item.status === "queued" || item.status === "failed") && open
+      // DNESKAi's evening question and its recipe posts are not an article's deck, so there is
+      // nothing of theirs for the Design Lab to redraw (quorum#592); their captions are edited.
+      rerender: (packageOf(item) !== null || (item.schemaVersion === 2 && item.sourceVentureId === "caught-up" && !isDneskaiExtra(item.id)))
+        && (reviewable || item.status === "queued" || item.status === "failed") && open
     }
   };
 }

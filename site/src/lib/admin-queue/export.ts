@@ -76,6 +76,18 @@ async function packageExtras(root: string, pkg: Record<string, unknown> | null):
   if (pkg.schemaVersion === "dneskai-recipe/1") {
     const threads = text(record(pkg.threads)?.text);
     if (threads) extras["threads.txt"] = encoder.encode(`${threads}\n`);
+    // The no-edition recipe's 9:16 story of the same card, for manual posting.
+    const story = record(pkg.story);
+    const frame = text(record(story?.frame)?.path, 300);
+    const link = text(story?.link, 2_000);
+    if (frame && STORY_FRAME.test(frame) && !frame.includes("..")) {
+      try {
+        extras["story.png"] = await readAdminSocialImage(root, `site/public${frame}`);
+      } catch {
+        // Not hosted, so not exported.
+      }
+    }
+    if (link?.startsWith("https://")) extras["story-link.txt"] = encoder.encode(`${link}\n`);
   }
   return extras;
 }

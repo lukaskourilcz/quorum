@@ -1,7 +1,7 @@
 import { readFile, rm } from "node:fs/promises";
 import path from "node:path";
 import { afterEach, describe, expect, it } from "vitest";
-import { EDGE_BOUND_SOURCES, runDeterministicChecks } from "./checks";
+import { EDGE_BOUND_SOURCES, OWNER_SLOT_FAILURE, OWNER_SLOT_MARKER, runDeterministicChecks } from "./checks";
 import { queueFixtureRoot, readQueueFixture } from "./fixture-root";
 import { parseQueueItemV2, queueItemV2Hash, type QueueItemV2 } from "./item";
 import { readQueueState } from "./state";
@@ -45,5 +45,22 @@ describe("the Queue's capability check", () => {
     // An edge-bound source on its own primary profile still needs its exact edge.
     const edgeBound = rehashed({ ...draft!, sourceVentureId: "marketingshark", target: { ...draft!.target, ...devsharkThreads } });
     expect(runDeterministicChecks(edgeBound, [], registry).results).toMatchObject({ capability: "fail", authority: "pass" });
+  });
+});
+
+describe("the owner's fact slots (quorum#592)", () => {
+  it("keeps the orchestrator's marker and refuses to approve copy that still carries one", async () => {
+    const source = await readFile(path.join(repository, "orchestrator/src/contracts/dneskai-recipe.ts"), "utf8");
+    expect(source).toContain(`export const OWNER_SLOT_MARKER = "${OWNER_SLOT_MARKER}";`);
+    const root = await queueFixtureRoot({ draft: false });
+    roots.push(root);
+    const { registry } = await readQueueState(root);
+    const draft = parseQueueItemV2(await readQueueFixture("caught-up-queue-threads.valid.json"))!;
+    const slotted = rehashed({ ...draft, content: { ...draft.content, text: `Kalkulačka nákladů. Cena: ${OWNER_SLOT_MARKER}: ověřit u výrobce]` } });
+    const review = runDeterministicChecks(slotted, [], registry);
+    expect(review.copyFailure).toBe(OWNER_SLOT_FAILURE);
+    expect(review.failures).toContain(OWNER_SLOT_FAILURE);
+    const filled = rehashed({ ...draft, content: { ...draft.content, text: "Kalkulačka nákladů. Cena: zdarma do 1 000 dotazů." } });
+    expect(runDeterministicChecks(filled, [], registry).copyFailure).toBeNull();
   });
 });

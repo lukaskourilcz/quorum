@@ -207,6 +207,9 @@ export async function applyQueueAction(value: unknown, options: { root?: string;
   if (request.action === "rerender") {
     const current = requireV2(item, "re-rendered here");
     if (request.imageId && current.sourceVentureId !== "caught-up") throw new QueueActionError("INVALID", "Article image choices apply to DNESKAi only.");
+    if (current.sourceVentureId === "caught-up" && /-question$|-cs-recipe-/u.test(current.id)) {
+      throw new QueueActionError("REFUSED", "This DNESKAi post is not an article's carousel, so there is nothing to re-render. Edit its caption instead.");
+    }
     if (!windowOpen) throw new QueueActionError("REFUSED", "The publish window has closed, so a re-rendered copy could not be sent.");
     return rerenderQueueItem({ request, current, state, store, stored, relative, root, now, event });
   }

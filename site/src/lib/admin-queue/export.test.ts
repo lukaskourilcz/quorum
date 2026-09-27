@@ -94,6 +94,21 @@ describe("buildQueueExport", () => {
     expect(Object.keys(await unzip("caught-up-2026-08-04-cs-threads")).sort()).toEqual(["alt-text.txt", "caption.txt", "manifest.json"]);
   });
 
+  it("adds a no-edition recipe's story card and its link", async () => {
+    const item = await readQueueFixture("caught-up-queue-threads.valid.json");
+    await writeJson(root, "state/social/queue/2026-08-04-cs-threads.json", item);
+    await writeJson(root, "state/social/packs/2026-08-04.json", {
+      schemaVersion: "dneskai-recipe/1",
+      threads: { text: "Pojem dne." },
+      story: { frame: { path: "/social/caught-up/2026-08-04/no-edition/story.png", sha256: "0".repeat(64) }, link: "https://dneskai.cz/?utm_source=instagram&utm_medium=story&utm_campaign=no-edition" }
+    });
+    await mkdir(path.join(root, "site/public/social/caught-up/2026-08-04/no-edition"), { recursive: true });
+    await writeFile(path.join(root, "site/public/social/caught-up/2026-08-04/no-edition/story.png"), PNG);
+    const files = await unzip("caught-up-2026-08-04-cs-threads");
+    expect(Buffer.from(files["story.png"]!)).toEqual(PNG);
+    expect(decoder.decode(files["story-link.txt"])).toContain("utm_campaign=no-edition");
+  });
+
   it("answers null for an item that does not exist", async () => {
     expect(await buildQueueExport("ms-2026-01-01-devshark-en-threads", root)).toBeNull();
   });

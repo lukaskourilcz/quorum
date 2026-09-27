@@ -33,6 +33,19 @@ export type DeterministicCheckResult = {
  */
 export const ENGAGEMENT_REWARD_FAILURE = "the copy promises a reward for following, liking, sharing or commenting, which Meta and LinkedIn forbid";
 
+/**
+ * A fact the owner still has to add, such as a tool's price in DNESKAi's Friday tools post
+ * (quorum#592). The recipe writes `[DOPLNIT: …]` where the fact goes; an approval refuses copy that
+ * still carries one, so a placeholder can never reach a platform. `OWNER_SLOT_MARKER` in the
+ * orchestrator's `dneskai-recipe.ts` holds the same string.
+ */
+export const OWNER_SLOT_MARKER = "[DOPLNIT";
+export const OWNER_SLOT_FAILURE = "the copy still has a [DOPLNIT: …] slot for a fact only the owner can add; edit it in first";
+
+export function copyHasOwnerSlot(copy: { text: string; altText: string | null }): boolean {
+  return copy.text.includes(OWNER_SLOT_MARKER) || (copy.altText ?? "").includes(OWNER_SLOT_MARKER);
+}
+
 export function copyBreaksEngagementRule(copy: { text: string; altText: string | null }): boolean {
   return [copy.text, copy.altText ?? ""].some(promisesEngagementReward);
 }
@@ -106,7 +119,9 @@ export function runDeterministicChecks(item: QueueItemV2, others: readonly Queue
     capability: "the capability map does not allow this venture to hand posts to Social Distribution",
     authority: "the profile or its connection does not belong to this venture and platform"
   };
-  const copyFailure = copyBreaksEngagementRule(item.content) ? ENGAGEMENT_REWARD_FAILURE : null;
+  const copyFailure = copyBreaksEngagementRule(item.content)
+    ? ENGAGEMENT_REWARD_FAILURE
+    : copyHasOwnerSlot(item.content) ? OWNER_SLOT_FAILURE : null;
   const failures = [
     ...(Object.keys(results) as QueueDeterministicCheck[]).filter((id) => results[id] === "fail").map((id) => messages[id]),
     ...(copyFailure ? [copyFailure] : [])
