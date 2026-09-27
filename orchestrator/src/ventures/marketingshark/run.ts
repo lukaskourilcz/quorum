@@ -17,7 +17,7 @@ import {
 import { assertHookAssignmentValid, assignPackHook, channelRecordFor, hookLineFor } from "../../studio/hook-brain.js";
 import { recordPost, writeHookChannels, type HookChannels } from "../../studio/hook-channels.js";
 import type { HookAssignment } from "../../contracts/hook-assignment.js";
-import type { Hook } from "@boardlessai/carousel-studio";
+import { brandKitProblem, type Hook } from "@boardlessai/carousel-studio";
 import { ChumOutput, inLocale, MarketingSharkPackage, packageId, packagePath, SLIDE_ROLES } from "./package.js";
 import { buildChumPacket, craftRulesFor, readCraftRules } from "./packet.js";
 import type { BrandOutcome } from "./outcome.js";
@@ -28,6 +28,7 @@ import { buildQueueItems, marketingSharkCapabilityRef } from "./queue.js";
 import { loadVentureCapabilityMap } from "../capabilities.js";
 import {
   codeOwnedSlotsFit,
+  brandTokensFor,
   engineVersion,
   MARKETINGSHARK_FORMAT,
   quizFacts,
@@ -421,6 +422,17 @@ export async function runBrandDay(input: {
   const { brand, date } = input;
   const now = input.now ?? new Date(`${date}T07:00:00.000Z`);
   let spendUsd = 0;
+
+  // A brand drawn from a kit that is missing or fails its hashes renders nothing (the studio refuses
+  // it), so the day stops here for $0 with the kit's own reason instead of after a paid call.
+  const kitProblem = brandKitProblem(brandTokensFor(brand));
+  if (kitProblem) {
+    return {
+      outcome: { status: "aborted", brandId: brand.id, kind: "quiz", reason: "render-failed", detail: kitProblem, spendUsd: 0 },
+      ledger: input.ledger,
+      artifacts: []
+    };
+  }
 
   let plan: Awaited<ReturnType<typeof planBrandDay>>;
   try {

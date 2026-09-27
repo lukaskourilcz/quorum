@@ -1,5 +1,6 @@
 import { access, mkdir } from "node:fs/promises";
 import path from "node:path";
+import { brandKitProblem } from "@boardlessai/carousel-studio";
 import { BudgetError } from "../../budget.js";
 import { ModelOutputParseError, ModelResponseTruncatedError } from "../../llm/call.js";
 import { configRoot as defaultConfigRoot, repoRoot } from "../../paths.js";
@@ -17,7 +18,7 @@ import { buildPostPacket } from "./post-packet.js";
 import type { PostDayPlan } from "./post-plan.js";
 import { buildPostRenderSummary, rasterisePostDeck, renderPostDeck } from "./post-render.js";
 import { buildQueueItems, marketingSharkCapabilityRef } from "./queue.js";
-import { engineVersion, MARKETINGSHARK_FORMAT, type RasterisedFrame } from "./render.js";
+import { brandTokensFor, engineVersion, MARKETINGSHARK_FORMAT, type RasterisedFrame } from "./render.js";
 import { MARKETINGSHARK_PACKAGE_VERSION } from "./package-version.js";
 
 /**
@@ -190,6 +191,10 @@ export async function runPostDay(input: {
   if (!mayRenderDeck(renderAccess)) {
     return aborted("render-failed", `the marketingshark -> design-lab render edge is ${renderAccess.decision}: ${renderAccess.reason}`, 0);
   }
+
+  // The brand kit is the only look devShark has; without it nothing renders, so nothing is paid for.
+  const kitProblem = brandKitProblem(brandTokensFor(brand));
+  if (kitProblem) return aborted("render-failed", kitProblem, 0);
 
   let spendUsd = 0;
   let output: PostWriterOutput | null = null;

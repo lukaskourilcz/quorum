@@ -3,6 +3,7 @@ import {
   CAROUSEL_BRANDS,
   CONNECTOR_MAX_SLIDES,
   articleSlideSlot,
+  brandKitProblem,
   buildArticleDeck,
   recipeTemplate,
   recipeVariant,
@@ -176,6 +177,9 @@ export async function produceDeck(input: {
 
   const brand = CAROUSEL_BRANDS[summary.venture as keyof typeof CAROUSEL_BRANDS];
   if (!brand) return { produced: false, reason: `${summary.venture} has no brand in the studio.` };
+  // A kitted venture is drawn from its brand kit or not at all; the refusal names the kit's problem.
+  const kitProblem = brandKitProblem(brand);
+  if (kitProblem) return { produced: false, reason: kitProblem };
 
   // Cut to the guarded Graph connector's cap, not the platform's: Instagram itself takes twenty.
   // This was a local `MAX_SLIDES = 10` whose comment called ten "the platform's own carousel
