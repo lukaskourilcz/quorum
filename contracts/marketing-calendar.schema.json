@@ -1,0 +1,687 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "type": "object",
+  "properties": {
+    "schemaVersion": {
+      "type": "string",
+      "const": "marketing-calendar/1"
+    },
+    "project": {
+      "type": "string",
+      "pattern": "^[a-z0-9-]{1,40}$"
+    },
+    "name": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 80
+    },
+    "tagline": {
+      "type": "string",
+      "maxLength": 300
+    },
+    "description": {
+      "type": "string",
+      "maxLength": 1500
+    },
+    "audience": {
+      "type": "string",
+      "maxLength": 1500
+    },
+    "goal": {
+      "type": "string",
+      "maxLength": 1000
+    },
+    "launch": {
+      "type": "string",
+      "format": "date",
+      "pattern": "^(?:(?:\\d\\d[2468][048]|\\d\\d[13579][26]|\\d\\d0[48]|[02468][048]00|[13579][26]00)-02-29|\\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\\d|30)|(?:02)-(?:0[1-9]|1\\d|2[0-8])))$"
+    },
+    "period": {
+      "type": "object",
+      "properties": {
+        "start": {
+          "type": "string",
+          "format": "date",
+          "pattern": "^(?:(?:\\d\\d[2468][048]|\\d\\d[13579][26]|\\d\\d0[48]|[02468][048]00|[13579][26]00)-02-29|\\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\\d|30)|(?:02)-(?:0[1-9]|1\\d|2[0-8])))$"
+        },
+        "end": {
+          "type": "string",
+          "format": "date",
+          "pattern": "^(?:(?:\\d\\d[2468][048]|\\d\\d[13579][26]|\\d\\d0[48]|[02468][048]00|[13579][26]00)-02-29|\\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\\d|30)|(?:02)-(?:0[1-9]|1\\d|2[0-8])))$"
+        }
+      },
+      "required": [
+        "start",
+        "end"
+      ],
+      "additionalProperties": {}
+    },
+    "kpis": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string",
+            "maxLength": 200
+          },
+          "baseline": {
+            "type": "string",
+            "maxLength": 400
+          },
+          "target": {
+            "type": "string",
+            "maxLength": 400
+          },
+          "how": {
+            "type": "string",
+            "maxLength": 600
+          }
+        },
+        "required": [
+          "name",
+          "baseline",
+          "target",
+          "how"
+        ],
+        "additionalProperties": {}
+      }
+    },
+    "channels": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "platform": {
+            "type": "string",
+            "enum": [
+              "instagram",
+              "threads",
+              "facebook",
+              "reddit",
+              "linkedin",
+              "newsletter",
+              "web",
+              "x"
+            ]
+          },
+          "role": {
+            "type": "string",
+            "enum": [
+              "primary",
+              "secondary",
+              "support"
+            ]
+          },
+          "handle": {
+            "anyOf": [
+              {
+                "type": "string",
+                "maxLength": 200
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "cadence": {
+            "type": "string",
+            "maxLength": 600
+          },
+          "notes": {
+            "type": "string",
+            "maxLength": 2000
+          }
+        },
+        "required": [
+          "platform",
+          "role",
+          "handle",
+          "cadence"
+        ],
+        "additionalProperties": {}
+      }
+    },
+    "pillars": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 20
+          },
+          "name": {
+            "type": "string",
+            "maxLength": 120
+          },
+          "share": {
+            "type": "string",
+            "pattern": "^\\d{1,3}\\s?%$"
+          },
+          "description": {
+            "type": "string",
+            "maxLength": 1500
+          },
+          "tipRefs": {
+            "type": "array",
+            "items": {
+              "type": "string",
+              "maxLength": 200
+            }
+          }
+        },
+        "required": [
+          "id",
+          "name",
+          "share",
+          "description",
+          "tipRefs"
+        ],
+        "additionalProperties": {}
+      }
+    },
+    "profileSetup": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "maxLength": 1000
+      }
+    },
+    "weeks": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "week": {
+            "type": "integer",
+            "exclusiveMinimum": 0,
+            "maximum": 9007199254740991
+          },
+          "dates": {
+            "type": "string",
+            "maxLength": 40
+          },
+          "theme": {
+            "type": "string",
+            "maxLength": 200
+          },
+          "focus": {
+            "type": "string",
+            "maxLength": 1000
+          }
+        },
+        "required": [
+          "week",
+          "dates",
+          "theme",
+          "focus"
+        ],
+        "additionalProperties": {}
+      }
+    },
+    "prelaunch": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "pattern": "^[a-z0-9][a-z0-9-]{0,47}$"
+          },
+          "due": {
+            "type": "string",
+            "format": "date",
+            "pattern": "^(?:(?:\\d\\d[2468][048]|\\d\\d[13579][26]|\\d\\d0[48]|[02468][048]00|[13579][26]00)-02-29|\\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\\d|30)|(?:02)-(?:0[1-9]|1\\d|2[0-8])))$"
+          },
+          "title": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 60
+          },
+          "detail": {
+            "type": "string",
+            "maxLength": 1000
+          },
+          "owner": {
+            "type": "string",
+            "enum": [
+              "owner",
+              "agent"
+            ]
+          },
+          "repo": {
+            "anyOf": [
+              {
+                "type": "string",
+                "pattern": "^[\\w.-]+\\/[\\w.-]+$"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "issue": {
+            "anyOf": [
+              {
+                "type": "string",
+                "pattern": "^#\\d+$"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "status": {
+            "type": "string",
+            "enum": [
+              "planned",
+              "done"
+            ]
+          }
+        },
+        "required": [
+          "id",
+          "due",
+          "title",
+          "detail",
+          "owner",
+          "repo",
+          "issue",
+          "status"
+        ],
+        "additionalProperties": {}
+      }
+    },
+    "entries": {
+      "minItems": 1,
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "pattern": "^[a-z0-9][a-z0-9-]{0,47}$"
+          },
+          "date": {
+            "type": "string",
+            "format": "date",
+            "pattern": "^(?:(?:\\d\\d[2468][048]|\\d\\d[13579][26]|\\d\\d0[48]|[02468][048]00|[13579][26]00)-02-29|\\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\\d|30)|(?:02)-(?:0[1-9]|1\\d|2[0-8])))$"
+          },
+          "time": {
+            "type": "string",
+            "pattern": "^(?:[01]\\d|2[0-3]):[0-5]\\d$"
+          },
+          "platform": {
+            "type": "string",
+            "enum": [
+              "instagram",
+              "threads",
+              "facebook",
+              "reddit",
+              "linkedin",
+              "newsletter",
+              "web"
+            ]
+          },
+          "kind": {
+            "type": "string",
+            "enum": [
+              "carousel",
+              "reel",
+              "post",
+              "story",
+              "thread",
+              "reddit",
+              "ad",
+              "task",
+              "review",
+              "newsletter"
+            ]
+          },
+          "pillar": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 20
+          },
+          "title": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 60
+          },
+          "hook": {
+            "type": "string",
+            "maxLength": 400
+          },
+          "hookType": {
+            "type": "string",
+            "enum": [
+              "curiosity",
+              "contrarian",
+              "list",
+              "number",
+              "story",
+              "question",
+              "problem",
+              "promise",
+              "negative",
+              "authority"
+            ]
+          },
+          "body": {
+            "type": "string",
+            "maxLength": 4000
+          },
+          "cta": {
+            "type": "string",
+            "maxLength": 400
+          },
+          "assets": {
+            "maxItems": 20,
+            "type": "array",
+            "items": {
+              "type": "string",
+              "maxLength": 400
+            }
+          },
+          "effortMin": {
+            "type": "integer",
+            "minimum": 0,
+            "maximum": 600
+          },
+          "status": {
+            "type": "string",
+            "enum": [
+              "planned",
+              "drafted",
+              "queued",
+              "published",
+              "skipped",
+              "blocked"
+            ]
+          },
+          "blockedBy": {
+            "type": "string",
+            "maxLength": 400
+          },
+          "producer": {
+            "type": "string",
+            "enum": [
+              "owner",
+              "marketingShark",
+              "dneskai-pack"
+            ]
+          },
+          "tipRefs": {
+            "maxItems": 12,
+            "type": "array",
+            "items": {
+              "type": "string",
+              "maxLength": 200
+            }
+          },
+          "measure": {
+            "type": "string",
+            "maxLength": 600
+          },
+          "links": {
+            "maxItems": 10,
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "label": {
+                  "type": "string",
+                  "maxLength": 120
+                },
+                "url": {
+                  "type": "string",
+                  "minLength": 1,
+                  "maxLength": 600
+                }
+              },
+              "required": [
+                "label",
+                "url"
+              ],
+              "additionalProperties": {}
+            }
+          },
+          "note": {
+            "type": "string",
+            "maxLength": 500
+          }
+        },
+        "required": [
+          "id",
+          "date",
+          "time",
+          "platform",
+          "kind",
+          "pillar",
+          "title",
+          "hook",
+          "hookType",
+          "body",
+          "cta",
+          "assets",
+          "effortMin",
+          "status",
+          "tipRefs",
+          "measure"
+        ],
+        "additionalProperties": {}
+      }
+    },
+    "ads": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "pattern": "^[a-z0-9][a-z0-9-]{0,47}$"
+          },
+          "platform": {
+            "type": "string",
+            "enum": [
+              "instagram",
+              "threads",
+              "facebook",
+              "reddit",
+              "linkedin",
+              "newsletter",
+              "web"
+            ]
+          },
+          "start": {
+            "type": "string",
+            "format": "date",
+            "pattern": "^(?:(?:\\d\\d[2468][048]|\\d\\d[13579][26]|\\d\\d0[48]|[02468][048]00|[13579][26]00)-02-29|\\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\\d|30)|(?:02)-(?:0[1-9]|1\\d|2[0-8])))$"
+          },
+          "end": {
+            "type": "string",
+            "format": "date",
+            "pattern": "^(?:(?:\\d\\d[2468][048]|\\d\\d[13579][26]|\\d\\d0[48]|[02468][048]00|[13579][26]00)-02-29|\\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\\d|30)|(?:02)-(?:0[1-9]|1\\d|2[0-8])))$"
+          },
+          "dailyBudgetEur": {
+            "type": "number",
+            "minimum": 0,
+            "maximum": 1000
+          },
+          "objective": {
+            "type": "string",
+            "maxLength": 200
+          },
+          "audience": {
+            "type": "string",
+            "maxLength": 1000
+          },
+          "placement": {
+            "type": "string",
+            "maxLength": 1000
+          },
+          "creative": {
+            "type": "string",
+            "maxLength": 1000
+          },
+          "policyNotes": {
+            "type": "string",
+            "maxLength": 2000
+          },
+          "successRule": {
+            "type": "string",
+            "maxLength": 1000
+          },
+          "status": {
+            "type": "string",
+            "enum": [
+              "planned",
+              "drafted",
+              "queued",
+              "published",
+              "skipped",
+              "blocked"
+            ]
+          }
+        },
+        "required": [
+          "id",
+          "platform",
+          "start",
+          "end",
+          "dailyBudgetEur",
+          "objective",
+          "audience",
+          "placement",
+          "creative",
+          "policyNotes",
+          "successRule",
+          "status"
+        ],
+        "additionalProperties": {}
+      }
+    },
+    "reviews": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "date": {
+            "type": "string",
+            "format": "date",
+            "pattern": "^(?:(?:\\d\\d[2468][048]|\\d\\d[13579][26]|\\d\\d0[48]|[02468][048]00|[13579][26]00)-02-29|\\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\\d|30)|(?:02)-(?:0[1-9]|1\\d|2[0-8])))$"
+          },
+          "what": {
+            "type": "string",
+            "maxLength": 1000
+          }
+        },
+        "required": [
+          "date",
+          "what"
+        ],
+        "additionalProperties": {}
+      }
+    },
+    "risks": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "maxLength": 1000
+      }
+    },
+    "productDependencies": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "repo": {
+            "type": "string",
+            "maxLength": 120
+          },
+          "what": {
+            "type": "string",
+            "maxLength": 1500
+          },
+          "why": {
+            "type": "string",
+            "maxLength": 1000
+          },
+          "issue": {
+            "anyOf": [
+              {
+                "type": "string",
+                "maxLength": 20
+              },
+              {
+                "type": "null"
+              }
+            ]
+          }
+        },
+        "required": [
+          "repo",
+          "what",
+          "why"
+        ],
+        "additionalProperties": {}
+      }
+    },
+    "sources": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "title": {
+            "type": "string",
+            "maxLength": 300
+          },
+          "url": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 600
+          },
+          "checked": {
+            "type": "string",
+            "maxLength": 40
+          },
+          "note": {
+            "type": "string",
+            "maxLength": 1000
+          }
+        },
+        "required": [
+          "title",
+          "url",
+          "checked",
+          "note"
+        ],
+        "additionalProperties": {}
+      }
+    }
+  },
+  "required": [
+    "schemaVersion",
+    "project",
+    "name",
+    "tagline",
+    "description",
+    "audience",
+    "goal",
+    "kpis",
+    "channels",
+    "pillars",
+    "profileSetup",
+    "weeks",
+    "entries",
+    "ads",
+    "reviews",
+    "risks",
+    "productDependencies",
+    "sources"
+  ],
+  "additionalProperties": {},
+  "$id": "https://boardless.ai/contracts/marketing-calendar.schema.json"
+}

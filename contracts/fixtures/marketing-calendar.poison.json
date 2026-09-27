@@ -1,0 +1,173 @@
+{
+  "schemaVersion": "marketing-calendar/1",
+  "project": "devshark",
+  "name": "devShark",
+  "tagline": "Learn web development with graded quizzes.",
+  "description": "A fixture plan with two days and one ad.",
+  "audience": "Self-taught web developers.",
+  "goal": "Followers on Threads.",
+  "launch": "2026-11-05",
+  "period": {
+    "start": "2026-11-05",
+    "end": "2026-11-06"
+  },
+  "prelaunch": [
+    {
+      "id": "ds-pre-01",
+      "due": "2026-10-20",
+      "title": "Create the Threads profile",
+      "detail": "Profile exists and links devshark.app.",
+      "owner": "owner",
+      "repo": null,
+      "issue": null,
+      "status": "planned"
+    },
+    {
+      "id": "ds-pre-02",
+      "due": "2026-10-30",
+      "title": "Keep UTM on the first pageview",
+      "detail": "PostHog shows utm_source on sign-up.",
+      "owner": "agent",
+      "repo": "lukaskourilcz/react-express-app",
+      "issue": "#239",
+      "status": "done"
+    }
+  ],
+  "kpis": [
+    {
+      "name": "Threads followers",
+      "baseline": "0",
+      "target": "400",
+      "how": "Threads Insights"
+    }
+  ],
+  "channels": [
+    {
+      "platform": "threads",
+      "role": "primary",
+      "handle": "@devshark.app",
+      "cadence": "daily",
+      "notes": "QOTD at 09:00"
+    },
+    {
+      "platform": "instagram",
+      "role": "primary",
+      "handle": "@devshark.app",
+      "cadence": "4 carousels a week"
+    }
+  ],
+  "pillars": [
+    {
+      "id": "p1",
+      "name": "Code question of the day",
+      "share": "60%",
+      "description": "One question a day.",
+      "tipRefs": [
+        "Tip one"
+      ]
+    },
+    {
+      "id": "p2",
+      "name": "Product proof",
+      "share": "40%",
+      "description": "Real screens.",
+      "tipRefs": []
+    }
+  ],
+  "profileSetup": [
+    "Convert the Instagram account to a professional account."
+  ],
+  "weeks": [
+    {
+      "week": 1,
+      "dates": "5–8 Nov",
+      "theme": "Launch",
+      "focus": "Start the rhythm."
+    }
+  ],
+  "entries": [
+    {
+      "id": "ds-001",
+      "date": "2026-11-05",
+      "time": "09:00",
+      "platform": "threads",
+      "kind": "thread",
+      "pillar": "p1",
+      "title": "QOTD: what does a commit represent?",
+      "hook": "What is a commit?",
+      "hookType": "question",
+      "body": "Text post with four options.",
+      "cta": "Reply with your answer",
+      "assets": [],
+      "effortMin": 10,
+      "status": "planned",
+      "producer": "owner",
+      "tipRefs": [
+        "Tip one"
+      ],
+      "measure": "replies"
+    },
+    {
+      "id": "ds-001",
+      "date": "2026-11-06",
+      "time": "17:30",
+      "platform": "instagram",
+      "kind": "carousel",
+      "pillar": "p2",
+      "title": "Five screens of the typing racer",
+      "hook": "Race the shark",
+      "hookType": "curiosity",
+      "body": "Slide 1: cover. Slide 2: second cover.",
+      "cta": "Link in bio",
+      "assets": [
+        "screenshots"
+      ],
+      "effortMin": 45,
+      "status": "blocked",
+      "producer": "marketingShark",
+      "tipRefs": [],
+      "measure": "saves, sends"
+    }
+  ],
+  "ads": [
+    {
+      "id": "ds-ad-1",
+      "platform": "instagram",
+      "start": "2026-11-05",
+      "end": "2026-11-06",
+      "dailyBudgetEur": 5,
+      "objective": "profile visits",
+      "audience": "18–34 web developers",
+      "placement": "feed",
+      "creative": "ds-002",
+      "policyNotes": "No before/after claims.",
+      "successRule": "Stop if CPV > 0.25 EUR",
+      "status": "planned"
+    }
+  ],
+  "reviews": [
+    {
+      "date": "2026-11-08",
+      "what": "Week 1 review: replies per post."
+    }
+  ],
+  "risks": [
+    "Zero-baseline accounts."
+  ],
+  "productDependencies": [
+    {
+      "repo": "lukaskourilcz/react-express-app",
+      "what": "Keep UTM",
+      "why": "Count clicks",
+      "issue": "#239"
+    }
+  ],
+  "sources": [
+    {
+      "title": "Buffer study",
+      "url": "https://buffer.com/resources/the-best-time-to-post-on-threads/",
+      "checked": "2026-09-27",
+      "note": "verified"
+    }
+  ]
+}
