@@ -19,11 +19,11 @@ const registry = JSON.parse(
 /*
  * The whole navigation, after the 2026-08-29 reset.
  *
- * Three places and the projects: the Overview, what is waiting for the owner, and Settings —
- * the one page that changes how the company runs. Operations, Implementation Plans, Social
- * Profiles and the held idea list still render for a bookmark and are linked from the Overview's
- * footer; none of them is something the owner has to check, which is the difference between a
- * link and a destination.
+ * Five places and the projects: the Overview, what is waiting for the owner, the Queue, the
+ * marketing Calendar (quorum#592) and Settings — the one page that changes how the company runs.
+ * Operations, Implementation Plans, Social Profiles and the held idea list still render for a
+ * bookmark and are linked from the Overview's footer; none of them is something the owner has to
+ * check, which is the difference between a link and a destination.
  */
 // Only an operating venture is a destination. A paused venture left the navigation with
 // operations-2026-09b and Settings lists it instead; the owner took Contest Radar, an exploration,
@@ -32,6 +32,7 @@ const canonicalDestinations = [
   "/admin",
   "/admin?view=waiting",
   "/admin/queue",
+  "/admin/calendar",
   "/admin/settings",
   "/admin?venture=carousel-studio",
   ...registry.ventures

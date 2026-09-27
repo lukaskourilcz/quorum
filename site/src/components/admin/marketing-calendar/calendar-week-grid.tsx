@@ -244,7 +244,7 @@ export function CalendarWeekGrid({
             <div className="sticky left-0 z-10 flex min-w-0 flex-col justify-start gap-0.5 border-b border-r border-[var(--admin-border)] bg-[var(--admin-surface)] px-2 py-2.5 sm:px-3" role="rowheader">
               <span className="flex items-center gap-1.5 text-[length:var(--admin-type-control)] font-semibold text-[var(--admin-foreground)]">
                 <RowIcon aria-hidden className="size-3.5 shrink-0 text-[var(--admin-foreground-muted)]" />
-                <span className="truncate">{row.label}</span>
+                <span className="min-w-0 [overflow-wrap:anywhere]">{row.label}</span>
               </span>
               {row.kind === "platform" && row.handle ? <span className="truncate text-[length:var(--admin-type-label)] text-[var(--admin-foreground-muted)]">{row.handle}</span> : null}
             </div>

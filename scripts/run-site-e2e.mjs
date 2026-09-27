@@ -32,7 +32,7 @@ const includesWriteJourneyFile = explicitSpecFiles.some(
 const readOnlyRuns = forwardedArgs.length > 0
   ? [forwardedArgs]
   : [
-      ["tests/e2e/admin-panels.spec.ts", "tests/e2e/admin-shell.spec.ts"],
+      ["tests/e2e/admin-panels.spec.ts", "tests/e2e/admin-shell.spec.ts", "tests/e2e/admin-calendar.spec.ts"],
       ["tests/e2e/buttons.spec.ts", "--grep", "every visible CTA"],
       ["tests/e2e/buttons.spec.ts", "--grep", "every app button"],
       ["tests/e2e/contrast.spec.ts"],

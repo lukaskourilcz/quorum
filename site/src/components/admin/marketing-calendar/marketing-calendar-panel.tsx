@@ -34,6 +34,7 @@ import {
   type CalendarView
 } from "@/lib/marketing-calendar-view";
 import { useAdminHydrated } from "@/components/admin/admin-write-mode";
+import { mondayOfCalendarWeek } from "@/lib/calendar-feed-model";
 import { cn } from "@/lib/utils";
 import { CalendarBrief, CalendarSummary, PrelaunchCallout } from "./calendar-brief";
 import { CalendarEntryDetail, type CalendarDetailTarget } from "./calendar-entry-detail";
@@ -69,7 +70,8 @@ export function MarketingCalendarPanel(props: MarketingCalendarPanelProps) {
     if (weeks.some((week) => week.monday === monday)) return monday;
     return monday < weeks[0]!.monday ? weeks[0]!.monday : weeks.at(-1)!.monday;
   }, [weeks]);
-  const [weekMonday, setWeekMonday] = useState(() => clampWeek(props.initial.week));
+  const initialWeek = props.initial.week;
+  const [weekMonday, setWeekMonday] = useState(() => clampWeek(initialWeek));
   const [view, setView] = useState<CalendarView>(props.initial.view);
   const [filters, setFilters] = useState<CalendarFilters>(props.initial.filters);
   const [detail, setDetail] = useState<{ type: "entry" | "ad"; id: string } | null>(
@@ -96,14 +98,15 @@ export function MarketingCalendarPanel(props: MarketingCalendarPanelProps) {
       const query = new URLSearchParams(window.location.search);
       const state = calendarStateFromQuery(query, document.pillars.map((pillar) => pillar.id));
       const week = query.get("week");
-      if (week && /^\d{4}-\d{2}-\d{2}$/u.test(week)) setWeekMonday(clampWeek(week));
+      // No week in the address is the week the page first opened on.
+      setWeekMonday(clampWeek(week && /^\d{4}-\d{2}-\d{2}$/u.test(week) ? mondayOfCalendarWeek(week) : initialWeek));
       setView(state.view);
       setFilters(state.filters);
       setDetail(state.entry ? { type: state.entry.includes("-ad-") ? "ad" : "entry", id: state.entry } : null);
     };
     window.addEventListener("popstate", onPop);
     return () => window.removeEventListener("popstate", onPop);
-  }, [clampWeek, document.pillars]);
+  }, [clampWeek, document.pillars, initialWeek]);
 
   const snapshot = { week: weekMonday, view, entry: detail?.id ?? null, filters };
   const go = (patch: Partial<typeof snapshot>, mode: "push" | "replace" = "push") => {

@@ -20,8 +20,8 @@ const registry = JSON.parse(
 ) as VentureRegistry;
 
 /*
- * Four places and the projects: the Overview, what is waiting for the owner, the Queue of social
- * posts (quorum#573) and Settings. Operations, Implementation Plans, Social Profiles and the held
+ * Five places and the projects: the Overview, what is waiting for the owner, the Queue of social
+ * posts (quorum#573), the marketing Calendar (quorum#592) and Settings. Operations, Implementation Plans, Social Profiles and the held
  * idea list still render for a bookmark and are linked from the Overview's footer — none of them
  * is something the owner has to check, which is what separates a link from a destination.
  */
@@ -29,6 +29,7 @@ const adminDestinations = [
   "/admin",
   "/admin?view=waiting",
   "/admin/queue",
+  "/admin/calendar",
   "/admin/settings",
   "/admin?venture=carousel-studio",
   // Only an operating venture is a destination: a paused one left with operations-2026-09b and
@@ -131,9 +132,9 @@ test("mobile Admin navigation has safe targets and exposes every live destinatio
 });
 
 test("Contest Radar is out of every admin navigation and still opens at its own address", async ({ page }) => {
-  // Seven routes, several compiled for the first time by the development server.
+  // Eight routes, several compiled for the first time by the development server.
   test.setTimeout(600_000);
-  for (const route of ["/admin", "/admin/queue", "/admin/settings", "/admin/operations", "/admin/implementation-plans", "/admin/social-profiles"]) {
+  for (const route of ["/admin", "/admin/queue", "/admin/calendar", "/admin/settings", "/admin/operations", "/admin/implementation-plans", "/admin/social-profiles"]) {
     await page.goto(route, { waitUntil: "networkidle" });
     await expect(page.getByRole("navigation", { name: "Admin destinations" }).locator('a[href="/admin?venture=contest-radar"]'), route)
       .toHaveCount(0);
