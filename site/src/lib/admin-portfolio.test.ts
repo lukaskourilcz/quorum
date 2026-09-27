@@ -301,9 +301,9 @@ describe("marketingShark package cards", () => {
     const summaries = Object.fromEntries(portfolio.ventures[0]!.cards.map((card) => [card.createdAt, card.summary]));
     expect(summaries).toEqual({
       "2026-09-26": "Question rm-abbr-19 (abbreviations). Hook payoff-explainer, alternate guess-first. Miss it and the explanation still pays off.",
-      "2026-09-29": "Feature spotlight: Learn paths. Inside devShark: Learn paths",
+      "2026-09-29": "Feature spotlight: Learn paths. A closer look: Learn paths",
       "2026-09-30": "Challenge teaser: Count vowels. Easy challenge: Count vowels",
-      "2026-10-02": "This week on devShark: This week on devShark, week of 2026-09-28. This week on devShark"
+      "2026-10-02": "The week in review: The week in review, week of 2026-09-28. The week in review"
     });
     expect(Object.values(summaries).join(" ")).not.toContain("?");
   });

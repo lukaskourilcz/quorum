@@ -154,90 +154,90 @@
         "locale": "en",
         "role": "hook",
         "slide": 1,
-        "svgHash": "8767ec1749c698baa9bac7d0a51909a21cacd851ca3df083d64d18e1fea333db",
+        "svgHash": "22184c7b922c35930dd3b03ae1f10a7a84c5fdc77faac2c288b1f2ff04de0f6c",
         "width": 1080,
         "height": 1350,
         "png": {
           "path": "/social/devshark/2026-09-26/en/slide-01.png",
-          "sha256": "79968f47fa443fa15902e47aac9b48a6866ac6b46c46af67d47f19ec39bafeb0",
-          "bytes": 42020
+          "sha256": "daf16c0240d8797266c977a7500fce558f6f4196200b0dc7dcab7d0cc6f6af19",
+          "bytes": 35091
         },
         "jpeg": {
           "path": "/social/devshark/2026-09-26/en/slide-01.jpg",
-          "sha256": "5336ab89f8ab8ede915b0934c500f0747d268b043f00ab3ad0c6e396b85199a7",
-          "bytes": 58105
+          "sha256": "c2c6a8d72784aaf1916750f6e97e071ec3de225d1087da2369fda4c961aec568",
+          "bytes": 49471
         }
       },
       {
         "locale": "en",
         "role": "context",
         "slide": 2,
-        "svgHash": "3ec77c07708258bbf1883702eccc440f844e5ee4cf3232ea78ae496e7e446bbf",
+        "svgHash": "3fc2613c55b7574cc9b8340fc96b1b422b383d2796307f07ea09ca115cf65867",
         "width": 1080,
         "height": 1350,
         "png": {
           "path": "/social/devshark/2026-09-26/en/slide-02.png",
-          "sha256": "3fb6dca1321f2e70dcf6016dd12c657535def036fc3743f9a4813a983420e6cd",
-          "bytes": 55296
+          "sha256": "1489b5165588853e705c1765825bae17e7d220e074d1e14c0c2ce184ccc80d6c",
+          "bytes": 52237
         },
         "jpeg": {
           "path": "/social/devshark/2026-09-26/en/slide-02.jpg",
-          "sha256": "91d74ab9b4d9d8c60ec0cf97ed109fed331719446c8161ccf2198b6839f475d3",
-          "bytes": 75660
+          "sha256": "ccb71d1b4a18d9d4dc2b37e488a6c80596de226d45832429e7747385915a1d98",
+          "bytes": 68762
         }
       },
       {
         "locale": "en",
         "role": "reveal",
         "slide": 3,
-        "svgHash": "1cc240167d74efa6c7576a9084b804654e70fe0333540eae24afa3971ea94125",
+        "svgHash": "8f1fbff975f5a8e3f618cb822acc5c79b5ea40d0c2b6180c31fa3256dc170433",
         "width": 1080,
         "height": 1350,
         "png": {
           "path": "/social/devshark/2026-09-26/en/slide-03.png",
-          "sha256": "2dff65778c560b38520b045b56986fc0e53849a2748c766c1efc2d423c31c248",
-          "bytes": 25205
+          "sha256": "d1b60a4f7ae9aa1ff4fffe56cd42a0367c404a38fb72e69332280853f69fb0c7",
+          "bytes": 18526
         },
         "jpeg": {
           "path": "/social/devshark/2026-09-26/en/slide-03.jpg",
-          "sha256": "8257782e1d11efd79a0a435095e6d5da5f5d79c62501c9d210a0e4b7cf9870b9",
-          "bytes": 26826
+          "sha256": "f1274d3926bcf40656980e0e103732566c041a41d1dc9d8eb346949c09c2f400",
+          "bytes": 18792
         }
       },
       {
         "locale": "en",
         "role": "why",
         "slide": 4,
-        "svgHash": "8c96de5fd8ee7493c3a80336bb9530bf3037eb124084bc379cd9a9f955881a44",
+        "svgHash": "1143424f0cf06b3dacbe0cce329eccfa71bd9e399b3e907740fd3c3917c9e519",
         "width": 1080,
         "height": 1350,
         "png": {
           "path": "/social/devshark/2026-09-26/en/slide-04.png",
-          "sha256": "edfcbbd885e2dc1d5e3574ed5d4f47881b0746407c4194346c0c11bcda7f8ad1",
-          "bytes": 67467
+          "sha256": "015198496ac6658ca22e4cc57e4f5732752367b2ef93c1ec6443b9fdbd7c5af0",
+          "bytes": 64551
         },
         "jpeg": {
           "path": "/social/devshark/2026-09-26/en/slide-04.jpg",
-          "sha256": "c2a1e43a85f1a59e9fea1798ed79cb8958853749f8e516fe9726bb7a4f6cfbbd",
-          "bytes": 97808
+          "sha256": "47fb3e91ba0d522e54be8c1c2cd1e57460361c47184ab3950c19dc2f928fa901",
+          "bytes": 91025
         }
       },
       {
         "locale": "en",
         "role": "footer",
         "slide": 5,
-        "svgHash": "c0da78ec04da993b8300ab0c171e007157e30e3b12d6cf6fcca05e291b03ad6c",
+        "svgHash": "4e62f7b331f8aa63ef87d097b2022764d2e2c99c86c93328faff5766a7e7e2c8",
         "width": 1080,
         "height": 1350,
         "png": {
           "path": "/social/devshark/2026-09-26/en/slide-05.png",
-          "sha256": "01aaa71b87322924f6353548fcf67d8cbed74c08dad8e1eed3f3ecbb9b1225ac",
-          "bytes": 58346
+          "sha256": "49d1e1849f56271670663ab12f9e7d396c5a1aab6fedbece16ff4e5809eca679",
+          "bytes": 56555
         },
         "jpeg": {
           "path": "/social/devshark/2026-09-26/en/slide-05.jpg",
-          "sha256": "811b1880512d971cfa9519b7b9d4c46489e310c0c2c1fc0ccc26865d4996e378",
-          "bytes": 79510
+          "sha256": "f8754571c41bd328f533cf0cef735b5261b68274793bcaa3231960329db237d2",
+          "bytes": 74307
         }
       }
     ]

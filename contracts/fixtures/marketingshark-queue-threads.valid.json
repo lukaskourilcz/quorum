@@ -25,7 +25,7 @@
   "sourcePackage": {
     "schemaVersion": "approved-publish-package/1",
     "artifactRef": "state/ventures/marketingshark/packages/2026-09-26/devshark/package.json",
-    "packageHash": "1ecf8f1dc0b720c0f693c20a670309254d997a05bbc942961d2fcfedbb5c3f45"
+    "packageHash": "b6e20e235dc8fa27d5bd1d983cbb852890410ef5d161efc4cdbbf4b960a8eb4f"
   },
   "locale": "en",
   "variant": "A",
@@ -53,7 +53,7 @@
       "marketingshark:question:rm-abbr-19"
     ],
     "rendererVersion": "carousel-studio-1",
-    "contentHash": "afbfc0a4d9b9e71c3e5c4427dfcda5e522d3b51b07baba389cb032ba9edce819"
+    "contentHash": "ce3172b0c19745611ab646415f31fe8ce942d95cfb2e1068648d154095266e12"
   },
   "publishWindow": {
     "notBefore": "2026-09-26T06:00:00.000Z",

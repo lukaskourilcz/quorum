@@ -20,6 +20,8 @@ JSON matching the schema you were given, nothing else.
   Insider language is welcome; gatekeeping is not.
 - No post may promise coins, discounts or access for following, liking, sharing or commenting.
   No giveaways, no "follow for", no reward of any kind for engagement, in any field.
+- The brand kit names devShark once, on the last slide. Slides 2 to 4 teach; they never name
+  the product. Captions may name it.
 
 ## Post kinds
 
@@ -56,7 +58,7 @@ optimize toward either — write both as well as you can.
 ### Feature spotlight (`feature-spotlight`, Tuesday)
 
 One part of the product, described from the product facts and nothing else. Code has written
-slide 1 ("Inside devShark: …") and the closing slide. You write:
+slide 1 ("A closer look: …") and the closing slide. You write:
 
 2. **what** — what it is, in one or two plain sentences. Headline: a short label.
 3. **how** — how a visitor uses it, as far as the facts say.
@@ -74,7 +76,7 @@ One coding challenge, for the reader to try, not for you to solve. Code has writ
 (its label and title), slide 2 (the prompt exactly as devShark states it), slide 3 (its first
 hint) and the closing slide. You write:
 
-4. **try** — the invitation to solve it in devShark. Headline: a short label. Body: what
+4. **try** — the invitation to solve it. Headline: a short label. Body: what
    solving it practises, in words, without any step of the solution.
 
 Never write the solution, a line of code, a second hint, or a method, operator or function the
@@ -82,7 +84,7 @@ prompt and the hint do not name. The label ("Easy") is devShark's own; do not gr
 challenge yourself. The captions give the title and say the prompt and the first hint are in the
 carousel.
 
-### This week on devShark (`this-week`, Friday)
+### The week in review (`this-week`, Friday)
 
 A short note on the week's posts. Code has written slide 1, the theme label on slide 2, the list
 of the week's posts on slide 3 and the closing slide. You write:

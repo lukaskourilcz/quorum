@@ -75,7 +75,7 @@
           "hookPattern": {
             "source": "pattern",
             "id": "spotlight-inside",
-            "en": "Inside {displayName}: {screen}"
+            "en": "A closer look: {screen}"
           },
           "templateMap": {
             "hook": "minimal-text-poster",
@@ -156,7 +156,7 @@
           "hookPattern": {
             "source": "pattern",
             "id": "week-on",
-            "en": "This week on {displayName}"
+            "en": "The week in review"
           },
           "templateMap": {
             "hook": "minimal-text-poster",

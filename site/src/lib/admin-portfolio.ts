@@ -457,7 +457,7 @@ async function caughtUpVisualCards(root: string, ratings: readonly RatingRecord[
 const POST_KIND_LABELS: Readonly<Record<string, string>> = {
   "feature-spotlight": "Feature spotlight",
   "challenge-teaser": "Challenge teaser",
-  "this-week": "This week on devShark",
+  "this-week": "The week in review",
   announcement: "Launch announcement"
 };
 

@@ -13,7 +13,7 @@
   },
   "hook": {
     "patternId": "spotlight-inside",
-    "en": "Inside devShark: Learn paths"
+    "en": "A closer look: Learn paths"
   },
   "carousels": {
     "en": {
@@ -21,8 +21,8 @@
         {
           "role": "hook",
           "templateId": "minimal-text-poster",
-          "headline": "Inside devShark: Learn paths",
-          "alt": "Slide 1: Inside devShark: Learn paths"
+          "headline": "A closer look: Learn paths",
+          "alt": "Slide 1: A closer look: Learn paths"
         },
         {
           "role": "what",
@@ -56,13 +56,13 @@
   },
   "descriptions": {
     "instagram": {
-      "en": "Fixture. Inside devShark: Learn paths on Instagram. The carousel shows it slide by slide."
+      "en": "Fixture. A closer look: Learn paths on Instagram. The carousel shows it slide by slide."
     },
     "threads": {
-      "en": "Fixture. Inside devShark: Learn paths on Threads."
+      "en": "Fixture. A closer look: Learn paths on Threads."
     },
     "linkedin": {
-      "en": "Fixture. Inside devShark: Learn paths, written for LinkedIn.\n\nThe carousel shows it slide by slide.\n\nhttps://devshark.app"
+      "en": "Fixture. A closer look: Learn paths, written for LinkedIn.\n\nThe carousel shows it slide by slide.\n\nhttps://devshark.app"
     }
   },
   "hashtags": {
@@ -109,90 +109,90 @@
         "locale": "en",
         "role": "hook",
         "slide": 1,
-        "svgHash": "227ae4959abee3da1b190e7c37eef2f007035865899e68232e1781fd873d3e6f",
+        "svgHash": "7b9f3388aa26b5944c5b3896eab5397a45b3a497ca2894f1d3c715177b578f79",
         "width": 1080,
         "height": 1350,
         "png": {
           "path": "/social/devshark/2026-09-29/en/slide-01.png",
-          "sha256": "266487fb4e20e510f5022c54cd23e697be7c675df51dee089cf8b59ee816c017",
-          "bytes": 36105
+          "sha256": "543225c83880e06b64723b9fc22805d9304cd9a9f57423836d5e4b28b8d16a45",
+          "bytes": 26253
         },
         "jpeg": {
           "path": "/social/devshark/2026-09-29/en/slide-01.jpg",
-          "sha256": "d46b1da91f91dfb8879d2edce8b7488d24ed8f1109d403ad37f28a3c9dbc89ea",
-          "bytes": 48227
+          "sha256": "e67679f501328f103f7e7336aa8aa09cbdf301e166bd7a2ffde91e4a72f0c613",
+          "bytes": 35217
         }
       },
       {
         "locale": "en",
         "role": "what",
         "slide": 2,
-        "svgHash": "f6a9fe7fa75dd8ed471434b58c015150ed4bd0599b730fb0a22221dee1206a1c",
+        "svgHash": "837840b00d20dbf7537f8ecee0fe6c7222ce157dcc94f451292a6b38ee806cc0",
         "width": 1080,
         "height": 1350,
         "png": {
           "path": "/social/devshark/2026-09-29/en/slide-02.png",
-          "sha256": "39894d9c8423b23943b8a827c7347f318c26b1fa77083b36fcb0ba6913775c0e",
-          "bytes": 38828
+          "sha256": "c16aa46e0327ca8390fad808bdd63bafa9cd1703be08d874b40397389680a602",
+          "bytes": 35742
         },
         "jpeg": {
           "path": "/social/devshark/2026-09-29/en/slide-02.jpg",
-          "sha256": "d1771c846253c08650b9f9610bb968c953866d9fc39210f3bf32482056b760c5",
-          "bytes": 55205
+          "sha256": "b5310282e05844fdffca46fbd1af5cfdf24f3b1e64104caa7d2f038d50ea1409",
+          "bytes": 48546
         }
       },
       {
         "locale": "en",
         "role": "how",
         "slide": 3,
-        "svgHash": "53d326c96c4feaf20e9f6719bd4a070a7bbf8f1262d17aa611c62f32d0010ce0",
+        "svgHash": "b012899a2e9d05ac6b7f97d4ef9776b3cf825d050afb56d4b3d379273cd9dde6",
         "width": 1080,
         "height": 1350,
         "png": {
           "path": "/social/devshark/2026-09-29/en/slide-03.png",
-          "sha256": "b88a53abe60a33d3e22c74fcd3b11d0aafefad4c0279aa6efb6a2e38f1ca9be7",
-          "bytes": 44865
+          "sha256": "68f2f8284745334745c9836c72a06525aca87e8b38cba51ca281eacfaa8ed8f8",
+          "bytes": 40744
         },
         "jpeg": {
           "path": "/social/devshark/2026-09-29/en/slide-03.jpg",
-          "sha256": "da231f748281d0c37bc92602bfce87e9cfb8231e7a817f5ad540aaba4fdaebf4",
-          "bytes": 64246
+          "sha256": "0e0218230af08e842ffc64249f0b2d6aa591148dd9ebf83096e9889e27828550",
+          "bytes": 61879
         }
       },
       {
         "locale": "en",
         "role": "why",
         "slide": 4,
-        "svgHash": "7792c8fccd35e146547533296f2270fcd5f6c56faadb95649784edec05987989",
+        "svgHash": "2173c4167c954d516f060999381be844c02f824875aef3472615fd6b3ed90a8d",
         "width": 1080,
         "height": 1350,
         "png": {
           "path": "/social/devshark/2026-09-29/en/slide-04.png",
-          "sha256": "2edcb19b04ad4b9a3bde02660787792d353f5c040c99c006744f7526dfc116f7",
-          "bytes": 47355
+          "sha256": "112c4cdac7d3770f6d424e401f9491d9eedf5f09e43442194deb32f97fbcac32",
+          "bytes": 44258
         },
         "jpeg": {
           "path": "/social/devshark/2026-09-29/en/slide-04.jpg",
-          "sha256": "690afca11aee2f5f13e80afe543166dcb755b16a0a64f7a4be4e258b13a76ee8",
-          "bytes": 68214
+          "sha256": "7cd343f12469a9e41e90837589f821fb89fc3f6cffed211a1a0990f0a4de305f",
+          "bytes": 60838
         }
       },
       {
         "locale": "en",
         "role": "footer",
         "slide": 5,
-        "svgHash": "9637aac7720b19fd2ff96112d5d9dc6937c275916290a424df6c9a4717d5043b",
+        "svgHash": "7730b146b82c1b450d468dd6d17d32b4961b7bf34e40ec37e0284e05e3d268f0",
         "width": 1080,
         "height": 1350,
         "png": {
           "path": "/social/devshark/2026-09-29/en/slide-05.png",
-          "sha256": "1ba45733acf766ab009af66933bd892ffa12828ff0d91175fecbb6d4e081588a",
-          "bytes": 56914
+          "sha256": "7cfce541c0cb6aca7e30e88758c69e05db563066d8d78e020e8898e551e5ea98",
+          "bytes": 56205
         },
         "jpeg": {
           "path": "/social/devshark/2026-09-29/en/slide-05.jpg",
-          "sha256": "54c00e07029b71306b0a4dc852bf7e59d8a4f8ca6061053b614d0b1e87b743d5",
-          "bytes": 79415
+          "sha256": "55edfdc3cedbc63b9e3c496b8ff9e1d560a1a66f50749b7204ecd6648db9412b",
+          "bytes": 74063
         }
       }
     ]

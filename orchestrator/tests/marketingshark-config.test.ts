@@ -59,7 +59,7 @@ describe("marketingShark configuration", () => {
     const brand = shipped.brands[0] as { postKinds: Record<string, { hookPattern: Record<string, unknown> }> };
     expect(brand.postKinds.quiz!.hookPattern).toEqual({ source: "library" });
     expect(brand.postKinds.announcement!.hookPattern).toEqual({ source: "owner" });
-    expect(brand.postKinds["feature-spotlight"]!.hookPattern.en).toBe("Inside {displayName}: {screen}");
+    expect(brand.postKinds["feature-spotlight"]!.hookPattern.en).toBe("A closer look: {screen}");
     // A pattern that reaches for a slot its kind does not fill is refused: no config edit can make
     // slide 1 claim a price, a date or a count.
     const reaching = structuredClone(brand);

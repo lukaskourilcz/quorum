@@ -242,7 +242,7 @@ describe("the kinds' own content", () => {
     const built = PostPackageSchema.parse(await packageOn(where, "2026-09-29"));
     const screens = brand.postKinds["feature-spotlight"]!.screens;
     expect(screens.map((screen) => screen.id)).toContain(built.spotlight!.screen.id);
-    expect(built.carousels.en.slides[0]!.headline).toBe(`Inside devShark: ${built.spotlight!.screen.name}`);
+    expect(built.carousels.en.slides[0]!.headline).toBe(`A closer look: ${built.spotlight!.screen.name}`);
     expect(built.carousels.en.slides[4]!.headline).toBe(brand.postKinds["feature-spotlight"]!.footer.en);
     // The block in effect on 2026-09-29 is the owner's 2026-09-25 freemium record.
     expect(built.spotlight!.factSheetEffectiveFrom).toBe("2026-09-25");

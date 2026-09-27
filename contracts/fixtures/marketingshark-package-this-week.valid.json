@@ -9,11 +9,11 @@
   ],
   "subject": {
     "ref": "marketingshark:week:2026-09-28",
-    "label": "This week on devShark, week of 2026-09-28"
+    "label": "The week in review, week of 2026-09-28"
   },
   "hook": {
     "patternId": "week-on",
-    "en": "This week on devShark"
+    "en": "The week in review"
   },
   "carousels": {
     "en": {
@@ -21,8 +21,8 @@
         {
           "role": "hook",
           "templateId": "minimal-text-poster",
-          "headline": "This week on devShark",
-          "alt": "Slide 1: This week on devShark"
+          "headline": "The week in review",
+          "alt": "Slide 1: The week in review"
         },
         {
           "role": "theme",
@@ -35,8 +35,8 @@
           "role": "recap",
           "templateId": "quiz-question-context",
           "headline": "Monday to Thursday",
-          "body": "Mon · Abbreviations: An API response must carry a small text object that browser code can…\nTue · Inside devShark: Learn paths\nWed · Easy challenge: Count vowels\nThu · Databases: Which aggregate returns the total of the numeric values in a column?",
-          "alt": "Slide 3: Monday to Thursday. Mon · Abbreviations: An API response must carry a small text object that browser code can…; Tue · Inside devShark: Learn paths…"
+          "body": "Mon · Abbreviations: An API response must carry a small text object that browser code can…\nTue · A closer look: Learn paths\nWed · Easy challenge: Count vowels\nThu · Databases: Which aggregate returns the total of the numeric values in a column?",
+          "alt": "Slide 3: Monday to Thursday. Mon · Abbreviations: An API response must carry a small text object that browser code can…; Tue · A closer look: Learn paths; Wed…"
         },
         {
           "role": "pick",
@@ -56,13 +56,13 @@
   },
   "descriptions": {
     "instagram": {
-      "en": "Fixture. This week on devShark on Instagram. The carousel shows it slide by slide."
+      "en": "Fixture. The week in review on Instagram. The carousel shows it slide by slide."
     },
     "threads": {
-      "en": "Fixture. This week on devShark on Threads."
+      "en": "Fixture. The week in review on Threads."
     },
     "linkedin": {
-      "en": "Fixture. This week on devShark, written for LinkedIn.\n\nThe carousel shows it slide by slide.\n\nhttps://devshark.app"
+      "en": "Fixture. The week in review, written for LinkedIn.\n\nThe carousel shows it slide by slide.\n\nhttps://devshark.app"
     }
   },
   "hashtags": {
@@ -99,7 +99,7 @@
         "date": "2026-09-29",
         "kind": "feature-spotlight",
         "packageRef": "state/ventures/marketingshark/packages/2026-09-29/devshark/package.json",
-        "line": "Tue · Inside devShark: Learn paths"
+        "line": "Tue · A closer look: Learn paths"
       },
       {
         "date": "2026-09-30",
@@ -152,90 +152,90 @@
         "locale": "en",
         "role": "hook",
         "slide": 1,
-        "svgHash": "202969656a660672ebcf6ef6435863ec9442c83bddd9b4d3ae1204d141477448",
+        "svgHash": "40ce43e6bf78846f9f1a3858ca9c90fe70174c85787194a967d8e024e5741bf1",
         "width": 1080,
         "height": 1350,
         "png": {
           "path": "/social/devshark/2026-10-02/en/slide-01.png",
-          "sha256": "62d023e6f0095ae0b78796db8bc916c3ca376a7873fb415db0ba7910333e09d2",
-          "bytes": 32252
+          "sha256": "a038861043a81e4cbc6f68c22e290aa04df74adf5be3c8f5bd69225b6200e40e",
+          "bytes": 22726
         },
         "jpeg": {
           "path": "/social/devshark/2026-10-02/en/slide-01.jpg",
-          "sha256": "454fd07ac32952d891b1b25ab49c78a82ecab599cf6dadd2ce48414224a8e0eb",
-          "bytes": 42528
+          "sha256": "6af646064b02c1c1716e41ffd37614e71a5173782d5e208dc0a8461bf3377e8b",
+          "bytes": 28738
         }
       },
       {
         "locale": "en",
         "role": "theme",
         "slide": 2,
-        "svgHash": "594757c1c748cff229a8b22c3265733c083aac6af4456210a430cba9f64d5c8d",
+        "svgHash": "ddf269b955729e6cab4481c5cea8c90b80da58bf2af5274439ba5adae63f5401",
         "width": 1080,
         "height": 1350,
         "png": {
           "path": "/social/devshark/2026-10-02/en/slide-02.png",
-          "sha256": "9f21fa39fe8fa3ad23741f230f0bd08fceab2e1ab74d9c752212ef20cbe6354d",
-          "bytes": 41322
+          "sha256": "dbbf910c9988d64b9c4de56eb12766fab28b7417fb703827731927dcae4c5fa2",
+          "bytes": 35181
         },
         "jpeg": {
           "path": "/social/devshark/2026-10-02/en/slide-02.jpg",
-          "sha256": "af7d4ee3b5416b694e93bb572d126f9841acedbc832c664828b194af7a192d79",
-          "bytes": 52796
+          "sha256": "0f6d67e8aa33209dbcff3e70591bade6b22d7257cab2f0bedbf3803a9435305e",
+          "bytes": 43457
         }
       },
       {
         "locale": "en",
         "role": "recap",
         "slide": 3,
-        "svgHash": "3664896134981b3adc2e60c47611ae05a3c5c6f3b9f73f2187275ade632c3915",
+        "svgHash": "1bfa252738f0ae7ac744305c79e07d900110513881ea76ef92f90049a7dfa1a8",
         "width": 1080,
         "height": 1350,
         "png": {
           "path": "/social/devshark/2026-10-02/en/slide-03.png",
-          "sha256": "30bfe28361b2bdb08814b7b9cc997818f296d36b322b5ec137a6dfff25b81c19",
-          "bytes": 77194
+          "sha256": "760981fdd8ab308a9a7e8c824356d25d690cd7b49bebe3096275fb1af81b012f",
+          "bytes": 70604
         },
         "jpeg": {
           "path": "/social/devshark/2026-10-02/en/slide-03.jpg",
-          "sha256": "6777e622ba2fe0984f9d8899096ebf3529217e35bd0986498d450010600bc076",
-          "bytes": 103177
+          "sha256": "a2c6b2b9ac6457193bb0837cac838a9ef0959fa4e06d05e1da99325d3b51db3e",
+          "bytes": 101306
         }
       },
       {
         "locale": "en",
         "role": "pick",
         "slide": 4,
-        "svgHash": "c8c39ac416157bd6e5ffd7f2b81cc5e18607345a64b5ff39ade812dd37df5302",
+        "svgHash": "4590b3a81ff8d40419e920cb87918dc08f38cd586dfed53627b0e833f956669b",
         "width": 1080,
         "height": 1350,
         "png": {
           "path": "/social/devshark/2026-10-02/en/slide-04.png",
-          "sha256": "112e10cc54974e787120184b57c8146d8c584e5d9c818a03fcec85dc8f940f05",
-          "bytes": 36198
+          "sha256": "ce7d308b0283dd4060750bfa92d267550cfab442a7575e4180050bcc6e58f1a0",
+          "bytes": 33100
         },
         "jpeg": {
           "path": "/social/devshark/2026-10-02/en/slide-04.jpg",
-          "sha256": "24d298c582d6029a73cd88f1cf60d2e255f1fd85bf51bed4aceb51f5ea5e0025",
-          "bytes": 51845
+          "sha256": "72c61b0a1d5d7f659fb58d2bf5ad67a1946f44c19e934db364db3d82041160c7",
+          "bytes": 44079
         }
       },
       {
         "locale": "en",
         "role": "footer",
         "slide": 5,
-        "svgHash": "1082daa134c9c6be980165972283338631a8c6edaaece6b4aeb53531ab28dbde",
+        "svgHash": "98b5e9a5aa3092ecdf6c28f72f4a5b3c3a9705d3ce36bde2d082db1070ebb696",
         "width": 1080,
         "height": 1350,
         "png": {
           "path": "/social/devshark/2026-10-02/en/slide-05.png",
-          "sha256": "d27ace771382751752c20d010f92502dfe065c075fe21e7e0f9146874ff89b85",
-          "bytes": 49451
+          "sha256": "b68f6de87982f3696437588b8ff9dbcfdc094d2d5547b996b0be49a5a13324d2",
+          "bytes": 50100
         },
         "jpeg": {
           "path": "/social/devshark/2026-10-02/en/slide-05.jpg",
-          "sha256": "9a1a9b0865a7ae1f459854741e2a8a58231bf2bc3e639e358e9487f45397824e",
-          "bytes": 66481
+          "sha256": "cbb702491219eb06bc4736bff3cb8a1b3cd3ecd3b96925f7c09497d04c34cc66",
+          "bytes": 63788
         }
       }
     ]
