@@ -15,6 +15,7 @@ import { TehdejsiSignalSchema } from "./tehdejsi-signal.js";
 import { TehdejsiProductInsightSchema } from "./tehdejsi-product-insight.js";
 import { BhResearchBriefBundleSchema } from "./bh-research-brief.js";
 import { BhDossierSchema, BhResearchLedgerEntrySchema } from "./bh-dossier.js";
+import { BrandKitManifestSchema } from "./brand-kit.js";
 import { CalendarFeedSchema } from "./calendar.js";
 import { BookKbIndexSchema } from "./book-kb-index.js";
 import { CampaignBriefSchema } from "./campaign-brief.js";
@@ -204,6 +205,7 @@ export const ContractSchemas = {
   "stream-sync": StreamSyncReceiptSchema,
   "calendar": CalendarFeedSchema,
   "campaign-brief": CampaignBriefSchema,
+  "brand-kit": BrandKitManifestSchema,
   "carousel-layout-review": CarouselLayoutReviewSchema,
   "carousel-template": CarouselTemplateSchema,
   "cost-report": CostReportSchema,
