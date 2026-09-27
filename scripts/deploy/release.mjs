@@ -99,7 +99,7 @@ function deploymentCommands(target, buildMode) {
 }
 
 function deploymentUrl(stdout) {
-  return stdout.match(/https:\/\/[^\s]+/gu)?.at(-1) ?? null;
+  return stdout.match(/https:\/\/[^\s"',]+/gu)?.at(-1) ?? null;
 }
 
 export async function runDeployment({

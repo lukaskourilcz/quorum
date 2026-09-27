@@ -60,6 +60,22 @@ describe("deployment argument guards", () => {
 });
 
 describe("explicit preview deployment", () => {
+  it("reads the URL out of the CLI's JSON summary without its quote and comma", async () => {
+    const harness = previewHarness();
+    harness.run.mockImplementation(async (command: string, args: string[]) => {
+      harness.calls.push([command, ...args].join(" "));
+      return {
+        stdout: args.includes("deploy")
+          ? '{\n  "deploymentUrl": "https://quorum-preview.example.test",\n}\n'
+          : "",
+        stderr: ""
+      };
+    });
+    const receipt = await runDeployment(harness.options as never);
+    expect(receipt).toMatchObject({ deploymentUrl: "https://quorum-preview.example.test" });
+  });
+
+
   it("pulls Preview settings, builds locally and uploads exactly once", async () => {
     const harness = previewHarness();
     const receipt = await runDeployment(harness.options as never);
