@@ -33,6 +33,7 @@ import { heroAltCs } from "../images/alt.js";
 import { pickedSubjectQuery } from "../images/subject-query.js";
 import type { HeroLadderResult } from "../images/ladder.js";
 import type { VisualBrief } from "../images/visual-brief.js";
+import { PRACTICAL_NOT_FILED } from "./practical.js";
 import { InvalidArticleError, write } from "./write.js";
 import { InvalidModelOutputError } from "./models.js";
 import { BudgetError } from "../budget.js";
@@ -278,6 +279,14 @@ export async function produceEdition(
         write(brief, input.items, input.config, input.gateway, feedback, input.now, input.readBody)
       );
       english.usage.forEach((usage) => reporter.addUsage(usage));
+      // A dropped practical block is silent everywhere else: the article publishes without it
+      // and nothing else changes. On the record it is the only sign that the desk was asked for
+      // something and did not deliver it, which is how a drifting prompt becomes visible.
+      for (const problem of english.practicalProblems ?? []) {
+        reporter.warn(
+          problem === PRACTICAL_NOT_FILED ? "practical_not_filed" : `practical_dropped:${problem}`
+        );
+      }
     } catch (error) {
       // A refused reservation is not a bad article. It was reported as
       // content_invalid_after_regeneration, and the remaining attempts were then spent on

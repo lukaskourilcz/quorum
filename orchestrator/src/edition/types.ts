@@ -2,6 +2,7 @@ import { z } from "zod";
 import { SourceRefSchema } from "../contracts/article-frontmatter.js";
 import type { ArticleCategory } from "../contracts/article-frontmatter.js";
 import type { VisualBrief } from "../images/visual-brief.js";
+import type { PracticalBlockShape } from "../contracts/practical.js";
 
 export const EvidenceClassSchema = z.enum([
   "confirmed_fact",
@@ -100,6 +101,8 @@ export interface WrittenArticle {
   sources: z.infer<typeof SourceRefSchema>[];
   /** What the desk says its picture should show. Absent when it wrote none, or wrote a bad one. */
   visualBrief?: VisualBrief;
+  /** The thing a reader can use today. Absent is the normal state; see contracts/practical.ts. */
+  practical?: PracticalBlockShape;
   /** Czech is what the desk writes. English is optional and no longer produced. */
   byLocale: { en?: LocalizedContent; cs: LocalizedContent };
   usage: EditionUsage[];
@@ -117,6 +120,10 @@ export interface CzechArticle {
   sources: z.infer<typeof SourceRefSchema>[];
   /** What the desk says its picture should show. Absent when it wrote none, or wrote a bad one. */
   visualBrief?: VisualBrief;
+  /** The thing a reader can use today, when the desk filed a usable one. */
+  practical?: PracticalBlockShape;
+  /** Why a filed practical block was dropped, for the run record. Absent when nothing was. */
+  practicalProblems?: string[];
   cs: LocalizedContent;
   usage: EditionUsage[];
 }
