@@ -6,7 +6,7 @@ them in the admin at `/admin?venture=design-lab&tab=brand`.
 
 | Kit | Venture | Studio brand | Source | Drawn in carousels |
 | --- | --- | --- | --- | --- |
-| DNESKAi | `caught-up` | `caught-up` | `lukaskourilcz/aifirst` at `978cf71` (`claude/dneskai-logo`) | yes: logo slot and palette |
+| DNESKAi | `caught-up` | `caught-up` | `lukaskourilcz/aifirst` at `978cf71` (on `main`) | yes: logo slot and palette |
 | devShark | `marketingshark` | `devshark` | owner handoff of 2026-09-27 (V9 `recommended/`) | no, reference only |
 
 BoardlessAI's own identity is locked and has no kit here.

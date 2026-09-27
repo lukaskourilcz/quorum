@@ -8,7 +8,7 @@
   "source": {
     "kind": "repository",
     "repository": "lukaskourilcz/aifirst",
-    "ref": "claude/dneskai-logo",
+    "ref": "main",
     "commit": "978cf71eaa07e6465dea9055a92a7ad918844405",
     "documents": [
       "design_handoff_dneskai_logo/README.md",
