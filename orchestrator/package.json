@@ -48,6 +48,7 @@
     "social:deck": "tsx src/social/deck-cli.ts",
     "datasets:append": "tsx src/datasets/append-cli.ts",
     "streams:fetch": "tsx src/streams/fetch-cli.ts",
+    "events:candidates": "tsx src/events/candidates-cli.ts",
     "finance:page": "tsx src/finance/finance-page-cli.ts",
     "cost:report": "tsx src/finance/cost-report-cli.ts",
     "mma:retire": "tsx src/mma-files/retire-cli.ts",

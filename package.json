@@ -59,6 +59,7 @@
     "social:deck": "pnpm --filter @boardlessai/orchestrator run social:deck",
     "datasets:append": "pnpm --filter @boardlessai/orchestrator datasets:append",
     "streams:fetch": "pnpm --filter @boardlessai/orchestrator streams:fetch",
+    "events:candidates": "pnpm --filter @boardlessai/orchestrator events:candidates",
     "finance:page": "pnpm --filter @boardlessai/orchestrator finance:page",
     "cost:report": "pnpm --filter @boardlessai/orchestrator cost:report",
     "mma:retire": "pnpm --filter @boardlessai/orchestrator mma:retire",

@@ -4,6 +4,7 @@ import { ActionPacketSchema } from "./action-packet.js";
 import { BoardlessDatasetSchema } from "./boardless-dataset.js";
 import { BoardlessStreamSchema, StreamSyncReceiptSchema } from "./boardless-stream.js";
 import { BoardlessEventsSchema } from "./boardless-events.js";
+import { EventCandidateFileSchema } from "./event-candidates.js";
 import { BhCycleSchema } from "./bh-cycle.js";
 import { BhSeedLibrarySchema } from "./bh-seed.js";
 import { BhShortlistSchema } from "./bh-shortlist.js";
@@ -187,6 +188,7 @@ export const ContractSchemas = {
   "boardless-dataset": BoardlessDatasetSchema,
   "boardless-stream": BoardlessStreamSchema,
   "boardless-events": BoardlessEventsSchema,
+  "event-candidates": EventCandidateFileSchema,
   "bh-cycle": BhCycleSchema,
   "bh-seed": BhSeedLibrarySchema,
   "bh-shortlist": BhShortlistSchema,

@@ -1,0 +1,56 @@
+{
+  "schemaVersion": "caught-up-event-sources/1",
+  "windowDays": 240,
+  "topicKeywords": [
+    "ai",
+    "artificial intelligence",
+    "umělá inteligence",
+    "machine learning",
+    "strojové učení",
+    "deep learning",
+    "llm",
+    "genai",
+    "mlops",
+    "nlp",
+    "data science"
+  ],
+  "czechCountries": ["Czech Republic", "Czechia", "Česká republika", "Česko"],
+  "sources": [
+    {
+      "id": "aiakce",
+      "kind": "events-calendar",
+      "name": "AI Akce.cz",
+      "url": "https://www.aiakce.cz/wp-json/tribe/events/v1/events?per_page=50",
+      "host": "www.aiakce.cz",
+      "scope": "cz",
+      "topicFilter": false,
+      "maxCandidates": 20,
+      "license": "Public Czech AI event listing. Read for candidates only; the Czech title and description the owner publishes are rewritten in the admin.",
+      "note": "The same calendar exports iCalendar at /seznam/?ical=1. safeFetch accepts no text/calendar and this endpoint carries the venue, city, price and organiser the export folds into free text, so the site's own JSON is what is read."
+    },
+    {
+      "id": "confs-tech-general",
+      "kind": "confs-tech",
+      "name": "confs.tech · general",
+      "url": "https://raw.githubusercontent.com/tech-conferences/conference-data/main/conferences/{year}/general.json",
+      "host": "raw.githubusercontent.com",
+      "scope": "global",
+      "topicFilter": true,
+      "maxCandidates": 12,
+      "license": "MIT, tech-conferences/conference-data.",
+      "note": "Czech entries are offered whatever they are about; everything else has to match a topic keyword. FrontKon in Prague on 2026-10-06 is here rather than in a topic file."
+    },
+    {
+      "id": "confs-tech-data",
+      "kind": "confs-tech",
+      "name": "confs.tech · data",
+      "url": "https://raw.githubusercontent.com/tech-conferences/conference-data/main/conferences/{year}/data.json",
+      "host": "raw.githubusercontent.com",
+      "scope": "global",
+      "topicFilter": true,
+      "maxCandidates": 12,
+      "license": "MIT, tech-conferences/conference-data.",
+      "note": "That repository publishes no ai.json; its AI and ML conferences sit in this topic file, which is why the keyword filter exists. Verified 2026-09-16: conferences/2026/ai.json answers 404, conferences/2026/data.json answers 200."
+    }
+  ]
+}

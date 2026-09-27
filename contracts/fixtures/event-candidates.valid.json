@@ -1,0 +1,83 @@
+{
+  "schemaVersion": "event-candidates/1",
+  "date": "2026-09-16",
+  "windowDays": 240,
+  "candidates": [
+    {
+      "id": "e021406e397e63fae8ef8988c4172cdcad59fec8",
+      "source": "aiakce",
+      "sourceName": "AI Akce.cz",
+      "scope": "cz",
+      "suggestedId": "cyber-attacks-2026",
+      "title": "Cyber Attacks",
+      "description": "Konference zaměřená na kybernetické útoky – ransomware, phishing a DDoS. Program pokrývá implementaci Zákona o kybernetické bezpečnosti, dopady útoků na smluvní vztahy a praktické zkušenosti z obrany v českém prostředí.",
+      "starts": "2026-09-23",
+      "city": "Praha",
+      "online": false,
+      "url": "https://cyberattacks.konference.cz/",
+      "listingUrl": "https://www.aiakce.cz/akce/cyber-attacks/"
+    },
+    {
+      "id": "7d3cc9d25337774effb8420d61564396ce9582b1",
+      "source": "confs-tech-general",
+      "sourceName": "confs.tech · general",
+      "scope": "cz",
+      "suggestedId": "frontkon-2026",
+      "title": "FrontKon",
+      "starts": "2026-10-06",
+      "city": "Prague",
+      "online": false,
+      "url": "https://www.frontkon.tech"
+    },
+    {
+      "id": "8d1625ff0288e00439f667a9379797edc0e2ab45",
+      "source": "aiakce",
+      "sourceName": "AI Akce.cz",
+      "scope": "cz",
+      "suggestedId": "ai-transformace-zdravotnictvi-2026",
+      "title": "AI transformace zdravotnictví 2026",
+      "description": "Třetí ročník celodenní odborné konference o využití umělé inteligence v diagnostice, péči o pacienta a chodu nemocnic.",
+      "starts": "2026-10-14",
+      "city": "Praha",
+      "venue": "Kongresové centrum",
+      "online": false,
+      "url": "https://asociace.ai/ai-transformace-zdravotnictvi/",
+      "listingUrl": "https://www.aiakce.cz/akce/ai-transformace-zdravotnictvi-2026/",
+      "price": "zdarma",
+      "organizer": "Česká asociace umělé inteligence"
+    }
+  ],
+  "sources": [
+    {
+      "id": "aiakce",
+      "name": "AI Akce.cz",
+      "kind": "events-calendar",
+      "host": "www.aiakce.cz",
+      "read": 5,
+      "accepted": 2,
+      "dropped": 2,
+      "known": 1
+    },
+    {
+      "id": "confs-tech-general",
+      "name": "confs.tech · general",
+      "kind": "confs-tech",
+      "host": "raw.githubusercontent.com",
+      "read": 49,
+      "accepted": 1,
+      "dropped": 48,
+      "known": 0
+    },
+    {
+      "id": "confs-tech-data",
+      "name": "confs.tech · data",
+      "kind": "confs-tech",
+      "host": "raw.githubusercontent.com",
+      "read": 0,
+      "accepted": 0,
+      "dropped": 0,
+      "known": 0,
+      "error": "Source returned HTTP 503"
+    }
+  ]
+}
