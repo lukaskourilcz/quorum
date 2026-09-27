@@ -34,6 +34,15 @@ export function wordsWithin(text: string, maximum: number): string {
   return `${(kept || clean.slice(0, maximum - 1)).replace(/[\s,;:.–—-]+$/u, "")}…`;
 }
 
+/** A caption within a character count: paragraphs and lines kept, cut at a word with an ellipsis. */
+export function clipCaption(text: string, maximum: number): string {
+  const clean = text.trim();
+  if (clean.length <= maximum) return clean;
+  const cut = clean.slice(0, maximum - 1);
+  const boundary = cut.search(/\s\S*$/u);
+  return `${(boundary > 0 ? cut.slice(0, boundary) : cut).replace(/[\s,;:.–—-]+$/u, "")}…`;
+}
+
 /** The story template's two slots hold 190 and 80 characters (`story-quote`, studio library). */
 const STORY_QUOTE_MAXIMUM = 190;
 const STORY_LINE_MAXIMUM = 80;

@@ -1,5 +1,8 @@
 import { releaseReviewedArticles } from "../edition/review-release.js";
 import { readDailyDatasetEntry } from "../social/daily-dataset.js";
+import { draftDneskaiRecipes } from "../social/recipes.js";
+import { pragueClockParts } from "../meetings/clock.js";
+import { stateRoot } from "../paths.js";
 import { appendFile, readFile } from "node:fs/promises";
 import path from "node:path";
 import { pathToFileURL } from "node:url";
@@ -40,6 +43,23 @@ export function failureCode(raw: string | undefined): DeliveryFailureCode | unde
   return raw;
 }
 
+/** DNESKAi's recipe drafts for a Prague date (today by default). Needs CAUGHT_UP_SITE_URL, as the pack does. */
+async function runRecipes(date?: string): Promise<Awaited<ReturnType<typeof draftDneskaiRecipes>>> {
+  const now = new Date();
+  const day = date ?? pragueClockParts(now).date;
+  if (!/^\d{4}-\d{2}-\d{2}$/u.test(day)) throw new Error("--date expects YYYY-MM-DD");
+  const siteUrl = process.env.CAUGHT_UP_SITE_URL;
+  if (!siteUrl) throw new Error("CAUGHT_UP_SITE_URL is required to draft DNESKAi recipe posts");
+  return draftDneskaiRecipes({
+    date: day,
+    stateRoot,
+    repoRoot,
+    siteUrl,
+    now,
+    readEntry: (dataset, entryDate) => readDailyDatasetEntry({ dataset, date: entryDate })
+  });
+}
+
 async function main(): Promise<void> {
   const rawArgs = process.argv.slice(2);
   const args = rawArgs[0] === "--" ? rawArgs.slice(1) : rawArgs;
@@ -48,7 +68,17 @@ async function main(): Promise<void> {
     const artifacts = await releaseReviewedArticles({
       readLesson: (date) => readDailyDatasetEntry({ dataset: "ai-lessons", date })
     });
-    console.log(JSON.stringify({ artifacts }));
+    // The recipe posts ride the same step and the same commit (quorum#592): $0, idempotent by date.
+    // A failing recipe never costs the article release that ran before it; it is logged instead.
+    const recipes = await runRecipes(valueAfter(args, "--date")).catch((error: unknown) => {
+      console.warn(JSON.stringify({ event: "dneskai_recipes_failed", reason: error instanceof Error ? error.message : String(error) }));
+      return { outcomes: [], artifacts: [] };
+    });
+    console.log(JSON.stringify({ artifacts: [...artifacts, ...recipes.artifacts], recipes: recipes.outcomes }));
+    return;
+  }
+  if (command === "recipes") {
+    console.log(JSON.stringify(await runRecipes(valueAfter(args, "--date"))));
     return;
   }
   if (command === "next") {

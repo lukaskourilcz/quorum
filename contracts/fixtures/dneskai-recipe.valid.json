@@ -1,0 +1,53 @@
+{
+  "schemaVersion": "dneskai-recipe/1",
+  "id": "dneskai-no-edition-2026-11-05",
+  "recipe": "no-edition",
+  "date": "2026-11-05",
+  "window": {
+    "from": "2026-11-05",
+    "to": "2026-11-05"
+  },
+  "sourceRefs": [
+    "aifirst:data/ai-lessons.json#lex-001"
+  ],
+  "slides": [
+    {
+      "text": "Machine learning: Software, který se pravidla učí z příkladů",
+      "alt": "Slide 1: Machine learning: Software, který se pravidla učí z příkladů"
+    }
+  ],
+  "visual": {
+    "template_id": "quote-card",
+    "version": "1.0.0",
+    "content": {
+      "locale": "cs",
+      "strings": {
+        "quote": "Machine learning: Software, který se pravidla učí z příkladů",
+        "attribution": "Pojem dne · DNESKAi"
+      }
+    }
+  },
+  "frames": [
+    {
+      "path": "/social/caught-up/2026-11-05/no-edition/frame-01.jpg",
+      "sha256": "001071fa8b0ca3ef50f3d8e7ab8b0f70b7177cfaf808956ebe79aa04532c5142"
+    }
+  ],
+  "story": {
+    "frame": {
+      "path": "/social/caught-up/2026-11-05/no-edition/story.png",
+      "sha256": "c3fb9b864c63e8ef2aee4cb3b4006f131e245a0e3be5383753f296dc7487b22d"
+    },
+    "link": "https://dneskai.example/?utm_source=instagram&utm_medium=story&utm_campaign=no-edition"
+  },
+  "destination": "https://dneskai.example/?utm_source=instagram&utm_medium=post&utm_campaign=no-edition",
+  "instagram": {
+    "caption": "Dnes vydání DNESKAi nevyšlo. Pojem dne:\n\nMachine learning: Strojové učení je přístup, kdy se program zlepšuje z příkladů místo pravidel napsaných ručně.\n\nZdroj: Mitchell, Machine Learning (1997)\n\nDalší vydání: https://dneskai.example/?utm_source=instagram&utm_medium=post&utm_campaign=no-edition\n\n#ai #umelainteligence #dneskai"
+  },
+  "threads": {
+    "text": "Dnes vydání DNESKAi nevyšlo. Pojem dne: Machine learning: Strojové učení je přístup, kdy se program zlepšuje z příkladů místo pravidel napsaných ručně.\n\nZdroj: Mitchell, Machine Learning (1997)\n\nhttps://dneskai.example/?utm_source=threads&utm_medium=post&utm_campaign=no-edition"
+  },
+  "ownerSlots": [],
+  "status": "draft",
+  "spendUsd": 0
+}

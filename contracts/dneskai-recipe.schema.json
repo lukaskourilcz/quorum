@@ -1,0 +1,266 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "type": "object",
+  "properties": {
+    "schemaVersion": {
+      "type": "string",
+      "const": "dneskai-recipe/1"
+    },
+    "id": {
+      "type": "string",
+      "pattern": "^dneskai-[a-z-]+-\\d{4}-\\d{2}-\\d{2}$"
+    },
+    "recipe": {
+      "type": "string",
+      "enum": [
+        "friday-tools",
+        "weekly-recap",
+        "how-it-was-made",
+        "no-edition"
+      ]
+    },
+    "date": {
+      "type": "string",
+      "format": "date",
+      "pattern": "^(?:(?:\\d\\d[2468][048]|\\d\\d[13579][26]|\\d\\d0[48]|[02468][048]00|[13579][26]00)-02-29|\\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\\d|30)|(?:02)-(?:0[1-9]|1\\d|2[0-8])))$"
+    },
+    "window": {
+      "type": "object",
+      "properties": {
+        "from": {
+          "type": "string",
+          "format": "date",
+          "pattern": "^(?:(?:\\d\\d[2468][048]|\\d\\d[13579][26]|\\d\\d0[48]|[02468][048]00|[13579][26]00)-02-29|\\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\\d|30)|(?:02)-(?:0[1-9]|1\\d|2[0-8])))$"
+        },
+        "to": {
+          "type": "string",
+          "format": "date",
+          "pattern": "^(?:(?:\\d\\d[2468][048]|\\d\\d[13579][26]|\\d\\d0[48]|[02468][048]00|[13579][26]00)-02-29|\\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\\d|30)|(?:02)-(?:0[1-9]|1\\d|2[0-8])))$"
+        }
+      },
+      "required": [
+        "from",
+        "to"
+      ],
+      "additionalProperties": false
+    },
+    "sourceRefs": {
+      "minItems": 1,
+      "maxItems": 20,
+      "type": "array",
+      "items": {
+        "type": "string",
+        "minLength": 1,
+        "maxLength": 240
+      }
+    },
+    "slides": {
+      "minItems": 1,
+      "maxItems": 10,
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "text": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 400
+          },
+          "alt": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 300
+          }
+        },
+        "required": [
+          "text",
+          "alt"
+        ],
+        "additionalProperties": false
+      }
+    },
+    "visual": {
+      "type": "object",
+      "properties": {
+        "template_id": {
+          "type": "string",
+          "pattern": "^[a-z0-9]+(?:-[a-z0-9]+)*$"
+        },
+        "version": {
+          "type": "string",
+          "pattern": "^\\d+\\.\\d+\\.\\d+$"
+        },
+        "content": {
+          "type": "object",
+          "properties": {
+            "locale": {
+              "type": "string",
+              "enum": [
+                "en",
+                "cs"
+              ]
+            },
+            "strings": {
+              "type": "object",
+              "propertyNames": {
+                "type": "string",
+                "pattern": "^[a-z][a-z0-9-]*$"
+              },
+              "additionalProperties": {
+                "type": "string",
+                "maxLength": 2000
+              }
+            },
+            "variant": {
+              "type": "string",
+              "pattern": "^[A-Z][A-Z0-9-]*$"
+            }
+          },
+          "required": [
+            "locale",
+            "strings"
+          ],
+          "additionalProperties": false
+        }
+      },
+      "required": [
+        "template_id",
+        "version",
+        "content"
+      ],
+      "additionalProperties": false
+    },
+    "frames": {
+      "minItems": 1,
+      "maxItems": 10,
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "path": {
+            "type": "string",
+            "pattern": "^\\/social\\/caught-up\\/\\d{4}-\\d{2}-\\d{2}\\/[a-z-]+\\/[a-z0-9-]+\\.(?:jpg|png)$"
+          },
+          "sha256": {
+            "type": "string",
+            "pattern": "^[a-f0-9]{64}$"
+          }
+        },
+        "required": [
+          "path",
+          "sha256"
+        ],
+        "additionalProperties": false
+      }
+    },
+    "story": {
+      "type": "object",
+      "properties": {
+        "frame": {
+          "type": "object",
+          "properties": {
+            "path": {
+              "type": "string",
+              "pattern": "^\\/social\\/caught-up\\/\\d{4}-\\d{2}-\\d{2}\\/[a-z-]+\\/[a-z0-9-]+\\.(?:jpg|png)$"
+            },
+            "sha256": {
+              "type": "string",
+              "pattern": "^[a-f0-9]{64}$"
+            }
+          },
+          "required": [
+            "path",
+            "sha256"
+          ],
+          "additionalProperties": false
+        },
+        "link": {
+          "type": "string",
+          "pattern": "^https:\\/\\/"
+        }
+      },
+      "required": [
+        "frame",
+        "link"
+      ],
+      "additionalProperties": false
+    },
+    "destination": {
+      "type": "string",
+      "pattern": "^https:\\/\\/"
+    },
+    "instagram": {
+      "type": "object",
+      "properties": {
+        "caption": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 2200
+        }
+      },
+      "required": [
+        "caption"
+      ],
+      "additionalProperties": false
+    },
+    "threads": {
+      "type": "object",
+      "properties": {
+        "text": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 500
+        }
+      },
+      "required": [
+        "text"
+      ],
+      "additionalProperties": false
+    },
+    "ownerSlots": {
+      "maxItems": 5,
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "label": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 120
+          }
+        },
+        "required": [
+          "label"
+        ],
+        "additionalProperties": false
+      }
+    },
+    "status": {
+      "type": "string",
+      "const": "draft"
+    },
+    "spendUsd": {
+      "type": "number",
+      "const": 0
+    }
+  },
+  "required": [
+    "schemaVersion",
+    "id",
+    "recipe",
+    "date",
+    "window",
+    "sourceRefs",
+    "slides",
+    "visual",
+    "frames",
+    "destination",
+    "instagram",
+    "threads",
+    "ownerSlots",
+    "status",
+    "spendUsd"
+  ],
+  "additionalProperties": false,
+  "$id": "https://boardless.ai/contracts/dneskai-recipe.schema.json"
+}

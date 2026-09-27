@@ -25,6 +25,7 @@ import { CostReportSchema } from "./cost-report.js";
 import { DailyDigestSchema } from "./daily-digest.js";
 import { DesignProposalSchema } from "./design-proposal.js";
 import { DoorMoneyPlaybookSchema } from "./door-money-playbook.js";
+import { DneskaiRecipePackageSchema } from "./dneskai-recipe.js";
 import { EditionPackageSchema } from "./edition-package.js";
 import { HookAssignmentSchema } from "./hook-assignment.js";
 import { IdeaLedgerEntrySchema } from "./idea-ledger.js";
@@ -213,6 +214,7 @@ export const ContractSchemas = {
   "daily-digest": DailyDigestSchema,
   "design-proposal": DesignProposalSchema,
   "door-money-playbook": DoorMoneyPlaybookSchema,
+  "dneskai-recipe": DneskaiRecipePackageSchema,
   "edition-package": EditionPackageSchema,
   "hook-assignment": HookAssignmentSchema,
   "idea-ledger": IdeaLedgerEntrySchema,
