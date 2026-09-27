@@ -1,0 +1,595 @@
+{
+  "schemaVersion": "brand-kit/1",
+  "venture": "marketingshark",
+  "studioBrand": "devshark",
+  "displayName": "devShark",
+  "status": "approved",
+  "approvedOn": "2026-09-27",
+  "source": {
+    "kind": "handoff",
+    "receivedOn": "2026-09-27",
+    "from": "owner",
+    "description": "devShark brand kit V9, the variant chosen on 2026-09-27: the recommended/ SVGs of the owner's export, copied byte for byte.",
+    "pinTo": "lukaskourilcz/react-express-app client/public/brand/v9/ once that is merged; re-pin this kit to that commit then.",
+    "documents": [
+      "README.md (export root)"
+    ]
+  },
+  "logotype": {
+    "viewBox": [
+      0,
+      -74.9,
+      602.571,
+      95.764
+    ],
+    "aspectRatio": 6.29,
+    "outlined": true,
+    "clearSpace": {
+      "basis": "The height of the letter d, on every side."
+    },
+    "sizes": [
+      {
+        "place": "Horizontal logo",
+        "size": "160 px / 35 mm wide minimum"
+      },
+      {
+        "place": "Horizontal small",
+        "size": "100-160 px / 20-35 mm wide"
+      },
+      {
+        "place": "Compact logo (navigation, mobile, footers)",
+        "size": "18 px high minimum"
+      },
+      {
+        "place": "Stacked logo",
+        "size": "120 px wide minimum"
+      },
+      {
+        "place": "Fin with wave",
+        "size": "20 px / 6 mm minimum"
+      },
+      {
+        "place": "Clean fin",
+        "size": "12 px / 4 mm minimum"
+      },
+      {
+        "place": "Clean fin in a social post corner",
+        "size": "48 px"
+      }
+    ]
+  },
+  "palettes": [
+    {
+      "id": "brand",
+      "label": "devShark colours",
+      "grounds": [],
+      "colors": [
+        {
+          "role": "Green",
+          "value": "#2d7a2d"
+        },
+        {
+          "role": "Ink",
+          "value": "#132019"
+        },
+        {
+          "role": "White",
+          "value": "#ffffff"
+        }
+      ]
+    },
+    {
+      "id": "social",
+      "label": "Carousel grounds",
+      "grounds": [],
+      "colors": [
+        {
+          "role": "Ink",
+          "value": "#132019"
+        },
+        {
+          "role": "Pale",
+          "value": "#f3f6f1"
+        },
+        {
+          "role": "Green",
+          "value": "#2d7a2d"
+        }
+      ]
+    }
+  ],
+  "rules": [
+    "Always spell it devShark.",
+    "The fin sits left of the name, its tip pointing left, with one wave and a transparent cut-out.",
+    "Green on white or light grounds, white on ink or green, ink for one-colour print.",
+    "Clear space on every side equals the height of the letter d.",
+    "The favicon and embroidery use the clean fin only.",
+    "All files draw the name as outlines; PNG exports have transparent backgrounds."
+  ],
+  "doNots": [
+    "Do not use gradients.",
+    "Do not add shadows.",
+    "Do not add 3D effects.",
+    "Do not use the V1-V10 working variants in production."
+  ],
+  "socialRules": [
+    "A carousel is 5 slides at 1080 × 1350.",
+    "Slide grounds run Ink, Pale #f3f6f1, Green, Pale, Ink.",
+    "The clean fin sits at 48 px in the corner of every slide.",
+    "The full logo appears only on the last slide.",
+    "devShark is named once, at the end."
+  ],
+  "typography": [
+    "The name is drawn as outlines in every logo file; do not set it in a font."
+  ],
+  "assets": [
+    {
+      "role": "logo-horizontal-green",
+      "kind": "lockup",
+      "label": "Horizontal logo, green",
+      "file": "devshark-logo-horizontal-green.svg",
+      "mediaType": "image/svg+xml",
+      "sha256": "d959eac1963f94f1bb18bdc6cd96e69fe7c384d1ab11e0596441be0c68b149fe",
+      "bytes": 14755,
+      "sourcePath": "recommended/devshark-logo-horizontal-green.svg",
+      "use": "The primary logo; green on white or light grounds.",
+      "grounds": [
+        "#ffffff",
+        "#f3f6f1"
+      ],
+      "onPhoto": false,
+      "inks": [
+        "#2d7a2d"
+      ],
+      "viewBox": [
+        0,
+        -74.9,
+        602.571,
+        95.764
+      ],
+      "minimumSize": "160 px wide",
+      "logoSlot": false
+    },
+    {
+      "role": "logo-horizontal-ink",
+      "kind": "lockup",
+      "label": "Horizontal logo, ink",
+      "file": "devshark-logo-horizontal-ink.svg",
+      "mediaType": "image/svg+xml",
+      "sha256": "0900e34f9bb71c7db229d02aad3171f74a30cfdcd5f9612d1bc8a1caf69a6b7f",
+      "bytes": 14755,
+      "sourcePath": "recommended/devshark-logo-horizontal-ink.svg",
+      "use": "The primary logo; ink one-colour print.",
+      "grounds": [],
+      "onPhoto": false,
+      "inks": [
+        "#132019"
+      ],
+      "viewBox": [
+        0,
+        -74.9,
+        602.571,
+        95.764
+      ],
+      "minimumSize": "160 px wide",
+      "logoSlot": false
+    },
+    {
+      "role": "logo-horizontal-white",
+      "kind": "lockup",
+      "label": "Horizontal logo, white",
+      "file": "devshark-logo-horizontal-white.svg",
+      "mediaType": "image/svg+xml",
+      "sha256": "ba705d15f8c6e391a5c515accc3d1faf45f6488bfb762945c2fd5e5f8247114f",
+      "bytes": 14755,
+      "sourcePath": "recommended/devshark-logo-horizontal-white.svg",
+      "use": "The primary logo; white on ink or green grounds.",
+      "grounds": [
+        "#132019",
+        "#2d7a2d"
+      ],
+      "onPhoto": false,
+      "inks": [
+        "#ffffff"
+      ],
+      "viewBox": [
+        0,
+        -74.9,
+        602.571,
+        95.764
+      ],
+      "minimumSize": "160 px wide",
+      "logoSlot": false
+    },
+    {
+      "role": "logo-horizontal-small-green",
+      "kind": "lockup",
+      "label": "Horizontal logo, small, green",
+      "file": "devshark-logo-horizontal-small-green.svg",
+      "mediaType": "image/svg+xml",
+      "sha256": "d7b45897fea2624e02da0ccaf88e4695954cf8d5e5d260ac02ebf02a20515ce3",
+      "bytes": 14753,
+      "sourcePath": "recommended/devshark-logo-horizontal-small-green.svg",
+      "use": "Same geometry with a heavier wave, for 100-160 px; green on white or light grounds.",
+      "grounds": [
+        "#ffffff",
+        "#f3f6f1"
+      ],
+      "onPhoto": false,
+      "inks": [
+        "#2d7a2d"
+      ],
+      "viewBox": [
+        0,
+        -74.9,
+        604.82,
+        96.888
+      ],
+      "minimumSize": "100 px wide",
+      "logoSlot": false
+    },
+    {
+      "role": "logo-horizontal-small-ink",
+      "kind": "lockup",
+      "label": "Horizontal logo, small, ink",
+      "file": "devshark-logo-horizontal-small-ink.svg",
+      "mediaType": "image/svg+xml",
+      "sha256": "b68ef4b9f0d620643584b9be5a756ed274475103597800174197120f6bc3b09d",
+      "bytes": 14753,
+      "sourcePath": "recommended/devshark-logo-horizontal-small-ink.svg",
+      "use": "Same geometry with a heavier wave, for 100-160 px; ink one-colour print.",
+      "grounds": [],
+      "onPhoto": false,
+      "inks": [
+        "#132019"
+      ],
+      "viewBox": [
+        0,
+        -74.9,
+        604.82,
+        96.888
+      ],
+      "minimumSize": "100 px wide",
+      "logoSlot": false
+    },
+    {
+      "role": "logo-horizontal-small-white",
+      "kind": "lockup",
+      "label": "Horizontal logo, small, white",
+      "file": "devshark-logo-horizontal-small-white.svg",
+      "mediaType": "image/svg+xml",
+      "sha256": "fc1de9998f7c27507f560bdce47e7151fd693d42deb1a3550e4c01cf9a2b45b1",
+      "bytes": 14753,
+      "sourcePath": "recommended/devshark-logo-horizontal-small-white.svg",
+      "use": "Same geometry with a heavier wave, for 100-160 px; white on ink or green grounds.",
+      "grounds": [
+        "#132019",
+        "#2d7a2d"
+      ],
+      "onPhoto": false,
+      "inks": [
+        "#ffffff"
+      ],
+      "viewBox": [
+        0,
+        -74.9,
+        604.82,
+        96.888
+      ],
+      "minimumSize": "100 px wide",
+      "logoSlot": false
+    },
+    {
+      "role": "logo-compact-green",
+      "kind": "lockup",
+      "label": "Compact logo, green",
+      "file": "devshark-logo-compact-green.svg",
+      "mediaType": "image/svg+xml",
+      "sha256": "79597bea25b00106d55da7b2d9583c2ffe29658b4b328d2958970b67faa0f40c",
+      "bytes": 14752,
+      "sourcePath": "recommended/devshark-logo-compact-green.svg",
+      "use": "Navigation, mobile and footers; green on white or light grounds.",
+      "grounds": [
+        "#ffffff",
+        "#f3f6f1"
+      ],
+      "onPhoto": false,
+      "inks": [
+        "#2d7a2d"
+      ],
+      "viewBox": [
+        0,
+        -74.9,
+        567.559,
+        92.631
+      ],
+      "minimumSize": "18 px high",
+      "logoSlot": false
+    },
+    {
+      "role": "logo-compact-ink",
+      "kind": "lockup",
+      "label": "Compact logo, ink",
+      "file": "devshark-logo-compact-ink.svg",
+      "mediaType": "image/svg+xml",
+      "sha256": "80a7e80de917ba9597bc6d5d9fe4d9bfab69126265e4a6c28167565874664857",
+      "bytes": 14752,
+      "sourcePath": "recommended/devshark-logo-compact-ink.svg",
+      "use": "Navigation, mobile and footers; ink one-colour print.",
+      "grounds": [],
+      "onPhoto": false,
+      "inks": [
+        "#132019"
+      ],
+      "viewBox": [
+        0,
+        -74.9,
+        567.559,
+        92.631
+      ],
+      "minimumSize": "18 px high",
+      "logoSlot": false
+    },
+    {
+      "role": "logo-compact-white",
+      "kind": "lockup",
+      "label": "Compact logo, white",
+      "file": "devshark-logo-compact-white.svg",
+      "mediaType": "image/svg+xml",
+      "sha256": "af9873e4462072f19dd74dab9e119514a6119e308d1066672e0d1d6b92cb75c8",
+      "bytes": 14752,
+      "sourcePath": "recommended/devshark-logo-compact-white.svg",
+      "use": "Navigation, mobile and footers; white on ink or green grounds.",
+      "grounds": [
+        "#132019",
+        "#2d7a2d"
+      ],
+      "onPhoto": false,
+      "inks": [
+        "#ffffff"
+      ],
+      "viewBox": [
+        0,
+        -74.9,
+        567.559,
+        92.631
+      ],
+      "minimumSize": "18 px high",
+      "logoSlot": false
+    },
+    {
+      "role": "logo-stacked-green",
+      "kind": "lockup",
+      "label": "Stacked logo, green",
+      "file": "devshark-logo-stacked-green.svg",
+      "mediaType": "image/svg+xml",
+      "sha256": "eec8e700c8cd6f43a6af5ec345d434eee9fe826b85b70a36ffd7d4525f16a240",
+      "bytes": 14718,
+      "sourcePath": "recommended/devshark-logo-stacked-green.svg",
+      "use": "Square formats: avatar, sticker, mug; green on white or light grounds.",
+      "grounds": [
+        "#ffffff",
+        "#f3f6f1"
+      ],
+      "onPhoto": false,
+      "inks": [
+        "#2d7a2d"
+      ],
+      "viewBox": [
+        -22.841,
+        -492.518,
+        501.181,
+        495.518
+      ],
+      "minimumSize": "120 px wide",
+      "logoSlot": false
+    },
+    {
+      "role": "logo-stacked-ink",
+      "kind": "lockup",
+      "label": "Stacked logo, ink",
+      "file": "devshark-logo-stacked-ink.svg",
+      "mediaType": "image/svg+xml",
+      "sha256": "ac6726558ceed5f7f15de5b73497e838fcfbb22e8464788548f1427c36274623",
+      "bytes": 14718,
+      "sourcePath": "recommended/devshark-logo-stacked-ink.svg",
+      "use": "Square formats: avatar, sticker, mug; ink one-colour print.",
+      "grounds": [],
+      "onPhoto": false,
+      "inks": [
+        "#132019"
+      ],
+      "viewBox": [
+        -22.841,
+        -492.518,
+        501.181,
+        495.518
+      ],
+      "minimumSize": "120 px wide",
+      "logoSlot": false
+    },
+    {
+      "role": "logo-stacked-white",
+      "kind": "lockup",
+      "label": "Stacked logo, white",
+      "file": "devshark-logo-stacked-white.svg",
+      "mediaType": "image/svg+xml",
+      "sha256": "d01de40142c4e0a9514b6528d1495b913f3d5227e162f54bea0c2ae1cbedd27b",
+      "bytes": 14718,
+      "sourcePath": "recommended/devshark-logo-stacked-white.svg",
+      "use": "Square formats: avatar, sticker, mug; white on ink or green grounds.",
+      "grounds": [
+        "#132019",
+        "#2d7a2d"
+      ],
+      "onPhoto": false,
+      "inks": [
+        "#ffffff"
+      ],
+      "viewBox": [
+        -22.841,
+        -492.518,
+        501.181,
+        495.518
+      ],
+      "minimumSize": "120 px wide",
+      "logoSlot": false
+    },
+    {
+      "role": "fin-wave-green",
+      "kind": "mark",
+      "label": "Fin with wave, green",
+      "file": "devshark-fin-wave-green.svg",
+      "mediaType": "image/svg+xml",
+      "sha256": "0b0f92cab380e302ed8cb6fdd844436d856a76e8a79eaff06ba8ee4c55fadc31",
+      "bytes": 8357,
+      "sourcePath": "recommended/devshark-fin-wave-green.svg",
+      "use": "The symbol on its own, with its wave; green on white or light grounds.",
+      "grounds": [
+        "#ffffff",
+        "#f3f6f1"
+      ],
+      "onPhoto": false,
+      "inks": [
+        "#2d7a2d"
+      ],
+      "viewBox": [
+        -0.35,
+        2.1,
+        26.7,
+        20.65
+      ],
+      "minimumSize": "20 px",
+      "logoSlot": false
+    },
+    {
+      "role": "fin-wave-ink",
+      "kind": "mark",
+      "label": "Fin with wave, ink",
+      "file": "devshark-fin-wave-ink.svg",
+      "mediaType": "image/svg+xml",
+      "sha256": "d0e0871acb3849cdf34f5ad771e9c66f9462fb0346f3162f4b3a8d304b0c85fa",
+      "bytes": 8357,
+      "sourcePath": "recommended/devshark-fin-wave-ink.svg",
+      "use": "The symbol on its own, with its wave; ink one-colour print.",
+      "grounds": [],
+      "onPhoto": false,
+      "inks": [
+        "#132019"
+      ],
+      "viewBox": [
+        -0.35,
+        2.1,
+        26.7,
+        20.65
+      ],
+      "minimumSize": "20 px",
+      "logoSlot": false
+    },
+    {
+      "role": "fin-wave-white",
+      "kind": "mark",
+      "label": "Fin with wave, white",
+      "file": "devshark-fin-wave-white.svg",
+      "mediaType": "image/svg+xml",
+      "sha256": "b90146c2d553e3d100f180f9b056827b72d4554fa66478670058c7c58fe8a236",
+      "bytes": 8357,
+      "sourcePath": "recommended/devshark-fin-wave-white.svg",
+      "use": "The symbol on its own, with its wave; white on ink or green grounds.",
+      "grounds": [
+        "#132019",
+        "#2d7a2d"
+      ],
+      "onPhoto": false,
+      "inks": [
+        "#ffffff"
+      ],
+      "viewBox": [
+        -0.35,
+        2.1,
+        26.7,
+        20.65
+      ],
+      "minimumSize": "20 px",
+      "logoSlot": false
+    },
+    {
+      "role": "fin-clean-green",
+      "kind": "mark",
+      "label": "Clean fin, green",
+      "file": "devshark-fin-clean-green.svg",
+      "mediaType": "image/svg+xml",
+      "sha256": "348d145b20eb26c3f091d2b406794d35c90136aa0930693d93bd930f3497666c",
+      "bytes": 8024,
+      "sourcePath": "recommended/devshark-fin-clean-green.svg",
+      "use": "Favicon, icon, embroidery and the corner of social posts; green on white or light grounds.",
+      "grounds": [
+        "#ffffff",
+        "#f3f6f1"
+      ],
+      "onPhoto": false,
+      "inks": [
+        "#2d7a2d"
+      ],
+      "viewBox": [
+        2.4,
+        2.1,
+        19.2,
+        15.9
+      ],
+      "minimumSize": "12 px",
+      "logoSlot": false
+    },
+    {
+      "role": "fin-clean-ink",
+      "kind": "mark",
+      "label": "Clean fin, ink",
+      "file": "devshark-fin-clean-ink.svg",
+      "mediaType": "image/svg+xml",
+      "sha256": "aedebdf0bc8dae4e4ac339341917b4ec55c978d1d7bb834bd48faadfcf416e1e",
+      "bytes": 8024,
+      "sourcePath": "recommended/devshark-fin-clean-ink.svg",
+      "use": "Favicon, icon, embroidery and the corner of social posts; ink one-colour print.",
+      "grounds": [],
+      "onPhoto": false,
+      "inks": [
+        "#132019"
+      ],
+      "viewBox": [
+        2.4,
+        2.1,
+        19.2,
+        15.9
+      ],
+      "minimumSize": "12 px",
+      "logoSlot": false
+    },
+    {
+      "role": "fin-clean-white",
+      "kind": "mark",
+      "label": "Clean fin, white",
+      "file": "devshark-fin-clean-white.svg",
+      "mediaType": "image/svg+xml",
+      "sha256": "442cdccec1ff353dcb6aac6852f129c0d41948199a7199b6b2c4759b8fdd498f",
+      "bytes": 8024,
+      "sourcePath": "recommended/devshark-fin-clean-white.svg",
+      "use": "Favicon, icon, embroidery and the corner of social posts; white on ink or green grounds.",
+      "grounds": [
+        "#132019",
+        "#2d7a2d"
+      ],
+      "onPhoto": false,
+      "inks": [
+        "#ffffff"
+      ],
+      "viewBox": [
+        2.4,
+        2.1,
+        19.2,
+        15.9
+      ],
+      "minimumSize": "12 px",
+      "logoSlot": false
+    }
+  ]
+}

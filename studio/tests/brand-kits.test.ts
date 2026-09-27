@@ -11,7 +11,9 @@ import {
 } from "../src/brand-kit.js";
 import { CAROUSEL_BRANDS } from "../src/library.js";
 
-const kits = readBrandKits();
+const readings = readBrandKits();
+/** Kits with a manifest. A directory without one is a kit on its way and holds only its README. */
+const kits = readings.filter((reading) => !reading.problems.includes("manifest.json is missing"));
 
 function svgFills(file: string): string[] {
   const drawing = readFileSync(file, "utf8").replace(/<metadata>[\s\S]*?<\/metadata>/g, "");
@@ -19,8 +21,15 @@ function svgFills(file: string): string[] {
 }
 
 describe("brand kits", () => {
-  it("ships at least the DNESKAi kit", () => {
-    expect(brandKitVentures()).toContain("caught-up");
+  it("ships the DNESKAi and devShark kits", () => {
+    expect(brandKitVentures()).toEqual(expect.arrayContaining(["caught-up", "marketingshark"]));
+    expect(kits.map((kit) => path.basename(kit.directory))).toEqual(expect.arrayContaining(["caught-up", "marketingshark"]));
+  });
+
+  it("lets a pending kit directory hold nothing but its README", () => {
+    for (const reading of readings.filter((candidate) => !kits.includes(candidate))) {
+      expect(readdirSync(reading.directory)).toEqual(["README.md"]);
+    }
   });
 
   it.each(kits.map((kit) => [path.basename(kit.directory), kit] as const))("%s: manifest parses and every file matches its size and sha256", (_venture, kit) => {
@@ -38,10 +47,8 @@ describe("brand kits", () => {
       if (asset.mediaType !== "image/svg+xml") continue;
       const file = path.join(kit.directory, asset.file);
       expect(svgFills(file), asset.file).toEqual([...asset.inks].sort());
-      if (asset.role.startsWith("logo-")) {
-        const viewBox = /viewBox="([^"]+)"/.exec(readFileSync(file, "utf8"))?.[1]?.split(/\s+/).map(Number);
-        expect(viewBox, asset.file).toEqual([...kit.manifest!.logotype.viewBox]);
-      }
+      const viewBox = /viewBox="([^"]+)"/.exec(readFileSync(file, "utf8"))?.[1]?.split(/\s+/).map(Number);
+      expect(viewBox, asset.file).toEqual(asset.viewBox);
     }
   });
 

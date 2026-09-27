@@ -29,39 +29,96 @@
       "pattern": "^(?:(?:\\d\\d[2468][048]|\\d\\d[13579][26]|\\d\\d0[48]|[02468][048]00|[13579][26]00)-02-29|\\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\\d|30)|(?:02)-(?:0[1-9]|1\\d|2[0-8])))$"
     },
     "source": {
-      "type": "object",
-      "properties": {
-        "repository": {
-          "type": "string",
-          "pattern": "^[A-Za-z0-9_.-]+\\/[A-Za-z0-9_.-]+$"
+      "oneOf": [
+        {
+          "type": "object",
+          "properties": {
+            "kind": {
+              "type": "string",
+              "const": "repository"
+            },
+            "repository": {
+              "type": "string",
+              "pattern": "^[A-Za-z0-9_.-]+\\/[A-Za-z0-9_.-]+$"
+            },
+            "ref": {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 120
+            },
+            "commit": {
+              "type": "string",
+              "pattern": "^[0-9a-f]{40}$"
+            },
+            "documents": {
+              "minItems": 1,
+              "maxItems": 8,
+              "type": "array",
+              "items": {
+                "type": "string",
+                "minLength": 3,
+                "maxLength": 200
+              }
+            }
+          },
+          "required": [
+            "kind",
+            "repository",
+            "ref",
+            "commit",
+            "documents"
+          ],
+          "additionalProperties": false
         },
-        "ref": {
-          "type": "string",
-          "minLength": 1,
-          "maxLength": 120
-        },
-        "commit": {
-          "type": "string",
-          "pattern": "^[0-9a-f]{40}$"
-        },
-        "documents": {
-          "minItems": 1,
-          "maxItems": 8,
-          "type": "array",
-          "items": {
-            "type": "string",
-            "minLength": 3,
-            "maxLength": 200
-          }
+        {
+          "type": "object",
+          "properties": {
+            "kind": {
+              "type": "string",
+              "const": "handoff"
+            },
+            "receivedOn": {
+              "type": "string",
+              "format": "date",
+              "pattern": "^(?:(?:\\d\\d[2468][048]|\\d\\d[13579][26]|\\d\\d0[48]|[02468][048]00|[13579][26]00)-02-29|\\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\\d|30)|(?:02)-(?:0[1-9]|1\\d|2[0-8])))$"
+            },
+            "from": {
+              "type": "string",
+              "minLength": 2,
+              "maxLength": 80
+            },
+            "description": {
+              "type": "string",
+              "minLength": 3,
+              "maxLength": 400
+            },
+            "pinTo": {
+              "type": "string",
+              "minLength": 3,
+              "maxLength": 400
+            },
+            "documents": {
+              "minItems": 1,
+              "maxItems": 8,
+              "type": "array",
+              "items": {
+                "type": "string",
+                "minLength": 3,
+                "maxLength": 200
+              }
+            }
+          },
+          "required": [
+            "kind",
+            "receivedOn",
+            "from",
+            "description",
+            "pinTo",
+            "documents"
+          ],
+          "additionalProperties": false
         }
-      },
-      "required": [
-        "repository",
-        "ref",
-        "commit",
-        "documents"
-      ],
-      "additionalProperties": false
+      ]
     },
     "logotype": {
       "type": "object",
@@ -108,7 +165,6 @@
             }
           },
           "required": [
-            "ratioOfHeight",
             "basis"
           ],
           "additionalProperties": false
@@ -128,15 +184,15 @@
                 "minLength": 2,
                 "maxLength": 80
               },
-              "heightPx": {
+              "size": {
                 "type": "string",
                 "minLength": 1,
-                "maxLength": 20
+                "maxLength": 60
               }
             },
             "required": [
               "place",
-              "heightPx"
+              "size"
             ],
             "additionalProperties": false
           }
@@ -147,7 +203,6 @@
         "aspectRatio",
         "outlined",
         "clearSpace",
-        "minimumHeightPx",
         "sizes"
       ],
       "additionalProperties": false
@@ -378,6 +433,16 @@
         "maxLength": 400
       }
     },
+    "socialRules": {
+      "default": [],
+      "maxItems": 12,
+      "type": "array",
+      "items": {
+        "type": "string",
+        "minLength": 3,
+        "maxLength": 400
+      }
+    },
     "typography": {
       "maxItems": 10,
       "type": "array",
@@ -389,24 +454,30 @@
     },
     "assets": {
       "minItems": 1,
-      "maxItems": 24,
+      "maxItems": 40,
       "type": "array",
       "items": {
         "type": "object",
         "properties": {
           "role": {
             "type": "string",
+            "maxLength": 60,
+            "pattern": "^[a-z][a-z0-9-]*$"
+          },
+          "kind": {
+            "type": "string",
             "enum": [
-              "logo-on-light",
-              "logo-on-dark",
-              "logo-mono-black",
-              "logo-mono-white",
-              "square",
-              "square-animated",
-              "square-png",
-              "og-light",
-              "og-dark"
+              "logotype",
+              "lockup",
+              "mark",
+              "icon",
+              "share-card"
             ]
+          },
+          "label": {
+            "type": "string",
+            "minLength": 2,
+            "maxLength": 60
           },
           "file": {
             "type": "string",
@@ -460,6 +531,30 @@
               "pattern": "^#[0-9a-f]{6}$"
             }
           },
+          "viewBox": {
+            "type": "array",
+            "prefixItems": [
+              {
+                "type": "number"
+              },
+              {
+                "type": "number"
+              },
+              {
+                "type": "number",
+                "exclusiveMinimum": 0
+              },
+              {
+                "type": "number",
+                "exclusiveMinimum": 0
+              }
+            ]
+          },
+          "minimumSize": {
+            "type": "string",
+            "minLength": 2,
+            "maxLength": 60
+          },
           "pixels": {
             "type": "object",
             "properties": {
@@ -479,10 +574,16 @@
               "height"
             ],
             "additionalProperties": false
+          },
+          "logoSlot": {
+            "default": false,
+            "type": "boolean"
           }
         },
         "required": [
           "role",
+          "kind",
+          "label",
           "file",
           "mediaType",
           "sha256",
@@ -491,7 +592,8 @@
           "use",
           "grounds",
           "onPhoto",
-          "inks"
+          "inks",
+          "logoSlot"
         ],
         "additionalProperties": false
       }
@@ -509,6 +611,7 @@
     "palettes",
     "rules",
     "doNots",
+    "socialRules",
     "typography",
     "assets"
   ],

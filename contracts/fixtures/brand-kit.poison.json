@@ -6,6 +6,7 @@
   "status": "approved",
   "approvedOn": "2026-09-27",
   "source": {
+    "kind": "repository",
     "repository": "lukaskourilcz/aifirst",
     "ref": "claude/dneskai-logo",
     "commit": "978cf71eaa07e6465dea9055a92a7ad918844405",
@@ -32,23 +33,23 @@
     "sizes": [
       {
         "place": "Navigation, desktop",
-        "heightPx": "20"
+        "size": "20 px high"
       },
       {
         "place": "Navigation, mobile",
-        "heightPx": "18"
+        "size": "18 px high"
       },
       {
         "place": "Footer and compact places",
-        "heightPx": "16-18"
+        "size": "16-18 px high"
       },
       {
         "place": "Print (black mono)",
-        "heightPx": "16"
+        "size": "16 px high"
       },
       {
         "place": "Open Graph header",
-        "heightPx": "40"
+        "size": "40 px high"
       }
     ]
   },
@@ -180,6 +181,7 @@
     "Do not set the name in a font.",
     "Do not stretch or squash the logotype."
   ],
+  "socialRules": [],
   "typography": [
     "The logotype is Poppins Black converted to outlines. Poppins is not a web font here and does not need to be installed.",
     "DNESKAi's own site sets display type in Space Grotesk, prose in Source Serif 4 and data in IBM Plex Mono.",
@@ -188,7 +190,9 @@
   "assets": [
     {
       "role": "logo-on-light",
-      "file": "DNESKAi-logo.png",
+      "kind": "logotype",
+      "label": "Logo on light",
+      "file": "DNESKAi-logo.svg",
       "mediaType": "image/svg+xml",
       "sha256": "3fc530282b94b0e104c918ae771d252c601f826526f734a3f174529f9cdaee03",
       "bytes": 9934,
@@ -203,10 +207,20 @@
         "#2f5ae6",
         "#1a3ab0",
         "#10266f"
-      ]
+      ],
+      "viewBox": [
+        50,
+        -708,
+        4217.817852834741,
+        708
+      ],
+      "minimumSize": "16 px high",
+      "logoSlot": true
     },
     {
       "role": "logo-on-dark",
+      "kind": "logotype",
+      "label": "Logo on dark",
       "file": "DNESKAi-logo-dark.svg",
       "mediaType": "image/svg+xml",
       "sha256": "401b30e8117b59579a09f87deb3e224464ca59197050496df04fe28b162d9c33",
@@ -221,10 +235,20 @@
         "#4d6ff0",
         "#9db2ff",
         "#d2dcff"
-      ]
+      ],
+      "viewBox": [
+        50,
+        -708,
+        4217.817852834741,
+        708
+      ],
+      "minimumSize": "16 px high",
+      "logoSlot": true
     },
     {
       "role": "logo-mono-white",
+      "kind": "logotype",
+      "label": "Logo, white mono",
       "file": "DNESKAi-logo-mono-white.svg",
       "mediaType": "image/svg+xml",
       "sha256": "102ad59c646d0ee9593c64a8214554b79afec48c16325ee2b679545fc1458bfe",
@@ -235,10 +259,20 @@
       "onPhoto": true,
       "inks": [
         "#ffffff"
-      ]
+      ],
+      "viewBox": [
+        50,
+        -708,
+        4217.817852834741,
+        708
+      ],
+      "minimumSize": "16 px high",
+      "logoSlot": true
     },
     {
       "role": "logo-mono-black",
+      "kind": "logotype",
+      "label": "Logo, black mono",
       "file": "DNESKAi-logo-mono-black.svg",
       "mediaType": "image/svg+xml",
       "sha256": "fe28148717c8f14cb962a55230578d76656ebfd04f075bbb539ad194a3c60d55",
@@ -249,10 +283,20 @@
       "onPhoto": false,
       "inks": [
         "#14161a"
-      ]
+      ],
+      "viewBox": [
+        50,
+        -708,
+        4217.817852834741,
+        708
+      ],
+      "minimumSize": "16 px high",
+      "logoSlot": true
     },
     {
       "role": "square",
+      "kind": "mark",
+      "label": "Square mark",
       "file": "DNESKAi-square.svg",
       "mediaType": "image/svg+xml",
       "sha256": "5aabe8408ee811a5b69464d0bb1a9ffa6a92a9878f39eeaee73f0da85ad997f2",
@@ -265,10 +309,19 @@
         "#14161a",
         "#ffffff",
         "#2f5ae6"
-      ]
+      ],
+      "viewBox": [
+        -311.7307692307693,
+        -1549.2307692307693,
+        3288.4615384615386,
+        3288.4615384615386
+      ],
+      "logoSlot": false
     },
     {
       "role": "square-animated",
+      "kind": "mark",
+      "label": "Square mark, blinking",
       "file": "DNESKAi-square-blink.svg",
       "mediaType": "image/svg+xml",
       "sha256": "958230efe1917affdd4bfcf5963bc4a3d3878a3d87fe912fa7e648f84edc1841",
@@ -281,10 +334,19 @@
         "#14161a",
         "#ffffff",
         "#2f5ae6"
-      ]
+      ],
+      "viewBox": [
+        -311.7307692307693,
+        -1549.2307692307693,
+        3288.4615384615386,
+        3288.4615384615386
+      ],
+      "logoSlot": false
     },
     {
       "role": "square-png",
+      "kind": "icon",
+      "label": "Square mark, 512 px PNG",
       "file": "DNESKAi-square-512.png",
       "mediaType": "image/png",
       "sha256": "f8295f7fa293d6ebd176a4dc078acfbdbfea190512d1370eb88eaef65c4ec31c",
@@ -301,10 +363,13 @@
       "pixels": {
         "width": 512,
         "height": 512
-      }
+      },
+      "logoSlot": true
     },
     {
       "role": "og-light",
+      "kind": "share-card",
+      "label": "Share card, light",
       "file": "DNESKAi-og.svg",
       "mediaType": "image/svg+xml",
       "sha256": "9d16018be516bc9ab97e31be66c51616eafd7c1d65c647a8fe1c61a496e5ad3a",
@@ -318,10 +383,19 @@
         "#2f5ae6",
         "#1a3ab0",
         "#10266f"
-      ]
+      ],
+      "viewBox": [
+        0,
+        0,
+        1200,
+        630
+      ],
+      "logoSlot": false
     },
     {
       "role": "og-dark",
+      "kind": "share-card",
+      "label": "Share card, dark",
       "file": "DNESKAi-og-dark.svg",
       "mediaType": "image/svg+xml",
       "sha256": "c44a2a827697c02c8d75ad0210e33feacb9063a3dde7781b5786f3fa7b3560ed",
@@ -335,7 +409,14 @@
         "#4d6ff0",
         "#9db2ff",
         "#d2dcff"
-      ]
+      ],
+      "viewBox": [
+        0,
+        0,
+        1200,
+        630
+      ],
+      "logoSlot": false
     }
   ]
 }

@@ -231,14 +231,16 @@ function kitLogoSvg(input: {
   );
   const chosen = chooseLogotypeVariant(logotype, grounds, onPhoto);
   if (!chosen) throw new Error(`Brand kit ${logotype.venture} has no logotype file for grounds ${grounds.join(", ")}`);
-  const byWidth = w / logotype.aspectRatio;
+  const [, , boxWidth, boxHeight] = chosen.variant.viewBox;
+  const aspect = boxWidth / boxHeight;
+  const byWidth = w / aspect;
   const byHeight = h / (1 + 2 * logotype.clearSpace);
   const height = Math.min(byWidth, Math.max(byHeight, logotype.minimumHeightPx));
-  const width = height * logotype.aspectRatio;
+  const width = height * aspect;
   const top = y + (h - height) / 2;
   const id = `logo-${input.uid}-`;
   const markup = chosen.variant.markup.replaceAll(LOGO_ID, id);
-  return `<svg x="${round(x)}" y="${round(top)}" width="${round(width)}" height="${round(height)}" viewBox="${logotype.viewBox.join(" ")}" preserveAspectRatio="xMinYMid meet" overflow="visible" aria-label="${escapeXml(logotype.displayName)}" role="img">${markup}</svg>`;
+  return `<svg x="${round(x)}" y="${round(top)}" width="${round(width)}" height="${round(height)}" viewBox="${chosen.variant.viewBox.join(" ")}" preserveAspectRatio="xMinYMid meet" overflow="visible" aria-label="${escapeXml(logotype.displayName)}" role="img">${markup}</svg>`;
 }
 
 /** One text layer, fitted for one canvas. Shared so a hugging panel measures what the text does. */

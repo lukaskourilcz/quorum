@@ -12,10 +12,11 @@ import { z } from "zod";
  * file is for. The files are copied byte for byte and the manifest pins each one by sha256, so a
  * kit here is a receipt for a specific approved commit rather than a redrawing of it.
  *
- * The renderer reads a kit only for its logotype: a kit's `logo-*` files replace the wordmark the
- * studio used to set in a font. Everything else in the manifest (square mark, Open Graph cards,
- * clear space, do-nots) is for the people and agents making posts, and the admin Design Lab shows
- * it. Adding a venture's kit is dropping in its files and one manifest; no code names a venture.
+ * The renderer reads a kit only for its logotype: the files the manifest marks `logoSlot` replace
+ * the wordmark the studio used to set in a font. Everything else in the manifest (marks, icons,
+ * share cards, clear space, do-nots, social rules) is for the people and agents making posts, and
+ * the admin Design Lab shows it. Adding a venture's kit is dropping in its files and one manifest;
+ * no code names a venture.
  */
 
 /** Where the kits live, resolved from this module so `dist/` and `src/` both find them. */
@@ -28,33 +29,23 @@ const FileNameSchema = z.string().regex(/^[A-Za-z0-9][A-Za-z0-9._-]*\.(svg|png)$
 const NoteSchema = z.string().trim().min(3).max(400);
 
 /**
- * What an asset is for. The four `logo-*` roles are the logotype in the colourings the brand
- * approves, and they are the only roles the renderer draws.
+ * What kind of drawing an asset is. `logotype` and `lockup` are the name (a lockup adds a symbol),
+ * `mark` is a symbol alone, `icon` a favicon or app tile, `share-card` a ready Open Graph image.
  */
-export const BRAND_KIT_ROLES = [
-  "logo-on-light",
-  "logo-on-dark",
-  "logo-mono-black",
-  "logo-mono-white",
-  "square",
-  "square-animated",
-  "square-png",
-  "og-light",
-  "og-dark"
-] as const;
+export const BrandKitAssetKindSchema = z.enum(["logotype", "lockup", "mark", "icon", "share-card"]);
 
-export const BrandKitRoleSchema = z.enum(BRAND_KIT_ROLES);
-export type BrandKitRole = z.infer<typeof BrandKitRoleSchema>;
-
-const LOGO_ROLES: ReadonlySet<BrandKitRole> = new Set(["logo-on-light", "logo-on-dark", "logo-mono-black", "logo-mono-white"]);
+const ViewBoxSchema = z.tuple([z.number().finite(), z.number().finite(), z.number().positive(), z.number().positive()]);
 
 const BrandKitAssetSchema = z.strictObject({
-  role: BrandKitRoleSchema,
+  /** Unique within the kit, e.g. `logo-on-light` or `fin-clean-white`. */
+  role: z.string().regex(/^[a-z][a-z0-9-]*$/).max(60),
+  kind: BrandKitAssetKindSchema,
+  label: z.string().trim().min(2).max(60),
   file: FileNameSchema,
   mediaType: z.enum(["image/svg+xml", "image/png"]),
   sha256: Sha256Schema,
   bytes: z.number().int().positive().max(2_000_000),
-  /** Where the file lives in the source repository at `source.commit`. */
+  /** Where the file came from: a path in the source repository, or in the handoff. */
   sourcePath: z.string().trim().min(3).max(200),
   /** What the brand spec says this file is for, in its own words. */
   use: NoteSchema,
@@ -62,10 +53,19 @@ const BrandKitAssetSchema = z.strictObject({
   grounds: z.array(HexSchema).max(6).default([]),
   /** Whether the spec names a photograph or a solid brand colour as this file's ground. */
   onPhoto: z.boolean().default(false),
-  /** Every fill colour the file draws, lowercase. What a contrast check has to measure. */
+  /** Every colour the file draws, lowercase. What a contrast check has to measure. */
   inks: z.array(HexSchema).min(1).max(8),
+  /** An SVG's own viewBox: min-x, min-y, width, height. */
+  viewBox: ViewBoxSchema.optional(),
+  /** The spec's smallest size for this file, as the spec states it. */
+  minimumSize: z.string().trim().min(2).max(60).optional(),
   /** Pixel size, for raster files. */
-  pixels: z.strictObject({ width: z.number().int().positive(), height: z.number().int().positive() }).optional()
+  pixels: z.strictObject({ width: z.number().int().positive(), height: z.number().int().positive() }).optional(),
+  /**
+   * Whether the studio may draw this file in a template's logo slot. Only outlined SVGs qualify,
+   * and the order of these files in `assets` is the order the renderer prefers them in.
+   */
+  logoSlot: z.boolean().default(false)
 });
 
 const PaletteSchema = z.strictObject({
@@ -79,6 +79,33 @@ const PaletteSchema = z.strictObject({
 /** One carousel token and where its value comes from in the venture's own design system. */
 const CarouselTokenSchema = z.strictObject({ value: HexSchema, source: NoteSchema });
 
+const DocumentsSchema = z.array(z.string().trim().min(3).max(200)).min(1).max(8);
+
+/**
+ * Where the files came from. A repository source pins an exact commit. A handoff is files the
+ * owner sent before they reached a repository; it names where they will be pinned, and the kit is
+ * re-pinned to a repository source once they land there.
+ */
+const BrandKitSourceSchema = z.discriminatedUnion("kind", [
+  z.strictObject({
+    kind: z.literal("repository"),
+    repository: z.string().regex(/^[A-Za-z0-9_.-]+\/[A-Za-z0-9_.-]+$/),
+    ref: z.string().trim().min(1).max(120),
+    commit: z.string().regex(/^[0-9a-f]{40}$/),
+    /** The documents the rules below were taken from, as paths in that repository. */
+    documents: DocumentsSchema
+  }),
+  z.strictObject({
+    kind: z.literal("handoff"),
+    receivedOn: z.iso.date(),
+    from: z.string().trim().min(2).max(80),
+    description: NoteSchema,
+    /** Where the files will live once merged, so the kit can be re-pinned to that commit. */
+    pinTo: NoteSchema,
+    documents: DocumentsSchema
+  })
+]);
+
 export const BrandKitManifestSchema = z.strictObject({
   schemaVersion: z.literal("brand-kit/1"),
   /** The venture id in `config/ventures.json`; the kit's directory has the same name. */
@@ -88,27 +115,22 @@ export const BrandKitManifestSchema = z.strictObject({
   displayName: z.string().trim().min(2).max(60),
   status: z.literal("approved"),
   approvedOn: z.iso.date(),
-  source: z.strictObject({
-    repository: z.string().regex(/^[A-Za-z0-9_.-]+\/[A-Za-z0-9_.-]+$/),
-    ref: z.string().trim().min(1).max(120),
-    commit: z.string().regex(/^[0-9a-f]{40}$/),
-    /** The documents the rules below were taken from, as paths in that repository. */
-    documents: z.array(z.string().trim().min(3).max(200)).min(1).max(8)
-  }),
+  source: BrandKitSourceSchema,
   logotype: z.strictObject({
-    /** The logo files' own viewBox: min-x, min-y, width, height. */
-    viewBox: z.tuple([z.number().finite(), z.number().finite(), z.number().positive(), z.number().positive()]),
+    /** The primary logo file's viewBox: min-x, min-y, width, height. */
+    viewBox: ViewBoxSchema,
     /** Width over height, rounded to two places. */
     aspectRatio: z.number().positive(),
     /** Always true: the name is drawn as paths, never set in a font. */
     outlined: z.literal(true),
     clearSpace: z.strictObject({
-      /** Clear space on every side as a fraction of the logotype's height. */
-      ratioOfHeight: z.number().min(0).max(1),
+      /** Clear space on every side as a fraction of the logo's height, when the spec gives one. */
+      ratioOfHeight: z.number().min(0).max(1).optional(),
       basis: NoteSchema
     }),
-    minimumHeightPx: z.number().positive(),
-    sizes: z.array(z.strictObject({ place: z.string().trim().min(2).max(80), heightPx: z.string().trim().min(1).max(20) })).max(12)
+    /** The smallest height the logotype may be drawn at, when the spec gives one in pixels. */
+    minimumHeightPx: z.number().positive().optional(),
+    sizes: z.array(z.strictObject({ place: z.string().trim().min(2).max(80), size: z.string().trim().min(1).max(60) })).max(12)
   }),
   palettes: z.array(PaletteSchema).min(1).max(8),
   /**
@@ -126,31 +148,38 @@ export const BrandKitManifestSchema = z.strictObject({
   }).optional(),
   rules: z.array(NoteSchema).min(1).max(20),
   doNots: z.array(NoteSchema).min(1).max(20),
+  /** How the brand's social posts are built, when the spec says. */
+  socialRules: z.array(NoteSchema).max(12).default([]),
   typography: z.array(NoteSchema).max(10),
-  assets: z.array(BrandKitAssetSchema).min(1).max(24)
+  assets: z.array(BrandKitAssetSchema).min(1).max(40)
 }).superRefine((kit, context) => {
-  const seen = new Set<string>();
+  const files = new Set<string>();
+  const roles = new Set<string>();
   kit.assets.forEach((asset, index) => {
-    if (seen.has(asset.file)) context.addIssue({ code: "custom", message: `Duplicate file ${asset.file}`, path: ["assets", index, "file"] });
-    seen.add(asset.file);
+    if (files.has(asset.file)) context.addIssue({ code: "custom", message: `Duplicate file ${asset.file}`, path: ["assets", index, "file"] });
+    if (roles.has(asset.role)) context.addIssue({ code: "custom", message: `Duplicate role ${asset.role}`, path: ["assets", index, "role"] });
+    files.add(asset.file);
+    roles.add(asset.role);
     const svg = asset.file.endsWith(".svg");
     if (svg !== (asset.mediaType === "image/svg+xml")) {
       context.addIssue({ code: "custom", message: "mediaType does not match the file extension", path: ["assets", index, "mediaType"] });
     }
-    if (LOGO_ROLES.has(asset.role) && !svg) {
-      context.addIssue({ code: "custom", message: "A logotype role must be an outlined SVG", path: ["assets", index, "file"] });
-    }
-    if (asset.mediaType === "image/png" && !asset.pixels) {
-      context.addIssue({ code: "custom", message: "A PNG asset records its pixel size", path: ["assets", index, "pixels"] });
+    if (svg && !asset.viewBox) context.addIssue({ code: "custom", message: "An SVG asset records its viewBox", path: ["assets", index, "viewBox"] });
+    if (!svg && !asset.pixels) context.addIssue({ code: "custom", message: "A PNG asset records its pixel size", path: ["assets", index, "pixels"] });
+    if (asset.logoSlot && (!svg || (asset.kind !== "logotype" && asset.kind !== "lockup"))) {
+      context.addIssue({ code: "custom", message: "Only an outlined SVG logotype or lockup may fill the logo slot", path: ["assets", index, "logoSlot"] });
     }
   });
-  for (const role of LOGO_ROLES) {
-    if (kit.assets.filter((asset) => asset.role === role).length > 1) {
-      context.addIssue({ code: "custom", message: `More than one ${role} asset`, path: ["assets"] });
-    }
+  if (!kit.assets.some((asset) => asset.kind === "logotype" || asset.kind === "lockup")) {
+    context.addIssue({ code: "custom", message: "A kit carries at least one logotype or lockup file", path: ["assets"] });
   }
-  if (!kit.assets.some((asset) => LOGO_ROLES.has(asset.role))) {
-    context.addIssue({ code: "custom", message: "A kit carries at least one logotype file", path: ["assets"] });
+  if (kit.assets.some((asset) => asset.logoSlot)) {
+    if (kit.logotype.clearSpace.ratioOfHeight === undefined) {
+      context.addIssue({ code: "custom", message: "A kit the renderer draws states its clear space as a ratio", path: ["logotype", "clearSpace", "ratioOfHeight"] });
+    }
+    if (kit.logotype.minimumHeightPx === undefined) {
+      context.addIssue({ code: "custom", message: "A kit the renderer draws states a minimum height in pixels", path: ["logotype", "minimumHeightPx"] });
+    }
   }
   const [, , width, height] = kit.logotype.viewBox;
   if (Math.abs(width / height - kit.logotype.aspectRatio) > 0.01) {
@@ -224,7 +253,8 @@ export function readBrandKits(root = BRAND_KITS_DIRECTORY): BrandKitReading[] {
 
 /** One colouring of the logotype, ready to draw. */
 export interface LogotypeVariant {
-  role: BrandKitRole;
+  role: string;
+  viewBox: readonly [number, number, number, number];
   grounds: readonly string[];
   onPhoto: boolean;
   inks: readonly string[];
@@ -235,11 +265,9 @@ export interface LogotypeVariant {
 export interface KitLogotype {
   venture: string;
   displayName: string;
-  viewBox: readonly [number, number, number, number];
-  aspectRatio: number;
   clearSpace: number;
   minimumHeightPx: number;
-  /** In the order the preference rule walks them: full colour first, then the mono files. */
+  /** The files the manifest lets fill the logo slot, in its order: the preference order. */
   variants: readonly LogotypeVariant[];
 }
 
@@ -256,39 +284,40 @@ export const LOGO_ID = "__logo__";
  */
 export function logotypeMarkup(svg: string): string {
   if (/<script|<foreignObject|\son[a-z]+=|href="(?!#)/i.test(svg)) throw new Error("Logotype SVG carries script, foreign content or an external reference");
-  const inner = /<svg\b[^>]*>([\s\S]*)<\/svg>\s*$/.exec(svg.trim())?.[1];
-  if (inner === undefined) throw new Error("Logotype file is not a single SVG element");
-  return inner
+  const match = /^<svg\b([^>]*)>([\s\S]*)<\/svg>$/.exec(svg.trim());
+  if (!match) throw new Error("Logotype file is not a single SVG element");
+  // Colour set on the root (`fill`, or `color` for `currentColor` strokes) belongs to the drawing,
+  // so it moves to a group rather than being lost with the root element.
+  const inherited = [...match[1]!.matchAll(/\s(fill|color)="(#[0-9a-fA-F]{6})"/g)].map(([, name, value]) => ` ${name}="${value}"`).join("");
+  const inner = match[2]!
     .replace(/<metadata>[\s\S]*?<\/metadata>/g, "")
     .replace(/<title>[\s\S]*?<\/title>/g, "")
     .replace(/\sid="([^"]+)"/g, ` id="${LOGO_ID}$1"`)
     .replace(/url\(#([^)]+)\)/g, `url(#${LOGO_ID}$1)`);
+  return inherited ? `<g${inherited}>${inner}</g>` : inner;
 }
 
-const VARIANT_ORDER: readonly BrandKitRole[] = ["logo-on-light", "logo-on-dark", "logo-mono-white", "logo-mono-black"];
-
-/** The logotype a kit hands the renderer, or an error naming why it cannot. */
-export function kitLogotype(reading: BrandKitReading): KitLogotype {
+/**
+ * The logotype a kit hands the renderer: null when the kit lets nothing fill the logo slot, and an
+ * error naming why when the kit cannot be used.
+ */
+export function kitLogotype(reading: BrandKitReading): KitLogotype | null {
   const { manifest, problems, directory } = reading;
   if (!manifest || problems.length) throw new Error(`Brand kit ${path.basename(directory)} is unusable: ${problems.join("; ")}`);
-  const variants = VARIANT_ORDER.flatMap((role) => {
-    const asset = manifest.assets.find((candidate) => candidate.role === role);
-    if (!asset) return [];
-    return [{
-      role,
-      grounds: asset.grounds,
-      onPhoto: asset.onPhoto,
-      inks: asset.inks,
-      markup: logotypeMarkup(readFileSync(path.join(directory, asset.file), "utf8"))
-    }];
-  });
+  const variants = manifest.assets.filter((asset) => asset.logoSlot).map((asset) => ({
+    role: asset.role,
+    viewBox: asset.viewBox!,
+    grounds: asset.grounds,
+    onPhoto: asset.onPhoto,
+    inks: asset.inks,
+    markup: logotypeMarkup(readFileSync(path.join(directory, asset.file), "utf8"))
+  }));
+  if (variants.length === 0) return null;
   return {
     venture: manifest.venture,
     displayName: manifest.displayName,
-    viewBox: manifest.logotype.viewBox,
-    aspectRatio: manifest.logotype.aspectRatio,
-    clearSpace: manifest.logotype.clearSpace.ratioOfHeight,
-    minimumHeightPx: manifest.logotype.minimumHeightPx,
+    clearSpace: manifest.logotype.clearSpace.ratioOfHeight!,
+    minimumHeightPx: manifest.logotype.minimumHeightPx!,
     variants
   };
 }
@@ -315,6 +344,8 @@ export function logotypeForBrand(studioBrand: string): KitLogotype | null {
       continue;
     }
     if (reading.manifest.studioBrand !== studioBrand) continue;
+    // A kit that lets nothing fill the logo slot dresses the admin only; the brand keeps its
+    // wordmark until the kit says otherwise.
     found = kitLogotype(reading);
     break;
   }

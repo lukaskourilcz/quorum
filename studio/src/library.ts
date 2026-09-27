@@ -647,7 +647,8 @@ export const CAROUSEL_BRANDS: Readonly<Record<BrandTokens["id"], BrandTokens>> =
     schemaVersion: "carousel-brand/1",
     id: "devshark",
     name: "devShark",
-    logoText: "DEVSHARK",
+    // The brand kit's first rule: always spelled devShark, never in capitals.
+    logoText: "devShark",
     colors: {
       background: "#0b141b",
       surface: "#101c24",
