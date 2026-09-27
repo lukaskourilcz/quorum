@@ -101,3 +101,8 @@ from the public `react-express-app` main branch, recording the exact source comm
 An import failure stops the room. Saturday quizzes and Sunday feature drafts extend the
 existing weekday rotation to seven days. These are drafts; cadence and owner approval still
 control actual posting. Product claims remain the existing reviewed MarketingShark facts.
+
+The first live reference check on 2026-09-27 read eight posts across both accounts and
+persisted a $0.03 reservation before scraping (Actions run `36326676457`). The shared
+usage reader uses Apify's account-limits endpoint, `data.current.monthlyUsageUsd`;
+unavailable or invalid totals refuse a new reference run.
