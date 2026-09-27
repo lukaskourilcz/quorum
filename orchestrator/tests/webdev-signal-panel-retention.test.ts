@@ -1,10 +1,13 @@
+import { execFile } from "node:child_process";
 import { access, mkdir, mkdtemp, readFile, rm, writeFile } from "node:fs/promises";
 import os from "node:os";
 import path from "node:path";
+import { promisify } from "node:util";
 import { afterEach, describe, expect, it } from "vitest";
 import { repoRoot } from "../src/paths.js";
 import { WEBDEV_PANEL_RETENTION_DAYS, pruneWebDevSignalPanels } from "../src/ventures/webdev-signal/panel-retention.js";
 
+const execFileAsync = promisify(execFile);
 const roots: string[] = [];
 afterEach(async () => Promise.all(roots.splice(0).map((root) => rm(root, { recursive: true, force: true }))));
 
@@ -110,7 +113,24 @@ describe("WebDev Signal's rendered panels leave the tree after four weeks", () =
     const cycle = await readFile(path.join(repoRoot, ".github/workflows/cycle.yml"), "utf8");
     const start = cycle.indexOf("      - name: Check both publish queues are draining\n");
     const step = cycle.slice(start, cycle.indexOf("\n      - name: ", start + 1));
-    expect(step).toContain("git ls-files --deleted -z -- state/ventures/webdev-signal/design-lab/assets | xargs -0 -r git rm --cached --quiet --");
-    expect(step).not.toMatch(/git add[^\n]*webdev-signal/u);
+    expect(step).toContain("git ls-files --deleted -z -- 'state/ventures/*/design-lab/assets/*' | xargs -0 -r git rm --cached --quiet --");
+    expect(step).not.toMatch(/git add[^\n]*design-lab/u);
+  });
+
+  it("stages a pruned panel through the glob and leaves a new one out", async () => {
+    const root = await tempState();
+    const git = (...args: string[]) => execFileAsync("git", ["-c", "user.name=fixture", "-c", "user.email=fixture@example.invalid", "-c", "commit.gpgsign=false", ...args], { cwd: root });
+    const state = path.join(root, "state");
+    await git("init", "--quiet");
+    await rendered(state, "2026-08-01", "cs", hashOf("a"));
+    await git("add", "--", "state");
+    await git("commit", "--quiet", "-m", "panels");
+    await rendered(state, "2026-09-26", "en", hashOf("b"));
+    await pruneWebDevSignalPanels({ stateRoot: state, today: "2026-09-26" });
+
+    await execFileAsync("bash", ["-c", "git ls-files --deleted -z -- 'state/ventures/*/design-lab/assets/*' | xargs -0 -r git rm --cached --quiet --"], { cwd: root });
+    const { stdout } = await git("diff", "--cached", "--name-only");
+
+    expect(stdout.trim().split("\n")).toEqual([1, 2, 3, 4].map((panel) => `state/${ASSETS}/${hashOf("a")}/cs/0${panel}.png`));
   });
 });

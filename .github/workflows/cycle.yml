@@ -1280,8 +1280,9 @@ jobs:
           # It also prunes closed queue items and their events after 90 days. Deletions only, for the
           # same reason: an item a failed cycle wrote or changed has not passed its gate.
           git ls-files --deleted -z -- state/social/queue state/social/queue-events | xargs -0 -r git rm --cached --quiet --
-          # And WebDev Signal's rendered panels after 28 days, deletions only as well.
-          git ls-files --deleted -z -- state/ventures/webdev-signal/design-lab/assets | xargs -0 -r git rm --cached --quiet --
+          # And a venture's rendered Design Lab panels after 28 days, deletions only as well. The glob
+          # keeps the venture's name out of this file, whose release audit forbids one.
+          git ls-files --deleted -z -- 'state/ventures/*/design-lab/assets/*' | xargs -0 -r git rm --cached --quiet --
           if git diff --cached --quiet; then exit 0; fi
           git config user.name "boardlessai-cycle[bot]"
           git config user.email "boardlessai-cycle[bot]@users.noreply.github.com"
