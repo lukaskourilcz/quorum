@@ -194,6 +194,28 @@ installs dependencies, runs the orchestrator's typecheck and tests, and pushes i
 ends with a refused or ambiguous post still commits the item's status, its receipts and the pauses
 before the job goes red.
 
+## Export for manual posting
+
+Until the guarded Meta publisher is connected (#587), every approved post goes out by hand. Each card
+carries "Export for manual posting", a download from `GET /admin/api/queue/export/<itemId>`
+(owner-only, `Cache-Control: no-store, private`, 404 for an unknown id). It returns one ZIP in store
+mode with a fixed timestamp, so the same item always exports to the same bytes:
+
+| File | From |
+| --- | --- |
+| `frame-NN.png` / `frame-NN.jpg` | each asset path, through `readQueueFrame`, the resolver the card's strip uses |
+| `caption.txt`, `alt-text.txt` | the item's text and alt text |
+| `first-reply.txt` | a package's `firstReply.text` (marketingShark's Threads code question of the day) |
+| `story.png`, `story-link.txt`, `threads-question.txt` | a DNESKAi `social-pack/1`'s optional `story` card (the committed PNG) with its UTM link, and its `threadsQuestion` |
+| `threads.txt` | a `dneskai-recipe/1` package's Threads text |
+| `manifest.json` | `queue-export/1`: item id, venture, platform, locale, window, content hash, and each file's sha256 |
+
+The extras come from the item's own `sourcePackage.artifactRef`, read only when it is a JSON path
+under `state/`. A package without one of them, or one that does not parse, costs that file and never
+the export. Exporting writes nothing: no event, no status and no receipt. The Queue does not learn that
+the post was sent, and the manifest says so. `site/src/lib/admin-queue/export.ts` owns it; the build
+traces `site/public/social` into this route as it does into the frame route.
+
 ## The Design Lab link
 
 "Open in Design Lab" opens the brand's section. For a marketingShark quiz draft it opens the package
@@ -253,6 +275,10 @@ from GitHub, not from the deployment's copy.
 - `site/src/lib/queue-dispatch.test.ts`: the request the wake-up sends, each GitHub answer, the
   skipped cases, and the workflow it starts. That test checks the workflow declares
   `validate_only` as a boolean input, checks out `github.ref` and keeps its concurrency group.
+- `site/src/lib/admin-queue/export.test.ts` and `site/src/app/admin/api/queue/export/[itemId]/route.test.ts`:
+  frames, caption, alt text and manifest; the same bytes twice; a first reply, a story card with its
+  link, a Threads question and a recipe's Threads text; a missing story frame and an unparseable
+  package skipped; 404, the admin session and the traced frames.
 - `site/src/lib/admin-queue/notice.test.ts`: what the card says after an action, and that it links
   only to a GitHub Actions run.
 - `site/src/components/admin/queue-panel.test.tsx`: the panel's empty, write-disabled, failed,

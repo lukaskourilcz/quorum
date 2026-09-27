@@ -17,6 +17,11 @@ Implementation: quorum #585–#588 and react-express-app #237. Authority is the
 4. Approve a specific post/window in Queue. The publisher checks the approved content hash,
    frame hashes, connected account, pause switches, cadence and provider limits before sending.
    Account setup never approves backlog posts. Old unreviewed DNESKAi drafts remain held.
+5. Until the Meta publisher is connected (#587), post by hand: "Export for manual posting" on the
+   card downloads a ZIP with the frames, the caption, the alt text and whatever the post's package
+   adds (the first reply of devShark's code question, DNESKAi's story card with its UTM link and
+   Threads question). Post it from the phone. The download records nothing, so the Queue does not
+   know the post went out.
 
 Article rejection sends nothing. Leave a card pending to hold it. Article approval does not
 approve Instagram or Threads. A provider timeout is reconciled rather than blindly retried.
