@@ -63,6 +63,7 @@ import { RatingRecordSchema } from "./rating.js";
 import { SeasonFileSchema } from "./season.js";
 import { SocialPackSchema } from "./social-pack.js";
 import { SocialAssetHoldSchema, SocialAssetRetentionSchema } from "./social-assets.js";
+import { SocialQueueRetentionSchema } from "./social-queue-retention.js";
 import { SocialPublishHoldSchema } from "./social-publish-hold.js";
 import { StyleProfileSchema } from "./style-profile.js";
 import { VentureRegistrySchema } from "./venture-registry.js";
@@ -313,6 +314,7 @@ export const ContractSchemas = {
   "social-continuation-proposal": SocialContinuationProposalSchema,
   "social-learning-checkpoint": SocialLearningCheckpointSchema,
   "social-queue-event": SocialQueueEventSchema,
+  "social-queue-retention": SocialQueueRetentionSchema,
   "webdev-source": WebDevSourceSchema,
   "webdev-candidate": WebDevCandidateSchema,
   "webdev-record": WebDevRecordSchema,

@@ -18,4 +18,6 @@ cancelled original, so none of the three exists without the others.
 - `hold` and `reject` carry the owner's reason; a rejection also carries a taste note for the
   venture that drafted the item.
 
-Readers parse each file or drop it and count it. No event sends anything.
+Readers parse each file or drop it and count it. No event sends anything. An event leaves with the
+item it names when the daily queue-health step prunes that item, 90 days after its last activity;
+`../queue-retention/<date>.json` keeps the hash.

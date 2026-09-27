@@ -22,6 +22,10 @@ committed four, whose windows closed in August). The
 publisher's claim phase writes `publishing` with its attempt and pushes it before any provider is
 called; a claim that never finished stays `publishing` and is never sent again by itself.
 
+A closed item (`published`, `cancelled`, `expired`, `failed`) leaves this directory 90 days after
+its last activity, with its events, through the daily queue-health step. The hash of each removed
+file stays in `../queue-retention/<date>.json`; `docs/SOCIAL-QUEUE.md` gives the rule.
+
 The owner acts on these files only through the Admin Queue (`/admin/queue`, #573,
 `docs/SOCIAL-QUEUE.md`). Each action appends a `social-queue-event/1` under `../queue-events/`.
 An approval sets `queued`, passes every check and writes the event id into

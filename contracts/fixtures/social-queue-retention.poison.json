@@ -1,0 +1,29 @@
+{
+  "schemaVersion": "social-queue-retention/1",
+  "date": "2026-12-26",
+  "retentionDays": 90,
+  "keepFrom": "2026-09-27",
+  "removedItems": [
+    {
+      "path": "state/social/queue/2026-09-20-devshark-en-linkedin.json",
+      "id": "2026-09-20-devshark-en-linkedin",
+      "status": "published",
+      "lastActivity": "2026-09-21",
+      "sha256": "1111111111111111111111111111111111111111111111111111111111111111",
+      "bytes": 4210
+    }
+  ],
+  "removedEvents": [
+    {
+      "path": "state/social/queue-events/2026-09-20T08-00-00-000Z-2026-09-20-devshark-en-linkedin-approve.json",
+      "itemId": "an-item-that-stayed",
+      "at": "2026-09-20",
+      "sha256": "2222222222222222222222222222222222222222222222222222222222222222",
+      "bytes": 1180
+    }
+  ],
+  "keptItems": 540,
+  "keptEvents": 210,
+  "heldByLink": 0,
+  "unmanagedCount": 4
+}

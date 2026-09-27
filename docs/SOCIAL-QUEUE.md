@@ -22,8 +22,17 @@ provider health, the pause and kill-switch files, the owner's events under
 bounded view models and two counts: `unreadable` (not JSON) and `dropped` (JSON that is not a queue
 item, event, receipt, health record or hold). It reads at most 2,000 files a directory, the last by
 name: queue items are named by date and events by timestamp, so those are the newest. A directory
-with more says how many it left out under `unavailable`. Nothing prunes closed items or events yet;
-`docs/NEEDED.md` carries that.
+with more says how many it left out under `unavailable`.
+
+The cycle's daily queue-health step keeps both directories well under that limit.
+`orchestrator/src/social/queue-retention.ts` removes a closed item (`published`, `cancelled`,
+`expired`, `failed`) once its last activity falls more than 90 days before the run date. Last
+activity is the latest of its creation, its window's close, its claim and any owner event that
+names it. The item's events go with it. An item that an edit or a re-render links to an open or
+recent one stays, so a chain leaves whole. The step leaves queue v1 files, unparseable files, the
+receipts under `state/social/posts/` and the hold records alone. It hashes every removed file into
+`state/social/queue-retention/<date>.json` (`social-queue-retention/1`), and the workflow commits
+that record and the deletions only.
 
 | Group | Items |
 | --- | --- |
