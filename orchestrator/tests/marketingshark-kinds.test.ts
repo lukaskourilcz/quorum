@@ -228,6 +228,16 @@ describe("the weekday rotation", () => {
     expect(record.roomTranscript!.turns.every((turn) => turn.text.length <= 800)).toBe(true);
   });
 
+  it("names the empty rotation slot when a day has no room, not a Monday-to-Friday week (#592)", async () => {
+    const brand = await devshark();
+    const where = await rooms();
+    const resting = { ...brand, rotation: { ...brand.rotation, sunday: null } };
+    const day = await plan(resting, "2026-10-04", where);
+    expect(day).toMatchObject({ kind: "none", weekday: "sunday" });
+    expect(day.kind === "none" ? day.reason : "").toContain("leaves the sunday slot of the rotation empty");
+    expect(day.kind === "none" ? day.reason : "").not.toMatch(/Monday to Friday/u);
+  });
+
   it("opens a weekend draft room without publishing", async () => {
     const result = await runMarketingSharkCycle({ cycleId: "t", dry: true, now: new Date("2026-10-03T05:00:00.000Z"), date: "2026-10-03", stage: "DISCOVERY" });
     expect(result).toMatchObject({ spendUsd: 0, skipped: null, brands: [expect.objectContaining({ kind: "quiz", status: expect.stringMatching(/^(?:drafted|already-served)$/u) })] });

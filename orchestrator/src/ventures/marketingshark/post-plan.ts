@@ -191,7 +191,10 @@ export async function planDay(input: {
 
   const scheduled = scheduledKind(brand, date);
   if (!scheduled) {
-    return { kind: "none", weekday, reason: `${weekday.charAt(0).toUpperCase()}${weekday.slice(1)} has no marketingShark room: the rotation drafts Monday to Friday (quorum#576).` };
+    // The rotation names a kind for all seven days since the Saturday quiz and the Sunday spotlight
+    // joined it, so a day without one is a config choice, and the reason says which slot is empty
+    // rather than naming a Monday-to-Friday week that no longer exists.
+    return { kind: "none", weekday, reason: `${weekday.charAt(0).toUpperCase()}${weekday.slice(1)} has no marketingShark room: config/marketingshark.json leaves the ${weekday} slot of the rotation empty (quorum#576).` };
   }
   if (scheduled === "quiz") return { kind: "quiz", weekday, fallback: null };
   const fallback = (reason: string): DayPlan => ({ kind: "quiz", weekday, fallback: { scheduled, reason: `The ${scheduled} was scheduled, but ${reason}.` } });
