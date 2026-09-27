@@ -1,6 +1,6 @@
 import { z } from "zod";
 import { DateSchema, DateTimeSchema, HttpsUrlSchema, openObject } from "./common.js";
-import { PracticalSchema } from "./practical.js";
+import { PracticalBlockSchema } from "./practical.js";
 
 const NonEmptyStringSchema = z.string().trim().min(1);
 
@@ -117,12 +117,13 @@ export const ArticleFrontmatterV2Schema = openObject({
     source: NonEmptyStringSchema
   })).optional(),
   /**
-   * The one thing in the edition a reader can use the same morning, in the reader's contract
-   * (aifirst#99). Optional and additive: every article already on disk parses unchanged.
-   * `practical.ts` holds the shape rules; the delivery boundary additionally checks the item
-   * against the edition's own date and its own sources.
+   * The one thing in the edition a reader can use the same morning, and on Friday the tools
+   * issue. Optional and additive: every article already on disk parses unchanged, and the
+   * magazine's loaders ignore frontmatter they do not render yet. `practical.ts` holds the
+   * shape rules; the delivery boundary additionally checks the block against the edition's own
+   * date and its own sources.
    */
-  practical: PracticalSchema.optional(),
+  practical: PracticalBlockSchema.optional(),
   type: z.enum(["daily", "weekly"]).optional(),
   editors_note: NonEmptyStringSchema.optional(),
   glossary_terms: z.array(NonEmptyStringSchema).optional(),

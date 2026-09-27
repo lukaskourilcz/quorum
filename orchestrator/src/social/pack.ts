@@ -300,7 +300,7 @@ export async function composeEditionSocialPack(input: {
   // The story card and the evening question (quorum#592), from the Czech edition only.
   const csFrontmatter = editionPackage.article?.cs?.frontmatter;
   const practical = csFrontmatter?.practical;
-  const card = storyCard({ practical, lesson: input.lesson ?? null, destination: destinations.cs });
+  const card = storyCard({ practical: practical?.items[0] ?? null, lesson: input.lesson ?? null, destination: destinations.cs });
   const storyPath = `${publicDirectory}/story.png`;
   if (card) {
     const story = await renderStoryCard(card);

@@ -1,7 +1,7 @@
 import { z } from "zod";
 import { isDeepStrictEqual } from "node:util";
 import { LiveTemplateReferenceSchema } from "./carousel-template.js";
-import { PracticalSchema } from "./practical.js";
+import { PracticalBlockSchema } from "./practical.js";
 import {
   DateSchema,
   HttpsUrlSchema,
@@ -80,8 +80,8 @@ export const SocialPackSchema = openObject({
     composerVersion: z.string().trim().min(1).max(40),
     inputsHash: Sha256Schema
   }),
-  /** The edition's own practical item, copied as delivered (aifirst#99). Absent on most days. */
-  practical: PracticalSchema.optional(),
+  /** The edition's own practical block, copied as delivered (aifirst#99). Absent on most days. */
+  practical: PracticalBlockSchema.optional(),
   /**
    * The 1080 × 1920 story card (quorum#592): the practical item, or the day's lesson when there is
    * none. Posted by hand from the Queue export; no queue item is written for it, because the

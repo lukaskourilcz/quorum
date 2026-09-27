@@ -44,11 +44,10 @@ const lesson: DatasetEntry = {
 };
 
 const tool = {
-  type: "tool" as const,
+  kind: "tool" as const,
   title: "Kalkulačka nákladů na inferenci",
-  text: "Spočítá měsíční účet za tokeny podle nových sazeb a ukáže rozdíl proti minulé faktuře po jednotlivých modelech.",
-  url: "https://www.anthropic.com/news/example-price-update",
-  verified_at: "2026-08-04"
+  body: "Spočítá měsíční účet za tokeny podle nových sazeb a ukáže rozdíl proti minulé faktuře po jednotlivých modelech.",
+  source_url: "https://www.anthropic.com/news/example-price-update"
 };
 
 async function summary(state: string, date: string, slug: string, title: string) {
@@ -86,7 +85,7 @@ describe("the recipe drafts", () => {
   it("drafts the Friday tools from the week's packs, frames proved by the asset gate, and nothing twice", async () => {
     const where = await repo();
     const edition = structuredClone(czechOnlyEdition()) as unknown as { article: { cs: { frontmatter: Record<string, unknown> } } };
-    edition.article.cs.frontmatter.practical = tool;
+    edition.article.cs.frontmatter.practical = { variant: "daily", items: [tool] };
     await composeEditionSocialPack({
       editionPackage: EditionPackageSchema.parse(edition),
       meeting: caughtUpEditionMeeting,

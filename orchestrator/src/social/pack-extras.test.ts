@@ -32,12 +32,12 @@ const lesson: DatasetEntry = {
 };
 
 const practical = {
-  type: "prompt" as const,
+  kind: "prompt" as const,
   title: "Prompt na přepočet účtu",
-  text: "Vlož do modelu svůj měsíční objem tokenů a starou i novou sazbu a nech si spočítat rozdíl proti minulé faktuře, rozepsaný po modelech.",
-  url: "https://www.anthropic.com/news/example-price-update",
-  verified_at: "2026-08-04"
+  body: "Vlož do modelu svůj měsíční objem tokenů a starou i novou sazbu a nech si spočítat rozdíl proti minulé faktuře, rozepsaný po modelech.",
+  source_url: "https://www.anthropic.com/news/example-price-update"
 };
+const block = { variant: "daily" as const, items: [practical] };
 
 describe("the story card", () => {
   it("prefers the edition's practical item, then the day's lesson, and is absent otherwise", () => {
@@ -125,10 +125,10 @@ describe("the composed pack", () => {
 
   it("carries the practical item, its story card and the evening question, all drafted and none sendable unapproved", async () => {
     const { root, result } = await compose((frontmatter) => {
-      frontmatter.practical = practical;
+      frontmatter.practical = block;
     });
     const pack = SocialPackSchema.parse(result.pack);
-    expect(pack.practical).toEqual(practical);
+    expect(pack.practical).toEqual(block);
     expect(pack.story).toMatchObject({ frame: "/social/2026-08-04/story.png", source: "practical" });
     expect(pack.altTexts["/social/2026-08-04/story.png"]).toContain("Story card:");
     const story = await sharp(await readFile(path.join(root, "site/public/social/2026-08-04/story.png"))).metadata();

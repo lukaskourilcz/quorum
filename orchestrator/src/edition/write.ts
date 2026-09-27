@@ -14,11 +14,15 @@ import type {
 } from "./types.js";
 import { DispatchSchema, WireItemSchema } from "./types.js";
 import {
-  PRACTICAL_TEXT_MAXIMUM,
-  PRACTICAL_TEXT_MINIMUM,
+  FRIDAY_PROMPTS,
+  FRIDAY_TOOLS,
+  PRACTICAL_BODY_MAXIMUM,
+  PRACTICAL_BODY_MINIMUM,
+  PRACTICAL_ITEMS_MAXIMUM,
+  PRACTICAL_KINDS,
   PRACTICAL_TITLE_MAXIMUM,
-  PRACTICAL_TYPES,
-  PracticalFiledSchema
+  PracticalItemSchema,
+  isFridayEdition
 } from "../contracts/practical.js";
 import { checkPractical } from "./practical.js";
 import { CZECH_EDITORIAL_REGISTER } from "./registers.js";
@@ -87,13 +91,14 @@ const ToolOutputSchema = z.object({
   image_negatives: z.array(z.string().trim().min(1)).max(5).optional(),
   wire: z.array(WireItemSchema).min(4).max(6),
   /*
-   * The thing a reader can use today.
+   * The thing a reader can use today, and on Friday the tools issue.
    *
    * Optional here and optional in the frontmatter: a day whose sources documented nothing
-   * usable ships without it. `checkPractical` turns it into the delivered item and drops it if
-   * any part of it fails, so an unusable item costs the extra and never the edition.
+   * usable ships without it. The variant is not in this payload, because the day decides it,
+   * not the desk. `checkPractical` assembles the block and drops it whole if any part of it
+   * fails, so an unusable item costs the extra and never the edition.
    */
-  practical: PracticalFiledSchema.optional(),
+  practical: z.array(PracticalItemSchema).max(PRACTICAL_ITEMS_MAXIMUM).optional(),
   ...LocalizedOutputSchema.shape
 }).superRefine((article, context) => {
   const titles = [article.title, ...article.alternative_headlines].map(title => removeEmptyCzechAdverbs(title).normalize("NFC").trim().toLocaleLowerCase("cs"));
@@ -209,19 +214,24 @@ export const WRITE_TOOL_INPUT_SCHEMA = {
       }
     },
     practical: {
-      type: "object",
-      properties: {
-        type: { type: "string", enum: [...PRACTICAL_TYPES] },
-        title: { type: "string", maxLength: PRACTICAL_TITLE_MAXIMUM },
-        text: {
-          type: "string",
-          minLength: PRACTICAL_TEXT_MINIMUM,
-          maxLength: PRACTICAL_TEXT_MAXIMUM
+      type: "array",
+      minItems: 1,
+      maxItems: PRACTICAL_ITEMS_MAXIMUM,
+      items: {
+        type: "object",
+        properties: {
+          kind: { type: "string", enum: [...PRACTICAL_KINDS] },
+          title: { type: "string", maxLength: PRACTICAL_TITLE_MAXIMUM },
+          body: {
+            type: "string",
+            minLength: PRACTICAL_BODY_MINIMUM,
+            maxLength: PRACTICAL_BODY_MAXIMUM
+          },
+          source_url: { type: "string" }
         },
-        source_url: { type: "string" }
-      },
-      required: ["type", "title", "text", "source_url"],
-      additionalProperties: false
+        required: ["kind", "title", "body", "source_url"],
+        additionalProperties: false
+      }
     },
     ...localeSchema.properties
   },
@@ -253,23 +263,25 @@ export function writeToolInputSchema(askForPractical: boolean): Record<string, u
 }
 
 /**
- * What the desk is told about the practical item.
+ * What the desk is told about the practical item on this particular day.
  *
- * One item every day, in the reader's contract (aifirst#99). The Friday tools issue that used to
- * ask one Friday edition for four items is the `friday-tools` social recipe now, which gathers the
- * week's tool items instead (quorum#592). `date` stays in the signature so the instruction can
- * name the day it was written for.
+ * Friday is the tools issue and every other day carries one item. The day decides, from the
+ * publication date the run was given, so the instruction and the block that comes back are
+ * describing the same calendar and `practicalBlockErrors` can hold them to it.
  */
-export function practicalInstruction(_date: string): string {
-  return `\n\nYou also file the practical item: the one part of today's edition a reader can act on
-rather than only read. It has \`type\` ("prompt", "tool" or "term"), a Czech \`title\` of at most
-${PRACTICAL_TITLE_MAXIMUM} characters, a Czech \`text\` of ${PRACTICAL_TEXT_MINIMUM} to
-${PRACTICAL_TEXT_MAXIMUM} characters and a \`source_url\` copied character for character from the
-approved list. The text says what to do, not why it is interesting: a prompt is the full text to
-paste, a tool is what it does and who it is for, a term is what it means and when it matters. Never
-write a link inside the title or the text; \`source_url\` is the only URL. Never state a price. File
-nothing the approved sources do not document. Omit the field entirely and the edition publishes
-without it, which is a normal edition and costs nothing.`;
+export function practicalInstruction(date: string): string {
+  const common = `\n\nYou also file the practical block: the part of today's edition a reader can act on
+rather than only read. Each entry has \`kind\` ("prompt", "tool" or "howto"), a Czech \`title\` of
+at most ${PRACTICAL_TITLE_MAXIMUM} characters, a Czech \`body\` of ${PRACTICAL_BODY_MINIMUM} to
+${PRACTICAL_BODY_MAXIMUM} characters and a \`source_url\` copied character for character from the
+approved list. The body says what to do, not why it is interesting: a prompt is the text to
+paste, a tool is what it does and who it is for, a how-to is the steps in order. Never write a
+link inside the title or the body; \`source_url\` is the only URL. File nothing the approved
+sources do not document. Omit the field entirely and the edition publishes without it, which is
+a normal edition and costs nothing.`;
+  return isFridayEdition(date)
+    ? `${common} Today is Friday, the tools issue: \`practical\` is exactly ${FRIDAY_TOOLS + FRIDAY_PROMPTS} entries, ${FRIDAY_TOOLS} of kind "tool" and ${FRIDAY_PROMPTS} of kind "prompt", each with its own title.`
+    : `${common} \`practical\` is exactly one entry today.`;
 }
 
 export const WRITE_SYSTEM = `You are STET's Czech writing desk at Caught Up.
@@ -994,8 +1006,8 @@ ${sourcePacket(brief, pickedItems, runnerUpItems, bodies)}`,
     ...wire.map((item) => item.url)
   ]);
   const practical = askForPractical
-    ? checkPractical({ filed: filedPractical, date: brief.date, groundedUrls })
-    : { practical: null, problems: [] };
+    ? checkPractical({ items: filedPractical, date: brief.date, groundedUrls })
+    : { block: null, problems: [] };
   return {
     slug,
     date: brief.date,
@@ -1017,7 +1029,7 @@ ${sourcePacket(brief, pickedItems, runnerUpItems, bodies)}`,
         ...(pick?.why ? { supports: [pick.why] } : {})
       };
     }),
-    ...(practical.practical ? { practical: practical.practical } : {}),
+    ...(practical.block ? { practical: practical.block } : {}),
     ...(practical.problems.length > 0 ? { practicalProblems: practical.problems } : {}),
     // Checked, not trusted, and dropped whole if any part of it fails. The tags are in the name
     // sources because a Czech tag is the shortest route a company or a person has into a phrase.

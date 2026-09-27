@@ -2,7 +2,7 @@ import { readdir } from "node:fs/promises";
 import path from "node:path";
 import { BudgetLedgerEntrySchema } from "../budget.js";
 import { SocialPackSchema } from "../contracts/social-pack.js";
-import type { PracticalShape } from "../contracts/practical.js";
+import type { PracticalItem } from "../contracts/practical.js";
 import { pragueClockParts } from "../meetings/clock.js";
 import { readJson } from "../state.js";
 
@@ -62,12 +62,12 @@ export async function readEditionSummaries(stateRoot: string, from: string, to: 
 
 export interface WeekTool {
   date: string;
-  practical: PracticalShape;
+  practical: PracticalItem;
   destination: string;
   ref: string;
 }
 
-/** The week's practical items of type `tool`, from the social packs that copied them. */
+/** The week's practical items of kind `tool`, from the social packs that copied the edition's block. */
 export async function readWeekTools(stateRoot: string, from: string, to: string): Promise<{ tools: WeekTool[]; dropped: number }> {
   const tools: WeekTool[] = [];
   let dropped = 0;
@@ -80,9 +80,8 @@ export async function readWeekTools(stateRoot: string, from: string, to: string)
       dropped += 1;
       continue;
     }
-    const practical = parsed.data.practical;
-    if (practical?.type === "tool" && practical.url) {
-      tools.push({ date, practical, destination: parsed.data.byLocale.cs.destination, ref: `state/${relative}` });
+    for (const item of parsed.data.practical?.items ?? []) {
+      if (item.kind === "tool") tools.push({ date, practical: item, destination: parsed.data.byLocale.cs.destination, ref: `state/${relative}` });
     }
   }
   return { tools, dropped };

@@ -521,38 +521,56 @@
                         "practical": {
                           "type": "object",
                           "properties": {
-                            "type": {
+                            "variant": {
                               "type": "string",
                               "enum": [
-                                "prompt",
-                                "tool",
-                                "term"
+                                "daily",
+                                "friday-tools"
                               ]
                             },
-                            "title": {
-                              "type": "string",
-                              "minLength": 1,
-                              "maxLength": 80
-                            },
-                            "text": {
-                              "type": "string",
-                              "minLength": 40,
-                              "maxLength": 400
-                            },
-                            "url": {
-                              "type": "string",
-                              "pattern": "^https:\\/\\/"
-                            },
-                            "verified_at": {
-                              "type": "string",
-                              "format": "date",
-                              "pattern": "^(?:(?:\\d\\d[2468][048]|\\d\\d[13579][26]|\\d\\d0[48]|[02468][048]00|[13579][26]00)-02-29|\\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\\d|30)|(?:02)-(?:0[1-9]|1\\d|2[0-8])))$"
+                            "items": {
+                              "minItems": 1,
+                              "maxItems": 4,
+                              "type": "array",
+                              "items": {
+                                "type": "object",
+                                "properties": {
+                                  "kind": {
+                                    "type": "string",
+                                    "enum": [
+                                      "prompt",
+                                      "tool",
+                                      "howto"
+                                    ]
+                                  },
+                                  "title": {
+                                    "type": "string",
+                                    "minLength": 1,
+                                    "maxLength": 80
+                                  },
+                                  "body": {
+                                    "type": "string",
+                                    "minLength": 40,
+                                    "maxLength": 600
+                                  },
+                                  "source_url": {
+                                    "type": "string",
+                                    "pattern": "^https:\\/\\/"
+                                  }
+                                },
+                                "required": [
+                                  "kind",
+                                  "title",
+                                  "body",
+                                  "source_url"
+                                ],
+                                "additionalProperties": {}
+                              }
                             }
                           },
                           "required": [
-                            "type",
-                            "title",
-                            "text"
+                            "variant",
+                            "items"
                           ],
                           "additionalProperties": {}
                         },
@@ -1085,38 +1103,56 @@
                         "practical": {
                           "type": "object",
                           "properties": {
-                            "type": {
+                            "variant": {
                               "type": "string",
                               "enum": [
-                                "prompt",
-                                "tool",
-                                "term"
+                                "daily",
+                                "friday-tools"
                               ]
                             },
-                            "title": {
-                              "type": "string",
-                              "minLength": 1,
-                              "maxLength": 80
-                            },
-                            "text": {
-                              "type": "string",
-                              "minLength": 40,
-                              "maxLength": 400
-                            },
-                            "url": {
-                              "type": "string",
-                              "pattern": "^https:\\/\\/"
-                            },
-                            "verified_at": {
-                              "type": "string",
-                              "format": "date",
-                              "pattern": "^(?:(?:\\d\\d[2468][048]|\\d\\d[13579][26]|\\d\\d0[48]|[02468][048]00|[13579][26]00)-02-29|\\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\\d|30)|(?:02)-(?:0[1-9]|1\\d|2[0-8])))$"
+                            "items": {
+                              "minItems": 1,
+                              "maxItems": 4,
+                              "type": "array",
+                              "items": {
+                                "type": "object",
+                                "properties": {
+                                  "kind": {
+                                    "type": "string",
+                                    "enum": [
+                                      "prompt",
+                                      "tool",
+                                      "howto"
+                                    ]
+                                  },
+                                  "title": {
+                                    "type": "string",
+                                    "minLength": 1,
+                                    "maxLength": 80
+                                  },
+                                  "body": {
+                                    "type": "string",
+                                    "minLength": 40,
+                                    "maxLength": 600
+                                  },
+                                  "source_url": {
+                                    "type": "string",
+                                    "pattern": "^https:\\/\\/"
+                                  }
+                                },
+                                "required": [
+                                  "kind",
+                                  "title",
+                                  "body",
+                                  "source_url"
+                                ],
+                                "additionalProperties": {}
+                              }
                             }
                           },
                           "required": [
-                            "type",
-                            "title",
-                            "text"
+                            "variant",
+                            "items"
                           ],
                           "additionalProperties": {}
                         },

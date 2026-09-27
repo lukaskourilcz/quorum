@@ -1,5 +1,5 @@
 import { EditionPackageSchema, type EditionPackage } from "../contracts/edition-package.js";
-import { practicalErrors } from "../contracts/practical.js";
+import { practicalBlockErrors } from "../contracts/practical.js";
 import { serializeMdx } from "../edition/content-write.js";
 import { hasValidEditionPackageHash } from "../edition/package.js";
 import YAML from "yaml";
@@ -95,8 +95,8 @@ export function validateEditionForDelivery(value: unknown): EditionPackage {
   // The practical block is the one part of an edition that tells a reader to go and do
   // something, so it is the one part that must be able to prove where it came from. The package
   // is checked against itself: a block may only cite a URL the same frontmatter already carries
-  // as a source or on the Watchlist, verified no later than the edition's day. A producer
-  // built the item from the writing packet; this is the boundary re-deriving the same verdict
+  // as a source or on the Watchlist, and only a Friday may carry the tools issue. A producer
+  // built the block from the writing packet; this is the boundary re-deriving the same verdict
   // from the bytes that ship, so a package assembled by any other path gets the same answer.
   for (const [locale, article] of localized) {
     const practical = article.frontmatter.practical;
@@ -105,8 +105,8 @@ export function validateEditionForDelivery(value: unknown): EditionPackage {
       ...article.frontmatter.sources.map((source) => source.url),
       ...(article.frontmatter.wire ?? []).map((item) => item.url)
     ]);
-    for (const message of practicalErrors({
-      practical,
+    for (const message of practicalBlockErrors({
+      block: practical,
       date: editionPackage.date,
       groundedUrls: grounded
     })) {

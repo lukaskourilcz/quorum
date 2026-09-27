@@ -1,6 +1,6 @@
 import { CAROUSEL_BRANDS, renderCarouselPng, type TemplateReference } from "@boardlessai/carousel-studio";
 import type { DatasetEntry } from "../contracts/boardless-dataset.js";
-import type { PracticalShape } from "../contracts/practical.js";
+import type { PracticalItem } from "../contracts/practical.js";
 import { resolveLiveCarouselTemplate } from "../studio/catalog.js";
 import { validateSocialImage } from "./media/validate.js";
 
@@ -62,14 +62,15 @@ export interface StoryCard {
  * the entry the reader reveals that day. Nothing is written that neither of them says.
  */
 export function storyCard(input: {
-  practical: PracticalShape | null | undefined;
+  /** The edition's first practical item, when its block has one. */
+  practical: Pick<PracticalItem, "title" | "body"> | null | undefined;
   lesson: DatasetEntry | null | undefined;
   destination: string;
 }): StoryCard | null {
   const linkLine = "Celé vydání: odkaz v příběhu";
   if (input.practical) {
     const lead = `${input.practical.title}: `;
-    const quote = `${lead}${wordsWithin(input.practical.text, STORY_QUOTE_MAXIMUM - lead.length)}`;
+    const quote = `${lead}${wordsWithin(input.practical.body, STORY_QUOTE_MAXIMUM - lead.length)}`;
     const line = wordsWithin(`1 praktická věc dnes · ${linkLine}`, STORY_LINE_MAXIMUM);
     return {
       source: "practical",

@@ -52,7 +52,7 @@ export function fridayToolsCopy(tools: readonly WeekTool[]): RecipeCopy | null {
   const latest = picked.at(-1)!;
   const link = withUtm(latest.destination, "instagram", "post", "friday-tools");
   const lines = picked.map((tool, index) => [
-    `${index + 1}. ${tool.practical.title}: ${wordsWithin(tool.practical.text, 220)}`,
+    `${index + 1}. ${tool.practical.title}: ${wordsWithin(tool.practical.body, 220)}`,
     `Cena: ${OWNER_SLOT_MARKER}: ověřit u výrobce]`,
     `Z vydání ${czechDay(tool.date)}: ${withUtm(tool.destination, "instagram", "post", "friday-tools")}`
   ].join("\n"));
@@ -64,14 +64,14 @@ export function fridayToolsCopy(tools: readonly WeekTool[]): RecipeCopy | null {
       dek: "Co se objevilo ve vydáních DNESKAi. Cenu si vždy ověřte u výrobce.",
       // The closing point is a fact about prices in general, and it keeps a one-tool week at the
       // deck's five-slide minimum without inventing anything about the tool.
-      points: [...picked.map((tool) => `${tool.practical.title}: ${tool.practical.text}`), "Ceny nástrojů se mění. Než si některý pořídíte, ověřte si cenu přímo u výrobce."],
+      points: [...picked.map((tool) => `${tool.practical.title}: ${tool.practical.body}`), "Ceny nástrojů se mění. Než si některý pořídíte, ověřte si cenu přímo u výrobce."],
       outro: "Každé ráno jedno vydání. Zdroje jsou u každého článku."
     },
     caption: clipCaption([`${label} týdne z DNESKAi`, ...lines, HASHTAGS].join("\n\n"), 2_200),
     threads: fitThreads([`${label} z tohoto týdne v DNESKAi: ${picked.map((tool) => tool.practical.title).join(", ")}.`, "Co dělají a odkud jsou, najdete ve vydáních."], withUtm(latest.destination, "threads", "post", "friday-tools")),
     destination: link,
     ownerSlots: picked.map((tool) => ({ label: `Cena: ${tool.practical.title}` })),
-    sourceRefs: [...new Set(picked.flatMap((tool) => [tool.ref, tool.practical.url!]))]
+    sourceRefs: [...new Set(picked.flatMap((tool) => [tool.ref, tool.practical.source_url]))]
   };
 }
 
