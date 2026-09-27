@@ -9,11 +9,11 @@ describe("DNESKAi logotype in the renderer", () => {
   const logotype = logotypeForBrand("caught-up")!;
   const brand = CAROUSEL_BRANDS["caught-up"];
 
-  it("is found for caught-up and for no brand without a kit", () => {
+  it("is found for the kitted brands and for no brand without a kit", () => {
     expect(logotype.displayName).toBe("DNESKAi");
     expect(logotype.variants.map((variant) => variant.role)).toEqual(["logo-on-light", "logo-on-dark", "logo-mono-white", "logo-mono-black"]);
     expect(logotypeForBrand("mma-files")).toBeNull();
-    expect(logotypeForBrand("devshark")).toBeNull();
+    expect(logotypeForBrand("devshark")!.variants.map((variant) => variant.role)).toEqual(["logo-horizontal-green", "logo-horizontal-white", "logo-horizontal-ink"]);
   });
 
   it("strips the file down to its paths and namespaces its clip id", () => {

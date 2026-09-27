@@ -79,6 +79,54 @@ const PaletteSchema = z.strictObject({
 /** One carousel token and where its value comes from in the venture's own design system. */
 const CarouselTokenSchema = z.strictObject({ value: HexSchema, source: NoteSchema });
 
+/** The studio's seven carousel tokens, each with the design-system value it came from. */
+const CarouselPaletteSchema = z.strictObject({
+  background: CarouselTokenSchema,
+  surface: CarouselTokenSchema,
+  "surface-strong": CarouselTokenSchema,
+  foreground: CarouselTokenSchema,
+  muted: CarouselTokenSchema,
+  accent: CarouselTokenSchema,
+  secondary: CarouselTokenSchema
+});
+
+/** One of the studio's three type slots: a committed family (`studio/src/fonts.ts`) and why. */
+const CarouselFontSchema = z.strictObject({ family: z.string().trim().min(2).max(100), source: NoteSchema });
+
+const GroundIdSchema = z.string().regex(/^[a-z][a-z0-9-]*$/).max(40);
+
+/**
+ * How the studio dresses a kitted brand beyond its tokens: what the spec forbids, where the logo may
+ * appear, which ground each slide of a deck stands on and which mark sits in its corner.
+ */
+const CarouselStyleSchema = z.strictObject({
+  /** The spec forbids gradients, blur, glow and shadows: mesh backdrops go, glow goes, seams stay hard. */
+  flat: z.boolean(),
+  /** The spec asks for zero radii on panels. */
+  squareCorners: z.boolean().default(false),
+  /** Where the logotype may appear: on every slide, or only on a deck's last slide. */
+  logo: z.enum(["every-slide", "last-slide"]).default("every-slide"),
+  /** Named grounds, each a full set of the seven tokens a slide on that ground uses. */
+  grounds: z.array(z.strictObject({ id: GroundIdSchema, label: z.string().trim().min(2).max(80), palette: CarouselPaletteSchema })).max(6).default([]),
+  /**
+   * The ground of each slide, first to last. A deck of another length keeps the first and the last
+   * and walks the ones between in order.
+   */
+  groundSequence: z.array(GroundIdSchema).max(8).default([]),
+  /** A mark drawn in the top-right corner of every slide, in the file the slide's ground calls for. */
+  cornerMark: z.strictObject({
+    /** Asset roles of `mark` SVGs, in preference order; the ground picks one as it picks a logotype. */
+    roles: z.array(z.string().regex(/^[a-z][a-z0-9-]*$/)).min(1).max(4),
+    /** Width on the 1080 px canvas; other canvases scale it with their width. */
+    widthPx: z.number().positive().max(200),
+    marginPx: z.number().min(0).max(200),
+    /** The top edge on a story, below the platform's own chrome. */
+    storyTopPx: z.number().min(0).max(600)
+  }).optional(),
+  /** Colours a slide may draw that are neither a token nor a file's ink. */
+  neutrals: z.array(HexSchema).max(4).default([])
+});
+
 const DocumentsSchema = z.array(z.string().trim().min(3).max(200)).min(1).max(8);
 
 /**
@@ -137,15 +185,10 @@ export const BrandKitManifestSchema = z.strictObject({
    * The studio's seven carousel tokens, when this kit sets them. `library.ts` must carry exactly
    * these values for `studioBrand`; a test holds the two together.
    */
-  carouselPalette: z.strictObject({
-    background: CarouselTokenSchema,
-    surface: CarouselTokenSchema,
-    "surface-strong": CarouselTokenSchema,
-    foreground: CarouselTokenSchema,
-    muted: CarouselTokenSchema,
-    accent: CarouselTokenSchema,
-    secondary: CarouselTokenSchema
-  }).optional(),
+  carouselPalette: CarouselPaletteSchema.optional(),
+  /** The studio's three type slots, when this kit sets them. `library.ts` carries the same families. */
+  carouselFonts: z.strictObject({ headline: CarouselFontSchema, body: CarouselFontSchema, mono: CarouselFontSchema }).optional(),
+  carouselStyle: CarouselStyleSchema.optional(),
   rules: z.array(NoteSchema).min(1).max(20),
   doNots: z.array(NoteSchema).min(1).max(20),
   /** How the brand's social posts are built, when the spec says. */
@@ -180,6 +223,22 @@ export const BrandKitManifestSchema = z.strictObject({
     if (kit.logotype.minimumHeightPx === undefined) {
       context.addIssue({ code: "custom", message: "A kit the renderer draws states a minimum height in pixels", path: ["logotype", "minimumHeightPx"] });
     }
+  }
+  if (kit.carouselStyle) {
+    const style = kit.carouselStyle;
+    if (!kit.carouselPalette) context.addIssue({ code: "custom", message: "A carousel style needs the carousel palette it dresses", path: ["carouselStyle"] });
+    const grounds = new Set(style.grounds.map((ground) => ground.id));
+    if (grounds.size !== style.grounds.length) context.addIssue({ code: "custom", message: "Ground ids repeat", path: ["carouselStyle", "grounds"] });
+    style.groundSequence.forEach((id, index) => {
+      if (!grounds.has(id)) context.addIssue({ code: "custom", message: `Ground ${id} is not declared`, path: ["carouselStyle", "groundSequence", index] });
+    });
+    if (style.groundSequence.length === 1) context.addIssue({ code: "custom", message: "A ground sequence names at least a first and a last ground", path: ["carouselStyle", "groundSequence"] });
+    style.cornerMark?.roles.forEach((role, index) => {
+      const asset = kit.assets.find((candidate) => candidate.role === role);
+      if (!asset || asset.kind !== "mark" || asset.mediaType !== "image/svg+xml") {
+        context.addIssue({ code: "custom", message: `Corner mark ${role} is not an SVG mark in this kit`, path: ["carouselStyle", "cornerMark", "roles", index] });
+      }
+    });
   }
   const [, , width, height] = kit.logotype.viewBox;
   if (Math.abs(width / height - kit.logotype.aspectRatio) > 0.01) {

@@ -26,7 +26,8 @@
     "aspectRatio": 6.29,
     "outlined": true,
     "clearSpace": {
-      "basis": "The height of the letter d, on every side."
+      "ratioOfHeight": 0.77,
+      "basis": "The height of the letter d on every side: 73.5 of the horizontal logo's 95.764 viewBox units, about 77 % of its height."
     },
     "sizes": [
       {
@@ -57,7 +58,8 @@
         "place": "Clean fin in a social post corner",
         "size": "48 px"
       }
-    ]
+    ],
+    "minimumHeightPx": 25.5
   },
   "palettes": [
     {
@@ -123,6 +125,163 @@
       ]
     }
   ],
+  "carouselPalette": {
+    "background": {
+      "value": "#f3f6f1",
+      "source": "Pale, the manifest background_color and the carousel's light ground."
+    },
+    "surface": {
+      "value": "#e3efe1",
+      "source": "--brand-green-100, the green tint: a card on the pale ground."
+    },
+    "surface-strong": {
+      "value": "#d6ded3",
+      "source": "--brand-line; the code panel on a pale slide. Ink on it clears 12:1."
+    },
+    "foreground": {
+      "value": "#132019",
+      "source": "--brand-ink, primary text; 15.43:1 on pale."
+    },
+    "muted": {
+      "value": "#3c4f43",
+      "source": "--brand-ink-700, secondary text; 8.05:1 on pale."
+    },
+    "accent": {
+      "value": "#236123",
+      "source": "--brand-green-800: green text that clears 4.5:1 on the tint and the line, where #2d7a2d does not."
+    },
+    "secondary": {
+      "value": "#132019",
+      "source": "--brand-ink as the second mark colour on pale: the green fails 4.5:1 on the line tone."
+    }
+  },
+  "carouselStyle": {
+    "flat": true,
+    "squareCorners": false,
+    "logo": "last-slide",
+    "grounds": [
+      {
+        "id": "ink",
+        "label": "Ink #132019: slides 1 and 5",
+        "palette": {
+          "background": {
+            "value": "#132019",
+            "source": "--brand-ink, the ground of the first and last carousel slides."
+          },
+          "surface": {
+            "value": "#1b2a21",
+            "source": "--brand-ink-surface, cards on ink."
+          },
+          "surface-strong": {
+            "value": "#1b2a21",
+            "source": "--brand-ink-surface; ink has one card tone."
+          },
+          "foreground": {
+            "value": "#ffffff",
+            "source": "White text on ink, 16.82:1."
+          },
+          "muted": {
+            "value": "#d6ded3",
+            "source": "--brand-line as quiet text on ink; the guidelines keep green text off ink."
+          },
+          "accent": {
+            "value": "#e3efe1",
+            "source": "--brand-green-100 on ink: the green reaches only 3.15:1 there."
+          },
+          "secondary": {
+            "value": "#ffffff",
+            "source": "White, the logo's colour on ink."
+          }
+        }
+      },
+      {
+        "id": "pale",
+        "label": "Pale #f3f6f1: slides 2 and 4",
+        "palette": {
+          "background": {
+            "value": "#f3f6f1",
+            "source": "Pale, the manifest background_color and the carousel's light ground."
+          },
+          "surface": {
+            "value": "#e3efe1",
+            "source": "--brand-green-100, the green tint: a card on the pale ground."
+          },
+          "surface-strong": {
+            "value": "#d6ded3",
+            "source": "--brand-line; the code panel on a pale slide. Ink on it clears 12:1."
+          },
+          "foreground": {
+            "value": "#132019",
+            "source": "--brand-ink, primary text; 15.43:1 on pale."
+          },
+          "muted": {
+            "value": "#3c4f43",
+            "source": "--brand-ink-700, secondary text; 8.05:1 on pale."
+          },
+          "accent": {
+            "value": "#236123",
+            "source": "--brand-green-800: green text that clears 4.5:1 on the tint and the line, where #2d7a2d does not."
+          },
+          "secondary": {
+            "value": "#132019",
+            "source": "--brand-ink as the second mark colour on pale: the green fails 4.5:1 on the line tone."
+          }
+        }
+      },
+      {
+        "id": "green",
+        "label": "Green #2d7a2d: slide 3",
+        "palette": {
+          "background": {
+            "value": "#2d7a2d",
+            "source": "--brand-accent, the ground of the middle carousel slide."
+          },
+          "surface": {
+            "value": "#236123",
+            "source": "--brand-green-800 as a panel on green."
+          },
+          "surface-strong": {
+            "value": "#236123",
+            "source": "--brand-green-800; green has one panel tone."
+          },
+          "foreground": {
+            "value": "#ffffff",
+            "source": "White text on green, 5.34:1."
+          },
+          "muted": {
+            "value": "#f3f6f1",
+            "source": "Pale as quiet text on green, 4.90:1."
+          },
+          "accent": {
+            "value": "#ffffff",
+            "source": "White, the only mark colour the guidelines put on green."
+          },
+          "secondary": {
+            "value": "#f3f6f1",
+            "source": "Pale, 4.90:1 on green."
+          }
+        }
+      }
+    ],
+    "groundSequence": [
+      "ink",
+      "pale",
+      "green",
+      "pale",
+      "ink"
+    ],
+    "cornerMark": {
+      "roles": [
+        "fin-clean-green",
+        "fin-clean-white",
+        "fin-clean-ink"
+      ],
+      "widthPx": 48,
+      "marginPx": 48,
+      "storyTopPx": 250
+    },
+    "neutrals": []
+  },
   "rules": [
     "Always spell it devShark: one capital S, also in uppercase labels. Never DevShark or DEVSHARK.",
     "The fin sits left of the name, its tip pointing left, with one wave and a transparent cut-out.",
@@ -185,31 +344,7 @@
         95.764
       ],
       "minimumSize": "160 px wide",
-      "logoSlot": false
-    },
-    {
-      "role": "logo-horizontal-ink",
-      "kind": "lockup",
-      "label": "Horizontal logo, ink",
-      "file": "devshark-logo-horizontal-ink.svg",
-      "mediaType": "image/svg+xml",
-      "sha256": "0900e34f9bb71c7db229d02aad3171f74a30cfdcd5f9612d1bc8a1caf69a6b7f",
-      "bytes": 14755,
-      "sourcePath": "client/public/brand/v9/recommended/devshark-logo-horizontal-ink.svg",
-      "use": "The primary logo; ink one-colour print.",
-      "grounds": [],
-      "onPhoto": false,
-      "inks": [
-        "#132019"
-      ],
-      "viewBox": [
-        0,
-        -74.9,
-        602.571,
-        95.764
-      ],
-      "minimumSize": "160 px wide",
-      "logoSlot": false
+      "logoSlot": true
     },
     {
       "role": "logo-horizontal-white",
@@ -236,7 +371,31 @@
         95.764
       ],
       "minimumSize": "160 px wide",
-      "logoSlot": false
+      "logoSlot": true
+    },
+    {
+      "role": "logo-horizontal-ink",
+      "kind": "lockup",
+      "label": "Horizontal logo, ink",
+      "file": "devshark-logo-horizontal-ink.svg",
+      "mediaType": "image/svg+xml",
+      "sha256": "0900e34f9bb71c7db229d02aad3171f74a30cfdcd5f9612d1bc8a1caf69a6b7f",
+      "bytes": 14755,
+      "sourcePath": "client/public/brand/v9/recommended/devshark-logo-horizontal-ink.svg",
+      "use": "The primary logo; ink one-colour print.",
+      "grounds": [],
+      "onPhoto": false,
+      "inks": [
+        "#132019"
+      ],
+      "viewBox": [
+        0,
+        -74.9,
+        602.571,
+        95.764
+      ],
+      "minimumSize": "160 px wide",
+      "logoSlot": true
     },
     {
       "role": "logo-horizontal-small-green",

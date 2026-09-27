@@ -1,6 +1,7 @@
 import { renderCarouselSlideSvg, type CarouselRenderInput } from "./renderer.js";
 import { completeQuizSlots, QUIZ_SLIDE_LIMITS, quizSlotBudget, type QuizSlideProblem } from "./quiz-deck.js";
 import type { BrandTokens, CarouselFormat, CarouselTemplate } from "./schema.js";
+import type { DeckPosition } from "./kit-style.js";
 
 /**
  * marketingShark's post kinds beyond the quiz, as one render path (quorum#576).
@@ -41,16 +42,17 @@ export function postSlideSlots(input: {
 }): Record<string, string> {
   const { headline, body, facts } = input;
   switch (input.template.id) {
+    // Code names the brand on the closing slide only; the kit names it once, at the end.
     case "minimal-text-poster":
       return {
         "poster-line": headline,
-        "poster-note": input.placement === "close" ? facts.productUrl.replace(/^https:\/\//u, "") : body || facts.displayName
+        "poster-note": input.placement === "close" ? facts.productUrl.replace(/^https:\/\//u, "") : body
       };
     case "quote-card":
     case "story-quote":
-      return { quote: body || headline, attribution: body ? headline : facts.displayName };
+      return { quote: body || headline, attribution: body ? headline : "" };
     case "stat-highlight":
-      return { stat: headline, "stat-label": body, source: facts.displayName };
+      return { stat: headline, "stat-label": body, source: input.placement === "close" ? facts.displayName : "" };
     case "quiz-question-context": {
       // A headline over up to four lines, unlettered: the week's recap, one day per line.
       const lines = bodyLines(body);
@@ -87,21 +89,24 @@ export function postSlideRenderInput(input: {
   template: CarouselTemplate;
   headline: string;
   body: string;
-  placement: PostSlidePlacement;
+  /** The slide's place in its deck, which sets its placement, its ground and whether the logo shows. */
+  position: DeckPosition;
   facts: PostDeckFacts;
   locale: "cs" | "en";
   brand: BrandTokens;
   format: CarouselFormat;
 }): CarouselRenderInput & { index: 0 } {
-  const variant = postSlideVariant(input.placement, input.template);
+  const placement = postSlidePlacement(input.position.index, input.position.count);
+  const variant = postSlideVariant(placement, input.template);
   return {
     template: input.template,
     brand: input.brand,
     format: input.format,
     index: 0,
+    deck: input.position,
     payload: {
       locale: input.locale,
-      strings: completeQuizSlots(input.template, postSlideSlots(input)),
+      strings: completeQuizSlots(input.template, postSlideSlots({ ...input, placement })),
       ...(variant ? { variant } : {})
     }
   };
@@ -139,8 +144,8 @@ export function reviewPostSlides(input: {
     if (slide.body.length > limits.bodyChars) add("body", `the body is ${slide.body.length} characters; it holds ${limits.bodyChars}.`);
     if (slide.alt.trim().length === 0) add("alt", "the alt text is empty; every slide needs one.");
     if (slide.alt.length > limits.altChars) add("alt", `the alt text is ${slide.alt.length} characters; it holds ${limits.altChars}.`);
-    const placement = postSlidePlacement(index, input.slides.length);
-    const rendered = renderCarouselSlideSvg(postSlideRenderInput({ ...slide, placement, facts: input.facts, locale: input.locale, brand: input.brand, format: input.format }));
+    const position = { index, count: input.slides.length };
+    const rendered = renderCarouselSlideSvg(postSlideRenderInput({ ...slide, position, facts: input.facts, locale: input.locale, brand: input.brand, format: input.format }));
     for (const slot of rendered?.truncatedSlots ?? []) {
       const budget = quizSlotBudget(slide.template, slot);
       const field = postSlotField(slide.template.id, slot, slide.body.trim().length > 0);

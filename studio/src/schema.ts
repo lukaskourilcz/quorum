@@ -350,6 +350,11 @@ export const BrandTokensSchema = z.object({
   id: z.enum(["caught-up", "mma-files", "titty-tuesdays", "devshark", "kvorum", "booksofhistory", "door-money", "tehdejsi-svet", "webdev-signal"]),
   name: z.string().trim().min(2).max(80),
   logoText: z.string().trim().min(2).max(40),
+  /**
+   * The venture whose brand kit (`studio/brand-kits/<kit>/`) this brand is drawn from. A kitted
+   * brand renders in the kit's palette, faces and marks, and refuses to render without the kit.
+   */
+  kit: z.string().regex(/^[a-z0-9]+(?:-[a-z0-9]+)*$/).optional(),
   colors: z.record(TokenNameSchema, z.string().regex(/^#[0-9a-f]{6}$/i)),
   fonts: z.object({
     headline: z.string().trim().min(2).max(100),

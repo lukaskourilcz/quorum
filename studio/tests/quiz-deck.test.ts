@@ -47,7 +47,7 @@ const review = (slides: QuizSlideCopy[]) => reviewQuizSlides({ slides, facts, lo
 describe("the quiz slot mapping", () => {
   it("gives code the reveal's letter, the footer's link and the options the writer left out", () => {
     const [hook, context, reveal, why, footer] = deck();
-    expect(quizSlideSlots({ ...hook!, facts })).toEqual({ "poster-line": hook!.headline, "poster-note": "devShark" });
+    expect(quizSlideSlots({ ...hook!, facts })).toEqual({ "poster-line": hook!.headline, "poster-note": "" });
     expect(quizSlideSlots({ ...footer!, facts })["poster-note"]).toBe("devshark.app");
     expect(quizSlideSlots({ ...context!, facts })).toEqual({
       "question-line": "What does useState return?",
@@ -55,9 +55,9 @@ describe("the quiz slot mapping", () => {
       options: "A. A single value\nB. An array with value and setter\nC. An object\nD. A promise"
     });
     expect(quizSlideSlots({ ...context!, body: `${CODE}\nA. One\nB. Two`, facts }).options).toBe("A. One\nB. Two");
-    expect(quizSlideSlots({ ...reveal!, body: "B. An array", facts })).toEqual({ stat: "B", "stat-label": "An array", source: "devShark" });
+    expect(quizSlideSlots({ ...reveal!, body: "B. An array", facts })).toEqual({ stat: "B", "stat-label": "An array", source: "" });
     expect(quizSlideSlots({ ...why!, facts })).toEqual({ quote: why!.body, attribution: "Why" });
-    expect(quizSlideSlots({ ...why!, body: "", facts })).toEqual({ quote: "Why", attribution: "devShark" });
+    expect(quizSlideSlots({ ...why!, body: "", facts })).toEqual({ quote: "Why", attribution: "" });
     expect(quizSlideSlots({ role: "context", template: live("quiz-question-context"), headline: "Which?", body: "", facts })).toMatchObject({ "option-b": "B. An array with value and setter" });
   });
 

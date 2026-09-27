@@ -596,6 +596,7 @@ export const CAROUSEL_BRANDS: Readonly<Record<BrandTokens["id"], BrandTokens>> =
     id: "caught-up",
     name: "Caught Up",
     logoText: "DNESKAi",
+    kit: "caught-up",
     colors: {
       background: "#ffffff",
       surface: "#f7f7f5",
@@ -639,25 +640,28 @@ export const CAROUSEL_BRANDS: Readonly<Record<BrandTokens["id"], BrandTokens>> =
     },
     fonts: { headline: "Petrona", body: "Karla", mono: "IBM Plex Mono" }
   }),
-  // devShark takes its palette from the product's own Deep End ocean-ink tokens
-  // (client/src/styles/astryx-theme.css) and its accent from its subject registry: webdev's ocean
-  // blue, at the bright variant those files pair with a dark surface. Every token combination the
-  // templates use clears 4.5:1, which the studio checks anyway.
+  /**
+   * devShark, dressed from its brand kit (`studio/brand-kits/marketingshark/`).
+   *
+   * These seven values are the kit's `carouselPalette`, the pale ground, and `brand-kits.test.ts`
+   * fails if they drift apart. They are what a Templates preview shows; a deck the renderer places
+   * slide by slide stands on the kit's ink, pale and green grounds instead, each a full set of
+   * these seven tokens.
+   */
   devshark: BrandTokensSchema.parse({
     schemaVersion: "carousel-brand/1",
     id: "devshark",
     name: "devShark",
-    // The kit spells it devShark. The capitals stay until devShark's carousels are rebuilt on its
-    // kit, because every recorded package frame hashes this wordmark (docs/NEEDED.md).
-    logoText: "DEVSHARK",
+    logoText: "devShark",
+    kit: "marketingshark",
     colors: {
-      background: "#0b141b",
-      surface: "#101c24",
-      "surface-strong": "#16242d",
-      foreground: "#e8eef0",
-      muted: "#9db3bc",
-      accent: "#60a5fa",
-      secondary: "#67e8f9"
+      background: "#f3f6f1",
+      surface: "#e3efe1",
+      "surface-strong": "#d6ded3",
+      foreground: "#132019",
+      muted: "#3c4f43",
+      accent: "#236123",
+      secondary: "#132019"
     },
     fonts: { headline: "Figtree", body: "Public Sans", mono: "IBM Plex Mono" }
   }),

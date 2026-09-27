@@ -48,9 +48,10 @@ describe("the Design Lab brand kit snapshot", () => {
       downloadHref: "/admin/api/brand-kits/caught-up/DNESKAi-logo-dark.svg?download=1"
     });
     const devshark = kits[1]!;
-    expect(devshark.drawnByStudio).toBe(false);
-    expect(devshark.source?.pinned).toBe(false);
-    expect(devshark.socialRules).toContain("The full logo appears only on the last slide.");
+    expect(devshark.drawnByStudio).toBe(true);
+    expect(devshark.source?.pinned).toBe(true);
+    expect(devshark.source?.summary).toContain("lukaskourilcz/react-express-app @ bc3a2e8");
+    expect(devshark.socialRules).toContain("The full logo appears only on the last slide: the horizontal logo, 160 px wide or more.");
   });
 
   it("lists only operating ventures", async () => {
@@ -96,8 +97,9 @@ describe("the Design Lab brand kit snapshot", () => {
     expect(html).toContain("background-color:#14161a");
     expect(html).toContain('src="/admin/api/brand-kits/caught-up/DNESKAi-logo.svg"');
     expect(html).toContain('href="/admin/api/brand-kits/marketingshark/devshark-logo-horizontal-green.svg?download=1"');
+    // Both kits dress their carousels now; neither is reference only.
     expect(html).toContain("Carousels draw this logo");
-    expect(html).toContain("Reference only in carousels");
+    expect(html).not.toContain("Reference only in carousels");
     expect(html).toContain("Do not recolour the logotype.");
   });
 });

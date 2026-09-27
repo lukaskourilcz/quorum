@@ -164,6 +164,14 @@
       "source": "The Ai colour of the logotype (brandAi in lib/og-theme.ts)."
     }
   },
+  "carouselStyle": {
+    "flat": true,
+    "squareCorners": true,
+    "logo": "every-slide",
+    "grounds": [],
+    "groundSequence": [],
+    "neutrals": []
+  },
   "rules": [
     "Use the production files as they are. The name is drawn as outlines; never redraw it or set it in a font.",
     "Keep the proportions: the viewBox is 50 -708 4217.8 708, about 5.96 : 1.",

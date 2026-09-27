@@ -12,9 +12,20 @@ import {
 } from "./schema.js";
 import { fitText } from "./text.js";
 import { fontFiles, measureEm, resolveFace } from "./fonts.js";
-import { validateTemplateForBrand } from "./validation.js";
+import { validateTemplateForBrand, type TemplateCheck } from "./validation.js";
 import { groundsBehindLayer, type SlideRendering } from "./grounds.js";
 import { LOGO_ID, chooseLogotypeVariant, logotypeForBrand, type KitLogotype } from "./brand-kit.js";
+import {
+  brandOnGround,
+  dressBrand,
+  groundAt,
+  kitStyleFor,
+  kitTemplate,
+  logoAllowedAt,
+  type DeckPosition,
+  type KitCornerMark,
+  type KitStyle
+} from "./kit-style.js";
 
 function escapeXml(value: string): string {
   return value
@@ -61,6 +72,8 @@ function layerSvg(input: {
   uid: string;
   /** The slide and rendering this layer sits in, so a kit logotype can see what is behind it. */
   slide: { slide: CarouselTemplate["slides"][number]; layerIndex: number; rendering: SlideRendering };
+  /** False on a slide where the brand's kit keeps the logotype off, such as all but a deck's last. */
+  logoAllowed: boolean;
 }): string {
   const { layer, payload, brand, width, height } = input;
   const x = px(layer.x, width);
@@ -109,6 +122,7 @@ function layerSvg(input: {
       + `<rect x="${x}" y="${y}" width="${w}" height="${h}" fill="url(#${id})"/>`;
   }
   if (layer.type === "logo") {
+    if (!input.logoAllowed) return "";
     const logotype = logotypeForBrand(brand.id);
     if (logotype) {
       return kitLogoSvg({ layer, logotype, x, y, w, h, uid: input.uid, slide: input.slide, brand, images: input.images });
@@ -124,15 +138,8 @@ function layerSvg(input: {
     const face = resolveFace(brand.fonts[layer.fontToken], LOGO_WEIGHT);
     const tracked = (size: number) => (measureEm(face, brand.logoText) + LOGO_TRACKING * [...brand.logoText].length) * size;
     const byHeight = h * 0.72;
-    const hasFin = brand.id === "devshark";
-    const markUnits = hasFin ? 1.35 : 0;
-    const size = hasFin ? Math.min(byHeight, w / (tracked(1) + markUnits))
-      : Math.max(18, Math.min(byHeight, tracked(byHeight) > w ? (w / tracked(1)) : byHeight));
-    // Reuse the product's SharkFin path; the mark and wordmark share the declared frame.
-    const fin = hasFin
-      ? `<g transform="translate(${x},${y + size * 0.12}) scale(${size / 24})" fill="${color(layer.colorToken)}"><path d="M3 18 Q6 6 15 3 Q17 11 21 18 Z"/><path d="M15 3 Q17 11 21 18 L16 18 Q14 10 15 3 Z" fill="black" opacity="0.12"/></g>`
-      : "";
-    return `${fin}<text x="${x + markUnits * size}" y="${y + size}" fill="${color(layer.colorToken)}" font-family="${escapeXml(face.familyName)}" font-size="${round(size)}" font-weight="${LOGO_WEIGHT}" letter-spacing="${round(LOGO_TRACKING * size)}">${escapeXml(brand.logoText)}</text>`;
+    const size = Math.max(18, Math.min(byHeight, tracked(byHeight) > w ? (w / tracked(1)) : byHeight));
+    return `<text x="${x}" y="${y + size}" fill="${color(layer.colorToken)}" font-family="${escapeXml(face.familyName)}" font-size="${round(size)}" font-weight="${LOGO_WEIGHT}" letter-spacing="${round(LOGO_TRACKING * size)}">${escapeXml(brand.logoText)}</text>`;
   }
   if (layer.type === "mesh") {
     // Several wide, blurred colour fields that overlap into a mesh. Built from radial gradients
@@ -285,6 +292,85 @@ export interface CarouselRenderInput {
   format: CarouselFormat;
   /** Decoded PNG bytes per image slot. WebP will not decode inside an SVG data URI. */
   images?: Readonly<Record<string, Buffer>>;
+  /**
+   * Where the template's first slide sits in the deck that ships, when the deck is assembled from
+   * single-slide templates. Absent means the template is the deck. A kit that grounds slides by
+   * position or keeps its logo to the last slide reads it.
+   */
+  deck?: DeckPosition;
+}
+
+/**
+ * The corner mark a kit puts on every slide, in the file the ground behind it calls for.
+ *
+ * Measured the way a logo frame is: a frame at the corner joins the slide as a last layer, and
+ * `groundsBehindLayer` says what sits under it, so a panel or a seam there counts.
+ */
+function cornerMarkSvg(input: {
+  mark: KitCornerMark;
+  slide: CarouselTemplate["slides"][number];
+  brand: BrandTokens;
+  rendering: SlideRendering;
+  width: number;
+  height: number;
+  format: CarouselFormat;
+  venture: string;
+  uid: string;
+}): string {
+  const { mark, width, height } = input;
+  const scale = width / 1_080;
+  const [, , boxWidth, boxHeight] = mark.variants[0]!.viewBox;
+  const w = mark.widthPx * scale;
+  const h = w * (boxHeight / boxWidth);
+  const x = width - mark.marginPx * scale - w;
+  const y = carouselCanvas(input.format) === "instagram-story" ? mark.storyTopPx : mark.marginPx * scale;
+  const frame = { type: "logo" as const, x: x / width, y: y / height, width: w / width, height: h / height, colorToken: "foreground", fontToken: "headline" as const };
+  const grounds = groundsBehindLayer({ ...input.slide, layers: [...input.slide.layers, frame] }, input.slide.layers.length, input.brand, input.rendering);
+  const chosen = chooseLogotypeVariant({ venture: input.venture, displayName: "", clearSpace: 0, minimumHeightPx: 0, variants: mark.variants }, grounds, false);
+  if (!chosen) throw new Error(`Brand kit ${input.venture} has no corner mark for grounds ${grounds.join(", ")}`);
+  const id = `mark-${input.uid}-`;
+  return `<svg x="${round(x)}" y="${round(y)}" width="${round(w)}" height="${round(h)}" viewBox="${chosen.variant.viewBox.join(" ")}" preserveAspectRatio="xMidYMid meet" overflow="visible" aria-hidden="true">${chosen.variant.markup.replaceAll(LOGO_ID, id)}</svg>`;
+}
+
+/**
+ * The template checks as the renderer will apply them to this brand.
+ *
+ * `validateTemplateForBrand` judges the tokens it is handed. A kitted brand is not drawn in those:
+ * it is drawn in its kit's palette and faces, with the template flattened as the kit asks, on any
+ * of the kit's grounds a slide can stand on. The Design Lab's check column reads this, so a
+ * template it shows as passing is one the renderer will draw. A brand whose kit cannot be used
+ * fails every template, with the kit's reason.
+ */
+export function validateTemplateAsRendered(template: CarouselTemplate, brand: BrandTokens, format: CarouselFormat): TemplateCheck[] {
+  let style: KitStyle | null;
+  try {
+    style = kitStyleFor(brand);
+  } catch (error) {
+    return [{ id: "brand-tokens", status: "fail", detail: error instanceof Error ? error.message : String(error) }];
+  }
+  if (!style) return validateTemplateForBrand(template, brand, format);
+  const dressed = dressBrand(brand, style);
+  const drawn = kitTemplate(template, style);
+  const grounds = [...style.grounds.keys()];
+  if (grounds.length === 0) return validateTemplateForBrand(drawn, dressed, format);
+  const perGround = grounds.map((ground) => ({ ground, checks: validateTemplateForBrand(drawn, brandOnGround(dressed, style, ground), format) }));
+  return perGround[0]!.checks.map((first, index) => {
+    const failing = perGround.filter(({ checks }) => checks[index]!.status === "fail");
+    return failing.length === 0
+      ? first
+      : { ...first, status: "fail" as const, detail: failing.map(({ ground, checks }) => `${ground}: ${checks[index]!.detail}`).join("; ") };
+  });
+}
+
+/** The slide's place in the deck, from the caller's deck or from the template itself. */
+function positionOf(input: CarouselRenderInput, index: number, slides: number): DeckPosition {
+  return input.deck ? { index: input.deck.index + index, count: input.deck.count } : { index, count: slides };
+}
+
+/** The brand a slide is drawn in: the kit's palette, on the ground its position calls for. */
+function slideBrand(brand: BrandTokens, style: KitStyle | null, position: DeckPosition): { brand: BrandTokens; ground: string | null } {
+  const ground = style ? groundAt(style, position) : null;
+  return { brand: ground ? brandOnGround(brand, style!, ground) : brand, ground };
 }
 
 /**
@@ -301,18 +387,33 @@ export interface CarouselRenderInput {
  * only asked for slide one.
  */
 function renderSlides(input: CarouselRenderInput, wanted?: number): RenderedSlide[] {
-  const template = CarouselTemplateSchema.parse(input.template);
+  const parsed = CarouselTemplateSchema.parse(input.template);
   const payload = CarouselPayloadSchema.parse(input.payload);
-  const brand = BrandTokensSchema.parse(input.brand);
+  const declared = BrandTokensSchema.parse(input.brand);
+  // A kitted brand is drawn from its kit or not at all: `kitStyleFor` throws for a missing or
+  // damaged kit, and so does a kit that gives the logo slot nothing to draw.
+  const style = kitStyleFor(declared);
+  if (style && !logotypeForBrand(declared.id)) throw new Error(`Brand kit ${style.venture} marks no logotype file for the logo slot`);
+  const brand = style ? dressBrand(declared, style) : declared;
+  const template = style ? kitTemplate(parsed, style) : parsed;
   const missing = template.requiredSlots.filter((slot) => payload.strings[slot] === undefined);
   if (missing.length) throw new Error(`Carousel payload is missing slots: ${missing.join(", ")}`);
-  const checks = validateTemplateForBrand(template, brand, input.format);
-  const failed = checks.filter((check) => check.status === "fail");
-  if (failed.length) throw new Error(`Template checks failed: ${failed.map((check) => check.detail).join("; ")}`);
+  // Every ground the deck's slides stand on is checked, whichever slide was asked for.
+  const grounded = template.slides.map((_, index) => slideBrand(brand, style, positionOf(input, index, template.slides.length)));
+  const checked = new Set<string | null>();
+  for (const { brand: onGround, ground } of grounded) {
+    if (checked.has(ground)) continue;
+    checked.add(ground);
+    const failed = validateTemplateForBrand(template, onGround, input.format).filter((check) => check.status === "fail");
+    if (failed.length) throw new Error(`Template checks failed${ground ? ` on the ${ground} ground` : ""}: ${failed.map((check) => check.detail).join("; ")}`);
+  }
   const canvas = template.formats[carouselCanvas(input.format)];
   const build = (slide: CarouselTemplate["slides"][number], index: number): RenderedSlide => {
     const variant = payload.variant ? slide.variants.find((candidate) => candidate.id === payload.variant) : undefined;
-    const backgroundToken = variant?.backgroundToken ?? slide.backgroundToken;
+    const { brand: slideTokens, ground } = grounded[index]!;
+    const position = positionOf(input, index, template.slides.length);
+    // A grounded slide stands on its ground; a variant may still swap the accent, never the ground.
+    const backgroundToken = ground ? "background" : variant?.backgroundToken ?? slide.backgroundToken;
     // Which slots did not fit, per slide. fitText has always known; the renderer discarded the
     // answer, so an over-long slide clipped to an ellipsis and nothing said so. A word limit
     // that the renderer silently enforces by cutting is not a limit, it is a surprise.
@@ -321,13 +422,14 @@ function renderSlides(input: CarouselRenderInput, wanted?: number): RenderedSlid
     // has to know the text's height before the text exists in the output.
     const hugged = Object.fromEntries(slide.layers.flatMap((layer) => {
       if (layer.type !== "text") return [];
-      const fitted = fitTextLayer(layer, payload, brand, canvas.width, canvas.height);
+      const fitted = fitTextLayer(layer, payload, slideTokens, canvas.width, canvas.height);
       return [[layer.slot, fitted.lines.length * fitted.fontSize * 1.12] as const];
     }));
+    const rendering = { background: backgroundToken, accent: variant?.accentToken ?? "accent" };
     const content = slide.layers.map((layer, layerIndex) => layerSvg({
       layer,
       payload,
-      brand,
+      brand: slideTokens,
       width: canvas.width,
       height: canvas.height,
       accentToken: variant?.accentToken,
@@ -336,9 +438,12 @@ function renderSlides(input: CarouselRenderInput, wanted?: number): RenderedSlid
       hugged,
       // Slide and layer, so two gradients on one deck cannot collide on an SVG id.
       uid: `${index}-${layerIndex}`,
-      slide: { slide, layerIndex, rendering: { background: backgroundToken, accent: variant?.accentToken ?? "accent" } }
-    })).join("");
-    const svg = `<svg xmlns="http://www.w3.org/2000/svg" width="${canvas.width}" height="${canvas.height}" viewBox="0 0 ${canvas.width} ${canvas.height}" role="img" aria-labelledby="title desc"><title id="title">${escapeXml(template.name)} ${index + 1}</title><desc id="desc">Original ${escapeXml(brand.name)} carousel layout rendered by the Design Lab.</desc><rect width="${canvas.width}" height="${canvas.height}" fill="${token(brand, backgroundToken)}"/>${content}</svg>`;
+      slide: { slide, layerIndex, rendering },
+      logoAllowed: logoAllowedAt(style, position)
+    })).join("") + (style?.cornerMark
+      ? cornerMarkSvg({ mark: style.cornerMark, slide, brand: slideTokens, rendering, width: canvas.width, height: canvas.height, format: input.format, venture: style.venture, uid: `${index}` })
+      : "");
+    const svg = `<svg xmlns="http://www.w3.org/2000/svg" width="${canvas.width}" height="${canvas.height}" viewBox="0 0 ${canvas.width} ${canvas.height}" role="img" aria-labelledby="title desc"><title id="title">${escapeXml(template.name)} ${index + 1}</title><desc id="desc">Original ${escapeXml(brand.name)} carousel layout rendered by the Design Lab.</desc><rect width="${canvas.width}" height="${canvas.height}" fill="${token(slideTokens, backgroundToken)}"/>${content}</svg>`;
     return {
       slideId: slide.id,
       index,
@@ -411,12 +516,15 @@ async function treatedImages(input: CarouselRenderInput): Promise<CarouselRender
     }
   }
   if (wanted.size === 0) return images;
+  // The kit's accent, not the tokens a caller passed: a duotone is drawn in the brand's colour.
+  const style = kitStyleFor(input.brand);
+  const brand = style ? dressBrand(input.brand, style) : input.brand;
   const treated: Record<string, Buffer> = { ...images };
   for (const [key, treatment] of wanted) {
     const [slot, accentToken] = key.split("\0") as [string, string];
     const source = images[slot];
     if (!source) continue;
-    treated[slot] = await treatImage(source, treatment, token(input.brand, accentToken));
+    treated[slot] = await treatImage(source, treatment, token(brand, accentToken));
   }
   return treated;
 }

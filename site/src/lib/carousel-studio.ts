@@ -13,7 +13,7 @@ import {
   readLibrary,
   previewFormats,
   resolveLifecycleStatus,
-  validateTemplateForBrand,
+  validateTemplateAsRendered,
   type CarouselCanvas,
   type CarouselFormat,
   type CarouselPayload,
@@ -32,7 +32,7 @@ export interface CarouselStudioTemplate {
     brand: keyof typeof CAROUSEL_BRANDS;
     format: CarouselFormat;
     passed: boolean;
-    details: ReturnType<typeof validateTemplateForBrand>;
+    details: ReturnType<typeof validateTemplateAsRendered>;
   }>;
   allChecksPass: boolean;
   ratings: RatingRecord[];
@@ -162,7 +162,8 @@ function templateChecks(template: CarouselTemplate): CarouselStudioTemplate["che
   const cached = checkCache.get(key);
   if (cached) return structuredClone(cached);
   const checks = Object.values(CAROUSEL_BRANDS).flatMap((brand) => previewFormats(template).map((format) => {
-    const details = validateTemplateForBrand(template, brand, format);
+    // As the renderer draws it: a kitted brand in its kit's palette, faces and grounds.
+    const details = validateTemplateAsRendered(template, brand, format);
     return { brand: brand.id, format, passed: details.every((check) => check.status === "pass"), details };
   }));
   if (checkCache.size >= 128) checkCache.delete(checkCache.keys().next().value!);

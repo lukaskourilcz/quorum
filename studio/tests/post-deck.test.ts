@@ -36,13 +36,14 @@ function deck(overrides: Partial<Record<number, Partial<PostSlideCopy>>> = {}): 
 const review = (slides: PostSlideCopy[]) => reviewPostSlides({ slides, facts, locale: "en", brand, format: "instagram-portrait" });
 
 describe("the post-deck slot mapping", () => {
-  it("fills each template from a headline, a body, the brand's name and its link", () => {
+  it("fills each template from a headline and a body, and names the brand only on the closing slide", () => {
     const [hook, theme, recap, pick, footer] = deck();
-    expect(postSlideSlots({ ...hook!, placement: "open", facts })).toEqual({ "poster-line": "This week on devShark", "poster-note": "devShark" });
+    expect(postSlideSlots({ ...hook!, placement: "open", facts })).toEqual({ "poster-line": "This week on devShark", "poster-note": "" });
     expect(postSlideSlots({ ...footer!, placement: "close", facts })).toEqual({ "poster-line": footer!.headline, "poster-note": "devshark.app" });
-    expect(postSlideSlots({ ...theme!, placement: "middle", facts })).toEqual({ stat: "TypeScript", "stat-label": theme!.body, source: "devShark" });
+    expect(postSlideSlots({ ...theme!, placement: "middle", facts })).toEqual({ stat: "TypeScript", "stat-label": theme!.body, source: "" });
+    expect(postSlideSlots({ ...theme!, placement: "close", facts })).toMatchObject({ source: "devShark" });
     expect(postSlideSlots({ ...pick!, placement: "middle", facts })).toEqual({ quote: pick!.body, attribution: "Worth a look" });
-    expect(postSlideSlots({ ...pick!, template: live("story-quote"), body: "", placement: "middle", facts })).toEqual({ quote: "Worth a look", attribution: "devShark" });
+    expect(postSlideSlots({ ...pick!, template: live("story-quote"), body: "", placement: "middle", facts })).toEqual({ quote: "Worth a look", attribution: "" });
     // The recap prints one line per slot, unlettered, and leaves a missing day empty.
     expect(postSlideSlots({ ...recap!, placement: "middle", facts })).toEqual({
       "question-line": "Monday to Thursday",
@@ -78,7 +79,7 @@ describe("the post-deck slot mapping", () => {
 
   it("renders the same PNG bytes for the same slide every time", async () => {
     const slide = deck()[2]!;
-    const input = postSlideRenderInput({ ...slide, placement: "middle", facts, locale: "en", brand, format: "instagram-portrait" });
+    const input = postSlideRenderInput({ ...slide, position: { index: 2, count: 5 }, facts, locale: "en", brand, format: "instagram-portrait" });
     const [first, second] = await Promise.all([renderCarouselSlidePng(input), renderCarouselSlidePng(input)]);
     expect(first!.pngHash).toBe(second!.pngHash);
     expect(first!.truncatedSlots).toEqual([]);

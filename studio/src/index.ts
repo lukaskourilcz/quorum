@@ -26,3 +26,4 @@ export * from "./summary.js";
 export * from "./hooks/index.js";
 export * from "./quiz-deck.js";
 export * from "./post-deck.js";
+export * from "./kit-style.js";

@@ -1,6 +1,5 @@
 import {
   liveTemplateByReference,
-  postSlidePlacement,
   postSlideRenderInput,
   postSlotField,
   renderCarouselSlideSvg,
@@ -77,7 +76,7 @@ function entriesFor(brand: Brand, kind: PostDeckKind, slides: readonly PostSlide
         template,
         headline: slide.headline,
         body: slide.body,
-        placement: postSlidePlacement(index, slides.length),
+        position: { index, count: slides.length },
         facts: postDeckFacts(brand),
         locale: "en",
         brand: brandTokensFor(brand),

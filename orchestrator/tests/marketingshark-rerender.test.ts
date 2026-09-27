@@ -6,7 +6,6 @@ import { beforeAll, describe, expect, it } from "vitest";
 import {
   CAROUSEL_BRANDS,
   liveTemplateByReference,
-  postSlidePlacement,
   postSlideRenderInput,
   quizFrameJpeg,
   quizSlideRenderInput,
@@ -57,6 +56,17 @@ beforeAll(async () => {
     }
   });
   expect(result.outcome.status).toBe("drafted");
+  // UPDATE_MARKETINGSHARK_FIXTURES=1 rewrites these handshake fixtures too, after an intended change.
+  if (process.env.UPDATE_MARKETINGSHARK_FIXTURES === "1") {
+    const handshake: Array<[string, string]> = [
+      [`ventures/marketingshark/packages/${DAY}/devshark/package.json`, "marketingshark-package.valid.json"],
+      [`ventures/marketingshark/packages/${DAY}/devshark/render-en.json`, "marketingshark-render.valid.json"],
+      ...["linkedin", "instagram", "threads"].map((channel): [string, string] => [`social/queue/${DAY}-devshark-en-${channel}.json`, `marketingshark-queue-${channel}.valid.json`])
+    ];
+    for (const [relative, name] of handshake) {
+      await writeFile(path.join(repoRoot, "contracts", "fixtures", name), `${JSON.stringify(await drafted(relative), null, 2)}\n`);
+    }
+  }
 });
 
 async function drafted(relative: string): Promise<unknown> {
@@ -191,7 +201,7 @@ describe("every post kind can be rendered again from what its package records", 
     expect(built.render.frames).toHaveLength(5);
     for (const [index, slide] of slides.entries()) {
       const frame = built.render.frames[index]!;
-      const input = postSlideRenderInput({ ...slide, placement: postSlidePlacement(index, slides.length), facts: summary.facts, locale: "en", brand, format: summary.format });
+      const input = postSlideRenderInput({ ...slide, position: { index, count: slides.length }, facts: summary.facts, locale: "en", brand, format: summary.format });
       const rendered = await renderCarouselSlidePng(input);
       expect(rendered!.svgHash, `${kind}/${slide.role}`).toBe(frame.svgHash);
       expect(rendered!.pngHash, `${kind}/${slide.role}`).toBe(frame.png.sha256);

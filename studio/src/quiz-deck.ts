@@ -91,10 +91,12 @@ export function quizSlideSlots(input: {
 }): Record<string, string> {
   const { headline, body, facts } = input;
   switch (input.template.id) {
+    // The kit names devShark once, at the end: before the footer an empty body leaves the note
+    // empty rather than filling it with the name.
     case "minimal-text-poster":
       return {
         "poster-line": headline,
-        "poster-note": input.role === "footer" ? facts.productUrl.replace(/^https:\/\//u, "") : body || facts.displayName
+        "poster-note": input.role === "footer" ? facts.productUrl.replace(/^https:\/\//u, "") : body
       };
     case "quiz-question-context":
       return { "question-line": headline, ...Object.fromEntries(["a", "b", "c", "d"].map((letter, index) => [
@@ -108,11 +110,11 @@ export function quizSlideSlots(input: {
       // The big figure on the reveal is the correct letter, and code owns it: an 18-character
       // one-line slot is no place for a sentence. The writer's words go to the label.
       if (input.role === "reveal") {
-        return { stat: facts.correctLetter, "stat-label": stripAnswerLetter(body.trim() || headline), source: facts.displayName };
+        return { stat: facts.correctLetter, "stat-label": stripAnswerLetter(body.trim() || headline), source: "" };
       }
-      return { stat: headline, "stat-label": body, source: facts.displayName };
+      return { stat: headline, "stat-label": body, source: input.role === "footer" ? facts.displayName : "" };
     case "quote-card":
-      return { quote: body || headline, attribution: body ? headline : facts.displayName };
+      return { quote: body || headline, attribution: body ? headline : "" };
     default:
       throw new Error(`No quiz slot mapping for template ${input.template.id}`);
   }
@@ -178,6 +180,8 @@ export function quizSlideRenderInput(input: {
     brand: input.brand,
     format: input.format,
     index: 0,
+    // Each role is its own one-slide template; the deck is the five roles in order.
+    deck: { index: QUIZ_SLIDE_ROLES.indexOf(input.role), count: QUIZ_SLIDE_ROLES.length },
     payload: {
       locale: input.locale,
       strings: completeQuizSlots(input.template, quizSlideSlots(input)),
