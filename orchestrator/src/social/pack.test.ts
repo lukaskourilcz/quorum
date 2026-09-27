@@ -53,7 +53,7 @@ afterEach(async () => {
 });
 
 describe("Caught Up social pack composer", () => {
-  it("renders accessible localized carousel sets and four draft-locked queue items", async () => {
+  it("renders accessible localized carousel sets and five draft-locked queue items", async () => {
     const root = await mkdtemp(path.join(os.tmpdir(), "boardless-social-pack-"));
     roots.push(root);
     const stateRoot = path.join(root, "state");
@@ -113,8 +113,9 @@ describe("Caught Up social pack composer", () => {
     }
     // Nothing was written for a channel that takes nothing.
     expect(Object.keys(pack.altTexts).some((frame) => frame.includes("/threads/"))).toBe(false);
-    expect(result!.queueItems).toHaveLength(4);
-    expect(new Set(result!.queueItems.map((item) => item.id)).size).toBe(4);
+    // Instagram and Threads per locale, and the evening Threads question (quorum#592).
+    expect(result!.queueItems).toHaveLength(5);
+    expect(new Set(result!.queueItems.map((item) => item.id)).size).toBe(5);
     expect(new Set(result!.queueItems.map((item) => item.destination))).toEqual(new Set([
       pack.byLocale.en!.destination,
       pack.byLocale.cs.destination
@@ -145,7 +146,7 @@ describe("Caught Up social pack composer", () => {
       });
       expect(Object.values(parsed.checks)).toEqual(Array(11).fill("pending"));
       expect(capabilityAwareQueuePayloadHash(parsed)).toBe(parsed.content.contentHash);
-      expect(JSON.parse(await readFile(path.join(stateRoot, `social/queue/2026-08-04-${parsed.locale}-${parsed.channel}.json`), "utf8"))).toEqual(parsed);
+      expect(JSON.parse(await readFile(path.join(stateRoot, `social/queue/2026-08-04-${parsed.id.replace("caught-up-2026-08-04-", "")}.json`), "utf8"))).toEqual(parsed);
       expect(isDue(parsed, new Date("2026-08-04T05:00:00.000Z"))).toBe(false);
       expect(() => assertQueueItemPublishable({ ...parsed, status: "queued" })).toThrow(/incomplete approval checks/u);
       // The asset gate trusts the pack, and finds a recorded hash for every frame an item names.
@@ -241,7 +242,7 @@ describe("a Czech-only edition composes", () => {
     const pack = SocialPackSchema.parse(result!.pack);
     expect(Object.keys(pack.byLocale)).toEqual(["cs"]);
     // Two queue items, not four: one locale times two channels.
-    expect(result!.queueItems).toHaveLength(2);
+    expect(result!.queueItems).toHaveLength(3);
     expect(result!.queueItems.every((item) => item.locale === "cs")).toBe(true);
   }, RENDER_TIMEOUT_MS);
 });
@@ -299,7 +300,7 @@ describe("composition without an enabled channel (quorum#563)", () => {
     const pack = SocialPackSchema.parse(JSON.parse(await readFile(path.join(stateRoot, "social/packs/2026-08-04.json"), "utf8")));
     expect(pack.byLocale.cs.instagram.frames.length).toBeGreaterThan(0);
     expect(pack.byLocale.cs.instagram.visual.template_id).toBeTruthy();
-    expect(result!.queueItems).toHaveLength(2);
+    expect(result!.queueItems).toHaveLength(3);
     // Nothing under site/public/social: not a frame, not the quote card.
     await expect(readdir(path.join(root, "site"))).rejects.toMatchObject({ code: "ENOENT" });
     expect(result!.artifactPaths.some((artifact) => artifact.includes("public/social"))).toBe(false);
@@ -366,7 +367,7 @@ describe("the Queue's DNESKAi handshake fixture (quorum#583)", () => {
       now: new Date("2026-08-04T04:00:00.000Z"),
       hostFrames: false
     });
-    const threads = JSON.parse(JSON.stringify(result!.queueItems.find(({ channel }) => channel === "threads"))) as unknown;
+    const threads = JSON.parse(JSON.stringify(result!.queueItems.find(({ channel, id }) => channel === "threads" && !id.endsWith("-question")))) as unknown;
     const fixture = path.join(repoRoot, "contracts/fixtures/caught-up-queue-threads.valid.json");
     if (process.env.UPDATE_CAUGHT_UP_FIXTURES === "1") await writeFile(fixture, `${JSON.stringify(threads, null, 2)}\n`);
     expect(threads).toEqual(JSON.parse(await readFile(fixture, "utf8")));

@@ -22,7 +22,10 @@ import { validateSocialImage } from "./media/validate.js";
 import { buildPackDraft, socialPackHash } from "./pack-drafts.js";
 import { loadSocialPublisherRegistry, ownPrimaryTarget } from "./publisher-targets.js";
 import type { CapabilityAwareQueueItem } from "./queue.js";
-import { assignPackHook, channelRecordFor } from "../studio/hook-brain.js";
+import { assignPackHook, channelRecordFor, hookLineFor } from "../studio/hook-brain.js";
+import type { DatasetEntry } from "../contracts/boardless-dataset.js";
+import { pragueSlotInstant } from "../meetings/calendar.js";
+import { renderStoryCard, storyCard, threadsQuestionText } from "./pack-extras.js";
 import { recordPost, writeHookChannels } from "../studio/hook-channels.js";
 
 const COMPOSER_VERSION = "carousel-studio-1" as const;
@@ -88,6 +91,11 @@ export async function composeEditionSocialPack(input: {
   hostFrames?: boolean;
   /** Where the publisher registry is read from; the repository's `config/` unless a test says otherwise. */
   configRoot?: string;
+  /**
+   * The lesson the reader reveals on the edition's date, for the story card when the edition has no
+   * practical item (quorum#592). Resolved by the caller; null or absent leaves the lesson out.
+   */
+  lesson?: DatasetEntry | null;
 }): Promise<SocialPackComposition | null> {
   const hostFrames = input.hostFrames ?? true;
   const editionPackage = input.editionPackage;
@@ -131,12 +139,44 @@ export async function composeEditionSocialPack(input: {
     date: editionPackage.date,
     hasHero: Boolean(editionPackage.image?.hero_bytes_base64)
   });
+  // The news library is data, not a second code path. Every edition runs through the same brain;
+  // if no truth-gated line survives, the logged `no-hook` fallback renders the deck headline.
+  const newsFrontmatter = (editionPackage.article?.cs ?? editionPackage.article?.en)!.frontmatter;
+  const hookDecision = await assignPackHook({
+    stateRoot: input.stateRoot,
+    surface: "news",
+    channel: "caught-up-carousel",
+    date: input.editionPackage.date,
+    itemId: newsFrontmatter.slug,
+    vertical: "dev",
+    languages: ["cs"],
+    subject: {
+      subject: {
+        sourceCount: newsFrontmatter.sources.length,
+        primarySourceCount: newsFrontmatter.sources.filter((source) => source.classification === "primary").length,
+        // Optional in the schema and unscored on some items. Null fails a threshold gate rather
+        // than defaulting past it: a weight claim on an item nobody scored licenses nothing.
+        signalStrength: newsFrontmatter.signal_strength ?? null,
+        tags: newsFrontmatter.tags,
+        // Read from the title and what_changed, which is where a figure the hook could point at
+        // would actually appear. A digit inside a slug or a URL is not a figure in the story.
+        hasNumber: /\d/u.test([newsFrontmatter.title, ...newsFrontmatter.what_changed].join(" "))
+      }
+    }
+  });
+  // Slide 1 carries the assigned hook when a truth-gated line matched the edition (quorum#592); on
+  // the logged `no-hook` fallback it stays the headline, as it always was.
+  const coverHook = hookDecision.hook
+    ? hookLineFor({ hook: hookDecision.hook, vertical: "dev", language: "cs", topic: "" })
+    : null;
   const visualReference = (locale: SocialLocale): TemplateReference | null => {
     const article = editionPackage.article?.[locale]?.frontmatter;
     if (!article) return null;
     const slides = buildArticleDeck({
       title: article.title,
-      coverLine: article.generation.human_reviewed ? article.title : article.alternative_headlines?.[0],
+      coverLine: locale === "cs" && coverHook
+        ? coverHook
+        : article.generation.human_reviewed ? article.title : article.alternative_headlines?.[0],
       dek: article.dek,
       points: [
         ...article.what_changed.slice(0, 3),
@@ -257,6 +297,19 @@ export async function composeEditionSocialPack(input: {
   frameHashes[quotePath] = quote!.pngHash;
   altTexts[quotePath] = `Quote from ${bestTurn.agent} in the edition room: ${bestTurn.text}`.slice(0, 300);
 
+  // The story card and the evening question (quorum#592), from the Czech edition only.
+  const csFrontmatter = editionPackage.article?.cs?.frontmatter;
+  const practical = csFrontmatter?.practical;
+  const card = storyCard({ practical, lesson: input.lesson ?? null, destination: destinations.cs });
+  const storyPath = `${publicDirectory}/story.png`;
+  if (card) {
+    const story = await renderStoryCard(card);
+    if (hostFrames) await atomicWriteBuffer(input.repoRoot, `${relativeDirectory}/story.png`, story.png);
+    frameHashes[storyPath] = story.pngHash;
+    altTexts[storyPath] = `Story card: ${card.visual.content.strings.quote} ${card.linkLine}`.slice(0, 300);
+  }
+  const questionText = csFrontmatter ? threadsQuestionText({ uncertainty: csFrontmatter.uncertainty, destination: destinations.cs }) : null;
+
   const buildLocalePack = (locale: SocialLocale) => {
       const localized = editionPackage.article?.[locale];
       const frames = framePaths[locale];
@@ -315,7 +368,11 @@ export async function composeEditionSocialPack(input: {
       visual: quoteVisual
     },
     provenance: { composerVersion: COMPOSER_VERSION, inputsHash: inputHash },
-    altTexts
+    altTexts,
+    ...(practical ? { practical } : {}),
+    ...(card ? { story: { frame: storyPath, source: card.source, link: card.link, linkLine: card.linkLine, visual: card.visual } } : {}),
+    ...(questionText ? { threadsQuestion: { text: questionText } } : {}),
+    ...(coverHook && hookDecision.hook ? { coverHook: { patternId: hookDecision.hook.id, line: coverHook } } : {})
   });
   const evidenceRefs = editionPackage.article.cs.frontmatter.sources
     .map((source) => `source:${source.source_id ?? source.id}`);
@@ -327,12 +384,12 @@ export async function composeEditionSocialPack(input: {
   // A queue item carries its destination all the way to the platform and cannot be edited
   // after it publishes. Items are built only for locales that have a destination, so nothing
   // in the queue can outlive the route it points at.
-  const queued = (["en", "cs"] as const).flatMap((locale) => {
+  const queued: Array<{ locale: SocialLocale; channel: string; item: CapabilityAwareQueueItem }> = (["en", "cs"] as const).flatMap((locale) => {
     const destination = destinations[locale];
     if (!destination) return [];
     return (["instagram", "threads"] as const).map((channel) => ({
       locale,
-      channel,
+      channel: channel as string,
       item: buildPackDraft({
         pack,
         packageHash,
@@ -347,32 +404,29 @@ export async function composeEditionSocialPack(input: {
       })
     }));
   });
+  // The evening question is its own Threads draft, opening at 20:30 Prague on the edition's day
+  // (the plan's slot) or now, whichever is later.
+  if (pack.threadsQuestion) {
+    const evening = new Date(pragueSlotInstant(input.editionPackage.date, 20).getTime() + 30 * 60_000);
+    queued.push({
+      locale: "cs",
+      channel: "threads-question",
+      item: buildPackDraft({
+        pack,
+        packageHash,
+        locale: "cs",
+        channel: "threads",
+        target: targets.threads,
+        destination: destinations.cs,
+        evidenceRefs,
+        selectionRef,
+        now,
+        framesHosted: hostFrames,
+        question: { text: pack.threadsQuestion.text, notBefore: evening > now ? evening : now }
+      })
+    });
+  }
   const csVisual = visualRefs.cs ?? visualRefs.en!;
-  // The news library is data, not a second code path. Every edition runs through the same brain;
-  // if no truth-gated line survives, the logged `no-hook` fallback renders the deck headline.
-  const newsFrontmatter = (editionPackage.article?.cs ?? editionPackage.article?.en)!.frontmatter;
-  const hookDecision = await assignPackHook({
-    stateRoot: input.stateRoot,
-    surface: "news",
-    channel: "caught-up-carousel",
-    date: input.editionPackage.date,
-    itemId: newsFrontmatter.slug,
-    vertical: "dev",
-    languages: ["cs"],
-    subject: {
-      subject: {
-        sourceCount: newsFrontmatter.sources.length,
-        primarySourceCount: newsFrontmatter.sources.filter((source) => source.classification === "primary").length,
-        // Optional in the schema and unscored on some items. Null fails a threshold gate rather
-        // than defaulting past it: a weight claim on an item nobody scored licenses nothing.
-        signalStrength: newsFrontmatter.signal_strength ?? null,
-        tags: newsFrontmatter.tags,
-        // Read from the title and what_changed, which is where a figure the hook could point at
-        // would actually appear. A digit inside a slug or a URL is not a figure in the story.
-        hasNumber: /\d/u.test([newsFrontmatter.title, ...newsFrontmatter.what_changed].join(" "))
-      }
-    }
-  });
   const hookChannelsPath = await writeHookChannels(
     input.stateRoot,
     recordPost(hookDecision.channels, hookDecision.assignment.channel, channelRecordFor(hookDecision.assignment, hookDecision.hook))
@@ -416,7 +470,8 @@ export async function composeEditionSocialPack(input: {
       ...(hostFrames
         ? [
             ...Object.values(framePaths).flatMap((channels) => Object.values(channels).flat()).map((frame) => path.relative(input.stateRoot, path.join(input.repoRoot, "site", "public", frame.slice(1)))),
-            path.relative(input.stateRoot, path.join(input.repoRoot, "site", "public", quotePath.slice(1)))
+            path.relative(input.stateRoot, path.join(input.repoRoot, "site", "public", quotePath.slice(1))),
+            ...(card ? [path.relative(input.stateRoot, path.join(input.repoRoot, "site", "public", storyPath.slice(1)))] : [])
           ]
         : [])
     ]

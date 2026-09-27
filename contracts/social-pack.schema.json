@@ -738,6 +738,162 @@
       ],
       "additionalProperties": {}
     },
+    "practical": {
+      "type": "object",
+      "properties": {
+        "type": {
+          "type": "string",
+          "enum": [
+            "prompt",
+            "tool",
+            "term"
+          ]
+        },
+        "title": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 80
+        },
+        "text": {
+          "type": "string",
+          "minLength": 40,
+          "maxLength": 400
+        },
+        "url": {
+          "type": "string",
+          "pattern": "^https:\\/\\/"
+        },
+        "verified_at": {
+          "type": "string",
+          "format": "date",
+          "pattern": "^(?:(?:\\d\\d[2468][048]|\\d\\d[13579][26]|\\d\\d0[48]|[02468][048]00|[13579][26]00)-02-29|\\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\\d|30)|(?:02)-(?:0[1-9]|1\\d|2[0-8])))$"
+        }
+      },
+      "required": [
+        "type",
+        "title",
+        "text"
+      ],
+      "additionalProperties": {}
+    },
+    "story": {
+      "type": "object",
+      "properties": {
+        "frame": {
+          "type": "string",
+          "pattern": "^\\/social\\/[a-zA-Z0-9/_-]+\\.png$"
+        },
+        "source": {
+          "type": "string",
+          "enum": [
+            "practical",
+            "lesson"
+          ]
+        },
+        "link": {
+          "type": "string",
+          "pattern": "^https:\\/\\/"
+        },
+        "linkLine": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 80
+        },
+        "visual": {
+          "type": "object",
+          "properties": {
+            "template_id": {
+              "type": "string",
+              "pattern": "^[a-z0-9]+(?:-[a-z0-9]+)*$"
+            },
+            "version": {
+              "type": "string",
+              "pattern": "^\\d+\\.\\d+\\.\\d+$"
+            },
+            "content": {
+              "type": "object",
+              "properties": {
+                "locale": {
+                  "type": "string",
+                  "enum": [
+                    "en",
+                    "cs"
+                  ]
+                },
+                "strings": {
+                  "type": "object",
+                  "propertyNames": {
+                    "type": "string",
+                    "pattern": "^[a-z][a-z0-9-]*$"
+                  },
+                  "additionalProperties": {
+                    "type": "string",
+                    "maxLength": 2000
+                  }
+                },
+                "variant": {
+                  "type": "string",
+                  "pattern": "^[A-Z][A-Z0-9-]*$"
+                }
+              },
+              "required": [
+                "locale",
+                "strings"
+              ],
+              "additionalProperties": false
+            }
+          },
+          "required": [
+            "template_id",
+            "version",
+            "content"
+          ],
+          "additionalProperties": false
+        }
+      },
+      "required": [
+        "frame",
+        "source",
+        "link",
+        "linkLine",
+        "visual"
+      ],
+      "additionalProperties": {}
+    },
+    "threadsQuestion": {
+      "type": "object",
+      "properties": {
+        "text": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 500
+        }
+      },
+      "required": [
+        "text"
+      ],
+      "additionalProperties": {}
+    },
+    "coverHook": {
+      "type": "object",
+      "properties": {
+        "patternId": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 80
+        },
+        "line": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 200
+        }
+      },
+      "required": [
+        "patternId",
+        "line"
+      ],
+      "additionalProperties": {}
+    },
     "altTexts": {
       "type": "object",
       "propertyNames": {

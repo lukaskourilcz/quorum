@@ -68,12 +68,19 @@ export function buildPackDraft(input: {
   selectionRef: string;
   now: Date;
   framesHosted: boolean;
+  /**
+   * The evening Threads question (quorum#592): a second Threads draft of the same pack with its own
+   * text and its own opening time. Only for the Threads channel.
+   */
+  question?: { text: string; notBefore: Date };
 }): CapabilityAwareQueueItem {
-  const notBefore = input.now.toISOString();
-  const notAfter = new Date(input.now.getTime() + 72 * 60 * 60 * 1_000).toISOString();
+  if (input.question && input.channel !== "threads") throw new Error("The pack's question is a Threads post");
+  const opens = input.question?.notBefore ?? input.now;
+  const notBefore = opens.toISOString();
+  const notAfter = new Date(opens.getTime() + 72 * 60 * 60 * 1_000).toISOString();
   const localized = input.pack.byLocale[input.locale]!;
   const platform = localized[input.channel];
-  const id = `caught-up-${input.pack.date}-${input.locale}-${input.channel}`;
+  const id = `caught-up-${input.pack.date}-${input.locale}-${input.channel}${input.question ? "-question" : ""}`;
   const variant = deterministicVariant(id);
   // The release and campaign ids the migration gives a v1 draft of the same day, so a rejection's
   // taste note names a DNESKAi release the same way whichever writer drafted it.
@@ -112,10 +119,10 @@ export function buildPackDraft(input: {
       source: input.channel,
       medium: "organic_social" as const,
       campaign: campaignId,
-      content: `edition-carousel-${input.locale}`
+      content: input.question ? `edition-question-${input.locale}` : `edition-carousel-${input.locale}`
     },
     content: {
-      text: input.channel === "instagram" ? localized.instagram.variants[variant] : localized.threads.variants[variant],
+      text: input.question?.text ?? (input.channel === "instagram" ? localized.instagram.variants[variant] : localized.threads.variants[variant]),
       altText: draftAltText(input.pack, input.locale, input.channel),
       // DNESKAi's Threads post is text and a link, and its frames belong to the carousel, which
       // is Instagram's. The connector has taken Threads images since #572; DNESKAi renders no
@@ -153,7 +160,7 @@ export function buildPackDraft(input: {
       policyRef: SOCIAL_DECISION_REFERENCE
     },
     selectedBy: "PULSE" as const,
-    createdAt: notBefore,
+    createdAt: input.now.toISOString(),
     attempt: null,
     receiptId: null,
     migration: null

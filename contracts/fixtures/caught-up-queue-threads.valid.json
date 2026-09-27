@@ -18,7 +18,7 @@
   "sourcePackage": {
     "schemaVersion": "approved-publish-package/1",
     "artifactRef": "state/social/packs/2026-08-04.json",
-    "packageHash": "e224ed0b53952bc2b53a01184954272608f52d18b028e51d73c90b96a02d9092"
+    "packageHash": "4acdbf885015ff0dd6f120789d4ed3f0b3a1e82c90f7d6d80dd6191a9a007fc3"
   },
   "locale": "cs",
   "variant": "B",
@@ -40,7 +40,7 @@
       "source:provider-news"
     ],
     "rendererVersion": "carousel-studio-1",
-    "contentHash": "a5db1fece2e008143b9baf65b3e6a394cdff9cc16790f04d4363022ba6ca94d4"
+    "contentHash": "b8c64e491bce68a4185bc49c810474f1e61ab23e017edd1b5bdb9cb1ede061b7"
   },
   "publishWindow": {
     "notBefore": "2026-08-04T04:00:00.000Z",

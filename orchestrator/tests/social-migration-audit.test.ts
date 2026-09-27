@@ -96,7 +96,7 @@ describe("Social Distribution compatibility migration audit", () => {
       // As in production while no channel is enabled: nothing is hosted.
       hostFrames: false
     });
-    expect(composed!.queueItems.map(({ id }) => id).sort()).toEqual(["caught-up-2026-08-04-cs-instagram", "caught-up-2026-08-04-cs-threads"]);
+    expect(composed!.queueItems.map(({ id }) => id).sort()).toEqual(["caught-up-2026-08-04-cs-instagram", "caught-up-2026-08-04-cs-threads", "caught-up-2026-08-04-cs-threads-question"]);
 
     const rollback = (audit: SocialReleaseAudit) => audit.checks.find(({ id }) => id === "idempotent-migration-rollback")!;
     const [committed, withPack, gated] = await Promise.all([

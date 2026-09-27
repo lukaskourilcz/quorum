@@ -7,9 +7,20 @@ import { configRoot, repoRoot, stateRoot } from "../paths.js";
 import { storeEditionCarouselSummary } from "../studio/carousel-summary-store.js";
 import { composeEditionSocialPack } from "../social/pack.js";
 import { approvedEditorialPackage, reviewFiles } from "./review.js";
+import type { DatasetEntry } from "../contracts/boardless-dataset.js";
 
 /** Runs inside the serialized cycle workflow; the admin only records the owner's decision. */
-export async function releaseReviewedArticles(input: { root?: string; repositoryRoot?: string; configurationRoot?: string; now?: Date } = {}): Promise<string[]> {
+export async function releaseReviewedArticles(input: {
+  root?: string;
+  repositoryRoot?: string;
+  configurationRoot?: string;
+  now?: Date;
+  /**
+   * The lesson the reader reveals on a date, for the story card of an edition with no practical
+   * item (quorum#592). The delivery CLI hands in the published-dataset reader; absent, no lesson.
+   */
+  readLesson?: (date: string) => Promise<DatasetEntry | null>;
+} = {}): Promise<string[]> {
   const root = input.root ?? stateRoot;
   const repositoryRoot = input.repositoryRoot ?? repoRoot;
   const now = input.now ?? new Date();
@@ -32,7 +43,8 @@ export async function releaseReviewedArticles(input: { root?: string; repository
     const baseUrl = process.env.CAUGHT_UP_SITE_URL;
     if (!baseUrl) throw new Error("CAUGHT_UP_SITE_URL is required to prepare reviewed article social drafts");
     await storeEditionCarouselSummary(root, approved);
-    const pack = await composeEditionSocialPack({ editionPackage: approved, meeting,
+    const lesson = approved.article.cs.frontmatter.practical ? null : await (input.readLesson?.(approved.date) ?? Promise.resolve(null));
+    const pack = await composeEditionSocialPack({ editionPackage: approved, meeting, lesson,
       destinations: { cs: new URL(`/articles/${approved.article.cs.frontmatter.slug}`, baseUrl).toString() },
       repoRoot: repositoryRoot, stateRoot: root, configRoot: input.configurationRoot ?? configRoot, now, hostFrames: true });
     if (!pack) throw new Error("The approved article's social drafts could not be prepared");

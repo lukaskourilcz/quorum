@@ -1,6 +1,7 @@
 import { z } from "zod";
 import { isDeepStrictEqual } from "node:util";
 import { LiveTemplateReferenceSchema } from "./carousel-template.js";
+import { PracticalSchema } from "./practical.js";
 import {
   DateSchema,
   HttpsUrlSchema,
@@ -79,6 +80,24 @@ export const SocialPackSchema = openObject({
     composerVersion: z.string().trim().min(1).max(40),
     inputsHash: Sha256Schema
   }),
+  /** The edition's own practical item, copied as delivered (aifirst#99). Absent on most days. */
+  practical: PracticalSchema.optional(),
+  /**
+   * The 1080 × 1920 story card (quorum#592): the practical item, or the day's lesson when there is
+   * none. Posted by hand from the Queue export; no queue item is written for it, because the
+   * publisher posts feed media and a story sent as a feed post would be the wrong post.
+   */
+  story: openObject({
+    frame: z.string().regex(/^\/social\/[a-zA-Z0-9/_-]+\.png$/),
+    source: z.enum(["practical", "lesson"]),
+    link: HttpsUrlSchema,
+    linkLine: z.string().trim().min(1).max(80),
+    visual: LiveTemplateReferenceSchema
+  }).optional(),
+  /** The evening Threads question from the edition's first open question (quorum#592). */
+  threadsQuestion: openObject({ text: z.string().trim().min(1).max(500) }).optional(),
+  /** The slide-1 hook the news library assigned, when one matched; the headline otherwise. */
+  coverHook: openObject({ patternId: z.string().trim().min(1).max(80), line: z.string().trim().min(1).max(200) }).optional(),
   altTexts: z.record(FramePathSchema, z.string().trim().min(1).max(300))
 }).superRefine((pack, context) => {
   // The legacy top-level fields mirror the locale the pack actually leads with — English
@@ -108,7 +127,8 @@ export const SocialPackSchema = openObject({
   }
   const frames = new Set([
     ...localePacks.flatMap(({ value }) => [...value.instagram.frames, ...value.threads.frames]),
-    pack.quoteCard.frame
+    pack.quoteCard.frame,
+    ...(pack.story ? [pack.story.frame] : [])
   ]);
   for (const frame of frames) {
     if (!pack.altTexts[frame]) {
