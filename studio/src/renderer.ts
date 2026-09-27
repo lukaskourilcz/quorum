@@ -13,6 +13,8 @@ import {
 import { fitText } from "./text.js";
 import { fontFiles, measureEm, resolveFace } from "./fonts.js";
 import { validateTemplateForBrand } from "./validation.js";
+import { groundsBehindLayer, type SlideRendering } from "./grounds.js";
+import { LOGO_ID, chooseLogotypeVariant, logotypeForBrand, type KitLogotype } from "./brand-kit.js";
 
 function escapeXml(value: string): string {
   return value
@@ -57,6 +59,8 @@ function layerSvg(input: {
   hugged?: Readonly<Record<string, number>>;
   /** Unique per layer, so two gradients on one slide cannot share an SVG id. */
   uid: string;
+  /** The slide and rendering this layer sits in, so a kit logotype can see what is behind it. */
+  slide: { slide: CarouselTemplate["slides"][number]; layerIndex: number; rendering: SlideRendering };
 }): string {
   const { layer, payload, brand, width, height } = input;
   const x = px(layer.x, width);
@@ -105,6 +109,10 @@ function layerSvg(input: {
       + `<rect x="${x}" y="${y}" width="${w}" height="${h}" fill="url(#${id})"/>`;
   }
   if (layer.type === "logo") {
+    const logotype = logotypeForBrand(brand.id);
+    if (logotype) {
+      return kitLogoSvg({ layer, logotype, x, y, w, h, uid: input.uid, slide: input.slide, brand, images: input.images });
+    }
     /*
      * Sized to the frame and to the mark, and now to the face as well.
      *
@@ -185,6 +193,52 @@ function layerSvg(input: {
   const filter = layer.glow ? ` filter="url(#${glowId})"` : "";
   const face = resolveFace(brand.fonts[layer.fontToken], layer.fontWeight);
   return `${glow}<text x="${textX}" y="${y + fitted.fontSize}" text-anchor="${anchor}" fill="${color(layer.colorToken)}" font-family="${escapeXml(face.familyName)}" font-size="${fitted.fontSize}" font-weight="${face.weight}"${tracking}${filter}>${tspans}</text>`;
+}
+
+/**
+ * The venture's own logotype, drawn from its brand kit as outlines.
+ *
+ * The file is nested as an `<svg>` with its own viewBox, so the paths are the approved paths and
+ * nothing is set in a font. Which file is drawn follows `chooseLogotypeVariant` over the same
+ * grounds the contrast gates measured, plus one thing only the renderer knows: whether a
+ * photograph actually sits under the frame.
+ *
+ * Sized to fit the frame with the kit's clear space above and below, never wider than the frame
+ * and never below the kit's minimum height unless the frame itself is narrower than that allows.
+ * Left-aligned, because every family aligns its logo frame to the text column it heads.
+ */
+function kitLogoSvg(input: {
+  layer: Extract<CarouselLayer, { type: "logo" }>;
+  logotype: KitLogotype;
+  x: number;
+  y: number;
+  w: number;
+  h: number;
+  uid: string;
+  slide: { slide: CarouselTemplate["slides"][number]; layerIndex: number; rendering: SlideRendering };
+  brand: BrandTokens;
+  images?: Readonly<Record<string, Buffer>>;
+}): string {
+  const { layer, logotype, x, y, w, h } = input;
+  const { slide, layerIndex, rendering } = input.slide;
+  const grounds = groundsBehindLayer(slide, layerIndex, input.brand, rendering);
+  const onPhoto = slide.layers.slice(0, layerIndex).some((under) =>
+    under.type === "image"
+    && input.images?.[under.slot] !== undefined
+    && under.x <= layer.x && under.y <= layer.y
+    && under.x + under.width >= layer.x + layer.width
+    && under.y + under.height >= layer.y + layer.height
+  );
+  const chosen = chooseLogotypeVariant(logotype, grounds, onPhoto);
+  if (!chosen) throw new Error(`Brand kit ${logotype.venture} has no logotype file for grounds ${grounds.join(", ")}`);
+  const byWidth = w / logotype.aspectRatio;
+  const byHeight = h / (1 + 2 * logotype.clearSpace);
+  const height = Math.min(byWidth, Math.max(byHeight, logotype.minimumHeightPx));
+  const width = height * logotype.aspectRatio;
+  const top = y + (h - height) / 2;
+  const id = `logo-${input.uid}-`;
+  const markup = chosen.variant.markup.replaceAll(LOGO_ID, id);
+  return `<svg x="${round(x)}" y="${round(top)}" width="${round(width)}" height="${round(height)}" viewBox="${logotype.viewBox.join(" ")}" preserveAspectRatio="xMinYMid meet" overflow="visible" aria-label="${escapeXml(logotype.displayName)}" role="img">${markup}</svg>`;
 }
 
 /** One text layer, fitted for one canvas. Shared so a hugging panel measures what the text does. */
@@ -279,7 +333,8 @@ function renderSlides(input: CarouselRenderInput, wanted?: number): RenderedSlid
       images: input.images,
       hugged,
       // Slide and layer, so two gradients on one deck cannot collide on an SVG id.
-      uid: `${index}-${layerIndex}`
+      uid: `${index}-${layerIndex}`,
+      slide: { slide, layerIndex, rendering: { background: backgroundToken, accent: variant?.accentToken ?? "accent" } }
     })).join("");
     const svg = `<svg xmlns="http://www.w3.org/2000/svg" width="${canvas.width}" height="${canvas.height}" viewBox="0 0 ${canvas.width} ${canvas.height}" role="img" aria-labelledby="title desc"><title id="title">${escapeXml(template.name)} ${index + 1}</title><desc id="desc">Original ${escapeXml(brand.name)} carousel layout rendered by the Design Lab.</desc><rect width="${canvas.width}" height="${canvas.height}" fill="${token(brand, backgroundToken)}"/>${content}</svg>`;
     return {

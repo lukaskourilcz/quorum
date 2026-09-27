@@ -1,8 +1,8 @@
 /**
  * What the reader actually sees behind every set of words, resolved once for every measure.
  *
- * A leaf module, importing only the schema's types — the ring-avoidance rule `canvas.ts` and
- * `designs.ts` both state at their own tops.
+ * A leaf module, importing only the schema's types and `brand-kit.ts`, which imports nothing from
+ * the studio — the ring-avoidance rule `canvas.ts` and `designs.ts` both state at their own tops.
  *
  * This logic used to live inside `contrastCheck`'s closure, and it had to come out the moment a
  * second readability measure arrived. Two measures that each resolve their own grounds are two
@@ -11,6 +11,7 @@
  * the pair nobody looked at. `validation.ts` and `contrast-apca.ts` now read this one list and
  * differ only in the arithmetic they apply to it.
  */
+import { chooseLogotypeVariant, logotypeForBrand, type KitLogotype } from "./brand-kit.js";
 import type { BrandTokens, CarouselTemplate } from "./schema.js";
 
 /** Source-over compositing of one colour on another, which is what the renderer draws. */
@@ -55,8 +56,85 @@ export interface TextGround {
 const LOGO_MIN_FONT_SIZE = 18;
 const LOGO_FONT_WEIGHT = 800;
 
-/** Every text and logo frame in this template, once per rendering the slide can produce. */
-export function textGroundPairs(template: CarouselTemplate, brand: BrandTokens): TextGround[] {
+type Slide = CarouselTemplate["slides"][number];
+
+/** One rendering of a slide: which token is the ground and which the accent resolves to. */
+export interface SlideRendering {
+  background: string;
+  accent: string;
+}
+
+/**
+ * Every colour that can sit behind one layer of one slide in one rendering.
+ *
+ * What is actually behind these words. The slide background used to be the whole answer, and it
+ * refused designs a reader finds perfectly legible: `background`-coloured type on an `accent`
+ * panel measures 6.17:1 and was reported as 1.00:1, because an opaque shape drawn beneath the
+ * text was invisible to the check. The last opaque layer before the text that covers its frame —
+ * a panel, a gradient whose two stops are two grounds, or a duotone photograph, which runs from
+ * black to its tint — is what the reader sees, so that is what is measured.
+ *
+ * An untreated photograph still cannot be checked: its pixels are the article's, not the
+ * template's, and a slide carrying one relies on the scrim its image layer draws. That is a real
+ * limit and is stated rather than papered over.
+ *
+ * Exported because the renderer asks the same question when it picks which logotype file to draw,
+ * and a second answer would be a logo checked against one ground and drawn on another.
+ */
+export function groundsBehindLayer(slide: Slide, layerIndex: number, brand: BrandTokens, rendering: SlideRendering): string[] {
+  const resolve = (name: string) => brand.colors[name === "accent" ? rendering.accent : name];
+  const background = brand.colors[rendering.background];
+  if (!background) return [];
+  const layer = slide.layers[layerIndex];
+  if (!layer) return [];
+  // A blob is composited over its ground at its own opacity, so that is what sits behind the
+  // text — not the blob's full colour. Comparing against the raw colour fails designs a
+  // reader would find perfectly legible, and a check that cries wolf gets its threshold
+  // lowered by the next person, which is how a contrast floor quietly dies.
+  const blobs = slide.layers.flatMap((candidate) =>
+    candidate.type === "mesh"
+      ? candidate.blobs.flatMap((blob) => {
+          const colour = resolve(blob.colorToken);
+          return colour ? [{ colour, opacity: blob.opacity }] : [];
+        })
+      : []
+  );
+  let ground = [background];
+  for (const under of slide.layers.slice(0, layerIndex)) {
+    if (!contains(under, layer)) continue;
+    if (under.type === "shape") {
+      const fill = resolve(under.fillToken);
+      if (fill) ground = [fill];
+    }
+    if (under.type === "linear-gradient") {
+      const stops = under.stops
+        .map((stop) => resolve(stop.colorToken))
+        .filter((colour): colour is string => colour !== undefined);
+      if (stops.length) ground = stops;
+    }
+    if (under.type === "image" && under.treatment === "duotone" && under.scrim === "none") {
+      const tint = resolve("accent");
+      if (tint) ground = [tint, "#000000"];
+    }
+  }
+  return [
+    ...ground,
+    ...blobs.flatMap((blob) => ground.map((base) => composite(base, blob.colour, blob.opacity)))
+  ];
+}
+
+/**
+ * Every text and logo frame in this template, once per rendering the slide can produce.
+ *
+ * A brand with an outlined logotype from its kit is measured for what the renderer will draw: an
+ * approved file on a ground its spec names is the brand's decision and adds no pair, and a
+ * one-colour fallback is measured in its own ink. `logotype` defaults to the brand's kit.
+ */
+export function textGroundPairs(
+  template: CarouselTemplate,
+  brand: BrandTokens,
+  logotype: KitLogotype | null = logotypeForBrand(brand.id)
+): TextGround[] {
   const pairs: TextGround[] = [];
   template.slides.forEach((slide) => {
     /*
@@ -66,7 +144,7 @@ export function textGroundPairs(template: CarouselTemplate, brand: BrandTokens):
      * queued A/B pair actually ships. Checking only the base is how "every token combination a
      * template can produce clears the floor" becomes "the one we happened to look at does".
      */
-    const renderings = [
+    const renderings: SlideRendering[] = [
       { background: slide.backgroundToken, accent: "accent" },
       ...slide.variants.map((variant) => ({
         background: variant.backgroundToken ?? slide.backgroundToken,
@@ -74,61 +152,17 @@ export function textGroundPairs(template: CarouselTemplate, brand: BrandTokens):
       }))
     ];
     for (const rendering of renderings) {
-      const resolve = (name: string) => brand.colors[name === "accent" ? rendering.accent : name];
-      const background = brand.colors[rendering.background];
-      if (!background) continue;
-      // A blob is composited over its ground at its own opacity, so that is what sits behind the
-      // text — not the blob's full colour. Comparing against the raw colour fails designs a
-      // reader would find perfectly legible, and a check that cries wolf gets its threshold
-      // lowered by the next person, which is how a contrast floor quietly dies.
-      const blobs = slide.layers.flatMap((layer) =>
-        layer.type === "mesh"
-          ? layer.blobs.flatMap((blob) => {
-              const colour = resolve(blob.colorToken);
-              return colour ? [{ colour, opacity: blob.opacity }] : [];
-            })
-          : []
-      );
+      if (!brand.colors[rendering.background]) continue;
       slide.layers.forEach((layer, layerIndex) => {
         if (layer.type !== "text" && layer.type !== "logo") return;
-        const foreground = resolve(layer.colorToken);
+        const candidates = groundsBehindLayer(slide, layerIndex, brand, rendering);
+        let foreground = brand.colors[layer.colorToken === "accent" ? rendering.accent : layer.colorToken];
         if (!foreground) return;
-        /*
-         * What is actually behind these words.
-         *
-         * The slide background used to be the whole answer, and it refused designs a reader
-         * finds perfectly legible: `background`-coloured type on an `accent` panel measures
-         * 6.17:1 and was reported as 1.00:1, because an opaque shape drawn beneath the text was
-         * invisible to the check. The last opaque layer before the text that covers its frame —
-         * a panel, a gradient whose two stops are two grounds, or a duotone photograph, which
-         * runs from black to its tint — is what the reader sees, so that is what is measured.
-         *
-         * An untreated photograph still cannot be checked: its pixels are the article's, not
-         * the template's, and a slide carrying one relies on the scrim its image layer draws.
-         * That is a real limit and is stated rather than papered over.
-         */
-        let ground = [background];
-        for (const under of slide.layers.slice(0, layerIndex)) {
-          if (!contains(under, layer)) continue;
-          if (under.type === "shape") {
-            const fill = resolve(under.fillToken);
-            if (fill) ground = [fill];
-          }
-          if (under.type === "linear-gradient") {
-            const stops = under.stops
-              .map((stop) => resolve(stop.colorToken))
-              .filter((colour): colour is string => colour !== undefined);
-            if (stops.length) ground = stops;
-          }
-          if (under.type === "image" && under.treatment === "duotone" && under.scrim === "none") {
-            const tint = resolve("accent");
-            if (tint) ground = [tint, "#000000"];
-          }
+        if (layer.type === "logo" && logotype) {
+          const chosen = chooseLogotypeVariant(logotype, candidates, false);
+          if (chosen?.exempt) return;
+          if (chosen) foreground = chosen.variant.inks[0]!;
         }
-        const candidates = [
-          ...ground,
-          ...blobs.flatMap((blob) => ground.map((base) => composite(base, blob.colour, blob.opacity)))
-        ];
         pairs.push({
           slideId: slide.id,
           target: layer.type === "text" ? layer.slot : "logo",
