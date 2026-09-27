@@ -1,7 +1,7 @@
 import "server-only";
 import { readAdminJson } from "@/lib/admin-repository";
 import { randomUUID } from "node:crypto";
-import { mkdir, rename, rm, writeFile } from "node:fs/promises";
+import { mkdir, readFile, rename, rm, writeFile } from "node:fs/promises";
 import path from "node:path";
 import {
   CarouselPresetFileSchema,
@@ -56,6 +56,28 @@ async function readJson(relative: string, root = repositoryRoot): Promise<unknow
     if ([401, 403].includes((error as { status?: number }).status ?? 0)) throw new CarouselStudioPersistenceError("REFUSED", `${GITHUB_TOKEN_ENV} was refused; check its expiry and repository permissions.`);
     if ((error as NodeJS.ErrnoException).code === "ENOENT") throw new CarouselStudioPersistenceError("UNAVAILABLE", `Missing ${relative}.`);
     throw error;
+  }
+}
+
+/**
+ * A read the renderer depends on. The deck-style, slide-text and preset files only adjust a
+ * render, and the deployment carries the copy that was on `main` when it was built. When GitHub
+ * refuses the token, rendering from that copy beats failing every slide: on 2026-09-27 an expired
+ * token turned every Design Lab preview into "Slide se nevykreslil". Writes still fail with
+ * `REFUSED`, so the owner keeps the signal that the token needs renewing.
+ */
+async function readRenderJson(relative: string, root = repositoryRoot): Promise<unknown> {
+  try {
+    return await readJson(relative, root);
+  } catch (error) {
+    if (!(error instanceof CarouselStudioPersistenceError) || error.code !== "REFUSED") throw error;
+    console.warn(`${error.message} Rendering from the deployed copy of ${relative}.`);
+    try {
+      return JSON.parse(await readFile(path.join(root, relative), "utf8")) as unknown;
+    } catch (local) {
+      if ((local as NodeJS.ErrnoException).code === "ENOENT") throw new CarouselStudioPersistenceError("UNAVAILABLE", `Missing ${relative}.`);
+      throw local;
+    }
   }
 }
 
@@ -297,7 +319,7 @@ export function matchDeckStyleOverride(
  */
 export async function readDeckStyleOverrides(root = repositoryRoot): Promise<DeckStyleOverride[]> {
   try {
-    const raw = await readJson(deckStyleOverridesPath, root) as { overrides?: unknown };
+    const raw = await readRenderJson(deckStyleOverridesPath, root) as { overrides?: unknown };
     return Array.isArray(raw.overrides) ? raw.overrides.filter(isDeckStyleOverride) : [];
   } catch (error) {
     if (error instanceof CarouselStudioPersistenceError && error.code === "UNAVAILABLE") return [];
@@ -387,7 +409,7 @@ function isSlideOverride(value: unknown): value is SlideTextOverride {
 
 export async function readSlideTextOverrides(root = repositoryRoot): Promise<SlideTextOverride[]> {
   try {
-    const raw = await readJson(slideOverridesPath, root) as { overrides?: unknown };
+    const raw = await readRenderJson(slideOverridesPath, root) as { overrides?: unknown };
     return Array.isArray(raw.overrides) ? raw.overrides.filter(isSlideOverride) : [];
   } catch (error) {
     if (error instanceof CarouselStudioPersistenceError && error.code === "UNAVAILABLE") return [];
@@ -519,7 +541,7 @@ const presetsPath = "state/ventures/carousel-studio/presets.json";
  */
 export async function readCarouselPresets(root = repositoryRoot): Promise<CarouselPreset[]> {
   try {
-    const parsed = CarouselPresetFileSchema.safeParse(await readJson(presetsPath, root));
+    const parsed = CarouselPresetFileSchema.safeParse(await readRenderJson(presetsPath, root));
     return parsed.success ? parsed.data.presets : [];
   } catch (error) {
     if (error instanceof CarouselStudioPersistenceError && error.code === "UNAVAILABLE") return [];

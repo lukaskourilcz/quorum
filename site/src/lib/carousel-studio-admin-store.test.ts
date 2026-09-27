@@ -1,7 +1,11 @@
+import { mkdir, mkdtemp, writeFile } from "node:fs/promises";
+import os from "node:os";
+import path from "node:path";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import {
   CarouselStudioPersistenceError,
   matchDeckStyleOverride,
+  readDeckStyleOverrides,
   setDeckStyleOverride,
   type DeckStyleOverride
 } from "./carousel-studio-admin-store";
@@ -153,6 +157,29 @@ describe("the Studio's GitHub writer", () => {
  * The records already on main carry no date and have to go on binding, which is why the exact
  * match is preferred and the undated one is the fallback rather than the other way round.
  */
+describe("reads a render depends on", () => {
+  const realFetch = globalThis.fetch;
+  afterEach(() => {
+    globalThis.fetch = realFetch;
+    vi.unstubAllEnvs();
+    vi.restoreAllMocks();
+  });
+
+  it("render from the deployed copy when GitHub refuses the token", async () => {
+    vi.stubEnv("BOARDLESSAI_GITHUB_TOKEN", "expired-token");
+    vi.spyOn(console, "warn").mockImplementation(() => undefined);
+    const { fetcher } = githubFetch([{ status: 401 }], [{ status: 200 }]);
+    globalThis.fetch = fetcher as unknown as typeof fetch;
+    const root = await mkdtemp(path.join(os.tmpdir(), "studio-read-"));
+    const override: DeckStyleOverride = { venture: "mma-files", slug: request.slug, date: request.date, style: "editorial", changedAt: "2026-08-09T09:00:00.000Z" } as DeckStyleOverride;
+    await mkdir(path.join(root, "state/ventures/carousel-studio"), { recursive: true });
+    await writeFile(path.join(root, "state/ventures/carousel-studio/deck-style-overrides.json"), JSON.stringify({ overrides: [override] }));
+
+    await expect(readDeckStyleOverrides(root)).resolves.toHaveLength(1);
+    expect(console.warn).toHaveBeenCalledWith(expect.stringContaining("BOARDLESSAI_GITHUB_TOKEN"));
+  });
+});
+
 describe("matching an owner's recorded design to an article", () => {
   const dated: DeckStyleOverride = {
     venture: "mma-files", slug: "gamrot", date: "2026-08-06", style: "contrast", changedAt: "2026-08-08T00:00:00.000Z"
