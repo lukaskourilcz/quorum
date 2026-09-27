@@ -27,3 +27,14 @@ Both locale packages resolve every factual sentence to accepted claim IDs. Cross
 validation requires the same core claims, rejects unsupported versions/audiences/actions, checks
 prohibited phrases and rejects clones or high lexical overlap. Holding one locale never permits the
 other to become factually broader.
+
+## Rendered panels in the admin
+
+The Design & delivery tab previews and downloads each rendered panel through
+`/admin/api/webdev-signal/panel/<date>/<locale>/<number>` (`?download=1` for an attachment). The
+route sits behind the admin session, reads only, and serves the file that the package's successful
+`webdev-render-receipt/1` names, and only while its bytes still hash to the receipt's `pngHash`.
+The cycle's daily queue-health step removes a render's panel directory 28 days after the newest
+package day that used it (`orchestrator/src/ventures/webdev-signal/panel-retention.ts`) and commits
+the deletions only. Receipts and payloads stay, so the card names a pruned panel, and its payload
+can render it again.

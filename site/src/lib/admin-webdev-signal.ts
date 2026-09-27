@@ -1,6 +1,6 @@
 import "server-only";
 import { createHash } from "node:crypto";
-import { readdir, readFile } from "node:fs/promises";
+import { access, readdir, readFile } from "node:fs/promises";
 import path from "node:path";
 
 /**
@@ -103,6 +103,18 @@ export interface WebDevAdminDraftPanel {
 }
 
 /**
+ * One rendered panel as the draft card shows it: admin URLs addressed by day, locale and number,
+ * never by repository path, and whether the file is still in the tree. Retention removes panels
+ * after four weeks; the receipt stays, so a pruned panel is named rather than dropped.
+ */
+export interface WebDevAdminPanelFile {
+  number: number;
+  previewUrl: string;
+  downloadUrl: string;
+  available: boolean;
+}
+
+/**
  * One locale package as the owner posts it by hand: the copy, the panel text and, when the Design
  * Lab rendered it, the paths of the panel files. The package is the editor's own writing, so its
  * text crosses this boundary; a source body never does.
@@ -122,6 +134,7 @@ export interface WebDevAdminDraft {
     outcome: "success" | "held" | "failed" | "absent";
     reason: string | null;
     assetRefs: string[];
+    files: WebDevAdminPanelFile[];
   };
 }
 
@@ -424,7 +437,7 @@ function parseDraft(value: unknown): WebDevAdminDraft | null {
     threadsPrimary,
     panels,
     sourceUrls,
-    render: { outcome: "absent", reason: null, assetRefs: [] }
+    render: { outcome: "absent", reason: null, assetRefs: [], files: [] }
   };
 }
 
@@ -433,6 +446,8 @@ interface DraftRender {
   outcome: "success" | "held" | "failed";
   reason: string | null;
   assetRefs: string[];
+  /** Aligned with `assetRefs`: the hash each panel file must still have. Server-side only. */
+  pngHashes: string[];
 }
 
 function parseRender(value: unknown): DraftRender | null {
@@ -441,28 +456,88 @@ function parseRender(value: unknown): DraftRender | null {
   const packageRef = text(record.packageRef, 300);
   const outcome = text(record.outcome, 10);
   if (!packageRef || (outcome !== "success" && outcome !== "held" && outcome !== "failed")) return null;
-  const assetRefs = Array.isArray(record.outputs)
+  const outputs = Array.isArray(record.outputs)
     ? record.outputs.flatMap((entry) => {
       const ref = text(object(entry)?.assetRef, 300);
-      return ref?.startsWith(ASSET_PREFIX) && !ref.includes("..") ? [ref] : [];
+      const pngHash = text(object(entry)?.pngHash, 64);
+      return ref?.startsWith(ASSET_PREFIX) && !ref.includes("..") ? [{ ref, pngHash: pngHash && /^[a-f0-9]{64}$/u.test(pngHash) ? pngHash : "" }] : [];
     }).slice(0, 8)
     : [];
-  return { packageRef, outcome, reason: text(record.reason, 500), assetRefs };
+  return { packageRef, outcome, reason: text(record.reason, 500), assetRefs: outputs.map(({ ref }) => ref), pngHashes: outputs.map(({ pngHash }) => pngHash) };
 }
 
-/** A package meets the receipt that rendered it; a successful render wins over a held retry. */
-function joinRenders(drafts: readonly WebDevAdminDraft[], renders: readonly DraftRender[]): WebDevAdminDraft[] {
-  return drafts
+function packageRefFor(date: string, locale: "cs" | "en"): string {
+  return `state/ventures/webdev-signal/packages/${date}-${locale}.json`;
+}
+
+/** A successful render wins over a held retry. */
+function renderFor(renders: readonly DraftRender[], date: string, locale: "cs" | "en"): DraftRender | undefined {
+  const matching = renders.filter((render) => render.packageRef === packageRefFor(date, locale));
+  return matching.find((candidate) => candidate.outcome === "success") ?? matching[0];
+}
+
+function panelUrl(date: string, locale: "cs" | "en", number: number): string {
+  return `/admin/api/webdev-signal/panel/${date}/${locale}/${number}`;
+}
+
+async function exists(relative: string): Promise<boolean> {
+  try { await access(path.join(repositoryRoot(), relative)); return true; } catch { return false; }
+}
+
+/** A package meets the receipt that rendered it. */
+async function joinRenders(drafts: readonly WebDevAdminDraft[], renders: readonly DraftRender[]): Promise<WebDevAdminDraft[]> {
+  const joined = drafts
     .map((draft) => {
-      const packageRef = `state/ventures/webdev-signal/packages/${draft.date}-${draft.locale}.json`;
-      const matching = renders.filter((render) => render.packageRef === packageRef);
-      const render = matching.find((candidate) => candidate.outcome === "success") ?? matching[0];
+      const render = renderFor(renders, draft.date, draft.locale);
       return render
-        ? { ...draft, render: { outcome: render.outcome, reason: render.reason, assetRefs: render.assetRefs } }
+        ? { ...draft, render: { outcome: render.outcome, reason: render.reason, assetRefs: render.assetRefs, files: [] } }
         : draft;
     })
     .sort((left, right) => right.date.localeCompare(left.date) || left.locale.localeCompare(right.locale))
     .slice(0, DRAFT_LIMIT);
+  return Promise.all(joined.map(async (draft) => draft.render.outcome !== "success" ? draft : {
+    ...draft,
+    render: {
+      ...draft.render,
+      files: await Promise.all(draft.render.assetRefs.map(async (ref, index) => ({
+        number: index + 1,
+        previewUrl: panelUrl(draft.date, draft.locale, index + 1),
+        downloadUrl: `${panelUrl(draft.date, draft.locale, index + 1)}?download=1`,
+        available: await exists(ref)
+      })))
+    }
+  }));
+}
+
+export type WebDevPanelRead =
+  | { state: "found"; bytes: Buffer; filename: string }
+  | { state: "not-found" }
+  | { state: "mismatch" };
+
+/**
+ * One rendered panel of one day's locale package, for the admin preview and download route.
+ *
+ * Addressed by day, locale and number, never by path: the file is the one the package's
+ * successful render receipt names, and it is served only while its bytes still hash to what that
+ * receipt recorded. Reads only; nothing here writes state.
+ */
+export async function readWebDevSignalPanel(date: string, locale: string, number: number): Promise<WebDevPanelRead> {
+  if (!/^\d{4}-\d{2}-\d{2}$/u.test(date) || (locale !== "cs" && locale !== "en") || !Number.isInteger(number) || number < 1 || number > 8) {
+    return { state: "not-found" };
+  }
+  const renders = await readDirectory("state/ventures/webdev-signal/design-lab/receipts", /\.json$/u, parseRender);
+  const render = renderFor(renders.values, date, locale);
+  const ref = render?.outcome === "success" ? render.assetRefs[number - 1] : undefined;
+  const expected = render?.pngHashes[number - 1];
+  if (!ref || !expected) return { state: "not-found" };
+  let bytes: Buffer;
+  try {
+    bytes = await readFile(path.join(repositoryRoot(), ref));
+  } catch {
+    return { state: "not-found" };
+  }
+  if (createHash("sha256").update(bytes).digest("hex") !== expected) return { state: "mismatch" };
+  return { state: "found", bytes, filename: `webdev-signal-${date}-${locale}-${String(number).padStart(2, "0")}.png` };
 }
 
 export async function readAdminWebDevSignal(): Promise<AdminWebDevSignalSnapshot> {
@@ -485,7 +560,7 @@ export async function readAdminWebDevSignal(): Promise<AdminWebDevSignalSnapshot
     profilesState: profiles.state,
     profiles: profiles.values.sort((left, right) => left.id.localeCompare(right.id)),
     draftsState: packages.state,
-    drafts: joinRenders(packages.values, renders.values),
+    drafts: await joinRenders(packages.values, renders.values),
     authority,
     unreadable: observations.unreadable + baselines.unreadable + profiles.unreadable + packages.unreadable + renders.unreadable
   };

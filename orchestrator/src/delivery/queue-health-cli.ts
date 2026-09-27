@@ -3,6 +3,7 @@ import { pathToFileURL } from "node:url";
 import { repoRoot, stateRoot } from "../paths.js";
 import { pruneSocialAssets } from "../social/media/retention.js";
 import { pruneSocialQueue } from "../social/queue-retention.js";
+import { pruneWebDevSignalPanels } from "../ventures/webdev-signal/panel-retention.js";
 import { runQueueHealthCheck } from "./queue-health.js";
 
 function valueAfter(args: string[], name: string): string | undefined {
@@ -37,6 +38,11 @@ async function main(): Promise<void> {
     console.error(`social queue retention failed: ${error instanceof Error ? error.message : String(error)}`);
     return null;
   });
+  // WebDev Signal's rendered panels leave after four weeks; the render receipts keep their hashes.
+  const panels = await pruneWebDevSignalPanels({ stateRoot, today }).catch((error: unknown) => {
+    console.error(`WebDev Signal panel retention failed: ${error instanceof Error ? error.message : String(error)}`);
+    return null;
+  });
   for (const venture of report.ventures) {
     const line = `${venture.venture}: ${venture.waiting.length} waiting, ${venture.parked.length} parked`;
     console.log(venture.stalled ? `${line} — NOT DRAINING` : line);
@@ -51,6 +57,9 @@ async function main(): Promise<void> {
   if (queueRetention) {
     const { removedItems, removedEvents, keepFrom, keptItems, heldByLink } = queueRetention.record;
     console.log(`social queue: ${removedItems.length} closed items and ${removedEvents.length} events pruned before ${keepFrom}, ${keptItems} items kept, ${heldByLink} held by a link`);
+  }
+  if (panels) {
+    console.log(`WebDev Signal panels: ${panels.removed.length} renders pruned before ${panels.keepFrom}, ${panels.kept} kept, ${panels.unmanaged} unmanaged`);
   }
   console.log(JSON.stringify({ needsOwner: report.needsOwner, artifacts: [...artifacts, ...(retention?.artifacts ?? []), ...(queueRetention?.artifacts ?? [])] }));
 }

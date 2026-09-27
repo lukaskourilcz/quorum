@@ -55,7 +55,15 @@ const DRAFT: WebDevAdminDraft = {
     { role: "source", heading: "Zdroj", body: "Oficiální zdroj: Chrome official source" }
   ],
   sourceUrls: ["https://developer.chrome.com/blog/x/"],
-  render: { outcome: "success", reason: null, assetRefs: ["state/ventures/webdev-signal/design-lab/assets/abc/cs/01.png"] }
+  render: {
+    outcome: "success",
+    reason: null,
+    assetRefs: ["state/ventures/webdev-signal/design-lab/assets/abc/cs/01.png", "state/ventures/webdev-signal/design-lab/assets/abc/cs/02.png"],
+    files: [
+      { number: 1, previewUrl: "/admin/api/webdev-signal/panel/2026-08-12/cs/1", downloadUrl: "/admin/api/webdev-signal/panel/2026-08-12/cs/1?download=1", available: true },
+      { number: 2, previewUrl: "/admin/api/webdev-signal/panel/2026-08-12/cs/2", downloadUrl: "/admin/api/webdev-signal/panel/2026-08-12/cs/2?download=1", available: false }
+    ]
+  }
 };
 
 function render(snapshot: AdminWebDevSignalSnapshot, tab: (typeof WEBDEV_TABS)[number]): string {
@@ -64,12 +72,16 @@ function render(snapshot: AdminWebDevSignalSnapshot, tab: (typeof WEBDEV_TABS)[n
 
 describe("the WebDev Signal workspace", () => {
   it("lays each draft out for manual posting: caption, Threads text, panels and rendered files", () => {
-    const html = render({ ...SNAPSHOT, draftsState: "present", drafts: [DRAFT, { ...DRAFT, locale: "en", status: "held", heldReason: "cs:missing-source-attribution", render: { outcome: "absent", reason: null, assetRefs: [] } }] }, "delivery");
+    const html = render({ ...SNAPSHOT, draftsState: "present", drafts: [DRAFT, { ...DRAFT, locale: "en", status: "held", heldReason: "cs:missing-source-attribution", render: { outcome: "absent", reason: null, assetRefs: [], files: [] } }] }, "delivery");
 
     expect(html).toContain("Drafts to post by hand");
     expect(html).toContain("Zdroj: https://developer.chrome.com/blog/x/");
     expect(html).toContain("design-lab/assets/abc/cs/01.png");
-    expect(html).toContain("rendered · 1 panel");
+    expect(html).toContain("rendered · 2 panels");
+    expect(html).toContain('src="/admin/api/webdev-signal/panel/2026-08-12/cs/1"');
+    expect(html).toContain('href="/admin/api/webdev-signal/panel/2026-08-12/cs/1?download=1"');
+    expect(html).toContain("Panel 2 was pruned after four weeks");
+    expect(html).not.toContain("/admin/api/webdev-signal/panel/2026-08-12/cs/2?download=1");
     expect(html).toContain("Held: cs:missing-source-attribution");
     expect(html).toContain("not rendered");
     // Still nothing that posts: the same warning sits under the drafts.

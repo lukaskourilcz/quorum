@@ -274,6 +274,50 @@ function renderLabel(render: WebDevAdminDraft["render"]): string {
 }
 
 /**
+ * The rendered panels of one package: a preview of each and a download link, served by the admin
+ * route from the file its render receipt names. A panel retention has removed says so.
+ */
+function RenderedPanels({ draft }: { draft: WebDevAdminDraft }) {
+  const label = draft.locale === "cs" ? "Czech" : "English";
+  return (
+    <>
+      <p className="mt-3 font-mono text-[9.5px] uppercase tracking-[0.12em] text-[var(--admin-foreground-muted)]">Rendered panels</p>
+      <ol className="mt-1 grid grid-cols-3 gap-2 sm:grid-cols-6">
+        {draft.render.files.map((file) => (
+          <li className="grid gap-1" key={file.number}>
+            {file.available ? (
+              <>
+                <a href={file.previewUrl} rel="noreferrer" target="_blank">
+                  {/* eslint-disable-next-line @next/next/no-img-element */}
+                  <img
+                    alt={`${label} panel ${file.number} of ${draft.render.files.length}, ${draft.date}`}
+                    className="w-full rounded-[6px] border border-[var(--admin-border)]"
+                    height={1350}
+                    loading="lazy"
+                    src={file.previewUrl}
+                    width={1080}
+                  />
+                </a>
+                <a className="text-[length:var(--admin-type-label)] underline" download href={file.downloadUrl}>
+                  Download {String(file.number).padStart(2, "0")}
+                </a>
+              </>
+            ) : (
+              <span className="text-[length:var(--admin-type-label)] text-[var(--admin-foreground-muted)]">
+                Panel {file.number} was pruned after four weeks; its payload can render it again.
+              </span>
+            )}
+          </li>
+        ))}
+      </ol>
+      <ul className="mt-2 grid gap-1 font-mono text-[length:var(--admin-type-label)] text-[var(--admin-foreground-muted)]">
+        {draft.render.assetRefs.map((ref) => <li key={ref}>{ref}</li>)}
+      </ul>
+    </>
+  );
+}
+
+/**
  * The packages as the owner posts them. Nothing here is a queue: the runner writes the copy and
  * the panel files, and the owner carries them to the accounts by hand until publishing is granted.
  */
@@ -295,7 +339,7 @@ function Drafts({ snapshot }: { snapshot: AdminWebDevSignalSnapshot }) {
     <Card note={`${snapshot.drafts.length} packages`} title="Drafts to post by hand">
       <p className="text-[length:var(--admin-type-body)] text-[var(--admin-foreground-muted)]">
         Each package is the deterministic editor&apos;s copy for one locale and one day. Nothing here is queued or posted:
-        copy the caption, take the rendered panel files from the paths named, and post from the accounts you own.
+        copy the caption, download the rendered panels, and post from the accounts you own.
       </p>
       <ol className="mt-4 grid gap-4">
         {snapshot.drafts.map((draft) => (
@@ -328,14 +372,7 @@ function Drafts({ snapshot }: { snapshot: AdminWebDevSignalSnapshot }) {
                 </li>
               ))}
             </ol>
-            {draft.render.assetRefs.length > 0 ? (
-              <>
-                <p className="mt-3 font-mono text-[9.5px] uppercase tracking-[0.12em] text-[var(--admin-foreground-muted)]">Rendered panel files</p>
-                <ul className="mt-1 grid gap-1 font-mono text-[length:var(--admin-type-label)] text-[var(--admin-foreground-muted)]">
-                  {draft.render.assetRefs.map((ref) => <li key={ref}>{ref}</li>)}
-                </ul>
-              </>
-            ) : null}
+            {draft.render.files.length > 0 ? <RenderedPanels draft={draft} /> : null}
             {draft.sourceUrls.length > 0 ? (
               <p className="mt-3 text-[length:var(--admin-type-label)] text-[var(--admin-foreground-muted)]">Source: {draft.sourceUrls.join(", ")}</p>
             ) : null}

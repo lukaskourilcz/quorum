@@ -1,8 +1,9 @@
+import { createHash } from "node:crypto";
 import { mkdtemp, mkdir, writeFile } from "node:fs/promises";
 import os from "node:os";
 import path from "node:path";
 import { afterEach, describe, expect, it, vi } from "vitest";
-import { readAdminWebDevSignal } from "./admin-webdev-signal";
+import { readAdminWebDevSignal, readWebDevSignalPanel } from "./admin-webdev-signal";
 
 afterEach(() => vi.unstubAllEnvs());
 
@@ -108,7 +109,13 @@ describe("the WebDev Signal admin snapshot", () => {
     expect(snapshot.drafts.map(({ date, locale }) => `${date}-${locale}`)).toEqual(["2026-08-13-en", "2026-08-12-cs", "2026-08-12-en"]);
     const czech = snapshot.drafts.find(({ locale, date }) => locale === "cs" && date === "2026-08-12");
     // The successful render wins over the held retry, and an escaping asset ref is dropped.
-    expect(czech?.render).toEqual({ outcome: "success", reason: null, assetRefs: ["state/ventures/webdev-signal/design-lab/assets/abc/cs/01.png"] });
+    // The file is not in the tree, so the card names the panel as pruned rather than showing a broken image.
+    expect(czech?.render).toEqual({
+      outcome: "success",
+      reason: null,
+      assetRefs: ["state/ventures/webdev-signal/design-lab/assets/abc/cs/01.png"],
+      files: [{ number: 1, previewUrl: "/admin/api/webdev-signal/panel/2026-08-12/cs/1", downloadUrl: "/admin/api/webdev-signal/panel/2026-08-12/cs/1?download=1", available: false }]
+    });
     expect(czech?.sourceUrls).toEqual(["https://developer.chrome.com/blog/x/"]);
     expect(czech?.instagramCaption).toContain("Source: https://");
     expect(snapshot.drafts.find(({ date }) => date === "2026-08-13")?.render.outcome).toBe("absent");
@@ -187,5 +194,48 @@ describe("the WebDev Signal admin snapshot", () => {
 
     expect(snapshot.days[0]?.outcome).toBe("NO_EDITION");
     expect(snapshot.days[0]?.scoreMargin).toEqual({ value: null, unavailableReason: "no-edition-day" });
+  });
+});
+
+describe("one rendered panel, for the admin preview and download route", () => {
+  const PNG = Buffer.from("89504e470d0a1a0a0000000d49484452", "hex");
+  const HASH = createHash("sha256").update(PNG).digest("hex");
+  const REF = "state/ventures/webdev-signal/design-lab/assets/abc/cs/01.png";
+
+  async function rendered(root: string, bytes: Buffer): Promise<void> {
+    await mkdir(path.join(root, "state/ventures/webdev-signal/design-lab/assets/abc/cs"), { recursive: true });
+    await writeFile(path.join(root, REF), bytes);
+    await receiptFile(root, "aaa-cs.json", { outputs: [{ panelId: "panel-01", assetRef: REF, pngHash: HASH }] });
+  }
+
+  it("serves the file the day's successful receipt names while its bytes match the receipt", async () => {
+    const root = await repository();
+    await rendered(root, PNG);
+
+    const read = await readWebDevSignalPanel("2026-08-12", "cs", 1);
+
+    expect(read).toEqual({ state: "found", bytes: PNG, filename: "webdev-signal-2026-08-12-cs-01.png" });
+    const snapshot = await (async () => { await packageFile(root, "2026-08-12", "cs"); return readAdminWebDevSignal(); })();
+    expect(snapshot.drafts[0]?.render.files).toEqual([expect.objectContaining({ number: 1, available: true })]);
+  });
+
+  it("refuses a changed file, a missing panel and anything that is not a day, a locale and a number", async () => {
+    const root = await repository();
+    await rendered(root, Buffer.from("not the rendered panel"));
+
+    expect(await readWebDevSignalPanel("2026-08-12", "cs", 1)).toEqual({ state: "mismatch" });
+    expect(await readWebDevSignalPanel("2026-08-12", "cs", 2)).toEqual({ state: "not-found" });
+    expect(await readWebDevSignalPanel("2026-08-12", "en", 1)).toEqual({ state: "not-found" });
+    expect(await readWebDevSignalPanel("../../x", "cs", 1)).toEqual({ state: "not-found" });
+    expect(await readWebDevSignalPanel("2026-08-12", "de", 1)).toEqual({ state: "not-found" });
+    expect(await readWebDevSignalPanel("2026-08-12", "cs", 0)).toEqual({ state: "not-found" });
+  });
+
+  it("serves nothing from a held render", async () => {
+    const root = await repository();
+    await rendered(root, PNG);
+    await receiptFile(root, "aaa-cs.json", { outcome: "held", reason: "textFit", outputs: [{ panelId: "panel-01", assetRef: REF, pngHash: HASH }] });
+
+    expect(await readWebDevSignalPanel("2026-08-12", "cs", 1)).toEqual({ state: "not-found" });
   });
 });
