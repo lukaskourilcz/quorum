@@ -1,8 +1,26 @@
 {
   "schemaVersion": "social-reference-monitor/1",
-  "sampledAt": "2026-09-27T14:39:27.464Z",
-  "expiresAt": "2026-10-04T14:39:27.464Z",
+  "sampledAt": "2026-09-27T23:26:33.185Z",
+  "expiresAt": "2026-10-04T23:26:33.185Z",
   "posts": [
+    {
+      "id": "Ddy6biRAHHN",
+      "account": "evolving.ai",
+      "url": "https://www.instagram.com/p/Ddy6biRAHHN/",
+      "postedAt": "2026-09-27T15:17:43.000Z",
+      "slideCount": 19,
+      "captionWords": 104,
+      "questionHook": false
+    },
+    {
+      "id": "Ddy2jrzDjFL",
+      "account": "activeprogrammer",
+      "url": "https://www.instagram.com/p/Ddy2jrzDjFL/",
+      "postedAt": "2026-09-27T14:43:53.000Z",
+      "slideCount": 8,
+      "captionWords": 103,
+      "questionHook": false
+    },
     {
       "id": "DdyzIFNACsW",
       "account": "evolving.ai",
@@ -77,14 +95,8 @@
     }
   ],
   "newPostIds": [
-    "evolving.ai:DdyzIFNACsW",
-    "evolving.ai:DdyisVegPDY",
-    "evolving.ai:DdyU0TOAAju",
-    "activeprogrammer:Ddvvmgojq-9",
-    "activeprogrammer:Ddrkqkmjp3S",
-    "activeprogrammer:Ddt6oihDrkn",
-    "evolving.ai:DdyXMjWR4ZC",
-    "activeprogrammer:DdtvUV9jkFA"
+    "evolving.ai:Ddy6biRAHHN",
+    "activeprogrammer:Ddy2jrzDjFL"
   ],
   "publishingAuthorized": false
 }
