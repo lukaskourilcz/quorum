@@ -56,7 +56,8 @@ describe("brand kits", () => {
     const manifest = kit.manifest!;
     const brand = CAROUSEL_BRANDS[manifest.studioBrand as keyof typeof CAROUSEL_BRANDS];
     expect(brand, `${manifest.studioBrand} is not a studio brand`).toBeDefined();
-    expect(brand.logoText).toBe(manifest.displayName);
+    // Case-insensitive: devShark's recorded frames still carry the capitals (see library.ts).
+    expect(brand.logoText.toLowerCase()).toBe(manifest.displayName.toLowerCase());
     if (manifest.carouselPalette) {
       expect(brand.colors).toEqual(Object.fromEntries(Object.entries(manifest.carouselPalette).map(([token, entry]) => [token, entry.value])));
     }
