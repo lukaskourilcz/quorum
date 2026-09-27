@@ -30,6 +30,20 @@ neither section. To bring an item back, move it above them.
 
 - [ ] **Decide whether to dispatch DNESKAi's 2026-09-27 edition** — it never ran. `cu-day`, `cu-edition`, `morning` and `ms-daily` were skipped from 03:04 to 07:05 UTC because the Queue route test's fixed date failed the pre-cycle release gate (fixed by `f86d8b01`). The later runs 36309712326 and 36314359027 passed the gate but did not produce the edition. A dispatch costs model calls, so it is yours to start or skip. [imp:4] [owner:me] [time:10m] [kind:decision]
 
+## Design Lab brand kits · 2026-09-27
+
+The Design Lab has a Brand tab (`/admin?venture=design-lab&tab=brand`) showing the DNESKAi and
+devShark kits from `studio/brand-kits/`. DNESKAi carousels now draw the outlined logotype and the
+kit's white and blueprint-blue palette in place of the obsidian and magenta. See
+`docs/design-lab/BRAND-KITS.md`.
+
+- [ ] **Review the Brand tab and DNESKAi's new carousel look after the next deploy** — DNESKAi decks switch from a dark ground to white, paper and blueprint blue with the real logotype. Look at a few decks in the Design Lab before the next approved post. [imp:4] [owner:me] [time:15m] [kind:decision]
+- [ ] **Send the rest of the devShark handoff** — the kit in `studio/brand-kits/marketingshark/` holds the 18 `recommended/` SVGs and the rules from the export's README and your social rules. The README names a brand manual (`devshark-02-brand-manual.dc.html`), social templates (`devshark-04-social.dc.html`, `social/SKILL.md`) and `CHANGES.md` that the export did not contain. Drop them in `studio/brand-kits/marketingshark/` if their rules should bind, and say whether the clear space of "the height of the d" has a number. [imp:2] [owner:me] [time:10m] [kind:content]
+- [ ] **Re-pin the devShark kit to react-express-app** — the kit cites an owner handoff. Once `client/public/brand/v9/` merges there, switch `source` to that repository and commit and confirm the hashes still match. [imp:2] [owner:ai] [time:20m] [kind:setup]
+- [ ] **Re-pin the DNESKAi kit if aifirst squash-merges `claude/dneskai-logo`** — the manifest pins `978cf71` on that branch. A squash merge leaves that commit off `main`; point `source.commit` at the merge commit and keep the hashes. [imp:1] [owner:ai] [time:10m] [kind:setup]
+- [ ] **Build devShark's carousels on its kit** — five 1080 × 1350 slides grounded Ink, Pale `#f3f6f1`, Green, Pale, Ink; the clean fin at 48 px in a corner of every slide; the full logo on the last slide only; devShark named once, at the end, and always spelled devShark (the studio wordmark still reads DEVSHARK). That means a devShark template, `carouselPalette` in its manifest plus the `library.ts` tokens, `logoSlot` on the chosen files, and re-recording marketingShark's package frames, whose hashes change. [imp:4] [owner:ai] [time:4h] [kind:setup]
+- [ ] **Set DNESKAi carousels in DNESKAi's own faces** — the site uses Space Grotesk and Source Serif 4; the studio has neither, so DNESKAi decks still use Archivo and IBM Plex Sans. Commit both OFL faces to `studio/fonts/`, run `pnpm -C studio fonts:metrics` and switch the `caught-up` fonts. [imp:3] [owner:ai] [time:1h] [kind:setup]
+
 ## Ported from `claude/elegant-cori-h9cdgb` · 2026-09-27
 
 The owner decisions from the branch's own list that still apply to what `main` now carries. The
