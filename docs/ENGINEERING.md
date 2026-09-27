@@ -151,7 +151,7 @@ writes an ignored `.deploy/validation.json` receipt tied to the exact commit. A 
 or dirty tree invalidates it.
 
 Run `pnpm deploy:preview` to pull Preview configuration, build `.vercel/output` locally and upload
-it once with `vercel deploy --prebuilt --archive=tgz`. The archive keeps the upload under the CLI's 15,000-file limit, which the traced `state/` tree passed on 2026-09-27. Verify the returned URL, including server routes,
+it once with `vercel deploy --prebuilt --archive=tgz`. The archive keeps the upload under the CLI's 15,000-file limit, which the traced `state/` tree passed on 2026-09-27. The output must carry the Linux builds of native packages (resvg, sharp); `supportedArchitectures` in `pnpm-workspace.yaml` installs them on a Mac, and the release stops before upload if a package is traced only for darwin. Verify the returned URL, including server routes,
 redirects, protected Admin behavior and cron configuration. This first manual preview is also the
 required parity check for the linked monorepo settings and build-time Vercel values.
 

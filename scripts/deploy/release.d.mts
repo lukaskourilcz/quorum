@@ -39,6 +39,9 @@ export function runDeployment(options: DeploymentOptions & {
   projectLink?: () => Promise<{ projectId: string; orgId: string }>;
   run?: CommandRunner;
   capture?: CommandRunner;
+  tracedPaths?: () => Promise<string[]>;
   writeReceipt?: (filePath: string, receipt: Record<string, unknown>) => Promise<void>;
   now?: () => Date;
 }): Promise<DeploymentReceipt>;
+export function nativePackagesMissingLinux(tracedPaths: string[]): string[];
+export function readPrebuiltTracedPaths(outputDirectory?: string): Promise<string[]>;

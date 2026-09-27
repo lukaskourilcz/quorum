@@ -22,3 +22,17 @@ overrides:
   "postcss@<8.5.18": 8.5.25
   "sharp@<0.35.0": 0.35.4
   "smol-toml@<1.7.1": 1.7.1
+
+# Releases build on a Mac and upload a prebuilt output to Vercel's Linux arm64
+# functions, so native packages (resvg, sharp) need their linux-arm64-gnu builds
+# installed next to the host's. Without them the function cannot load resvg.
+supportedArchitectures:
+  os:
+    - current
+    - linux
+  cpu:
+    - current
+    - arm64
+  libc:
+    - current
+    - glibc

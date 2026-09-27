@@ -2,6 +2,7 @@ import { readFile } from "node:fs/promises";
 import path from "node:path";
 import { describe, expect, it, vi } from "vitest";
 import {
+  nativePackagesMissingLinux,
   parseDeploymentArguments,
   runDeployment
 } from "../../scripts/deploy/release.mjs";
@@ -31,6 +32,7 @@ function previewHarness(overrides: Record<string, unknown> = {}) {
     projectLink: async () => link,
     run,
     capture: async () => ({ stdout: sha, stderr: "" }),
+    tracedPaths: async () => [],
     writeReceipt: async (_path: string, receipt: Record<string, unknown>) => {
       receipts.push(receipt);
     },
@@ -193,5 +195,21 @@ describe("deployment secret hygiene", () => {
     expect(ignored).toContain(".vercel/");
     expect(ignored).toContain("site/.vercel/");
     expect(ignored).toContain(".env.*.local");
+  });
+});
+
+describe("native binaries in a prebuilt output", () => {
+  const darwin = "node_modules/.pnpm/@resvg+resvg-js-darwin-arm64@2.6.2/node_modules/@resvg/resvg-js-darwin-arm64/resvgjs.darwin-arm64.node";
+  const linux = "node_modules/.pnpm/@resvg+resvg-js-linux-arm64-gnu@2.6.2/node_modules/@resvg/resvg-js-linux-arm64-gnu/resvgjs.linux-arm64-gnu.node";
+
+  it("names a package traced only in its darwin build", () => {
+    expect(nativePackagesMissingLinux([darwin, "site/.next/server/app/page.js"])).toEqual(["@resvg+resvg-js"]);
+    expect(nativePackagesMissingLinux([darwin, linux])).toEqual([]);
+  });
+
+  it("stops before upload when the output would not load on Linux", async () => {
+    const harness = previewHarness({ tracedPaths: async () => [darwin] });
+    await expect(runDeployment(harness.options as never)).rejects.toThrow("only the darwin build of @resvg+resvg-js");
+    expect(harness.calls.some((call) => call.includes("vercel deploy"))).toBe(false);
   });
 });

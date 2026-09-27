@@ -98,6 +98,40 @@ function deploymentCommands(target, buildMode) {
   };
 }
 
+const NATIVE_PACKAGE = /node_modules\/\.pnpm\/((?:@[^+/]+\+)?[a-z0-9-]+?)-(darwin|linux|linuxmusl|win32)-(arm64|x64)(?:-[a-z]+)?@/u;
+
+/**
+ * A release built on a Mac uploads a prebuilt output to Linux functions. A native
+ * package traced only in its darwin build loads nowhere there: on 2026-09-27 every
+ * Design Lab slide failed with "Cannot find module @resvg/resvg-js-linux-arm64-gnu".
+ * Returns the packages that have a darwin build in the output but no linux one.
+ */
+export function nativePackagesMissingLinux(tracedPaths) {
+  const platforms = new Map();
+  for (const tracedPath of tracedPaths) {
+    const match = NATIVE_PACKAGE.exec(tracedPath);
+    if (!match) continue;
+    const [, name, platform] = match;
+    if (!platforms.has(name)) platforms.set(name, new Set());
+    platforms.get(name).add(platform);
+  }
+  return [...platforms]
+    .filter(([, seen]) => seen.has("darwin") && !seen.has("linux"))
+    .map(([name]) => name)
+    .sort();
+}
+
+export async function readPrebuiltTracedPaths(outputDirectory = path.join(repoRoot, ".vercel", "output", "functions")) {
+  const { readdir } = await import("node:fs/promises");
+  const paths = [];
+  for (const entry of await readdir(outputDirectory, { recursive: true, withFileTypes: true })) {
+    if (!entry.isFile() || entry.name !== ".vc-config.json") continue;
+    const config = JSON.parse(await readFile(path.join(entry.parentPath, entry.name), "utf8"));
+    paths.push(...Object.values(config.filePathMap ?? {}));
+  }
+  return paths;
+}
+
 function deploymentUrl(stdout) {
   return stdout.match(/https:\/\/[^\s"',]+/gu)?.at(-1) ?? null;
 }
@@ -111,6 +145,7 @@ export async function runDeployment({
   projectLink = () => readProjectLink(),
   run = runCommand,
   capture = captureCommand,
+  tracedPaths = () => readPrebuiltTracedPaths(),
   writeReceipt = writeJsonAtomic,
   now = () => new Date()
 }) {
@@ -157,7 +192,16 @@ export async function runDeployment({
     if (linkedAfter.projectId !== linkedBefore.projectId || linkedAfter.orgId !== linkedBefore.orgId) {
       throw new Error("vercel pull changed the linked project; deployment stopped before build");
     }
-    if (commands.build) await run(...commands.build, { cwd: repoRoot });
+    if (commands.build) {
+      await run(...commands.build, { cwd: repoRoot });
+      const missing = nativePackagesMissingLinux(await tracedPaths());
+      if (missing.length > 0) {
+        throw new Error(
+          `the prebuilt output carries only the darwin build of ${missing.join(", ")}; ` +
+            "run `pnpm install` so pnpm-workspace.yaml's supportedArchitectures adds the linux builds"
+        );
+      }
+    }
 
     const beforeUpload = await gitState();
     if (!beforeUpload.clean || beforeUpload.sha !== state.sha) {
