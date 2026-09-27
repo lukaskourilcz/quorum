@@ -6,13 +6,14 @@
   "status": "approved",
   "approvedOn": "2026-09-27",
   "source": {
-    "kind": "handoff",
-    "receivedOn": "2026-09-27",
-    "from": "owner",
-    "description": "devShark brand kit V9, the variant chosen on 2026-09-27: the recommended/ SVGs of the owner's export, copied byte for byte.",
-    "pinTo": "lukaskourilcz/react-express-app client/public/brand/v9/ once that is merged; re-pin this kit to that commit then.",
+    "kind": "repository",
+    "repository": "lukaskourilcz/react-express-app",
+    "ref": "main",
+    "commit": "bc3a2e8899e0243715a3ad0ad99db33309652833",
     "documents": [
-      "README.md (export root)"
+      "docs/brand/brand-guidelines.md",
+      "docs/marketing/social-skill.md",
+      "client/public/brand/v9/README.md"
     ]
   },
   "logotype": {
@@ -65,12 +66,36 @@
       "grounds": [],
       "colors": [
         {
-          "role": "Green",
+          "role": "Green, --brand-accent",
           "value": "#2d7a2d"
         },
         {
-          "role": "Ink",
+          "role": "Green 800, hover and pressed",
+          "value": "#236123"
+        },
+        {
+          "role": "Green 100, active item tint",
+          "value": "#e3efe1"
+        },
+        {
+          "role": "Ink, text and ink grounds",
           "value": "#132019"
+        },
+        {
+          "role": "Ink 700, secondary text",
+          "value": "#3c4f43"
+        },
+        {
+          "role": "Ink surface, cards on ink",
+          "value": "#1b2a21"
+        },
+        {
+          "role": "Line, decoration only",
+          "value": "#d6ded3"
+        },
+        {
+          "role": "Pale, light ground",
+          "value": "#f3f6f1"
         },
         {
           "role": "White",
@@ -99,28 +124,40 @@
     }
   ],
   "rules": [
-    "Always spell it devShark.",
+    "Always spell it devShark: one capital S, also in uppercase labels. Never DevShark or DEVSHARK.",
     "The fin sits left of the name, its tip pointing left, with one wave and a transparent cut-out.",
     "Green on white or light grounds, white on ink or green, ink for one-colour print.",
     "Clear space on every side equals the height of the letter d.",
-    "The favicon and embroidery use the clean fin only.",
-    "All files draw the name as outlines; PNG exports have transparent backgrounds."
+    "Below 100 px of width, use the clean fin instead of a logo.",
+    "The favicon and embroidery use the clean fin only. Every fin apart from the logo's is the clean fin.",
+    "Never trace, redraw or recolour a mark; every file draws the name as outlines.",
+    "Text contrast reaches 4.5:1: white on ink or green, ink on pale. Green text never sits on ink (3.15:1).",
+    "devShark ships no AI feature. Brand copy makes no AI claims."
   ],
   "doNots": [
     "Do not use gradients.",
     "Do not add shadows.",
     "Do not add 3D effects.",
-    "Do not use the V1-V10 working variants in production."
+    "Do not use the V1-V10 working variants in production.",
+    "Do not put generated imagery on the marks.",
+    "Do not fake terminals or screenshot made-up UI."
   ],
   "socialRules": [
-    "A carousel is 5 slides at 1080 × 1350.",
-    "Slide grounds run Ink, Pale #f3f6f1, Green, Pale, Ink.",
-    "The clean fin sits at 48 px in the corner of every slide.",
-    "The full logo appears only on the last slide.",
-    "devShark is named once, at the end."
+    "A carousel is 5 slides at 1080 × 1350: the question, context or code, the options, the answer and why, the takeaway.",
+    "Slide grounds run Ink #132019, Pale #f3f6f1, Green #2d7a2d, Pale, Ink; white text on ink and green, ink on pale.",
+    "The clean fin sits 48 px wide in the same corner of every slide, 48 px from the edges: white on ink and green, green on pale.",
+    "The full logo appears only on the last slide: the horizontal logo, 160 px wide or more.",
+    "devShark is named once, on the last slide. Slides 1 to 4 teach; they do not sell.",
+    "Code is set in JetBrains Mono on a pale or ink panel.",
+    "A square post is 1080 × 1080: one fact, question or result, the clean fin in the corner at 48 px, and the compact or horizontal logo at the bottom when it names devShark.",
+    "A story is 1080 × 1920 with text and marks inside the middle 1080 × 1420; the clean fin sits at 48 px in the top corner of that safe area.",
+    "The owner's social SKILL.md will replace these interim rules (docs/marketing/social-skill.md)."
   ],
   "typography": [
-    "The name is drawn as outlines in every logo file; do not set it in a font."
+    "The name is drawn as outlines in every logo file; do not set it in a font. The lettering started as Manrope ExtraBold.",
+    "Manrope 800 and 700 for headings and display.",
+    "Inter 400 and 500 for body text and interface.",
+    "JetBrains Mono 400 for code in marketing and print."
   ],
   "assets": [
     {
@@ -131,7 +168,7 @@
       "mediaType": "image/svg+xml",
       "sha256": "d959eac1963f94f1bb18bdc6cd96e69fe7c384d1ab11e0596441be0c68b149fe",
       "bytes": 14755,
-      "sourcePath": "recommended/devshark-logo-horizontal-green.svg",
+      "sourcePath": "client/public/brand/v9/recommended/devshark-logo-horizontal-green.svg",
       "use": "The primary logo; green on white or light grounds.",
       "grounds": [
         "#ffffff",
@@ -158,7 +195,7 @@
       "mediaType": "image/svg+xml",
       "sha256": "0900e34f9bb71c7db229d02aad3171f74a30cfdcd5f9612d1bc8a1caf69a6b7f",
       "bytes": 14755,
-      "sourcePath": "recommended/devshark-logo-horizontal-ink.svg",
+      "sourcePath": "client/public/brand/v9/recommended/devshark-logo-horizontal-ink.svg",
       "use": "The primary logo; ink one-colour print.",
       "grounds": [],
       "onPhoto": false,
@@ -182,7 +219,7 @@
       "mediaType": "image/svg+xml",
       "sha256": "ba705d15f8c6e391a5c515accc3d1faf45f6488bfb762945c2fd5e5f8247114f",
       "bytes": 14755,
-      "sourcePath": "recommended/devshark-logo-horizontal-white.svg",
+      "sourcePath": "client/public/brand/v9/recommended/devshark-logo-horizontal-white.svg",
       "use": "The primary logo; white on ink or green grounds.",
       "grounds": [
         "#132019",
@@ -209,7 +246,7 @@
       "mediaType": "image/svg+xml",
       "sha256": "d7b45897fea2624e02da0ccaf88e4695954cf8d5e5d260ac02ebf02a20515ce3",
       "bytes": 14753,
-      "sourcePath": "recommended/devshark-logo-horizontal-small-green.svg",
+      "sourcePath": "client/public/brand/v9/recommended/devshark-logo-horizontal-small-green.svg",
       "use": "Same geometry with a heavier wave, for 100-160 px; green on white or light grounds.",
       "grounds": [
         "#ffffff",
@@ -236,7 +273,7 @@
       "mediaType": "image/svg+xml",
       "sha256": "b68ef4b9f0d620643584b9be5a756ed274475103597800174197120f6bc3b09d",
       "bytes": 14753,
-      "sourcePath": "recommended/devshark-logo-horizontal-small-ink.svg",
+      "sourcePath": "client/public/brand/v9/recommended/devshark-logo-horizontal-small-ink.svg",
       "use": "Same geometry with a heavier wave, for 100-160 px; ink one-colour print.",
       "grounds": [],
       "onPhoto": false,
@@ -260,7 +297,7 @@
       "mediaType": "image/svg+xml",
       "sha256": "fc1de9998f7c27507f560bdce47e7151fd693d42deb1a3550e4c01cf9a2b45b1",
       "bytes": 14753,
-      "sourcePath": "recommended/devshark-logo-horizontal-small-white.svg",
+      "sourcePath": "client/public/brand/v9/recommended/devshark-logo-horizontal-small-white.svg",
       "use": "Same geometry with a heavier wave, for 100-160 px; white on ink or green grounds.",
       "grounds": [
         "#132019",
@@ -287,7 +324,7 @@
       "mediaType": "image/svg+xml",
       "sha256": "79597bea25b00106d55da7b2d9583c2ffe29658b4b328d2958970b67faa0f40c",
       "bytes": 14752,
-      "sourcePath": "recommended/devshark-logo-compact-green.svg",
+      "sourcePath": "client/public/brand/v9/recommended/devshark-logo-compact-green.svg",
       "use": "Navigation, mobile and footers; green on white or light grounds.",
       "grounds": [
         "#ffffff",
@@ -314,7 +351,7 @@
       "mediaType": "image/svg+xml",
       "sha256": "80a7e80de917ba9597bc6d5d9fe4d9bfab69126265e4a6c28167565874664857",
       "bytes": 14752,
-      "sourcePath": "recommended/devshark-logo-compact-ink.svg",
+      "sourcePath": "client/public/brand/v9/recommended/devshark-logo-compact-ink.svg",
       "use": "Navigation, mobile and footers; ink one-colour print.",
       "grounds": [],
       "onPhoto": false,
@@ -338,7 +375,7 @@
       "mediaType": "image/svg+xml",
       "sha256": "af9873e4462072f19dd74dab9e119514a6119e308d1066672e0d1d6b92cb75c8",
       "bytes": 14752,
-      "sourcePath": "recommended/devshark-logo-compact-white.svg",
+      "sourcePath": "client/public/brand/v9/recommended/devshark-logo-compact-white.svg",
       "use": "Navigation, mobile and footers; white on ink or green grounds.",
       "grounds": [
         "#132019",
@@ -365,7 +402,7 @@
       "mediaType": "image/svg+xml",
       "sha256": "eec8e700c8cd6f43a6af5ec345d434eee9fe826b85b70a36ffd7d4525f16a240",
       "bytes": 14718,
-      "sourcePath": "recommended/devshark-logo-stacked-green.svg",
+      "sourcePath": "client/public/brand/v9/recommended/devshark-logo-stacked-green.svg",
       "use": "Square formats: avatar, sticker, mug; green on white or light grounds.",
       "grounds": [
         "#ffffff",
@@ -392,7 +429,7 @@
       "mediaType": "image/svg+xml",
       "sha256": "ac6726558ceed5f7f15de5b73497e838fcfbb22e8464788548f1427c36274623",
       "bytes": 14718,
-      "sourcePath": "recommended/devshark-logo-stacked-ink.svg",
+      "sourcePath": "client/public/brand/v9/recommended/devshark-logo-stacked-ink.svg",
       "use": "Square formats: avatar, sticker, mug; ink one-colour print.",
       "grounds": [],
       "onPhoto": false,
@@ -416,7 +453,7 @@
       "mediaType": "image/svg+xml",
       "sha256": "d01de40142c4e0a9514b6528d1495b913f3d5227e162f54bea0c2ae1cbedd27b",
       "bytes": 14718,
-      "sourcePath": "recommended/devshark-logo-stacked-white.svg",
+      "sourcePath": "client/public/brand/v9/recommended/devshark-logo-stacked-white.svg",
       "use": "Square formats: avatar, sticker, mug; white on ink or green grounds.",
       "grounds": [
         "#132019",
@@ -443,7 +480,7 @@
       "mediaType": "image/svg+xml",
       "sha256": "0b0f92cab380e302ed8cb6fdd844436d856a76e8a79eaff06ba8ee4c55fadc31",
       "bytes": 8357,
-      "sourcePath": "recommended/devshark-fin-wave-green.svg",
+      "sourcePath": "client/public/brand/v9/recommended/devshark-fin-wave-green.svg",
       "use": "The symbol on its own, with its wave; green on white or light grounds.",
       "grounds": [
         "#ffffff",
@@ -470,7 +507,7 @@
       "mediaType": "image/svg+xml",
       "sha256": "d0e0871acb3849cdf34f5ad771e9c66f9462fb0346f3162f4b3a8d304b0c85fa",
       "bytes": 8357,
-      "sourcePath": "recommended/devshark-fin-wave-ink.svg",
+      "sourcePath": "client/public/brand/v9/recommended/devshark-fin-wave-ink.svg",
       "use": "The symbol on its own, with its wave; ink one-colour print.",
       "grounds": [],
       "onPhoto": false,
@@ -494,7 +531,7 @@
       "mediaType": "image/svg+xml",
       "sha256": "b90146c2d553e3d100f180f9b056827b72d4554fa66478670058c7c58fe8a236",
       "bytes": 8357,
-      "sourcePath": "recommended/devshark-fin-wave-white.svg",
+      "sourcePath": "client/public/brand/v9/recommended/devshark-fin-wave-white.svg",
       "use": "The symbol on its own, with its wave; white on ink or green grounds.",
       "grounds": [
         "#132019",
@@ -521,7 +558,7 @@
       "mediaType": "image/svg+xml",
       "sha256": "348d145b20eb26c3f091d2b406794d35c90136aa0930693d93bd930f3497666c",
       "bytes": 8024,
-      "sourcePath": "recommended/devshark-fin-clean-green.svg",
+      "sourcePath": "client/public/brand/v9/recommended/devshark-fin-clean-green.svg",
       "use": "Favicon, icon, embroidery and the corner of social posts; green on white or light grounds.",
       "grounds": [
         "#ffffff",
@@ -548,7 +585,7 @@
       "mediaType": "image/svg+xml",
       "sha256": "aedebdf0bc8dae4e4ac339341917b4ec55c978d1d7bb834bd48faadfcf416e1e",
       "bytes": 8024,
-      "sourcePath": "recommended/devshark-fin-clean-ink.svg",
+      "sourcePath": "client/public/brand/v9/recommended/devshark-fin-clean-ink.svg",
       "use": "Favicon, icon, embroidery and the corner of social posts; ink one-colour print.",
       "grounds": [],
       "onPhoto": false,
@@ -572,7 +609,7 @@
       "mediaType": "image/svg+xml",
       "sha256": "442cdccec1ff353dcb6aac6852f129c0d41948199a7199b6b2c4759b8fdd498f",
       "bytes": 8024,
-      "sourcePath": "recommended/devshark-fin-clean-white.svg",
+      "sourcePath": "client/public/brand/v9/recommended/devshark-fin-clean-white.svg",
       "use": "Favicon, icon, embroidery and the corner of social posts; white on ink or green grounds.",
       "grounds": [
         "#132019",
