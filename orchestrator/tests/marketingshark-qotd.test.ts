@@ -44,7 +44,7 @@ async function snapshot(): Promise<QuestionBankSnapshot> {
   return bank;
 }
 
-function question(overrides: Partial<NormalizedQuestion> & { en?: Partial<NormalizedQuestion["en"]> } = {}): NormalizedQuestion {
+function question(overrides: Omit<Partial<NormalizedQuestion>, "en"> & { en?: Partial<NormalizedQuestion["en"]> } = {}): NormalizedQuestion {
   const { en, ...rest } = overrides;
   return {
     id: "q-1",
