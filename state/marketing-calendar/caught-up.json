@@ -36,28 +36,8 @@
       "id": "dn-pre-03",
       "due": "2026-10-09",
       "title": "Bio, jméno, link s UTM, avatar čitelný ve 40 px",
-      "detail": "Jméno „DNESKAi · AI zprávy česky“; bio „To podstatné z AI. Každý den, česky, 2 minuty. Zdroje pod každou zprávou. ↓ dnešní vydání“; link {site}/?utm_source=instagram&utm_medium=bio&utm_campaign=launch-2026-11 (po aifirst#99 stránka /social). Threads bio stejně s utm_source=threads. Avatar = favicon C.",
+      "detail": "Jméno „DNESKAi · AI zprávy česky“; bio „To podstatné z AI. Každý den, česky, 2 minuty. Zdroje pod každou zprávou. ↓ dnešní vydání“; link https://caughtup-ai.vercel.app/?utm_source=instagram&utm_medium=bio&utm_campaign=launch-2026-11 (po aifirst#99 stránka /social). Threads bio stejně s utm_source=threads. Avatar = favicon C.",
       "owner": "owner",
-      "repo": null,
-      "issue": null,
-      "status": "planned"
-    },
-    {
-      "id": "dn-pre-04",
-      "due": "2026-10-30",
-      "title": "Highlighty: Praktické · Akce · Jak to vzniká",
-      "detail": "Tři highlighty s obálkami v barvách směru C; do každého 1 úvodní story (vznikne 4. 11. jako test story šablony). Hotovo, když jsou vidět na profilu.",
-      "owner": "owner",
-      "repo": null,
-      "issue": null,
-      "status": "planned"
-    },
-    {
-      "id": "dn-pre-05",
-      "due": "2026-10-20",
-      "title": "Seznam reply-targets pro Threads (15 účtů)",
-      "detail": "Agent sestaví seznam 15 českých/slovenských účtů na Threads, pod kterými má DNESKAi věcně odpovídat: @ct24zive (142k), @seznamzpravy (65,5k), @czechcrunch (10,8k), @petrmara (40,5k), @ai_ktivista, @davidgrudl, @tyljan + dalších 8 ověřených z prohledání (aktivní v posledních 14 dnech, téma tech/AI/byznys). Formát: handle, počet sledujících, poslední aktivita, téma. Uložit do plan-dneskai.md.",
-      "owner": "agent",
       "repo": null,
       "issue": null,
       "status": "planned"
@@ -83,6 +63,36 @@
       "status": "planned"
     },
     {
+      "id": "dn-pre-14",
+      "due": "2026-10-16",
+      "title": "UTM landing: parametry projdou do Web Analytics",
+      "detail": "Odkaz https://caughtup-ai.vercel.app/?utm_source=threads&utm_medium=post&utm_campaign=edition se započítá ve Vercel Web Analytics s utm_source; /?utm_* a /articles/[slug]?utm_* bez redirectu, který query zahodí; stránka /social (noindex) jako link v biu.",
+      "owner": "agent",
+      "repo": "lukaskourilcz/aifirst",
+      "issue": "#99",
+      "status": "planned"
+    },
+    {
+      "id": "dn-pre-05",
+      "due": "2026-10-20",
+      "title": "Seznam reply-targets pro Threads (15 účtů)",
+      "detail": "Agent sestaví seznam 15 českých/slovenských účtů na Threads, pod kterými má DNESKAi věcně odpovídat: @ct24zive (142k), @seznamzpravy (65,5k), @czechcrunch (10,8k), @petrmara (40,5k), @ai_ktivista, @davidgrudl, @tyljan + dalších 8 ověřených z prohledání (aktivní v posledních 14 dnech, téma tech/AI/byznys). Formát: handle, počet sledujících, poslední aktivita, téma. Uložit do plan-dneskai.md.",
+      "owner": "agent",
+      "repo": null,
+      "issue": null,
+      "status": "planned"
+    },
+    {
+      "id": "dn-pre-19",
+      "due": "2026-10-20",
+      "title": "Patička: skutečné odkazy na IG a Threads",
+      "detail": "SocialRow → instagram.com/dneskai a threads.com/@dneskai (dnes placeholder span); Facebook a X skrýt, dokud účty neexistují.",
+      "owner": "agent",
+      "repo": "lukaskourilcz/aifirst",
+      "issue": "#99",
+      "status": "planned"
+    },
+    {
       "id": "dn-pre-08",
       "due": "2026-10-23",
       "title": "Seznam Newsfeed: kontrola podmínek (bez žádosti)",
@@ -90,66 +100,6 @@
       "owner": "agent",
       "repo": null,
       "issue": null,
-      "status": "planned"
-    },
-    {
-      "id": "dn-pre-09",
-      "due": "2026-11-04",
-      "title": "Den 0: zapsat baseline IG + Threads",
-      "detail": "4. 11. večer screenshot IG Insights (sledující, dosah 30 dní, návštěvy profilu) a Threads (sledující, views) — zapsat do plan-dneskai.md a do kalendáře jako baseline KPI. Hotovo = čísla zapsaná s časem.",
-      "owner": "owner",
-      "repo": null,
-      "issue": null,
-      "status": "planned"
-    },
-    {
-      "id": "dn-pre-10",
-      "due": "2026-11-02",
-      "title": "Připravit launch set (3 pinned posty + Threads intro)",
-      "detail": "Agent připraví drafty: carousel „Co je DNESKAi“, carousel „Jak vzniká edice“ (quote card + ledger + Queue), „Důkaz: jedno vydání“ (nejlepší edice 26. 10.–2. 11.), Threads úvodní thread, 4 story snímky. Hotovo = drafty v Queue / Design Lab.",
-      "owner": "agent",
-      "repo": null,
-      "issue": null,
-      "status": "planned"
-    },
-    {
-      "id": "dn-pre-11",
-      "due": "2026-11-04",
-      "title": "Schválit launch set a naplánovat 5. 11.",
-      "detail": "Vlastník projde drafty launch setu, opraví texty, v IG naplánuje 3 posty na 5. 11. (IG má nativní plánování), v Threads composeru naplánuje intro thread. Hotovo = naplánováno, screenshot.",
-      "owner": "owner",
-      "repo": null,
-      "issue": null,
-      "status": "planned"
-    },
-    {
-      "id": "dn-pre-12",
-      "due": "2026-11-03",
-      "title": "Ověřit AI Days 5. 11.: program, stream, účast",
-      "detail": "Agent 3. 11. znovu otevře stránku AI Days a zapíše finální program, časy a zda existuje stream; vlastník rozhodne, zda jede osobně (KC City, Na Strži 65, Praha 4) nebo pokrývá z programu. Hotovo = rozhodnutí v kalendáři u položky 5. 11.",
-      "owner": "agent",
-      "repo": null,
-      "issue": null,
-      "status": "planned"
-    },
-    {
-      "id": "dn-pre-13",
-      "due": "2026-10-30",
-      "title": "Import ověřených akcí do /akce",
-      "detail": "Agent quorum naimportuje events-dneskai.json (28. 10.–31. 12. 2026) do state/ventures/caught-up/events/ a synchronizuje do aifirst data/events.json. Hotovo = /akce na webu ukazuje ≥ 15 listopadových akcí s odkazy.",
-      "owner": "agent",
-      "repo": "lukaskourilcz/quorum",
-      "issue": "#592",
-      "status": "planned"
-    },
-    {
-      "id": "dn-pre-14",
-      "due": "2026-10-16",
-      "title": "UTM landing: parametry projdou do Web Analytics",
-      "detail": "Odkaz {site}/?utm_source=threads&utm_medium=post&utm_campaign=edition se započítá ve Vercel Web Analytics s utm_source; /?utm_* a /articles/[slug]?utm_* bez redirectu, který query zahodí; stránka /social (noindex) jako link v biu.",
-      "owner": "agent",
-      "repo": "lukaskourilcz/aifirst",
-      "issue": "#99",
       "status": "planned"
     },
     {
@@ -173,46 +123,6 @@
       "status": "planned"
     },
     {
-      "id": "dn-pre-17",
-      "due": "2026-10-27",
-      "title": "Google News sitemap /news-sitemap.xml",
-      "detail": "Jen posledních 48 h, news:publication (DNESKAi, cs), publication_date, title; ≤ 1 000 URL; v robots/sitemap indexu. Seznam RSS varianta a identifikace provozovatele podle kontroly podmínek.",
-      "owner": "agent",
-      "repo": "lukaskourilcz/aifirst",
-      "issue": "#99",
-      "status": "planned"
-    },
-    {
-      "id": "dn-pre-18",
-      "due": "2026-10-27",
-      "title": "llms.txt + markdown verze edice",
-      "detail": "/llms.txt (název, popis, odkazy) a /articles/[slug].md generované při buildu; validace v CI.",
-      "owner": "agent",
-      "repo": "lukaskourilcz/aifirst",
-      "issue": "#99",
-      "status": "planned"
-    },
-    {
-      "id": "dn-pre-19",
-      "due": "2026-10-20",
-      "title": "Patička: skutečné odkazy na IG a Threads",
-      "detail": "SocialRow → instagram.com/dneskai a threads.com/@dneskai (dnes placeholder span); Facebook a X skrýt, dokud účty neexistují.",
-      "owner": "agent",
-      "repo": "lukaskourilcz/aifirst",
-      "issue": "#99",
-      "status": "planned"
-    },
-    {
-      "id": "dn-pre-20",
-      "due": "2026-10-30",
-      "title": "/akce naplněné listopadovými akcemi",
-      "detail": "data/events.json ze synchronizace quorum (events-dneskai.json); /akce ukazuje datum, město, zdarma/placené, odkaz; poctivý prázdný stav zůstává pro dny bez akcí.",
-      "owner": "agent",
-      "repo": "lukaskourilcz/aifirst",
-      "issue": "#99",
-      "status": "planned"
-    },
-    {
       "id": "dn-pre-21",
       "due": "2026-10-23",
       "title": "Admin Calendar pro DNESKAi (caught-up)",
@@ -220,16 +130,6 @@
       "owner": "agent",
       "repo": "lukaskourilcz/quorum",
       "issue": "#592",
-      "status": "planned"
-    },
-    {
-      "id": "dn-pre-22",
-      "due": "2026-10-30",
-      "title": "Meta publisher pro @dneskai (IG Login + Threads)",
-      "detail": "Napojit @dneskai na guarded publisher (tokeny jen v GitHub Secrets). Do nasazení platí: každý post publikuje vlastník ručně po schválení v Queue; export tlačítko v Queue (deck + caption) je náhrada.",
-      "owner": "agent",
-      "repo": "lukaskourilcz/quorum",
-      "issue": "#587",
       "status": "planned"
     },
     {
@@ -263,6 +163,66 @@
       "status": "planned"
     },
     {
+      "id": "dn-pre-17",
+      "due": "2026-10-27",
+      "title": "Google News sitemap /news-sitemap.xml",
+      "detail": "Jen posledních 48 h, news:publication (DNESKAi, cs), publication_date, title; ≤ 1 000 URL; v robots/sitemap indexu. Seznam RSS varianta a identifikace provozovatele podle kontroly podmínek.",
+      "owner": "agent",
+      "repo": "lukaskourilcz/aifirst",
+      "issue": "#99",
+      "status": "planned"
+    },
+    {
+      "id": "dn-pre-18",
+      "due": "2026-10-27",
+      "title": "llms.txt + markdown verze edice",
+      "detail": "/llms.txt (název, popis, odkazy) a /articles/[slug].md generované při buildu; validace v CI.",
+      "owner": "agent",
+      "repo": "lukaskourilcz/aifirst",
+      "issue": "#99",
+      "status": "planned"
+    },
+    {
+      "id": "dn-pre-04",
+      "due": "2026-10-30",
+      "title": "Highlighty: Praktické · Akce · Jak to vzniká",
+      "detail": "Tři highlighty s obálkami v barvách směru C; do každého 1 úvodní story (vznikne 4. 11. jako test story šablony). Hotovo, když jsou vidět na profilu.",
+      "owner": "owner",
+      "repo": null,
+      "issue": null,
+      "status": "planned"
+    },
+    {
+      "id": "dn-pre-13",
+      "due": "2026-10-30",
+      "title": "Import ověřených akcí do /akce",
+      "detail": "Agent quorum naimportuje events-dneskai.json (28. 10.–31. 12. 2026) do state/ventures/caught-up/events/ a synchronizuje do aifirst data/events.json. Hotovo = /akce na webu ukazuje ≥ 15 listopadových akcí s odkazy.",
+      "owner": "agent",
+      "repo": "lukaskourilcz/quorum",
+      "issue": "#592",
+      "status": "planned"
+    },
+    {
+      "id": "dn-pre-20",
+      "due": "2026-10-30",
+      "title": "/akce naplněné listopadovými akcemi",
+      "detail": "data/events.json ze synchronizace quorum (events-dneskai.json); /akce ukazuje datum, město, zdarma/placené, odkaz; poctivý prázdný stav zůstává pro dny bez akcí.",
+      "owner": "agent",
+      "repo": "lukaskourilcz/aifirst",
+      "issue": "#99",
+      "status": "planned"
+    },
+    {
+      "id": "dn-pre-22",
+      "due": "2026-10-30",
+      "title": "Meta publisher pro @dneskai (IG Login + Threads)",
+      "detail": "Napojit @dneskai na guarded publisher (tokeny jen v GitHub Secrets). Do nasazení platí: každý post publikuje vlastník ručně po schválení v Queue; export tlačítko v Queue (deck + caption) je náhrada.",
+      "owner": "agent",
+      "repo": "lukaskourilcz/quorum",
+      "issue": "#587",
+      "status": "planned"
+    },
+    {
       "id": "dn-pre-26",
       "due": "2026-10-30",
       "title": "Recepty friday-tools, weekly-recap, how-it-was-made",
@@ -280,6 +240,56 @@
       "owner": "agent",
       "repo": "lukaskourilcz/quorum",
       "issue": "#592",
+      "status": "planned"
+    },
+    {
+      "id": "dn-pre-28",
+      "due": "2026-10-30",
+      "title": "Vlastní doména místo caughtup-ai.vercel.app",
+      "detail": "aifirst NEEDED.md: nastavit produkční doménu na Vercel projektu a siteUrl(), caughtup-ai.vercel.app trvale přesměrovat. Plán dnes odkazuje na https://caughtup-ai.vercel.app — po změně domény nahradit v state/marketing-calendar/caught-up.json (přesměrování staré odkazy udrží). Ověřit: bio link a UTM odkaz vedou na novou doménu bez ztráty utm_*.",
+      "owner": "owner",
+      "repo": "lukaskourilcz/aifirst",
+      "issue": null,
+      "status": "planned"
+    },
+    {
+      "id": "dn-pre-10",
+      "due": "2026-11-02",
+      "title": "Připravit launch set (3 pinned posty + Threads intro)",
+      "detail": "Agent připraví drafty: carousel „Co je DNESKAi“, carousel „Jak vzniká edice“ (quote card + ledger + Queue), „Důkaz: jedno vydání“ (nejlepší edice 26. 10.–2. 11.), Threads úvodní thread, 4 story snímky. Hotovo = drafty v Queue / Design Lab.",
+      "owner": "agent",
+      "repo": null,
+      "issue": null,
+      "status": "planned"
+    },
+    {
+      "id": "dn-pre-12",
+      "due": "2026-11-03",
+      "title": "Ověřit AI Days 5. 11.: program, stream, účast",
+      "detail": "Agent 3. 11. znovu otevře stránku AI Days a zapíše finální program, časy a zda existuje stream; vlastník rozhodne, zda jede osobně (KC City, Na Strži 65, Praha 4) nebo pokrývá z programu. Hotovo = rozhodnutí v kalendáři u položky 5. 11.",
+      "owner": "agent",
+      "repo": null,
+      "issue": null,
+      "status": "planned"
+    },
+    {
+      "id": "dn-pre-09",
+      "due": "2026-11-04",
+      "title": "Den 0: zapsat baseline IG + Threads",
+      "detail": "4. 11. večer screenshot IG Insights (sledující, dosah 30 dní, návštěvy profilu) a Threads (sledující, views) — zapsat do plan-dneskai.md a do kalendáře jako baseline KPI. Hotovo = čísla zapsaná s časem.",
+      "owner": "owner",
+      "repo": null,
+      "issue": null,
+      "status": "planned"
+    },
+    {
+      "id": "dn-pre-11",
+      "due": "2026-11-04",
+      "title": "Schválit launch set a naplánovat 5. 11.",
+      "detail": "Vlastník projde drafty launch setu, opraví texty, v IG naplánuje 3 posty na 5. 11. (IG má nativní plánování), v Threads composeru naplánuje intro thread. Hotovo = naplánováno, screenshot.",
+      "owner": "owner",
+      "repo": null,
+      "issue": null,
       "status": "planned"
     }
   ],
@@ -352,7 +362,7 @@
     {
       "platform": "web",
       "role": "support",
-      "handle": "{site} — /akce, /lekce, /tyden, /social, /feed.xml",
+      "handle": "https://caughtup-ai.vercel.app — /akce, /lekce, /tyden, /social, /feed.xml",
       "cadence": "denní edice (cíl 5/týden)",
       "notes": "Kliky měřitelné až s UTM landingem (aifirst#99); /akce plní import events-dneskai.json."
     },
@@ -448,7 +458,7 @@
     "Vše z prelaunch[] (dn-pre-01…) hotové do 4. 11.; den 0 = 4. 11. večer (baseline IG + Threads).",
     "3 připnuté posty od 5. 11.: (1) „Co je DNESKAi“, (2) „Jak vzniká edice“, (3) „Důkaz: jedno vydání“ — publikované v den spuštění a připnuté v tomto pořadí.",
     "Highlighty „Praktické“, „Akce“, „Jak to vzniká“ s obálkami směru C.",
-    "Link v biu: {site}/social?utm_source=instagram&utm_medium=bio&utm_campaign=launch-2026-11 (fallback na / do nasazení /social).",
+    "Link v biu: https://caughtup-ai.vercel.app/social?utm_source=instagram&utm_medium=bio&utm_campaign=launch-2026-11 (fallback na / do nasazení /social).",
     "Labeling: fotokredit v caption (v packu); u AI ilustrací „AI ilustrace“ (Kodex férového influencera 02/2026, #AIobsah); AI Act čl. 50 se na abstraktní ilustraci nevztahuje.",
     "Originalita: žádné screenshoty cizích postů nebo slidů z konferencí bez vlastního textu.",
     "Vercel Web Analytics: uložený pohled „social listopad“ s filtrem utm_source."
@@ -519,7 +529,7 @@
       "title": "Launch 1/3: Co je DNESKAi (připnout)",
       "hook": "To podstatné z AI. Česky. Za 2 minuty.",
       "hookType": "promise",
-      "body": "Připnutý post č. 1 (nabídka). 7 slidů 4:5 1080×1350, směr C: (1) hook + logo; (2) druhá obálka „Jedno vydání denně. Ne 40 odkazů.“; (3) co v edici je: Co se změnilo / Proč na tom záleží / Otevřené zůstává — screenshot skutečné edice; (4) zdroje pod každou zprávou — screenshot ledgeru zdrojů; (5) denní lekce a fakt — screenshot /lekce; (6) co bude na tomto profilu: carousel edice Po–Čt, pátek 3 nástroje + prompt, neděle týden, akce; (7) „Sleduj @dneskai · web v biu“. Caption: 3 věty + {site}/?utm_source=instagram&utm_medium=post&utm_campaign=launch-2026-11. Draft připravil agent v prelaunch, vlastník publikuje a připne.",
+      "body": "Připnutý post č. 1 (nabídka). 7 slidů 4:5 1080×1350, směr C: (1) hook + logo; (2) druhá obálka „Jedno vydání denně. Ne 40 odkazů.“; (3) co v edici je: Co se změnilo / Proč na tom záleží / Otevřené zůstává — screenshot skutečné edice; (4) zdroje pod každou zprávou — screenshot ledgeru zdrojů; (5) denní lekce a fakt — screenshot /lekce; (6) co bude na tomto profilu: carousel edice Po–Čt, pátek 3 nástroje + prompt, neděle týden, akce; (7) „Sleduj @dneskai · web v biu“. Caption: 3 věty + https://caughtup-ai.vercel.app/?utm_source=instagram&utm_medium=post&utm_campaign=launch-2026-11. Draft připravil agent v prelaunch, vlastník publikuje a připne.",
       "cta": "Sleduj @dneskai; dnešní edice → link v biu",
       "assets": [
         "Design Lab deck 'launch-intro' (7 slidů)",
@@ -573,7 +583,7 @@
       "hook": "Co se změnilo. Ne co si o tom kdo myslí.",
       "hookType": "contrarian",
       "producer": "dneskai-pack",
-      "body": "Připnutý post č. 3 (důkaz) = dnešní edice z social packu, standardní carousel 4:5 (hook na slide 1, dek, what_changed, why_it_matters, uncertainty, outro). Když je 5. 11. NO_EDITION, připnout nejlepší edici z 26. 10.–4. 11. (podle signal_strength). Caption A + {site}/?utm_source=instagram&utm_medium=post&utm_campaign=launch-2026-11. 12:00 = varianta A.",
+      "body": "Připnutý post č. 3 (důkaz) = dnešní edice z social packu, standardní carousel 4:5 (hook na slide 1, dek, what_changed, why_it_matters, uncertainty, outro). Když je 5. 11. NO_EDITION, připnout nejlepší edici z 26. 10.–4. 11. (podle signal_strength). Caption A + https://caughtup-ai.vercel.app/?utm_source=instagram&utm_medium=post&utm_campaign=launch-2026-11. 12:00 = varianta A.",
       "cta": "Celý článek → link v biu",
       "assets": [
         "frames z /admin/queue (frame-01…09.jpg)",
@@ -601,7 +611,7 @@
       "title": "Threads intro: kdo jsme a co tu bude",
       "hook": "Ahoj Threads. Každé ráno jedna česká AI edice. Tady je, jak funguje.",
       "hookType": "story",
-      "body": "Úvodní thread (5 postů): (1) hook; (2) co je edice — 3 části + zdroje; (3) kdo ji dělá — agenti BoardlessAI a člověk, který schvaluje; (4) co tu uvidíte: 09:30 titulek dne, 20:30 otázka, zápisky z českých AI akcí; (5) „Dnes je v Praze NVIDIA AI Days a běží Dny AI — budeme psát, co zaznělo.“ + {site}/?utm_source=threads&utm_medium=post&utm_campaign=launch-2026-11. Připnout na profil.",
+      "body": "Úvodní thread (5 postů): (1) hook; (2) co je edice — 3 části + zdroje; (3) kdo ji dělá — agenti BoardlessAI a člověk, který schvaluje; (4) co tu uvidíte: 09:30 titulek dne, 20:30 otázka, zápisky z českých AI akcí; (5) „Dnes je v Praze NVIDIA AI Days a běží Dny AI — budeme psát, co zaznělo.“ + https://caughtup-ai.vercel.app/?utm_source=threads&utm_medium=post&utm_campaign=launch-2026-11. Připnout na profil.",
       "cta": "Sledujte a napište, co vám v AI zprávách chybí",
       "assets": [
         "text threadu (draft z prelaunch)"
@@ -625,7 +635,7 @@
       "title": "Launch story sekvence (4 snímky)",
       "hook": "Dnes startujeme.",
       "hookType": "story",
-      "body": "4 snímky 1080×1920: (1) „Dnes startujeme“ + logo; (2) „Každý den: jedna edice, 2 minuty“ + sticker odkaz {site}/?utm_source=instagram&utm_medium=story&utm_campaign=launch-2026-11; (3) „Dnes v Praze: NVIDIA AI Days, KC City“ (+ Dny AI 2.–15. 11.); (4) „Pošli kamarádovi, který o AI mluví v práci“ + anketa „Čtete AI zprávy česky, nebo anglicky?“. Uložit do highlightu „Jak to vzniká“.",
+      "body": "4 snímky 1080×1920: (1) „Dnes startujeme“ + logo; (2) „Každý den: jedna edice, 2 minuty“ + sticker odkaz https://caughtup-ai.vercel.app/?utm_source=instagram&utm_medium=story&utm_campaign=launch-2026-11; (3) „Dnes v Praze: NVIDIA AI Days, KC City“ (+ Dny AI 2.–15. 11.); (4) „Pošli kamarádovi, který o AI mluví v práci“ + anketa „Čtete AI zprávy česky, nebo anglicky?“. Uložit do highlightu „Jak to vzniká“.",
       "cta": "Pošli kamarádovi",
       "assets": [
         "story šablona směr C (4 snímky)"
@@ -649,7 +659,7 @@
       "hook": "„[Subjekt] [udělal X]. [Číslo].“ — např. „Mistral uzavřel kolo 3 miliard eur – největší v historii evropského tech sektoru.“",
       "hookType": "number",
       "producer": "dneskai-pack",
-      "body": "threadsText edice / varianta A social packu (≤ 500 znaků): titulek + why_it_matters[0] + „Otevřené zůstává: …“ + link {site}/?utm_source=threads&utm_medium=post&utm_campaign=edition. Linky v těle Meta od 6/2025 neřadí hůř — link přímo v postu. Bez hashtagů. 09:30 = hned po dodání edice (~09:00); Buffer: Čt 9 h nejlepší globálně.",
+      "body": "threadsText edice / varianta A social packu (≤ 500 znaků): titulek + why_it_matters[0] + „Otevřené zůstává: …“ + link https://caughtup-ai.vercel.app/?utm_source=threads&utm_medium=post&utm_campaign=edition. Linky v těle Meta od 6/2025 neřadí hůř — link přímo v postu. Bez hashtagů. 09:30 = hned po dodání edice (~09:00); Buffer: Čt 9 h nejlepší globálně.",
       "cta": "Celé vydání → link",
       "assets": [
         "threadsText z Queue"
@@ -673,7 +683,7 @@
       "hook": "AI továrny v Praze: co dnes zaznělo na NVIDIA AI Days",
       "hookType": "authority",
       "producer": "owner",
-      "body": "NVIDIA AI Days 2026 (10. ročník, M Computers, KC City, Na Strži 65, Praha 4; téma „AI factories“; řečníci podle programu: Richard Wright, NVIDIA — „Sovereign AI: Europe's Path to AI Factories“; Arts Yang, NVIDIA; Lukáš Hejtmánek, MUNI — vědecký AI cloud; Robert Mitka, České Radiokomunikace — open-source LLM; Luboš Kolář, HPE; Jan Šedivý, CIIRC ČVUT — lokální asistenti Alquist; Petr Plodík, M Computers). Stream není ohlášen a lístek stojí 3 800 Kč → pokrytí jen s akreditací (prelaunch dn-pre-06) nebo po výslovném rozhodnutí vlastníka lístek koupit; jinak thread z programu a veřejných výstupů řečníků, jasně označený „z programu“. Ve stejný den MAIDAY v Brně (Mendelova univerzita, 4.–5. 11.). Formát: 3–6 navazujících postů; první bez linku, poslední s odkazem {site}/akce?utm_source=threads&utm_medium=post&utm_campaign=akce. Jen vlastní zápisky (citace se jménem řečníka, čísla, co to znamená pro čtenáře) — nikdy cizí slidy nebo screenshoty bez vlastního textu (IG/Threads originalita od 30. 4. 2026). Zdroj akce: https://aidays.cz/.",
+      "body": "NVIDIA AI Days 2026 (10. ročník, M Computers, KC City, Na Strži 65, Praha 4; téma „AI factories“; řečníci podle programu: Richard Wright, NVIDIA — „Sovereign AI: Europe's Path to AI Factories“; Arts Yang, NVIDIA; Lukáš Hejtmánek, MUNI — vědecký AI cloud; Robert Mitka, České Radiokomunikace — open-source LLM; Luboš Kolář, HPE; Jan Šedivý, CIIRC ČVUT — lokální asistenti Alquist; Petr Plodík, M Computers). Stream není ohlášen a lístek stojí 3 800 Kč → pokrytí jen s akreditací (prelaunch dn-pre-06) nebo po výslovném rozhodnutí vlastníka lístek koupit; jinak thread z programu a veřejných výstupů řečníků, jasně označený „z programu“. Ve stejný den MAIDAY v Brně (Mendelova univerzita, 4.–5. 11.). Formát: 3–6 navazujících postů; první bez linku, poslední s odkazem https://caughtup-ai.vercel.app/akce?utm_source=threads&utm_medium=post&utm_campaign=akce. Jen vlastní zápisky (citace se jménem řečníka, čísla, co to znamená pro čtenáře) — nikdy cizí slidy nebo screenshoty bez vlastního textu (IG/Threads originalita od 30. 4. 2026). Zdroj akce: https://aidays.cz/.",
       "cta": "Další akce → /akce",
       "assets": [
         "poznámky ze streamu / programu akce",
@@ -722,7 +732,7 @@
       "hook": "Jedno číslo tady mění celý obrázek.",
       "hookType": "number",
       "producer": "dneskai-pack",
-      "body": "BoardlessAI social pack (composeEditionSocialPack) po ranní edici (~09:00): slide 1 = titulek edice nebo alternative_headlines[0] + hook „Jedno číslo tady mění celý obrázek.“ (hook 'one-number' (truthRequires hasNumber); slide 1 nese číslo z what_changed, např. „600 000 odcizených karet za 25 dolarů“); slide 2 = dek jako druhá obálka; slidy 3–5 = what_changed (max 3); slidy 6–8 = why_it_matters (max 3); slide 9 = „Otevřené zůstává: …“ (uncertainty[0]); outro „Jedno vydání a máte přehled.“ + @dneskai. 4:5 1080×1350 JPEG, hero z licencované fotky ve slotu s clonou. Caption = varianta A z packu, „Celý článek: {site}/?utm_source=instagram&utm_medium=post&utm_campaign=edition“, 5–10 hashtagů, fotokredit. Vlastník v /admin/queue vybere titulek, zkontroluje slidy a schválí; dokud neběží publisher (quorum#587), publikuje ručně z exportu. Den NO_EDITION → místo carouselu story z ai-lessons (fallback v Queue). 12:00 = varianta A (poledne; Buffer/Hootsuite: poledne a dopoledne v pracovní dny). Hypotéza.",
+      "body": "BoardlessAI social pack (composeEditionSocialPack) po ranní edici (~09:00): slide 1 = titulek edice nebo alternative_headlines[0] + hook „Jedno číslo tady mění celý obrázek.“ (hook 'one-number' (truthRequires hasNumber); slide 1 nese číslo z what_changed, např. „600 000 odcizených karet za 25 dolarů“); slide 2 = dek jako druhá obálka; slidy 3–5 = what_changed (max 3); slidy 6–8 = why_it_matters (max 3); slide 9 = „Otevřené zůstává: …“ (uncertainty[0]); outro „Jedno vydání a máte přehled.“ + @dneskai. 4:5 1080×1350 JPEG, hero z licencované fotky ve slotu s clonou. Caption = varianta A z packu, „Celý článek: https://caughtup-ai.vercel.app/?utm_source=instagram&utm_medium=post&utm_campaign=edition“, 5–10 hashtagů, fotokredit. Vlastník v /admin/queue vybere titulek, zkontroluje slidy a schválí; dokud neběží publisher (quorum#587), publikuje ručně z exportu. Den NO_EDITION → místo carouselu story z ai-lessons (fallback v Queue). 12:00 = varianta A (poledne; Buffer/Hootsuite: poledne a dopoledne v pracovní dny). Hypotéza.",
       "cta": "Celý článek → link v biu",
       "assets": [
         "frames z /admin/queue (frame-01…09.jpg)",
@@ -751,7 +761,7 @@
       "hook": "Prompt dne: jeden řádek, hodina ušetřená",
       "hookType": "list",
       "producer": "dneskai-pack",
-      "body": "Pole practical typu prompt z edice (kopírovatelný český prompt, shrnutí libovolného článku do formátu Co se změnilo / Proč na tom záleží / Co není jisté); otestovaný ve 2 modelech, verified_at vyplněné. Formát: story karta 1080×1920 ze social packu (quorum#592, pole practical z edice / lekce dne), Poppins Black (směr C), modrá #2F5AE6 na ink #14161A, max 2 textové bloky; link sticker {site}/?utm_source=instagram&utm_medium=story&utm_campaign=practical; sticker „pošli kamarádovi“ (AMI: Češi sdílí soukromě). Highlight „Praktické“. Když story karta v packu ještě není, vlastník ji udělá z Design Lab šablony (10 min navíc).",
+      "body": "Pole practical typu prompt z edice (kopírovatelný český prompt, shrnutí libovolného článku do formátu Co se změnilo / Proč na tom záleží / Co není jisté); otestovaný ve 2 modelech, verified_at vyplněné. Formát: story karta 1080×1920 ze social packu (quorum#592, pole practical z edice / lekce dne), Poppins Black (směr C), modrá #2F5AE6 na ink #14161A, max 2 textové bloky; link sticker https://caughtup-ai.vercel.app/?utm_source=instagram&utm_medium=story&utm_campaign=practical; sticker „pošli kamarádovi“ (AMI: Češi sdílí soukromě). Highlight „Praktické“. Když story karta v packu ještě není, vlastník ji udělá z Design Lab šablony (10 min navíc).",
       "cta": "Zkopíruj prompt → link",
       "assets": [
         "story karta ze social packu (practical / lekce dne)"
@@ -776,7 +786,7 @@
       "hook": "„[Subjekt] [udělal X]. [Číslo].“ — např. „Mistral uzavřel kolo 3 miliard eur – největší v historii evropského tech sektoru.“",
       "hookType": "number",
       "producer": "dneskai-pack",
-      "body": "threadsText edice / varianta A social packu (≤ 500 znaků): titulek + why_it_matters[0] + „Otevřené zůstává: …“ + link {site}/?utm_source=threads&utm_medium=post&utm_campaign=edition. Linky v těle Meta od 6/2025 neřadí hůř — link přímo v postu. Bez hashtagů. 09:30 = hned po dodání edice (~09:00); Buffer: Čt 9 h nejlepší globálně.",
+      "body": "threadsText edice / varianta A social packu (≤ 500 znaků): titulek + why_it_matters[0] + „Otevřené zůstává: …“ + link https://caughtup-ai.vercel.app/?utm_source=threads&utm_medium=post&utm_campaign=edition. Linky v těle Meta od 6/2025 neřadí hůř — link přímo v postu. Bez hashtagů. 09:30 = hned po dodání edice (~09:00); Buffer: Čt 9 h nejlepší globálně.",
       "cta": "Celé vydání → link",
       "assets": [
         "threadsText z Queue"
@@ -801,7 +811,7 @@
       "hookType": "list",
       "producer": "dneskai-pack",
       "body": "Recept friday-tools (quorum#592) z edic týdne, vlastník ověří: slide 1 hook „3 nástroje z prvního týdne + 1 prompt“; slide 2 (druhá obálka) = prompt týdne v plném znění (kopírovatelný, česky); slidy 3–5 = tři nástroje z edic týdne (název, co dělá, cena ověřená na webu poskytovatele + datum ověření, odkaz na edici); slide 6 = „Ulož si to na pondělí“ + @dneskai. 6 slidů, 4:5 1080×1350. Vlastník ověří ceny (screenshot ceníku) a otestuje prompt ve 2 modelech (~30 min). První pátek: nástroje z edic 2.–6. 11.; zvážit nástroj zmíněný na AI Days, jen s ověřenou cenou.",
-      "cta": "Ulož si to; celé edice → {site}/?utm_source=instagram&utm_medium=post&utm_campaign=friday-tools",
+      "cta": "Ulož si to; celé edice → https://caughtup-ai.vercel.app/?utm_source=instagram&utm_medium=post&utm_campaign=friday-tools",
       "assets": [
         "Design Lab deck 'friday-tools' (6 slidů)",
         "ověřené ceny nástrojů (screenshot ceníku, datum)",
@@ -828,7 +838,7 @@
       "hook": "Dnes: AI a bezpečnost v Brně, AI ve škole v Praze",
       "hookType": "list",
       "producer": "owner",
-      "body": "Cybercamp.ai (AI + security, anglicky, JIC Startup Hub Brno, 69–139 EUR) a AI for Edu 2026 Praha „AI a didaktika“ (Microsoft, 970 Kč) — obě v rámci Dnů AI (dny.ai/program). 1–3 story snímky 1080×1920 (Design Lab šablona „akce“): název, datum, město, zdarma/placené, link sticker {site}/akce?utm_source=instagram&utm_medium=story&utm_campaign=akce. Highlight „Akce“. Zdroj: https://cybercamp.ai/.",
+      "body": "Cybercamp.ai (AI + security, anglicky, JIC Startup Hub Brno, 69–139 EUR) a AI for Edu 2026 Praha „AI a didaktika“ (Microsoft, 970 Kč) — obě v rámci Dnů AI (dny.ai/program). 1–3 story snímky 1080×1920 (Design Lab šablona „akce“): název, datum, město, zdarma/placené, link sticker https://caughtup-ai.vercel.app/akce?utm_source=instagram&utm_medium=story&utm_campaign=akce. Highlight „Akce“. Zdroj: https://cybercamp.ai/.",
       "cta": "Program → /akce",
       "assets": [
         "story šablona „akce“",
@@ -949,7 +959,7 @@
       "hook": "První týden: 5 edic, 8 slidů.",
       "hookType": "list",
       "producer": "dneskai-pack",
-      "body": "Recept weekly-recap (quorum#592) z /tyden a /api/weekly.json: slide 1 hook „První týden: 5 edic, 8 slidů.“; slidy 2–6 = pět edic týdne (titulek + věta why_it_matters + signal_strength); slide 7 = „Co zůstává otevřené do příštího týdne“ (3 uncertainty body); slide 8 = „Příští týden: AI 4 Gov (CIIRC) 9. 11., Money Maker (CzechCrunch), Ženy v AI a Young AI Research Forum 10. 11., WebTop100 a AI Business Roundtable 12. 11.; Dny AI končí 15. 11.“ + /akce. 8 slidů, 4:5, bulk render z pěti summaries. Neděle 18:00 = kompromis Emplifi (So–Ne 21–24) a Hootsuite (Ne 12–15), hypotéza. CTA {site}/tyden?utm_source=instagram&utm_medium=post&utm_campaign=weekly-recap.",
+      "body": "Recept weekly-recap (quorum#592) z /tyden a /api/weekly.json: slide 1 hook „První týden: 5 edic, 8 slidů.“; slidy 2–6 = pět edic týdne (titulek + věta why_it_matters + signal_strength); slide 7 = „Co zůstává otevřené do příštího týdne“ (3 uncertainty body); slide 8 = „Příští týden: AI 4 Gov (CIIRC) 9. 11., Money Maker (CzechCrunch), Ženy v AI a Young AI Research Forum 10. 11., WebTop100 a AI Business Roundtable 12. 11.; Dny AI končí 15. 11.“ + /akce. 8 slidů, 4:5, bulk render z pěti summaries. Neděle 18:00 = kompromis Emplifi (So–Ne 21–24) a Hootsuite (Ne 12–15), hypotéza. CTA https://caughtup-ai.vercel.app/tyden?utm_source=instagram&utm_medium=post&utm_campaign=weekly-recap.",
       "cta": "Ulož si týden; v pondělí další edice",
       "assets": [
         "Design Lab deck 'weekly-recap' (8 slidů)",
@@ -976,7 +986,7 @@
       "hook": "Příští týden: 10 AI akcí, 6 zdarma. Přehled.",
       "hookType": "list",
       "producer": "owner",
-      "body": "Seznam z events-dneskai.json s cenou: AI 4 Gov 9. 11. (CIIRC, zdarma se schválením); Money Maker Praha 10. 11. (CzechCrunch, Průmyslový palác, 2 790–4 790 Kč; AI blok Mikolov a Beck z BottleCap AI); UI v IT infrastruktuře 10. 11. (placené); Young AI Research Forum 10. 11. (zdarma); Ženy v AI 10. 11. (zdarma); Žárovky AI 10. 11. (zdarma); AI pro moderní HR 11. 11. (webinář, 990 Kč); WebTop100 12. 11. (AI vyhledávání/GEO, placené); AI Business Roundtable 12. 11. (zdarma); AI a mobilita O2 12. 11. (zdarma). Formát: 3–6 navazujících postů; první bez linku, poslední s odkazem {site}/akce?utm_source=threads&utm_medium=post&utm_campaign=akce. Jen vlastní zápisky (citace se jménem řečníka, čísla, co to znamená pro čtenáře) — nikdy cizí slidy nebo screenshoty bez vlastního textu (IG/Threads originalita od 30. 4. 2026). Zdroj akce: https://dny.ai/program.",
+      "body": "Seznam z events-dneskai.json s cenou: AI 4 Gov 9. 11. (CIIRC, zdarma se schválením); Money Maker Praha 10. 11. (CzechCrunch, Průmyslový palác, 2 790–4 790 Kč; AI blok Mikolov a Beck z BottleCap AI); UI v IT infrastruktuře 10. 11. (placené); Young AI Research Forum 10. 11. (zdarma); Ženy v AI 10. 11. (zdarma); Žárovky AI 10. 11. (zdarma); AI pro moderní HR 11. 11. (webinář, 990 Kč); WebTop100 12. 11. (AI vyhledávání/GEO, placené); AI Business Roundtable 12. 11. (zdarma); AI a mobilita O2 12. 11. (zdarma). Formát: 3–6 navazujících postů; první bez linku, poslední s odkazem https://caughtup-ai.vercel.app/akce?utm_source=threads&utm_medium=post&utm_campaign=akce. Jen vlastní zápisky (citace se jménem řečníka, čísla, co to znamená pro čtenáře) — nikdy cizí slidy nebo screenshoty bez vlastního textu (IG/Threads originalita od 30. 4. 2026). Zdroj akce: https://dny.ai/program.",
       "cta": "Další akce → /akce",
       "assets": [
         "poznámky ze streamu / programu akce",
@@ -1029,7 +1039,7 @@
       "hook": "Dneska ty dvě minuty stojí za to.",
       "hookType": "promise",
       "producer": "dneskai-pack",
-      "body": "BoardlessAI social pack (composeEditionSocialPack) po ranní edici (~09:00): slide 1 = titulek edice nebo alternative_headlines[0] + hook „Dneska ty dvě minuty stojí za to.“ (hook 'earns-the-minutes' jen při signal_strength ≥ 80; jinak fallback 'read-once'); slide 2 = dek jako druhá obálka; slidy 3–5 = what_changed (max 3); slidy 6–8 = why_it_matters (max 3); slide 9 = „Otevřené zůstává: …“ (uncertainty[0]); outro „Jedno vydání a máte přehled.“ + @dneskai. 4:5 1080×1350 JPEG, hero z licencované fotky ve slotu s clonou. Caption = varianta A z packu, „Celý článek: {site}/?utm_source=instagram&utm_medium=post&utm_campaign=edition“, 5–10 hashtagů, fotokredit. Vlastník v /admin/queue vybere titulek, zkontroluje slidy a schválí; dokud neběží publisher (quorum#587), publikuje ručně z exportu. Den NO_EDITION → místo carouselu story z ai-lessons (fallback v Queue). 12:00 = varianta A (poledne; Buffer/Hootsuite: poledne a dopoledne v pracovní dny). Hypotéza.",
+      "body": "BoardlessAI social pack (composeEditionSocialPack) po ranní edici (~09:00): slide 1 = titulek edice nebo alternative_headlines[0] + hook „Dneska ty dvě minuty stojí za to.“ (hook 'earns-the-minutes' jen při signal_strength ≥ 80; jinak fallback 'read-once'); slide 2 = dek jako druhá obálka; slidy 3–5 = what_changed (max 3); slidy 6–8 = why_it_matters (max 3); slide 9 = „Otevřené zůstává: …“ (uncertainty[0]); outro „Jedno vydání a máte přehled.“ + @dneskai. 4:5 1080×1350 JPEG, hero z licencované fotky ve slotu s clonou. Caption = varianta A z packu, „Celý článek: https://caughtup-ai.vercel.app/?utm_source=instagram&utm_medium=post&utm_campaign=edition“, 5–10 hashtagů, fotokredit. Vlastník v /admin/queue vybere titulek, zkontroluje slidy a schválí; dokud neběží publisher (quorum#587), publikuje ručně z exportu. Den NO_EDITION → místo carouselu story z ai-lessons (fallback v Queue). 12:00 = varianta A (poledne; Buffer/Hootsuite: poledne a dopoledne v pracovní dny). Hypotéza.",
       "cta": "Celý článek → link v biu",
       "assets": [
         "frames z /admin/queue (frame-01…09.jpg)",
@@ -1058,7 +1068,7 @@
       "hook": "Pojem dne: 20 sekund",
       "hookType": "list",
       "producer": "dneskai-pack",
-      "body": "Lekce dne z ai-lessons.json (60 termínů, pořadí podle data nejnovější edice) nebo practical typu term; odkaz na /lekce. Formát: story karta 1080×1920 ze social packu (quorum#592, pole practical z edice / lekce dne), Poppins Black (směr C), modrá #2F5AE6 na ink #14161A, max 2 textové bloky; link sticker {site}/lekce?utm_source=instagram&utm_medium=story&utm_campaign=practical; sticker „pošli kamarádovi“ (AMI: Češi sdílí soukromě). Highlight „Praktické“. Když story karta v packu ještě není, vlastník ji udělá z Design Lab šablony (10 min navíc).",
+      "body": "Lekce dne z ai-lessons.json (60 termínů, pořadí podle data nejnovější edice) nebo practical typu term; odkaz na /lekce. Formát: story karta 1080×1920 ze social packu (quorum#592, pole practical z edice / lekce dne), Poppins Black (směr C), modrá #2F5AE6 na ink #14161A, max 2 textové bloky; link sticker https://caughtup-ai.vercel.app/lekce?utm_source=instagram&utm_medium=story&utm_campaign=practical; sticker „pošli kamarádovi“ (AMI: Češi sdílí soukromě). Highlight „Praktické“. Když story karta v packu ještě není, vlastník ji udělá z Design Lab šablony (10 min navíc).",
       "cta": "Vyzkoušej dnes → link",
       "assets": [
         "story karta ze social packu (practical / lekce dne)"
@@ -1083,7 +1093,7 @@
       "hook": "„[Subjekt] [udělal X]. [Číslo].“ — např. „Mistral uzavřel kolo 3 miliard eur – největší v historii evropského tech sektoru.“",
       "hookType": "number",
       "producer": "dneskai-pack",
-      "body": "threadsText edice / varianta A social packu (≤ 500 znaků): titulek + why_it_matters[0] + „Otevřené zůstává: …“ + link {site}/?utm_source=threads&utm_medium=post&utm_campaign=edition. Linky v těle Meta od 6/2025 neřadí hůř — link přímo v postu. Bez hashtagů. 09:30 = hned po dodání edice (~09:00); Buffer: Čt 9 h nejlepší globálně.",
+      "body": "threadsText edice / varianta A social packu (≤ 500 znaků): titulek + why_it_matters[0] + „Otevřené zůstává: …“ + link https://caughtup-ai.vercel.app/?utm_source=threads&utm_medium=post&utm_campaign=edition. Linky v těle Meta od 6/2025 neřadí hůř — link přímo v postu. Bez hashtagů. 09:30 = hned po dodání edice (~09:00); Buffer: Čt 9 h nejlepší globálně.",
       "cta": "Celé vydání → link",
       "assets": [
         "threadsText z Queue"
@@ -1107,7 +1117,7 @@
       "hook": "Stát a AI: co dnes na CIIRC řešili úředníci a výzkumníci",
       "hookType": "authority",
       "producer": "owner",
-      "body": "AI 4 Gov (prg.ai, CIIRC ČVUT, 09:00–17:00, zdarma se schválením). Zápisky, pokud vlastník získá místo nebo existují veřejné výstupy; jinak thread „co je v programu a proč to sledovat“. Politicky neutrálně — fakta a citace. Formát: 3–6 navazujících postů; první bez linku, poslední s odkazem {site}/akce?utm_source=threads&utm_medium=post&utm_campaign=akce. Jen vlastní zápisky (citace se jménem řečníka, čísla, co to znamená pro čtenáře) — nikdy cizí slidy nebo screenshoty bez vlastního textu (IG/Threads originalita od 30. 4. 2026). Zdroj akce: https://dny.ai/program/ai-4-gov.",
+      "body": "AI 4 Gov (prg.ai, CIIRC ČVUT, 09:00–17:00, zdarma se schválením). Zápisky, pokud vlastník získá místo nebo existují veřejné výstupy; jinak thread „co je v programu a proč to sledovat“. Politicky neutrálně — fakta a citace. Formát: 3–6 navazujících postů; první bez linku, poslední s odkazem https://caughtup-ai.vercel.app/akce?utm_source=threads&utm_medium=post&utm_campaign=akce. Jen vlastní zápisky (citace se jménem řečníka, čísla, co to znamená pro čtenáře) — nikdy cizí slidy nebo screenshoty bez vlastního textu (IG/Threads originalita od 30. 4. 2026). Zdroj akce: https://dny.ai/program/ai-4-gov.",
       "cta": "Další akce → /akce",
       "assets": [
         "poznámky ze streamu / programu akce",
@@ -1156,7 +1166,7 @@
       "hook": "Zdroje jsou přímo pod tím. Ověř si to.",
       "hookType": "authority",
       "producer": "dneskai-pack",
-      "body": "BoardlessAI social pack (composeEditionSocialPack) po ranní edici (~09:00): slide 1 = titulek edice nebo alternative_headlines[0] + hook „Zdroje jsou přímo pod tím. Ověř si to.“ (hook 'sources-under-it'; slide 1 = titulek + počet zdrojů (sourceCount ze share packu)); slide 2 = dek jako druhá obálka; slidy 3–5 = what_changed (max 3); slidy 6–8 = why_it_matters (max 3); slide 9 = „Otevřené zůstává: …“ (uncertainty[0]); outro „Jedno vydání a máte přehled.“ + @dneskai. 4:5 1080×1350 JPEG, hero z licencované fotky ve slotu s clonou. Caption = varianta A z packu, „Celý článek: {site}/?utm_source=instagram&utm_medium=post&utm_campaign=edition“, 5–10 hashtagů, fotokredit. Vlastník v /admin/queue vybere titulek, zkontroluje slidy a schválí; dokud neběží publisher (quorum#587), publikuje ručně z exportu. Den NO_EDITION → místo carouselu story z ai-lessons (fallback v Queue). 12:00 = varianta A (poledne; Buffer/Hootsuite: poledne a dopoledne v pracovní dny). Hypotéza.",
+      "body": "BoardlessAI social pack (composeEditionSocialPack) po ranní edici (~09:00): slide 1 = titulek edice nebo alternative_headlines[0] + hook „Zdroje jsou přímo pod tím. Ověř si to.“ (hook 'sources-under-it'; slide 1 = titulek + počet zdrojů (sourceCount ze share packu)); slide 2 = dek jako druhá obálka; slidy 3–5 = what_changed (max 3); slidy 6–8 = why_it_matters (max 3); slide 9 = „Otevřené zůstává: …“ (uncertainty[0]); outro „Jedno vydání a máte přehled.“ + @dneskai. 4:5 1080×1350 JPEG, hero z licencované fotky ve slotu s clonou. Caption = varianta A z packu, „Celý článek: https://caughtup-ai.vercel.app/?utm_source=instagram&utm_medium=post&utm_campaign=edition“, 5–10 hashtagů, fotokredit. Vlastník v /admin/queue vybere titulek, zkontroluje slidy a schválí; dokud neběží publisher (quorum#587), publikuje ručně z exportu. Den NO_EDITION → místo carouselu story z ai-lessons (fallback v Queue). 12:00 = varianta A (poledne; Buffer/Hootsuite: poledne a dopoledne v pracovní dny). Hypotéza.",
       "cta": "Celý článek → link v biu",
       "assets": [
         "frames z /admin/queue (frame-01…09.jpg)",
@@ -1185,7 +1195,7 @@
       "hook": "Nástroj dne z edice",
       "hookType": "promise",
       "producer": "dneskai-pack",
-      "body": "Pole practical typu tool: nástroj/model z dnešní edice, co dělá, cena ověřená na webu poskytovatele + verified_at; bez ověřené ceny se nepublikuje. Formát: story karta 1080×1920 ze social packu (quorum#592, pole practical z edice / lekce dne), Poppins Black (směr C), modrá #2F5AE6 na ink #14161A, max 2 textové bloky; link sticker {site}/?utm_source=instagram&utm_medium=story&utm_campaign=practical; sticker „pošli kamarádovi“ (AMI: Češi sdílí soukromě). Highlight „Praktické“. Když story karta v packu ještě není, vlastník ji udělá z Design Lab šablony (10 min navíc).",
+      "body": "Pole practical typu tool: nástroj/model z dnešní edice, co dělá, cena ověřená na webu poskytovatele + verified_at; bez ověřené ceny se nepublikuje. Formát: story karta 1080×1920 ze social packu (quorum#592, pole practical z edice / lekce dne), Poppins Black (směr C), modrá #2F5AE6 na ink #14161A, max 2 textové bloky; link sticker https://caughtup-ai.vercel.app/?utm_source=instagram&utm_medium=story&utm_campaign=practical; sticker „pošli kamarádovi“ (AMI: Češi sdílí soukromě). Highlight „Praktické“. Když story karta v packu ještě není, vlastník ji udělá z Design Lab šablony (10 min navíc).",
       "cta": "Vyzkoušej dnes → link",
       "assets": [
         "story karta ze social packu (practical / lekce dne)"
@@ -1210,7 +1220,7 @@
       "hook": "„[Subjekt] [udělal X]. [Číslo].“ — např. „Mistral uzavřel kolo 3 miliard eur – největší v historii evropského tech sektoru.“",
       "hookType": "number",
       "producer": "dneskai-pack",
-      "body": "threadsText edice / varianta A social packu (≤ 500 znaků): titulek + why_it_matters[0] + „Otevřené zůstává: …“ + link {site}/?utm_source=threads&utm_medium=post&utm_campaign=edition. Linky v těle Meta od 6/2025 neřadí hůř — link přímo v postu. Bez hashtagů. 09:30 = hned po dodání edice (~09:00); Buffer: Čt 9 h nejlepší globálně.",
+      "body": "threadsText edice / varianta A social packu (≤ 500 znaků): titulek + why_it_matters[0] + „Otevřené zůstává: …“ + link https://caughtup-ai.vercel.app/?utm_source=threads&utm_medium=post&utm_campaign=edition. Linky v těle Meta od 6/2025 neřadí hůř — link přímo v postu. Bez hashtagů. 09:30 = hned po dodání edice (~09:00); Buffer: Čt 9 h nejlepší globálně.",
       "cta": "Celé vydání → link",
       "assets": [
         "threadsText z Queue"
@@ -1234,7 +1244,7 @@
       "hook": "Tomáš Mikolov na Money Maker: 3 věty, které si zapamatovat",
       "hookType": "authority",
       "producer": "owner",
-      "body": "Money Maker Praha (CzechCrunch, Průmyslový palác, 2 790–4 790 Kč): AI blok s Tomášem Mikolovem a Beckem z BottleCap AI. Bez lístku jen z veřejných výstupů (CzechCrunch články, záznamy) — citovat zdroj. Tentýž den: Ženy v AI, Young AI Research Forum (CIIRC), Žárovky AI, osobnosti.ai (vyhlášení ČAUI, jen pro zvané — výsledky zmínit, až budou veřejné). Formát: 3–6 navazujících postů; první bez linku, poslední s odkazem {site}/akce?utm_source=threads&utm_medium=post&utm_campaign=akce. Jen vlastní zápisky (citace se jménem řečníka, čísla, co to znamená pro čtenáře) — nikdy cizí slidy nebo screenshoty bez vlastního textu (IG/Threads originalita od 30. 4. 2026). Zdroj akce: https://cc.cz/moneymaker-praha/.",
+      "body": "Money Maker Praha (CzechCrunch, Průmyslový palác, 2 790–4 790 Kč): AI blok s Tomášem Mikolovem a Beckem z BottleCap AI. Bez lístku jen z veřejných výstupů (CzechCrunch články, záznamy) — citovat zdroj. Tentýž den: Ženy v AI, Young AI Research Forum (CIIRC), Žárovky AI, osobnosti.ai (vyhlášení ČAUI, jen pro zvané — výsledky zmínit, až budou veřejné). Formát: 3–6 navazujících postů; první bez linku, poslední s odkazem https://caughtup-ai.vercel.app/akce?utm_source=threads&utm_medium=post&utm_campaign=akce. Jen vlastní zápisky (citace se jménem řečníka, čísla, co to znamená pro čtenáře) — nikdy cizí slidy nebo screenshoty bez vlastního textu (IG/Threads originalita od 30. 4. 2026). Zdroj akce: https://cc.cz/moneymaker-praha/.",
       "cta": "Další akce → /akce",
       "assets": [
         "poznámky ze streamu / programu akce",
@@ -1259,7 +1269,7 @@
       "hook": "3 AI akce zdarma dnes večer v Praze",
       "hookType": "list",
       "producer": "owner",
-      "body": "Ženy v AI 2026 (Nadace ABF, zdarma), Young AI Research Forum 16:00–21:00 (CIIRC, zdarma), Žárovky AI 18:00 (Signal Space, zdarma) — Dny AI. 1–3 story snímky 1080×1920 (Design Lab šablona „akce“): název, datum, město, zdarma/placené, link sticker {site}/akce?utm_source=instagram&utm_medium=story&utm_campaign=akce. Highlight „Akce“. Zdroj: https://dny.ai/program.",
+      "body": "Ženy v AI 2026 (Nadace ABF, zdarma), Young AI Research Forum 16:00–21:00 (CIIRC, zdarma), Žárovky AI 18:00 (Signal Space, zdarma) — Dny AI. 1–3 story snímky 1080×1920 (Design Lab šablona „akce“): název, datum, město, zdarma/placené, link sticker https://caughtup-ai.vercel.app/akce?utm_source=instagram&utm_medium=story&utm_campaign=akce. Highlight „Akce“. Zdroj: https://dny.ai/program.",
       "cta": "Program → /akce",
       "assets": [
         "story šablona „akce“",
@@ -1308,7 +1318,7 @@
       "hook": "Žádné komentáře. Události a co mění.",
       "hookType": "contrarian",
       "producer": "dneskai-pack",
-      "body": "BoardlessAI social pack (composeEditionSocialPack) po ranní edici (~09:00): slide 1 = titulek edice nebo alternative_headlines[0] + hook „Žádné komentáře. Události a co mění.“ (hook 'no-takes'; slide 1 = titulek, slidy 2–4 = what_changed[0..2]); slide 2 = dek jako druhá obálka; slidy 3–5 = what_changed (max 3); slidy 6–8 = why_it_matters (max 3); slide 9 = „Otevřené zůstává: …“ (uncertainty[0]); outro „Jedno vydání a máte přehled.“ + @dneskai. 4:5 1080×1350 JPEG, hero z licencované fotky ve slotu s clonou. Caption = varianta A z packu, „Celý článek: {site}/?utm_source=instagram&utm_medium=post&utm_campaign=edition“, 5–10 hashtagů, fotokredit. Vlastník v /admin/queue vybere titulek, zkontroluje slidy a schválí; dokud neběží publisher (quorum#587), publikuje ručně z exportu. Den NO_EDITION → místo carouselu story z ai-lessons (fallback v Queue). 12:00 = varianta A (poledne; Buffer/Hootsuite: poledne a dopoledne v pracovní dny). Hypotéza.",
+      "body": "BoardlessAI social pack (composeEditionSocialPack) po ranní edici (~09:00): slide 1 = titulek edice nebo alternative_headlines[0] + hook „Žádné komentáře. Události a co mění.“ (hook 'no-takes'; slide 1 = titulek, slidy 2–4 = what_changed[0..2]); slide 2 = dek jako druhá obálka; slidy 3–5 = what_changed (max 3); slidy 6–8 = why_it_matters (max 3); slide 9 = „Otevřené zůstává: …“ (uncertainty[0]); outro „Jedno vydání a máte přehled.“ + @dneskai. 4:5 1080×1350 JPEG, hero z licencované fotky ve slotu s clonou. Caption = varianta A z packu, „Celý článek: https://caughtup-ai.vercel.app/?utm_source=instagram&utm_medium=post&utm_campaign=edition“, 5–10 hashtagů, fotokredit. Vlastník v /admin/queue vybere titulek, zkontroluje slidy a schválí; dokud neběží publisher (quorum#587), publikuje ručně z exportu. Den NO_EDITION → místo carouselu story z ai-lessons (fallback v Queue). 12:00 = varianta A (poledne; Buffer/Hootsuite: poledne a dopoledne v pracovní dny). Hypotéza.",
       "cta": "Celý článek → link v biu",
       "assets": [
         "frames z /admin/queue (frame-01…09.jpg)",
@@ -1337,7 +1347,7 @@
       "hook": "Prompt dne: jeden řádek, hodina ušetřená",
       "hookType": "list",
       "producer": "dneskai-pack",
-      "body": "Pole practical typu prompt z edice (kopírovatelný český prompt, rychlé porovnání dvou modelů podle licence, ceny a limitů); otestovaný ve 2 modelech, verified_at vyplněné. Formát: story karta 1080×1920 ze social packu (quorum#592, pole practical z edice / lekce dne), Poppins Black (směr C), modrá #2F5AE6 na ink #14161A, max 2 textové bloky; link sticker {site}/?utm_source=instagram&utm_medium=story&utm_campaign=practical; sticker „pošli kamarádovi“ (AMI: Češi sdílí soukromě). Highlight „Praktické“. Když story karta v packu ještě není, vlastník ji udělá z Design Lab šablony (10 min navíc).",
+      "body": "Pole practical typu prompt z edice (kopírovatelný český prompt, rychlé porovnání dvou modelů podle licence, ceny a limitů); otestovaný ve 2 modelech, verified_at vyplněné. Formát: story karta 1080×1920 ze social packu (quorum#592, pole practical z edice / lekce dne), Poppins Black (směr C), modrá #2F5AE6 na ink #14161A, max 2 textové bloky; link sticker https://caughtup-ai.vercel.app/?utm_source=instagram&utm_medium=story&utm_campaign=practical; sticker „pošli kamarádovi“ (AMI: Češi sdílí soukromě). Highlight „Praktické“. Když story karta v packu ještě není, vlastník ji udělá z Design Lab šablony (10 min navíc).",
       "cta": "Zkopíruj prompt → link",
       "assets": [
         "story karta ze social packu (practical / lekce dne)"
@@ -1362,7 +1372,7 @@
       "hook": "„[Subjekt] [udělal X]. [Číslo].“ — např. „Mistral uzavřel kolo 3 miliard eur – největší v historii evropského tech sektoru.“",
       "hookType": "number",
       "producer": "dneskai-pack",
-      "body": "threadsText edice / varianta A social packu (≤ 500 znaků): titulek + why_it_matters[0] + „Otevřené zůstává: …“ + link {site}/?utm_source=threads&utm_medium=post&utm_campaign=edition. Linky v těle Meta od 6/2025 neřadí hůř — link přímo v postu. Bez hashtagů. 09:30 = hned po dodání edice (~09:00); Buffer: Čt 9 h nejlepší globálně.",
+      "body": "threadsText edice / varianta A social packu (≤ 500 znaků): titulek + why_it_matters[0] + „Otevřené zůstává: …“ + link https://caughtup-ai.vercel.app/?utm_source=threads&utm_medium=post&utm_campaign=edition. Linky v těle Meta od 6/2025 neřadí hůř — link přímo v postu. Bez hashtagů. 09:30 = hned po dodání edice (~09:00); Buffer: Čt 9 h nejlepší globálně.",
       "cta": "Celé vydání → link",
       "assets": [
         "threadsText z Queue"
@@ -1432,7 +1442,7 @@
       "hook": "Psané česky. Ne přeložené do češtiny.",
       "hookType": "authority",
       "producer": "dneskai-pack",
-      "body": "BoardlessAI social pack (composeEditionSocialPack) po ranní edici (~09:00): slide 1 = titulek edice nebo alternative_headlines[0] + hook „Psané česky. Ne přeložené do češtiny.“ (hook 'czech-first' (cooldown 12 dní); slide 1 = titulek dne); slide 2 = dek jako druhá obálka; slidy 3–5 = what_changed (max 3); slidy 6–8 = why_it_matters (max 3); slide 9 = „Otevřené zůstává: …“ (uncertainty[0]); outro „Jedno vydání a máte přehled.“ + @dneskai. 4:5 1080×1350 JPEG, hero z licencované fotky ve slotu s clonou. Caption = varianta A z packu, „Celý článek: {site}/?utm_source=instagram&utm_medium=post&utm_campaign=edition“, 5–10 hashtagů, fotokredit. Vlastník v /admin/queue vybere titulek, zkontroluje slidy a schválí; dokud neběží publisher (quorum#587), publikuje ručně z exportu. Den NO_EDITION → místo carouselu story z ai-lessons (fallback v Queue). 12:00 = varianta A (poledne; Buffer/Hootsuite: poledne a dopoledne v pracovní dny). Hypotéza.",
+      "body": "BoardlessAI social pack (composeEditionSocialPack) po ranní edici (~09:00): slide 1 = titulek edice nebo alternative_headlines[0] + hook „Psané česky. Ne přeložené do češtiny.“ (hook 'czech-first' (cooldown 12 dní); slide 1 = titulek dne); slide 2 = dek jako druhá obálka; slidy 3–5 = what_changed (max 3); slidy 6–8 = why_it_matters (max 3); slide 9 = „Otevřené zůstává: …“ (uncertainty[0]); outro „Jedno vydání a máte přehled.“ + @dneskai. 4:5 1080×1350 JPEG, hero z licencované fotky ve slotu s clonou. Caption = varianta A z packu, „Celý článek: https://caughtup-ai.vercel.app/?utm_source=instagram&utm_medium=post&utm_campaign=edition“, 5–10 hashtagů, fotokredit. Vlastník v /admin/queue vybere titulek, zkontroluje slidy a schválí; dokud neběží publisher (quorum#587), publikuje ručně z exportu. Den NO_EDITION → místo carouselu story z ai-lessons (fallback v Queue). 12:00 = varianta A (poledne; Buffer/Hootsuite: poledne a dopoledne v pracovní dny). Hypotéza.",
       "cta": "Celý článek → link v biu",
       "assets": [
         "frames z /admin/queue (frame-01…09.jpg)",
@@ -1461,7 +1471,7 @@
       "hook": "Pojem dne: 20 sekund",
       "hookType": "list",
       "producer": "dneskai-pack",
-      "body": "Lekce dne z ai-lessons.json (60 termínů, pořadí podle data nejnovější edice) nebo practical typu term; odkaz na /lekce. Formát: story karta 1080×1920 ze social packu (quorum#592, pole practical z edice / lekce dne), Poppins Black (směr C), modrá #2F5AE6 na ink #14161A, max 2 textové bloky; link sticker {site}/lekce?utm_source=instagram&utm_medium=story&utm_campaign=practical; sticker „pošli kamarádovi“ (AMI: Češi sdílí soukromě). Highlight „Praktické“. Když story karta v packu ještě není, vlastník ji udělá z Design Lab šablony (10 min navíc).",
+      "body": "Lekce dne z ai-lessons.json (60 termínů, pořadí podle data nejnovější edice) nebo practical typu term; odkaz na /lekce. Formát: story karta 1080×1920 ze social packu (quorum#592, pole practical z edice / lekce dne), Poppins Black (směr C), modrá #2F5AE6 na ink #14161A, max 2 textové bloky; link sticker https://caughtup-ai.vercel.app/lekce?utm_source=instagram&utm_medium=story&utm_campaign=practical; sticker „pošli kamarádovi“ (AMI: Češi sdílí soukromě). Highlight „Praktické“. Když story karta v packu ještě není, vlastník ji udělá z Design Lab šablony (10 min navíc).",
       "cta": "Vyzkoušej dnes → link",
       "assets": [
         "story karta ze social packu (practical / lekce dne)"
@@ -1486,7 +1496,7 @@
       "hook": "„[Subjekt] [udělal X]. [Číslo].“ — např. „Mistral uzavřel kolo 3 miliard eur – největší v historii evropského tech sektoru.“",
       "hookType": "number",
       "producer": "dneskai-pack",
-      "body": "threadsText edice / varianta A social packu (≤ 500 znaků): titulek + why_it_matters[0] + „Otevřené zůstává: …“ + link {site}/?utm_source=threads&utm_medium=post&utm_campaign=edition. Linky v těle Meta od 6/2025 neřadí hůř — link přímo v postu. Bez hashtagů. 09:30 = hned po dodání edice (~09:00); Buffer: Čt 9 h nejlepší globálně.",
+      "body": "threadsText edice / varianta A social packu (≤ 500 znaků): titulek + why_it_matters[0] + „Otevřené zůstává: …“ + link https://caughtup-ai.vercel.app/?utm_source=threads&utm_medium=post&utm_campaign=edition. Linky v těle Meta od 6/2025 neřadí hůř — link přímo v postu. Bez hashtagů. 09:30 = hned po dodání edice (~09:00); Buffer: Čt 9 h nejlepší globálně.",
       "cta": "Celé vydání → link",
       "assets": [
         "threadsText z Queue"
@@ -1510,7 +1520,7 @@
       "hook": "AI vyhledávání bere webům kliky. Co dnes zaznělo na WebTop100",
       "hookType": "problem",
       "producer": "owner",
-      "body": "WebTop100 2026 (TUESDAY + Internet Info, Hotel Duo, placené; témata AI search a GEO). Zápisky z veřejných výstupů / Lupa.cz; vlastní kontext: DNESKAi publikuje llms.txt a news sitemap (aifirst#99) — ukázat jako skutečný příklad, ne reklamu. Tentýž den AI Business Roundtable (Stratox, zdarma) a AI a mobilita (O2, zdarma). Formát: 3–6 navazujících postů; první bez linku, poslední s odkazem {site}/akce?utm_source=threads&utm_medium=post&utm_campaign=akce. Jen vlastní zápisky (citace se jménem řečníka, čísla, co to znamená pro čtenáře) — nikdy cizí slidy nebo screenshoty bez vlastního textu (IG/Threads originalita od 30. 4. 2026). Zdroj akce: https://www.tuesday.cz.",
+      "body": "WebTop100 2026 (TUESDAY + Internet Info, Hotel Duo, placené; témata AI search a GEO). Zápisky z veřejných výstupů / Lupa.cz; vlastní kontext: DNESKAi publikuje llms.txt a news sitemap (aifirst#99) — ukázat jako skutečný příklad, ne reklamu. Tentýž den AI Business Roundtable (Stratox, zdarma) a AI a mobilita (O2, zdarma). Formát: 3–6 navazujících postů; první bez linku, poslední s odkazem https://caughtup-ai.vercel.app/akce?utm_source=threads&utm_medium=post&utm_campaign=akce. Jen vlastní zápisky (citace se jménem řečníka, čísla, co to znamená pro čtenáře) — nikdy cizí slidy nebo screenshoty bez vlastního textu (IG/Threads originalita od 30. 4. 2026). Zdroj akce: https://www.tuesday.cz.",
       "cta": "Další akce → /akce",
       "assets": [
         "poznámky ze streamu / programu akce",
@@ -1559,7 +1569,7 @@
       "hook": "Je v tom číslo, ne dojem.",
       "hookType": "number",
       "producer": "dneskai-pack",
-      "body": "BoardlessAI social pack (composeEditionSocialPack) po ranní edici (~09:00): slide 1 = titulek edice nebo alternative_headlines[0] + hook „Je v tom číslo, ne dojem.“ (hook 'figure-not-vibe' (hasNumber); slide 1 = číslo + subjekt); slide 2 = dek jako druhá obálka; slidy 3–5 = what_changed (max 3); slidy 6–8 = why_it_matters (max 3); slide 9 = „Otevřené zůstává: …“ (uncertainty[0]); outro „Jedno vydání a máte přehled.“ + @dneskai. 4:5 1080×1350 JPEG, hero z licencované fotky ve slotu s clonou. Caption = varianta A z packu, „Celý článek: {site}/?utm_source=instagram&utm_medium=post&utm_campaign=edition“, 5–10 hashtagů, fotokredit. Vlastník v /admin/queue vybere titulek, zkontroluje slidy a schválí; dokud neběží publisher (quorum#587), publikuje ručně z exportu. Den NO_EDITION → místo carouselu story z ai-lessons (fallback v Queue). 12:00 = varianta A (poledne; Buffer/Hootsuite: poledne a dopoledne v pracovní dny). Hypotéza.",
+      "body": "BoardlessAI social pack (composeEditionSocialPack) po ranní edici (~09:00): slide 1 = titulek edice nebo alternative_headlines[0] + hook „Je v tom číslo, ne dojem.“ (hook 'figure-not-vibe' (hasNumber); slide 1 = číslo + subjekt); slide 2 = dek jako druhá obálka; slidy 3–5 = what_changed (max 3); slidy 6–8 = why_it_matters (max 3); slide 9 = „Otevřené zůstává: …“ (uncertainty[0]); outro „Jedno vydání a máte přehled.“ + @dneskai. 4:5 1080×1350 JPEG, hero z licencované fotky ve slotu s clonou. Caption = varianta A z packu, „Celý článek: https://caughtup-ai.vercel.app/?utm_source=instagram&utm_medium=post&utm_campaign=edition“, 5–10 hashtagů, fotokredit. Vlastník v /admin/queue vybere titulek, zkontroluje slidy a schválí; dokud neběží publisher (quorum#587), publikuje ručně z exportu. Den NO_EDITION → místo carouselu story z ai-lessons (fallback v Queue). 12:00 = varianta A (poledne; Buffer/Hootsuite: poledne a dopoledne v pracovní dny). Hypotéza.",
       "cta": "Celý článek → link v biu",
       "assets": [
         "frames z /admin/queue (frame-01…09.jpg)",
@@ -1588,7 +1598,7 @@
       "hook": "Nástroj dne z edice",
       "hookType": "promise",
       "producer": "dneskai-pack",
-      "body": "Pole practical typu tool: nástroj/model z dnešní edice, co dělá, cena ověřená na webu poskytovatele + verified_at; bez ověřené ceny se nepublikuje. Formát: story karta 1080×1920 ze social packu (quorum#592, pole practical z edice / lekce dne), Poppins Black (směr C), modrá #2F5AE6 na ink #14161A, max 2 textové bloky; link sticker {site}/?utm_source=instagram&utm_medium=story&utm_campaign=practical; sticker „pošli kamarádovi“ (AMI: Češi sdílí soukromě). Highlight „Praktické“. Když story karta v packu ještě není, vlastník ji udělá z Design Lab šablony (10 min navíc).",
+      "body": "Pole practical typu tool: nástroj/model z dnešní edice, co dělá, cena ověřená na webu poskytovatele + verified_at; bez ověřené ceny se nepublikuje. Formát: story karta 1080×1920 ze social packu (quorum#592, pole practical z edice / lekce dne), Poppins Black (směr C), modrá #2F5AE6 na ink #14161A, max 2 textové bloky; link sticker https://caughtup-ai.vercel.app/?utm_source=instagram&utm_medium=story&utm_campaign=practical; sticker „pošli kamarádovi“ (AMI: Češi sdílí soukromě). Highlight „Praktické“. Když story karta v packu ještě není, vlastník ji udělá z Design Lab šablony (10 min navíc).",
       "cta": "Vyzkoušej dnes → link",
       "assets": [
         "story karta ze social packu (practical / lekce dne)"
@@ -1613,7 +1623,7 @@
       "hook": "„[Subjekt] [udělal X]. [Číslo].“ — např. „Mistral uzavřel kolo 3 miliard eur – největší v historii evropského tech sektoru.“",
       "hookType": "number",
       "producer": "dneskai-pack",
-      "body": "threadsText edice / varianta A social packu (≤ 500 znaků): titulek + why_it_matters[0] + „Otevřené zůstává: …“ + link {site}/?utm_source=threads&utm_medium=post&utm_campaign=edition. Linky v těle Meta od 6/2025 neřadí hůř — link přímo v postu. Bez hashtagů. 09:30 = hned po dodání edice (~09:00); Buffer: Čt 9 h nejlepší globálně.",
+      "body": "threadsText edice / varianta A social packu (≤ 500 znaků): titulek + why_it_matters[0] + „Otevřené zůstává: …“ + link https://caughtup-ai.vercel.app/?utm_source=threads&utm_medium=post&utm_campaign=edition. Linky v těle Meta od 6/2025 neřadí hůř — link přímo v postu. Bez hashtagů. 09:30 = hned po dodání edice (~09:00); Buffer: Čt 9 h nejlepší globálně.",
       "cta": "Celé vydání → link",
       "assets": [
         "threadsText z Queue"
@@ -1638,7 +1648,7 @@
       "hookType": "list",
       "producer": "dneskai-pack",
       "body": "Recept friday-tools (quorum#592) z edic týdne, vlastník ověří: slide 1 hook „3 nástroje z Dnů AI + prompt týdne“; slide 2 (druhá obálka) = prompt týdne v plném znění (kopírovatelný, česky); slidy 3–5 = tři nástroje z edic týdne (název, co dělá, cena ověřená na webu poskytovatele + datum ověření, odkaz na edici); slide 6 = „Ulož si to na pondělí“ + @dneskai. 6 slidů, 4:5 1080×1350. Vlastník ověří ceny (screenshot ceníku) a otestuje prompt ve 2 modelech (~30 min). Jeden nástroj z programu Dnů AI (dny.ai), jen s ověřenou cenou.",
-      "cta": "Ulož si to; celé edice → {site}/?utm_source=instagram&utm_medium=post&utm_campaign=friday-tools",
+      "cta": "Ulož si to; celé edice → https://caughtup-ai.vercel.app/?utm_source=instagram&utm_medium=post&utm_campaign=friday-tools",
       "assets": [
         "Design Lab deck 'friday-tools' (6 slidů)",
         "ověřené ceny nástrojů (screenshot ceníku, datum)",
@@ -1762,7 +1772,7 @@
       "hook": "Týden, kdy AI bylo v každém kraji. Pět edic.",
       "hookType": "list",
       "producer": "dneskai-pack",
-      "body": "Recept weekly-recap (quorum#592) z /tyden a /api/weekly.json: slide 1 hook „Týden, kdy AI bylo v každém kraji. Pět edic.“; slidy 2–6 = pět edic týdne (titulek + věta why_it_matters + signal_strength); slide 7 = „Co zůstává otevřené do příštího týdne“ (3 uncertainty body); slide 8 = „Příští týden: 17. 11. svátek; TechMeetup Ostrava 20. 11. (VŠB-TUO, 550 Kč). Dny AI skončily — ohlédnutí v pondělí.“. 8 slidů, 4:5, bulk render z pěti summaries. Neděle 18:00 = kompromis Emplifi (So–Ne 21–24) a Hootsuite (Ne 12–15), hypotéza. CTA {site}/tyden?utm_source=instagram&utm_medium=post&utm_campaign=weekly-recap.",
+      "body": "Recept weekly-recap (quorum#592) z /tyden a /api/weekly.json: slide 1 hook „Týden, kdy AI bylo v každém kraji. Pět edic.“; slidy 2–6 = pět edic týdne (titulek + věta why_it_matters + signal_strength); slide 7 = „Co zůstává otevřené do příštího týdne“ (3 uncertainty body); slide 8 = „Příští týden: 17. 11. svátek; TechMeetup Ostrava 20. 11. (VŠB-TUO, 550 Kč). Dny AI skončily — ohlédnutí v pondělí.“. 8 slidů, 4:5, bulk render z pěti summaries. Neděle 18:00 = kompromis Emplifi (So–Ne 21–24) a Hootsuite (Ne 12–15), hypotéza. CTA https://caughtup-ai.vercel.app/tyden?utm_source=instagram&utm_medium=post&utm_campaign=weekly-recap.",
       "cta": "Ulož si týden; v pondělí další edice",
       "assets": [
         "Design Lab deck 'weekly-recap' (8 slidů)",
@@ -1789,7 +1799,7 @@
       "hook": "Klidnější týden: svátek a TechMeetup Ostrava. A kde jsou AI akce na leden.",
       "hookType": "list",
       "producer": "owner",
-      "body": "TechMeetup Ostrava 20. 11. (Aula VŠB-TUO, 7 stagí, 550 Kč / studenti 290 Kč). Poznámka: AI Festival Prague se podle oficiálního webu přesunul na leden 2027 (StartupJobs uvádí stále 21.–23. 11. — neplatí). Výzva: pošlete nám akci, kterou chcete na /akce. Formát: 3–6 navazujících postů; první bez linku, poslední s odkazem {site}/akce?utm_source=threads&utm_medium=post&utm_campaign=akce. Jen vlastní zápisky (citace se jménem řečníka, čísla, co to znamená pro čtenáře) — nikdy cizí slidy nebo screenshoty bez vlastního textu (IG/Threads originalita od 30. 4. 2026). Zdroj akce: https://www.visitostrava.eu/en/events/exhibitions/181789-techmeetup-ostrava-2026.html.",
+      "body": "TechMeetup Ostrava 20. 11. (Aula VŠB-TUO, 7 stagí, 550 Kč / studenti 290 Kč). Poznámka: AI Festival Prague se podle oficiálního webu přesunul na leden 2027 (StartupJobs uvádí stále 21.–23. 11. — neplatí). Výzva: pošlete nám akci, kterou chcete na /akce. Formát: 3–6 navazujících postů; první bez linku, poslední s odkazem https://caughtup-ai.vercel.app/akce?utm_source=threads&utm_medium=post&utm_campaign=akce. Jen vlastní zápisky (citace se jménem řečníka, čísla, co to znamená pro čtenáře) — nikdy cizí slidy nebo screenshoty bez vlastního textu (IG/Threads originalita od 30. 4. 2026). Zdroj akce: https://www.visitostrava.eu/en/events/exhibitions/181789-techmeetup-ostrava-2026.html.",
       "cta": "Další akce → /akce",
       "assets": [
         "poznámky ze streamu / programu akce",
@@ -1864,7 +1874,7 @@
       "hook": "Den, který má váhu. Žádná vata.",
       "hookType": "authority",
       "producer": "dneskai-pack",
-      "body": "BoardlessAI social pack (composeEditionSocialPack) po ranní edici (~09:00): slide 1 = titulek edice nebo alternative_headlines[0] + hook „Den, který má váhu. Žádná vata.“ (hook 'day-with-weight' jen při signal_strength ≥ 80); slide 2 = dek jako druhá obálka; slidy 3–5 = what_changed (max 3); slidy 6–8 = why_it_matters (max 3); slide 9 = „Otevřené zůstává: …“ (uncertainty[0]); outro „Jedno vydání a máte přehled.“ + @dneskai. 4:5 1080×1350 JPEG, hero z licencované fotky ve slotu s clonou. Caption = varianta A z packu, „Celý článek: {site}/?utm_source=instagram&utm_medium=post&utm_campaign=edition“, 5–10 hashtagů, fotokredit. Vlastník v /admin/queue vybere titulek, zkontroluje slidy a schválí; dokud neběží publisher (quorum#587), publikuje ručně z exportu. Den NO_EDITION → místo carouselu story z ai-lessons (fallback v Queue). 17:30 = varianta B (po práci; Hootsuite St 17, Čt 16–17). Hypotéza — srovnat sends/reach A vs B v review 22. 11.",
+      "body": "BoardlessAI social pack (composeEditionSocialPack) po ranní edici (~09:00): slide 1 = titulek edice nebo alternative_headlines[0] + hook „Den, který má váhu. Žádná vata.“ (hook 'day-with-weight' jen při signal_strength ≥ 80); slide 2 = dek jako druhá obálka; slidy 3–5 = what_changed (max 3); slidy 6–8 = why_it_matters (max 3); slide 9 = „Otevřené zůstává: …“ (uncertainty[0]); outro „Jedno vydání a máte přehled.“ + @dneskai. 4:5 1080×1350 JPEG, hero z licencované fotky ve slotu s clonou. Caption = varianta A z packu, „Celý článek: https://caughtup-ai.vercel.app/?utm_source=instagram&utm_medium=post&utm_campaign=edition“, 5–10 hashtagů, fotokredit. Vlastník v /admin/queue vybere titulek, zkontroluje slidy a schválí; dokud neběží publisher (quorum#587), publikuje ručně z exportu. Den NO_EDITION → místo carouselu story z ai-lessons (fallback v Queue). 17:30 = varianta B (po práci; Hootsuite St 17, Čt 16–17). Hypotéza — srovnat sends/reach A vs B v review 22. 11.",
       "cta": "Celý článek → link v biu",
       "assets": [
         "frames z /admin/queue (frame-01…09.jpg)",
@@ -1893,7 +1903,7 @@
       "hook": "Pojem dne: 20 sekund",
       "hookType": "list",
       "producer": "dneskai-pack",
-      "body": "Lekce dne z ai-lessons.json (60 termínů, pořadí podle data nejnovější edice) nebo practical typu term; odkaz na /lekce. Formát: story karta 1080×1920 ze social packu (quorum#592, pole practical z edice / lekce dne), Poppins Black (směr C), modrá #2F5AE6 na ink #14161A, max 2 textové bloky; link sticker {site}/lekce?utm_source=instagram&utm_medium=story&utm_campaign=practical; sticker „pošli kamarádovi“ (AMI: Češi sdílí soukromě). Highlight „Praktické“. Když story karta v packu ještě není, vlastník ji udělá z Design Lab šablony (10 min navíc).",
+      "body": "Lekce dne z ai-lessons.json (60 termínů, pořadí podle data nejnovější edice) nebo practical typu term; odkaz na /lekce. Formát: story karta 1080×1920 ze social packu (quorum#592, pole practical z edice / lekce dne), Poppins Black (směr C), modrá #2F5AE6 na ink #14161A, max 2 textové bloky; link sticker https://caughtup-ai.vercel.app/lekce?utm_source=instagram&utm_medium=story&utm_campaign=practical; sticker „pošli kamarádovi“ (AMI: Češi sdílí soukromě). Highlight „Praktické“. Když story karta v packu ještě není, vlastník ji udělá z Design Lab šablony (10 min navíc).",
       "cta": "Vyzkoušej dnes → link",
       "assets": [
         "story karta ze social packu (practical / lekce dne)"
@@ -1918,7 +1928,7 @@
       "hook": "„[Subjekt] [udělal X]. [Číslo].“ — např. „Mistral uzavřel kolo 3 miliard eur – největší v historii evropského tech sektoru.“",
       "hookType": "number",
       "producer": "dneskai-pack",
-      "body": "threadsText edice / varianta A social packu (≤ 500 znaků): titulek + why_it_matters[0] + „Otevřené zůstává: …“ + link {site}/?utm_source=threads&utm_medium=post&utm_campaign=edition. Linky v těle Meta od 6/2025 neřadí hůř — link přímo v postu. Bez hashtagů. 09:30 = hned po dodání edice (~09:00); Buffer: Čt 9 h nejlepší globálně.",
+      "body": "threadsText edice / varianta A social packu (≤ 500 znaků): titulek + why_it_matters[0] + „Otevřené zůstává: …“ + link https://caughtup-ai.vercel.app/?utm_source=threads&utm_medium=post&utm_campaign=edition. Linky v těle Meta od 6/2025 neřadí hůř — link přímo v postu. Bez hashtagů. 09:30 = hned po dodání edice (~09:00); Buffer: Čt 9 h nejlepší globálně.",
       "cta": "Celé vydání → link",
       "assets": [
         "threadsText z Queue"
@@ -1942,7 +1952,7 @@
       "hook": "Dny AI skončily. 5 věcí, které se opakovaly v Praze i v Brně",
       "hookType": "list",
       "producer": "owner",
-      "body": "Ohlédnutí z vlastních zápisků 5.–15. 11. a veřejných výstupů pořadatelů (CNAIP, prg.ai): AI Days, MAIDAY, Cybercamp.ai, AI 4 Gov, AI for Edu, Ženy v AI. Jen citovaná tvrzení; čísla návštěvnosti jen z oficiálního zdroje. Formát: 3–6 navazujících postů; první bez linku, poslední s odkazem {site}/akce?utm_source=threads&utm_medium=post&utm_campaign=akce. Jen vlastní zápisky (citace se jménem řečníka, čísla, co to znamená pro čtenáře) — nikdy cizí slidy nebo screenshoty bez vlastního textu (IG/Threads originalita od 30. 4. 2026). Zdroj akce: https://dny.ai/program.",
+      "body": "Ohlédnutí z vlastních zápisků 5.–15. 11. a veřejných výstupů pořadatelů (CNAIP, prg.ai): AI Days, MAIDAY, Cybercamp.ai, AI 4 Gov, AI for Edu, Ženy v AI. Jen citovaná tvrzení; čísla návštěvnosti jen z oficiálního zdroje. Formát: 3–6 navazujících postů; první bez linku, poslední s odkazem https://caughtup-ai.vercel.app/akce?utm_source=threads&utm_medium=post&utm_campaign=akce. Jen vlastní zápisky (citace se jménem řečníka, čísla, co to znamená pro čtenáře) — nikdy cizí slidy nebo screenshoty bez vlastního textu (IG/Threads originalita od 30. 4. 2026). Zdroj akce: https://dny.ai/program.",
       "cta": "Další akce → /akce",
       "assets": [
         "poznámky ze streamu / programu akce",
@@ -1991,7 +2001,7 @@
       "hook": "Co se změnilo. Ne co si o tom kdo myslí.",
       "hookType": "contrarian",
       "producer": "dneskai-pack",
-      "body": "Státní svátek: edice vychází normálně (pokud upstream doručí), carousel z packu jako obvykle, publikace 17:30 (varianta B). Žádná praktická story, žádné akce, žádná práce navíc; téma svátku netematizovat (politika mimo rozsah značky). Caption A + {site}/?utm_source=instagram&utm_medium=post&utm_campaign=edition. Review 22. 11. porovná dosah svátku s pracovním dnem.",
+      "body": "Státní svátek: edice vychází normálně (pokud upstream doručí), carousel z packu jako obvykle, publikace 17:30 (varianta B). Žádná praktická story, žádné akce, žádná práce navíc; téma svátku netematizovat (politika mimo rozsah značky). Caption A + https://caughtup-ai.vercel.app/?utm_source=instagram&utm_medium=post&utm_campaign=edition. Review 22. 11. porovná dosah svátku s pracovním dnem.",
       "cta": "Celý článek → link v biu",
       "assets": [
         "frames z /admin/queue (frame-01…09.jpg)",
@@ -2020,7 +2030,7 @@
       "hook": "„[Subjekt] [udělal X]. [Číslo].“ — např. „Mistral uzavřel kolo 3 miliard eur – největší v historii evropského tech sektoru.“",
       "hookType": "number",
       "producer": "dneskai-pack",
-      "body": "threadsText edice / varianta A social packu (≤ 500 znaků): titulek + why_it_matters[0] + „Otevřené zůstává: …“ + link {site}/?utm_source=threads&utm_medium=post&utm_campaign=edition. Linky v těle Meta od 6/2025 neřadí hůř — link přímo v postu. Bez hashtagů. 09:30 = hned po dodání edice (~09:00); Buffer: Čt 9 h nejlepší globálně.",
+      "body": "threadsText edice / varianta A social packu (≤ 500 znaků): titulek + why_it_matters[0] + „Otevřené zůstává: …“ + link https://caughtup-ai.vercel.app/?utm_source=threads&utm_medium=post&utm_campaign=edition. Linky v těle Meta od 6/2025 neřadí hůř — link přímo v postu. Bez hashtagů. 09:30 = hned po dodání edice (~09:00); Buffer: Čt 9 h nejlepší globálně.",
       "cta": "Celé vydání → link",
       "assets": [
         "threadsText z Queue"
@@ -2068,7 +2078,7 @@
       "hook": "Jedno číslo tady mění celý obrázek.",
       "hookType": "number",
       "producer": "dneskai-pack",
-      "body": "BoardlessAI social pack (composeEditionSocialPack) po ranní edici (~09:00): slide 1 = titulek edice nebo alternative_headlines[0] + hook „Jedno číslo tady mění celý obrázek.“ (hook 'one-number' (truthRequires hasNumber); slide 1 nese číslo z what_changed, např. „600 000 odcizených karet za 25 dolarů“); slide 2 = dek jako druhá obálka; slidy 3–5 = what_changed (max 3); slidy 6–8 = why_it_matters (max 3); slide 9 = „Otevřené zůstává: …“ (uncertainty[0]); outro „Jedno vydání a máte přehled.“ + @dneskai. 4:5 1080×1350 JPEG, hero z licencované fotky ve slotu s clonou. Caption = varianta A z packu, „Celý článek: {site}/?utm_source=instagram&utm_medium=post&utm_campaign=edition“, 5–10 hashtagů, fotokredit. Vlastník v /admin/queue vybere titulek, zkontroluje slidy a schválí; dokud neběží publisher (quorum#587), publikuje ručně z exportu. Den NO_EDITION → místo carouselu story z ai-lessons (fallback v Queue). 17:30 = varianta B (po práci; Hootsuite St 17, Čt 16–17). Hypotéza — srovnat sends/reach A vs B v review 22. 11.",
+      "body": "BoardlessAI social pack (composeEditionSocialPack) po ranní edici (~09:00): slide 1 = titulek edice nebo alternative_headlines[0] + hook „Jedno číslo tady mění celý obrázek.“ (hook 'one-number' (truthRequires hasNumber); slide 1 nese číslo z what_changed, např. „600 000 odcizených karet za 25 dolarů“); slide 2 = dek jako druhá obálka; slidy 3–5 = what_changed (max 3); slidy 6–8 = why_it_matters (max 3); slide 9 = „Otevřené zůstává: …“ (uncertainty[0]); outro „Jedno vydání a máte přehled.“ + @dneskai. 4:5 1080×1350 JPEG, hero z licencované fotky ve slotu s clonou. Caption = varianta A z packu, „Celý článek: https://caughtup-ai.vercel.app/?utm_source=instagram&utm_medium=post&utm_campaign=edition“, 5–10 hashtagů, fotokredit. Vlastník v /admin/queue vybere titulek, zkontroluje slidy a schválí; dokud neběží publisher (quorum#587), publikuje ručně z exportu. Den NO_EDITION → místo carouselu story z ai-lessons (fallback v Queue). 17:30 = varianta B (po práci; Hootsuite St 17, Čt 16–17). Hypotéza — srovnat sends/reach A vs B v review 22. 11.",
       "cta": "Celý článek → link v biu",
       "assets": [
         "frames z /admin/queue (frame-01…09.jpg)",
@@ -2097,7 +2107,7 @@
       "hook": "Nástroj dne z edice",
       "hookType": "promise",
       "producer": "dneskai-pack",
-      "body": "Pole practical typu tool: nástroj/model z dnešní edice, co dělá, cena ověřená na webu poskytovatele + verified_at; bez ověřené ceny se nepublikuje. Formát: story karta 1080×1920 ze social packu (quorum#592, pole practical z edice / lekce dne), Poppins Black (směr C), modrá #2F5AE6 na ink #14161A, max 2 textové bloky; link sticker {site}/?utm_source=instagram&utm_medium=story&utm_campaign=practical; sticker „pošli kamarádovi“ (AMI: Češi sdílí soukromě). Highlight „Praktické“. Když story karta v packu ještě není, vlastník ji udělá z Design Lab šablony (10 min navíc).",
+      "body": "Pole practical typu tool: nástroj/model z dnešní edice, co dělá, cena ověřená na webu poskytovatele + verified_at; bez ověřené ceny se nepublikuje. Formát: story karta 1080×1920 ze social packu (quorum#592, pole practical z edice / lekce dne), Poppins Black (směr C), modrá #2F5AE6 na ink #14161A, max 2 textové bloky; link sticker https://caughtup-ai.vercel.app/?utm_source=instagram&utm_medium=story&utm_campaign=practical; sticker „pošli kamarádovi“ (AMI: Češi sdílí soukromě). Highlight „Praktické“. Když story karta v packu ještě není, vlastník ji udělá z Design Lab šablony (10 min navíc).",
       "cta": "Vyzkoušej dnes → link",
       "assets": [
         "story karta ze social packu (practical / lekce dne)"
@@ -2122,7 +2132,7 @@
       "hook": "„[Subjekt] [udělal X]. [Číslo].“ — např. „Mistral uzavřel kolo 3 miliard eur – největší v historii evropského tech sektoru.“",
       "hookType": "number",
       "producer": "dneskai-pack",
-      "body": "threadsText edice / varianta A social packu (≤ 500 znaků): titulek + why_it_matters[0] + „Otevřené zůstává: …“ + link {site}/?utm_source=threads&utm_medium=post&utm_campaign=edition. Linky v těle Meta od 6/2025 neřadí hůř — link přímo v postu. Bez hashtagů. 09:30 = hned po dodání edice (~09:00); Buffer: Čt 9 h nejlepší globálně.",
+      "body": "threadsText edice / varianta A social packu (≤ 500 znaků): titulek + why_it_matters[0] + „Otevřené zůstává: …“ + link https://caughtup-ai.vercel.app/?utm_source=threads&utm_medium=post&utm_campaign=edition. Linky v těle Meta od 6/2025 neřadí hůř — link přímo v postu. Bez hashtagů. 09:30 = hned po dodání edice (~09:00); Buffer: Čt 9 h nejlepší globálně.",
       "cta": "Celé vydání → link",
       "assets": [
         "threadsText z Queue"
@@ -2191,7 +2201,7 @@
       "hook": "Nejen co se stalo. Taky proč na tom záleží.",
       "hookType": "promise",
       "producer": "dneskai-pack",
-      "body": "BoardlessAI social pack (composeEditionSocialPack) po ranní edici (~09:00): slide 1 = titulek edice nebo alternative_headlines[0] + hook „Nejen co se stalo. Taky proč na tom záleží.“ (hook 'matters-too'; slide 1 = titulek, slide 2 = první why_it_matters jako druhá obálka); slide 2 = dek jako druhá obálka; slidy 3–5 = what_changed (max 3); slidy 6–8 = why_it_matters (max 3); slide 9 = „Otevřené zůstává: …“ (uncertainty[0]); outro „Jedno vydání a máte přehled.“ + @dneskai. 4:5 1080×1350 JPEG, hero z licencované fotky ve slotu s clonou. Caption = varianta A z packu, „Celý článek: {site}/?utm_source=instagram&utm_medium=post&utm_campaign=edition“, 5–10 hashtagů, fotokredit. Vlastník v /admin/queue vybere titulek, zkontroluje slidy a schválí; dokud neběží publisher (quorum#587), publikuje ručně z exportu. Den NO_EDITION → místo carouselu story z ai-lessons (fallback v Queue). 17:30 = varianta B (po práci; Hootsuite St 17, Čt 16–17). Hypotéza — srovnat sends/reach A vs B v review 22. 11.",
+      "body": "BoardlessAI social pack (composeEditionSocialPack) po ranní edici (~09:00): slide 1 = titulek edice nebo alternative_headlines[0] + hook „Nejen co se stalo. Taky proč na tom záleží.“ (hook 'matters-too'; slide 1 = titulek, slide 2 = první why_it_matters jako druhá obálka); slide 2 = dek jako druhá obálka; slidy 3–5 = what_changed (max 3); slidy 6–8 = why_it_matters (max 3); slide 9 = „Otevřené zůstává: …“ (uncertainty[0]); outro „Jedno vydání a máte přehled.“ + @dneskai. 4:5 1080×1350 JPEG, hero z licencované fotky ve slotu s clonou. Caption = varianta A z packu, „Celý článek: https://caughtup-ai.vercel.app/?utm_source=instagram&utm_medium=post&utm_campaign=edition“, 5–10 hashtagů, fotokredit. Vlastník v /admin/queue vybere titulek, zkontroluje slidy a schválí; dokud neběží publisher (quorum#587), publikuje ručně z exportu. Den NO_EDITION → místo carouselu story z ai-lessons (fallback v Queue). 17:30 = varianta B (po práci; Hootsuite St 17, Čt 16–17). Hypotéza — srovnat sends/reach A vs B v review 22. 11.",
       "cta": "Celý článek → link v biu",
       "assets": [
         "frames z /admin/queue (frame-01…09.jpg)",
@@ -2220,7 +2230,7 @@
       "hook": "Prompt dne: jeden řádek, hodina ušetřená",
       "hookType": "list",
       "producer": "dneskai-pack",
-      "body": "Pole practical typu prompt z edice (kopírovatelný český prompt, kritické čtení AI tiskovky: „vyjmenuj 3 rizika, která oznámení nezmiňuje“); otestovaný ve 2 modelech, verified_at vyplněné. Formát: story karta 1080×1920 ze social packu (quorum#592, pole practical z edice / lekce dne), Poppins Black (směr C), modrá #2F5AE6 na ink #14161A, max 2 textové bloky; link sticker {site}/?utm_source=instagram&utm_medium=story&utm_campaign=practical; sticker „pošli kamarádovi“ (AMI: Češi sdílí soukromě). Highlight „Praktické“. Když story karta v packu ještě není, vlastník ji udělá z Design Lab šablony (10 min navíc).",
+      "body": "Pole practical typu prompt z edice (kopírovatelný český prompt, kritické čtení AI tiskovky: „vyjmenuj 3 rizika, která oznámení nezmiňuje“); otestovaný ve 2 modelech, verified_at vyplněné. Formát: story karta 1080×1920 ze social packu (quorum#592, pole practical z edice / lekce dne), Poppins Black (směr C), modrá #2F5AE6 na ink #14161A, max 2 textové bloky; link sticker https://caughtup-ai.vercel.app/?utm_source=instagram&utm_medium=story&utm_campaign=practical; sticker „pošli kamarádovi“ (AMI: Češi sdílí soukromě). Highlight „Praktické“. Když story karta v packu ještě není, vlastník ji udělá z Design Lab šablony (10 min navíc).",
       "cta": "Zkopíruj prompt → link",
       "assets": [
         "story karta ze social packu (practical / lekce dne)"
@@ -2245,7 +2255,7 @@
       "hook": "„[Subjekt] [udělal X]. [Číslo].“ — např. „Mistral uzavřel kolo 3 miliard eur – největší v historii evropského tech sektoru.“",
       "hookType": "number",
       "producer": "dneskai-pack",
-      "body": "threadsText edice / varianta A social packu (≤ 500 znaků): titulek + why_it_matters[0] + „Otevřené zůstává: …“ + link {site}/?utm_source=threads&utm_medium=post&utm_campaign=edition. Linky v těle Meta od 6/2025 neřadí hůř — link přímo v postu. Bez hashtagů. 09:30 = hned po dodání edice (~09:00); Buffer: Čt 9 h nejlepší globálně.",
+      "body": "threadsText edice / varianta A social packu (≤ 500 znaků): titulek + why_it_matters[0] + „Otevřené zůstává: …“ + link https://caughtup-ai.vercel.app/?utm_source=threads&utm_medium=post&utm_campaign=edition. Linky v těle Meta od 6/2025 neřadí hůř — link přímo v postu. Bez hashtagů. 09:30 = hned po dodání edice (~09:00); Buffer: Čt 9 h nejlepší globálně.",
       "cta": "Celé vydání → link",
       "assets": [
         "threadsText z Queue"
@@ -2293,7 +2303,7 @@
       "hook": "Co ještě není jisté, je tam napsané.",
       "hookType": "curiosity",
       "producer": "dneskai-pack",
-      "body": "BoardlessAI social pack (composeEditionSocialPack) po ranní edici (~09:00): slide 1 = titulek edice nebo alternative_headlines[0] + hook „Co ještě není jisté, je tam napsané.“ (hook 'uncertainty-named'; slide 1 = titulek, poslední slide = uncertainty[0] jako otázka); slide 2 = dek jako druhá obálka; slidy 3–5 = what_changed (max 3); slidy 6–8 = why_it_matters (max 3); slide 9 = „Otevřené zůstává: …“ (uncertainty[0]); outro „Jedno vydání a máte přehled.“ + @dneskai. 4:5 1080×1350 JPEG, hero z licencované fotky ve slotu s clonou. Caption = varianta A z packu, „Celý článek: {site}/?utm_source=instagram&utm_medium=post&utm_campaign=edition“, 5–10 hashtagů, fotokredit. Vlastník v /admin/queue vybere titulek, zkontroluje slidy a schválí; dokud neběží publisher (quorum#587), publikuje ručně z exportu. Den NO_EDITION → místo carouselu story z ai-lessons (fallback v Queue). 17:30 = varianta B (po práci; Hootsuite St 17, Čt 16–17). Hypotéza — srovnat sends/reach A vs B v review 22. 11.",
+      "body": "BoardlessAI social pack (composeEditionSocialPack) po ranní edici (~09:00): slide 1 = titulek edice nebo alternative_headlines[0] + hook „Co ještě není jisté, je tam napsané.“ (hook 'uncertainty-named'; slide 1 = titulek, poslední slide = uncertainty[0] jako otázka); slide 2 = dek jako druhá obálka; slidy 3–5 = what_changed (max 3); slidy 6–8 = why_it_matters (max 3); slide 9 = „Otevřené zůstává: …“ (uncertainty[0]); outro „Jedno vydání a máte přehled.“ + @dneskai. 4:5 1080×1350 JPEG, hero z licencované fotky ve slotu s clonou. Caption = varianta A z packu, „Celý článek: https://caughtup-ai.vercel.app/?utm_source=instagram&utm_medium=post&utm_campaign=edition“, 5–10 hashtagů, fotokredit. Vlastník v /admin/queue vybere titulek, zkontroluje slidy a schválí; dokud neběží publisher (quorum#587), publikuje ručně z exportu. Den NO_EDITION → místo carouselu story z ai-lessons (fallback v Queue). 17:30 = varianta B (po práci; Hootsuite St 17, Čt 16–17). Hypotéza — srovnat sends/reach A vs B v review 22. 11.",
       "cta": "Celý článek → link v biu",
       "assets": [
         "frames z /admin/queue (frame-01…09.jpg)",
@@ -2322,7 +2332,7 @@
       "hook": "Pojem dne: 20 sekund",
       "hookType": "list",
       "producer": "dneskai-pack",
-      "body": "Lekce dne z ai-lessons.json (60 termínů, pořadí podle data nejnovější edice) nebo practical typu term; odkaz na /lekce. Formát: story karta 1080×1920 ze social packu (quorum#592, pole practical z edice / lekce dne), Poppins Black (směr C), modrá #2F5AE6 na ink #14161A, max 2 textové bloky; link sticker {site}/lekce?utm_source=instagram&utm_medium=story&utm_campaign=practical; sticker „pošli kamarádovi“ (AMI: Češi sdílí soukromě). Highlight „Praktické“. Když story karta v packu ještě není, vlastník ji udělá z Design Lab šablony (10 min navíc).",
+      "body": "Lekce dne z ai-lessons.json (60 termínů, pořadí podle data nejnovější edice) nebo practical typu term; odkaz na /lekce. Formát: story karta 1080×1920 ze social packu (quorum#592, pole practical z edice / lekce dne), Poppins Black (směr C), modrá #2F5AE6 na ink #14161A, max 2 textové bloky; link sticker https://caughtup-ai.vercel.app/lekce?utm_source=instagram&utm_medium=story&utm_campaign=practical; sticker „pošli kamarádovi“ (AMI: Češi sdílí soukromě). Highlight „Praktické“. Když story karta v packu ještě není, vlastník ji udělá z Design Lab šablony (10 min navíc).",
       "cta": "Vyzkoušej dnes → link",
       "assets": [
         "story karta ze social packu (practical / lekce dne)"
@@ -2347,7 +2357,7 @@
       "hook": "„[Subjekt] [udělal X]. [Číslo].“ — např. „Mistral uzavřel kolo 3 miliard eur – největší v historii evropského tech sektoru.“",
       "hookType": "number",
       "producer": "dneskai-pack",
-      "body": "threadsText edice / varianta A social packu (≤ 500 znaků): titulek + why_it_matters[0] + „Otevřené zůstává: …“ + link {site}/?utm_source=threads&utm_medium=post&utm_campaign=edition. Linky v těle Meta od 6/2025 neřadí hůř — link přímo v postu. Bez hashtagů. 09:30 = hned po dodání edice (~09:00); Buffer: Čt 9 h nejlepší globálně.",
+      "body": "threadsText edice / varianta A social packu (≤ 500 znaků): titulek + why_it_matters[0] + „Otevřené zůstává: …“ + link https://caughtup-ai.vercel.app/?utm_source=threads&utm_medium=post&utm_campaign=edition. Linky v těle Meta od 6/2025 neřadí hůř — link přímo v postu. Bez hashtagů. 09:30 = hned po dodání edice (~09:00); Buffer: Čt 9 h nejlepší globálně.",
       "cta": "Celé vydání → link",
       "assets": [
         "threadsText z Queue"
@@ -2372,7 +2382,7 @@
       "hookType": "list",
       "producer": "dneskai-pack",
       "body": "Recept friday-tools (quorum#592) z edic týdne, vlastník ověří: slide 1 hook „3 nástroje z edic + prompt na tiskovky“; slide 2 (druhá obálka) = prompt týdne v plném znění (kopírovatelný, česky); slidy 3–5 = tři nástroje z edic týdne (název, co dělá, cena ověřená na webu poskytovatele + datum ověření, odkaz na edici); slide 6 = „Ulož si to na pondělí“ + @dneskai. 6 slidů, 4:5 1080×1350. Vlastník ověří ceny (screenshot ceníku) a otestuje prompt ve 2 modelech (~30 min). ",
-      "cta": "Ulož si to; celé edice → {site}/?utm_source=instagram&utm_medium=post&utm_campaign=friday-tools",
+      "cta": "Ulož si to; celé edice → https://caughtup-ai.vercel.app/?utm_source=instagram&utm_medium=post&utm_campaign=friday-tools",
       "assets": [
         "Design Lab deck 'friday-tools' (6 slidů)",
         "ověřené ceny nástrojů (screenshot ceníku, datum)",
@@ -2399,7 +2409,7 @@
       "hook": "7 stagí, jedna aula: TechMeetup Ostrava dnes",
       "hookType": "list",
       "producer": "owner",
-      "body": "TechMeetup Ostrava 2026 (Aula VŠB-TUO, dev/DevOps/produkt, 550 Kč, studenti 290 Kč). 1–3 story snímky 1080×1920 (Design Lab šablona „akce“): název, datum, město, zdarma/placené, link sticker {site}/akce?utm_source=instagram&utm_medium=story&utm_campaign=akce. Highlight „Akce“. Zdroj: https://www.visitostrava.eu/en/events/exhibitions/181789-techmeetup-ostrava-2026.html.",
+      "body": "TechMeetup Ostrava 2026 (Aula VŠB-TUO, dev/DevOps/produkt, 550 Kč, studenti 290 Kč). 1–3 story snímky 1080×1920 (Design Lab šablona „akce“): název, datum, město, zdarma/placené, link sticker https://caughtup-ai.vercel.app/akce?utm_source=instagram&utm_medium=story&utm_campaign=akce. Highlight „Akce“. Zdroj: https://www.visitostrava.eu/en/events/exhibitions/181789-techmeetup-ostrava-2026.html.",
       "cta": "Program → /akce",
       "assets": [
         "story šablona „akce“",
@@ -2522,7 +2532,7 @@
       "hook": "Týden bez konferencí. Zprávy nepočkaly.",
       "hookType": "list",
       "producer": "dneskai-pack",
-      "body": "Recept weekly-recap (quorum#592) z /tyden a /api/weekly.json: slide 1 hook „Týden bez konferencí. Zprávy nepočkaly.“; slidy 2–6 = pět edic týdne (titulek + věta why_it_matters + signal_strength); slide 7 = „Co zůstává otevřené do příštího týdne“ (3 uncertainty body); slide 8 = „Příští týden: Křišťálová Lupa (nová kategorie AI projekt) 24. 11., ITAPA Bratislava 24.–26. 11., Data Restart a DobroData 25. 11., Vibecoding Festival Ostrava 26. 11. (zdarma), HACK JAK BRNO 27.–29. 11.“. 8 slidů, 4:5, bulk render z pěti summaries. Neděle 18:00 = kompromis Emplifi (So–Ne 21–24) a Hootsuite (Ne 12–15), hypotéza. CTA {site}/tyden?utm_source=instagram&utm_medium=post&utm_campaign=weekly-recap.",
+      "body": "Recept weekly-recap (quorum#592) z /tyden a /api/weekly.json: slide 1 hook „Týden bez konferencí. Zprávy nepočkaly.“; slidy 2–6 = pět edic týdne (titulek + věta why_it_matters + signal_strength); slide 7 = „Co zůstává otevřené do příštího týdne“ (3 uncertainty body); slide 8 = „Příští týden: Křišťálová Lupa (nová kategorie AI projekt) 24. 11., ITAPA Bratislava 24.–26. 11., Data Restart a DobroData 25. 11., Vibecoding Festival Ostrava 26. 11. (zdarma), HACK JAK BRNO 27.–29. 11.“. 8 slidů, 4:5, bulk render z pěti summaries. Neděle 18:00 = kompromis Emplifi (So–Ne 21–24) a Hootsuite (Ne 12–15), hypotéza. CTA https://caughtup-ai.vercel.app/tyden?utm_source=instagram&utm_medium=post&utm_campaign=weekly-recap.",
       "cta": "Ulož si týden; v pondělí další edice",
       "assets": [
         "Design Lab deck 'weekly-recap' (8 slidů)",
@@ -2549,7 +2559,7 @@
       "hook": "Příští týden: AI ceny, data, vibecoding a hackathon ve zdravotnictví",
       "hookType": "list",
       "producer": "owner",
-      "body": "Křišťálová Lupa 2026 — vyhlášení 24. 11. (nová porotní kategorie AI projekt); Jesenná ITAPA 24.–26. 11. Bratislava (agentní AI ve státě, placené); Data Restart 25. 11. (Taste, 4 290 Kč); DobroData 25. 11. (AI ve zdravotnictví, dar 2 500 Kč); Vibecoding Festival Ostrava II 26. 11. (IT4Innovations, zdarma, Luma); HACK JAK BRNO 27.–29. 11. (FN u sv. Anny); Cyberspace 27.–28. 11. (MU Brno). Formát: 3–6 navazujících postů; první bez linku, poslední s odkazem {site}/akce?utm_source=threads&utm_medium=post&utm_campaign=akce. Jen vlastní zápisky (citace se jménem řečníka, čísla, co to znamená pro čtenáře) — nikdy cizí slidy nebo screenshoty bez vlastního textu (IG/Threads originalita od 30. 4. 2026). Zdroj akce: https://www.lupa.cz/clanky/kristalova-lupa-2026-otevira-hlasovani-ve-hre-je-140-projektu/.",
+      "body": "Křišťálová Lupa 2026 — vyhlášení 24. 11. (nová porotní kategorie AI projekt); Jesenná ITAPA 24.–26. 11. Bratislava (agentní AI ve státě, placené); Data Restart 25. 11. (Taste, 4 290 Kč); DobroData 25. 11. (AI ve zdravotnictví, dar 2 500 Kč); Vibecoding Festival Ostrava II 26. 11. (IT4Innovations, zdarma, Luma); HACK JAK BRNO 27.–29. 11. (FN u sv. Anny); Cyberspace 27.–28. 11. (MU Brno). Formát: 3–6 navazujících postů; první bez linku, poslední s odkazem https://caughtup-ai.vercel.app/akce?utm_source=threads&utm_medium=post&utm_campaign=akce. Jen vlastní zápisky (citace se jménem řečníka, čísla, co to znamená pro čtenáře) — nikdy cizí slidy nebo screenshoty bez vlastního textu (IG/Threads originalita od 30. 4. 2026). Zdroj akce: https://www.lupa.cz/clanky/kristalova-lupa-2026-otevira-hlasovani-ve-hre-je-140-projektu/.",
       "cta": "Další akce → /akce",
       "assets": [
         "poznámky ze streamu / programu akce",
@@ -2602,7 +2612,7 @@
       "hook": "Žádné komentáře. Události a co mění.",
       "hookType": "contrarian",
       "producer": "dneskai-pack",
-      "body": "BoardlessAI social pack (composeEditionSocialPack) po ranní edici (~09:00): slide 1 = titulek edice nebo alternative_headlines[0] + hook „Žádné komentáře. Události a co mění.“ (hook 'no-takes'; slide 1 = titulek, slidy 2–4 = what_changed[0..2]); slide 2 = dek jako druhá obálka; slidy 3–5 = what_changed (max 3); slidy 6–8 = why_it_matters (max 3); slide 9 = „Otevřené zůstává: …“ (uncertainty[0]); outro „Jedno vydání a máte přehled.“ + @dneskai. 4:5 1080×1350 JPEG, hero z licencované fotky ve slotu s clonou. Caption = varianta A z packu, „Celý článek: {site}/?utm_source=instagram&utm_medium=post&utm_campaign=edition“, 5–10 hashtagů, fotokredit. Vlastník v /admin/queue vybere titulek, zkontroluje slidy a schválí; dokud neběží publisher (quorum#587), publikuje ručně z exportu. Den NO_EDITION → místo carouselu story z ai-lessons (fallback v Queue). 17:30 = varianta B (po práci; Hootsuite St 17, Čt 16–17). Hypotéza — srovnat sends/reach A vs B v review 22. 11.",
+      "body": "BoardlessAI social pack (composeEditionSocialPack) po ranní edici (~09:00): slide 1 = titulek edice nebo alternative_headlines[0] + hook „Žádné komentáře. Události a co mění.“ (hook 'no-takes'; slide 1 = titulek, slidy 2–4 = what_changed[0..2]); slide 2 = dek jako druhá obálka; slidy 3–5 = what_changed (max 3); slidy 6–8 = why_it_matters (max 3); slide 9 = „Otevřené zůstává: …“ (uncertainty[0]); outro „Jedno vydání a máte přehled.“ + @dneskai. 4:5 1080×1350 JPEG, hero z licencované fotky ve slotu s clonou. Caption = varianta A z packu, „Celý článek: https://caughtup-ai.vercel.app/?utm_source=instagram&utm_medium=post&utm_campaign=edition“, 5–10 hashtagů, fotokredit. Vlastník v /admin/queue vybere titulek, zkontroluje slidy a schválí; dokud neběží publisher (quorum#587), publikuje ručně z exportu. Den NO_EDITION → místo carouselu story z ai-lessons (fallback v Queue). 17:30 = varianta B (po práci; Hootsuite St 17, Čt 16–17). Hypotéza — srovnat sends/reach A vs B v review 22. 11.",
       "cta": "Celý článek → link v biu",
       "assets": [
         "frames z /admin/queue (frame-01…09.jpg)",
@@ -2631,7 +2641,7 @@
       "hook": "Nástroj dne z edice",
       "hookType": "promise",
       "producer": "dneskai-pack",
-      "body": "Pole practical typu tool: nástroj/model z dnešní edice, co dělá, cena ověřená na webu poskytovatele + verified_at; bez ověřené ceny se nepublikuje. Formát: story karta 1080×1920 ze social packu (quorum#592, pole practical z edice / lekce dne), Poppins Black (směr C), modrá #2F5AE6 na ink #14161A, max 2 textové bloky; link sticker {site}/?utm_source=instagram&utm_medium=story&utm_campaign=practical; sticker „pošli kamarádovi“ (AMI: Češi sdílí soukromě). Highlight „Praktické“. Když story karta v packu ještě není, vlastník ji udělá z Design Lab šablony (10 min navíc).",
+      "body": "Pole practical typu tool: nástroj/model z dnešní edice, co dělá, cena ověřená na webu poskytovatele + verified_at; bez ověřené ceny se nepublikuje. Formát: story karta 1080×1920 ze social packu (quorum#592, pole practical z edice / lekce dne), Poppins Black (směr C), modrá #2F5AE6 na ink #14161A, max 2 textové bloky; link sticker https://caughtup-ai.vercel.app/?utm_source=instagram&utm_medium=story&utm_campaign=practical; sticker „pošli kamarádovi“ (AMI: Češi sdílí soukromě). Highlight „Praktické“. Když story karta v packu ještě není, vlastník ji udělá z Design Lab šablony (10 min navíc).",
       "cta": "Vyzkoušej dnes → link",
       "assets": [
         "story karta ze social packu (practical / lekce dne)"
@@ -2656,7 +2666,7 @@
       "hook": "„[Subjekt] [udělal X]. [Číslo].“ — např. „Mistral uzavřel kolo 3 miliard eur – největší v historii evropského tech sektoru.“",
       "hookType": "number",
       "producer": "dneskai-pack",
-      "body": "threadsText edice / varianta A social packu (≤ 500 znaků): titulek + why_it_matters[0] + „Otevřené zůstává: …“ + link {site}/?utm_source=threads&utm_medium=post&utm_campaign=edition. Linky v těle Meta od 6/2025 neřadí hůř — link přímo v postu. Bez hashtagů. 09:30 = hned po dodání edice (~09:00); Buffer: Čt 9 h nejlepší globálně.",
+      "body": "threadsText edice / varianta A social packu (≤ 500 znaků): titulek + why_it_matters[0] + „Otevřené zůstává: …“ + link https://caughtup-ai.vercel.app/?utm_source=threads&utm_medium=post&utm_campaign=edition. Linky v těle Meta od 6/2025 neřadí hůř — link přímo v postu. Bez hashtagů. 09:30 = hned po dodání edice (~09:00); Buffer: Čt 9 h nejlepší globálně.",
       "cta": "Celé vydání → link",
       "assets": [
         "threadsText z Queue"
@@ -2704,7 +2714,7 @@
       "hook": "Psané česky. Ne přeložené do češtiny.",
       "hookType": "authority",
       "producer": "dneskai-pack",
-      "body": "BoardlessAI social pack (composeEditionSocialPack) po ranní edici (~09:00): slide 1 = titulek edice nebo alternative_headlines[0] + hook „Psané česky. Ne přeložené do češtiny.“ (hook 'czech-first' (cooldown 12 dní); slide 1 = titulek dne); slide 2 = dek jako druhá obálka; slidy 3–5 = what_changed (max 3); slidy 6–8 = why_it_matters (max 3); slide 9 = „Otevřené zůstává: …“ (uncertainty[0]); outro „Jedno vydání a máte přehled.“ + @dneskai. 4:5 1080×1350 JPEG, hero z licencované fotky ve slotu s clonou. Caption = varianta A z packu, „Celý článek: {site}/?utm_source=instagram&utm_medium=post&utm_campaign=edition“, 5–10 hashtagů, fotokredit. Vlastník v /admin/queue vybere titulek, zkontroluje slidy a schválí; dokud neběží publisher (quorum#587), publikuje ručně z exportu. Den NO_EDITION → místo carouselu story z ai-lessons (fallback v Queue). 17:30 = varianta B (po práci; Hootsuite St 17, Čt 16–17). Hypotéza — srovnat sends/reach A vs B v review 22. 11.",
+      "body": "BoardlessAI social pack (composeEditionSocialPack) po ranní edici (~09:00): slide 1 = titulek edice nebo alternative_headlines[0] + hook „Psané česky. Ne přeložené do češtiny.“ (hook 'czech-first' (cooldown 12 dní); slide 1 = titulek dne); slide 2 = dek jako druhá obálka; slidy 3–5 = what_changed (max 3); slidy 6–8 = why_it_matters (max 3); slide 9 = „Otevřené zůstává: …“ (uncertainty[0]); outro „Jedno vydání a máte přehled.“ + @dneskai. 4:5 1080×1350 JPEG, hero z licencované fotky ve slotu s clonou. Caption = varianta A z packu, „Celý článek: https://caughtup-ai.vercel.app/?utm_source=instagram&utm_medium=post&utm_campaign=edition“, 5–10 hashtagů, fotokredit. Vlastník v /admin/queue vybere titulek, zkontroluje slidy a schválí; dokud neběží publisher (quorum#587), publikuje ručně z exportu. Den NO_EDITION → místo carouselu story z ai-lessons (fallback v Queue). 17:30 = varianta B (po práci; Hootsuite St 17, Čt 16–17). Hypotéza — srovnat sends/reach A vs B v review 22. 11.",
       "cta": "Celý článek → link v biu",
       "assets": [
         "frames z /admin/queue (frame-01…09.jpg)",
@@ -2733,7 +2743,7 @@
       "hook": "Pojem dne: 20 sekund",
       "hookType": "list",
       "producer": "dneskai-pack",
-      "body": "Lekce dne z ai-lessons.json (60 termínů, pořadí podle data nejnovější edice) nebo practical typu term; odkaz na /lekce. Formát: story karta 1080×1920 ze social packu (quorum#592, pole practical z edice / lekce dne), Poppins Black (směr C), modrá #2F5AE6 na ink #14161A, max 2 textové bloky; link sticker {site}/lekce?utm_source=instagram&utm_medium=story&utm_campaign=practical; sticker „pošli kamarádovi“ (AMI: Češi sdílí soukromě). Highlight „Praktické“. Když story karta v packu ještě není, vlastník ji udělá z Design Lab šablony (10 min navíc).",
+      "body": "Lekce dne z ai-lessons.json (60 termínů, pořadí podle data nejnovější edice) nebo practical typu term; odkaz na /lekce. Formát: story karta 1080×1920 ze social packu (quorum#592, pole practical z edice / lekce dne), Poppins Black (směr C), modrá #2F5AE6 na ink #14161A, max 2 textové bloky; link sticker https://caughtup-ai.vercel.app/lekce?utm_source=instagram&utm_medium=story&utm_campaign=practical; sticker „pošli kamarádovi“ (AMI: Češi sdílí soukromě). Highlight „Praktické“. Když story karta v packu ještě není, vlastník ji udělá z Design Lab šablony (10 min navíc).",
       "cta": "Vyzkoušej dnes → link",
       "assets": [
         "story karta ze social packu (practical / lekce dne)"
@@ -2758,7 +2768,7 @@
       "hook": "„[Subjekt] [udělal X]. [Číslo].“ — např. „Mistral uzavřel kolo 3 miliard eur – největší v historii evropského tech sektoru.“",
       "hookType": "number",
       "producer": "dneskai-pack",
-      "body": "threadsText edice / varianta A social packu (≤ 500 znaků): titulek + why_it_matters[0] + „Otevřené zůstává: …“ + link {site}/?utm_source=threads&utm_medium=post&utm_campaign=edition. Linky v těle Meta od 6/2025 neřadí hůř — link přímo v postu. Bez hashtagů. 09:30 = hned po dodání edice (~09:00); Buffer: Čt 9 h nejlepší globálně.",
+      "body": "threadsText edice / varianta A social packu (≤ 500 znaků): titulek + why_it_matters[0] + „Otevřené zůstává: …“ + link https://caughtup-ai.vercel.app/?utm_source=threads&utm_medium=post&utm_campaign=edition. Linky v těle Meta od 6/2025 neřadí hůř — link přímo v postu. Bez hashtagů. 09:30 = hned po dodání edice (~09:00); Buffer: Čt 9 h nejlepší globálně.",
       "cta": "Celé vydání → link",
       "assets": [
         "threadsText z Queue"
@@ -2782,7 +2792,7 @@
       "hook": "Křišťálová Lupa má poprvé kategorii AI projekt. Vyhrál…",
       "hookType": "curiosity",
       "producer": "owner",
-      "body": "Po vyhlášení (Lupa.cz / Internet Info, ČVUT, jen pro zvané) z oficiálních výsledků: vítěz kategorie AI projekt, co dělá, proč to je zajímavé, odkaz na výsledky. Nic před zveřejněním. Paralelně ITAPA Bratislava 24.–26. 11. — jedna věta o slovenském programu (agentní AI ve státě a zdravotnictví). Formát: 3–6 navazujících postů; první bez linku, poslední s odkazem {site}/akce?utm_source=threads&utm_medium=post&utm_campaign=akce. Jen vlastní zápisky (citace se jménem řečníka, čísla, co to znamená pro čtenáře) — nikdy cizí slidy nebo screenshoty bez vlastního textu (IG/Threads originalita od 30. 4. 2026). Zdroj akce: https://www.lupa.cz/clanky/kristalova-lupa-2026-otevira-hlasovani-ve-hre-je-140-projektu/.",
+      "body": "Po vyhlášení (Lupa.cz / Internet Info, ČVUT, jen pro zvané) z oficiálních výsledků: vítěz kategorie AI projekt, co dělá, proč to je zajímavé, odkaz na výsledky. Nic před zveřejněním. Paralelně ITAPA Bratislava 24.–26. 11. — jedna věta o slovenském programu (agentní AI ve státě a zdravotnictví). Formát: 3–6 navazujících postů; první bez linku, poslední s odkazem https://caughtup-ai.vercel.app/akce?utm_source=threads&utm_medium=post&utm_campaign=akce. Jen vlastní zápisky (citace se jménem řečníka, čísla, co to znamená pro čtenáře) — nikdy cizí slidy nebo screenshoty bez vlastního textu (IG/Threads originalita od 30. 4. 2026). Zdroj akce: https://www.lupa.cz/clanky/kristalova-lupa-2026-otevira-hlasovani-ve-hre-je-140-projektu/.",
       "cta": "Další akce → /akce",
       "assets": [
         "poznámky ze streamu / programu akce",
@@ -2831,7 +2841,7 @@
       "hook": "Je v tom číslo, ne dojem.",
       "hookType": "number",
       "producer": "dneskai-pack",
-      "body": "BoardlessAI social pack (composeEditionSocialPack) po ranní edici (~09:00): slide 1 = titulek edice nebo alternative_headlines[0] + hook „Je v tom číslo, ne dojem.“ (hook 'figure-not-vibe' (hasNumber); slide 1 = číslo + subjekt); slide 2 = dek jako druhá obálka; slidy 3–5 = what_changed (max 3); slidy 6–8 = why_it_matters (max 3); slide 9 = „Otevřené zůstává: …“ (uncertainty[0]); outro „Jedno vydání a máte přehled.“ + @dneskai. 4:5 1080×1350 JPEG, hero z licencované fotky ve slotu s clonou. Caption = varianta A z packu, „Celý článek: {site}/?utm_source=instagram&utm_medium=post&utm_campaign=edition“, 5–10 hashtagů, fotokredit. Vlastník v /admin/queue vybere titulek, zkontroluje slidy a schválí; dokud neběží publisher (quorum#587), publikuje ručně z exportu. Den NO_EDITION → místo carouselu story z ai-lessons (fallback v Queue). 17:30 = varianta B (po práci; Hootsuite St 17, Čt 16–17). Hypotéza — srovnat sends/reach A vs B v review 22. 11.",
+      "body": "BoardlessAI social pack (composeEditionSocialPack) po ranní edici (~09:00): slide 1 = titulek edice nebo alternative_headlines[0] + hook „Je v tom číslo, ne dojem.“ (hook 'figure-not-vibe' (hasNumber); slide 1 = číslo + subjekt); slide 2 = dek jako druhá obálka; slidy 3–5 = what_changed (max 3); slidy 6–8 = why_it_matters (max 3); slide 9 = „Otevřené zůstává: …“ (uncertainty[0]); outro „Jedno vydání a máte přehled.“ + @dneskai. 4:5 1080×1350 JPEG, hero z licencované fotky ve slotu s clonou. Caption = varianta A z packu, „Celý článek: https://caughtup-ai.vercel.app/?utm_source=instagram&utm_medium=post&utm_campaign=edition“, 5–10 hashtagů, fotokredit. Vlastník v /admin/queue vybere titulek, zkontroluje slidy a schválí; dokud neběží publisher (quorum#587), publikuje ručně z exportu. Den NO_EDITION → místo carouselu story z ai-lessons (fallback v Queue). 17:30 = varianta B (po práci; Hootsuite St 17, Čt 16–17). Hypotéza — srovnat sends/reach A vs B v review 22. 11.",
       "cta": "Celý článek → link v biu",
       "assets": [
         "frames z /admin/queue (frame-01…09.jpg)",
@@ -2860,7 +2870,7 @@
       "hook": "Prompt dne: jeden řádek, hodina ušetřená",
       "hookType": "list",
       "producer": "dneskai-pack",
-      "body": "Pole practical typu prompt z edice (kopírovatelný český prompt, vyčištění tabulky dat před analýzou (navazuje na Data Restart)); otestovaný ve 2 modelech, verified_at vyplněné. Formát: story karta 1080×1920 ze social packu (quorum#592, pole practical z edice / lekce dne), Poppins Black (směr C), modrá #2F5AE6 na ink #14161A, max 2 textové bloky; link sticker {site}/?utm_source=instagram&utm_medium=story&utm_campaign=practical; sticker „pošli kamarádovi“ (AMI: Češi sdílí soukromě). Highlight „Praktické“. Když story karta v packu ještě není, vlastník ji udělá z Design Lab šablony (10 min navíc).",
+      "body": "Pole practical typu prompt z edice (kopírovatelný český prompt, vyčištění tabulky dat před analýzou (navazuje na Data Restart)); otestovaný ve 2 modelech, verified_at vyplněné. Formát: story karta 1080×1920 ze social packu (quorum#592, pole practical z edice / lekce dne), Poppins Black (směr C), modrá #2F5AE6 na ink #14161A, max 2 textové bloky; link sticker https://caughtup-ai.vercel.app/?utm_source=instagram&utm_medium=story&utm_campaign=practical; sticker „pošli kamarádovi“ (AMI: Češi sdílí soukromě). Highlight „Praktické“. Když story karta v packu ještě není, vlastník ji udělá z Design Lab šablony (10 min navíc).",
       "cta": "Zkopíruj prompt → link",
       "assets": [
         "story karta ze social packu (practical / lekce dne)"
@@ -2885,7 +2895,7 @@
       "hook": "„[Subjekt] [udělal X]. [Číslo].“ — např. „Mistral uzavřel kolo 3 miliard eur – největší v historii evropského tech sektoru.“",
       "hookType": "number",
       "producer": "dneskai-pack",
-      "body": "threadsText edice / varianta A social packu (≤ 500 znaků): titulek + why_it_matters[0] + „Otevřené zůstává: …“ + link {site}/?utm_source=threads&utm_medium=post&utm_campaign=edition. Linky v těle Meta od 6/2025 neřadí hůř — link přímo v postu. Bez hashtagů. 09:30 = hned po dodání edice (~09:00); Buffer: Čt 9 h nejlepší globálně.",
+      "body": "threadsText edice / varianta A social packu (≤ 500 znaků): titulek + why_it_matters[0] + „Otevřené zůstává: …“ + link https://caughtup-ai.vercel.app/?utm_source=threads&utm_medium=post&utm_campaign=edition. Linky v těle Meta od 6/2025 neřadí hůř — link přímo v postu. Bez hashtagů. 09:30 = hned po dodání edice (~09:00); Buffer: Čt 9 h nejlepší globálně.",
       "cta": "Celé vydání → link",
       "assets": [
         "threadsText z Queue"
@@ -2909,7 +2919,7 @@
       "hook": "Data a AI dnes: dvě konference v Praze",
       "hookType": "list",
       "producer": "owner",
-      "body": "Data Restart 2026 (Taste, OREA Hotel Pyramida, 4 290 Kč) a DobroData 2026 (AI ve zdravotnictví a bezpečnost, Divadlo Palace, dar 2 500 Kč; dobrodata.cz). 1–3 story snímky 1080×1920 (Design Lab šablona „akce“): název, datum, město, zdarma/placené, link sticker {site}/akce?utm_source=instagram&utm_medium=story&utm_campaign=akce. Highlight „Akce“. Zdroj: https://www.datarestart.cz/.",
+      "body": "Data Restart 2026 (Taste, OREA Hotel Pyramida, 4 290 Kč) a DobroData 2026 (AI ve zdravotnictví a bezpečnost, Divadlo Palace, dar 2 500 Kč; dobrodata.cz). 1–3 story snímky 1080×1920 (Design Lab šablona „akce“): název, datum, město, zdarma/placené, link sticker https://caughtup-ai.vercel.app/akce?utm_source=instagram&utm_medium=story&utm_campaign=akce. Highlight „Akce“. Zdroj: https://www.datarestart.cz/.",
       "cta": "Program → /akce",
       "assets": [
         "story šablona „akce“",
@@ -2958,7 +2968,7 @@
       "hook": "Přečti jednou. Celý den jsi v obraze.",
       "hookType": "promise",
       "producer": "dneskai-pack",
-      "body": "BoardlessAI social pack (composeEditionSocialPack) po ranní edici (~09:00): slide 1 = titulek edice nebo alternative_headlines[0] + hook „Přečti jednou. Celý den jsi v obraze.“ (hook 'read-once'; slide 1 = titulek dne); slide 2 = dek jako druhá obálka; slidy 3–5 = what_changed (max 3); slidy 6–8 = why_it_matters (max 3); slide 9 = „Otevřené zůstává: …“ (uncertainty[0]); outro „Jedno vydání a máte přehled.“ + @dneskai. 4:5 1080×1350 JPEG, hero z licencované fotky ve slotu s clonou. Caption = varianta A z packu, „Celý článek: {site}/?utm_source=instagram&utm_medium=post&utm_campaign=edition“, 5–10 hashtagů, fotokredit. Vlastník v /admin/queue vybere titulek, zkontroluje slidy a schválí; dokud neběží publisher (quorum#587), publikuje ručně z exportu. Den NO_EDITION → místo carouselu story z ai-lessons (fallback v Queue). 17:30 = varianta B (po práci; Hootsuite St 17, Čt 16–17). Hypotéza — srovnat sends/reach A vs B v review 22. 11.",
+      "body": "BoardlessAI social pack (composeEditionSocialPack) po ranní edici (~09:00): slide 1 = titulek edice nebo alternative_headlines[0] + hook „Přečti jednou. Celý den jsi v obraze.“ (hook 'read-once'; slide 1 = titulek dne); slide 2 = dek jako druhá obálka; slidy 3–5 = what_changed (max 3); slidy 6–8 = why_it_matters (max 3); slide 9 = „Otevřené zůstává: …“ (uncertainty[0]); outro „Jedno vydání a máte přehled.“ + @dneskai. 4:5 1080×1350 JPEG, hero z licencované fotky ve slotu s clonou. Caption = varianta A z packu, „Celý článek: https://caughtup-ai.vercel.app/?utm_source=instagram&utm_medium=post&utm_campaign=edition“, 5–10 hashtagů, fotokredit. Vlastník v /admin/queue vybere titulek, zkontroluje slidy a schválí; dokud neběží publisher (quorum#587), publikuje ručně z exportu. Den NO_EDITION → místo carouselu story z ai-lessons (fallback v Queue). 17:30 = varianta B (po práci; Hootsuite St 17, Čt 16–17). Hypotéza — srovnat sends/reach A vs B v review 22. 11.",
       "cta": "Celý článek → link v biu",
       "assets": [
         "frames z /admin/queue (frame-01…09.jpg)",
@@ -2987,7 +2997,7 @@
       "hook": "Pojem dne: 20 sekund",
       "hookType": "list",
       "producer": "dneskai-pack",
-      "body": "Lekce dne z ai-lessons.json (60 termínů, pořadí podle data nejnovější edice) nebo practical typu term; odkaz na /lekce. Formát: story karta 1080×1920 ze social packu (quorum#592, pole practical z edice / lekce dne), Poppins Black (směr C), modrá #2F5AE6 na ink #14161A, max 2 textové bloky; link sticker {site}/lekce?utm_source=instagram&utm_medium=story&utm_campaign=practical; sticker „pošli kamarádovi“ (AMI: Češi sdílí soukromě). Highlight „Praktické“. Když story karta v packu ještě není, vlastník ji udělá z Design Lab šablony (10 min navíc).",
+      "body": "Lekce dne z ai-lessons.json (60 termínů, pořadí podle data nejnovější edice) nebo practical typu term; odkaz na /lekce. Formát: story karta 1080×1920 ze social packu (quorum#592, pole practical z edice / lekce dne), Poppins Black (směr C), modrá #2F5AE6 na ink #14161A, max 2 textové bloky; link sticker https://caughtup-ai.vercel.app/lekce?utm_source=instagram&utm_medium=story&utm_campaign=practical; sticker „pošli kamarádovi“ (AMI: Češi sdílí soukromě). Highlight „Praktické“. Když story karta v packu ještě není, vlastník ji udělá z Design Lab šablony (10 min navíc).",
       "cta": "Vyzkoušej dnes → link",
       "assets": [
         "story karta ze social packu (practical / lekce dne)"
@@ -3012,7 +3022,7 @@
       "hook": "„[Subjekt] [udělal X]. [Číslo].“ — např. „Mistral uzavřel kolo 3 miliard eur – největší v historii evropského tech sektoru.“",
       "hookType": "number",
       "producer": "dneskai-pack",
-      "body": "threadsText edice / varianta A social packu (≤ 500 znaků): titulek + why_it_matters[0] + „Otevřené zůstává: …“ + link {site}/?utm_source=threads&utm_medium=post&utm_campaign=edition. Linky v těle Meta od 6/2025 neřadí hůř — link přímo v postu. Bez hashtagů. 09:30 = hned po dodání edice (~09:00); Buffer: Čt 9 h nejlepší globálně.",
+      "body": "threadsText edice / varianta A social packu (≤ 500 znaků): titulek + why_it_matters[0] + „Otevřené zůstává: …“ + link https://caughtup-ai.vercel.app/?utm_source=threads&utm_medium=post&utm_campaign=edition. Linky v těle Meta od 6/2025 neřadí hůř — link přímo v postu. Bez hashtagů. 09:30 = hned po dodání edice (~09:00); Buffer: Čt 9 h nejlepší globálně.",
       "cta": "Celé vydání → link",
       "assets": [
         "threadsText z Queue"
@@ -3036,7 +3046,7 @@
       "hook": "Vibecoding v AI Factory: co postavili v Ostravě za 4 hodiny",
       "hookType": "story",
       "producer": "owner",
-      "body": "Vibecoding Festival Ostrava II (ČERNÁ AI / Černá kostka, IT4Innovations — AI Factory hub, 14:00–18:30, zdarma přes Luma). Zápisky z veřejných výstupů pořadatele; pokud vlastník jede (Plzeň–Ostrava je daleko, spíš ne), vlastní fotky. Formát: 3–6 navazujících postů; první bez linku, poslední s odkazem {site}/akce?utm_source=threads&utm_medium=post&utm_campaign=akce. Jen vlastní zápisky (citace se jménem řečníka, čísla, co to znamená pro čtenáře) — nikdy cizí slidy nebo screenshoty bez vlastního textu (IG/Threads originalita od 30. 4. 2026). Zdroj akce: https://luma.com/pn0rtehm.",
+      "body": "Vibecoding Festival Ostrava II (ČERNÁ AI / Černá kostka, IT4Innovations — AI Factory hub, 14:00–18:30, zdarma přes Luma). Zápisky z veřejných výstupů pořadatele; pokud vlastník jede (Plzeň–Ostrava je daleko, spíš ne), vlastní fotky. Formát: 3–6 navazujících postů; první bez linku, poslední s odkazem https://caughtup-ai.vercel.app/akce?utm_source=threads&utm_medium=post&utm_campaign=akce. Jen vlastní zápisky (citace se jménem řečníka, čísla, co to znamená pro čtenáře) — nikdy cizí slidy nebo screenshoty bez vlastního textu (IG/Threads originalita od 30. 4. 2026). Zdroj akce: https://luma.com/pn0rtehm.",
       "cta": "Další akce → /akce",
       "assets": [
         "poznámky ze streamu / programu akce",
@@ -3085,7 +3095,7 @@
       "hook": "Celý den v technologiích, bez scrollování.",
       "hookType": "promise",
       "producer": "dneskai-pack",
-      "body": "BoardlessAI social pack (composeEditionSocialPack) po ranní edici (~09:00): slide 1 = titulek edice nebo alternative_headlines[0] + hook „Celý den v technologiích, bez scrollování.“ (hook 'whole-day'; slide 1 = titulek dne); slide 2 = dek jako druhá obálka; slidy 3–5 = what_changed (max 3); slidy 6–8 = why_it_matters (max 3); slide 9 = „Otevřené zůstává: …“ (uncertainty[0]); outro „Jedno vydání a máte přehled.“ + @dneskai. 4:5 1080×1350 JPEG, hero z licencované fotky ve slotu s clonou. Caption = varianta A z packu, „Celý článek: {site}/?utm_source=instagram&utm_medium=post&utm_campaign=edition“, 5–10 hashtagů, fotokredit. Vlastník v /admin/queue vybere titulek, zkontroluje slidy a schválí; dokud neběží publisher (quorum#587), publikuje ručně z exportu. Den NO_EDITION → místo carouselu story z ai-lessons (fallback v Queue). 17:30 = varianta B (po práci; Hootsuite St 17, Čt 16–17). Hypotéza — srovnat sends/reach A vs B v review 22. 11.",
+      "body": "BoardlessAI social pack (composeEditionSocialPack) po ranní edici (~09:00): slide 1 = titulek edice nebo alternative_headlines[0] + hook „Celý den v technologiích, bez scrollování.“ (hook 'whole-day'; slide 1 = titulek dne); slide 2 = dek jako druhá obálka; slidy 3–5 = what_changed (max 3); slidy 6–8 = why_it_matters (max 3); slide 9 = „Otevřené zůstává: …“ (uncertainty[0]); outro „Jedno vydání a máte přehled.“ + @dneskai. 4:5 1080×1350 JPEG, hero z licencované fotky ve slotu s clonou. Caption = varianta A z packu, „Celý článek: https://caughtup-ai.vercel.app/?utm_source=instagram&utm_medium=post&utm_campaign=edition“, 5–10 hashtagů, fotokredit. Vlastník v /admin/queue vybere titulek, zkontroluje slidy a schválí; dokud neběží publisher (quorum#587), publikuje ručně z exportu. Den NO_EDITION → místo carouselu story z ai-lessons (fallback v Queue). 17:30 = varianta B (po práci; Hootsuite St 17, Čt 16–17). Hypotéza — srovnat sends/reach A vs B v review 22. 11.",
       "cta": "Celý článek → link v biu",
       "assets": [
         "frames z /admin/queue (frame-01…09.jpg)",
@@ -3114,7 +3124,7 @@
       "hook": "Nástroj dne z edice",
       "hookType": "promise",
       "producer": "dneskai-pack",
-      "body": "Pole practical typu tool: nástroj/model z dnešní edice, co dělá, cena ověřená na webu poskytovatele + verified_at; bez ověřené ceny se nepublikuje. Formát: story karta 1080×1920 ze social packu (quorum#592, pole practical z edice / lekce dne), Poppins Black (směr C), modrá #2F5AE6 na ink #14161A, max 2 textové bloky; link sticker {site}/?utm_source=instagram&utm_medium=story&utm_campaign=practical; sticker „pošli kamarádovi“ (AMI: Češi sdílí soukromě). Highlight „Praktické“. Když story karta v packu ještě není, vlastník ji udělá z Design Lab šablony (10 min navíc).",
+      "body": "Pole practical typu tool: nástroj/model z dnešní edice, co dělá, cena ověřená na webu poskytovatele + verified_at; bez ověřené ceny se nepublikuje. Formát: story karta 1080×1920 ze social packu (quorum#592, pole practical z edice / lekce dne), Poppins Black (směr C), modrá #2F5AE6 na ink #14161A, max 2 textové bloky; link sticker https://caughtup-ai.vercel.app/?utm_source=instagram&utm_medium=story&utm_campaign=practical; sticker „pošli kamarádovi“ (AMI: Češi sdílí soukromě). Highlight „Praktické“. Když story karta v packu ještě není, vlastník ji udělá z Design Lab šablony (10 min navíc).",
       "cta": "Vyzkoušej dnes → link",
       "assets": [
         "story karta ze social packu (practical / lekce dne)"
@@ -3139,7 +3149,7 @@
       "hook": "„[Subjekt] [udělal X]. [Číslo].“ — např. „Mistral uzavřel kolo 3 miliard eur – největší v historii evropského tech sektoru.“",
       "hookType": "number",
       "producer": "dneskai-pack",
-      "body": "threadsText edice / varianta A social packu (≤ 500 znaků): titulek + why_it_matters[0] + „Otevřené zůstává: …“ + link {site}/?utm_source=threads&utm_medium=post&utm_campaign=edition. Linky v těle Meta od 6/2025 neřadí hůř — link přímo v postu. Bez hashtagů. 09:30 = hned po dodání edice (~09:00); Buffer: Čt 9 h nejlepší globálně.",
+      "body": "threadsText edice / varianta A social packu (≤ 500 znaků): titulek + why_it_matters[0] + „Otevřené zůstává: …“ + link https://caughtup-ai.vercel.app/?utm_source=threads&utm_medium=post&utm_campaign=edition. Linky v těle Meta od 6/2025 neřadí hůř — link přímo v postu. Bez hashtagů. 09:30 = hned po dodání edice (~09:00); Buffer: Čt 9 h nejlepší globálně.",
       "cta": "Celé vydání → link",
       "assets": [
         "threadsText z Queue"
@@ -3164,7 +3174,7 @@
       "hookType": "list",
       "producer": "dneskai-pack",
       "body": "Recept friday-tools (quorum#592) z edic týdne, vlastník ověří: slide 1 hook „3 AI nástroje, u kterých se sleva vyplatí“; slide 2 (druhá obálka) = prompt týdne v plném znění (kopírovatelný, česky); slidy 3–5 = tři nástroje z edic týdne (název, co dělá, cena ověřená na webu poskytovatele + datum ověření, odkaz na edici); slide 6 = „Ulož si to na pondělí“ + @dneskai. 6 slidů, 4:5 1080×1350. Vlastník ověří ceny (screenshot ceníku) a otestuje prompt ve 2 modelech (~30 min). Black Friday 27. 11.: jen nástroje z edic, cena a sleva ověřená na webu poskytovatele se screenshotem; žádné affiliate odkazy, žádná placená spolupráce (jinak označení „reklama“ podle zákona 40/1995 Sb.).",
-      "cta": "Ulož si to; celé edice → {site}/?utm_source=instagram&utm_medium=post&utm_campaign=friday-tools",
+      "cta": "Ulož si to; celé edice → https://caughtup-ai.vercel.app/?utm_source=instagram&utm_medium=post&utm_campaign=friday-tools",
       "assets": [
         "Design Lab deck 'friday-tools' (6 slidů)",
         "ověřené ceny nástrojů (screenshot ceníku, datum)",
@@ -3191,7 +3201,7 @@
       "hook": "48 hodin, zdravotnictví a AI: HACK JAK BRNO",
       "hookType": "list",
       "producer": "owner",
-      "body": "HACK JAK BRNO 2026 (Insane Business Ideas, FN u sv. Anny, 27.–29. 11.) + Cyberspace 2026 (MU, 27.–28. 11.). 1–3 story snímky 1080×1920 (Design Lab šablona „akce“): název, datum, město, zdarma/placené, link sticker {site}/akce?utm_source=instagram&utm_medium=story&utm_campaign=akce. Highlight „Akce“. Zdroj: https://www.hackjakbrno.cz.",
+      "body": "HACK JAK BRNO 2026 (Insane Business Ideas, FN u sv. Anny, 27.–29. 11.) + Cyberspace 2026 (MU, 27.–28. 11.). 1–3 story snímky 1080×1920 (Design Lab šablona „akce“): název, datum, město, zdarma/placené, link sticker https://caughtup-ai.vercel.app/akce?utm_source=instagram&utm_medium=story&utm_campaign=akce. Highlight „Akce“. Zdroj: https://www.hackjakbrno.cz.",
       "cta": "Program → /akce",
       "assets": [
         "story šablona „akce“",
@@ -3314,7 +3324,7 @@
       "hook": "Týden, kdy se AI rozdávaly ceny. Pět edic.",
       "hookType": "list",
       "producer": "dneskai-pack",
-      "body": "Recept weekly-recap (quorum#592) z /tyden a /api/weekly.json: slide 1 hook „Týden, kdy se AI rozdávaly ceny. Pět edic.“; slidy 2–6 = pět edic týdne (titulek + věta why_it_matters + signal_strength); slide 7 = „Co zůstává otevřené do příštího týdne“ (3 uncertainty body); slide 8 = „Příští týden: Power Conference 2.–3. 12. (Power Platform, agentní AI), Data Day 3. 12. (Divadlo X10, zdarma přes Luma), AI Masterclass #4 3. 12. AI Awards (CNAIP) vyhlásí v prosinci.“. 8 slidů, 4:5, bulk render z pěti summaries. Neděle 18:00 = kompromis Emplifi (So–Ne 21–24) a Hootsuite (Ne 12–15), hypotéza. CTA {site}/tyden?utm_source=instagram&utm_medium=post&utm_campaign=weekly-recap.",
+      "body": "Recept weekly-recap (quorum#592) z /tyden a /api/weekly.json: slide 1 hook „Týden, kdy se AI rozdávaly ceny. Pět edic.“; slidy 2–6 = pět edic týdne (titulek + věta why_it_matters + signal_strength); slide 7 = „Co zůstává otevřené do příštího týdne“ (3 uncertainty body); slide 8 = „Příští týden: Power Conference 2.–3. 12. (Power Platform, agentní AI), Data Day 3. 12. (Divadlo X10, zdarma přes Luma), AI Masterclass #4 3. 12. AI Awards (CNAIP) vyhlásí v prosinci.“. 8 slidů, 4:5, bulk render z pěti summaries. Neděle 18:00 = kompromis Emplifi (So–Ne 21–24) a Hootsuite (Ne 12–15), hypotéza. CTA https://caughtup-ai.vercel.app/tyden?utm_source=instagram&utm_medium=post&utm_campaign=weekly-recap.",
       "cta": "Ulož si týden; v pondělí další edice",
       "assets": [
         "Design Lab deck 'weekly-recap' (8 slidů)",
@@ -3341,7 +3351,7 @@
       "hook": "Poslední AI akce roku v Praze: Data Day zdarma a Power Conference",
       "hookType": "list",
       "producer": "owner",
-      "body": "Power Conference 2026 2.–3. 12. (DataBrothers, Clarion / Cubex, 4 900 Kč/den); Data Day 2026 3. 12. (DATA talk, Divadlo X10, 13:00–20:00, zdarma, 300 míst); AI Masterclass Roadshow #4 3. 12. (IPEX). AI Awards 2026 (CNAIP) — vyhlášení v prosinci, datum zatím není. Formát: 3–6 navazujících postů; první bez linku, poslední s odkazem {site}/akce?utm_source=threads&utm_medium=post&utm_campaign=akce. Jen vlastní zápisky (citace se jménem řečníka, čísla, co to znamená pro čtenáře) — nikdy cizí slidy nebo screenshoty bez vlastního textu (IG/Threads originalita od 30. 4. 2026). Zdroj akce: https://luma.com/60g1uup7.",
+      "body": "Power Conference 2026 2.–3. 12. (DataBrothers, Clarion / Cubex, 4 900 Kč/den); Data Day 2026 3. 12. (DATA talk, Divadlo X10, 13:00–20:00, zdarma, 300 míst); AI Masterclass Roadshow #4 3. 12. (IPEX). AI Awards 2026 (CNAIP) — vyhlášení v prosinci, datum zatím není. Formát: 3–6 navazujících postů; první bez linku, poslední s odkazem https://caughtup-ai.vercel.app/akce?utm_source=threads&utm_medium=post&utm_campaign=akce. Jen vlastní zápisky (citace se jménem řečníka, čísla, co to znamená pro čtenáře) — nikdy cizí slidy nebo screenshoty bez vlastního textu (IG/Threads originalita od 30. 4. 2026). Zdroj akce: https://luma.com/60g1uup7.",
       "cta": "Další akce → /akce",
       "assets": [
         "poznámky ze streamu / programu akce",
@@ -3394,7 +3404,7 @@
       "hook": "Jedno číslo tady mění celý obrázek.",
       "hookType": "number",
       "producer": "dneskai-pack",
-      "body": "BoardlessAI social pack (composeEditionSocialPack) po ranní edici (~09:00): slide 1 = titulek edice nebo alternative_headlines[0] + hook „Jedno číslo tady mění celý obrázek.“ (hook 'one-number' (truthRequires hasNumber); slide 1 nese číslo z what_changed, např. „600 000 odcizených karet za 25 dolarů“); slide 2 = dek jako druhá obálka; slidy 3–5 = what_changed (max 3); slidy 6–8 = why_it_matters (max 3); slide 9 = „Otevřené zůstává: …“ (uncertainty[0]); outro „Jedno vydání a máte přehled.“ + @dneskai. 4:5 1080×1350 JPEG, hero z licencované fotky ve slotu s clonou. Caption = varianta A z packu, „Celý článek: {site}/?utm_source=instagram&utm_medium=post&utm_campaign=edition“, 5–10 hashtagů, fotokredit. Vlastník v /admin/queue vybere titulek, zkontroluje slidy a schválí; dokud neběží publisher (quorum#587), publikuje ručně z exportu. Den NO_EDITION → místo carouselu story z ai-lessons (fallback v Queue). 17:30 = varianta B (po práci; Hootsuite St 17, Čt 16–17). Hypotéza — srovnat sends/reach A vs B v review 22. 11.",
+      "body": "BoardlessAI social pack (composeEditionSocialPack) po ranní edici (~09:00): slide 1 = titulek edice nebo alternative_headlines[0] + hook „Jedno číslo tady mění celý obrázek.“ (hook 'one-number' (truthRequires hasNumber); slide 1 nese číslo z what_changed, např. „600 000 odcizených karet za 25 dolarů“); slide 2 = dek jako druhá obálka; slidy 3–5 = what_changed (max 3); slidy 6–8 = why_it_matters (max 3); slide 9 = „Otevřené zůstává: …“ (uncertainty[0]); outro „Jedno vydání a máte přehled.“ + @dneskai. 4:5 1080×1350 JPEG, hero z licencované fotky ve slotu s clonou. Caption = varianta A z packu, „Celý článek: https://caughtup-ai.vercel.app/?utm_source=instagram&utm_medium=post&utm_campaign=edition“, 5–10 hashtagů, fotokredit. Vlastník v /admin/queue vybere titulek, zkontroluje slidy a schválí; dokud neběží publisher (quorum#587), publikuje ručně z exportu. Den NO_EDITION → místo carouselu story z ai-lessons (fallback v Queue). 17:30 = varianta B (po práci; Hootsuite St 17, Čt 16–17). Hypotéza — srovnat sends/reach A vs B v review 22. 11.",
       "cta": "Celý článek → link v biu",
       "assets": [
         "frames z /admin/queue (frame-01…09.jpg)",
@@ -3423,7 +3433,7 @@
       "hook": "Pojem dne: 20 sekund",
       "hookType": "list",
       "producer": "dneskai-pack",
-      "body": "Lekce dne z ai-lessons.json (60 termínů, pořadí podle data nejnovější edice) nebo practical typu term; odkaz na /lekce. Formát: story karta 1080×1920 ze social packu (quorum#592, pole practical z edice / lekce dne), Poppins Black (směr C), modrá #2F5AE6 na ink #14161A, max 2 textové bloky; link sticker {site}/lekce?utm_source=instagram&utm_medium=story&utm_campaign=practical; sticker „pošli kamarádovi“ (AMI: Češi sdílí soukromě). Highlight „Praktické“. Když story karta v packu ještě není, vlastník ji udělá z Design Lab šablony (10 min navíc).",
+      "body": "Lekce dne z ai-lessons.json (60 termínů, pořadí podle data nejnovější edice) nebo practical typu term; odkaz na /lekce. Formát: story karta 1080×1920 ze social packu (quorum#592, pole practical z edice / lekce dne), Poppins Black (směr C), modrá #2F5AE6 na ink #14161A, max 2 textové bloky; link sticker https://caughtup-ai.vercel.app/lekce?utm_source=instagram&utm_medium=story&utm_campaign=practical; sticker „pošli kamarádovi“ (AMI: Češi sdílí soukromě). Highlight „Praktické“. Když story karta v packu ještě není, vlastník ji udělá z Design Lab šablony (10 min navíc).",
       "cta": "Vyzkoušej dnes → link",
       "assets": [
         "story karta ze social packu (practical / lekce dne)"
@@ -3448,7 +3458,7 @@
       "hook": "„[Subjekt] [udělal X]. [Číslo].“ — např. „Mistral uzavřel kolo 3 miliard eur – největší v historii evropského tech sektoru.“",
       "hookType": "number",
       "producer": "dneskai-pack",
-      "body": "threadsText edice / varianta A social packu (≤ 500 znaků): titulek + why_it_matters[0] + „Otevřené zůstává: …“ + link {site}/?utm_source=threads&utm_medium=post&utm_campaign=edition. Linky v těle Meta od 6/2025 neřadí hůř — link přímo v postu. Bez hashtagů. 09:30 = hned po dodání edice (~09:00); Buffer: Čt 9 h nejlepší globálně.",
+      "body": "threadsText edice / varianta A social packu (≤ 500 znaků): titulek + why_it_matters[0] + „Otevřené zůstává: …“ + link https://caughtup-ai.vercel.app/?utm_source=threads&utm_medium=post&utm_campaign=edition. Linky v těle Meta od 6/2025 neřadí hůř — link přímo v postu. Bez hashtagů. 09:30 = hned po dodání edice (~09:00); Buffer: Čt 9 h nejlepší globálně.",
       "cta": "Celé vydání → link",
       "assets": [
         "threadsText z Queue"
@@ -3496,7 +3506,7 @@
       "title": "AI listopad v kostce (měsíční recap)",
       "hook": "Listopad v AI: 4 týdny, 8 slidů.",
       "hookType": "list",
-      "body": "Recept weekly-recap v měsíčním režimu (bulk nad 4 týdny /tyden): (1) hook; (2) druhá obálka „Co se v listopadu změnilo“ — 3 nejsilnější what_changed podle signal_strength; (3–6) jeden slide na týden: hlavní edice + věta proč na tom záleží; (7) akce měsíce: AI Days, Dny AI, Money Maker, Křišťálová Lupa (AI projekt), Vibecoding Festival Ostrava — jen ověřené fakty a odkazy na vlastní zápisky; (8) „Co zůstává otevřené do prosince“ + @dneskai. Vlastník vybere edice a zkontroluje (20 min). CTA {site}/tyden?utm_source=instagram&utm_medium=post&utm_campaign=weekly-recap.",
+      "body": "Recept weekly-recap v měsíčním režimu (bulk nad 4 týdny /tyden): (1) hook; (2) druhá obálka „Co se v listopadu změnilo“ — 3 nejsilnější what_changed podle signal_strength; (3–6) jeden slide na týden: hlavní edice + věta proč na tom záleží; (7) akce měsíce: AI Days, Dny AI, Money Maker, Křišťálová Lupa (AI projekt), Vibecoding Festival Ostrava — jen ověřené fakty a odkazy na vlastní zápisky; (8) „Co zůstává otevřené do prosince“ + @dneskai. Vlastník vybere edice a zkontroluje (20 min). CTA https://caughtup-ai.vercel.app/tyden?utm_source=instagram&utm_medium=post&utm_campaign=weekly-recap.",
       "cta": "Ulož si měsíc; celé edice → link v biu",
       "assets": [
         "Design Lab deck 'weekly-recap' (měsíční, 8 slidů)",
@@ -3523,7 +3533,7 @@
       "hook": "Nejen co se stalo. Taky proč na tom záleží.",
       "hookType": "promise",
       "producer": "dneskai-pack",
-      "body": "BoardlessAI social pack (composeEditionSocialPack) po ranní edici (~09:00): slide 1 = titulek edice nebo alternative_headlines[0] + hook „Nejen co se stalo. Taky proč na tom záleží.“ (hook 'matters-too'; slide 1 = titulek, slide 2 = první why_it_matters jako druhá obálka); slide 2 = dek jako druhá obálka; slidy 3–5 = what_changed (max 3); slidy 6–8 = why_it_matters (max 3); slide 9 = „Otevřené zůstává: …“ (uncertainty[0]); outro „Jedno vydání a máte přehled.“ + @dneskai. 4:5 1080×1350 JPEG, hero z licencované fotky ve slotu s clonou. Caption = varianta A z packu, „Celý článek: {site}/?utm_source=instagram&utm_medium=post&utm_campaign=edition“, 5–10 hashtagů, fotokredit. Vlastník v /admin/queue vybere titulek, zkontroluje slidy a schválí; dokud neběží publisher (quorum#587), publikuje ručně z exportu. Den NO_EDITION → místo carouselu story z ai-lessons (fallback v Queue). 17:30 = varianta B (po práci; Hootsuite St 17, Čt 16–17). Hypotéza — srovnat sends/reach A vs B v review 22. 11.",
+      "body": "BoardlessAI social pack (composeEditionSocialPack) po ranní edici (~09:00): slide 1 = titulek edice nebo alternative_headlines[0] + hook „Nejen co se stalo. Taky proč na tom záleží.“ (hook 'matters-too'; slide 1 = titulek, slide 2 = první why_it_matters jako druhá obálka); slide 2 = dek jako druhá obálka; slidy 3–5 = what_changed (max 3); slidy 6–8 = why_it_matters (max 3); slide 9 = „Otevřené zůstává: …“ (uncertainty[0]); outro „Jedno vydání a máte přehled.“ + @dneskai. 4:5 1080×1350 JPEG, hero z licencované fotky ve slotu s clonou. Caption = varianta A z packu, „Celý článek: https://caughtup-ai.vercel.app/?utm_source=instagram&utm_medium=post&utm_campaign=edition“, 5–10 hashtagů, fotokredit. Vlastník v /admin/queue vybere titulek, zkontroluje slidy a schválí; dokud neběží publisher (quorum#587), publikuje ručně z exportu. Den NO_EDITION → místo carouselu story z ai-lessons (fallback v Queue). 17:30 = varianta B (po práci; Hootsuite St 17, Čt 16–17). Hypotéza — srovnat sends/reach A vs B v review 22. 11.",
       "cta": "Celý článek → link v biu",
       "assets": [
         "frames z /admin/queue (frame-01…09.jpg)",
@@ -3552,7 +3562,7 @@
       "hook": "Nástroj dne z edice",
       "hookType": "promise",
       "producer": "dneskai-pack",
-      "body": "Pole practical typu tool: nástroj/model z dnešní edice, co dělá, cena ověřená na webu poskytovatele + verified_at; bez ověřené ceny se nepublikuje. Formát: story karta 1080×1920 ze social packu (quorum#592, pole practical z edice / lekce dne), Poppins Black (směr C), modrá #2F5AE6 na ink #14161A, max 2 textové bloky; link sticker {site}/?utm_source=instagram&utm_medium=story&utm_campaign=practical; sticker „pošli kamarádovi“ (AMI: Češi sdílí soukromě). Highlight „Praktické“. Když story karta v packu ještě není, vlastník ji udělá z Design Lab šablony (10 min navíc).",
+      "body": "Pole practical typu tool: nástroj/model z dnešní edice, co dělá, cena ověřená na webu poskytovatele + verified_at; bez ověřené ceny se nepublikuje. Formát: story karta 1080×1920 ze social packu (quorum#592, pole practical z edice / lekce dne), Poppins Black (směr C), modrá #2F5AE6 na ink #14161A, max 2 textové bloky; link sticker https://caughtup-ai.vercel.app/?utm_source=instagram&utm_medium=story&utm_campaign=practical; sticker „pošli kamarádovi“ (AMI: Češi sdílí soukromě). Highlight „Praktické“. Když story karta v packu ještě není, vlastník ji udělá z Design Lab šablony (10 min navíc).",
       "cta": "Vyzkoušej dnes → link",
       "assets": [
         "story karta ze social packu (practical / lekce dne)"
@@ -3577,7 +3587,7 @@
       "hook": "„[Subjekt] [udělal X]. [Číslo].“ — např. „Mistral uzavřel kolo 3 miliard eur – největší v historii evropského tech sektoru.“",
       "hookType": "number",
       "producer": "dneskai-pack",
-      "body": "threadsText edice / varianta A social packu (≤ 500 znaků): titulek + why_it_matters[0] + „Otevřené zůstává: …“ + link {site}/?utm_source=threads&utm_medium=post&utm_campaign=edition. Linky v těle Meta od 6/2025 neřadí hůř — link přímo v postu. Bez hashtagů. 09:30 = hned po dodání edice (~09:00); Buffer: Čt 9 h nejlepší globálně.",
+      "body": "threadsText edice / varianta A social packu (≤ 500 znaků): titulek + why_it_matters[0] + „Otevřené zůstává: …“ + link https://caughtup-ai.vercel.app/?utm_source=threads&utm_medium=post&utm_campaign=edition. Linky v těle Meta od 6/2025 neřadí hůř — link přímo v postu. Bez hashtagů. 09:30 = hned po dodání edice (~09:00); Buffer: Čt 9 h nejlepší globálně.",
       "cta": "Celé vydání → link",
       "assets": [
         "threadsText z Queue"
@@ -3625,7 +3635,7 @@
       "hook": "Co ještě není jisté, je tam napsané.",
       "hookType": "curiosity",
       "producer": "dneskai-pack",
-      "body": "BoardlessAI social pack (composeEditionSocialPack) po ranní edici (~09:00): slide 1 = titulek edice nebo alternative_headlines[0] + hook „Co ještě není jisté, je tam napsané.“ (hook 'uncertainty-named'; slide 1 = titulek, poslední slide = uncertainty[0] jako otázka); slide 2 = dek jako druhá obálka; slidy 3–5 = what_changed (max 3); slidy 6–8 = why_it_matters (max 3); slide 9 = „Otevřené zůstává: …“ (uncertainty[0]); outro „Jedno vydání a máte přehled.“ + @dneskai. 4:5 1080×1350 JPEG, hero z licencované fotky ve slotu s clonou. Caption = varianta A z packu, „Celý článek: {site}/?utm_source=instagram&utm_medium=post&utm_campaign=edition“, 5–10 hashtagů, fotokredit. Vlastník v /admin/queue vybere titulek, zkontroluje slidy a schválí; dokud neběží publisher (quorum#587), publikuje ručně z exportu. Den NO_EDITION → místo carouselu story z ai-lessons (fallback v Queue). 17:30 = varianta B (po práci; Hootsuite St 17, Čt 16–17). Hypotéza — srovnat sends/reach A vs B v review 22. 11.",
+      "body": "BoardlessAI social pack (composeEditionSocialPack) po ranní edici (~09:00): slide 1 = titulek edice nebo alternative_headlines[0] + hook „Co ještě není jisté, je tam napsané.“ (hook 'uncertainty-named'; slide 1 = titulek, poslední slide = uncertainty[0] jako otázka); slide 2 = dek jako druhá obálka; slidy 3–5 = what_changed (max 3); slidy 6–8 = why_it_matters (max 3); slide 9 = „Otevřené zůstává: …“ (uncertainty[0]); outro „Jedno vydání a máte přehled.“ + @dneskai. 4:5 1080×1350 JPEG, hero z licencované fotky ve slotu s clonou. Caption = varianta A z packu, „Celý článek: https://caughtup-ai.vercel.app/?utm_source=instagram&utm_medium=post&utm_campaign=edition“, 5–10 hashtagů, fotokredit. Vlastník v /admin/queue vybere titulek, zkontroluje slidy a schválí; dokud neběží publisher (quorum#587), publikuje ručně z exportu. Den NO_EDITION → místo carouselu story z ai-lessons (fallback v Queue). 17:30 = varianta B (po práci; Hootsuite St 17, Čt 16–17). Hypotéza — srovnat sends/reach A vs B v review 22. 11.",
       "cta": "Celý článek → link v biu",
       "assets": [
         "frames z /admin/queue (frame-01…09.jpg)",
@@ -3654,7 +3664,7 @@
       "hook": "Prompt dne: jeden řádek, hodina ušetřená",
       "hookType": "list",
       "producer": "dneskai-pack",
-      "body": "Pole practical typu prompt z edice (kopírovatelný český prompt, roční přehled vlastní práce s AI: „z těchto poznámek sestav, na co jsem AI letos používal nejvíc“); otestovaný ve 2 modelech, verified_at vyplněné. Formát: story karta 1080×1920 ze social packu (quorum#592, pole practical z edice / lekce dne), Poppins Black (směr C), modrá #2F5AE6 na ink #14161A, max 2 textové bloky; link sticker {site}/?utm_source=instagram&utm_medium=story&utm_campaign=practical; sticker „pošli kamarádovi“ (AMI: Češi sdílí soukromě). Highlight „Praktické“. Když story karta v packu ještě není, vlastník ji udělá z Design Lab šablony (10 min navíc).",
+      "body": "Pole practical typu prompt z edice (kopírovatelný český prompt, roční přehled vlastní práce s AI: „z těchto poznámek sestav, na co jsem AI letos používal nejvíc“); otestovaný ve 2 modelech, verified_at vyplněné. Formát: story karta 1080×1920 ze social packu (quorum#592, pole practical z edice / lekce dne), Poppins Black (směr C), modrá #2F5AE6 na ink #14161A, max 2 textové bloky; link sticker https://caughtup-ai.vercel.app/?utm_source=instagram&utm_medium=story&utm_campaign=practical; sticker „pošli kamarádovi“ (AMI: Češi sdílí soukromě). Highlight „Praktické“. Když story karta v packu ještě není, vlastník ji udělá z Design Lab šablony (10 min navíc).",
       "cta": "Zkopíruj prompt → link",
       "assets": [
         "story karta ze social packu (practical / lekce dne)"
@@ -3679,7 +3689,7 @@
       "hook": "„[Subjekt] [udělal X]. [Číslo].“ — např. „Mistral uzavřel kolo 3 miliard eur – největší v historii evropského tech sektoru.“",
       "hookType": "number",
       "producer": "dneskai-pack",
-      "body": "threadsText edice / varianta A social packu (≤ 500 znaků): titulek + why_it_matters[0] + „Otevřené zůstává: …“ + link {site}/?utm_source=threads&utm_medium=post&utm_campaign=edition. Linky v těle Meta od 6/2025 neřadí hůř — link přímo v postu. Bez hashtagů. 09:30 = hned po dodání edice (~09:00); Buffer: Čt 9 h nejlepší globálně.",
+      "body": "threadsText edice / varianta A social packu (≤ 500 znaků): titulek + why_it_matters[0] + „Otevřené zůstává: …“ + link https://caughtup-ai.vercel.app/?utm_source=threads&utm_medium=post&utm_campaign=edition. Linky v těle Meta od 6/2025 neřadí hůř — link přímo v postu. Bez hashtagů. 09:30 = hned po dodání edice (~09:00); Buffer: Čt 9 h nejlepší globálně.",
       "cta": "Celé vydání → link",
       "assets": [
         "threadsText z Queue"
@@ -3703,7 +3713,7 @@
       "hook": "Power Platform, Fabric a agenti: Power Conference dnes a zítra",
       "hookType": "list",
       "producer": "owner",
-      "body": "Power Conference 2026 (DataBrothers, 2. 12. Clarion Congress Hotel, 3. 12. Cubex; 4 900 Kč/den). 1–3 story snímky 1080×1920 (Design Lab šablona „akce“): název, datum, město, zdarma/placené, link sticker {site}/akce?utm_source=instagram&utm_medium=story&utm_campaign=akce. Highlight „Akce“. Zdroj: https://www.powerconference.cz/.",
+      "body": "Power Conference 2026 (DataBrothers, 2. 12. Clarion Congress Hotel, 3. 12. Cubex; 4 900 Kč/den). 1–3 story snímky 1080×1920 (Design Lab šablona „akce“): název, datum, město, zdarma/placené, link sticker https://caughtup-ai.vercel.app/akce?utm_source=instagram&utm_medium=story&utm_campaign=akce. Highlight „Akce“. Zdroj: https://www.powerconference.cz/.",
       "cta": "Program → /akce",
       "assets": [
         "story šablona „akce“",
@@ -3774,7 +3784,7 @@
       "hook": "Dneska ty dvě minuty stojí za to.",
       "hookType": "promise",
       "producer": "dneskai-pack",
-      "body": "BoardlessAI social pack (composeEditionSocialPack) po ranní edici (~09:00): slide 1 = titulek edice nebo alternative_headlines[0] + hook „Dneska ty dvě minuty stojí za to.“ (hook 'earns-the-minutes' jen při signal_strength ≥ 80; jinak fallback 'read-once'); slide 2 = dek jako druhá obálka; slidy 3–5 = what_changed (max 3); slidy 6–8 = why_it_matters (max 3); slide 9 = „Otevřené zůstává: …“ (uncertainty[0]); outro „Jedno vydání a máte přehled.“ + @dneskai. 4:5 1080×1350 JPEG, hero z licencované fotky ve slotu s clonou. Caption = varianta A z packu, „Celý článek: {site}/?utm_source=instagram&utm_medium=post&utm_campaign=edition“, 5–10 hashtagů, fotokredit. Vlastník v /admin/queue vybere titulek, zkontroluje slidy a schválí; dokud neběží publisher (quorum#587), publikuje ručně z exportu. Den NO_EDITION → místo carouselu story z ai-lessons (fallback v Queue). 17:30 = varianta B (po práci; Hootsuite St 17, Čt 16–17). Hypotéza — srovnat sends/reach A vs B v review 22. 11.",
+      "body": "BoardlessAI social pack (composeEditionSocialPack) po ranní edici (~09:00): slide 1 = titulek edice nebo alternative_headlines[0] + hook „Dneska ty dvě minuty stojí za to.“ (hook 'earns-the-minutes' jen při signal_strength ≥ 80; jinak fallback 'read-once'); slide 2 = dek jako druhá obálka; slidy 3–5 = what_changed (max 3); slidy 6–8 = why_it_matters (max 3); slide 9 = „Otevřené zůstává: …“ (uncertainty[0]); outro „Jedno vydání a máte přehled.“ + @dneskai. 4:5 1080×1350 JPEG, hero z licencované fotky ve slotu s clonou. Caption = varianta A z packu, „Celý článek: https://caughtup-ai.vercel.app/?utm_source=instagram&utm_medium=post&utm_campaign=edition“, 5–10 hashtagů, fotokredit. Vlastník v /admin/queue vybere titulek, zkontroluje slidy a schválí; dokud neběží publisher (quorum#587), publikuje ručně z exportu. Den NO_EDITION → místo carouselu story z ai-lessons (fallback v Queue). 17:30 = varianta B (po práci; Hootsuite St 17, Čt 16–17). Hypotéza — srovnat sends/reach A vs B v review 22. 11.",
       "cta": "Celý článek → link v biu",
       "assets": [
         "frames z /admin/queue (frame-01…09.jpg)",
@@ -3803,7 +3813,7 @@
       "hook": "Pojem dne: 20 sekund",
       "hookType": "list",
       "producer": "dneskai-pack",
-      "body": "Lekce dne z ai-lessons.json (60 termínů, pořadí podle data nejnovější edice) nebo practical typu term; odkaz na /lekce. Formát: story karta 1080×1920 ze social packu (quorum#592, pole practical z edice / lekce dne), Poppins Black (směr C), modrá #2F5AE6 na ink #14161A, max 2 textové bloky; link sticker {site}/lekce?utm_source=instagram&utm_medium=story&utm_campaign=practical; sticker „pošli kamarádovi“ (AMI: Češi sdílí soukromě). Highlight „Praktické“. Když story karta v packu ještě není, vlastník ji udělá z Design Lab šablony (10 min navíc).",
+      "body": "Lekce dne z ai-lessons.json (60 termínů, pořadí podle data nejnovější edice) nebo practical typu term; odkaz na /lekce. Formát: story karta 1080×1920 ze social packu (quorum#592, pole practical z edice / lekce dne), Poppins Black (směr C), modrá #2F5AE6 na ink #14161A, max 2 textové bloky; link sticker https://caughtup-ai.vercel.app/lekce?utm_source=instagram&utm_medium=story&utm_campaign=practical; sticker „pošli kamarádovi“ (AMI: Češi sdílí soukromě). Highlight „Praktické“. Když story karta v packu ještě není, vlastník ji udělá z Design Lab šablony (10 min navíc).",
       "cta": "Vyzkoušej dnes → link",
       "assets": [
         "story karta ze social packu (practical / lekce dne)"
@@ -3828,7 +3838,7 @@
       "hook": "„[Subjekt] [udělal X]. [Číslo].“ — např. „Mistral uzavřel kolo 3 miliard eur – největší v historii evropského tech sektoru.“",
       "hookType": "number",
       "producer": "dneskai-pack",
-      "body": "threadsText edice / varianta A social packu (≤ 500 znaků): titulek + why_it_matters[0] + „Otevřené zůstává: …“ + link {site}/?utm_source=threads&utm_medium=post&utm_campaign=edition. Linky v těle Meta od 6/2025 neřadí hůř — link přímo v postu. Bez hashtagů. 09:30 = hned po dodání edice (~09:00); Buffer: Čt 9 h nejlepší globálně.",
+      "body": "threadsText edice / varianta A social packu (≤ 500 znaků): titulek + why_it_matters[0] + „Otevřené zůstává: …“ + link https://caughtup-ai.vercel.app/?utm_source=threads&utm_medium=post&utm_campaign=edition. Linky v těle Meta od 6/2025 neřadí hůř — link přímo v postu. Bez hashtagů. 09:30 = hned po dodání edice (~09:00); Buffer: Čt 9 h nejlepší globálně.",
       "cta": "Celé vydání → link",
       "assets": [
         "threadsText z Queue"
@@ -3852,7 +3862,7 @@
       "hook": "Data Day: 300 míst zdarma a 7 hodin o datech a AI. Zápisky",
       "hookType": "authority",
       "producer": "owner",
-      "body": "Data Day 2026 (DATA talk, Divadlo X10, Charvátova 10, 13:00–20:00, zdarma přes Luma). Pokud vlastník jede (registrace zdarma, bez peněz → rozhodne sám), vlastní fotky a citace; jinak z veřejných výstupů. Formát: 3–6 navazujících postů; první bez linku, poslední s odkazem {site}/akce?utm_source=threads&utm_medium=post&utm_campaign=akce. Jen vlastní zápisky (citace se jménem řečníka, čísla, co to znamená pro čtenáře) — nikdy cizí slidy nebo screenshoty bez vlastního textu (IG/Threads originalita od 30. 4. 2026). Zdroj akce: https://luma.com/60g1uup7.",
+      "body": "Data Day 2026 (DATA talk, Divadlo X10, Charvátova 10, 13:00–20:00, zdarma přes Luma). Pokud vlastník jede (registrace zdarma, bez peněz → rozhodne sám), vlastní fotky a citace; jinak z veřejných výstupů. Formát: 3–6 navazujících postů; první bez linku, poslední s odkazem https://caughtup-ai.vercel.app/akce?utm_source=threads&utm_medium=post&utm_campaign=akce. Jen vlastní zápisky (citace se jménem řečníka, čísla, co to znamená pro čtenáře) — nikdy cizí slidy nebo screenshoty bez vlastního textu (IG/Threads originalita od 30. 4. 2026). Zdroj akce: https://luma.com/60g1uup7.",
       "cta": "Další akce → /akce",
       "assets": [
         "poznámky ze streamu / programu akce",
@@ -3901,7 +3911,7 @@
       "hook": "Zdroje jsou přímo pod tím. Ověř si to.",
       "hookType": "authority",
       "producer": "dneskai-pack",
-      "body": "BoardlessAI social pack (composeEditionSocialPack) po ranní edici (~09:00): slide 1 = titulek edice nebo alternative_headlines[0] + hook „Zdroje jsou přímo pod tím. Ověř si to.“ (hook 'sources-under-it'; slide 1 = titulek + počet zdrojů (sourceCount ze share packu)); slide 2 = dek jako druhá obálka; slidy 3–5 = what_changed (max 3); slidy 6–8 = why_it_matters (max 3); slide 9 = „Otevřené zůstává: …“ (uncertainty[0]); outro „Jedno vydání a máte přehled.“ + @dneskai. 4:5 1080×1350 JPEG, hero z licencované fotky ve slotu s clonou. Caption = varianta A z packu, „Celý článek: {site}/?utm_source=instagram&utm_medium=post&utm_campaign=edition“, 5–10 hashtagů, fotokredit. Vlastník v /admin/queue vybere titulek, zkontroluje slidy a schválí; dokud neběží publisher (quorum#587), publikuje ručně z exportu. Den NO_EDITION → místo carouselu story z ai-lessons (fallback v Queue). 17:30 = varianta B (po práci; Hootsuite St 17, Čt 16–17). Hypotéza — srovnat sends/reach A vs B v review 22. 11.",
+      "body": "BoardlessAI social pack (composeEditionSocialPack) po ranní edici (~09:00): slide 1 = titulek edice nebo alternative_headlines[0] + hook „Zdroje jsou přímo pod tím. Ověř si to.“ (hook 'sources-under-it'; slide 1 = titulek + počet zdrojů (sourceCount ze share packu)); slide 2 = dek jako druhá obálka; slidy 3–5 = what_changed (max 3); slidy 6–8 = why_it_matters (max 3); slide 9 = „Otevřené zůstává: …“ (uncertainty[0]); outro „Jedno vydání a máte přehled.“ + @dneskai. 4:5 1080×1350 JPEG, hero z licencované fotky ve slotu s clonou. Caption = varianta A z packu, „Celý článek: https://caughtup-ai.vercel.app/?utm_source=instagram&utm_medium=post&utm_campaign=edition“, 5–10 hashtagů, fotokredit. Vlastník v /admin/queue vybere titulek, zkontroluje slidy a schválí; dokud neběží publisher (quorum#587), publikuje ručně z exportu. Den NO_EDITION → místo carouselu story z ai-lessons (fallback v Queue). 17:30 = varianta B (po práci; Hootsuite St 17, Čt 16–17). Hypotéza — srovnat sends/reach A vs B v review 22. 11.",
       "cta": "Celý článek → link v biu",
       "assets": [
         "frames z /admin/queue (frame-01…09.jpg)",
@@ -3930,7 +3940,7 @@
       "hook": "Nástroj dne z edice",
       "hookType": "promise",
       "producer": "dneskai-pack",
-      "body": "Pole practical typu tool: nástroj/model z dnešní edice, co dělá, cena ověřená na webu poskytovatele + verified_at; bez ověřené ceny se nepublikuje. Formát: story karta 1080×1920 ze social packu (quorum#592, pole practical z edice / lekce dne), Poppins Black (směr C), modrá #2F5AE6 na ink #14161A, max 2 textové bloky; link sticker {site}/?utm_source=instagram&utm_medium=story&utm_campaign=practical; sticker „pošli kamarádovi“ (AMI: Češi sdílí soukromě). Highlight „Praktické“. Když story karta v packu ještě není, vlastník ji udělá z Design Lab šablony (10 min navíc).",
+      "body": "Pole practical typu tool: nástroj/model z dnešní edice, co dělá, cena ověřená na webu poskytovatele + verified_at; bez ověřené ceny se nepublikuje. Formát: story karta 1080×1920 ze social packu (quorum#592, pole practical z edice / lekce dne), Poppins Black (směr C), modrá #2F5AE6 na ink #14161A, max 2 textové bloky; link sticker https://caughtup-ai.vercel.app/?utm_source=instagram&utm_medium=story&utm_campaign=practical; sticker „pošli kamarádovi“ (AMI: Češi sdílí soukromě). Highlight „Praktické“. Když story karta v packu ještě není, vlastník ji udělá z Design Lab šablony (10 min navíc).",
       "cta": "Vyzkoušej dnes → link",
       "assets": [
         "story karta ze social packu (practical / lekce dne)"
@@ -3955,7 +3965,7 @@
       "hook": "„[Subjekt] [udělal X]. [Číslo].“ — např. „Mistral uzavřel kolo 3 miliard eur – největší v historii evropského tech sektoru.“",
       "hookType": "number",
       "producer": "dneskai-pack",
-      "body": "threadsText edice / varianta A social packu (≤ 500 znaků): titulek + why_it_matters[0] + „Otevřené zůstává: …“ + link {site}/?utm_source=threads&utm_medium=post&utm_campaign=edition. Linky v těle Meta od 6/2025 neřadí hůř — link přímo v postu. Bez hashtagů. 09:30 = hned po dodání edice (~09:00); Buffer: Čt 9 h nejlepší globálně.",
+      "body": "threadsText edice / varianta A social packu (≤ 500 znaků): titulek + why_it_matters[0] + „Otevřené zůstává: …“ + link https://caughtup-ai.vercel.app/?utm_source=threads&utm_medium=post&utm_campaign=edition. Linky v těle Meta od 6/2025 neřadí hůř — link přímo v postu. Bez hashtagů. 09:30 = hned po dodání edice (~09:00); Buffer: Čt 9 h nejlepší globálně.",
       "cta": "Celé vydání → link",
       "assets": [
         "threadsText z Queue"
@@ -3980,7 +3990,7 @@
       "hookType": "list",
       "producer": "dneskai-pack",
       "body": "Recept friday-tools (quorum#592) z edic týdne, vlastník ověří: slide 1 hook „3 nástroje listopadu + prompt měsíce“; slide 2 (druhá obálka) = prompt týdne v plném znění (kopírovatelný, česky); slidy 3–5 = tři nástroje z edic týdne (název, co dělá, cena ověřená na webu poskytovatele + datum ověření, odkaz na edici); slide 6 = „Ulož si to na pondělí“ + @dneskai. 6 slidů, 4:5 1080×1350. Vlastník ověří ceny (screenshot ceníku) a otestuje prompt ve 2 modelech (~30 min). Měsíční výběr: tři nástroje s nejvíc saves z pátků 6., 13., 20. a 27. 11. + nejvíc kopírovaný prompt (link sticker taps).",
-      "cta": "Ulož si to; celé edice → {site}/?utm_source=instagram&utm_medium=post&utm_campaign=friday-tools",
+      "cta": "Ulož si to; celé edice → https://caughtup-ai.vercel.app/?utm_source=instagram&utm_medium=post&utm_campaign=friday-tools",
       "assets": [
         "Design Lab deck 'friday-tools' (6 slidů)",
         "ověřené ceny nástrojů (screenshot ceníku, datum)",
