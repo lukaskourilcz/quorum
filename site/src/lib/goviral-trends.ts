@@ -31,6 +31,27 @@ export interface AdminGoViralHashtag {
   weekOverWeekDelta: number | null;
 }
 
+/**
+ * A rated signal, as the workspace shows it.
+ *
+ * Every field is optional in practice: a snapshot written before scoring existed carries none of
+ * them, and the panel has to render that snapshot rather than report it broken. So the parse is
+ * the same null-over-guess defence the rest of this reader uses — a missing score is `null`, never
+ * a zero the owner could mistake for a measurement.
+ */
+export interface AdminGoViralScoredSignal {
+  key: string;
+  topic: string;
+  topicSet: string | null;
+  status: "exploding" | "regular" | "peaked";
+  window: "active" | "lasted";
+  score: number;
+  firstFlaggedOn: string | null;
+  expiresAt: string | null;
+  breadthProviders: string[];
+  breakout: boolean;
+}
+
 export interface AdminGoViralMagazineLead {
   topic: string;
   engagementPerHour: number;
@@ -43,6 +64,8 @@ export interface AdminGoViralTrends {
   generatedAt: string | null;
   topics: AdminGoViralTopic[];
   hashtags: AdminGoViralHashtag[];
+  /** Empty for any snapshot written before the scorer existed, which is a state, not a fault. */
+  scoredSignals: AdminGoViralScoredSignal[];
   audio: Array<{ title: string; artist: string | null; reels: number }>;
   forMagazines: { ai: AdminGoViralMagazineLead[]; mma: AdminGoViralMagazineLead[] };
   /** Snapshot files that exist but could not be read. Visible, never silently skipped. */
@@ -62,6 +85,32 @@ function finite(value: unknown): number | null {
 
 function words(value: unknown, cap: number): string[] {
   return Array.isArray(value) ? value.filter((entry): entry is string => typeof entry === "string").slice(0, cap) : [];
+}
+
+const SIGNAL_STATUSES = ["exploding", "regular", "peaked"] as const;
+const SIGNAL_WINDOWS = ["active", "lasted"] as const;
+
+function scoredSignals(value: unknown): AdminGoViralScoredSignal[] {
+  if (!Array.isArray(value)) return [];
+  return value.flatMap((entry) => {
+    const signal = record(entry);
+    const score = finite(signal?.score);
+    const status = SIGNAL_STATUSES.find((candidate) => candidate === signal?.status);
+    const window = SIGNAL_WINDOWS.find((candidate) => candidate === signal?.window);
+    if (typeof signal?.key !== "string" || typeof signal.topic !== "string" || score === null || !status || !window) return [];
+    return [{
+      key: signal.key,
+      topic: signal.topic,
+      topicSet: typeof signal.topicSet === "string" ? signal.topicSet : null,
+      status,
+      window,
+      score,
+      firstFlaggedOn: typeof signal.firstFlaggedOn === "string" ? signal.firstFlaggedOn : null,
+      expiresAt: typeof signal.expiresAt === "string" ? signal.expiresAt : null,
+      breadthProviders: words(signal.breadthProviders, 8),
+      breakout: signal.breakout === true
+    }];
+  }).slice(0, 12);
 }
 
 function magazineLeads(value: unknown): AdminGoViralMagazineLead[] {
@@ -111,6 +160,7 @@ function parseSnapshot(raw: string): Omit<AdminGoViralTrends, "state" | "dropped
     generatedAt: typeof snapshot.generatedAt === "string" ? snapshot.generatedAt : null,
     topics,
     hashtags,
+    scoredSignals: scoredSignals(snapshot.scoredSignals),
     audio,
     forMagazines: { ai: magazineLeads(forMagazines?.ai), mma: magazineLeads(forMagazines?.mma) }
   };
@@ -123,6 +173,7 @@ export async function readGoViralTrends(root = repositoryRoot): Promise<AdminGoV
     generatedAt: null,
     topics: [],
     hashtags: [],
+    scoredSignals: [],
     audio: [],
     forMagazines: { ai: [], mma: [] },
     droppedSnapshots: 0

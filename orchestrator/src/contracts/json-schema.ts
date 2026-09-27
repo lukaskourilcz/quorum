@@ -60,6 +60,8 @@ import {
   TrackRecordSchema
 } from "./mma.js";
 import { ArticlePackageSchema, EditorialSlateSchema, SocialVariantPackSchema } from "./mma-files.js";
+import { GoViralPlayLibrarySchema } from "./goviral-play-library.js";
+import { GoViralWeeklyBriefSchema } from "./goviral-weekly-brief.js";
 import { RatingRecordSchema } from "./rating.js";
 import { SeasonFileSchema } from "./season.js";
 import { EditorialReviewSchema, EditorialDecisionSchema } from "./editorial-review.js";
@@ -253,6 +255,8 @@ export const ContractSchemas = {
   "venture-capability-map": VentureCapabilityMapSchema,
   "venture-capability-edge": VentureCapabilityEdgeSchema,
   "goviral-intelligence-packet": GoViralIntelligencePacketSchema,
+  "goviral-weekly-brief": GoViralWeeklyBriefSchema,
+  "goviral-play-library": GoViralPlayLibrarySchema,
   "bounded-render-summary": BoundedRenderSummarySchema,
   "approved-publish-package": ApprovedPublishPackageRefSchema,
   "venture-operation-health": VentureOperationHealthSchema,

@@ -45,6 +45,37 @@ function snapshot(date: string) {
   };
 }
 
+function ratedSnapshot(date: string) {
+  return {
+    ...snapshot(date),
+    scoredSignals: [
+      {
+        key: "search-spike:model release day",
+        topic: "model release day",
+        topicSet: "dneskai",
+        provider: "google-trends",
+        sourceKind: "search-spike",
+        measurement: "volume",
+        value: 20000,
+        components: [],
+        score: 78.3,
+        status: "exploding",
+        window: "active",
+        breakout: true,
+        firstFlaggedOn: "2026-08-03",
+        measuredAt: `${date}T06:10:00.000Z`,
+        expiresAt: "2026-08-26T06:10:00.000Z",
+        lastedHours: 168,
+        breadthProviders: ["google", "hn"],
+        evidenceRefs: []
+      },
+      // Missing the score entirely: dropped rather than rendered as a zero the owner could read
+      // as a measurement.
+      { key: "viral-post:half a record", topic: "half a record", status: "regular", window: "active" }
+    ]
+  };
+}
+
 describe("what is viral this week", () => {
   it("reports a missing store as the pre-token state, not an error", async () => {
     const root = await mkdtemp(path.join(os.tmpdir(), "goviral-trends-none-"));
@@ -89,5 +120,29 @@ describe("what is viral this week", () => {
     const trends = await readGoViralTrends(root);
     expect(trends.state).toBe("missing");
     expect(trends.droppedSnapshots).toBe(1);
+  });
+
+  it("carries the rated signals through, and drops one that has no score", async () => {
+    const root = await trendsRoot();
+    await writeFile(path.join(root, "state", "goviral", "trends", "2026-08-24.json"), JSON.stringify(ratedSnapshot("2026-08-24")));
+    const trends = await readGoViralTrends(root);
+    expect(trends.scoredSignals).toHaveLength(1);
+    expect(trends.scoredSignals[0]).toMatchObject({
+      topic: "model release day",
+      status: "exploding",
+      score: 78.3,
+      firstFlaggedOn: "2026-08-03",
+      breakout: true
+    });
+    expect(trends.scoredSignals[0]?.breadthProviders).toEqual(["google", "hn"]);
+  });
+
+  it("renders a snapshot written before scoring existed, with no rated signals and no error", async () => {
+    const root = await trendsRoot();
+    await writeFile(path.join(root, "state", "goviral", "trends", "2026-08-24.json"), JSON.stringify(snapshot("2026-08-24")));
+    const trends = await readGoViralTrends(root);
+    expect(trends.state).toBe("present");
+    expect(trends.scoredSignals).toEqual([]);
+    expect(trends.droppedSnapshots).toBe(0);
   });
 });

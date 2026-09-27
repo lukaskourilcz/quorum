@@ -1,0 +1,90 @@
+{
+  "schemaVersion": "goviral-weekly-brief/1",
+  "ventureId": "goviral",
+  "date": "2026-08-24",
+  "title": "Weekly brief — 2026-08-24",
+  "planRef": "state/ventures/goviral/plans/plan-2026-08-24-weekly-brief.json",
+  "wordCount": 345,
+  "readingTimeMinutes": 2,
+  "sections": [
+    {
+      "key": "problem",
+      "heading": "Problem — what this week leaves unresolved",
+      "lines": [
+        "Fixture chair framing for the weekly brief contract.",
+        "No scout data was available this week."
+      ]
+    },
+    {
+      "key": "solution",
+      "heading": "Solution — the week's rhythm",
+      "lines": [
+        "Mon–Tue: the strongest trend call from this week's data. No scout data was available this week.",
+        "Wed–Thu: the searchable piece — something that answers a question people type, and earns for months rather than days.",
+        "Fri: the shareable piece — rides the moment, dies in days, and that is fine as long as it is not the whole week.",
+        "Sat–Sun: nothing scheduled. A quiet weekend is a real editorial choice."
+      ]
+    },
+    {
+      "key": "players",
+      "heading": "Players — which desk each call belongs to",
+      "lines": [
+        "No call this week named a desk, so no desk is claimed here."
+      ]
+    },
+    {
+      "key": "predictions",
+      "heading": "Predictions — measured change, not forecast",
+      "lines": [
+        "No hashtag carries a comparison with a previous snapshot, so the room predicts nothing this week."
+      ]
+    },
+    {
+      "key": "opportunities",
+      "heading": "Opportunities — numbered, at most three",
+      "lines": [
+        "GV-2026-08-24-O1 — DNESKAi: fixture opportunity: Fixture opportunity kept so the contract has a numbered entry to validate."
+      ]
+    },
+    {
+      "key": "key-lessons",
+      "heading": "Key Lessons — the plays that earned their rating",
+      "lines": [
+        "RICE 19.2 · hook · 3 min read — Fixture: open the piece on the unresolved number: beat 41% with 58% on fixture completion rate over a synthetic fixture window; screenshot recorded at state/ventures/goviral/plays/screenshots/fixture-open-loop.png and the file is missing.",
+        "RICE 2.0 · cadence · 1 min read — Fixture: leave one day of the week empty: no benchmark on file, so the rating is an opinion at 50% confidence; no screenshot."
+      ]
+    },
+    {
+      "key": "haters",
+      "heading": "Haters — what could be wrong with all of this",
+      "lines": [
+        "AUDIT's review: Fixture review. Nothing proposed here posts, schedules or spends.",
+        "No scout data was available this week.",
+        "No trend call cleared the week's data, so anything below the calls rests on the seats alone.",
+        "1 play in the library has no benchmark, so its rating is an opinion held at 50% confidence.",
+        "1 play names a screenshot whose file is not in the repository.",
+        "This brief measures no reach. The repository holds no follower, impression or click figure, so nothing here is a performance claim."
+      ]
+    },
+    {
+      "key": "links",
+      "heading": "Links — everything cited above",
+      "lines": [
+        "fixture:goviral-weekly-brief"
+      ]
+    }
+  ],
+  "opportunities": [
+    {
+      "id": "GV-2026-08-24-O1",
+      "number": 1,
+      "title": "DNESKAi: fixture opportunity",
+      "detail": "Fixture opportunity kept so the contract has a numbered entry to validate.",
+      "evidenceRefs": [
+        "fixture:goviral-weekly-brief"
+      ]
+    }
+  ],
+  "status": "approved",
+  "generatedAt": "2026-08-24T11:00:00.000Z"
+}

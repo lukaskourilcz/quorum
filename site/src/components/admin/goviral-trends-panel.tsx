@@ -24,6 +24,15 @@ function perHour(value: number): string {
   return `${value.toFixed(1)}/h`;
 }
 
+/**
+ * The status word carries the tone, and the tone is not a judgement about the topic.
+ *
+ * `peaked` is warning rather than danger because a peaked trend is a correct reading, not a
+ * failure — the owner is being told to stop spending attention on it, which is the panel doing its
+ * job.
+ */
+const STATUS_TONE = { exploding: "success", regular: "neutral", peaked: "warning" } as const;
+
 export function GoViralTrendsPanel({ trends }: { trends: AdminGoViralTrends }) {
   if (trends.state === "missing") {
     return (
@@ -69,6 +78,36 @@ export function GoViralTrendsPanel({ trends }: { trends: AdminGoViralTrends }) {
               </div>
             ))}
           </div>
+        ) : null}
+        {trends.scoredSignals.length > 0 ? (
+          <table className="w-full border-collapse text-[length:var(--admin-type-control)]" aria-label="Rated signals" data-goviral-scored>
+            <thead>
+              <tr className="text-left text-[length:var(--admin-type-micro)] font-semibold uppercase tracking-[var(--admin-tracking-label)] text-[var(--admin-foreground-muted)]">
+                <th className="py-1 pr-3 font-semibold">Signal</th>
+                <th className="py-1 pr-3 font-semibold">Status</th>
+                <th className="py-1 pr-3 text-right font-semibold">Score</th>
+                <th className="py-1 pr-3 text-right font-semibold">Breadth</th>
+                <th className="py-1 pr-3 font-semibold">First flagged</th>
+                <th className="py-1 font-semibold">Window closes</th>
+              </tr>
+            </thead>
+            <tbody>
+              {trends.scoredSignals.map((signal) => (
+                <tr className="border-t border-[var(--admin-border)]" key={signal.key}>
+                  <td className="py-1.5 pr-3 font-semibold text-[var(--admin-foreground)]">{signal.topic}</td>
+                  <td className="py-1.5 pr-3">
+                    <AdminStatusBadge tone={STATUS_TONE[signal.status]}>
+                      {signal.breakout ? `${signal.status} · breakout` : signal.status}
+                    </AdminStatusBadge>
+                  </td>
+                  <td className="admin-tabular py-1.5 pr-3 text-right">{signal.score.toFixed(0)}</td>
+                  <td className="admin-tabular py-1.5 pr-3 text-right">{signal.breadthProviders.length}</td>
+                  <td className="admin-tabular py-1.5 pr-3">{signal.firstFlaggedOn ?? "unrecorded"}</td>
+                  <td className="admin-tabular py-1.5">{signal.expiresAt?.slice(0, 10) ?? "unrecorded"}</td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
         ) : null}
         {trends.hashtags.length > 0 ? (
           <table className="w-full border-collapse text-[length:var(--admin-type-control)]" aria-label="Ranked hashtags">

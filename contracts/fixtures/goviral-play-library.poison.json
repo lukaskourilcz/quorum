@@ -1,0 +1,28 @@
+{
+  "schemaVersion": "goviral-play-library/1",
+  "ventureId": "goviral",
+  "reachScale": "reach-band/1",
+  "updatedAt": "2026-08-24",
+  "plays": [
+    {
+      "id": "play-fixture-weekly-quiet-day",
+      "title": "Fixture: leave one day of the week empty",
+      "category": "cadence",
+      "ventureId": null,
+      "summary": "Fixture play. Nothing is scheduled at the weekend, so the week has somewhere to put an unexpected piece.",
+      "readTimeMinutes": 1,
+      "reach": {
+        "band": 2,
+        "basis": "estimate",
+        "note": "Fixture estimate. No reading behind it."
+      },
+      "impact": 0.5,
+      "confidence": 1,
+      "effortPersonWeeks": 0.25,
+      "benchmark": null,
+      "screenshot": null,
+      "evidenceRefs": [],
+      "recordedAt": "2026-08-24"
+    }
+  ]
+}

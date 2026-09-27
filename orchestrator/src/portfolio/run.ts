@@ -28,6 +28,8 @@ import { loadVentureCapabilityMap } from "../ventures/capabilities.js";
 import { atomicWriteJson, atomicWriteText, readJson, readText } from "../state.js";
 import { wrapUntrustedData } from "../security/content.js";
 import { trendEvidenceRefs } from "../sources/goviral-trends.js";
+import { loadGoViralDistributionPriors, renderDistributionPriorsBrief } from "../ventures/goviral/distribution-priors.js";
+import { loadGoViralGrowthLoops, renderGrowthLoopsBrief } from "../ventures/goviral/growth-loops.js";
 import type { FoundingAgent, Stage } from "../types.js";
 import {
   composeMeetingRouteDefinition,
@@ -75,6 +77,10 @@ import {
 import { deskMonthlyCapUsd, environmentBudgetLimits } from "./limits.js";
 import { renderMarketingPlanMarkdown } from "./marketing-plan.js";
 import { buildGoViralWeeklyBrief } from "./goviral-brief.js";
+import { buildGoViralBriefSkeleton, renderGoViralBriefMarkdown } from "./goviral-brief-skeleton.js";
+import { loadGoViralPlayLibrary } from "./goviral-plays.js";
+import type { GoViralWeeklyBrief } from "../contracts/goviral-weekly-brief.js";
+import { readSignalRegister } from "../sources/goviral-signal-register.js";
 import { composeTittyTuesdaysSocialQueue } from "../social/venture-packs.js";
 import { socialContentGenerationEnabled } from "../social/activation.js";
 import {
@@ -832,10 +838,12 @@ export async function composePortfolioContext(phase: PortfolioPhase, root: strin
     };
   }
   if (phase === "gv-brief") {
-    const [profile, trends, ideaIndex] = await Promise.all([
+    const [profile, trends, ideaIndex, priors, loops] = await Promise.all([
       readText(root, "ventures/goviral/profile.md"),
       newestTrendSnapshot(root, date),
-      readIdeaIndexSlice(root, "goviral")
+      readIdeaIndexSlice(root, "goviral"),
+      loadGoViralDistributionPriors(),
+      loadGoViralGrowthLoops()
     ]);
     // Items are the raw scraped posts. They stay on disk for the 30-day window and out of the
     // packet entirely: a room needs the aggregate to make a call, and handing four seats a list
@@ -850,6 +858,14 @@ export async function composePortfolioContext(phase: PortfolioPhase, root: strin
       text: [
         profile ?? "The owner has not filled in state/ventures/goviral/profile.md yet. Until they do, lean the writer brief on the two magazine niches and say plainly that this is what you are doing.",
         staleness,
+        // The priors and the loops are config, not scout data, and they reach the room as data on
+        // purpose: a number written into the prompt drifts from the file that owns it and four
+        // seats then quote it differently for a month. They sit above the signals because the cut
+        // at eighteen thousand characters takes the tail — a truncated priors block would leave a
+        // platform half-described, which is worse than a shorter list of trend readings. Both are
+        // the packet renderings, about five kilobytes together; the full ones are for humans.
+        renderDistributionPriorsBrief(priors),
+        renderGrowthLoopsBrief(loops),
         signals ? `This week's trend signals:\n${signals}` : "No scout data is available for this week.",
         "Ideas this room has already recorded. Propose nothing whose title or summary restates one of them:",
         ideaIndex,
@@ -1524,6 +1540,7 @@ export async function runPortfolioCycle(input: {
   }
 
   let marketingPlan: MarketingPlan | null = null;
+  let goViralBrief: GoViralWeeklyBrief | null = null;
   if (input.phase === "tt-marketing") {
     const meetingRef = `${date}-tt-marketing`;
     const rawPlan = input.dry
@@ -1605,11 +1622,30 @@ export async function runPortfolioCycle(input: {
 
   }
   if (input.phase === "gv-brief") {
+    // The register is read, never written, here. `refreshGoViralTrends` retired these earlier in
+    // the same cycle and recorded why; the brief's job is to name them, not to decide again.
+    const register = input.dry ? null : await readSignalRegister(root, input.now);
+    // Read once: the plan and the brief must describe the same week, and a second read could
+    // pick up a snapshot written between them.
+    const trends = input.dry ? null : await newestTrendSnapshot(root, date);
+    const vetoed = contributions.some((contribution) => contribution.agent === "AUDIT" && contribution.stance === "veto");
     marketingPlan = buildGoViralWeeklyBrief({
       date,
-      trends: input.dry ? null : await newestTrendSnapshot(root, date),
+      trends,
       contributions,
-      vetoed: contributions.some((contribution) => contribution.agent === "AUDIT" && contribution.stance === "veto")
+      vetoed,
+      retired: register?.recentlyRetired ?? []
+    });
+    // The plan is the machine artifact five desks parse; this is the document the owner reads.
+    // Both are written every week from the same inputs, and the brief's Key Lessons section is the
+    // play library's only consumer — an empty library costs that section and nothing else.
+    goViralBrief = buildGoViralBriefSkeleton({
+      date,
+      trends,
+      contributions,
+      vetoed,
+      plays: await loadGoViralPlayLibrary({ stateRoot: root, repoRoot }),
+      generatedAt: input.now.toISOString()
     });
   }
   let editorialSlate: EditorialSlate | null = null;
@@ -1746,6 +1782,8 @@ export async function runPortfolioCycle(input: {
   // literal, which was true while TT was the only room producing one.
   const marketingPlanPath = marketingPlan ? `ventures/${marketingPlan.ventureId}/plans/${marketingPlan.id}.json` : null;
   const marketingPlanMarkdownPath = marketingPlan ? `ventures/${marketingPlan.ventureId}/plans/${marketingPlan.id}.md` : null;
+  const goViralBriefPath = goViralBrief ? `ventures/goviral/briefs/${goViralBrief.date}.json` : null;
+  const goViralBriefMarkdownPath = goViralBrief ? `ventures/goviral/briefs/${goViralBrief.date}.md` : null;
   await Promise.all([
     atomicWriteJson(root, meetingPath, record),
     atomicWriteJson(root, decisionPath, { schemaVersion: 1, fixture: input.dry, cycleId: input.cycleId, phase: input.phase, outcome: record.decision.outcome, summary: record.decision.summary, evidenceRefs: record.decision.evidenceRefs, ...(agenda ? { agendaRef: `${MEETING_AGENDA_PATH}#${agenda.id}` } : {}), generatedAt: record.generatedAt }),
@@ -1754,6 +1792,10 @@ export async function runPortfolioCycle(input: {
     ...(marketingPlan && marketingPlanPath && marketingPlanMarkdownPath ? [
       atomicWriteJson(root, marketingPlanPath, marketingPlan),
       atomicWriteText(root, marketingPlanMarkdownPath, renderMarketingPlanMarkdown(marketingPlan))
+    ] : []),
+    ...(goViralBrief && goViralBriefPath && goViralBriefMarkdownPath ? [
+      atomicWriteJson(root, goViralBriefPath, goViralBrief),
+      atomicWriteText(root, goViralBriefMarkdownPath, renderGoViralBriefMarkdown(goViralBrief))
     ] : [])
   ]);
   const ttSocialUnlocked = !input.dry && await socialContentGenerationEnabled(root, "titty-tuesdays");
@@ -1825,6 +1867,6 @@ export async function runPortfolioCycle(input: {
   }
   if (input.explainBudget) console.log(JSON.stringify({ cycleId: input.cycleId, shape: schedule.shape, envelopeUsd: record.ledger.estimatedCycleUsd, estimatedWorstCaseUsd, measuredUsd: actualCycleUsd }, null, 2));
   if (input.explainRouting) console.log(JSON.stringify({ selected: room.selectedParticipants, skipped: room.skippedParticipants, preSteps: definition.preSteps }, null, 2));
-  const artifacts = [...preparationArtifacts, meetingPath, decisionPath, scorecardPath, calendarPath, ...(editorialSlatePath ? [editorialSlatePath] : []), ...(marketingPlanPath ? [marketingPlanPath] : []), ...(marketingPlanMarkdownPath ? [marketingPlanMarkdownPath] : []), ...ttSocialArtifacts, ...(agendaStateChanged ? [MEETING_AGENDA_PATH] : []), ...ideaArtifacts, ...(input.dry ? [] : ["budget/ledger.json"])];
+  const artifacts = [...preparationArtifacts, meetingPath, decisionPath, scorecardPath, calendarPath, ...(editorialSlatePath ? [editorialSlatePath] : []), ...(marketingPlanPath ? [marketingPlanPath] : []), ...(marketingPlanMarkdownPath ? [marketingPlanMarkdownPath] : []), ...(goViralBriefPath ? [goViralBriefPath] : []), ...(goViralBriefMarkdownPath ? [goViralBriefMarkdownPath] : []), ...ttSocialArtifacts, ...(agendaStateChanged ? [MEETING_AGENDA_PATH] : []), ...ideaArtifacts, ...(input.dry ? [] : ["budget/ledger.json"])];
   return { cycleId: input.cycleId, phase: input.phase, dry: input.dry, status: input.dry ? "dry_complete" : "live_complete", decision: "PLAN", estimatedWorstCaseUsd, selectedAgents: selected, skippedAgents: room.skippedParticipants.map(({ agent }) => agent), artifacts: artifacts.map((artifact) => path.relative(repoRoot, path.join(root, artifact))) };
 }

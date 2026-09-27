@@ -1,0 +1,206 @@
+{
+  "schemaVersion": "goviral-growth-loops/1",
+  "loopsVersion": "1.1.0",
+  "verifiedAt": "2026-09-16",
+  "$comment": "One loop per venture that has one, written as a closed cycle: the last stage feeds the first or it is not a loop. A play is worth doing here in proportion to how much of its venture's loop it turns, which is the only reason this file exists — a rating that cannot say what a play feeds is a ranking of tactics against each other rather than against the business.",
+  "$sourceComment": "The loop shape is Reforge's: inputs run through a process that produces an output which is reinvested as the next input, and a loop beats a funnel because a funnel needs new fuel poured in at the top every time. https://www.reforge.com/blog/growth-loops",
+  "$costComment": "Every stage here is zero-budget by construction. A stage that would need money, an account, a credential or an approved scope is recorded with status blocked and the exact missing thing; it never becomes a plan to spend. Unblocking one is an owner action in docs/NEEDED.md, not a code change.",
+  "loops": [
+    {
+      "ventureId": "caught-up",
+      "id": "loop-caught-up-edition-to-reader",
+      "name": "Edition to reader, reader to reader",
+      "kind": "content-to-audience",
+      "input": "One Czech AI edition a day, already produced.",
+      "stages": [
+        {
+          "id": "publish",
+          "label": "Publish the edition",
+          "surface": "site",
+          "output": "A dated page, its Atom feed entries and its JSON endpoints.",
+          "feedsStageId": "capture",
+          "status": "live"
+        },
+        {
+          "id": "capture",
+          "label": "Turn a reader into a returning reader",
+          "surface": "newsletter",
+          "output": "A subscriber who gets the next edition without having to remember the site.",
+          "feedsStageId": "share",
+          "status": "blocked",
+          "blockedBy": "No email provider, list or subscribe form exists. DNESKAi's only retention surfaces today are the Atom feeds, which are a weaker version of this stage and cannot be measured.",
+          "ownerAction": "docs/NEEDED.md — decide the DNESKAi newsletter"
+        },
+        {
+          "id": "share",
+          "label": "Give the reader one thing worth passing on",
+          "surface": "instagram",
+          "output": "A Brief or a Watchlist line a reader sends to one other person.",
+          "feedsStageId": "discover",
+          "status": "live"
+        },
+        {
+          "id": "discover",
+          "label": "The send lands in front of somebody who does not follow us",
+          "surface": "instagram",
+          "output": "A new reader arriving at the edition.",
+          "feedsStageId": "publish",
+          "status": "live"
+        }
+      ]
+    },
+    {
+      "ventureId": "marketingshark",
+      "id": "loop-marketingshark-lesson-to-learner",
+      "name": "Free lesson to learner, learner to learner",
+      "kind": "free-tool-to-product",
+      "input": "One bilingual carousel package a day about devShark's free learning.",
+      "stages": [
+        {
+          "id": "package",
+          "label": "Draft the day's package",
+          "surface": "none",
+          "output": "A carousel and its captions, owner-approved before anything leaves the repository.",
+          "feedsStageId": "tool",
+          "status": "live"
+        },
+        {
+          "id": "tool",
+          "label": "Send the reader to something free and finishable",
+          "surface": "site",
+          "output": "A devShark lesson or path a stranger can complete without paying or registering interest.",
+          "feedsStageId": "artifact",
+          "status": "live"
+        },
+        {
+          "id": "artifact",
+          "label": "The learner finishes something worth showing",
+          "surface": "none",
+          "output": "A completed path, its merchandise reward, and a screenshot the learner owns.",
+          "feedsStageId": "package",
+          "status": "live"
+        }
+      ]
+    },
+    {
+      "ventureId": "goviral",
+      "id": "loop-goviral-play-to-prior",
+      "name": "Play to result, result to prior",
+      "kind": "efficiency",
+      "input": "One weekly brief and the plays in it.",
+      "$kindComment": "An efficiency loop in Reforge's sense, not an acquisition one. GoVIRAL has no audience of its own and is not going to be given one; what compounds here is how good the next brief is, and pretending otherwise would put a follower target on a room that cannot post.",
+      "stages": [
+        {
+          "id": "brief",
+          "label": "Write the week's brief",
+          "surface": "none",
+          "output": "Rated plays with the readings behind them.",
+          "feedsStageId": "run",
+          "status": "live"
+        },
+        {
+          "id": "run",
+          "label": "The owner runs one of them",
+          "surface": "none",
+          "output": "A post that happened, on a surface the owner controls.",
+          "feedsStageId": "record",
+          "status": "live"
+        },
+        {
+          "id": "record",
+          "label": "Record what it did",
+          "surface": "none",
+          "output": "A measured result that either supports a prior in config/goviral-distribution-priors.json or contradicts it.",
+          "feedsStageId": "brief",
+          "status": "blocked",
+          "blockedBy": "Nothing in this repository reads back what a post earned; no analytics scope is approved and none is being requested here. Until a result is recorded by hand, the loop turns on the owner's own reporting.",
+          "ownerAction": "docs/NEEDED.md — decide how a play's result gets back into the priors"
+        }
+      ]
+    },
+    {
+      "ventureId": "carousel-studio",
+      "id": "loop-design-lab-deck-to-template",
+      "name": "Deck to summary, summary to template",
+      "kind": "efficiency",
+      "input": "Every delivered article and package that needs a rendered deck.",
+      "stages": [
+        {
+          "id": "render",
+          "label": "Render the deck",
+          "surface": "none",
+          "output": "Panels, and the bounded summary written beside the delivery.",
+          "feedsStageId": "review",
+          "status": "live"
+        },
+        {
+          "id": "review",
+          "label": "Read the summaries back as a family",
+          "surface": "none",
+          "output": "Which template families are actually being asked for.",
+          "feedsStageId": "template",
+          "status": "live"
+        },
+        {
+          "id": "template",
+          "label": "Improve the template the decks keep needing",
+          "surface": "none",
+          "output": "A template every venture's next deck inherits.",
+          "feedsStageId": "render",
+          "status": "live"
+        }
+      ]
+    }
+  ],
+  "$unrecordedComment": "Every venture in config/ventures.json is either above or here. A venture with no loop is a decision with a reason, not an oversight, and the test that reads both files is what stops this list from quietly going stale when the registry changes.",
+  "unrecordedVentures": [
+    {
+      "ventureId": "mma-files",
+      "reason": "Paused by operations-2026-09a and again by operations-2026-09b. Since #562 GoVIRAL scouts and briefs for DNESKAi and devShark only, so no loop is drafted for it; its Facebook stage returns with the venture."
+    },
+    {
+      "ventureId": "personal-growth",
+      "reason": "Paused by operations-2026-09b. Since #562 GoVIRAL scouts and briefs for DNESKAi and devShark only."
+    },
+    {
+      "ventureId": "webdev-signal",
+      "reason": "Operating with its editions held, but outside GoVIRAL's scope: since operations-2026-09b and #562 GoVIRAL scouts and briefs for DNESKAi and devShark only."
+    },
+    {
+      "ventureId": "titty-tuesdays",
+      "reason": "Paused by operations-2026-09a, and its platform-risk record governs every distribution question it has. A loop drafted while it is paused would be a plan nobody reviewed."
+    },
+    {
+      "ventureId": "booksofhistory",
+      "reason": "Paused by operations-2026-09a."
+    },
+    {
+      "ventureId": "fightaiq",
+      "reason": "Paused with MMA Files, and it is a data supplier rather than a publication. It has no audience of its own to loop."
+    },
+    {
+      "ventureId": "door-money",
+      "reason": "Paused by operations-2026-09a, and its public boundary is irreversible: a growth loop written here could not name the manuscript, the chunks or the embeddings it would need."
+    },
+    {
+      "ventureId": "tehdejsi-svet",
+      "reason": "Paused by operations-2026-09a."
+    },
+    {
+      "ventureId": "kvorum",
+      "reason": "Built but held. No external source or TRIBUN call may run until both the founding record and a separate capacity-reallocation record are countersigned, and a distribution loop is exactly the kind of thing that must not exist before those two signatures."
+    },
+    {
+      "ventureId": "webdev-signal-cs",
+      "reason": "An edition of webdev-signal, not a venture with its own loop. Like webdev-signal it sits outside GoVIRAL's scope; it would turn that venture's loop in Czech."
+    },
+    {
+      "ventureId": "webdev-signal-en",
+      "reason": "An edition of webdev-signal, not a venture with its own loop. Like webdev-signal it sits outside GoVIRAL's scope; it would turn that venture's loop in English."
+    },
+    {
+      "ventureId": "contest-radar",
+      "reason": "Exploration, not founded. Nothing may be planned for it as though it were operating."
+    }
+  ]
+}
