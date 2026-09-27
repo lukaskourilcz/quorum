@@ -191,25 +191,31 @@
       "at": "2026-09-27T03:00:00.000Z",
       "tz": "Europe/Prague",
       "kind": "cu-day",
-      "status": "scheduled"
+      "status": "skipped",
+      "decisionOneLiner": "The checks on the code behind this meeting did not pass, so it did not meet and nothing was spent."
     },
     {
       "at": "2026-09-27T04:00:00.000Z",
       "tz": "Europe/Prague",
       "kind": "venture-morning",
-      "status": "scheduled"
+      "status": "held",
+      "meetingRef": "standups/2026-09-27-morning",
+      "decisionOneLiner": "The council held the internal work item. No external action, business claim or stage change was approved."
     },
     {
       "at": "2026-09-27T05:00:00.000Z",
       "tz": "Europe/Prague",
       "kind": "ms-daily",
-      "status": "scheduled"
+      "status": "skipped",
+      "decisionOneLiner": "The checks on the code behind this meeting did not pass, so it did not meet and nothing was spent."
     },
     {
       "at": "2026-09-27T11:00:00.000Z",
       "tz": "Europe/Prague",
       "kind": "gv-brief",
-      "status": "scheduled"
+      "status": "not-needed",
+      "meetingRef": "meetings/2026-09-27-gv-brief",
+      "decisionOneLiner": "This room meets on Mondays. Nothing was spent."
     }
   ]
 }
