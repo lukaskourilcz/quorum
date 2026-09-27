@@ -24,6 +24,8 @@ export function parseDeploymentArguments(target, argv) {
 
   for (let index = 0; index < argv.length; index += 1) {
     const argument = argv[index];
+    // pnpm 10 forwards the `--` in `pnpm deploy:production -- --flag` to the script.
+    if (argument === "--") continue;
     if (argument === "--remote-build") {
       buildMode = "manual-remote-build";
     } else if (argument === "--confirm-remote-build") {
@@ -77,12 +79,14 @@ function deploymentCommands(target, buildMode) {
   const environment = target === "production" ? "production" : "preview";
   const pull = [pnpmExecutable, ["exec", "vercel", "pull", "--yes", `--environment=${environment}`]];
   if (buildMode === "manual-remote-build") {
-    const args = ["exec", "vercel", "deploy"];
+    // One archive instead of one request entry per file: the traced state/ tree takes a
+    // deployment past the CLI's 15,000-file limit (16,294 on 2026-09-27).
+    const args = ["exec", "vercel", "deploy", "--archive=tgz"];
     if (target === "production") args.push("--prod");
     return { pull, build: null, deploy: [pnpmExecutable, args] };
   }
   const buildArgs = ["exec", "vercel", "build"];
-  const deployArgs = ["exec", "vercel", "deploy", "--prebuilt"];
+  const deployArgs = ["exec", "vercel", "deploy", "--prebuilt", "--archive=tgz"];
   if (target === "production") {
     buildArgs.push("--prod");
     deployArgs.push("--prod");

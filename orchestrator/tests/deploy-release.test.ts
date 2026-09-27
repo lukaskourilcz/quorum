@@ -52,6 +52,11 @@ describe("deployment argument guards", () => {
     expect(() => parseDeploymentArguments("staging", [])).toThrow("preview or production");
     expect(() => parseDeploymentArguments("preview", ["--prod"])).toThrow("unknown deployment argument");
   });
+
+  it("ignores the `--` separator pnpm forwards to the script", () => {
+    expect(parseDeploymentArguments("production", ["--", "--confirm-production=abc"]))
+      .toMatchObject({ target: "production", productionConfirmation: "abc" });
+  });
 });
 
 describe("explicit preview deployment", () => {
@@ -62,7 +67,7 @@ describe("explicit preview deployment", () => {
     expect(harness.calls).toEqual([
       "pnpm exec vercel pull --yes --environment=preview",
       "pnpm exec vercel build",
-      "pnpm exec vercel deploy --prebuilt"
+      "pnpm exec vercel deploy --prebuilt --archive=tgz"
     ]);
     expect(receipt).toMatchObject({
       buildMode: "prebuilt-local",
@@ -97,7 +102,7 @@ describe("explicit preview deployment", () => {
     await runDeployment(harness.options as never);
     expect(harness.calls).toEqual([
       "pnpm exec vercel pull --yes --environment=preview",
-      "pnpm exec vercel deploy"
+      "pnpm exec vercel deploy --archive=tgz"
     ]);
     expect(harness.receipts.at(-1)).toMatchObject({ buildMode: "manual-remote-build" });
   });
@@ -149,7 +154,7 @@ describe("production deployment", () => {
       "git fetch --quiet origin main",
       "pnpm exec vercel pull --yes --environment=production",
       "pnpm exec vercel build --prod",
-      "pnpm exec vercel deploy --prebuilt --prod"
+      "pnpm exec vercel deploy --prebuilt --archive=tgz --prod"
     ]);
   });
 
