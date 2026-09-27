@@ -10,6 +10,10 @@ paused ventures' items under **On hold — paused ventures**, and Contest Radar,
 and company process and engineering under **Parked — outside the current focus**. The admin counts
 neither section. To bring an item back, move it above them.
 
+## DNESKAi · 2026-09-27
+
+- [ ] **Decide whether to dispatch DNESKAi's 2026-09-27 edition** — it never ran. `cu-day`, `cu-edition`, `morning` and `ms-daily` were skipped from 03:04 to 07:05 UTC because the Queue route test's fixed date failed the pre-cycle release gate (fixed by `f86d8b01`). The later runs 36309712326 and 36314359027 passed the gate but did not produce the edition. A dispatch costs model calls, so it is yours to start or skip. [imp:4] [owner:me] [time:10m] [kind:decision]
+
 ## The devShark social queue · 2026-09-25
 
 `SECOND-HANDOFF-25-9-2026.md` at the repository root designs the Queue workspace, the devShark profiles on LinkedIn, Instagram and Threads, the LinkedIn transport and the approval-to-publish path. The implementation issues are #568 to #576 (label `second-handoff-25-9-2026`); #556, #561 and #562 come first. Building it sends nothing.
@@ -18,6 +22,7 @@ Three approvals in `state/INBOX.md` go with these steps, and "Waiting for you" l
 
 These are the steps only you can take, in order:
 
+
 - [ ] **Countersign `state/decisions/2026-09-26-devshark-social-queue.md`** — #568 wrote it with status `proposed`; set `countersigned` and name your approval on its signature line. [imp:5] [owner:me] [time:20m] [kind:decision]
 - [ ] **Create the devShark profiles** — a LinkedIn Company Page (desktop or iOS), an Instagram professional account (Instagram Login, no Facebook Page needed) and its Threads profile; record the URLs here and in devShark's `client/product-catalog.ts`. [imp:5] [owner:me] [time:1h] [kind:setup]
 - [ ] **Buffer Free account** — connect the LinkedIn Page and create the API key; store `BUFFER_API_KEY` as an Actions **secret** and `BUFFER_CHANNEL_ID_DEVSHARK_LINKEDIN` as an Actions **variable**. Then run the live test in `docs/SOCIAL-PROVIDERS.md` ("The live test"): one multi-image post from the API, and write the result under its "Result" line. That is all; an agent session flips Buffer's verdict from it (the `[owner:ai]` item below). [imp:4] [owner:me] [time:45m] [kind:setup]
@@ -25,7 +30,7 @@ These are the steps only you can take, in order:
 - [ ] **Give `BOARDLESSAI_GITHUB_TOKEN` the `actions: write` permission** so an approval can dispatch the publisher (#574), under DEVSHARK-SOCIAL-003. [imp:4] [owner:me] [time:5m] [kind:setup]
 - [ ] **Flip Buffer's verdict from the recorded live test** — once "The live test" in `docs/SOCIAL-PROVIDERS.md` has a result: in one commit, set `BUFFER_LINKEDIN_FORMAT` from the result, set Buffer's `verdict` to `enabled` in `config/social-providers.json`, tick B4 in the decision, and move the four gates that pin Buffer as held, each citing the recorded test: `orchestrator/tests/social-providers.test.ts`, the migration audit's counts and `optionalProvidersHeld` (`migration-audit.ts`, `social-migration-audit.test.ts`), and the release audit's `provider-and-queue-safety` and `idempotent-migration-rollback` checks, which must accept a LinkedIn-only `enabled` Buffer and nothing else. [imp:3] [owner:ai] [time:45m] [kind:setup]
 - [ ] **Hand devShark's credentials to the publisher in the activation commit** — beside the channel flip, add to the `publish` job's `env:` in `.github/workflows/social-publisher.yml`: `DEVSHARK_INSTAGRAM_USER_ID: ${{ vars.DEVSHARK_INSTAGRAM_USER_ID }}`, `DEVSHARK_INSTAGRAM_ACCESS_TOKEN: ${{ secrets.DEVSHARK_INSTAGRAM_ACCESS_TOKEN }}`, `DEVSHARK_THREADS_USER_ID: ${{ vars.DEVSHARK_THREADS_USER_ID }}`, `DEVSHARK_THREADS_ACCESS_TOKEN: ${{ secrets.DEVSHARK_THREADS_ACCESS_TOKEN }}`, `BUFFER_API_KEY: ${{ secrets.BUFFER_API_KEY }}` and `BUFFER_CHANNEL_ID_DEVSHARK_LINKEDIN: ${{ vars.BUFFER_CHANNEL_ID_DEVSHARK_LINKEDIN }}`. The same commit lists `marketingshark` in `social-post-receipt/1`'s venture enum and makes it a publishing venture. Without the env lines every devShark item resolves `credential-unavailable` and nothing sends. [imp:4] [owner:ai] [time:30m] [kind:deploy]
-- [ ] **Prune closed Queue items and events** — `state/social/queue` and `queue-events` grow by about 5–7 files a day with no retention; the Queue reads the newest 2,000 of each and names the rest as left out. Archive or remove closed items (`published`, `cancelled`, `expired`, `failed`) and their events after a set age, keeping every receipt, before a directory reaches 2,000. [imp:2] [owner:ai] [time:2h] [kind:setup]
+- [x] **Prune closed Queue items and events** — done 2026-09-27: the daily queue-health step removes a closed item (`published`, `cancelled`, `expired`, `failed`) 90 days after its last activity, with its events, and records each removed file's hash in `state/social/queue-retention/<date>.json`. A supersession chain leaves whole or stays; receipts, holds and the v1 files stay. `docs/SOCIAL-QUEUE.md` gives the rule. [imp:2] [owner:ai] [time:2h] [kind:setup]
 - [ ] **Time the first live approval** — once a devShark connection is active, approve one post with "Approve and publish now", follow the run link on its card, and record here the minutes from the click to the post's permalink (#574; target under five). [imp:3] [owner:me] [time:10m] [kind:setup]
 - [ ] **Append the Premium launch block to devShark's fact sheet** — the 2026-09-25 block in `config/marketingshark.json` records the freemium decision and the English-only product. It names what every account gets, keeps the price out of anything a post may quote, and forbids both a price and any claim that learning is free. Read it and correct it there if devShark's facts differ. On the day Premium goes on sale, append one block dated that day with the price and the launch date, so the announcement below can state them. [imp:3] [owner:me] [time:15m] [kind:content]
 - [x] **Import devShark's coding challenges for the Wednesday teaser** — done 2026-09-26 from devShark `01fdfc9`, which ships `difficultyOf` (D5): `state/marketingshark/challenge-banks/devshark.json` holds 413 challenges, 338 of them Easy, and the import names 77 tasks it dropped because their text does not fit the snapshot's bounds. `pnpm marketingshark:import-challenges -- --brand devshark --source <clone> --check` reports it current; re-import when devShark's challenges change (#576). [imp:3] [owner:ai] [time:15m] [kind:content]
@@ -119,12 +124,12 @@ the day, and the run receipt under `state/ventures/webdev-signal/runs/` names wh
   rendered, copy the caption and Threads text from the draft card, take the panel PNGs from the
   repository paths the card lists under `state/ventures/webdev-signal/design-lab/assets/`, and
   post them from the accounts above. [imp:3] [owner:me] [time:20m] [kind:content]
-- [ ] **Add an admin preview and download route for the rendered panels, with retention** — the
-  draft card names the PNG paths but cannot show or serve them; until then the panels are read
-  from the public repository on GitHub. Server-only read under the existing `/admin` auth
-  boundary, no new state writer, and a retention rule that keeps only the last weeks of panels,
-  since every panel is regenerable from its payload and a selected day adds one to two megabytes
-  to a checkout that Vercel traces into its functions. [imp:3] [owner:ai] [time:2h] [kind:content]
+- [x] **Add an admin preview and download route for the rendered panels, with retention** — done
+  2026-09-27: the draft card shows each panel with a download link through
+  `/admin/api/webdev-signal/panel/<date>/<locale>/<number>`, behind the admin session. The route
+  reads only and serves a panel while its bytes match the render receipt. The daily queue-health
+  step removes a render's panels 28 days after the newest package day that used it; receipts and
+  payloads stay. [imp:3] [owner:ai] [time:2h] [kind:content]
 
 ## Design Lab · 2026-09-15
 
