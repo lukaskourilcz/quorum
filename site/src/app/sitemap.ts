@@ -5,12 +5,14 @@ import { getPublicSiteUrl } from "@/lib/public-site-url";
 import { getPublicMeetingRecords } from "@/lib/meeting-records";
 import { calendarStaticWeeks } from "@/lib/calendar-feed-model";
 import { PUBLIC_VENTURE_SLUGS } from "@/data/public-venture-slugs";
+import { getDailyResults } from "@/lib/daily-results";
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   const base = getPublicSiteUrl();
-  const [standups, meetings] = await Promise.all([
+  const [standups, meetings, days] = await Promise.all([
     getPublicStandups(),
-    getPublicMeetingRecords()
+    getPublicMeetingRecords(),
+    getDailyResults()
   ]);
   const updated = new Date("2026-07-23T05:30:00.000Z");
   const core = [
@@ -51,6 +53,14 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
       lastModified: new Date(meeting.generatedAt),
       changeFrequency: "never" as const,
       priority: 0.7
+    })),
+    // The per-day permalinks under /results. A day is finished before its summary is written, so
+    // nothing here changes once it exists.
+    ...days.map((day) => ({
+      url: `${base}/results/${day.date}`,
+      lastModified: new Date(`${day.date}T05:30:00.000Z`),
+      changeFrequency: "never" as const,
+      priority: 0.5
     })),
     ...calendarStaticWeeks(new Date()).map((week) => ({
       url: `${base}/calendar/${week}`,
