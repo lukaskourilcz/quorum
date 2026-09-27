@@ -188,8 +188,8 @@ test("Design Lab renders a manual export workspace and keeps social publishing c
   expect(response?.status()).toBe(200);
   await expect(page.getByRole("heading", { level: 1, name: "Design Lab." }))
     .toBeVisible();
-  // The 52a0b8b2 redesign says it in one sentence under the workspace: nothing is sent from here.
-  await expect(page.getByText("Karusely se odsud nikam neposílají", { exact: false }))
+  // Design changes become drafts; actual publishing still needs separate Queue approval.
+  await expect(page.getByText("Každé publikování vyžaduje samostatné schválení", { exact: false }))
     .toBeVisible();
   await expect(page.locator("[data-article-rail]")).toBeVisible();
   const canvas = page.locator("[data-slide-canvas]");
