@@ -211,9 +211,9 @@ test("Design Lab renders a manual export workspace and keeps social publishing c
     return lookTab.getAttribute("aria-pressed");
   }).toBe("true");
   await expect(page.locator("[data-save-preset]")).toBeDisabled();
-  // Whole English words: the article rail's buttons carry Czech headlines, and "postavený"
-  // (built) is not a publishing control.
-  await expect(page.getByRole("button", { name: /\b(?:publish(?:ing)?|post(?:ing|s)?|send(?:ing|s)?)\b/iu }))
+  // Loading draft metadata is a read control; there is still no publishing action here.
+  await expect(page.getByRole("button", { name: "Load current posts and images", exact: true })).toBeDisabled();
+  await expect(page.getByRole("button", { name: /\b(?:publish(?:ing)?|post(?:ing|s)?|send(?:ing|s)?)\b/iu }).filter({ hasNotText: "Load current posts and images" }))
     .toHaveCount(0);
 
   expect(failures).toEqual([]);

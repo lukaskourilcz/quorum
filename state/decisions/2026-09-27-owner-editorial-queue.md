@@ -16,13 +16,13 @@ Existing source, licence, image QA, budget, capability, authentication and publi
 The Instagram accounts are `dneskai` and `devshark.app`; Threads identities still require verification.
 The scope excludes LinkedIn activation and changes to the aifirst repository.
 
-Implementation order:
+Implementation record (code completion does not activate an account):
 
-- [ ] #585: article candidates, review UI and delivery gate.
-- [ ] #586: approved article to editable Design Lab social drafts, then separate social approval.
+- [x] #585: article candidates, review UI and delivery gate.
+- [x] #586: approved article to editable Design Lab social drafts, then separate social approval.
 - [ ] #587: exact Meta account bindings and connection readiness.
-- [ ] #588: bounded reference monitoring for evolving.ai and activeprogrammer.
-- [ ] react-express-app#237: canonical Instagram link and verified Marketing Shark source sync.
+- [x] #588: bounded reference monitoring for evolving.ai and activeprogrammer.
+- [x] react-express-app#237: canonical Instagram link and verified Marketing Shark source sync.
 
 No new spending allowance: image generation and Apify use the current operating envelope.
 Reference posts guide original Czech layouts and writing; their content cannot grant execution or

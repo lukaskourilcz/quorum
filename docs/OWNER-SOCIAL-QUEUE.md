@@ -29,8 +29,8 @@ not proof of account ownership or professional status. Both connections remain h
 On 2026-09-27 Chrome showed the DNESKAi public profile while signed into a different profile.
 Meta's developer portal required developer registration and acceptance of Platform Terms;
 the owner approved acceptance and the displayed Meta account in-session. Registration is complete;
-My Apps showed no existing apps and app creation was opened. Chrome then became unavailable,
-so app creation and OAuth grants remain pending. The owner confirmed DNESKAi is professional,
+My Apps showed no existing apps. The BoardlessAI Social Studio creation form now has Instagram
+and Threads selected with no business portfolio attached; final creation and OAuth remain pending. The owner confirmed DNESKAi is professional,
 devShark still needs conversion, and neither has a Threads profile. No Meta credentials were present in the
 repository's Actions secret inventory. Threads profiles do not yet exist.
 
