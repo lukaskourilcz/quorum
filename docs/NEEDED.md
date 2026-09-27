@@ -16,6 +16,17 @@ The older devShark checklist below also includes LinkedIn/Buffer, outside this s
 activation. Its proposed countersignature is not a blocker for the now-authorized implementation;
 it remains relevant if the owner later expands that older scope.
 
+## Marketing launch on 5 Nov · 2026-09-28
+
+`/admin/calendar` holds both 30-day plans (5 Nov to 4 Dec) and their pre-launch checklists: 21
+items for devShark, 27 for DNESKAi, due between now and 4 Nov. Tick them there; the checklist is
+the list, and these are the three the plans cannot start without. `docs/MARKETING-CALENDAR.md`
+explains the screen. The Calendar is on `main` and reaches the live admin with the next deploy.
+
+- [ ] **Create both Threads profiles before 5 Nov** — @devshark.app and @dneskai, each from its Instagram account with the same handle; keep them empty until launch day and record the URLs in the plans' `channels[]`. The Meta connection items above cover the tokens. [imp:5] [owner:me] [time:20m] [kind:setup]
+- [ ] **Make both Instagram accounts professional** — @devshark.app is still personal (item above); @dneskai already is. Insights, boosting and the publisher all need it. [imp:5] [owner:me] [time:10m] [kind:setup]
+- [ ] **Record the day-0 baselines on 4 Nov** — followers, profile visits and reach for IG and Threads, devShark sign-ups and PostHog `premium_page_viewed`, DNESKAi UTM visits; screenshots into each plan's review log. Every KPI target in the Calendar is measured against these numbers. [imp:4] [owner:me] [time:30m] [kind:content]
+
 ## Focus sweep · 2026-09-26
 
 You asked on 2026-09-26 to keep "Waiting for you" to what DNESKAi, devShark, the Design Lab,

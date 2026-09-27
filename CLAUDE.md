@@ -31,6 +31,9 @@ Council runs via API in `orchestrator/`; you are the human-invoked engineer.
   before anything that only resolves the package** — `pnpm cycle`, `pnpm delivery` and the
   other `tsx` entry points read `dist` and will otherwise use the last build.
 - `config/models.json` — model IDs per role. `.env.example` — required env.
+- `state/marketing-calendar/` — the devShark and DNESKAi 30-day marketing plans
+  (`marketing-calendar/1`) that `/admin/calendar` renders. A plan, not a scheduler:
+  `docs/MARKETING-CALENDAR.md`.
 
 ## Things a session will trip over
 
