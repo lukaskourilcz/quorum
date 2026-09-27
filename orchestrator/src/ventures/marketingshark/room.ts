@@ -9,11 +9,15 @@ import { configRoot, repoRoot, stateRoot } from "../../paths.js";
 import { loadRuntimeBudgetLimits } from "../../portfolio/limits.js";
 import { atomicWriteJson, readJson } from "../../state.js";
 import type { Stage } from "../../types.js";
-import { enabledBrands, loadMarketingSharkConfig } from "./config.js";
+import { enabledBrands, loadMarketingSharkConfig, type Brand } from "./config.js";
 import { clipToWords } from "./kinds.js";
 import type { BrandOutcome } from "./outcome.js";
 import { ChumOutput, PostWriterOutput } from "./package.js";
 import { planDay, type DayPlan } from "./post-plan.js";
+import { draftQotd, type QotdOutcome } from "./qotd.js";
+import { loadQuestionBankSnapshot } from "./bank.js";
+import { marketingSharkCapabilityRef } from "./queue.js";
+import { loadVentureCapabilityMap } from "../capabilities.js";
 import { fixturePostOutput, runPostDay } from "./post-run.js";
 import {
   fixtureChumOutput,
@@ -70,7 +74,7 @@ export async function runMarketingSharkCycle(input: {
       const artifacts = process.env.MEETING_TRIGGER === "schedule"
         ? [await writeSkip({ date: input.date, reason: `ms-daily did not open: ${closed}.`, now: input.now, root })]
         : [];
-      return { date: input.date, dry: false, brands: [], spendUsd: 0, skipped: { reason: closed }, artifacts };
+      return { date: input.date, dry: false, brands: [], qotd: [], spendUsd: 0, skipped: { reason: closed }, artifacts };
     }
   }
 
@@ -80,12 +84,17 @@ export async function runMarketingSharkCycle(input: {
   for (const brand of brands) {
     plans.push(await planDay({ brand, date: input.date, stateRoot: root, factStateRoot: stateRoot, repoRoot, configRoot }));
   }
+  // The Threads code question of the day (quorum#592): $0, code only, drafted on every day the room
+  // wakes, whatever the rotation says about the carousel. Written before the rest-day return so a
+  // day without a carousel still has its question.
+  const qotd = await draftQuestionsOfTheDay({ brands, date: input.date, root, now: input.now, dry: input.dry });
+
   const rest = plans.find((plan): plan is Extract<DayPlan, { kind: "none" }> => plan.kind === "none");
   if (brands.length > 0 && plans.every((plan) => plan.kind === "none")) {
     const artifacts = !input.dry && process.env.MEETING_TRIGGER === "schedule"
       ? [await writeSkip({ date: input.date, reason: `ms-daily did not open: ${rest!.reason}`, now: input.now, root })]
       : [];
-    return { date: input.date, dry: input.dry, brands: [], spendUsd: 0, skipped: { reason: rest!.reason, rest: true }, artifacts };
+    return { date: input.date, dry: input.dry, brands: [], qotd: qotd.outcomes, spendUsd: 0, skipped: { reason: rest!.reason, rest: true }, artifacts: [...qotd.artifacts, ...artifacts] };
   }
 
   const limits = await loadRuntimeBudgetLimits();
@@ -151,7 +160,7 @@ export async function runMarketingSharkCycle(input: {
 
   let ledger = await readLedger(root);
   const outcomes: BrandOutcome[] = [];
-  const artifacts: string[] = [];
+  const artifacts: string[] = [...qotd.artifacts];
   let spendUsd = 0;
 
   for (const [index, brand] of brands.entries()) {
@@ -226,6 +235,7 @@ export async function runMarketingSharkCycle(input: {
     stage: input.stage,
     dry: input.dry,
     outcomes,
+    qotd: qotd.outcomes,
     spendUsd,
     envelopeUsd: 0.1 * brands.length,
     // The published figures every other room computes. They were literals here, so a reader of an
@@ -235,7 +245,51 @@ export async function runMarketingSharkCycle(input: {
   }));
   artifacts.push(recordPath);
 
-  return { date: input.date, dry: input.dry, brands: outcomes, spendUsd, skipped: null, artifacts };
+  return { date: input.date, dry: input.dry, brands: outcomes, qotd: qotd.outcomes, spendUsd, skipped: null, artifacts };
+}
+
+/**
+ * Each enabled brand's question of the day. A failure costs that brand's question and a line in the
+ * record, never the carousel: the question is read from the same committed bank the quiz reads.
+ */
+async function draftQuestionsOfTheDay(input: {
+  brands: readonly Brand[];
+  date: string;
+  root: string;
+  now: Date;
+  dry: boolean;
+}): Promise<{ outcomes: QotdOutcome[]; artifacts: string[] }> {
+  const outcomes: QotdOutcome[] = [];
+  const artifacts: string[] = [];
+  if (!input.brands.some((brand) => brand.qotd?.enabled)) return { outcomes, artifacts };
+  const capabilityRef = await loadVentureCapabilityMap(configRoot).then(marketingSharkCapabilityRef, () => null);
+  const carouselLedger = await readLedger(input.root);
+  for (const brand of input.brands) {
+    try {
+      const result = await draftQotd({
+        brand,
+        date: input.date,
+        root: input.root,
+        now: input.now,
+        loadSnapshot: () => loadQuestionBankSnapshot(brand.questionBank.snapshotPath, repoRoot),
+        carouselLedger,
+        capabilityRef
+      });
+      outcomes.push(result.outcome);
+      artifacts.push(...result.artifacts);
+    } catch (error) {
+      outcomes.push({ status: "skipped", brandId: brand.id, reason: error instanceof Error ? error.message : String(error) });
+    }
+  }
+  return { outcomes, artifacts };
+}
+
+/** The question of the day as one sentence of the record, or nothing when no brand drafts one. */
+function qotdLine(outcomes: readonly QotdOutcome[]): string {
+  const lines = outcomes.map((outcome) => outcome.status === "skipped"
+    ? `${outcome.brandId} has no question of the day: ${outcome.reason}.`
+    : `${outcome.brandId} question of the day ${outcome.status === "drafted" ? "drafted" : "already drafted"} for Threads (${outcome.questionId}).`);
+  return lines.join(" ");
 }
 
 /** One drafted brand, as the summary and CHUM's turn name it. */
@@ -259,6 +313,8 @@ export function buildMeetingRecord(input: {
   stage: Stage;
   dry: boolean;
   outcomes: readonly BrandOutcome[];
+  /** The Threads question of the day, $0 and code only (quorum#592). */
+  qotd?: readonly QotdOutcome[];
   spendUsd: number;
   envelopeUsd: number;
   monthAllInUsd: number;
@@ -268,7 +324,7 @@ export function buildMeetingRecord(input: {
   const aborted = input.outcomes.filter((outcome) => outcome.status === "aborted");
   const times = Array.from({ length: 4 }, (_, index) => new Date(input.now.getTime() + index * 60_000).toISOString());
   const fallbacks = drafted.flatMap((outcome) => (outcome.fallback ? [outcome.fallback.reason] : []));
-  const summary = drafted.length === 0
+  const carouselSummary = drafted.length === 0
     ? aborted.length > 0
       // The reason is a code and the detail is the sentence that explains it. Printing the code
       // alone is how a truncated reply read as `model-output-invalid` in nineteen consecutive
@@ -278,6 +334,9 @@ export function buildMeetingRecord(input: {
       ? `No package was drafted. ${aborted.map((outcome) => `${outcome.brandId}: ${outcome.reason} — ${outcome.detail}`).join("; ")}.`
       : "Every enabled brand already had today's package; nothing was re-served."
     : `${drafted.length} draft ${drafted.length === 1 ? "package" : "packages"}: ${drafted.map(draftedLine).join("; ")}.${fallbacks.length > 0 ? ` ${fallbacks.join(" ")}` : ""}`;
+
+  const questionLine = qotdLine(input.qotd ?? []);
+  const summary = questionLine ? `${carouselSummary} ${questionLine}` : carouselSummary;
 
   // A transcript turn holds 800 characters. The decision keeps the whole summary; the turn keeps
   // what fits, so a long refusal list can never make the record itself fail to write.

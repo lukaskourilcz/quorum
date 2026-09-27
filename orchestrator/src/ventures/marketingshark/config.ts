@@ -165,6 +165,20 @@ export const Brand = z.object({
   }),
   banner: z.boolean(),
   /**
+   * The Threads code question of the day (quorum#592): one text post a day, drafted by code from
+   * the question bank at $0, with the answer in a first-reply draft. Absent or disabled, nothing is
+   * drafted; the carousel rotation is unaffected either way.
+   */
+  qotd: z.strictObject({
+    enabled: z.boolean(),
+    platform: z.literal("threads"),
+    /** The plan's slot. The draft's window opens at this Prague hour and closes `windowHours` later. */
+    pragueHour: z.number().int().min(6).max(21),
+    windowHours: z.number().int().min(1).max(16),
+    /** `utm_campaign` on the first reply's link (the cross-repo UTM convention, CONTRACTS.md §4). */
+    utmCampaign: z.string().regex(/^[a-z0-9]+(?:-[a-z0-9]+)*$/u).max(40)
+  }).optional(),
+  /**
    * Absent for a brand nobody has described yet; the packet then carries the brand block alone.
    * Oldest first, one block per date.
    */

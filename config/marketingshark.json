@@ -202,6 +202,13 @@
         }
       },
       "banner": true,
+      "qotd": {
+        "enabled": true,
+        "platform": "threads",
+        "pragueHour": 9,
+        "windowHours": 14,
+        "utmCampaign": "qotd"
+      },
       "factSheets": [
         {
           "effectiveFrom": "2026-09-15",

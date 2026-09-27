@@ -41,6 +41,7 @@ import { KvorumEntityLexiconSchema } from "./kvorum-entities.js";
 import { KvorumMonitorReceiptSchema } from "./kvorum-monitor.js";
 import { KvorumSourceRegistrySchema } from "./kvorum-sources.js";
 import { MarketingPlanSchema } from "./marketing-plan.js";
+import { MarketingSharkQotdSchema } from "./marketingshark-qotd.js";
 import { MeetingEmailSchema } from "./meeting-email.js";
 import { MeetingAgendaQueueSchema } from "./meeting-agenda.js";
 import { MeetingRecordSchema } from "./meeting-record.js";
@@ -226,6 +227,7 @@ export const ContractSchemas = {
   "kvorum-monitor": KvorumMonitorReceiptSchema,
   "kvorum-sources": KvorumSourceRegistrySchema,
   "marketing-plan": MarketingPlanSchema,
+  "marketingshark-qotd": MarketingSharkQotdSchema,
   "meeting-email": MeetingEmailSchema,
   "meeting-agenda": MeetingAgendaQueueSchema,
   "meeting-record": MeetingRecordSchema,

@@ -241,6 +241,8 @@ describe("the weekday rotation", () => {
   it("opens a weekend draft room without publishing", async () => {
     const result = await runMarketingSharkCycle({ cycleId: "t", dry: true, now: new Date("2026-10-03T05:00:00.000Z"), date: "2026-10-03", stage: "DISCOVERY" });
     expect(result).toMatchObject({ spendUsd: 0, skipped: null, brands: [expect.objectContaining({ kind: "quiz", status: expect.stringMatching(/^(?:drafted|already-served)$/u) })] });
+    // The Threads code question of the day drafts beside the carousel, at $0 (quorum#592).
+    expect(result.qotd).toEqual([expect.objectContaining({ brandId: "devshark", status: expect.stringMatching(/^(?:drafted|already-served)$/u) })]);
   });
 });
 

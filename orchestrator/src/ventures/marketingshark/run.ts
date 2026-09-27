@@ -21,6 +21,7 @@ import { brandKitProblem, type Hook } from "@boardlessai/carousel-studio";
 import { ChumOutput, inLocale, MarketingSharkPackage, packageId, packagePath, SLIDE_ROLES } from "./package.js";
 import { buildChumPacket, craftRulesFor, readCraftRules } from "./packet.js";
 import type { BrandOutcome } from "./outcome.js";
+import type { QotdOutcome } from "./qotd.js";
 import type { RotationKind } from "./kinds.js";
 import { readBrandTrendLines } from "./trends.js";
 import { topicLabel } from "./topics.js";
@@ -50,6 +51,8 @@ export interface MarketingSharkRunResult {
   date: string;
   dry: boolean;
   brands: BrandOutcome[];
+  /** The Threads code question of the day per brand (quorum#592); empty when none is enabled. */
+  qotd: QotdOutcome[];
   spendUsd: number;
   /** Why the room did not open. `rest` marks a day the rotation gives no room, not a closed gate. */
   skipped: { reason: string; rest?: boolean } | null;
