@@ -28,8 +28,11 @@ The intended Instagram handles are **@dneskai** and **@devshark.app**. Recording
 not proof of account ownership or professional status. Both connections remain held.
 On 2026-09-27 Chrome showed the DNESKAi public profile while signed into a different profile.
 Meta's developer portal required developer registration and acceptance of Platform Terms;
-that acceptance was left pending for the owner. No Meta credentials were present in the
-repository's Actions secret inventory. Threads profiles have not been verified.
+the owner approved acceptance and the displayed Meta account in-session. Registration is complete;
+My Apps showed no existing apps and app creation was opened. Chrome then became unavailable,
+so app creation and OAuth grants remain pending. The owner confirmed DNESKAi is professional,
+devShark still needs conversion, and neither has a Threads profile. No Meta credentials were present in the
+repository's Actions secret inventory. Threads profiles do not yet exist.
 
 Use one owner-controlled Meta developer app, with Instagram and Threads use cases/products.
 Each Instagram account must be Business or Creator. For accounts managed by the app owner,
@@ -71,3 +74,30 @@ The code must be deployed to expose the new admin UI. A Git merge alone is not a
 Reviews live under `state/editorial/reviews`, immutable owner selections under `decisions`, and
 release receipts under `releases`. No automatic delivery is permitted for an article without its
 matching selection. Social revisions and approvals retain their own identities and hashes.
+
+## Reference monitoring
+
+`social-references.yml` polls the public feeds of `evolving.ai` and `activeprogrammer`
+every six hours, with four results per account and a $0.03 provider charge ceiling per run.
+Its $5 monthly ceiling is inside the existing shared $19 Apify credit, not an added allowance.
+A fresh account-usage reading is required. The workflow pushes a reservation before the paid
+request and retains it on failure. `state/PAUSED` and the autonomy kill switch stop polling.
+Deduplication avoids treating a previously observed post as new; a failed poll preserves the
+previous packet without renewing its expiry. This is bounded polling, not a source-post webhook;
+more than four new posts between polls can exceed the sample.
+
+Only post references and format measurements (slide count, caption length, question hooks)
+are retained. Fresh observations from both accounts influence the initial DNESKAi Design Lab
+family/type scale; recorded recipes and the owner's saved layouts take precedence. This is
+format inspiration, not a claim to reproduce their typography or image composition exactly.
+Posts use original Czech editorial copy and the selected licensed or generated image.
+[Apify's input schema](https://apify.com/apify/instagram-scraper/input-schema) documents the
+profile URLs and per-URL result limits. No Instagram login cookies are supplied to the scraper.
+
+## devShark source sync
+
+Before each live `ms-daily` room, the cycle imports question and coding-challenge snapshots
+from the public `react-express-app` main branch, recording the exact source commit and hashes.
+An import failure stops the room. Saturday quizzes and Sunday feature drafts extend the
+existing weekday rotation to seven days. These are drafts; cadence and owner approval still
+control actual posting. Product claims remain the existing reviewed MarketingShark facts.

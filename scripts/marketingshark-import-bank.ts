@@ -8,7 +8,7 @@
  * `--source` is read from the directory the command is typed in (pnpm's `INIT_CWD`), so run it from
  * the quorum clone with devShark cloned beside it.
  *
- * The daily room never runs this and never fetches anything. It reads the committed snapshot and
+ * The workflow refreshes this before each live daily room. The room itself reads the snapshot and
  * checks its hash, which is what makes the whole selection path deterministic and $0.
  */
 import { execFileSync } from "node:child_process";

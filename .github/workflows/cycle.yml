@@ -583,6 +583,13 @@ jobs:
           echo "The repository release gate failed; the cycle did not run."
           exit 1
 
+      - name: Sync committed devShark source into MarketingShark
+        if: ${{ steps.guard.outputs.proceed == 'true' && steps.mode.outputs.skip != 'true' && steps.mode.outputs.phase == 'ms-daily' && steps.mode.outputs.dry != 'true' && steps.mode.outputs.delivery_only != 'true' }}
+        run: |
+          git clone --depth 1 --branch main https://github.com/lukaskourilcz/react-express-app.git "$RUNNER_TEMP/devshark-source"
+          pnpm marketingshark:import-bank -- --brand devshark --source "$RUNNER_TEMP/devshark-source"
+          pnpm marketingshark:import-challenges -- --brand devshark --source "$RUNNER_TEMP/devshark-source"
+
       - name: Run cycle
         id: run
         if: ${{ steps.guard.outputs.proceed == 'true' && steps.mode.outputs.skip != 'true' && steps.mode.outputs.delivery_only != 'true' }}

@@ -2,8 +2,8 @@
   "schemaVersion": "marketingshark-challenges/1",
   "brandId": "devshark",
   "sourceRepo": "lukaskourilcz/react-express-app",
-  "sourceCommit": "01fdfc9f2ea1b5a8cd13e7c5c60454c5ae0c7377",
-  "importedAt": "2026-09-26T18:40:32.802Z",
+  "sourceCommit": "c7efbab0d9eea33dfb2ffed4a0c8cc87a8bd2013",
+  "importedAt": "2026-09-27T14:06:49.661Z",
   "labelSource": "shared/coding-catalog.ts#difficultyOf",
   "contentHash": "e74b95cf13d47bc6ec9c6bb872354139f2023c4bc3409be944fa32dd796d1bc1",
   "challenges": [
