@@ -52,7 +52,7 @@ describe("the committed seed plans", () => {
 
   it("derives what an October document leaves out", () => {
     const raw = read("state/marketing-calendar/caught-up.json") as Record<string, unknown>;
-    const { launch: _launch, period: _period, prelaunch: _prelaunch, ...october } = raw;
+    const october = Object.fromEntries(Object.entries(raw).filter(([key]) => !["launch", "period", "prelaunch"].includes(key)));
     const result = parseMarketingCalendar(october);
     expect(result.ok).toBe(true);
     if (!result.ok) return;
