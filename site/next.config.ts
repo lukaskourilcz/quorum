@@ -46,6 +46,8 @@ const nextConfig: NextConfig = {
     // function otherwise never sees: Vercel serves `public/` from its CDN, not from the bundle.
     // Only this route carries them, so the other admin functions stay their size.
     "/admin/api/queue/frame/**": ["./public/social/**/*"],
+    // The manual-posting export (quorum#592) zips the same committed frames and story cards.
+    "/admin/api/queue/export/**": ["./public/social/**/*"],
     "/api/carousel-studio/preview/[templateId]/[version]/[brand]/[format]/[slide]": [...hookLibraryFiles, ...fontFiles, ...brandKitFiles],
     "/money": ["../state/money/public.json"],
     "/results": ["../state/notify/digest/**/*", "../state/reports/**/*"],
