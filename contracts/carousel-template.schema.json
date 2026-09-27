@@ -275,6 +275,44 @@
       ],
       "additionalProperties": false
     },
+    "canvas": {
+      "default": {
+        "master": "instagram-portrait",
+        "derive": []
+      },
+      "type": "object",
+      "properties": {
+        "master": {
+          "default": "instagram-portrait",
+          "type": "string",
+          "enum": [
+            "instagram-square",
+            "instagram-portrait",
+            "instagram-story",
+            "threads"
+          ]
+        },
+        "derive": {
+          "default": [],
+          "maxItems": 3,
+          "type": "array",
+          "items": {
+            "type": "string",
+            "enum": [
+              "instagram-square",
+              "instagram-portrait",
+              "instagram-story",
+              "threads"
+            ]
+          }
+        }
+      },
+      "required": [
+        "master",
+        "derive"
+      ],
+      "additionalProperties": false
+    },
     "requiredSlots": {
       "minItems": 1,
       "maxItems": 30,
@@ -925,6 +963,7 @@
     "description",
     "citedObservationRefs",
     "formats",
+    "canvas",
     "requiredSlots",
     "slides"
   ],

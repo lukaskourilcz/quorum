@@ -188,7 +188,9 @@ function page(family: DeckFamily): string {
     const checks = validateTemplateForBrand(template, brand, format);
     const failed = checks.filter((check) => check.status === "fail");
     return `<tr><td class="n">${brand.id}</td><td class="n">${format}</td><td>${
-      failed.length ? escapeHtml(failed.map((check) => check.detail).join("; ")) : "all six pass"}</td></tr>`;
+      // Counted rather than spelled out: the verdict said "all six pass" for as long as there were
+      // six checks, and went on saying it after the canvas check made seven.
+      failed.length ? escapeHtml(failed.map((check) => check.detail).join("; ")) : `all ${checks.length} pass`}</td></tr>`;
   })).join("");
 
   const sizes = typeSizes(family, "instagram-portrait", mma)

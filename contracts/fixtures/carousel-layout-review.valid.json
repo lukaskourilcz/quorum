@@ -1,0 +1,10 @@
+{
+  "schemaVersion": "carousel-layout-review/1",
+  "family": "rail",
+  "templateVersion": "1.0.0",
+  "checklistVersion": "layout-gate/1",
+  "composer": "studio/src/families-launch.ts",
+  "specimen": "docs/design-lab/families/rail.html",
+  "gatedAt": "2026-09-16",
+  "signOff": null
+}

@@ -1,0 +1,108 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "type": "object",
+  "properties": {
+    "schemaVersion": {
+      "type": "string",
+      "const": "carousel-layout-review/1"
+    },
+    "family": {
+      "type": "string",
+      "enum": [
+        "masthead",
+        "gutter",
+        "bevel",
+        "porthole",
+        "slab",
+        "terrace",
+        "figure",
+        "pull",
+        "tower",
+        "dossier",
+        "billboard",
+        "broadsheet",
+        "zurich",
+        "concrete",
+        "terminal",
+        "marginalia",
+        "memo",
+        "versus",
+        "tally",
+        "counterweight",
+        "throughline",
+        "quiet",
+        "offset",
+        "apex",
+        "rail",
+        "vista",
+        "fault",
+        "halo",
+        "folio",
+        "press"
+      ]
+    },
+    "templateVersion": {
+      "type": "string",
+      "pattern": "^\\d+\\.\\d+\\.\\d+$"
+    },
+    "checklistVersion": {
+      "type": "string",
+      "const": "layout-gate/1"
+    },
+    "composer": {
+      "type": "string",
+      "minLength": 1
+    },
+    "specimen": {
+      "type": "string",
+      "minLength": 1
+    },
+    "gatedAt": {
+      "type": "string",
+      "pattern": "^\\d{4}-\\d{2}-\\d{2}$"
+    },
+    "signOff": {
+      "anyOf": [
+        {
+          "type": "object",
+          "properties": {
+            "reviewer": {
+              "type": "string",
+              "const": "owner"
+            },
+            "reviewedAt": {
+              "type": "string",
+              "pattern": "^\\d{4}-\\d{2}-\\d{2}$"
+            },
+            "note": {
+              "type": "string",
+              "minLength": 3,
+              "maxLength": 240
+            }
+          },
+          "required": [
+            "reviewer",
+            "reviewedAt",
+            "note"
+          ],
+          "additionalProperties": false
+        },
+        {
+          "type": "null"
+        }
+      ]
+    }
+  },
+  "required": [
+    "schemaVersion",
+    "family",
+    "templateVersion",
+    "checklistVersion",
+    "composer",
+    "specimen",
+    "gatedAt",
+    "signOff"
+  ],
+  "additionalProperties": false,
+  "$id": "https://boardless.ai/contracts/carousel-layout-review.schema.json"
+}

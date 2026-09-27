@@ -17,6 +17,7 @@ import { BhDossierSchema, BhResearchLedgerEntrySchema } from "./bh-dossier.js";
 import { CalendarFeedSchema } from "./calendar.js";
 import { BookKbIndexSchema } from "./book-kb-index.js";
 import { CampaignBriefSchema } from "./campaign-brief.js";
+import { CarouselLayoutReviewSchema } from "./carousel-layout-review.js";
 import { CarouselTemplateSchema } from "./carousel-template.js";
 import { CostReportSchema } from "./cost-report.js";
 import { DailyDigestSchema } from "./daily-digest.js";
@@ -201,6 +202,7 @@ export const ContractSchemas = {
   "stream-sync": StreamSyncReceiptSchema,
   "calendar": CalendarFeedSchema,
   "campaign-brief": CampaignBriefSchema,
+  "carousel-layout-review": CarouselLayoutReviewSchema,
   "carousel-template": CarouselTemplateSchema,
   "cost-report": CostReportSchema,
   "daily-digest": DailyDigestSchema,

@@ -5,8 +5,8 @@ import {
   type CarouselTemplateInput
 } from "./schema.js";
 import { MAX_RESOLVABLE_SLIDES, MIN_SLIDES } from "./slides.js";
-import { articleSlideSlot, deckFormats } from "./library.js";
-import { DECK_FAMILIES, type DeckFamily } from "./designs.js";
+import { articleSlideSlot, deckCanvas, deckFormats } from "./library.js";
+import { DECK_FAMILIES, LAUNCH_FAMILIES, type DeckFamily } from "./designs.js";
 import { RHYTHM, variantsFor, type FamilySpec, type Role } from "./family-kit.js";
 import { FOUNDING_FAMILIES } from "./families-founding.js";
 import { LAUNCH_FAMILY_SPECS } from "./families-launch.js";
@@ -36,12 +36,14 @@ import { EDITORIAL_FAMILIES } from "./families-editorial.js";
  * - **per-band type ceilings**, because a cover line, a passage and a closing line are three
  *   different reading distances.
  *
- * ## One slides array, four canvases
+ * ## One slides array, one master canvas, three derivations
  *
- * `carousel-template/1` holds one set of layers and four canvas declarations, so a family's
- * fractions have to hold at 1:1, 4:5, 9:16 and the Threads square at once. Every text and logo
- * frame therefore lives inside the union of the four safe areas — the story's, which is the
- * widest — and only backgrounds, photographs and full-bleed art are allowed outside it. That is
+ * `carousel-template/1` holds one set of layers and four canvas measurements, and a `canvas` block
+ * saying which of them the composition was made for. Every family here declares all four —
+ * 4:5 as the master and the other three derived — so a family's fractions have to hold at 1:1,
+ * 4:5, 9:16 and the Threads square at once. Every text and logo frame therefore lives inside the
+ * union of the four safe areas — the story's, which is the widest — and only backgrounds,
+ * photographs and full-bleed art are allowed outside it. That is
  * a real constraint and it shows: a 4:5 deck from these families is more generously margined than
  * one composed for 4:5 alone. What it buys is that every family renders honestly as a story
  * without a second composition to keep in step.
@@ -116,6 +118,23 @@ export function familyTemplateId(family: DeckFamily, slideCount: number): string
 }
 
 /**
+ * What the slide at this position is for, in this family.
+ *
+ * Exported because it is the whole of the hook's blast radius, and a rule nobody can read is a
+ * rule nobody can check. Slide two is a `hook` only in the five families the dealer actually
+ * deals; every legacy family keeps `body` there and therefore renders the byte-identical deck it
+ * rendered before the role existed, which matters because a stored recipe naming one of them has
+ * to redraw exactly as it was sent. `studio/tests/fixtures/legacy-family-hashes.json` is the
+ * receipt for that claim, captured from the build before this role was added.
+ */
+export function deckSlideRole(family: DeckFamily, index: number, slideCount: number): Role {
+  if (index === 0) return "cover";
+  if (index === slideCount - 1) return "outro";
+  const dealt = (LAUNCH_FAMILIES as readonly string[]).includes(family);
+  return index === 1 && dealt ? "hook" : "body";
+}
+
+/**
  * The axes a recipe turns, over and above which family it picked.
  *
  * `typeScale` moves every ceiling and floor in the family together, so a deck can be set louder
@@ -166,9 +185,10 @@ export function familyDeckTemplate(family: DeckFamily, slideCount: number, optio
     description: specification.description,
     citedObservationRefs: [],
     formats: deckFormats,
+    canvas: deckCanvas(),
     requiredSlots: slots,
     slides: slots.map((slot, index) => {
-      const role: Role = index === 0 ? "cover" : index === slideCount - 1 ? "outro" : "body";
+      const role: Role = deckSlideRole(family, index, slideCount);
       // The beat walks the body only, so the cover and the closing slide are always themselves.
       const beat = RHYTHM[(index - 1 + rotation + RHYTHM.length * 2) % RHYTHM.length]!;
       const phase = slideCount === 1 ? 0 : index / (slideCount - 1);

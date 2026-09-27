@@ -1,4 +1,5 @@
 import type { CarouselLayerInput } from "./schema.js";
+import { MASTER_RATIO } from "./canvas.js";
 import { ARTICLE_HERO_SLOT } from "./library.js";
 
 /**
@@ -35,7 +36,17 @@ export function bodyTop(fraction: number): number {
   return TOP + SAFE_HEIGHT * Math.min(0.26, Math.max(0.14, fraction));
 }
 
-export type Role = "cover" | "body" | "outro";
+/**
+ * What a slide is for, which is not the same as where it sits.
+ *
+ * `hook` is slide two, and it is a role rather than a body beat because the platform makes it one:
+ * Instagram re-serves a carousel to a reader who did not finish it and opens on a slide they have
+ * not seen, so the second slide is a second cover for anyone who came back. A slide composed as
+ * the third beat of a rhythm reads as the middle of an argument when it is served as the start of
+ * one. The hook therefore carries the cover's type ceiling and an entry mark instead of the body's
+ * position numeral — it says "this is where you are", not "this is the second of seven".
+ */
+export type Role = "cover" | "hook" | "body" | "outro";
 
 export interface Beat {
   /** The ground this beat paints. Adjacent beats differ, which is what makes a rhythm. */
@@ -246,10 +257,29 @@ export function pagerDots(index: number, slideCount: number, ground: string): Ca
   const first = 0.5 - ((slideCount - 1) * gap) / 2 - size / 2;
   const inactive = ground === "surface" ? "surface-strong" : "surface";
   return Array.from({ length: slideCount }, (_, dot) =>
-    shape(first + dot * gap, BOTTOM + 0.005, size, size * (1_080 / 1_350), {
+    // Frames are fractions of the canvas, so a square needs the canvas's own aspect to come out
+    // round. That aspect is the master canvas's, named here rather than written as two numbers.
+    shape(first + dot * gap, BOTTOM + 0.005, size, size * MASTER_RATIO, {
       fillToken: dot === index ? "accent" : inactive,
       radius: 0.5
     }));
+}
+
+/**
+ * The entry mark: a solid accent bar with a ghost tail, set at the head of the reading column.
+ *
+ * The hook's shared vocabulary, here rather than privately in five composers for the same reason
+ * the pager is: two families that mark their second slide differently are two families a reader
+ * has to learn twice. Solid then ghost reads as "you are at the start of this", which is the one
+ * thing a re-served slide has to say, and it says it with two rectangles — no numeral, because a
+ * hook is not a position.
+ */
+export function hookMark(x: number, y: number, ground: Beat["ground"]): CarouselLayerInput[] {
+  const ghost = ground === "surface" ? "surface-strong" : "surface";
+  return [
+    rule(x, y, 0.14, { thickness: 12, colorToken: "accent" }),
+    rule(x + 0.155, y, 0.085, { thickness: 12, colorToken: ghost })
+  ];
 }
 
 /**

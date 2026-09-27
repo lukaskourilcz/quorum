@@ -1,0 +1,463 @@
+{
+  "schemaVersion": "carousel-golden/1",
+  "canvas": {
+    "width": 1080,
+    "height": 1350
+  },
+  "brand": "mma-files",
+  "slideCount": 7,
+  "payloadHash": "de4cc5af4ffe0db708947c00050a27ff95348a07e4782d2bd689f8815411bcc9",
+  "updatedAt": "2026-09-16",
+  "entries": [
+    {
+      "family": "masthead",
+      "templateId": "deck-masthead-7",
+      "version": "1.0.0",
+      "slideHashes": [
+        "672d5e00f7e0206944aa2fd0fc8a1a57257e8297cb601196888f471c7f874b82",
+        "3f7dd48bbcf2d6e82604d9caedb321111388b15a74d596be35dfb42430c0fe97",
+        "e44561d198ec2040a16a00e7ad896145b9b3a741f12c0b1e46376458d6c3a314",
+        "44b33cdbb704ad966d41a8140895cdd1baf5f6a555dfd52bc4ea46cb08001b7a",
+        "f3b085948ed66b70969c0acc05c0539fee0389eaa24b533e33c6bc783625ba67",
+        "3f72dbcd2ae757b6c7222bbfbf547abe44f15608338d383ec8b38eadab53c425",
+        "3b4f88e2f4c6d842c3403a6613207c2f4a63beabe858c0b42a319244978a7aad"
+      ],
+      "deckHash": "7b5620cbe1f99b810925121a4425c580a1692385d7c32dfbd1b2f8a817884c2b"
+    },
+    {
+      "family": "gutter",
+      "templateId": "deck-gutter-7",
+      "version": "1.0.0",
+      "slideHashes": [
+        "e577804ecc97493c8b5821cf3a8768a86c08023ec0fc392e9c3be0642ab7ec53",
+        "5f7a692c39360c85702c82c21b59dea4f92b2ae8983bedc6a2649cfb550d78ee",
+        "6edd4ba9109ba48db3974d493f6327dd166b1eec816470664fddec8a00390277",
+        "26e48a3492aab85c2dfad62026b185c434e6fa8b71d1121e7ddf965736bfb057",
+        "19bc57fca84788ae5aab61d61991fe63f1c2017848d9e38306194ea64c5352d2",
+        "0db908e2fb50f06371e66564889b6e751852a9107978a7bab4adde9ca7675fe1",
+        "82eb2cf3010f5685365906d050799335180bb48e4b521fd9a3a62c0682e864a0"
+      ],
+      "deckHash": "e0b8aad872743be0519c1a29eace259b61c1aaa1c950c482330f07912843f9a4"
+    },
+    {
+      "family": "bevel",
+      "templateId": "deck-bevel-7",
+      "version": "1.0.0",
+      "slideHashes": [
+        "38162ac07071f37f6c13524faaeb6a0c55310e738425375267fab3e3c1a545b9",
+        "5b272e28259bde33953bbae8888b07bfd2fb6fd797a31dcdf9ab4ca67009559b",
+        "606abde30cfda86b20a7fb40b8baf3c9652043520f1a6522a586d07051b7867d",
+        "8f42d52df8b6e2074453b9beddfc874760bee250bde59accaac77e421d6c5ff1",
+        "6ead880ce5eef33d32cab77c5ea8bf8148b9b344e734e9b67105853f10bb900e",
+        "0fae2e5b3a444a8c8e428fca99cce6ae568919e6a7cbbcac46961083fb3726af",
+        "c891d1057f8b26859a93735f25da78472dba9f5ede48359aef09e3b6d9e11a3b"
+      ],
+      "deckHash": "301e3a3265408abcc55ae7df79640a5fcae68cccad09ec529ff01aa70bbc6da8"
+    },
+    {
+      "family": "porthole",
+      "templateId": "deck-porthole-7",
+      "version": "1.0.0",
+      "slideHashes": [
+        "4f4fb1619bad0a1b13e5608dc0051a6cd217e2aceb92efd059efb65dbbce8eec",
+        "482a4dfcc73009c76202c60320e374cc0eeea0ac5033c256ae4e5d057caa1165",
+        "b3e82035f64499aeb6bc6f6a15ed1bf7a4a1a81d345c345e1abe57301fe13c8b",
+        "1fdf12f9c55eb1f7e7ff89143a8a6c32d49c7172870cc01b4a94c3be67abe6dd",
+        "9659f1e670316548929fe9d3120deb54919a289e2333b105dde05c5eb5559b47",
+        "a56de5c7e04cdeb931e92ad9bb36838b0a6a9e4d6ee9fdd5f98736a481a82176",
+        "3bc38317c8cf61445cd2fe0ea5975f24e4b0109b87e2b59db22950e6d6586483"
+      ],
+      "deckHash": "0223f7ec08e33aa5e254d3ae00b09a3eae04beb4d78e96878ce34d14278d7864"
+    },
+    {
+      "family": "slab",
+      "templateId": "deck-slab-7",
+      "version": "1.0.0",
+      "slideHashes": [
+        "3e0fc6831d88ff6f7f99542ca35c24afc10d78d1c27699a41c4b8d25cce76b69",
+        "86eed74c5339845d94e8fd46ce5a2ac3e2199ff168f5de474196544f88d79705",
+        "c6e5c418e47f771fa3793e2a2133d8e7372713dc52f1f41d58ba2c8665cd7330",
+        "b4eb7a30df04f31676ddce071c858a1133e36b66f602b8bf01a91af37718c0ff",
+        "c551e74edc76d25fcfa0c4171cf88cdb2124378322fde4dcb18e008907db6aa6",
+        "dab97a25be71134cfd7d78295fd14eeed5df6b002520d30f1675c10fbe45eb7c",
+        "c6edc7b3ec1bfc62f1f6bc23b02c77f8a32acfa95c9694d525f089aeb8b091b0"
+      ],
+      "deckHash": "ec6d54f1aa7ac27e0c82cc6315a05e0d3933499324d703364e0cacbacf375ba1"
+    },
+    {
+      "family": "terrace",
+      "templateId": "deck-terrace-7",
+      "version": "1.0.0",
+      "slideHashes": [
+        "ac170b6c069360c15aec693a626bb80e47e257b87aa45677b866303a8fd14504",
+        "a38762efbe5e6e4abf56d1d7c3dcc1cd8f3d8d528ec7481440223693bfbafba9",
+        "051367f18fc6760a9d5e223c21ec8517e856073b3cd210d422a6d1e1d82c383e",
+        "0fac1f1252f37a04af6bda30d493998e7f9f2c49735e6ed598d1a8b8ac136cba",
+        "19079a101a66ad990724ddc8511affdb959da2c26573ecc82e3aada10f1368eb",
+        "fa7e6459baace0fa0755e9fb7184821e07698f3e3b58b258104834c40de53d0d",
+        "ed8564f33d90fa6742378405ef345a676923cdc3b4de0d6d84e1265cc8efea50"
+      ],
+      "deckHash": "c0dfbaf4f70c0af9661040761e0aae2de0de74a940895c742484f4a4774fda58"
+    },
+    {
+      "family": "figure",
+      "templateId": "deck-figure-7",
+      "version": "1.0.0",
+      "slideHashes": [
+        "336a552767d3665768dbc52b4b8478919f79079763b03763ac23d93ce2a92fa4",
+        "c89d5e880bceda64946d73b3af0408653c44f86e09f135e2f2b0a05f5a7bc272",
+        "5b6aca29fc2bdb7b56094ee4c2787f503d0e299c9bec7601624bc4c4803d378e",
+        "4571882ae3bb58089e8ef804fc8fa4d33dba2a5a5f1ce4624fae67912f2767cd",
+        "5c404f5c9aed34f0c5d89324f6223048b426464d5257959608e31b072cda9f6b",
+        "28fd9c69c4537813b430b3c1844da9f1101c57a6a9b5681148eb55c7944c0c02",
+        "7b36a99ffeb8707f1ab13094262202f84ae53152c896537c7cacdb846cfa3a68"
+      ],
+      "deckHash": "06e9ebe065ccf875b455caa0c80794e5f78c4524ab5f1c36a68525cbb461ce0a"
+    },
+    {
+      "family": "pull",
+      "templateId": "deck-pull-7",
+      "version": "1.0.0",
+      "slideHashes": [
+        "632d6ee16dce21270cbbff6cfeef1ffedc994f974ecbb2ae059c4e65007ed49a",
+        "c47ed8304d424e4cbcb15135e48c76a62b2bb3810ce89dc3ff0583ad86a0b885",
+        "662188fa08430a08100327a35c47dfd46f522933515eeef3db3e92b15f7ac63f",
+        "77dea209cc21f6f510bcdab694dbd4a9df12a2c8f7a3420c15bcbe87f8357e2f",
+        "5571f05702eec1b7b1407bc57a10839cb83ccd485882e52d9b9f82f47129e62a",
+        "021011d75b0ca39e811909a0f2d7e666843fab9efbf11cba83358664687de282",
+        "edf6dfe60145d6967ef260129a7e7f70ef90f52ce066ce1be9c67dc52db50112"
+      ],
+      "deckHash": "de2af7fbda699c017e01340f12296b067b023a6cf8e96f833e6eed9b14d04def"
+    },
+    {
+      "family": "tower",
+      "templateId": "deck-tower-7",
+      "version": "1.0.0",
+      "slideHashes": [
+        "11d2d3b0b95ff6bd47967cca8310d4f53022f71c140b4bb6d1ffa251ab927be1",
+        "3a403f09cd2866bf45e88ea5a0683b6323228379574ac8119502c351e8755c56",
+        "7b9d52f0a5da10f0905304a645c76bf70e107fa5561ea873653b0da1ededa48c",
+        "c3873668f641fa5fcf5c8a4ab4b68599bf7cfeb1bea9eefdd2ed8ea7b53c0395",
+        "4799d18bb414d92690ec9a8f3c82c85c2c121063cfd815c876d596cabf5d111d",
+        "2fcbaf8113da9993ce33ecf04b1e52fdb1acc5bb734292c3488683170431c543",
+        "ffddb3ff3bd3b1da91fe3236ba13b9f42bf334b5784dc866b834f359e23f01b2"
+      ],
+      "deckHash": "604fae7c8d224fa883d5cfe237ed3bc816fcbdd5515c367bfd3baebe112fb9f0"
+    },
+    {
+      "family": "dossier",
+      "templateId": "deck-dossier-7",
+      "version": "1.0.0",
+      "slideHashes": [
+        "31b744c920fa018a4dfa96b9e5a5d0930fab5c664d6962e6df8169cf4821cec1",
+        "70961f1642bd77012f947b34c0cc32642287b2ac17a0e7ef8badb443b121f3fb",
+        "d1b41c2ba0842a2a12d7d568d4eb12e7efb38c03879a90855a7ce6d9cc76da93",
+        "69b43409fa80842bef793f5ea1e93089dbe932dedbb3c3e9df5b9e67e7b33440",
+        "9640a7049cc646adfba369a0261ff71c8993d8ffe2536c4a732ddb0de35354b1",
+        "b12f056c46779bab5f71a23b259c86ae7ae567b4716ef98a6c1c72d19a60df6a",
+        "9052a2aed14167f610b8d79d2e0a05bdbfe9b0ec6bbfecd37bf71a394c3d267e"
+      ],
+      "deckHash": "b39466ccefa8bb1269588fdea5a52a4348bd09f2f8afd8f490e2461e35a0b407"
+    },
+    {
+      "family": "billboard",
+      "templateId": "deck-billboard-7",
+      "version": "1.0.0",
+      "slideHashes": [
+        "cec44b935a3ff14cb03052804fc7f2c57fb715a6c857690a2b9862e0ca97d6cb",
+        "d07d3a7007068def99933e6ae2e3b4c39545052a80bea443253d8b0da95d0972",
+        "2476d141caa2b26ece19f52eb2800df9a9cd34026ac0b7cab627a49f9ac05175",
+        "0034b779b5153ee80468e92f0afc9074a40bdfad5faeef1ceffd3baa79216c78",
+        "c9972dc00c82ba1bfe5e03f856eba0ade657fa724822af6819353a0af71f327e",
+        "6e9cf0bf647f48afdff1df7aa35b90ccb347d81a3db4c784c8fbbb06a0042a18",
+        "a4785e59e374ba275f590012f57eec4eea68d5f11b1a0c005243e864f7f548c5"
+      ],
+      "deckHash": "e06268d2880267a7f22a2220f6838047aa5f56a2fa1eaa654a62695be4fe0ad0"
+    },
+    {
+      "family": "broadsheet",
+      "templateId": "deck-broadsheet-7",
+      "version": "1.0.0",
+      "slideHashes": [
+        "ed63fbb1816bd58faf042a1fe1dc794705fc9e7d362025258847aaf74dbe86c2",
+        "b4834e42749fe9f7bd2d0ea3d2f5adf5c0ac328770d76a1204c097d89fff66b0",
+        "57352e5dd831148d840d3881e83749b8602c2d629385d43f262c15b659f1a73b",
+        "27ef5ef269df47b634247431d1f2997b36751fbc835d8c5c03ff78cb863b02d9",
+        "2cf1e73de40d4768774cd3e73d3027c5aacd079c733c3f00f2924b5ca7d277c1",
+        "7b1f0467ef98ad0159da72cb39c9a37e966c12173792e404d2de9d830a632440",
+        "6f604f633b9aa464bfb39200a2c78c1b6b4868b4103d8130bde6f329d933256b"
+      ],
+      "deckHash": "089749a9bb7c232516784ae8cf51b950792c683aa67d2fa532b943ef123bbfe0"
+    },
+    {
+      "family": "zurich",
+      "templateId": "deck-zurich-7",
+      "version": "1.0.0",
+      "slideHashes": [
+        "c54250a0ae4705e312f8f7308ad9e02dea04207b3141f40acb09cc9cd6409bf8",
+        "72303f3dbb69096002be556e381642f814e4fb00b5031c13fbb43002e4c42c13",
+        "6581f8687895fc2b8c1c188c7a2a6f5c4850850856804c3ec90975019c45e295",
+        "843903319042fd154c4856553f8164272e605086d4e02369fe4df4d0510c0c35",
+        "4380675606b809ff11b27383d8a5f6be38bc133363bd639dbf15aaaa219dd874",
+        "a12d707285d17912b14143d9d430bede94dd25cc64451e83766bf71e55e62ae7",
+        "d7956df23c88dce458a76728add9b1f9c90cec5b5bf540a0710ba5b0317365c7"
+      ],
+      "deckHash": "9ce0051e9e380b6b20d76a377f1d32afe51eb85b54263d97f3fe4c49bb34da73"
+    },
+    {
+      "family": "concrete",
+      "templateId": "deck-concrete-7",
+      "version": "1.0.0",
+      "slideHashes": [
+        "a0f769d12dc073786d67502e1f5ad821e2a99e4c18d98bc2f34940f462b0b33d",
+        "b557a9f80536bd6d64efadeb741fb1f30596fe8828a82758783cc67272926277",
+        "bc38f248174c9bb2107c4a62cf55c44851464bfba23c177ea076e20880b0d37c",
+        "69e95e727e966f2b232166df95ea3a3bb8e6d393883195d40fd51f8138d73bb1",
+        "89b7b5fe12e755705eec4e63240a71c13c2887a9f3f152e90437dd3b4254256b",
+        "a35917953c81f7ac9e7ca11b752f304158d539a5713d470f8f3fbcb0eaea3db0",
+        "3385ebfc286a39e4eec17f578304d820851eb23c0c716d7b7b5977e9ca8de4f4"
+      ],
+      "deckHash": "cc9fff3154aef69267243ea42ccaa3df361cf1cba83f78767375a0e8d50a074e"
+    },
+    {
+      "family": "terminal",
+      "templateId": "deck-terminal-7",
+      "version": "1.0.0",
+      "slideHashes": [
+        "cbbcf792dcaa56bf8ec14fb976c3a7ebfc5adb77d36a9efa9574cc41c3ffb1e8",
+        "bef97a9b9eb607bcde8505e482c08a8d593b6a0b09ca80c3b42a3bcc279a55b8",
+        "fc522b0fe7efe4b79598657bf5680b3bf90b09efec55fb9c1939e4170498ff02",
+        "689b210d1416c3712407094b7760e832b1c2546ef01c2f7d535808c0fc2674d7",
+        "3a2be79ab8a3b45b291dd6b4def1d62eeae5ad51df8da56b4dbe9069c0efb697",
+        "93f578f732c4fffcb4d71847e6afdf9e0a467c2a32961bacad63c377ff2f3ed4",
+        "86ca0e35a7731656c3337385a8f33b432b23c835fd6fadf66c192ab7ea98dc06"
+      ],
+      "deckHash": "8e41d45a9d29398ae1afca8f332cf9a077bdb003c1e7a2f7036b78612695bab9"
+    },
+    {
+      "family": "marginalia",
+      "templateId": "deck-marginalia-7",
+      "version": "1.0.0",
+      "slideHashes": [
+        "36377c892aedb72ab02b76ff85d594aee4ee1f1d60c21b776c5d928397463e73",
+        "c2ae9fcc3e265cd608b21d7a069019237ef3cd67b1e87f24f8f3b12ac7a7ca82",
+        "655669f7993a4c543194e25fa718ee2ca4847e758d7459fa33f3bceb5174d243",
+        "29794fba74a47325307a166827bd93670fa7335a67bb2fd190ccb0e1b3491b9b",
+        "28dfe0c4e75e61fe8ae8b8c2dc0882119de174d6b3f69d8a2f75fc4a133db849",
+        "74837b1b55f751d1a761852835b89a51797cbfc016dc6f265dcaece92a4893b8",
+        "1b3dc4b68e29a8a3b6b524c6cd379e9045d81e359897d6e862094257266febed"
+      ],
+      "deckHash": "cf6af76328a061664eacea2fd99712ac613057bac791869086ad87eae96beea8"
+    },
+    {
+      "family": "memo",
+      "templateId": "deck-memo-7",
+      "version": "1.0.0",
+      "slideHashes": [
+        "14ac32fb50a88125f26607183266b26379a1677e1523b599ccc7c9cb76aea5d7",
+        "d4514df12d483ce2ea7c98fa21b40ff39678e5d329933540f591940c0a324e05",
+        "7ba89be7755bde30c993cfcfa842f4f3e4dda9adb19aa5146d5c9358e89760fa",
+        "b083659e353bd8b96b55bcff9e50d640d61030b9fcc3f98ecd4b175be3286513",
+        "9cd41eadb5b8e5c80b26adb8e891f39c24c944c433e064d0cf7983d80c7a397f",
+        "80687a2f62dfd873cf3587d252b33d7982e1e879c4349a0cd201118b12fbfcff",
+        "496aa2eaef124dee39fb0da6df53de07be33cff6aeeb13beceeb07b4c420d665"
+      ],
+      "deckHash": "53cca7de01ec7c18b5d402836c7396151d3d78e360e5431b54938519b3a6ffcd"
+    },
+    {
+      "family": "versus",
+      "templateId": "deck-versus-7",
+      "version": "1.0.0",
+      "slideHashes": [
+        "b11fba14ddd9f0d386d4d3fd61d97f4a3bfd1e1037b13595dcba45775a5632fa",
+        "db8b7bbd70a0c1781a52f4da035adfcbb177646c3d1372d750a32c9e1ddf5204",
+        "6b957837b9608980f2757544344804d08c97436c907dfe35ad3c13442df28572",
+        "64e052b672fade53c82ddea27780c6571a37f347cd8bb880613be6a7bcfb6198",
+        "40b1573a666e1286e286ebd7e147d168f9c3afe182e15988175d88af3ab6e190",
+        "52ba155178d8e937fe3b8c810a135a49ae25032a48986cd03e65010ee28e3da2",
+        "5040e35da57f4a676982263409f74089c6a0414d0a1c693656e10e59517c3825"
+      ],
+      "deckHash": "54b17f691283022705e6c84b249b0e753f55adb83ed707ba000fb71d174b172d"
+    },
+    {
+      "family": "tally",
+      "templateId": "deck-tally-7",
+      "version": "1.0.0",
+      "slideHashes": [
+        "467980ad4e2e23798975d22f86f7e7ede94c4ed1c80a5b883d07ecd255779ee6",
+        "56c9887bf3ef00e55946cced2f90257a88a4849d910316c7024c121d842f801f",
+        "46b2d814a6de4abddab8a06c49c6235aa56f4be8f596750ee69d495cf3e42aa4",
+        "5c82c715c82e0d29d1891365de9924ceae510d5944e25b5310e9269cba38a775",
+        "4a22217e735f115f531f99819e89ad2bbde823c185e66bd6a3b132f79af5e150",
+        "3e1ca6a00e9953cbab6fe30f940e422265abdfcb50c12865534d2d4a27085899",
+        "45b16fc447fb7f62b1bd3222915ad0e3b48e0c3c09ebcc980a3630ee770774e8"
+      ],
+      "deckHash": "0c52e2686fd1935e5379eeba5a7747bdc8994f59170c6a7f49b2e3b6ddb63860"
+    },
+    {
+      "family": "counterweight",
+      "templateId": "deck-counterweight-7",
+      "version": "1.0.0",
+      "slideHashes": [
+        "21b772090c42a85bb88bf3efaa4902fdf5ea241713ef02dcf5a3d5eebd412c9a",
+        "0e7cfe4bec56723b7c6b0aed68ee983f593ec7665d36f0e43cf5592b6c232e3a",
+        "7f6b42bdb8b4c85916e776f52c7c3e82d6ee2e0806c0d0db86d9ab6aaf49876a",
+        "d6033cde241eb7d6ff07e2d616fc6b5e805a40db3f81bc4e155d8beff6531b76",
+        "b21e8cf6d82cae028ad0f3be739cb1b5d59e7d7a985e9b98a0036a966f26743d",
+        "c7fbdc1ff1bdeac792881a4636ed8ab82717bfd0cca71ded8330613ff08a1a71",
+        "39fa1cd697ce4ca379d76d07740518257df6506e38493c04897dfa73fee4a5e0"
+      ],
+      "deckHash": "ba41aaa5adfa865fea67639cefe7bd60893ec8da64da87f237491c59b510eb9b"
+    },
+    {
+      "family": "throughline",
+      "templateId": "deck-throughline-7",
+      "version": "1.0.0",
+      "slideHashes": [
+        "ef477a4a6169c427e8dcd97cf7447d10f42c675adb2b5705156db3b6e4a62527",
+        "1ae2d9797f5a82e1b5362828295bf00a840c06c682124b05595ec39fa43f7a39",
+        "9e4701391a37c22c9c19a643c2aedd06d8127cd759cc49de4a31d0ac0d1d266c",
+        "b5f7be9733cd819e4c6aa9d0dbf9e45336e272b9aeedafbb041fd2a77085a56f",
+        "d5bb5e2327e597cfb0e6024ae56bf78fd79f7b70eef66bbfff4bda8af44fc927",
+        "829e5e7632f02625c818586fb77e9e59131d36c63eb378350acae2d013f941a0",
+        "33cb042211ca69d94c2a7e65db12d7d1490862777a5dc91b6996f51da960e45f"
+      ],
+      "deckHash": "abed09c639d027bde9057db3a490f0b5af9cf6bb45056dfa3ab1dbb24f1a7d81"
+    },
+    {
+      "family": "quiet",
+      "templateId": "deck-quiet-7",
+      "version": "1.0.0",
+      "slideHashes": [
+        "8e46687641dd817c7ef966a742536f77cd695cefd4d0f62b84ec66ccd4c90a24",
+        "2ec8300431745589093539bc1d37fefd2a3363dd2316112e23fb78734e54968c",
+        "962a2f25f1d3b8efaf6d0efda2ec8c84a53cffe42bd1a54b79ca1401e307f266",
+        "467c5fc78383307146dad8d818b171bc4834359026917402d1634c64991bfa10",
+        "8aad65531b11bcd2d389629f9c9933eafbb5039c828981eb44217a1d83c0b05e",
+        "6280638c5cb1992da291d9742cbcc5c1a449adcf1e72c73a5597318c1991a7e2",
+        "c26d5b334f803f2dbd54b52a8b552ea6f2dc5533b16984085f67b7db8983d19d"
+      ],
+      "deckHash": "7807b04fb1f97d1d4d2c2ee40796262ab92bd65d0b23cd6f403a81cb9cc303ce"
+    },
+    {
+      "family": "offset",
+      "templateId": "deck-offset-7",
+      "version": "1.0.0",
+      "slideHashes": [
+        "a1a994fdc03cbcfa6674f80e6b3a0f892cbf4184392b1cec96e86d94bcceddbc",
+        "92eb53b47c8da1c21672f6835226ca57e33a5b4b8d67252710ab027c3e959ed2",
+        "a37f4c3555eb292b6c4371ed2618a4b2a2228d81f3b4fc26426ef34c3d1da566",
+        "e3eede90b6199a55e67df7d2c4c005b4145f9ef9c251f57232875480f28d7c92",
+        "7c76cee480369512abf488eec06cea4ec3b828d223477e40021a28b7e98fcb6f",
+        "48525560b11c094c397d2087c2359a6eae26e81778f7526388ab847ec4e393aa",
+        "e2ad6d439d17467010c6b371c83f65802b162f89d47279fa719d601104138286"
+      ],
+      "deckHash": "c2cc426b33adce5a734c8506fb4582f64b437a167cc8fceaf9379352f80828ee"
+    },
+    {
+      "family": "apex",
+      "templateId": "deck-apex-7",
+      "version": "1.0.0",
+      "slideHashes": [
+        "bd4c317d9e601231aa23e6bd2d8c5e6e1f5de8fc0546305a016b47610d227a58",
+        "c611f568384805f134e2752780b670e2c3d87c70526b862b2bf95f1e220978a3",
+        "81d3461c8b4409ce22da4accc7edeea8b40bb68516a95c9de860b9aada0fdd31",
+        "5ec7390bae4ab7017e16d758f0646efbf1099ef2f0b6f71002ddd6c2195b0190",
+        "2c30cf949d52de086f5fd3b4016c08c86f65d8206b0169841e8286d11705f8da",
+        "8c1cbad7deb6612593716e9b17a09162348f1dc7e09564424dc545880e749403",
+        "d8449835fd46b37ec80d99c60d02b80eefa0e9355cc0a885a8a4a5626f9274bc"
+      ],
+      "deckHash": "58452391eb27a87b649e70aae6f09203b1a9bba348d521bed73c6c0263632d02"
+    },
+    {
+      "family": "rail",
+      "templateId": "deck-rail-7",
+      "version": "1.0.0",
+      "slideHashes": [
+        "9247b82341a06911aef4359ee04077bb97334ced7b469c00c6f9e3b67f7101a8",
+        "a8840c94e13fd60b4db3d8e9ca863d3884fa9d7293ffd821c31b59614439aecc",
+        "f29172b20fd57c120600fa303e3f22c61d7b3250102c2bc865f33972f4d3f25e",
+        "8e44b00268583b003741f5dd5c1fe1843c0d6446ccd7f0608d77af05848114c0",
+        "8f2e0d582cfb10e888e3c09c0b24c2a3cd29f3cf79dbf985fd54f03576c33bb8",
+        "03d2ed9803a826492b336253a27e12d27bb72d62526266f18fa30ef4871ce0fb",
+        "d3ec1b4118dd620acba3bbe9912fd3de05ce1cca98c8d9bcbec48089a37a3a49"
+      ],
+      "deckHash": "6f8e42e4a037db3a02f9f26a5b3e7304950f92fe9e876bc78d945d3765220d7a"
+    },
+    {
+      "family": "vista",
+      "templateId": "deck-vista-7",
+      "version": "1.0.0",
+      "slideHashes": [
+        "ae07c7009bee0c20ac19f80c4d448dc7c0379e38abb3cd0c607865c008a5b41e",
+        "5fb2f920515d3bc0c7fff0e1daea15ac1efad1986f849d7e3763d66142872091",
+        "7b7826217a65e0cecddf9ce94652f312c9a371c27e2a758a40befc57d8131991",
+        "1f7a806621ab18c2a31fd93e73dd787aaad1155396f17fb863194a4156436438",
+        "ad5805d91cbc1a60621c86f750110da436bde0cc0bc7b17e3590c73225d0eec8",
+        "4f9082dde86673404484c782c43d3290225db99a8b4af4cb2a16590acda7fb0e",
+        "4a44cb3aff28b1bdb6dba0d294e91e94bd1c493c451aabe78bc590510255ce5b"
+      ],
+      "deckHash": "bcd634aef16577e0511311c99ff313531260463e500e90e0cfb34907c07b58fb"
+    },
+    {
+      "family": "fault",
+      "templateId": "deck-fault-7",
+      "version": "1.0.0",
+      "slideHashes": [
+        "25fd2d0a3678ce23ab5443865efe7e026395302da3148ce01ea8e506140ddac8",
+        "5486e33210735ea3fc6fe91df49187c9bb1fa8fb9a3b36068b4c493787e9ec64",
+        "1acd8733b7d6909e674080bb1862736c6e8361dacfdd373087b1a8dd284de71d",
+        "c2f659184ee6c08d172063474bd3473560f54d7e0800154cf5bda2b46cde25ee",
+        "99cca62a96a1ab54c4d16ac67d7e5b63c53c002878e43a9fa40f13387d761e39",
+        "1fe5ecdc8158158db26a770c369d1a5c4b0b6f7bb7ab459861ddf89c49995135",
+        "b77497a8803dbdbfbf4b06cb1bcf9e203ae40230b3e47ab83287b39574012d20"
+      ],
+      "deckHash": "5f6330881a2d622671049d9d678db77b16baa1ddd78338d45a6cf7c471614170"
+    },
+    {
+      "family": "halo",
+      "templateId": "deck-halo-7",
+      "version": "1.0.0",
+      "slideHashes": [
+        "a90ef0042e37797825ed2c871aa1bd5776e29e7ee0a0a55cb8c22aa752cdcdb2",
+        "198d72f55dd775b68a31281c2b729cb02499995321b40bdce2b9d929efe90370",
+        "ed399cff2f00c530be311da4a390b32b61ef4667608899a789ffbf3a488859db",
+        "c8c4cb52f50ae3498930cf0ef1a99cc6741bb668326dd6ef55c45f300c011d58",
+        "a337b9cc56584d1d96d0a51d2c0024dfc12d2492a15303cf8508e71a6d1b39e6",
+        "ec3752bfdf7f32ff9b8b0e97f23c572f52d14b8d5907b513f3df3adf87ba6618",
+        "535c9624123e465ff2c38138038950113e4aa18bddd38c03d0ff2bdc3acd043f"
+      ],
+      "deckHash": "6207af59e806ca8c2ef3324aede315e721e64fe9597d3615e802f913f136b3b5"
+    },
+    {
+      "family": "folio",
+      "templateId": "deck-folio-7",
+      "version": "1.0.0",
+      "slideHashes": [
+        "d286e2b34fdd619f13fe9ce0163ab5417445e6ef4537b1e6203cb725e03ca4b8",
+        "59a3a3829c5f083be2e13fa5e87c76940a891c7fb01df665aea111c53bc0dce2",
+        "4952c53eba06a632644a718553dd8342b951a1df2f5fe0aa4570df4899972491",
+        "7c2b0e7ce0b3766d0a66dec7d8b4d35ca041c3b62af97846d0326069c07b8617",
+        "68d9ed220024a5660ac12a84a7c06d1690ed56af6e5fb659c8ea45fb8f74fad4",
+        "e74a6b92c707a59ef19f17a8598f53892e9d9ccea19ad6e98195b6bb201910cc",
+        "a8d00f61466d2095815edf508b72cf390c4045836d03675e4634b4e257a3a3af"
+      ],
+      "deckHash": "85db20fa6cd7496707a804e1dc46187a09798c62f014d05285a7aba02b2b4f37"
+    },
+    {
+      "family": "press",
+      "templateId": "deck-press-7",
+      "version": "1.0.0",
+      "slideHashes": [
+        "fa85079c5c2d7fa948f4474279e8a257efe27b0c8fd6ddf5a7fd860d185ad128",
+        "8f96add45f2136a4d884bdba6df9f145f4ab9b298656537174e06a5504a005f4",
+        "ee467fc21d729587f0ee6bbb0c824ee57735a8454b29ad5ef4e7d279fb23a6ac",
+        "ac3751519d947bdad68a03f0f63a879f7466b363646b5f0b0b5a71bd163e730a",
+        "c93e2fc90f75f765771bede1b44278d7163effad02d9a7672d59ee87847070ba",
+        "7fd2bd37e6c71bef43931661e12ba113005b85d608aee1da9bad84734d3185f6",
+        "fdca57b650f9c86c33c0a68d4d16ad1aff484aa74b25ce116e36ff65fc53f1be"
+      ],
+      "deckHash": "da824a4264279aaa8f1f25b6d9a5793687738346672c61f66cfd69de69f567f2"
+    }
+  ]
+}

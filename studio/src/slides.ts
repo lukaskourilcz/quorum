@@ -13,6 +13,8 @@
  * two readers over one splitter rather than one clever function.
  */
 
+import { INSTAGRAM_MAX_SLIDES, INSTAGRAM_MIN_SLIDES } from "./canvas.js";
+
 /** No slide may exceed this. The owner's constraint, and the only hard rule here. */
 export const MAX_SLIDE_WORDS = 30;
 export const MIN_SLIDES = 5;
@@ -37,8 +39,15 @@ export const QUEUE_MAX_SLIDES = 7;
 export const MAX_RESOLVABLE_SLIDES = 10;
 
 export interface Slide {
-  /** cover and outro bracket the deck; body carries the argument. */
-  kind: "cover" | "body" | "outro";
+  /**
+   * cover and outro bracket the deck; body carries the argument.
+   *
+   * `hook` is the second slide, and it is its own kind because the platform makes it one:
+   * Instagram re-serves a carousel opening on a slide the reader has not seen, so slide two is
+   * where a returning reader starts. The kind travels with the text so a composer can give that
+   * slide an entry point's layout rather than the third beat of a rhythm.
+   */
+  kind: "cover" | "hook" | "body" | "outro";
   text: string;
 }
 
@@ -188,7 +197,9 @@ export function buildArticleDeck(input: ArticleDeckInput): Slide[] {
   const room = QUEUE_MAX_SLIDES - 3;
   return [
     { kind: "cover" as const, text: capped(input.coverLine?.trim() || input.title) },
-    { kind: "body" as const, text: capped(input.dek) },
+    // The dek, and the deck's second entry point. Same text as before; what changed is that the
+    // slide now says what it is for, so a family can compose it as an opening.
+    { kind: "hook" as const, text: capped(input.dek) },
     ...middle.slice(0, room).map((text) => ({ kind: "body" as const, text })),
     { kind: "outro" as const, text: capped(input.outro) }
   ];
@@ -205,8 +216,16 @@ export function reviewDeck(slides: readonly Slide[], mode: "carousel" | "single-
   const problems: string[] = [];
   if (mode === "single-image" && slides.length !== 1) {
     problems.push(`A single-image deck needs exactly one slide; this one has ${slides.length}.`);
+  } else if (mode === "carousel" && slides.length < INSTAGRAM_MIN_SLIDES) {
+    // The platform's own floor, reported in its own words. Below two Instagram does not have a
+    // carousel to show, whatever the editorial band says, so this is a different failure from
+    // "shorter than the deck we choose to build" and reads as one.
+    problems.push(`Instagram needs at least ${INSTAGRAM_MIN_SLIDES} items for a carousel; this deck has ${slides.length}.`);
   } else if (mode === "carousel" && slides.length < MIN_SLIDES) {
     problems.push(`A deck needs at least ${MIN_SLIDES} slides; this one has ${slides.length}.`);
+  }
+  if (slides.length > INSTAGRAM_MAX_SLIDES) {
+    problems.push(`Instagram accepts at most ${INSTAGRAM_MAX_SLIDES} items in one post; this deck has ${slides.length}.`);
   }
   if (slides.length > MAX_SLIDES) {
     problems.push(`A deck may not exceed ${MAX_SLIDES} slides; this one has ${slides.length}.`);

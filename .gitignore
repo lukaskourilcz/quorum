@@ -38,6 +38,9 @@ site/.playwright/
 # Carousel previews are regenerable renders for looking at, not canonical state.
 state/social/previews/
 
+# Golden-render drift output: the slides `pnpm studio:golden:check` writes when a hash moves.
+studio/golden/.diff/
+
 # The staged hook-library delivery is rebuilt from studio/hooks/ on every run and read back
 # inside the same job. The receipt beside it is the canonical record of what was sent.
 state/ventures/carousel-studio/hook-delivery.json

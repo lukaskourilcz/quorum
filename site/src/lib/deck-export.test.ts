@@ -121,9 +121,15 @@ describe("the whole-deck export", () => {
     const manifest = JSON.parse(decoder.decode(files["manifest.json"]!)) as {
       recipe: { family: string };
       template: { template_id: string };
+      canvas: { master: string; rendered: string; declared: string[] };
       attribution: string;
       slides: Array<{ pngHash: string }>;
     };
+    // One deck is one canvas, and the ZIP says which one. Before this the manifest recorded the
+    // requested format and nothing about whether the design was composed for it.
+    expect(manifest.canvas.master).toBe("instagram-portrait");
+    expect(manifest.canvas.rendered).toBe("instagram-portrait");
+    expect(manifest.canvas.declared).toContain(manifest.canvas.rendered);
     expect(manifest.recipe.family).toBe("tower");
     expect(manifest.template.template_id).toBe(`deck-tower-${deck!.slides.length}`);
     expect(manifest.attribution).toBe(CREDIT);
@@ -209,6 +215,16 @@ describe("the whole-deck export", () => {
       expect(first.status, input.venture).toBe(200);
       expect(second.status, input.venture).toBe(200);
       expect(Buffer.from(await first.arrayBuffer()).equals(Buffer.from(await second.arrayBuffer())), input.venture).toBe(true);
+
+      // A derivation, and recorded as one: Threads is not this design's master canvas.
+      const threadsManifest = JSON.parse(new TextDecoder().decode(
+        unzipSync(new Uint8Array(await (await exportRoute.GET(
+          new Request("https://example.test/x?format=threads", { headers: { cookie } }),
+          { params: Promise.resolve({ venture: input.venture, slug, date: "2026-08-12", recipe: RECIPE }) }
+        )).arrayBuffer()))["manifest.json"]!
+      )) as { canvas: { master: string; rendered: string; declared: string[] } };
+      expect(threadsManifest.canvas, input.venture).toMatchObject({ master: "instagram-portrait", rendered: "threads" });
+      expect(threadsManifest.canvas.declared, input.venture).toContain("threads");
 
       const slide = await slideRoute.GET(
         new Request("https://example.test/x?format=threads", { headers: { cookie } }),

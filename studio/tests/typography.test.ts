@@ -180,6 +180,10 @@ describe("Czech diacritics reach the raster", () => {
         "instagram-story": { width: 1_080, height: 1_920, safeArea: { top: 0.14, right: 0.07, bottom: 0.16, left: 0.07 } },
         threads: { width: 1_200, height: 1_200, safeArea: { top: 0.07, right: 0.07, bottom: 0.09, left: 0.07 } }
       },
+      // One line centred in a flat field holds at either shape, and the probe is rendered at 1:1
+      // because a square counts ink in fewer pixels. A template that did not say so would be
+      // refused by the canvas check, which is the point of the check.
+      canvas: { master: "instagram-portrait", derive: ["instagram-square"] },
       requiredSlots: ["probe"],
       slides: [{
         id: "slide-probe",

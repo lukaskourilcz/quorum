@@ -1,5 +1,5 @@
 import { CarouselTemplateSchema, type CarouselLayerInput, type CarouselTemplate } from "./schema.js";
-import { deckFormats } from "./library.js";
+import { deckCanvas, deckFormats } from "./library.js";
 
 export const WEBDEV_SIGNAL_MIN_PANELS = 4;
 export const WEBDEV_SIGNAL_MAX_PANELS = 6;
@@ -71,6 +71,7 @@ export function webDevSignalTemplate(panelCount: number): CarouselTemplate {
     description: "A source-forward change, impact and action carousel for native Czech and English editions.",
     citedObservationRefs: ["GitHub #436", "GitHub #442"],
     formats: deckFormats,
+    canvas: deckCanvas(),
     requiredSlots: [...new Set(Array.from({ length: panelCount }, (_, panelIndex) =>
       fields.map((field) => webDevSignalSlot(panelIndex, field))).flat())],
     slides: Array.from({ length: panelCount }, (_, panelIndex) => ({

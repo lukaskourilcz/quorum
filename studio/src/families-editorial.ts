@@ -1,4 +1,4 @@
-import { LEFT, MEASURE, TOP, drawnIndex, hero, pagerDots, rule, shape, text, type Composer, type FamilySpec } from "./family-kit.js";
+import { LEFT, MEASURE, TOP, drawnIndex, hero, hookMark, pagerDots, rule, shape, text, type Composer, type FamilySpec } from "./family-kit.js";
 
 // Original compositions informed by the Canva carousel catalog's photo-feature and
 // typography categories. No template assets or third-party compositions are embedded.
@@ -25,6 +25,16 @@ const folio: Composer = ({ slot, index, slideCount, role, beat, ground }) => {
     text(slot, LEFT, 0.36, MEASURE, 0.34, { fontWeight: 800, minFontSize: 32, maxFontSize: 106, maxLines: 6 }),
     ...footer
   ];
+  if (role === "hook") {
+    // The magazine's opening spread: the mark where the folio number would sit, the headline
+    // block starting where the cover's does, and a ceiling between the cover's and the page's.
+    return [
+      ...mast(),
+      ...hookMark(LEFT, 0.26, ground),
+      text(slot, LEFT, 0.33, MEASURE, 0.42, { fontWeight: 700, minFontSize: 30, maxFontSize: 104, maxLines: 8 }),
+      ...footer
+    ];
+  }
   return [
     ...mast(),
     ...drawnIndex(index + 1, LEFT, 0.24, 0.06, 0.105, 0.014, "accent"),
@@ -55,6 +65,16 @@ const press: Composer = ({ slot, index, slideCount, role, beat, ground }) => {
     text(slot, LEFT + 0.055, 0.32, MEASURE - 0.055, 0.39, { fontWeight: 900, minFontSize: 30, maxFontSize: 106, maxLines: 7 }),
     ...footer
   ];
+  if (role === "hook") {
+    // The second front page. No hairline dividing a page from the one before it, because a
+    // re-served reader has no page before it — the entry mark opens, the headline runs heavy.
+    return [
+      ...mast(),
+      ...hookMark(LEFT, 0.27, ground),
+      text(slot, LEFT, 0.34, MEASURE, 0.41, { fontWeight: 900, minFontSize: 28, maxFontSize: 116, maxLines: 8 }),
+      ...footer
+    ];
+  }
   return [
     ...mast(),
     ...drawnIndex(index + 1, LEFT, 0.255, 0.075, 0.13, 0.018, "accent"),
