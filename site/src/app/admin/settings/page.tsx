@@ -4,7 +4,7 @@ import { AdminShell, type AdminSection, type AdminWorkspace } from "@/components
 import { AdminStateMessage } from "@/components/admin/admin-primitives";
 import { AdminWriteProvider } from "@/components/admin/admin-write-mode";
 import { VenturePauseSwitches } from "@/components/admin/venture-pause-switches";
-import { navigableVentures, readAdminPortfolio } from "@/lib/admin-portfolio";
+import { adminVentureName, navigableVentures, readAdminPortfolio } from "@/lib/admin-portfolio";
 import { readAdminVentureSettings } from "@/lib/admin-venture-settings";
 import { adminWritesEnabled } from "@/lib/admin-write-permission";
 
@@ -26,7 +26,7 @@ export default async function SettingsPage() {
     { id: "global", name: "Company Overview", count: 0, href: "/admin", active: false },
     ...navigableVentures(portfolio).map((venture) => ({
       id: venture.id,
-      name: venture.name,
+      name: adminVentureName(venture.id, venture.name),
       count: venture.cards.length,
       href: `/admin?venture=${venture.id}`,
       active: false

@@ -82,6 +82,15 @@ export function navigableVentures(portfolio: AdminPortfolio): AdminVenture[] {
   return portfolio.ventures.filter((venture) => venture.status === "operating");
 }
 
+/**
+ * The name the admin shows for a venture. The owner calls Caught Up "DNESKAi" everywhere in this
+ * admin, and every page that builds the navigation rail goes through this one function, so the
+ * rail reads the same on every page.
+ */
+export function adminVentureName(id: string, name: string): string {
+  return id === "caught-up" ? "DNESKAi" : name;
+}
+
 export interface AdminPlanDetail {
   id: string;
   ventureId: string;

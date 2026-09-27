@@ -4,7 +4,7 @@ import { AdminWriteProvider } from "@/components/admin/admin-write-mode";
 import { QueuePanel, type QueueFilters } from "@/components/admin/queue-panel";
 import { readAdminQueue } from "@/lib/admin-queue";
 import { QUEUE_GROUPS, QUEUE_PLATFORMS, type QueueGroup, type QueuePlatform } from "@/lib/admin-queue/types";
-import { navigableVentures, readAdminPortfolio } from "@/lib/admin-portfolio";
+import { adminVentureName, navigableVentures, readAdminPortfolio } from "@/lib/admin-portfolio";
 import { adminSections } from "@/lib/admin-sections";
 import { adminWritesEnabled } from "@/lib/admin-write-permission";
 
@@ -33,7 +33,7 @@ export default async function QueuePage({
     { id: "global", name: "Company Overview", count: 0, href: "/admin", active: false },
     ...navigableVentures(portfolio).map((venture) => ({
       id: venture.id,
-      name: venture.name,
+      name: adminVentureName(venture.id, venture.name),
       count: venture.cards.length,
       href: `/admin?venture=${venture.id}`,
       active: false

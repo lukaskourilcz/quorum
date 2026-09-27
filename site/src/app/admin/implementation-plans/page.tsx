@@ -4,7 +4,7 @@ import { AdminShell, type AdminSection, type AdminWorkspace } from "@/components
 import { ImplementationRefreshButton } from "@/components/admin/implementation-plan-actions";
 import { ImplementationPlansView } from "@/components/admin/implementation-plans";
 import { readAdminImplementationProgress } from "@/lib/admin-implementation-plans";
-import { navigableVentures, readAdminPortfolio } from "@/lib/admin-portfolio";
+import { adminVentureName, navigableVentures, readAdminPortfolio } from "@/lib/admin-portfolio";
 
 export const dynamic = "force-dynamic";
 export const revalidate = 0;
@@ -28,7 +28,7 @@ export default async function ImplementationPlansPage({
     { id: "global", name: "Company Overview", count: 0, href: "/admin", active: false },
     ...navigableVentures(portfolio).map((venture) => ({
       id: venture.id,
-      name: venture.name,
+      name: adminVentureName(venture.id, venture.name),
       count: venture.cards.length,
       href: `/admin?venture=${venture.id}`,
       active: false

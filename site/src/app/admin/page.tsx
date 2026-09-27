@@ -72,7 +72,7 @@ import { readAdminContestRadar } from "@/lib/admin-contest-radar";
 import { readAdminImplementationProgress } from "@/lib/admin-implementation-plans";
 import { readAdminMmaFiles } from "@/lib/admin-mma-files";
 import { readAdminPersonalGrowth, type PersonalGrowthCoreTab } from "@/lib/admin-personal-growth";
-import { navigableVentures, readAdminPortfolio, type AdminVentureTab } from "@/lib/admin-portfolio";
+import { adminVentureName as ventureName, navigableVentures, readAdminPortfolio, type AdminVentureTab } from "@/lib/admin-portfolio";
 import { readAdminSnapshot } from "@/lib/admin-state";
 import { readCarouselStudio, readCarouselStudioCounts } from "@/lib/carousel-studio";
 import { readGoViralProfile } from "@/lib/goviral-profile";
@@ -119,10 +119,6 @@ function tabLabel(tab: AdminVentureTab): string {
   if (tab === "edition-cs") return "czech edition";
   if (tab === "edition-en") return "english edition";
   return tab;
-}
-
-function ventureName(id: string, name: string): string {
-  return id === "caught-up" ? "DNESKAi" : name;
 }
 
 /**

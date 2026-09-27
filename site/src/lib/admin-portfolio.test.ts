@@ -5,7 +5,7 @@ import { describe, expect, it, vi } from "vitest";
 
 vi.mock("server-only", () => ({}));
 
-import { navigableVentures, readAdminLaunchBinder, readAdminPortfolio, type AdminVenture } from "./admin-portfolio";
+import { adminVentureName, navigableVentures, readAdminLaunchBinder, readAdminPortfolio, type AdminVenture } from "./admin-portfolio";
 
 describe("admin portfolio projection", () => {
   it("projects every review card kind and a Perfect owner-rated binder plan", async () => {
@@ -267,6 +267,18 @@ describe("the admin navigation", () => {
     // WebDev Signal runs as the DNESKAi day's pre-step (`operations-2026-09b`), so it stays.
     expect(navigable).toContain("webdev-signal");
     expect(portfolio.ventures.map(({ id }) => id)).toContain("contest-radar");
+  });
+
+  it("names Caught Up DNESKAi on every admin page that builds the rail", async () => {
+    expect(adminVentureName("caught-up", "Caught Up")).toBe("DNESKAi");
+    expect(adminVentureName("goviral", "GoVIRAL")).toBe("GoVIRAL");
+    const admin = path.resolve(process.cwd(), "src/app/admin");
+    for (const page of ["page.tsx", "queue/page.tsx", "settings/page.tsx", "operations/page.tsx", "implementation-plans/page.tsx", "social-profiles/page.tsx"]) {
+      const source = await readFile(path.join(admin, page), "utf8");
+      // The registry's own name reaching the rail is what made these pages say "Caught Up".
+      expect(source, page).not.toMatch(/name: venture\.name\b/u);
+      expect(source, page).toMatch(/adminVentureName/u);
+    }
   });
 });
 
