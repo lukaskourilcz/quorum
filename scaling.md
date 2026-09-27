@@ -49,6 +49,14 @@ podílu `$25` a tempu `$1.00` denně. Obálka je nejvyšší povolená částka,
   Odborné porady se otevřou jen s konkrétní agendou. marketingShark běží každý pracovní
   den a GoVIRAL platí model jen v pondělí. Pozastavené projekty nemají na hodinách slot a
   stojí $0. Nepotřebný čas stojí $0.
+- Každé placené volání porady se od 27. září 2026 rezervuje i proti obálce vlastní místnosti
+  (`ROOM_CAP`) a, pokud projekt v `config/ventures.json` dostane `budget.monthlyDeskUsd`, proti
+  jeho měsíčnímu limitu (`DESK_MONTHLY_CAP`); zatím ho nemá žádný projekt. Při 80 % měsíčního
+  limitu $50 otevře systém jednou za měsíc upozornění v `state/INBOX.md`. Po vyčerpání limitu
+  zapíše `budget/office-mode.json` režim jen pro čtení a živý cyklus skončí dřív, než otevře
+  místnost. Přehled `pnpm cost:report` (`state/money/cost-report.json`) počítá z ledgeru a stojí
+  $0; skutečně vyfakturovanou částku od Anthropicu čte jen s `ANTHROPIC_ADMIN_API_KEY` a
+  `PROVIDER_BILLING_ENABLED`, které zatím nejsou nastavené.
 - Porady spouští Vercel cron, dva UTC záznamy pro každý z pěti slotů. GitHub Actions běží
   jen na **třech** záložních rozvrzích (03:55, 11:55 a 19:55 UTC), které zachytí zmeškaný
   slot. Spouštěč poradu pojmenuje sám, takže zpoždění nevadí a nepotřebné běhy nevznikají.
