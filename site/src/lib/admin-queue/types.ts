@@ -138,6 +138,11 @@ export interface AdminQueueItemView {
   frameCount: number;
   /** `/admin/api/queue/frame/<id>/<n>` for every frame, in slide order. */
   frameHrefs: string[];
+  /**
+   * `/admin/api/queue/export/<id>`: the item's frames, caption and its package's extras as one ZIP
+   * for posting by hand while the Meta publisher is not connected (quorum#592). Exporting records nothing.
+   */
+  exportHref: string;
   publishWindow: { notBefore: string; notAfter: string };
   status: QueueStatus;
   group: QueueGroup;

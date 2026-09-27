@@ -82,6 +82,7 @@ describe("readAdminQueue", () => {
       actions: { approve: true, edit: true, hold: true, reject: true, rerender: true }
     });
     expect(item!.frameHrefs[0]).toBe("/admin/api/queue/frame/ms-2026-09-26-devshark-en-linkedin/1");
+    expect(item!.exportHref).toBe("/admin/api/queue/export/ms-2026-09-26-devshark-en-linkedin");
     expect(item!.checks.map(({ id, state }) => `${id}:${state}`)).toEqual([
       "schema:pass", "duplicate:pass", "accessibility:pass", "budget:pass", "capability:pass", "authority:pass"
     ]);

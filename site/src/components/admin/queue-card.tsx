@@ -245,6 +245,8 @@ export function QueueCard({ item }: { item: AdminQueueItemView }) {
           {item.actions.hold ? <AdminButton disabled={busy} onClick={() => setMode("hold")} variant="ghost">Hold</AdminButton> : null}
           {item.actions.reject ? <AdminButton disabled={busy} onClick={() => setMode("reject")} variant="ghost">Reject</AdminButton> : null}
           {item.designLabHref ? <Link className={adminButtonVariants({ variant: "ghost" })} href={item.designLabHref}>Open in Design Lab</Link> : null}
+          {/* A download, not an action: the Queue records nothing when the owner posts by hand (quorum#592). */}
+          <a className={adminButtonVariants({ variant: "ghost" })} data-queue-export download href={item.exportHref}>Export for manual posting</a>
           {rerenderShown ? (
             <>
               <AdminButton aria-describedby={`${ids}-rerender`} disabled={!item.actions.rerender || busy} onClick={() => send("rerender")} variant="ghost">{pending === "rerender" ? "Re-rendering…" : "Re-render"}</AdminButton>

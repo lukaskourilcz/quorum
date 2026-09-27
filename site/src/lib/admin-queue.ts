@@ -214,6 +214,7 @@ function itemView(entry: QueueEntry, siblings: readonly QueueSibling[], state: Q
     hashtags: [...new Set(item.content.text.match(/#[\p{L}\p{N}_]+/gu) ?? [])],
     frameCount: assets.length,
     frameHrefs: assets.map((_, index) => `/admin/api/queue/frame/${encodeURIComponent(item.id)}/${index + 1}`),
+    exportHref: `/admin/api/queue/export/${encodeURIComponent(item.id)}`,
     publishWindow: { ...item.publishWindow },
     status: item.status,
     group,

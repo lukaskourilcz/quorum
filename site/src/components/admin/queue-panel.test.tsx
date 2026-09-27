@@ -22,6 +22,7 @@ function item(overrides: Partial<AdminQueueItemView> = {}): AdminQueueItemView {
     hashtags: ["#css", "#frontend"],
     frameCount: 5,
     frameHrefs: [1, 2, 3, 4, 5].map((slide) => `/admin/api/queue/frame/ms-2026-09-26-devshark-en-linkedin/${slide}`),
+    exportHref: "/admin/api/queue/export/ms-2026-09-26-devshark-en-linkedin",
     publishWindow: { notBefore: "2026-09-26T06:00:00.000Z", notAfter: "2026-09-26T21:00:00.000Z" },
     status: "draft",
     group: "waiting",
@@ -100,6 +101,12 @@ describe("the Queue panel", () => {
     const html = render(snapshot([item({ designLabHref: href, actions: { approve: true, edit: true, hold: true, reject: true, rerender: true } })]));
     expect(html).toContain(`href="${href.replaceAll("&", "&amp;")}"`);
     expect(html).toContain("Re-render draws the slides saved in the Design Lab into new frames");
+  });
+
+  it("offers every post as a download for manual posting, even when the deployment cannot save (quorum#592)", () => {
+    const html = render(snapshot([item()]), waiting, false);
+    expect(html).toMatch(/<a[^>]*data-queue-export[^>]*download[^>]*href="\/admin\/api\/queue\/export\/ms-2026-09-26-devshark-en-linkedin"/u);
+    expect(html).toContain("Export for manual posting");
   });
 
   it("keeps every write control inert and says why when the deployment cannot save", () => {
