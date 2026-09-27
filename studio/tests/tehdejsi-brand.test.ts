@@ -67,12 +67,13 @@ describe("Tehdejsi svet brand tokens", () => {
   });
 
   it("follows the light ladder BOOKSOFHISTORY already established rather than inventing one", () => {
-    // Two of the ten brands are light. Both run their three grounds downward from paper, and
-    // both keep the darkest of them well clear of the text tokens — which is the property that
-    // makes a shared family work on a light skin at all.
+    // Three of the ten brands are light: DNESKAi joined when its brand kit replaced the borrowed
+    // dark palette. All run their three grounds downward from paper, and all keep the darkest of
+    // them well clear of the text tokens — which is the property that makes a shared family work
+    // on a light skin at all.
     const light = Object.values(CAROUSEL_BRANDS)
       .filter((entry) => contrastRatio(entry.colors.background!, "#000000") > 10);
-    expect(light.map((entry) => entry.id)).toEqual(["booksofhistory", "tehdejsi-svet"]);
+    expect(light.map((entry) => entry.id)).toEqual(["caught-up", "booksofhistory", "tehdejsi-svet"]);
     for (const entry of light) {
       const grounds = GROUNDS.map((token) => contrastRatio(entry.colors[token]!, "#000000"));
       expect(grounds[0], `${entry.id} background`).toBeGreaterThan(grounds[1]!);

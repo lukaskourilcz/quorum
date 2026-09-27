@@ -5,6 +5,7 @@ export * from "./fonts.js";
 export * from "./font-metrics.generated.js";
 export * from "./text.js";
 export * from "./grounds.js";
+export * from "./brand-kit.js";
 export * from "./validation.js";
 export * from "./platform-limits.js";
 export * from "./contrast-apca.js";

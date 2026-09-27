@@ -578,19 +578,32 @@ export function liveTemplates(): readonly CarouselTemplate[] {
 }
 
 export const CAROUSEL_BRANDS: Readonly<Record<BrandTokens["id"], BrandTokens>> = {
+  /**
+   * DNESKAi, dressed from its brand kit (`studio/brand-kits/caught-up/`).
+   *
+   * These seven values are the kit manifest's `carouselPalette`, and `brand-kits.test.ts` fails if
+   * they drift apart. Each comes from DNESKAi's own design system: white reading surface, paper
+   * page, the subtle panel, its two text inks, blueprint blue and the Ai blue of the logotype.
+   * Until the kit arrived this brand wore BoardlessAI's obsidian and magenta, which was never
+   * DNESKAi's.
+   *
+   * The ground ladder runs white, paper, subtle panel — downward, as on the other light brands —
+   * and the first two are exactly the grounds the full-colour logotype is approved for. The
+   * renderer draws the logo from the kit's outlines; `logoText` names it where only text fits.
+   */
   "caught-up": BrandTokensSchema.parse({
     schemaVersion: "carousel-brand/1",
     id: "caught-up",
     name: "Caught Up",
-    logoText: "CAUGHT UP",
+    logoText: "DNESKAi",
     colors: {
-      background: "#09090b",
-      surface: "#18181b",
-      "surface-strong": "#27272a",
-      foreground: "#f4f4f5",
-      muted: "#d4d4d8",
-      accent: "#fe45e2",
-      secondary: "#ff5a00"
+      background: "#ffffff",
+      surface: "#f7f7f5",
+      "surface-strong": "#efefec",
+      foreground: "#14161a",
+      muted: "#3c4149",
+      accent: "#2f5ae6",
+      secondary: "#1a3ab0"
     },
     fonts: { headline: "Archivo", body: "IBM Plex Sans", mono: "IBM Plex Mono" }
   }),
