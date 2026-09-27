@@ -8,6 +8,8 @@
 export interface FaceMetrics {
   /** The family name the file itself reports, which is the name a renderer has to ask for. */
   readonly familyName: string;
+  /** The name resvg resolves this exact face by (name id 16 when present). */
+  readonly rasterFamily: string;
   readonly weight: number;
   readonly file: string;
   /** The mean advance of a letter in this face, which is what capacity questions need. */
@@ -20,6 +22,7 @@ export interface FaceMetrics {
 export const FONT_METRICS: Readonly<Record<string, FaceMetrics>> = {
   "anton-400": {
     familyName: "Anton",
+    rasterFamily: "Anton",
     weight: 400,
     file: "anton/anton-400.ttf",
     average: 460,
@@ -138,6 +141,7 @@ export const FONT_METRICS: Readonly<Record<string, FaceMetrics>> = {
   },
   "archivo-600": {
     familyName: "Archivo SemiBold",
+    rasterFamily: "Archivo",
     weight: 600,
     file: "archivo/archivo-600.ttf",
     average: 598,
@@ -244,6 +248,7 @@ export const FONT_METRICS: Readonly<Record<string, FaceMetrics>> = {
   },
   "archivo-700": {
     familyName: "Archivo",
+    rasterFamily: "Archivo",
     weight: 700,
     file: "archivo/archivo-700.ttf",
     average: 616,
@@ -344,6 +349,7 @@ export const FONT_METRICS: Readonly<Record<string, FaceMetrics>> = {
   },
   "archivo-800": {
     familyName: "Archivo ExtraBold",
+    rasterFamily: "Archivo",
     weight: 800,
     file: "archivo/archivo-800.ttf",
     average: 643,
@@ -440,6 +446,7 @@ export const FONT_METRICS: Readonly<Record<string, FaceMetrics>> = {
   },
   "archivo-900": {
     familyName: "Archivo Black",
+    rasterFamily: "Archivo",
     weight: 900,
     file: "archivo/archivo-900.ttf",
     average: 681,
@@ -493,6 +500,7 @@ export const FONT_METRICS: Readonly<Record<string, FaceMetrics>> = {
   },
   "barlow-400": {
     familyName: "Barlow",
+    rasterFamily: "Barlow",
     weight: 400,
     file: "barlow/barlow-400.ttf",
     average: 538,
@@ -621,6 +629,7 @@ export const FONT_METRICS: Readonly<Record<string, FaceMetrics>> = {
   },
   "barlow-700": {
     familyName: "Barlow",
+    rasterFamily: "Barlow",
     weight: 700,
     file: "barlow/barlow-700.ttf",
     average: 552,
@@ -758,6 +767,7 @@ export const FONT_METRICS: Readonly<Record<string, FaceMetrics>> = {
   },
   "barlow-condensed-600": {
     familyName: "Barlow Condensed SemiBold",
+    rasterFamily: "Barlow Condensed SemiBold",
     weight: 600,
     file: "barlow-condensed/barlow-condensed-600.ttf",
     average: 425,
@@ -877,6 +887,7 @@ export const FONT_METRICS: Readonly<Record<string, FaceMetrics>> = {
   },
   "barlow-condensed-700": {
     familyName: "Barlow Condensed",
+    rasterFamily: "Barlow Condensed",
     weight: 700,
     file: "barlow-condensed/barlow-condensed-700.ttf",
     average: 435,
@@ -1003,6 +1014,7 @@ export const FONT_METRICS: Readonly<Record<string, FaceMetrics>> = {
   },
   "barlow-condensed-800": {
     familyName: "Barlow Condensed ExtraBold",
+    rasterFamily: "Barlow Condensed ExtraBold",
     weight: 800,
     file: "barlow-condensed/barlow-condensed-800.ttf",
     average: 445,
@@ -1119,6 +1131,7 @@ export const FONT_METRICS: Readonly<Record<string, FaceMetrics>> = {
   },
   "barlow-condensed-900": {
     familyName: "Barlow Condensed Black",
+    rasterFamily: "Barlow Condensed Black",
     weight: 900,
     file: "barlow-condensed/barlow-condensed-900.ttf",
     average: 454,
@@ -1231,6 +1244,7 @@ export const FONT_METRICS: Readonly<Record<string, FaceMetrics>> = {
   },
   "figtree-600": {
     familyName: "Figtree SemiBold",
+    rasterFamily: "Figtree",
     weight: 600,
     file: "figtree/figtree-600.ttf",
     average: 586,
@@ -1362,6 +1376,7 @@ export const FONT_METRICS: Readonly<Record<string, FaceMetrics>> = {
   },
   "figtree-700": {
     familyName: "Figtree",
+    rasterFamily: "Figtree",
     weight: 700,
     file: "figtree/figtree-700.ttf",
     average: 593,
@@ -1493,6 +1508,7 @@ export const FONT_METRICS: Readonly<Record<string, FaceMetrics>> = {
   },
   "figtree-800": {
     familyName: "Figtree ExtraBold",
+    rasterFamily: "Figtree",
     weight: 800,
     file: "figtree/figtree-800.ttf",
     average: 601,
@@ -1626,6 +1642,7 @@ export const FONT_METRICS: Readonly<Record<string, FaceMetrics>> = {
   },
   "figtree-900": {
     familyName: "Figtree Black",
+    rasterFamily: "Figtree",
     weight: 900,
     file: "figtree/figtree-900.ttf",
     average: 610,
@@ -1751,6 +1768,7 @@ export const FONT_METRICS: Readonly<Record<string, FaceMetrics>> = {
   },
   "ibm-plex-mono-400": {
     familyName: "IBM Plex Mono",
+    rasterFamily: "IBM Plex Mono",
     weight: 400,
     file: "ibm-plex-mono/ibm-plex-mono-400.ttf",
     average: 600,
@@ -1761,6 +1779,7 @@ export const FONT_METRICS: Readonly<Record<string, FaceMetrics>> = {
   },
   "ibm-plex-mono-700": {
     familyName: "IBM Plex Mono",
+    rasterFamily: "IBM Plex Mono",
     weight: 700,
     file: "ibm-plex-mono/ibm-plex-mono-700.ttf",
     average: 600,
@@ -1771,6 +1790,7 @@ export const FONT_METRICS: Readonly<Record<string, FaceMetrics>> = {
   },
   "ibm-plex-sans-400": {
     familyName: "IBM Plex Sans",
+    rasterFamily: "IBM Plex Sans",
     weight: 400,
     file: "ibm-plex-sans/ibm-plex-sans-400.ttf",
     average: 563,
@@ -1953,6 +1973,7 @@ export const FONT_METRICS: Readonly<Record<string, FaceMetrics>> = {
   },
   "ibm-plex-sans-700": {
     familyName: "IBM Plex Sans",
+    rasterFamily: "IBM Plex Sans",
     weight: 700,
     file: "ibm-plex-sans/ibm-plex-sans-700.ttf",
     average: 595,
@@ -2148,6 +2169,7 @@ export const FONT_METRICS: Readonly<Record<string, FaceMetrics>> = {
   },
   "inter-400": {
     familyName: "Inter",
+    rasterFamily: "Inter",
     weight: 400,
     file: "inter/inter-400.ttf",
     average: 603,
@@ -2343,6 +2365,7 @@ export const FONT_METRICS: Readonly<Record<string, FaceMetrics>> = {
   },
   "inter-600": {
     familyName: "Inter SemiBold",
+    rasterFamily: "Inter",
     weight: 600,
     file: "inter/inter-600.ttf",
     average: 617,
@@ -2542,6 +2565,7 @@ export const FONT_METRICS: Readonly<Record<string, FaceMetrics>> = {
   },
   "inter-700": {
     familyName: "Inter",
+    rasterFamily: "Inter",
     weight: 700,
     file: "inter/inter-700.ttf",
     average: 625,
@@ -2744,6 +2768,7 @@ export const FONT_METRICS: Readonly<Record<string, FaceMetrics>> = {
   },
   "jetbrains-mono-400": {
     familyName: "JetBrains Mono",
+    rasterFamily: "JetBrains Mono",
     weight: 400,
     file: "jetbrains-mono/jetbrains-mono-400.ttf",
     average: 600,
@@ -2754,6 +2779,7 @@ export const FONT_METRICS: Readonly<Record<string, FaceMetrics>> = {
   },
   "karla-400": {
     familyName: "Karla",
+    rasterFamily: "Karla",
     weight: 400,
     file: "karla/karla-400.ttf",
     average: 555,
@@ -2867,6 +2893,7 @@ export const FONT_METRICS: Readonly<Record<string, FaceMetrics>> = {
   },
   "karla-700": {
     familyName: "Karla",
+    rasterFamily: "Karla",
     weight: 700,
     file: "karla/karla-700.ttf",
     average: 583,
@@ -2982,6 +3009,7 @@ export const FONT_METRICS: Readonly<Record<string, FaceMetrics>> = {
   },
   "literata-400": {
     familyName: "Literata",
+    rasterFamily: "Literata",
     weight: 400,
     file: "literata/literata-400.ttf",
     average: 630,
@@ -3167,6 +3195,7 @@ export const FONT_METRICS: Readonly<Record<string, FaceMetrics>> = {
   },
   "literata-600": {
     familyName: "Literata SemiBold",
+    rasterFamily: "Literata",
     weight: 600,
     file: "literata/literata-600.ttf",
     average: 648,
@@ -3359,6 +3388,7 @@ export const FONT_METRICS: Readonly<Record<string, FaceMetrics>> = {
   },
   "literata-700": {
     familyName: "Literata",
+    rasterFamily: "Literata",
     weight: 700,
     file: "literata/literata-700.ttf",
     average: 659,
@@ -3552,6 +3582,7 @@ export const FONT_METRICS: Readonly<Record<string, FaceMetrics>> = {
   },
   "manrope-700": {
     familyName: "Manrope",
+    rasterFamily: "Manrope",
     weight: 700,
     file: "manrope/manrope-700.ttf",
     average: 599,
@@ -3709,6 +3740,7 @@ export const FONT_METRICS: Readonly<Record<string, FaceMetrics>> = {
   },
   "manrope-800": {
     familyName: "Manrope ExtraBold",
+    rasterFamily: "Manrope",
     weight: 800,
     file: "manrope/manrope-800.ttf",
     average: 609,
@@ -3869,6 +3901,7 @@ export const FONT_METRICS: Readonly<Record<string, FaceMetrics>> = {
   },
   "outfit-600": {
     familyName: "Outfit SemiBold",
+    rasterFamily: "Outfit",
     weight: 600,
     file: "outfit/outfit-600.ttf",
     average: 587,
@@ -3996,6 +4029,7 @@ export const FONT_METRICS: Readonly<Record<string, FaceMetrics>> = {
   },
   "outfit-700": {
     familyName: "Outfit",
+    rasterFamily: "Outfit",
     weight: 700,
     file: "outfit/outfit-700.ttf",
     average: 597,
@@ -4123,6 +4157,7 @@ export const FONT_METRICS: Readonly<Record<string, FaceMetrics>> = {
   },
   "outfit-800": {
     familyName: "Outfit ExtraBold",
+    rasterFamily: "Outfit",
     weight: 800,
     file: "outfit/outfit-800.ttf",
     average: 607,
@@ -4251,6 +4286,7 @@ export const FONT_METRICS: Readonly<Record<string, FaceMetrics>> = {
   },
   "outfit-900": {
     familyName: "Outfit Black",
+    rasterFamily: "Outfit",
     weight: 900,
     file: "outfit/outfit-900.ttf",
     average: 616,
@@ -4377,6 +4413,7 @@ export const FONT_METRICS: Readonly<Record<string, FaceMetrics>> = {
   },
   "petrona-600": {
     familyName: "Petrona SemiBold",
+    rasterFamily: "Petrona",
     weight: 600,
     file: "petrona/petrona-600.ttf",
     average: 577,
@@ -4499,6 +4536,7 @@ export const FONT_METRICS: Readonly<Record<string, FaceMetrics>> = {
   },
   "petrona-700": {
     familyName: "Petrona",
+    rasterFamily: "Petrona",
     weight: 700,
     file: "petrona/petrona-700.ttf",
     average: 586,
@@ -4621,6 +4659,7 @@ export const FONT_METRICS: Readonly<Record<string, FaceMetrics>> = {
   },
   "petrona-800": {
     familyName: "Petrona ExtraBold",
+    rasterFamily: "Petrona",
     weight: 800,
     file: "petrona/petrona-800.ttf",
     average: 598,
@@ -4743,6 +4782,7 @@ export const FONT_METRICS: Readonly<Record<string, FaceMetrics>> = {
   },
   "petrona-900": {
     familyName: "Petrona Black",
+    rasterFamily: "Petrona",
     weight: 900,
     file: "petrona/petrona-900.ttf",
     average: 615,
@@ -4860,6 +4900,7 @@ export const FONT_METRICS: Readonly<Record<string, FaceMetrics>> = {
   },
   "public-sans-400": {
     familyName: "Public Sans",
+    rasterFamily: "Public Sans",
     weight: 400,
     file: "public-sans/public-sans-400.ttf",
     average: 592,
@@ -4995,6 +5036,7 @@ export const FONT_METRICS: Readonly<Record<string, FaceMetrics>> = {
   },
   "public-sans-700": {
     familyName: "Public Sans",
+    rasterFamily: "Public Sans",
     weight: 700,
     file: "public-sans/public-sans-700.ttf",
     average: 611,
@@ -5136,6 +5178,7 @@ export const FONT_METRICS: Readonly<Record<string, FaceMetrics>> = {
   },
   "source-serif-4-400": {
     familyName: "Source Serif 4",
+    rasterFamily: "Source Serif 4",
     weight: 400,
     file: "source-serif-4/source-serif-4-400.ttf",
     average: 574,
@@ -5296,6 +5339,7 @@ export const FONT_METRICS: Readonly<Record<string, FaceMetrics>> = {
   },
   "source-serif-4-600": {
     familyName: "Source Serif 4 Semibold",
+    rasterFamily: "Source Serif 4",
     weight: 600,
     file: "source-serif-4/source-serif-4-600.ttf",
     average: 580,
@@ -5459,6 +5503,7 @@ export const FONT_METRICS: Readonly<Record<string, FaceMetrics>> = {
   },
   "source-serif-4-700": {
     familyName: "Source Serif 4",
+    rasterFamily: "Source Serif 4",
     weight: 700,
     file: "source-serif-4/source-serif-4-700.ttf",
     average: 587,
@@ -5624,6 +5669,7 @@ export const FONT_METRICS: Readonly<Record<string, FaceMetrics>> = {
   },
   "space-grotesk-400": {
     familyName: "Space Grotesk",
+    rasterFamily: "Space Grotesk",
     weight: 400,
     file: "space-grotesk/space-grotesk-400.ttf",
     average: 585,
@@ -5734,6 +5780,7 @@ export const FONT_METRICS: Readonly<Record<string, FaceMetrics>> = {
   },
   "space-grotesk-500": {
     familyName: "Space Grotesk Medium",
+    rasterFamily: "Space Grotesk",
     weight: 500,
     file: "space-grotesk/space-grotesk-500.ttf",
     average: 586,
@@ -5842,6 +5889,7 @@ export const FONT_METRICS: Readonly<Record<string, FaceMetrics>> = {
   },
   "space-grotesk-700": {
     familyName: "Space Grotesk",
+    rasterFamily: "Space Grotesk",
     weight: 700,
     file: "space-grotesk/space-grotesk-700.ttf",
     average: 588,

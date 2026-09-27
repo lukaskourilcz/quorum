@@ -199,7 +199,10 @@ function layerSvg(input: {
     : "";
   const filter = layer.glow ? ` filter="url(#${glowId})"` : "";
   const face = resolveFace(brand.fonts[layer.fontToken], layer.fontWeight);
-  return `${glow}<text x="${textX}" y="${y + fitted.fontSize}" text-anchor="${anchor}" fill="${color(layer.colorToken)}" font-family="${escapeXml(face.familyName)}" font-size="${fitted.fontSize}" font-weight="${face.weight}"${tracking}${filter}>${tspans}</text>`;
+  // A kitted brand names the face the way the rasteriser finds it. Every other brand keeps the
+  // legacy name its recorded hashes were drawn with, until those are re-recorded on purpose.
+  const family = brand.kit ? face.rasterFamily : face.familyName;
+  return `${glow}<text x="${textX}" y="${y + fitted.fontSize}" text-anchor="${anchor}" fill="${color(layer.colorToken)}" font-family="${escapeXml(family)}" font-size="${fitted.fontSize}" font-weight="${face.weight}"${tracking}${filter}>${tspans}</text>`;
 }
 
 /**

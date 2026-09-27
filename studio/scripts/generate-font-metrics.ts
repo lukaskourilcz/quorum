@@ -27,6 +27,8 @@ interface Face {
   weight: number;
   /** What the file calls itself, which is what a renderer has to ask for. */
   familyName: string;
+  /** The typographic family (name id 16) when the file has one: what resvg's fontdb keys on. */
+  rasterFamily: string;
   unitsPerEm: number;
   advances: Map<number, number>;
 }
@@ -53,7 +55,7 @@ function tables(data: Buffer): Map<string, { offset: number; length: number }> {
  * nothing, silently, and the renderer draws in whatever it falls back to. So the table records
  * what each file actually calls itself and the renderer names that.
  */
-function familyName(data: Buffer, offset: number): string {
+function familyNames(data: Buffer, offset: number): { familyName: string; rasterFamily: string } {
   const count = data.readUInt16BE(offset + 2);
   const stringOffset = data.readUInt16BE(offset + 4);
   const byId = new Map<number, string>();
@@ -68,9 +70,12 @@ function familyName(data: Buffer, offset: number): string {
     const value = platform === 3 ? raw.swap16().toString("utf16le") : raw.toString("latin1");
     if (!byId.has(nameId)) byId.set(nameId, value);
   }
-  // Name id 1 is what fontdb keys on for these files: a face whose subfamily is `Regular` is a
-  // family of its own as far as the legacy naming is concerned.
-  return byId.get(1) ?? byId.get(16) ?? "";
+  // Measured on 2026-09-27: resvg's fontdb keys a face on name id 16 when the file has one, so
+  // `font-family="Inter SemiBold"` finds nothing and draws the fallback face, while `Inter` at 600
+  // finds the file. `familyName` keeps the legacy id-1 name every recorded hash was drawn with;
+  // `rasterFamily` is the name that resolves, and brands drawn from a kit use it.
+  const legacy = byId.get(1) ?? byId.get(16) ?? "";
+  return { familyName: legacy, rasterFamily: byId.get(16) ?? legacy };
 }
 
 function characterMap(data: Buffer, offset: number): Map<number, number> {
@@ -172,7 +177,7 @@ function readFace(slug: string, file: string): Face {
     if (glyph === undefined) continue;
     advances.set(code, Math.round((advanceOf(glyph) / unitsPerEm) * 1_000));
   }
-  return { slug, file, weight, familyName: familyName(data, found.get("name")!.offset), unitsPerEm, advances };
+  return { slug, file, weight, ...familyNames(data, found.get("name")!.offset), unitsPerEm, advances };
 }
 
 const faces = readdirSync(fontsDirectory, { withFileTypes: true })
@@ -196,6 +201,8 @@ const lines: string[] = [
   "export interface FaceMetrics {",
   "  /** The family name the file itself reports, which is the name a renderer has to ask for. */",
   "  readonly familyName: string;",
+  "  /** The name resvg resolves this exact face by (name id 16 when present). */",
+  "  readonly rasterFamily: string;",
   "  readonly weight: number;",
   "  readonly file: string;",
   "  /** The mean advance of a letter in this face, which is what capacity questions need. */",
@@ -234,6 +241,7 @@ for (const face of faces) {
     .join(",\n");
   lines.push(`  "${face.slug}-${face.weight}": {`);
   lines.push(`    familyName: ${JSON.stringify(face.familyName)},`);
+  lines.push(`    rasterFamily: ${JSON.stringify(face.rasterFamily)},`);
   lines.push(`    weight: ${face.weight},`);
   lines.push(`    file: ${JSON.stringify(`${face.slug}/${face.file}`)},`);
   lines.push(`    average: ${average},`);

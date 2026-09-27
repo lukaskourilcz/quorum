@@ -1,3 +1,4 @@
+import { createHash } from "node:crypto";
 import { cpSync, mkdtempSync, readFileSync, rmSync, writeFileSync } from "node:fs";
 import { tmpdir } from "node:os";
 import path from "node:path";
@@ -5,7 +6,10 @@ import { fileURLToPath } from "node:url";
 import { afterEach, describe, expect, it } from "vitest";
 import {
   BRAND_KITS_DIRECTORY,
+  FONT_METRICS,
+  FONTS_DIRECTORY,
   brandKitProblem,
+  fontFiles,
   CAROUSEL_BRANDS,
   DECK_DESIGNS,
   MAX_RESOLVABLE_SLIDES,
@@ -231,5 +235,26 @@ describe("a kitted brand fails closed", () => {
   it("draws the kit's palette whatever colours a caller passes", () => {
     const repainted = { ...CAROUSEL_BRANDS["caught-up"], colors: { ...CAROUSEL_BRANDS["caught-up"].colors, accent: "#ff00ff" } };
     for (const slide of render(repainted)) expect(slide.svg).not.toContain("#ff00ff");
+  });
+});
+
+describe("the kitted brands' faces", () => {
+  /*
+   * resvg keys a face on its typographic family (name id 16), so a static cut asked for by its
+   * legacy name ("Source Serif 4 Semibold", "Inter SemiBold") is not found and the slide silently
+   * draws in the fallback face. Kitted brands ask by `rasterFamily`; this renders every face they
+   * bind both ways to prove the name finds the file.
+   */
+  const picture = async (family: string, weight: number, files: string[], fallback: string) => {
+    const { Resvg } = await import("@resvg/resvg-js");
+    const svg = `<svg xmlns="http://www.w3.org/2000/svg" width="400" height="60"><text x="5" y="45" font-family="${family}" font-size="40" font-weight="${weight}">agq Rř 0{}</text></svg>`;
+    return createHash("sha256").update(new Resvg(svg, { font: { loadSystemFonts: false, fontFiles: files, defaultFontFamily: fallback } }).render().asPng()).digest("hex");
+  };
+  const bound = new Set(["caught-up", "devshark"].flatMap((id) => Object.values(CAROUSEL_BRANDS[id as "devshark"].fonts)));
+  const faces = Object.values(FONT_METRICS).filter((face) => bound.has(face.rasterFamily));
+
+  it.each(faces.map((face) => [face.file, face] as const))("%s draws as itself", async (_file, face) => {
+    const alone = await picture("Nothing", face.weight, [path.join(FONTS_DIRECTORY, face.file)], face.familyName);
+    expect(await picture(face.rasterFamily, face.weight, fontFiles(), "IBM Plex Sans")).toBe(alone);
   });
 });
