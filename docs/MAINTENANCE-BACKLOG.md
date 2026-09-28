@@ -115,3 +115,5 @@ These are not prerequisites for DNESKAi article delivery. Existing owner proposa
 - [ ] **Countersign `state/decisions/2026-09-26-devshark-social-queue.md`** — #568 wrote it with status `proposed`; set `countersigned` and name your approval on its signature line. [imp:5] [owner:me] [time:20m] [kind:decision]
 
 - [ ] Add `PIXABAY_API_KEY` to GitHub Actions so the licensed-photo search can use pixabay. Openverse and Wikimedia remain active without it.
+
+- [ ] **Upgrade the Vercel toolchain past its Undici 5 dependency.** After the 28 September patches, GitHub reports eight remaining alerts (six moderate, two low) for Undici 5.29.0 pulled by the pinned Vercel CLI/build tools. Check a compatible upstream CLI release and repeat the deployment gate; avoid treating a cross-major override as a routine patch. [imp:3] [owner:ai] [time:1h] [kind:deploy]
