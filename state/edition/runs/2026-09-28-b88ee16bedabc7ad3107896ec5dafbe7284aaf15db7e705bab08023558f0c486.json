@@ -1,0 +1,268 @@
+{
+  "schemaVersion": 1,
+  "runId": "7d49223f-e291-4061-961a-d9926a9858d2",
+  "date": "2026-09-28",
+  "mode": "production",
+  "status": "edition",
+  "startedAt": "2026-09-28T13:19:29.493Z",
+  "completedAt": "2026-09-28T13:22:04.533Z",
+  "stages": [
+    {
+      "name": "curate",
+      "status": "success",
+      "startedAt": "2026-09-28T13:19:29.516Z",
+      "completedAt": "2026-09-28T13:19:52.784Z",
+      "durationMs": 23268
+    },
+    {
+      "name": "write",
+      "status": "success",
+      "startedAt": "2026-09-28T13:19:52.784Z",
+      "completedAt": "2026-09-28T13:21:33.370Z",
+      "durationMs": 100586
+    },
+    {
+      "name": "stet_0",
+      "status": "success",
+      "startedAt": "2026-09-28T13:21:33.370Z",
+      "completedAt": "2026-09-28T13:21:33.376Z",
+      "durationMs": 6
+    },
+    {
+      "name": "quality_0",
+      "status": "success",
+      "startedAt": "2026-09-28T13:21:33.377Z",
+      "completedAt": "2026-09-28T13:21:33.377Z",
+      "durationMs": 0
+    },
+    {
+      "name": "assemble_package",
+      "status": "success",
+      "startedAt": "2026-09-28T13:21:33.377Z",
+      "completedAt": "2026-09-28T13:22:04.529Z",
+      "durationMs": 31152
+    }
+  ],
+  "regenerationAttempts": 0,
+  "stetBlocks": 0,
+  "hacekBlocks": 0,
+  "usage": [
+    {
+      "provider": "anthropic",
+      "model": "claude-sonnet-4-6",
+      "stage": "curate",
+      "inputTokens": 11344,
+      "outputTokens": 1130,
+      "cacheReadTokens": 0,
+      "cacheWriteTokens": 0,
+      "costUsd": 0.050982
+    },
+    {
+      "provider": "anthropic",
+      "model": "claude-sonnet-4-6",
+      "stage": "write",
+      "inputTokens": 14788,
+      "outputTokens": 4288,
+      "cacheReadTokens": 0,
+      "cacheWriteTokens": 2470,
+      "costUsd": 0.1179465
+    }
+  ],
+  "measuredCostUsd": 0.1689285,
+  "quality": {
+    "metrics": {
+      "successfulSources": 32,
+      "candidateItems": 80,
+      "citedSources": 8,
+      "signalStrength": 86,
+      "maximumSingleSourceShare": 0.25,
+      "sourceDiversity": 0.84375,
+      "duplicateStorySimilarity": 0.1111111111111111,
+      "repeatedTopicFrequency": 0.5,
+      "primarySourceRelevant": false,
+      "primarySourcePresent": false,
+      "unsupportedWatchlistItems": 0,
+      "costPerRun": 0.1689285
+    },
+    "result": {
+      "passed": true,
+      "enforced": true,
+      "violations": [],
+      "action": "publish"
+    }
+  },
+  "stet": {
+    "passed": true,
+    "score": 50,
+    "violations": []
+  },
+  "imageProgram": {
+    "readiness": {
+      "providers": {
+        "openverse": "keyless",
+        "wikimedia": "keyless",
+        "pexels": "present",
+        "pixabay": "present"
+      },
+      "gateModelConfigured": true,
+      "caps": {
+        "perArticleUsd": 0.05,
+        "perDayUsd": 0.1,
+        "generatedImagesPerDay": 4
+      },
+      "spentToday": {
+        "usd": 0.005505,
+        "generatedImages": 0
+      },
+      "illustrationRung": "armed"
+    },
+    "rung": "search",
+    "verdicts": [
+      {
+        "mode": "search",
+        "considered": 6,
+        "selected": "pexels:4316",
+        "reason": "Clear, well-lit photograph of real GPU heatsinks and motherboard components directly illustrates the hardware infrastructure behind AI training, without appearing staged or dated.",
+        "candidates": [
+          {
+            "candidateId": "pexels:9242888",
+            "provider": "pexels",
+            "fit": 6,
+            "vetoes": [],
+            "reason": "Authentic hands-on work with computer hardware illustrates practical AI infrastructure, but the specific person and dated equipment aesthetic slightly undermine its contemporary relevance.",
+            "sceneCs": "ruka drží součástku k základní desce"
+          },
+          {
+            "candidateId": "wikimedia:179520469",
+            "provider": "wikimedia",
+            "fit": 1,
+            "vetoes": [
+              "ai-generated-look",
+              "dated-aesthetic"
+            ],
+            "reason": "The glowing blue circuit-board brain is textbook stock imagery for AI—exactly the clichéd, mid-2010s aesthetic that dates an article and looks digitally rendered rather than real.",
+            "sceneCs": "mozkový tvar složený z elektrotechnických prvků"
+          },
+          {
+            "candidateId": "openverse:00de4c50-7cec-4609-9f6d-e605679a28a8",
+            "provider": "openverse",
+            "fit": 4,
+            "vetoes": [],
+            "reason": "Museum or exhibition display of circuit boards shows real hardware in educational context, but the theatrical staging and recognizable institutional setting feel too specific to a place rather than the general topic.",
+            "sceneCs": "výstavní prostor s vitrínami a obrazovkou"
+          },
+          {
+            "candidateId": "pixabay:3963945",
+            "provider": "pixabay",
+            "fit": 0,
+            "vetoes": [
+              "ai-generated-look",
+              "dated-aesthetic"
+            ],
+            "reason": "Holographic brain with glowing network overlays is classic AI stock imagery—synthetic-looking, trendy clip-art that actively misleads readers about what AI research actually involves.",
+            "sceneCs": "digitální mozek s sítí světel"
+          },
+          {
+            "candidateId": "pexels:4316",
+            "provider": "pexels",
+            "fit": 7,
+            "vetoes": [],
+            "reason": "Clear, well-lit photograph of real GPU heatsinks and motherboard components directly illustrates the hardware infrastructure behind AI training, without appearing staged or dated.",
+            "sceneCs": "žlutý chladič GPU na modré základní desce"
+          },
+          {
+            "candidateId": "pixabay:3382521",
+            "provider": "pixabay",
+            "fit": 2,
+            "vetoes": [
+              "ai-generated-look",
+              "dated-aesthetic"
+            ],
+            "reason": "Glowing grid pattern with blue geometric overlays is synthetically styled stock imagery for AI concepts—exactly the kind of dated, mid-2000s aesthetic that feels like filler rather than honest illustration.",
+            "sceneCs": "abstraktní modrá síť s geometrickými vzory"
+          }
+        ],
+        "skipped": [],
+        "costUsd": 0.005666
+      },
+      {
+        "mode": "generated",
+        "considered": 1,
+        "selected": "illustration:2026-09-28-candidate-2",
+        "reason": "Abstract circuit board visualization appropriately illustrates the technology and AI theme of the article without showing any specific person, event, or containing text; clean, well-lit, and professionally rendered as befits an illustration.",
+        "candidates": [
+          {
+            "candidateId": "illustration:2026-09-28-candidate-2",
+            "provider": "boardlessai",
+            "fit": 7,
+            "vetoes": [],
+            "reason": "Abstract circuit board visualization appropriately illustrates the technology and AI theme of the article without showing any specific person, event, or containing text; clean, well-lit, and professionally rendered as befits an illustration.",
+            "sceneCs": "abstraktní schéma s modrými elektrickými obvody"
+          }
+        ],
+        "skipped": [],
+        "costUsd": 0.00217
+      },
+      {
+        "mode": "generated",
+        "considered": 1,
+        "selected": "illustration:2026-09-28-candidate-3",
+        "reason": "A generic circuit-board illustration with a central node and branching connections effectively conveys the concept of AI systems and neural networks, fitting the article's focus on AI models and safety concerns without depicting any specific event or person.",
+        "candidates": [
+          {
+            "candidateId": "illustration:2026-09-28-candidate-3",
+            "provider": "boardlessai",
+            "fit": 7,
+            "vetoes": [],
+            "reason": "A generic circuit-board illustration with a central node and branching connections effectively conveys the concept of AI systems and neural networks, fitting the article's focus on AI models and safety concerns without depicting any specific event or person.",
+            "sceneCs": "abstraktní schéma s centrálním uzlem a modře zbarvenými vodiči"
+          }
+        ],
+        "skipped": [],
+        "costUsd": 0.00228
+      },
+      {
+        "mode": "generated",
+        "considered": 1,
+        "selected": "illustration:2026-09-28-candidate-4",
+        "reason": "Abstract circuit board with central glowing node illustrates AI and technology systems well; the geometric, digital aesthetic fits the article's focus on AI development and governance, though the image is generic rather than specifically tied to OpenAI or China.",
+        "candidates": [
+          {
+            "candidateId": "illustration:2026-09-28-candidate-4",
+            "provider": "boardlessai",
+            "fit": 7,
+            "vetoes": [],
+            "reason": "Abstract circuit board with central glowing node illustrates AI and technology systems well; the geometric, digital aesthetic fits the article's focus on AI development and governance, though the image is generic rather than specifically tied to OpenAI or China.",
+            "sceneCs": "modrý obvod s ústředním zářícím prvkem na černém pozadí"
+          }
+        ],
+        "skipped": [],
+        "costUsd": 0.00223
+      }
+    ]
+  },
+  "packageStatus": "edition",
+  "warnings": [
+    "image_rung:search",
+    "image_gate:search:selected",
+    "image_gate:generated:selected"
+  ],
+  "sourceSummary": {
+    "successfulSources": 32,
+    "candidateItems": 80,
+    "evidenceRefs": [
+      "source:404-media",
+      "source:anthropic-news",
+      "source:ars-technica",
+      "source:arxiv-cs-ai",
+      "source:arxiv-cs-lg",
+      "source:bluesky-language-models",
+      "source:deepmind-blog",
+      "source:digiday",
+      "source:github-ai-releases",
+      "source:google-research",
+      "source:hf-blog",
+      "source:hn-frontpage"
+    ]
+  }
+}

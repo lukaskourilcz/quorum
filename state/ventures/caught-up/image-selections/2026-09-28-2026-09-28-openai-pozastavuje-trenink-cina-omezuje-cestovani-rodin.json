@@ -1,0 +1,133 @@
+{
+  "schemaVersion": "image-selection/1",
+  "venture": "caught-up",
+  "slug": "2026-09-28-openai-pozastavuje-trenink-cina-omezuje-cestovani-rodin",
+  "date": "2026-09-28",
+  "rung": "search",
+  "selected": "pexels:4316",
+  "verdicts": [
+    {
+      "mode": "search",
+      "considered": 6,
+      "selected": "pexels:4316",
+      "reason": "Clear, well-lit photograph of real GPU heatsinks and motherboard components directly illustrates the hardware infrastructure behind AI training, without appearing staged or dated.",
+      "candidates": [
+        {
+          "candidateId": "pexels:9242888",
+          "provider": "pexels",
+          "fit": 6,
+          "vetoes": [],
+          "reason": "Authentic hands-on work with computer hardware illustrates practical AI infrastructure, but the specific person and dated equipment aesthetic slightly undermine its contemporary relevance.",
+          "sceneCs": "ruka drží součástku k základní desce"
+        },
+        {
+          "candidateId": "wikimedia:179520469",
+          "provider": "wikimedia",
+          "fit": 1,
+          "vetoes": [
+            "ai-generated-look",
+            "dated-aesthetic"
+          ],
+          "reason": "The glowing blue circuit-board brain is textbook stock imagery for AI—exactly the clichéd, mid-2010s aesthetic that dates an article and looks digitally rendered rather than real.",
+          "sceneCs": "mozkový tvar složený z elektrotechnických prvků"
+        },
+        {
+          "candidateId": "openverse:00de4c50-7cec-4609-9f6d-e605679a28a8",
+          "provider": "openverse",
+          "fit": 4,
+          "vetoes": [],
+          "reason": "Museum or exhibition display of circuit boards shows real hardware in educational context, but the theatrical staging and recognizable institutional setting feel too specific to a place rather than the general topic.",
+          "sceneCs": "výstavní prostor s vitrínami a obrazovkou"
+        },
+        {
+          "candidateId": "pixabay:3963945",
+          "provider": "pixabay",
+          "fit": 0,
+          "vetoes": [
+            "ai-generated-look",
+            "dated-aesthetic"
+          ],
+          "reason": "Holographic brain with glowing network overlays is classic AI stock imagery—synthetic-looking, trendy clip-art that actively misleads readers about what AI research actually involves.",
+          "sceneCs": "digitální mozek s sítí světel"
+        },
+        {
+          "candidateId": "pexels:4316",
+          "provider": "pexels",
+          "fit": 7,
+          "vetoes": [],
+          "reason": "Clear, well-lit photograph of real GPU heatsinks and motherboard components directly illustrates the hardware infrastructure behind AI training, without appearing staged or dated.",
+          "sceneCs": "žlutý chladič GPU na modré základní desce"
+        },
+        {
+          "candidateId": "pixabay:3382521",
+          "provider": "pixabay",
+          "fit": 2,
+          "vetoes": [
+            "ai-generated-look",
+            "dated-aesthetic"
+          ],
+          "reason": "Glowing grid pattern with blue geometric overlays is synthetically styled stock imagery for AI concepts—exactly the kind of dated, mid-2000s aesthetic that feels like filler rather than honest illustration.",
+          "sceneCs": "abstraktní modrá síť s geometrickými vzory"
+        }
+      ],
+      "skipped": [],
+      "costUsd": 0.005666
+    },
+    {
+      "mode": "generated",
+      "considered": 1,
+      "selected": "illustration:2026-09-28-candidate-2",
+      "reason": "Abstract circuit board visualization appropriately illustrates the technology and AI theme of the article without showing any specific person, event, or containing text; clean, well-lit, and professionally rendered as befits an illustration.",
+      "candidates": [
+        {
+          "candidateId": "illustration:2026-09-28-candidate-2",
+          "provider": "boardlessai",
+          "fit": 7,
+          "vetoes": [],
+          "reason": "Abstract circuit board visualization appropriately illustrates the technology and AI theme of the article without showing any specific person, event, or containing text; clean, well-lit, and professionally rendered as befits an illustration.",
+          "sceneCs": "abstraktní schéma s modrými elektrickými obvody"
+        }
+      ],
+      "skipped": [],
+      "costUsd": 0.00217
+    },
+    {
+      "mode": "generated",
+      "considered": 1,
+      "selected": "illustration:2026-09-28-candidate-3",
+      "reason": "A generic circuit-board illustration with a central node and branching connections effectively conveys the concept of AI systems and neural networks, fitting the article's focus on AI models and safety concerns without depicting any specific event or person.",
+      "candidates": [
+        {
+          "candidateId": "illustration:2026-09-28-candidate-3",
+          "provider": "boardlessai",
+          "fit": 7,
+          "vetoes": [],
+          "reason": "A generic circuit-board illustration with a central node and branching connections effectively conveys the concept of AI systems and neural networks, fitting the article's focus on AI models and safety concerns without depicting any specific event or person.",
+          "sceneCs": "abstraktní schéma s centrálním uzlem a modře zbarvenými vodiči"
+        }
+      ],
+      "skipped": [],
+      "costUsd": 0.00228
+    },
+    {
+      "mode": "generated",
+      "considered": 1,
+      "selected": "illustration:2026-09-28-candidate-4",
+      "reason": "Abstract circuit board with central glowing node illustrates AI and technology systems well; the geometric, digital aesthetic fits the article's focus on AI development and governance, though the image is generic rather than specifically tied to OpenAI or China.",
+      "candidates": [
+        {
+          "candidateId": "illustration:2026-09-28-candidate-4",
+          "provider": "boardlessai",
+          "fit": 7,
+          "vetoes": [],
+          "reason": "Abstract circuit board with central glowing node illustrates AI and technology systems well; the geometric, digital aesthetic fits the article's focus on AI development and governance, though the image is generic rather than specifically tied to OpenAI or China.",
+          "sceneCs": "modrý obvod s ústředním zářícím prvkem na černém pozadí"
+        }
+      ],
+      "skipped": [],
+      "costUsd": 0.00223
+    }
+  ],
+  "skippedProviders": [],
+  "recordedAt": "2026-09-28T13:19:25.940Z"
+}

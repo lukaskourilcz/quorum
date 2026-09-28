@@ -1,0 +1,19 @@
+{
+  "schemaVersion": 1,
+  "fixture": false,
+  "cycleId": "20260928131925-cu-edition",
+  "phase": "cu-edition",
+  "outcome": "EDITION",
+  "summary": "Dvě události jediného dne – přiznání OpenAI o ztrátě kontroly nad agenty a čínské omezení pohybu rodin AI výzkumníků – společně ukazují, že bezpečnostní tlaky kolem umělé inteligence přecházejí z teorie do praxe a mění podmínky pro laboratoře i pro lidi v nich.",
+  "evidenceRefs": [
+    "source:wired-ai",
+    "source:tensorfeed",
+    "source:stratechery",
+    "source:mit-tech-review",
+    "source:the-verge",
+    "source:the-register",
+    "source:rest-of-world"
+  ],
+  "editionRef": "b88ee16bedabc7ad3107896ec5dafbe7284aaf15db7e705bab08023558f0c486",
+  "generatedAt": "2026-09-28T13:19:30.940Z"
+}
