@@ -343,7 +343,7 @@ const PROJECT_COPY: Record<string, { status: string; description: string; url: s
   "caught-up": {
     status: "Publishes daily",
     description: "Czech news about AI. One subject a day, and when none passes verification, no edition goes out.",
-    url: "https://caughtup-ai.vercel.app/",
+    url: "https://dneskai.vercel.app/",
     daily: true
   },
   "mma-files": {

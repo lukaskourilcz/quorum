@@ -31,13 +31,13 @@ describe("the package a day delivered", () => {
     await write(base, "edition/deliveries/2026-08-06.json", {
       status: "delivered",
       packageHash: "abc123",
-      articleUrl: "https://caughtup-ai.vercel.app/articles/tri-laboratore"
+      articleUrl: "https://dneskai.vercel.app/articles/tri-laboratore"
     });
     await write(base, "edition/archive/2026-08-06-abc123.json", { status: "edition", date: "2026-08-06" });
 
     const delivered = await deliveredEditionPackage("2026-08-06");
 
-    expect(delivered?.articleUrl).toBe("https://caughtup-ai.vercel.app/articles/tri-laboratore");
+    expect(delivered?.articleUrl).toBe("https://dneskai.vercel.app/articles/tri-laboratore");
     expect(delivered?.json).toContain("\"date\": \"2026-08-06\"");
     expect(delivered?.note).toBeUndefined();
   });

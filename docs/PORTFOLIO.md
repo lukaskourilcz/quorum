@@ -234,7 +234,7 @@ morning checkpoint refreshes the generated truth block in `docs/ECOSYSTEM.md` at
 ## Delivery boundaries
 
 - Caught Up receives hash-checked Czech edition files in
-  `lukaskourilcz/aifirst` and deploys at `caughtup-ai.vercel.app`.
+  `lukaskourilcz/aifirst` and deploys at `dneskai.vercel.app`.
 - MMA Files receives only bounded article and FightAIQ data files in
   `lukaskourilcz/mma-files` and deploys at `mma-files.vercel.app`.
 - Titty Tuesdays can read the sanitized public concept feed. BoardlessAI cannot

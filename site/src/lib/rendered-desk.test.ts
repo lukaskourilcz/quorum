@@ -21,7 +21,7 @@ async function shipped(): Promise<string> {
     date: "2026-08-08",
     status: "delivered",
     editionStatus: "edition",
-    articleUrl: "https://caughtup-ai.vercel.app/articles/2026-08-08-openai-astra"
+    articleUrl: "https://dneskai.vercel.app/articles/2026-08-08-openai-astra"
   });
   await json(root, "edition/archive/2026-08-08-abc.json", {
     schemaVersion: "edition-package/1",
@@ -72,7 +72,7 @@ describe("what shipped on a day", () => {
     // here to show — and the card says that rather than showing a broken image.
     expect(edition.imageHref).toBeNull();
     expect(edition.imageNote).toContain("lives in the magazine");
-    expect(edition.url).toContain("caughtup-ai.vercel.app");
+    expect(edition.url).toContain("dneskai.vercel.app");
 
     // MMA Files keeps its bytes in state, so the authed media route can serve the real thumbnail.
     expect(mma.imageHref).toBe(
