@@ -72,7 +72,7 @@ describe("the question of the day's copy", () => {
   it("is the question and lettered options with no link, and the answer with the tracked link in the reply", async () => {
     const brand = await devshark();
     const link = qotdLink(brand, brand.qotd!, "2026-11-05");
-    expect(link).toBe("https://devshark.app/?utm_source=threads&utm_medium=reply&utm_campaign=qotd&utm_content=2026-11-05");
+    expect(link).toBe("https://devshark.app/daily/2026-11-05?utm_source=threads&utm_medium=reply&utm_campaign=qotd&utm_content=2026-11-05");
     const post = qotdPostText(question());
     expect(post).toContain("Code question of the day · JavaScript");
     expect(post).toContain("A) forEach\nB) map\nC) reduce\nD) find");

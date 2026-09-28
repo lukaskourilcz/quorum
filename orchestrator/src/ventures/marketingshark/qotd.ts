@@ -46,8 +46,13 @@ export function qotdQueueItemPath(date: string, brandId: string): string {
   return `social/queue/${date}-${brandId}-en-threads-qotd.json`;
 }
 
+/**
+ * The tracked link in the first reply: that day's /daily/<date> page on devShark (react-express-app#239).
+ * The page shows the site's own question of the day, not necessarily this one, which is why the reply
+ * says "one question like this"; the dated path gives Meta one link preview per day.
+ */
 export function qotdLink(brand: Pick<Brand, "productUrl">, settings: QotdSettings, date: string): string {
-  const url = new URL(brand.productUrl);
+  const url = new URL(`/daily/${date}`, brand.productUrl);
   url.searchParams.set("utm_source", "threads");
   url.searchParams.set("utm_medium", "reply");
   url.searchParams.set("utm_campaign", settings.utmCampaign);

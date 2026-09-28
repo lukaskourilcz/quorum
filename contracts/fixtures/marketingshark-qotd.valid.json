@@ -19,8 +19,8 @@
     "text": "Code question of the day · General\n\n\"Code-splitting\" helps performance by:\n\nA) Downloading the same bundle but compressing it more aggressively\nB) Downloading only the JavaScript a route or interaction needs, and the rest on demand\nC) Splitting the bundle into files that are all still requested on the first load\nD) Removing exports nothing imports from the bundle at build time\n\nYour answer? The answer and why are in the replies."
   },
   "firstReply": {
-    "text": "Answer: B) Downloading only the JavaScript a route or interaction needs, and the rest on demand\n\nCode-splitting produces chunks that load when a route is visited or a lazy component renders, so the first load carries less script to download, parse and execute. Removing unused exports is tree shaking, a separate build-time step; compression makes the same…\n\nOne question like this a day on devShark: https://devshark.app/?utm_source=threads&utm_medium=reply&utm_campaign=qotd&utm_content=2026-11-05",
-    "link": "https://devshark.app/?utm_source=threads&utm_medium=reply&utm_campaign=qotd&utm_content=2026-11-05"
+    "text": "Answer: B) Downloading only the JavaScript a route or interaction needs, and the rest on demand\n\nCode-splitting produces chunks that load when a route is visited or a lazy component renders, so the first load carries less script to download, parse and execute. Removing unused exports is tree shaking, a separate build-time step…\n\nOne question like this a day on devShark: https://devshark.app/daily/2026-11-05?utm_source=threads&utm_medium=reply&utm_campaign=qotd&utm_content=2026-11-05",
+    "link": "https://devshark.app/daily/2026-11-05?utm_source=threads&utm_medium=reply&utm_campaign=qotd&utm_content=2026-11-05"
   },
   "publishWindow": {
     "prague": "09:00",
