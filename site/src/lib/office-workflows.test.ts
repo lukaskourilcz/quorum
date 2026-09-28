@@ -177,7 +177,7 @@ describe("resolving against committed state", () => {
       expect(resolved.slots.some((slot) => slot.kind === kind), kind).toBe(!pausedKinds.has(kind));
     }
     // The workshop holds no session, so it hangs no note and appears with no slots at all.
-    expect(resolved.rooms.find((room) => room.key === WORKSHOP_ROOM)?.slots).toEqual([]);
+    expect(resolved.rooms.find((room) => room.key === WORKSHOP_ROOM)).toBeUndefined();
     // Every slot lands in a room the plan actually draws.
     const drawn = new Set(resolved.rooms.map((room) => room.key));
     for (const entry of resolved.slots) expect(drawn.has(entry.room)).toBe(true);

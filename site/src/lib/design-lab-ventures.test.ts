@@ -66,9 +66,9 @@ describe("the Design Lab's venture sections", () => {
 });
 
 describe("the Design Lab offers running ventures only (operations-2026-09b)", () => {
-  it("lists DNESKAi, devShark and WebDev Signal with today's registry", async () => {
-    expect(await activeDesignLabVentureIds()).toEqual(["caught-up", "devshark", "webdev-signal"]);
-    expect((await readDesignLabSections()).map((section) => section.id)).toEqual(["caught-up", "devshark", "webdev-signal"]);
+  it("lists only DNESKAi with today's registry", async () => {
+    expect(await activeDesignLabVentureIds()).toEqual(["caught-up"]);
+    expect((await readDesignLabSections()).map((section) => section.id)).toEqual(["caught-up"]);
   });
 
   it("drops a paused venture's brand and a disabled marketingShark brand, and keeps both renderable", async () => {

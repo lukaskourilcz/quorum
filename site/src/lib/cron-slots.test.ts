@@ -23,9 +23,7 @@ describe("the slot table the cron route dispatches from", () => {
     // venture holds no slot (`operations-2026-09b`); its rooms stay dispatchable by name.
     expect(slots.map((slot) => `${slot.hour}:${slot.phase}`)).toEqual([
       "5:cu-day",
-      "6:morning",
-      "7:ms-daily",
-      "13:gv-brief"
+      "6:morning"
     ]);
   });
 

@@ -45,8 +45,8 @@ describe("the public venture index", () => {
     for (const venture of ventureRegistry.ventures.filter(venture => venture.status === "paused")) {
       expect(cards.find(card => card.id === venture.id)).toBeUndefined();
     }
-    expect(cards.find((card) => card.id === "carousel-studio")?.metric.count).toBe(1);
-    expect(cards.find((card) => card.id === "goviral")?.metric.count).toBe(1);
+    expect(cards.find((card) => card.id === "carousel-studio")).toBeUndefined();
+    expect(cards.find((card) => card.id === "goviral")).toBeUndefined();
   });
 
   it("describes marketingShark's weekday English post, not the retired bilingual quiz", async () => {
@@ -67,7 +67,12 @@ describe("the public venture index", () => {
   it("refuses to present a partial count when a ledger line is unreadable", async () => {
     const root = await mkdtemp(path.join(tmpdir(), "venture-index-poison-"));
     await put(root, "state/ideas/goviral/ledger.jsonl", "{}\nnot-json\n");
-    const cards = await readVentureIndex(root);
-    expect(cards.find((card) => card.id === "goviral")?.metric.count).toBeNull();
+    const goviral = ventureRegistry.ventures.find(venture => venture.id === "goviral")!;
+    const status = goviral.status;
+    goviral.status = "operating";
+    try {
+      const cards = await readVentureIndex(root);
+      expect(cards.find((card) => card.id === "goviral")?.metric.count).toBeNull();
+    } finally { goviral.status = status; }
   });
 });
