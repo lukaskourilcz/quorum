@@ -14,19 +14,23 @@
       "at": "2026-09-28T04:00:00.000Z",
       "tz": "Europe/Prague",
       "kind": "venture-morning",
-      "status": "scheduled"
+      "status": "skipped",
+      "decisionOneLiner": "The meeting ran, but what it wrote failed the checks that come before it is saved, so its record was not kept."
     },
     {
       "at": "2026-09-28T05:00:00.000Z",
       "tz": "Europe/Prague",
       "kind": "ms-daily",
-      "status": "scheduled"
+      "status": "skipped",
+      "decisionOneLiner": "The run behind this meeting failed before it finished."
     },
     {
       "at": "2026-09-28T11:00:00.000Z",
       "tz": "Europe/Prague",
       "kind": "gv-brief",
-      "status": "scheduled"
+      "status": "held",
+      "meetingRef": "meetings/2026-09-28-gv-brief",
+      "decisionOneLiner": "AUDIT vetoed the room output: Veto #sandra as a fad: 2 posts, 0 engagement/hour, and no measured week-over-week delta. The week is data-thin because three Instagram scout sources f"
     },
     {
       "at": "2026-09-29T03:00:00.000Z",

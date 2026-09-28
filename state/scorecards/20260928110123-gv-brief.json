@@ -1,0 +1,16 @@
+{
+  "schemaVersion": 1,
+  "fixture": false,
+  "cycleId": "20260928110123-gv-brief",
+  "phase": "gv-brief",
+  "estimatedWorstCaseUsd": 0.047696,
+  "actualUsd": 0.026022,
+  "participants": [
+    "PULSE",
+    "SCOUT",
+    "ANGLE",
+    "AUDIT"
+  ],
+  "agendaId": null,
+  "generatedAt": "2026-09-28T11:06:23.549Z"
+}

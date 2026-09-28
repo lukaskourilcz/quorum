@@ -1,0 +1,2871 @@
+{
+  "schemaVersion": "goviral-trends/1",
+  "date": "2026-09-28",
+  "generatedAt": "2026-09-28T11:01:23.549Z",
+  "sourceResults": [
+    {
+      "actorId": "instagram-popular-reels",
+      "step": 1,
+      "status": "failed",
+      "reason": "An actor request failed; its full allowance remains reserved because billing is unknown.",
+      "count": 0,
+      "estimatedUsd": 0.288
+    },
+    {
+      "actorId": "instagram-hashtags",
+      "step": 2,
+      "status": "failed",
+      "reason": "An actor request failed; its full allowance remains reserved because billing is unknown.",
+      "count": 0,
+      "estimatedUsd": 0.15
+    },
+    {
+      "actorId": "threads-primary",
+      "step": 3,
+      "status": "success",
+      "reason": null,
+      "count": 49,
+      "estimatedUsd": 0.051
+    },
+    {
+      "actorId": "instagram-explore",
+      "step": 5,
+      "status": "failed",
+      "reason": "An actor request failed; its full allowance remains reserved because billing is unknown.",
+      "count": 0,
+      "estimatedUsd": 0.478
+    }
+  ],
+  "freeSignals": [
+    {
+      "provider": "hn",
+      "status": "success",
+      "reason": null,
+      "signals": [
+        {
+          "kind": "velocity",
+          "topic": "Artificial intelligence is not conscious – Ted Chiang",
+          "value": 0.7786,
+          "topicSets": [],
+          "ref": "source:trending:hn:2026-09-28"
+        },
+        {
+          "kind": "velocity",
+          "topic": "Grok 4.6 scores 61 on the Artificial Analysis Intelligence Index",
+          "value": 0.6773,
+          "topicSets": [],
+          "ref": "source:trending:hn:2026-09-28"
+        },
+        {
+          "kind": "velocity",
+          "topic": "Opus 5 is currently #1 on Artificial Analysis Intelligence Leaderboard",
+          "value": 0.3872,
+          "topicSets": [],
+          "ref": "source:trending:hn:2026-09-28"
+        },
+        {
+          "kind": "velocity",
+          "topic": "Artificial intelligence is losing hype",
+          "value": 0.073,
+          "topicSets": [],
+          "ref": "source:trending:hn:2026-09-28"
+        },
+        {
+          "kind": "velocity",
+          "topic": "John Carmack: I’m going to work on artificial general intelligence",
+          "value": 0.0409,
+          "topicSets": [],
+          "ref": "source:trending:hn:2026-09-28"
+        },
+        {
+          "kind": "velocity",
+          "topic": "Probabilistic Artificial Intelligence",
+          "value": 0.033,
+          "topicSets": [],
+          "ref": "source:trending:hn:2026-09-28"
+        },
+        {
+          "kind": "velocity",
+          "topic": "John Carmack’s ‘Different Path’ to Artificial General Intelligence",
+          "value": 0.0272,
+          "topicSets": [],
+          "ref": "source:trending:hn:2026-09-28"
+        },
+        {
+          "kind": "velocity",
+          "topic": "Artificial General Intelligence – A gentle introduction",
+          "value": 0.0173,
+          "topicSets": [],
+          "ref": "source:trending:hn:2026-09-28"
+        },
+        {
+          "kind": "velocity",
+          "topic": "Use of artificial intelligence for image analysis in breast cancer screening",
+          "value": 0.0171,
+          "topicSets": [],
+          "ref": "source:trending:hn:2026-09-28"
+        },
+        {
+          "kind": "velocity",
+          "topic": "U.S. government limits exports of artificial intelligence software",
+          "value": 0.0137,
+          "topicSets": [],
+          "ref": "source:trending:hn:2026-09-28"
+        }
+      ]
+    },
+    {
+      "provider": "hn",
+      "status": "success",
+      "reason": null,
+      "signals": [
+        {
+          "kind": "velocity",
+          "topic": "Discovery of a new OpenAI agent message board",
+          "value": 6.7883,
+          "topicSets": [],
+          "ref": "source:trending:hn:2026-09-28"
+        },
+        {
+          "kind": "velocity",
+          "topic": "OpenAI and Hugging Face address security incident during model evaluation",
+          "value": 1.6935,
+          "topicSets": [],
+          "ref": "source:trending:hn:2026-09-28"
+        },
+        {
+          "kind": "velocity",
+          "topic": "Apple sues OpenAI, accuses ex-employees of stealing trade secrets",
+          "value": 1.3747,
+          "topicSets": [],
+          "ref": "source:trending:hn:2026-09-28"
+        },
+        {
+          "kind": "velocity",
+          "topic": "An OpenAI model has disproved a central conjecture in discrete geometry",
+          "value": 0.7921,
+          "topicSets": [],
+          "ref": "source:trending:hn:2026-09-28"
+        },
+        {
+          "kind": "velocity",
+          "topic": "S&P 500 rejects SpaceX, also blocking entry for OpenAI and Anthropic",
+          "value": 0.7242,
+          "topicSets": [],
+          "ref": "source:trending:hn:2026-09-28"
+        },
+        {
+          "kind": "velocity",
+          "topic": "Astral to Join OpenAI",
+          "value": 0.5162,
+          "topicSets": [],
+          "ref": "source:trending:hn:2026-09-28"
+        },
+        {
+          "kind": "velocity",
+          "topic": "I’m joining OpenAI",
+          "value": 0.4787,
+          "topicSets": [],
+          "ref": "source:trending:hn:2026-09-28"
+        },
+        {
+          "kind": "velocity",
+          "topic": "OpenAI – How to delete your account",
+          "value": 0.4502,
+          "topicSets": [],
+          "ref": "source:trending:hn:2026-09-28"
+        },
+        {
+          "kind": "velocity",
+          "topic": "OpenAI's board has fired Sam Altman",
+          "value": 0.3284,
+          "topicSets": [],
+          "ref": "source:trending:hn:2026-09-28"
+        },
+        {
+          "kind": "velocity",
+          "topic": "Open models by OpenAI",
+          "value": 0.2985,
+          "topicSets": [],
+          "ref": "source:trending:hn:2026-09-28"
+        }
+      ]
+    },
+    {
+      "provider": "hn",
+      "status": "success",
+      "reason": null,
+      "signals": [
+        {
+          "kind": "velocity",
+          "topic": "I resigned from Anthropic today",
+          "value": 3.7676,
+          "topicSets": [],
+          "ref": "source:trending:hn:2026-09-28"
+        },
+        {
+          "kind": "velocity",
+          "topic": "A single firm is behind OpenAI, Anthropic, and Meta hacking scandals",
+          "value": 2.9131,
+          "topicSets": [],
+          "ref": "source:trending:hn:2026-09-28"
+        },
+        {
+          "kind": "velocity",
+          "topic": "Anthropic's best AI model struggles to attract users as cheaper tools thrive",
+          "value": 1.7765,
+          "topicSets": [],
+          "ref": "source:trending:hn:2026-09-28"
+        },
+        {
+          "kind": "velocity",
+          "topic": "Anthropic's ‘watermark’ text adulteration in Claude is a perversion of writing",
+          "value": 1.5238,
+          "topicSets": [],
+          "ref": "source:trending:hn:2026-09-28"
+        },
+        {
+          "kind": "velocity",
+          "topic": "Zig Creator Calls Spade a Spade, Anthropic Blows Smoke",
+          "value": 1.2641,
+          "topicSets": [],
+          "ref": "source:trending:hn:2026-09-28"
+        },
+        {
+          "kind": "velocity",
+          "topic": "Anthropic says Alibaba illicitly extracted Claude AI model capabilities",
+          "value": 0.9311,
+          "topicSets": [],
+          "ref": "source:trending:hn:2026-09-28"
+        },
+        {
+          "kind": "velocity",
+          "topic": "I think Anthropic and OpenAI have found product-market fit",
+          "value": 0.7874,
+          "topicSets": [],
+          "ref": "source:trending:hn:2026-09-28"
+        },
+        {
+          "kind": "velocity",
+          "topic": "S&P 500 rejects SpaceX, also blocking entry for OpenAI and Anthropic",
+          "value": 0.7242,
+          "topicSets": [],
+          "ref": "source:trending:hn:2026-09-28"
+        },
+        {
+          "kind": "velocity",
+          "topic": "Can the stockmarket swallow Anthropic, SpaceX and OpenAI?",
+          "value": 0.7024,
+          "topicSets": [],
+          "ref": "source:trending:hn:2026-09-28"
+        },
+        {
+          "kind": "velocity",
+          "topic": "I’ve joined Anthropic",
+          "value": 0.6476,
+          "topicSets": [],
+          "ref": "source:trending:hn:2026-09-28"
+        }
+      ]
+    },
+    {
+      "provider": "google-trends",
+      "status": "success",
+      "reason": null,
+      "signals": [
+        {
+          "kind": "volume",
+          "topic": "arthur fils",
+          "value": 1000,
+          "scope": "geo:CZ",
+          "topicSets": [],
+          "ref": "source:trending:google-trends:2026-09-28"
+        },
+        {
+          "kind": "volume",
+          "topic": "karel řehka",
+          "value": 1000,
+          "scope": "geo:CZ",
+          "topicSets": [],
+          "ref": "source:trending:google-trends:2026-09-28"
+        },
+        {
+          "kind": "volume",
+          "topic": "politika",
+          "value": 200,
+          "scope": "geo:CZ",
+          "topicSets": [],
+          "ref": "source:trending:google-trends:2026-09-28"
+        },
+        {
+          "kind": "volume",
+          "topic": "d11",
+          "value": 2000,
+          "scope": "geo:CZ",
+          "topicSets": [],
+          "ref": "source:trending:google-trends:2026-09-28"
+        },
+        {
+          "kind": "volume",
+          "topic": "ropovod",
+          "value": 1000,
+          "scope": "geo:CZ",
+          "topicSets": [],
+          "ref": "source:trending:google-trends:2026-09-28"
+        },
+        {
+          "kind": "volume",
+          "topic": "rebranding",
+          "value": 1000,
+          "scope": "geo:CZ",
+          "topicSets": [],
+          "ref": "source:trending:google-trends:2026-09-28"
+        },
+        {
+          "kind": "volume",
+          "topic": "bydlení",
+          "value": 500,
+          "scope": "geo:CZ",
+          "topicSets": [],
+          "ref": "source:trending:google-trends:2026-09-28"
+        },
+        {
+          "kind": "volume",
+          "topic": "otevírací doba",
+          "value": 500,
+          "scope": "geo:CZ",
+          "topicSets": [],
+          "ref": "source:trending:google-trends:2026-09-28"
+        },
+        {
+          "kind": "volume",
+          "topic": "weather",
+          "value": 1000,
+          "scope": "geo:CZ",
+          "topicSets": [],
+          "ref": "source:trending:google-trends:2026-09-28"
+        },
+        {
+          "kind": "volume",
+          "topic": "time",
+          "value": 500,
+          "scope": "geo:CZ",
+          "topicSets": [],
+          "ref": "source:trending:google-trends:2026-09-28"
+        }
+      ]
+    },
+    {
+      "provider": "google-trends",
+      "status": "success",
+      "reason": null,
+      "signals": [
+        {
+          "kind": "volume",
+          "topic": "when is daylight savings time",
+          "value": 20000,
+          "scope": "geo:US",
+          "topicSets": [],
+          "ref": "source:trending:google-trends:2026-09-28"
+        },
+        {
+          "kind": "volume",
+          "topic": "adam sandler",
+          "value": 500,
+          "scope": "geo:US",
+          "topicSets": [],
+          "ref": "source:trending:google-trends:2026-09-28"
+        },
+        {
+          "kind": "volume",
+          "topic": "atlantic city",
+          "value": 200,
+          "scope": "geo:US",
+          "topicSets": [],
+          "ref": "source:trending:google-trends:2026-09-28"
+        },
+        {
+          "kind": "volume",
+          "topic": "todays weather",
+          "value": 200,
+          "scope": "geo:US",
+          "topicSets": [],
+          "ref": "source:trending:google-trends:2026-09-28"
+        },
+        {
+          "kind": "volume",
+          "topic": "한국 대 우루과이",
+          "value": 200,
+          "scope": "geo:US",
+          "topicSets": [],
+          "ref": "source:trending:google-trends:2026-09-28"
+        },
+        {
+          "kind": "volume",
+          "topic": "trial",
+          "value": 200,
+          "scope": "geo:US",
+          "topicSets": [],
+          "ref": "source:trending:google-trends:2026-09-28"
+        },
+        {
+          "kind": "volume",
+          "topic": "south korea vs uruguay",
+          "value": 2000,
+          "scope": "geo:US",
+          "topicSets": [],
+          "ref": "source:trending:google-trends:2026-09-28"
+        },
+        {
+          "kind": "volume",
+          "topic": "temperature",
+          "value": 200,
+          "scope": "geo:US",
+          "topicSets": [],
+          "ref": "source:trending:google-trends:2026-09-28"
+        },
+        {
+          "kind": "volume",
+          "topic": "tsla stock",
+          "value": 200,
+          "scope": "geo:US",
+          "topicSets": [],
+          "ref": "source:trending:google-trends:2026-09-28"
+        },
+        {
+          "kind": "volume",
+          "topic": "fat bear",
+          "value": 200,
+          "scope": "geo:US",
+          "topicSets": [],
+          "ref": "source:trending:google-trends:2026-09-28"
+        }
+      ]
+    },
+    {
+      "provider": "reddit",
+      "status": "success",
+      "reason": null,
+      "signals": [
+        {
+          "kind": "rank",
+          "topic": "I read the GPT-6 Astra system card and I think we all misunderstand what \"monitorability\" means now",
+          "value": 1,
+          "scope": "r/artificial",
+          "topicSets": [],
+          "ref": "source:trending:reddit:2026-09-28"
+        },
+        {
+          "kind": "rank",
+          "topic": "As A.I. Accelerates, Governments Are Increasingly Being Left Behind The gap between technology and policymaking has gott",
+          "value": 2,
+          "scope": "r/artificial",
+          "topicSets": [],
+          "ref": "source:trending:reddit:2026-09-28"
+        },
+        {
+          "kind": "rank",
+          "topic": "How do you personally handle data protection when using AI tools?",
+          "value": 3,
+          "scope": "r/artificial",
+          "topicSets": [],
+          "ref": "source:trending:reddit:2026-09-28"
+        },
+        {
+          "kind": "rank",
+          "topic": "Mixolabs a multi style ai image generator",
+          "value": 4,
+          "scope": "r/artificial",
+          "topicSets": [],
+          "ref": "source:trending:reddit:2026-09-28"
+        },
+        {
+          "kind": "rank",
+          "topic": "AI Revenue Estimates",
+          "value": 5,
+          "scope": "r/artificial",
+          "topicSets": [],
+          "ref": "source:trending:reddit:2026-09-28"
+        },
+        {
+          "kind": "rank",
+          "topic": "What are chinese labs doing differently?",
+          "value": 6,
+          "scope": "r/artificial",
+          "topicSets": [],
+          "ref": "source:trending:reddit:2026-09-28"
+        },
+        {
+          "kind": "rank",
+          "topic": "Will the AI compute crunch be solved on-device or in data centers?",
+          "value": 7,
+          "scope": "r/artificial",
+          "topicSets": [],
+          "ref": "source:trending:reddit:2026-09-28"
+        },
+        {
+          "kind": "rank",
+          "topic": "Ex-LinkedIn insider Jeremy Schifeling put a number on what a referral is worth against an AI-generated online applicatio",
+          "value": 8,
+          "scope": "r/artificial",
+          "topicSets": [],
+          "ref": "source:trending:reddit:2026-09-28"
+        },
+        {
+          "kind": "rank",
+          "topic": "Is there a specific prompt that makes Gemini create proper youtube video summaries, with working timecodes?",
+          "value": 9,
+          "scope": "r/artificial",
+          "topicSets": [],
+          "ref": "source:trending:reddit:2026-09-28"
+        },
+        {
+          "kind": "rank",
+          "topic": "What has AI actually become useful for in your life?",
+          "value": 10,
+          "scope": "r/artificial",
+          "topicSets": [],
+          "ref": "source:trending:reddit:2026-09-28"
+        }
+      ]
+    },
+    {
+      "provider": "reddit",
+      "status": "failed",
+      "reason": "Source returned HTTP 429",
+      "signals": []
+    }
+  ],
+  "scoredSignals": [
+    {
+      "key": "search-spike:when is daylight savings time",
+      "topic": "when is daylight savings time",
+      "topicSet": null,
+      "provider": "google-trends",
+      "sourceKind": "search-spike",
+      "measurement": "volume",
+      "value": 20000,
+      "components": [
+        {
+          "name": "relative-growth",
+          "rawValue": null,
+          "weight": 0.45,
+          "contribution": null,
+          "note": "No prior reading to compare against."
+        },
+        {
+          "name": "absolute-volume",
+          "rawValue": 0.915,
+          "weight": 0.25,
+          "contribution": 22.875,
+          "note": "Normalized inside search-spike."
+        },
+        {
+          "name": "source-breadth",
+          "rawValue": 0.25,
+          "weight": 0.3,
+          "contribution": 7.5,
+          "note": "1 of 4 answering operators."
+        }
+      ],
+      "score": 55.227,
+      "status": "regular",
+      "window": "active",
+      "breakout": false,
+      "firstFlaggedOn": "2026-09-28",
+      "measuredAt": "2026-09-28T11:01:23.549Z",
+      "expiresAt": "2026-09-30T11:01:23.549Z",
+      "lastedHours": 0,
+      "breadthProviders": [
+        "google"
+      ],
+      "evidenceRefs": [
+        "source:trending:google-trends:2026-09-28"
+      ]
+    },
+    {
+      "key": "search-spike:time",
+      "topic": "time",
+      "topicSet": null,
+      "provider": "google-trends",
+      "sourceKind": "search-spike",
+      "measurement": "volume",
+      "value": 500,
+      "components": [
+        {
+          "name": "relative-growth",
+          "rawValue": null,
+          "weight": 0.45,
+          "contribution": null,
+          "note": "No prior reading to compare against."
+        },
+        {
+          "name": "absolute-volume",
+          "rawValue": 0.575,
+          "weight": 0.25,
+          "contribution": 14.375,
+          "note": "Normalized inside search-spike."
+        },
+        {
+          "name": "source-breadth",
+          "rawValue": 0.5,
+          "weight": 0.3,
+          "contribution": 15,
+          "note": "2 of 4 answering operators."
+        }
+      ],
+      "score": 53.409,
+      "status": "regular",
+      "window": "active",
+      "breakout": false,
+      "firstFlaggedOn": "2026-09-28",
+      "measuredAt": "2026-09-28T11:01:23.549Z",
+      "expiresAt": "2026-09-30T11:01:23.549Z",
+      "lastedHours": 0,
+      "breadthProviders": [
+        "google",
+        "reddit"
+      ],
+      "evidenceRefs": [
+        "source:trending:google-trends:2026-09-28"
+      ]
+    },
+    {
+      "key": "format-shift:thread",
+      "topic": "thread",
+      "topicSet": null,
+      "provider": "apify-social",
+      "sourceKind": "format-shift",
+      "measurement": "count",
+      "value": 28,
+      "components": [
+        {
+          "name": "relative-growth",
+          "rawValue": null,
+          "weight": 0.45,
+          "contribution": null,
+          "note": "No prior reading to compare against."
+        },
+        {
+          "name": "absolute-volume",
+          "rawValue": 0.819,
+          "weight": 0.25,
+          "contribution": 20.475,
+          "note": "Normalized inside format-shift."
+        },
+        {
+          "name": "source-breadth",
+          "rawValue": 0.25,
+          "weight": 0.3,
+          "contribution": 7.5,
+          "note": "1 of 4 answering operators."
+        }
+      ],
+      "score": 50.864,
+      "status": "regular",
+      "window": "active",
+      "breakout": false,
+      "firstFlaggedOn": "2026-09-28",
+      "measuredAt": "2026-09-28T11:01:23.549Z",
+      "expiresAt": "2026-10-28T11:01:23.549Z",
+      "lastedHours": 0,
+      "breadthProviders": [
+        "meta"
+      ],
+      "evidenceRefs": [
+        "source:apify:threads:2026-09-28",
+        "source:trending:hn:2026-09-28",
+        "source:trending:google-trends:2026-09-28",
+        "source:trending:reddit:2026-09-28"
+      ]
+    },
+    {
+      "key": "viral-post:is there a specific prompt that makes gemini create proper youtube video summaries with working timecodes",
+      "topic": "Is there a specific prompt that makes Gemini create proper youtube video summaries, with working timecodes?",
+      "topicSet": null,
+      "provider": "reddit",
+      "sourceKind": "viral-post",
+      "measurement": "rank",
+      "value": 9,
+      "components": [
+        {
+          "name": "relative-growth",
+          "rawValue": null,
+          "weight": 0.45,
+          "contribution": null,
+          "note": "No prior reading to compare against."
+        },
+        {
+          "name": "absolute-volume",
+          "rawValue": null,
+          "weight": 0.25,
+          "contribution": null,
+          "note": "A rank carries position and no size; it is never read as volume."
+        },
+        {
+          "name": "source-breadth",
+          "rawValue": 0.5,
+          "weight": 0.3,
+          "contribution": 15,
+          "note": "2 of 4 answering operators."
+        }
+      ],
+      "score": 50,
+      "status": "regular",
+      "window": "active",
+      "breakout": false,
+      "firstFlaggedOn": "2026-09-28",
+      "measuredAt": "2026-09-28T11:01:23.549Z",
+      "expiresAt": "2026-09-29T11:01:23.549Z",
+      "lastedHours": 0,
+      "breadthProviders": [
+        "google",
+        "reddit"
+      ],
+      "evidenceRefs": [
+        "source:trending:reddit:2026-09-28"
+      ]
+    },
+    {
+      "key": "search-spike:d11",
+      "topic": "d11",
+      "topicSet": null,
+      "provider": "google-trends",
+      "sourceKind": "search-spike",
+      "measurement": "volume",
+      "value": 2000,
+      "components": [
+        {
+          "name": "relative-growth",
+          "rawValue": null,
+          "weight": 0.45,
+          "contribution": null,
+          "note": "No prior reading to compare against."
+        },
+        {
+          "name": "absolute-volume",
+          "rawValue": 0.703,
+          "weight": 0.25,
+          "contribution": 17.575,
+          "note": "Normalized inside search-spike."
+        },
+        {
+          "name": "source-breadth",
+          "rawValue": 0.25,
+          "weight": 0.3,
+          "contribution": 7.5,
+          "note": "1 of 4 answering operators."
+        }
+      ],
+      "score": 45.591,
+      "status": "regular",
+      "window": "active",
+      "breakout": false,
+      "firstFlaggedOn": "2026-09-28",
+      "measuredAt": "2026-09-28T11:01:23.549Z",
+      "expiresAt": "2026-09-30T11:01:23.549Z",
+      "lastedHours": 0,
+      "breadthProviders": [
+        "google"
+      ],
+      "evidenceRefs": [
+        "source:trending:google-trends:2026-09-28"
+      ]
+    },
+    {
+      "key": "search-spike:south korea vs uruguay",
+      "topic": "south korea vs uruguay",
+      "topicSet": null,
+      "provider": "google-trends",
+      "sourceKind": "search-spike",
+      "measurement": "volume",
+      "value": 2000,
+      "components": [
+        {
+          "name": "relative-growth",
+          "rawValue": null,
+          "weight": 0.45,
+          "contribution": null,
+          "note": "No prior reading to compare against."
+        },
+        {
+          "name": "absolute-volume",
+          "rawValue": 0.703,
+          "weight": 0.25,
+          "contribution": 17.575,
+          "note": "Normalized inside search-spike."
+        },
+        {
+          "name": "source-breadth",
+          "rawValue": 0.25,
+          "weight": 0.3,
+          "contribution": 7.5,
+          "note": "1 of 4 answering operators."
+        }
+      ],
+      "score": 45.591,
+      "status": "regular",
+      "window": "active",
+      "breakout": false,
+      "firstFlaggedOn": "2026-09-28",
+      "measuredAt": "2026-09-28T11:01:23.549Z",
+      "expiresAt": "2026-09-30T11:01:23.549Z",
+      "lastedHours": 0,
+      "breadthProviders": [
+        "google"
+      ],
+      "evidenceRefs": [
+        "source:trending:google-trends:2026-09-28"
+      ]
+    },
+    {
+      "key": "search-spike:arthur fils",
+      "topic": "arthur fils",
+      "topicSet": null,
+      "provider": "google-trends",
+      "sourceKind": "search-spike",
+      "measurement": "volume",
+      "value": 1000,
+      "components": [
+        {
+          "name": "relative-growth",
+          "rawValue": null,
+          "weight": 0.45,
+          "contribution": null,
+          "note": "No prior reading to compare against."
+        },
+        {
+          "name": "absolute-volume",
+          "rawValue": 0.639,
+          "weight": 0.25,
+          "contribution": 15.975,
+          "note": "Normalized inside search-spike."
+        },
+        {
+          "name": "source-breadth",
+          "rawValue": 0.25,
+          "weight": 0.3,
+          "contribution": 7.5,
+          "note": "1 of 4 answering operators."
+        }
+      ],
+      "score": 42.682,
+      "status": "regular",
+      "window": "active",
+      "breakout": false,
+      "firstFlaggedOn": "2026-09-28",
+      "measuredAt": "2026-09-28T11:01:23.549Z",
+      "expiresAt": "2026-09-30T11:01:23.549Z",
+      "lastedHours": 0,
+      "breadthProviders": [
+        "google"
+      ],
+      "evidenceRefs": [
+        "source:trending:google-trends:2026-09-28"
+      ]
+    },
+    {
+      "key": "search-spike:karel řehka",
+      "topic": "karel řehka",
+      "topicSet": null,
+      "provider": "google-trends",
+      "sourceKind": "search-spike",
+      "measurement": "volume",
+      "value": 1000,
+      "components": [
+        {
+          "name": "relative-growth",
+          "rawValue": null,
+          "weight": 0.45,
+          "contribution": null,
+          "note": "No prior reading to compare against."
+        },
+        {
+          "name": "absolute-volume",
+          "rawValue": 0.639,
+          "weight": 0.25,
+          "contribution": 15.975,
+          "note": "Normalized inside search-spike."
+        },
+        {
+          "name": "source-breadth",
+          "rawValue": 0.25,
+          "weight": 0.3,
+          "contribution": 7.5,
+          "note": "1 of 4 answering operators."
+        }
+      ],
+      "score": 42.682,
+      "status": "regular",
+      "window": "active",
+      "breakout": false,
+      "firstFlaggedOn": "2026-09-28",
+      "measuredAt": "2026-09-28T11:01:23.549Z",
+      "expiresAt": "2026-09-30T11:01:23.549Z",
+      "lastedHours": 0,
+      "breadthProviders": [
+        "google"
+      ],
+      "evidenceRefs": [
+        "source:trending:google-trends:2026-09-28"
+      ]
+    },
+    {
+      "key": "search-spike:rebranding",
+      "topic": "rebranding",
+      "topicSet": null,
+      "provider": "google-trends",
+      "sourceKind": "search-spike",
+      "measurement": "volume",
+      "value": 1000,
+      "components": [
+        {
+          "name": "relative-growth",
+          "rawValue": null,
+          "weight": 0.45,
+          "contribution": null,
+          "note": "No prior reading to compare against."
+        },
+        {
+          "name": "absolute-volume",
+          "rawValue": 0.639,
+          "weight": 0.25,
+          "contribution": 15.975,
+          "note": "Normalized inside search-spike."
+        },
+        {
+          "name": "source-breadth",
+          "rawValue": 0.25,
+          "weight": 0.3,
+          "contribution": 7.5,
+          "note": "1 of 4 answering operators."
+        }
+      ],
+      "score": 42.682,
+      "status": "regular",
+      "window": "active",
+      "breakout": false,
+      "firstFlaggedOn": "2026-09-28",
+      "measuredAt": "2026-09-28T11:01:23.549Z",
+      "expiresAt": "2026-09-30T11:01:23.549Z",
+      "lastedHours": 0,
+      "breadthProviders": [
+        "google"
+      ],
+      "evidenceRefs": [
+        "source:trending:google-trends:2026-09-28"
+      ]
+    },
+    {
+      "key": "search-spike:ropovod",
+      "topic": "ropovod",
+      "topicSet": null,
+      "provider": "google-trends",
+      "sourceKind": "search-spike",
+      "measurement": "volume",
+      "value": 1000,
+      "components": [
+        {
+          "name": "relative-growth",
+          "rawValue": null,
+          "weight": 0.45,
+          "contribution": null,
+          "note": "No prior reading to compare against."
+        },
+        {
+          "name": "absolute-volume",
+          "rawValue": 0.639,
+          "weight": 0.25,
+          "contribution": 15.975,
+          "note": "Normalized inside search-spike."
+        },
+        {
+          "name": "source-breadth",
+          "rawValue": 0.25,
+          "weight": 0.3,
+          "contribution": 7.5,
+          "note": "1 of 4 answering operators."
+        }
+      ],
+      "score": 42.682,
+      "status": "regular",
+      "window": "active",
+      "breakout": false,
+      "firstFlaggedOn": "2026-09-28",
+      "measuredAt": "2026-09-28T11:01:23.549Z",
+      "expiresAt": "2026-09-30T11:01:23.549Z",
+      "lastedHours": 0,
+      "breadthProviders": [
+        "google"
+      ],
+      "evidenceRefs": [
+        "source:trending:google-trends:2026-09-28"
+      ]
+    },
+    {
+      "key": "search-spike:weather",
+      "topic": "weather",
+      "topicSet": null,
+      "provider": "google-trends",
+      "sourceKind": "search-spike",
+      "measurement": "volume",
+      "value": 1000,
+      "components": [
+        {
+          "name": "relative-growth",
+          "rawValue": null,
+          "weight": 0.45,
+          "contribution": null,
+          "note": "No prior reading to compare against."
+        },
+        {
+          "name": "absolute-volume",
+          "rawValue": 0.639,
+          "weight": 0.25,
+          "contribution": 15.975,
+          "note": "Normalized inside search-spike."
+        },
+        {
+          "name": "source-breadth",
+          "rawValue": 0.25,
+          "weight": 0.3,
+          "contribution": 7.5,
+          "note": "1 of 4 answering operators."
+        }
+      ],
+      "score": 42.682,
+      "status": "regular",
+      "window": "active",
+      "breakout": false,
+      "firstFlaggedOn": "2026-09-28",
+      "measuredAt": "2026-09-28T11:01:23.549Z",
+      "expiresAt": "2026-09-30T11:01:23.549Z",
+      "lastedHours": 0,
+      "breadthProviders": [
+        "google"
+      ],
+      "evidenceRefs": [
+        "source:trending:google-trends:2026-09-28"
+      ]
+    },
+    {
+      "key": "search-spike:adam sandler",
+      "topic": "adam sandler",
+      "topicSet": null,
+      "provider": "google-trends",
+      "sourceKind": "search-spike",
+      "measurement": "volume",
+      "value": 500,
+      "components": [
+        {
+          "name": "relative-growth",
+          "rawValue": null,
+          "weight": 0.45,
+          "contribution": null,
+          "note": "No prior reading to compare against."
+        },
+        {
+          "name": "absolute-volume",
+          "rawValue": 0.575,
+          "weight": 0.25,
+          "contribution": 14.375,
+          "note": "Normalized inside search-spike."
+        },
+        {
+          "name": "source-breadth",
+          "rawValue": 0.25,
+          "weight": 0.3,
+          "contribution": 7.5,
+          "note": "1 of 4 answering operators."
+        }
+      ],
+      "score": 39.773,
+      "status": "regular",
+      "window": "active",
+      "breakout": false,
+      "firstFlaggedOn": "2026-09-28",
+      "measuredAt": "2026-09-28T11:01:23.549Z",
+      "expiresAt": "2026-09-30T11:01:23.549Z",
+      "lastedHours": 0,
+      "breadthProviders": [
+        "google"
+      ],
+      "evidenceRefs": [
+        "source:trending:google-trends:2026-09-28"
+      ]
+    },
+    {
+      "key": "search-spike:bydlení",
+      "topic": "bydlení",
+      "topicSet": null,
+      "provider": "google-trends",
+      "sourceKind": "search-spike",
+      "measurement": "volume",
+      "value": 500,
+      "components": [
+        {
+          "name": "relative-growth",
+          "rawValue": null,
+          "weight": 0.45,
+          "contribution": null,
+          "note": "No prior reading to compare against."
+        },
+        {
+          "name": "absolute-volume",
+          "rawValue": 0.575,
+          "weight": 0.25,
+          "contribution": 14.375,
+          "note": "Normalized inside search-spike."
+        },
+        {
+          "name": "source-breadth",
+          "rawValue": 0.25,
+          "weight": 0.3,
+          "contribution": 7.5,
+          "note": "1 of 4 answering operators."
+        }
+      ],
+      "score": 39.773,
+      "status": "regular",
+      "window": "active",
+      "breakout": false,
+      "firstFlaggedOn": "2026-09-28",
+      "measuredAt": "2026-09-28T11:01:23.549Z",
+      "expiresAt": "2026-09-30T11:01:23.549Z",
+      "lastedHours": 0,
+      "breadthProviders": [
+        "google"
+      ],
+      "evidenceRefs": [
+        "source:trending:google-trends:2026-09-28"
+      ]
+    },
+    {
+      "key": "search-spike:otevírací doba",
+      "topic": "otevírací doba",
+      "topicSet": null,
+      "provider": "google-trends",
+      "sourceKind": "search-spike",
+      "measurement": "volume",
+      "value": 500,
+      "components": [
+        {
+          "name": "relative-growth",
+          "rawValue": null,
+          "weight": 0.45,
+          "contribution": null,
+          "note": "No prior reading to compare against."
+        },
+        {
+          "name": "absolute-volume",
+          "rawValue": 0.575,
+          "weight": 0.25,
+          "contribution": 14.375,
+          "note": "Normalized inside search-spike."
+        },
+        {
+          "name": "source-breadth",
+          "rawValue": 0.25,
+          "weight": 0.3,
+          "contribution": 7.5,
+          "note": "1 of 4 answering operators."
+        }
+      ],
+      "score": 39.773,
+      "status": "regular",
+      "window": "active",
+      "breakout": false,
+      "firstFlaggedOn": "2026-09-28",
+      "measuredAt": "2026-09-28T11:01:23.549Z",
+      "expiresAt": "2026-09-30T11:01:23.549Z",
+      "lastedHours": 0,
+      "breadthProviders": [
+        "google"
+      ],
+      "evidenceRefs": [
+        "source:trending:google-trends:2026-09-28"
+      ]
+    },
+    {
+      "key": "search-spike:atlantic city",
+      "topic": "atlantic city",
+      "topicSet": null,
+      "provider": "google-trends",
+      "sourceKind": "search-spike",
+      "measurement": "volume",
+      "value": 200,
+      "components": [
+        {
+          "name": "relative-growth",
+          "rawValue": null,
+          "weight": 0.45,
+          "contribution": null,
+          "note": "No prior reading to compare against."
+        },
+        {
+          "name": "absolute-volume",
+          "rawValue": 0.49,
+          "weight": 0.25,
+          "contribution": 12.25,
+          "note": "Normalized inside search-spike."
+        },
+        {
+          "name": "source-breadth",
+          "rawValue": 0.25,
+          "weight": 0.3,
+          "contribution": 7.5,
+          "note": "1 of 4 answering operators."
+        }
+      ],
+      "score": 35.909,
+      "status": "regular",
+      "window": "active",
+      "breakout": false,
+      "firstFlaggedOn": "2026-09-28",
+      "measuredAt": "2026-09-28T11:01:23.549Z",
+      "expiresAt": "2026-09-30T11:01:23.549Z",
+      "lastedHours": 0,
+      "breadthProviders": [
+        "google"
+      ],
+      "evidenceRefs": [
+        "source:trending:google-trends:2026-09-28"
+      ]
+    },
+    {
+      "key": "search-spike:fat bear",
+      "topic": "fat bear",
+      "topicSet": null,
+      "provider": "google-trends",
+      "sourceKind": "search-spike",
+      "measurement": "volume",
+      "value": 200,
+      "components": [
+        {
+          "name": "relative-growth",
+          "rawValue": null,
+          "weight": 0.45,
+          "contribution": null,
+          "note": "No prior reading to compare against."
+        },
+        {
+          "name": "absolute-volume",
+          "rawValue": 0.49,
+          "weight": 0.25,
+          "contribution": 12.25,
+          "note": "Normalized inside search-spike."
+        },
+        {
+          "name": "source-breadth",
+          "rawValue": 0.25,
+          "weight": 0.3,
+          "contribution": 7.5,
+          "note": "1 of 4 answering operators."
+        }
+      ],
+      "score": 35.909,
+      "status": "regular",
+      "window": "active",
+      "breakout": false,
+      "firstFlaggedOn": "2026-09-28",
+      "measuredAt": "2026-09-28T11:01:23.549Z",
+      "expiresAt": "2026-09-30T11:01:23.549Z",
+      "lastedHours": 0,
+      "breadthProviders": [
+        "google"
+      ],
+      "evidenceRefs": [
+        "source:trending:google-trends:2026-09-28"
+      ]
+    },
+    {
+      "key": "search-spike:politika",
+      "topic": "politika",
+      "topicSet": null,
+      "provider": "google-trends",
+      "sourceKind": "search-spike",
+      "measurement": "volume",
+      "value": 200,
+      "components": [
+        {
+          "name": "relative-growth",
+          "rawValue": null,
+          "weight": 0.45,
+          "contribution": null,
+          "note": "No prior reading to compare against."
+        },
+        {
+          "name": "absolute-volume",
+          "rawValue": 0.49,
+          "weight": 0.25,
+          "contribution": 12.25,
+          "note": "Normalized inside search-spike."
+        },
+        {
+          "name": "source-breadth",
+          "rawValue": 0.25,
+          "weight": 0.3,
+          "contribution": 7.5,
+          "note": "1 of 4 answering operators."
+        }
+      ],
+      "score": 35.909,
+      "status": "regular",
+      "window": "active",
+      "breakout": false,
+      "firstFlaggedOn": "2026-09-28",
+      "measuredAt": "2026-09-28T11:01:23.549Z",
+      "expiresAt": "2026-09-30T11:01:23.549Z",
+      "lastedHours": 0,
+      "breadthProviders": [
+        "google"
+      ],
+      "evidenceRefs": [
+        "source:trending:google-trends:2026-09-28"
+      ]
+    },
+    {
+      "key": "search-spike:temperature",
+      "topic": "temperature",
+      "topicSet": null,
+      "provider": "google-trends",
+      "sourceKind": "search-spike",
+      "measurement": "volume",
+      "value": 200,
+      "components": [
+        {
+          "name": "relative-growth",
+          "rawValue": null,
+          "weight": 0.45,
+          "contribution": null,
+          "note": "No prior reading to compare against."
+        },
+        {
+          "name": "absolute-volume",
+          "rawValue": 0.49,
+          "weight": 0.25,
+          "contribution": 12.25,
+          "note": "Normalized inside search-spike."
+        },
+        {
+          "name": "source-breadth",
+          "rawValue": 0.25,
+          "weight": 0.3,
+          "contribution": 7.5,
+          "note": "1 of 4 answering operators."
+        }
+      ],
+      "score": 35.909,
+      "status": "regular",
+      "window": "active",
+      "breakout": false,
+      "firstFlaggedOn": "2026-09-28",
+      "measuredAt": "2026-09-28T11:01:23.549Z",
+      "expiresAt": "2026-09-30T11:01:23.549Z",
+      "lastedHours": 0,
+      "breadthProviders": [
+        "google"
+      ],
+      "evidenceRefs": [
+        "source:trending:google-trends:2026-09-28"
+      ]
+    },
+    {
+      "key": "search-spike:todays weather",
+      "topic": "todays weather",
+      "topicSet": null,
+      "provider": "google-trends",
+      "sourceKind": "search-spike",
+      "measurement": "volume",
+      "value": 200,
+      "components": [
+        {
+          "name": "relative-growth",
+          "rawValue": null,
+          "weight": 0.45,
+          "contribution": null,
+          "note": "No prior reading to compare against."
+        },
+        {
+          "name": "absolute-volume",
+          "rawValue": 0.49,
+          "weight": 0.25,
+          "contribution": 12.25,
+          "note": "Normalized inside search-spike."
+        },
+        {
+          "name": "source-breadth",
+          "rawValue": 0.25,
+          "weight": 0.3,
+          "contribution": 7.5,
+          "note": "1 of 4 answering operators."
+        }
+      ],
+      "score": 35.909,
+      "status": "regular",
+      "window": "active",
+      "breakout": false,
+      "firstFlaggedOn": "2026-09-28",
+      "measuredAt": "2026-09-28T11:01:23.549Z",
+      "expiresAt": "2026-09-30T11:01:23.549Z",
+      "lastedHours": 0,
+      "breadthProviders": [
+        "google"
+      ],
+      "evidenceRefs": [
+        "source:trending:google-trends:2026-09-28"
+      ]
+    },
+    {
+      "key": "search-spike:trial",
+      "topic": "trial",
+      "topicSet": null,
+      "provider": "google-trends",
+      "sourceKind": "search-spike",
+      "measurement": "volume",
+      "value": 200,
+      "components": [
+        {
+          "name": "relative-growth",
+          "rawValue": null,
+          "weight": 0.45,
+          "contribution": null,
+          "note": "No prior reading to compare against."
+        },
+        {
+          "name": "absolute-volume",
+          "rawValue": 0.49,
+          "weight": 0.25,
+          "contribution": 12.25,
+          "note": "Normalized inside search-spike."
+        },
+        {
+          "name": "source-breadth",
+          "rawValue": 0.25,
+          "weight": 0.3,
+          "contribution": 7.5,
+          "note": "1 of 4 answering operators."
+        }
+      ],
+      "score": 35.909,
+      "status": "regular",
+      "window": "active",
+      "breakout": false,
+      "firstFlaggedOn": "2026-09-28",
+      "measuredAt": "2026-09-28T11:01:23.549Z",
+      "expiresAt": "2026-09-30T11:01:23.549Z",
+      "lastedHours": 0,
+      "breadthProviders": [
+        "google"
+      ],
+      "evidenceRefs": [
+        "source:trending:google-trends:2026-09-28"
+      ]
+    },
+    {
+      "key": "search-spike:tsla stock",
+      "topic": "tsla stock",
+      "topicSet": null,
+      "provider": "google-trends",
+      "sourceKind": "search-spike",
+      "measurement": "volume",
+      "value": 200,
+      "components": [
+        {
+          "name": "relative-growth",
+          "rawValue": null,
+          "weight": 0.45,
+          "contribution": null,
+          "note": "No prior reading to compare against."
+        },
+        {
+          "name": "absolute-volume",
+          "rawValue": 0.49,
+          "weight": 0.25,
+          "contribution": 12.25,
+          "note": "Normalized inside search-spike."
+        },
+        {
+          "name": "source-breadth",
+          "rawValue": 0.25,
+          "weight": 0.3,
+          "contribution": 7.5,
+          "note": "1 of 4 answering operators."
+        }
+      ],
+      "score": 35.909,
+      "status": "regular",
+      "window": "active",
+      "breakout": false,
+      "firstFlaggedOn": "2026-09-28",
+      "measuredAt": "2026-09-28T11:01:23.549Z",
+      "expiresAt": "2026-09-30T11:01:23.549Z",
+      "lastedHours": 0,
+      "breadthProviders": [
+        "google"
+      ],
+      "evidenceRefs": [
+        "source:trending:google-trends:2026-09-28"
+      ]
+    },
+    {
+      "key": "search-spike:한국 대 우루과이",
+      "topic": "한국 대 우루과이",
+      "topicSet": null,
+      "provider": "google-trends",
+      "sourceKind": "search-spike",
+      "measurement": "volume",
+      "value": 200,
+      "components": [
+        {
+          "name": "relative-growth",
+          "rawValue": null,
+          "weight": 0.45,
+          "contribution": null,
+          "note": "No prior reading to compare against."
+        },
+        {
+          "name": "absolute-volume",
+          "rawValue": 0.49,
+          "weight": 0.25,
+          "contribution": 12.25,
+          "note": "Normalized inside search-spike."
+        },
+        {
+          "name": "source-breadth",
+          "rawValue": 0.25,
+          "weight": 0.3,
+          "contribution": 7.5,
+          "note": "1 of 4 answering operators."
+        }
+      ],
+      "score": 35.909,
+      "status": "regular",
+      "window": "active",
+      "breakout": false,
+      "firstFlaggedOn": "2026-09-28",
+      "measuredAt": "2026-09-28T11:01:23.549Z",
+      "expiresAt": "2026-09-30T11:01:23.549Z",
+      "lastedHours": 0,
+      "breadthProviders": [
+        "google"
+      ],
+      "evidenceRefs": [
+        "source:trending:google-trends:2026-09-28"
+      ]
+    },
+    {
+      "key": "viral-post:discovery of a new openai agent message board",
+      "topic": "Discovery of a new OpenAI agent message board",
+      "topicSet": null,
+      "provider": "hn",
+      "sourceKind": "viral-post",
+      "measurement": "velocity",
+      "value": 6.788,
+      "components": [
+        {
+          "name": "relative-growth",
+          "rawValue": null,
+          "weight": 0.45,
+          "contribution": null,
+          "note": "No prior reading to compare against."
+        },
+        {
+          "name": "absolute-volume",
+          "rawValue": 0.33,
+          "weight": 0.25,
+          "contribution": 8.25,
+          "note": "Normalized inside viral-post."
+        },
+        {
+          "name": "source-breadth",
+          "rawValue": 0.25,
+          "weight": 0.3,
+          "contribution": 7.5,
+          "note": "1 of 4 answering operators."
+        }
+      ],
+      "score": 28.636,
+      "status": "regular",
+      "window": "active",
+      "breakout": false,
+      "firstFlaggedOn": "2026-09-28",
+      "measuredAt": "2026-09-28T11:01:23.549Z",
+      "expiresAt": "2026-09-29T11:01:23.549Z",
+      "lastedHours": 0,
+      "breadthProviders": [
+        "hn"
+      ],
+      "evidenceRefs": [
+        "source:trending:hn:2026-09-28"
+      ]
+    },
+    {
+      "key": "viral-post:i resigned from anthropic today",
+      "topic": "I resigned from Anthropic today",
+      "topicSet": null,
+      "provider": "hn",
+      "sourceKind": "viral-post",
+      "measurement": "velocity",
+      "value": 3.768,
+      "components": [
+        {
+          "name": "relative-growth",
+          "rawValue": null,
+          "weight": 0.45,
+          "contribution": null,
+          "note": "No prior reading to compare against."
+        },
+        {
+          "name": "absolute-volume",
+          "rawValue": 0.251,
+          "weight": 0.25,
+          "contribution": 6.275,
+          "note": "Normalized inside viral-post."
+        },
+        {
+          "name": "source-breadth",
+          "rawValue": 0.25,
+          "weight": 0.3,
+          "contribution": 7.5,
+          "note": "1 of 4 answering operators."
+        }
+      ],
+      "score": 25.045,
+      "status": "regular",
+      "window": "active",
+      "breakout": false,
+      "firstFlaggedOn": "2026-09-28",
+      "measuredAt": "2026-09-28T11:01:23.549Z",
+      "expiresAt": "2026-09-29T11:01:23.549Z",
+      "lastedHours": 0,
+      "breadthProviders": [
+        "hn"
+      ],
+      "evidenceRefs": [
+        "source:trending:hn:2026-09-28"
+      ]
+    },
+    {
+      "key": "viral-post:ai revenue estimates",
+      "topic": "AI Revenue Estimates",
+      "topicSet": null,
+      "provider": "reddit",
+      "sourceKind": "viral-post",
+      "measurement": "rank",
+      "value": 5,
+      "components": [
+        {
+          "name": "relative-growth",
+          "rawValue": null,
+          "weight": 0.45,
+          "contribution": null,
+          "note": "No prior reading to compare against."
+        },
+        {
+          "name": "absolute-volume",
+          "rawValue": null,
+          "weight": 0.25,
+          "contribution": null,
+          "note": "A rank carries position and no size; it is never read as volume."
+        },
+        {
+          "name": "source-breadth",
+          "rawValue": 0.25,
+          "weight": 0.3,
+          "contribution": 7.5,
+          "note": "1 of 4 answering operators."
+        }
+      ],
+      "score": 25,
+      "status": "regular",
+      "window": "active",
+      "breakout": false,
+      "firstFlaggedOn": "2026-09-28",
+      "measuredAt": "2026-09-28T11:01:23.549Z",
+      "expiresAt": "2026-09-29T11:01:23.549Z",
+      "lastedHours": 0,
+      "breadthProviders": [
+        "reddit"
+      ],
+      "evidenceRefs": [
+        "source:trending:reddit:2026-09-28"
+      ]
+    },
+    {
+      "key": "viral-post:as a i accelerates governments are increasingly being left behind the gap between technology and policymaking has gott",
+      "topic": "As A.I. Accelerates, Governments Are Increasingly Being Left Behind The gap between technology and policymaking has gott",
+      "topicSet": null,
+      "provider": "reddit",
+      "sourceKind": "viral-post",
+      "measurement": "rank",
+      "value": 2,
+      "components": [
+        {
+          "name": "relative-growth",
+          "rawValue": null,
+          "weight": 0.45,
+          "contribution": null,
+          "note": "No prior reading to compare against."
+        },
+        {
+          "name": "absolute-volume",
+          "rawValue": null,
+          "weight": 0.25,
+          "contribution": null,
+          "note": "A rank carries position and no size; it is never read as volume."
+        },
+        {
+          "name": "source-breadth",
+          "rawValue": 0.25,
+          "weight": 0.3,
+          "contribution": 7.5,
+          "note": "1 of 4 answering operators."
+        }
+      ],
+      "score": 25,
+      "status": "regular",
+      "window": "active",
+      "breakout": false,
+      "firstFlaggedOn": "2026-09-28",
+      "measuredAt": "2026-09-28T11:01:23.549Z",
+      "expiresAt": "2026-09-29T11:01:23.549Z",
+      "lastedHours": 0,
+      "breadthProviders": [
+        "reddit"
+      ],
+      "evidenceRefs": [
+        "source:trending:reddit:2026-09-28"
+      ]
+    },
+    {
+      "key": "viral-post:ex linkedin insider jeremy schifeling put a number on what a referral is worth against an ai generated online applicatio",
+      "topic": "Ex-LinkedIn insider Jeremy Schifeling put a number on what a referral is worth against an AI-generated online applicatio",
+      "topicSet": null,
+      "provider": "reddit",
+      "sourceKind": "viral-post",
+      "measurement": "rank",
+      "value": 8,
+      "components": [
+        {
+          "name": "relative-growth",
+          "rawValue": null,
+          "weight": 0.45,
+          "contribution": null,
+          "note": "No prior reading to compare against."
+        },
+        {
+          "name": "absolute-volume",
+          "rawValue": null,
+          "weight": 0.25,
+          "contribution": null,
+          "note": "A rank carries position and no size; it is never read as volume."
+        },
+        {
+          "name": "source-breadth",
+          "rawValue": 0.25,
+          "weight": 0.3,
+          "contribution": 7.5,
+          "note": "1 of 4 answering operators."
+        }
+      ],
+      "score": 25,
+      "status": "regular",
+      "window": "active",
+      "breakout": false,
+      "firstFlaggedOn": "2026-09-28",
+      "measuredAt": "2026-09-28T11:01:23.549Z",
+      "expiresAt": "2026-09-29T11:01:23.549Z",
+      "lastedHours": 0,
+      "breadthProviders": [
+        "reddit"
+      ],
+      "evidenceRefs": [
+        "source:trending:reddit:2026-09-28"
+      ]
+    },
+    {
+      "key": "viral-post:how do you personally handle data protection when using ai tools",
+      "topic": "How do you personally handle data protection when using AI tools?",
+      "topicSet": null,
+      "provider": "reddit",
+      "sourceKind": "viral-post",
+      "measurement": "rank",
+      "value": 3,
+      "components": [
+        {
+          "name": "relative-growth",
+          "rawValue": null,
+          "weight": 0.45,
+          "contribution": null,
+          "note": "No prior reading to compare against."
+        },
+        {
+          "name": "absolute-volume",
+          "rawValue": null,
+          "weight": 0.25,
+          "contribution": null,
+          "note": "A rank carries position and no size; it is never read as volume."
+        },
+        {
+          "name": "source-breadth",
+          "rawValue": 0.25,
+          "weight": 0.3,
+          "contribution": 7.5,
+          "note": "1 of 4 answering operators."
+        }
+      ],
+      "score": 25,
+      "status": "regular",
+      "window": "active",
+      "breakout": false,
+      "firstFlaggedOn": "2026-09-28",
+      "measuredAt": "2026-09-28T11:01:23.549Z",
+      "expiresAt": "2026-09-29T11:01:23.549Z",
+      "lastedHours": 0,
+      "breadthProviders": [
+        "reddit"
+      ],
+      "evidenceRefs": [
+        "source:trending:reddit:2026-09-28"
+      ]
+    },
+    {
+      "key": "viral-post:i read the gpt 6 astra system card and i think we all misunderstand what monitorability means now",
+      "topic": "I read the GPT-6 Astra system card and I think we all misunderstand what \"monitorability\" means now",
+      "topicSet": null,
+      "provider": "reddit",
+      "sourceKind": "viral-post",
+      "measurement": "rank",
+      "value": 1,
+      "components": [
+        {
+          "name": "relative-growth",
+          "rawValue": null,
+          "weight": 0.45,
+          "contribution": null,
+          "note": "No prior reading to compare against."
+        },
+        {
+          "name": "absolute-volume",
+          "rawValue": null,
+          "weight": 0.25,
+          "contribution": null,
+          "note": "A rank carries position and no size; it is never read as volume."
+        },
+        {
+          "name": "source-breadth",
+          "rawValue": 0.25,
+          "weight": 0.3,
+          "contribution": 7.5,
+          "note": "1 of 4 answering operators."
+        }
+      ],
+      "score": 25,
+      "status": "regular",
+      "window": "active",
+      "breakout": false,
+      "firstFlaggedOn": "2026-09-28",
+      "measuredAt": "2026-09-28T11:01:23.549Z",
+      "expiresAt": "2026-09-29T11:01:23.549Z",
+      "lastedHours": 0,
+      "breadthProviders": [
+        "reddit"
+      ],
+      "evidenceRefs": [
+        "source:trending:reddit:2026-09-28"
+      ]
+    },
+    {
+      "key": "viral-post:mixolabs a multi style ai image generator",
+      "topic": "Mixolabs a multi style ai image generator",
+      "topicSet": null,
+      "provider": "reddit",
+      "sourceKind": "viral-post",
+      "measurement": "rank",
+      "value": 4,
+      "components": [
+        {
+          "name": "relative-growth",
+          "rawValue": null,
+          "weight": 0.45,
+          "contribution": null,
+          "note": "No prior reading to compare against."
+        },
+        {
+          "name": "absolute-volume",
+          "rawValue": null,
+          "weight": 0.25,
+          "contribution": null,
+          "note": "A rank carries position and no size; it is never read as volume."
+        },
+        {
+          "name": "source-breadth",
+          "rawValue": 0.25,
+          "weight": 0.3,
+          "contribution": 7.5,
+          "note": "1 of 4 answering operators."
+        }
+      ],
+      "score": 25,
+      "status": "regular",
+      "window": "active",
+      "breakout": false,
+      "firstFlaggedOn": "2026-09-28",
+      "measuredAt": "2026-09-28T11:01:23.549Z",
+      "expiresAt": "2026-09-29T11:01:23.549Z",
+      "lastedHours": 0,
+      "breadthProviders": [
+        "reddit"
+      ],
+      "evidenceRefs": [
+        "source:trending:reddit:2026-09-28"
+      ]
+    },
+    {
+      "key": "viral-post:what are chinese labs doing differently",
+      "topic": "What are chinese labs doing differently?",
+      "topicSet": null,
+      "provider": "reddit",
+      "sourceKind": "viral-post",
+      "measurement": "rank",
+      "value": 6,
+      "components": [
+        {
+          "name": "relative-growth",
+          "rawValue": null,
+          "weight": 0.45,
+          "contribution": null,
+          "note": "No prior reading to compare against."
+        },
+        {
+          "name": "absolute-volume",
+          "rawValue": null,
+          "weight": 0.25,
+          "contribution": null,
+          "note": "A rank carries position and no size; it is never read as volume."
+        },
+        {
+          "name": "source-breadth",
+          "rawValue": 0.25,
+          "weight": 0.3,
+          "contribution": 7.5,
+          "note": "1 of 4 answering operators."
+        }
+      ],
+      "score": 25,
+      "status": "regular",
+      "window": "active",
+      "breakout": false,
+      "firstFlaggedOn": "2026-09-28",
+      "measuredAt": "2026-09-28T11:01:23.549Z",
+      "expiresAt": "2026-09-29T11:01:23.549Z",
+      "lastedHours": 0,
+      "breadthProviders": [
+        "reddit"
+      ],
+      "evidenceRefs": [
+        "source:trending:reddit:2026-09-28"
+      ]
+    },
+    {
+      "key": "viral-post:what has ai actually become useful for in your life",
+      "topic": "What has AI actually become useful for in your life?",
+      "topicSet": null,
+      "provider": "reddit",
+      "sourceKind": "viral-post",
+      "measurement": "rank",
+      "value": 10,
+      "components": [
+        {
+          "name": "relative-growth",
+          "rawValue": null,
+          "weight": 0.45,
+          "contribution": null,
+          "note": "No prior reading to compare against."
+        },
+        {
+          "name": "absolute-volume",
+          "rawValue": null,
+          "weight": 0.25,
+          "contribution": null,
+          "note": "A rank carries position and no size; it is never read as volume."
+        },
+        {
+          "name": "source-breadth",
+          "rawValue": 0.25,
+          "weight": 0.3,
+          "contribution": 7.5,
+          "note": "1 of 4 answering operators."
+        }
+      ],
+      "score": 25,
+      "status": "regular",
+      "window": "active",
+      "breakout": false,
+      "firstFlaggedOn": "2026-09-28",
+      "measuredAt": "2026-09-28T11:01:23.549Z",
+      "expiresAt": "2026-09-29T11:01:23.549Z",
+      "lastedHours": 0,
+      "breadthProviders": [
+        "reddit"
+      ],
+      "evidenceRefs": [
+        "source:trending:reddit:2026-09-28"
+      ]
+    },
+    {
+      "key": "viral-post:will the ai compute crunch be solved on device or in data centers",
+      "topic": "Will the AI compute crunch be solved on-device or in data centers?",
+      "topicSet": null,
+      "provider": "reddit",
+      "sourceKind": "viral-post",
+      "measurement": "rank",
+      "value": 7,
+      "components": [
+        {
+          "name": "relative-growth",
+          "rawValue": null,
+          "weight": 0.45,
+          "contribution": null,
+          "note": "No prior reading to compare against."
+        },
+        {
+          "name": "absolute-volume",
+          "rawValue": null,
+          "weight": 0.25,
+          "contribution": null,
+          "note": "A rank carries position and no size; it is never read as volume."
+        },
+        {
+          "name": "source-breadth",
+          "rawValue": 0.25,
+          "weight": 0.3,
+          "contribution": 7.5,
+          "note": "1 of 4 answering operators."
+        }
+      ],
+      "score": 25,
+      "status": "regular",
+      "window": "active",
+      "breakout": false,
+      "firstFlaggedOn": "2026-09-28",
+      "measuredAt": "2026-09-28T11:01:23.549Z",
+      "expiresAt": "2026-09-29T11:01:23.549Z",
+      "lastedHours": 0,
+      "breadthProviders": [
+        "reddit"
+      ],
+      "evidenceRefs": [
+        "source:trending:reddit:2026-09-28"
+      ]
+    },
+    {
+      "key": "viral-post:a single firm is behind openai anthropic and meta hacking scandals",
+      "topic": "A single firm is behind OpenAI, Anthropic, and Meta hacking scandals",
+      "topicSet": null,
+      "provider": "hn",
+      "sourceKind": "viral-post",
+      "measurement": "velocity",
+      "value": 2.913,
+      "components": [
+        {
+          "name": "relative-growth",
+          "rawValue": null,
+          "weight": 0.45,
+          "contribution": null,
+          "note": "No prior reading to compare against."
+        },
+        {
+          "name": "absolute-volume",
+          "rawValue": 0.219,
+          "weight": 0.25,
+          "contribution": 5.475,
+          "note": "Normalized inside viral-post."
+        },
+        {
+          "name": "source-breadth",
+          "rawValue": 0.25,
+          "weight": 0.3,
+          "contribution": 7.5,
+          "note": "1 of 4 answering operators."
+        }
+      ],
+      "score": 23.591,
+      "status": "regular",
+      "window": "active",
+      "breakout": false,
+      "firstFlaggedOn": "2026-09-28",
+      "measuredAt": "2026-09-28T11:01:23.549Z",
+      "expiresAt": "2026-09-29T11:01:23.549Z",
+      "lastedHours": 0,
+      "breadthProviders": [
+        "hn"
+      ],
+      "evidenceRefs": [
+        "source:trending:hn:2026-09-28"
+      ]
+    },
+    {
+      "key": "viral-post:anthropic s best ai model struggles to attract users as cheaper tools thrive",
+      "topic": "Anthropic's best AI model struggles to attract users as cheaper tools thrive",
+      "topicSet": null,
+      "provider": "hn",
+      "sourceKind": "viral-post",
+      "measurement": "velocity",
+      "value": 1.777,
+      "components": [
+        {
+          "name": "relative-growth",
+          "rawValue": null,
+          "weight": 0.45,
+          "contribution": null,
+          "note": "No prior reading to compare against."
+        },
+        {
+          "name": "absolute-volume",
+          "rawValue": 0.164,
+          "weight": 0.25,
+          "contribution": 4.1,
+          "note": "Normalized inside viral-post."
+        },
+        {
+          "name": "source-breadth",
+          "rawValue": 0.25,
+          "weight": 0.3,
+          "contribution": 7.5,
+          "note": "1 of 4 answering operators."
+        }
+      ],
+      "score": 21.091,
+      "status": "regular",
+      "window": "active",
+      "breakout": false,
+      "firstFlaggedOn": "2026-09-28",
+      "measuredAt": "2026-09-28T11:01:23.549Z",
+      "expiresAt": "2026-09-29T11:01:23.549Z",
+      "lastedHours": 0,
+      "breadthProviders": [
+        "hn"
+      ],
+      "evidenceRefs": [
+        "source:trending:hn:2026-09-28"
+      ]
+    },
+    {
+      "key": "viral-post:openai and hugging face address security incident during model evaluation",
+      "topic": "OpenAI and Hugging Face address security incident during model evaluation",
+      "topicSet": null,
+      "provider": "hn",
+      "sourceKind": "viral-post",
+      "measurement": "velocity",
+      "value": 1.694,
+      "components": [
+        {
+          "name": "relative-growth",
+          "rawValue": null,
+          "weight": 0.45,
+          "contribution": null,
+          "note": "No prior reading to compare against."
+        },
+        {
+          "name": "absolute-volume",
+          "rawValue": 0.159,
+          "weight": 0.25,
+          "contribution": 3.975,
+          "note": "Normalized inside viral-post."
+        },
+        {
+          "name": "source-breadth",
+          "rawValue": 0.25,
+          "weight": 0.3,
+          "contribution": 7.5,
+          "note": "1 of 4 answering operators."
+        }
+      ],
+      "score": 20.864,
+      "status": "regular",
+      "window": "active",
+      "breakout": false,
+      "firstFlaggedOn": "2026-09-28",
+      "measuredAt": "2026-09-28T11:01:23.549Z",
+      "expiresAt": "2026-09-29T11:01:23.549Z",
+      "lastedHours": 0,
+      "breadthProviders": [
+        "hn"
+      ],
+      "evidenceRefs": [
+        "source:trending:hn:2026-09-28"
+      ]
+    },
+    {
+      "key": "viral-post:anthropic s watermark text adulteration in claude is a perversion of writing",
+      "topic": "Anthropic's ‘watermark’ text adulteration in Claude is a perversion of writing",
+      "topicSet": null,
+      "provider": "hn",
+      "sourceKind": "viral-post",
+      "measurement": "velocity",
+      "value": 1.524,
+      "components": [
+        {
+          "name": "relative-growth",
+          "rawValue": null,
+          "weight": 0.45,
+          "contribution": null,
+          "note": "No prior reading to compare against."
+        },
+        {
+          "name": "absolute-volume",
+          "rawValue": 0.149,
+          "weight": 0.25,
+          "contribution": 3.725,
+          "note": "Normalized inside viral-post."
+        },
+        {
+          "name": "source-breadth",
+          "rawValue": 0.25,
+          "weight": 0.3,
+          "contribution": 7.5,
+          "note": "1 of 4 answering operators."
+        }
+      ],
+      "score": 20.409,
+      "status": "regular",
+      "window": "active",
+      "breakout": false,
+      "firstFlaggedOn": "2026-09-28",
+      "measuredAt": "2026-09-28T11:01:23.549Z",
+      "expiresAt": "2026-09-29T11:01:23.549Z",
+      "lastedHours": 0,
+      "breadthProviders": [
+        "hn"
+      ],
+      "evidenceRefs": [
+        "source:trending:hn:2026-09-28"
+      ]
+    },
+    {
+      "key": "viral-post:apple sues openai accuses ex employees of stealing trade secrets",
+      "topic": "Apple sues OpenAI, accuses ex-employees of stealing trade secrets",
+      "topicSet": null,
+      "provider": "hn",
+      "sourceKind": "viral-post",
+      "measurement": "velocity",
+      "value": 1.375,
+      "components": [
+        {
+          "name": "relative-growth",
+          "rawValue": null,
+          "weight": 0.45,
+          "contribution": null,
+          "note": "No prior reading to compare against."
+        },
+        {
+          "name": "absolute-volume",
+          "rawValue": 0.139,
+          "weight": 0.25,
+          "contribution": 3.475,
+          "note": "Normalized inside viral-post."
+        },
+        {
+          "name": "source-breadth",
+          "rawValue": 0.25,
+          "weight": 0.3,
+          "contribution": 7.5,
+          "note": "1 of 4 answering operators."
+        }
+      ],
+      "score": 19.955,
+      "status": "regular",
+      "window": "active",
+      "breakout": false,
+      "firstFlaggedOn": "2026-09-28",
+      "measuredAt": "2026-09-28T11:01:23.549Z",
+      "expiresAt": "2026-09-29T11:01:23.549Z",
+      "lastedHours": 0,
+      "breadthProviders": [
+        "hn"
+      ],
+      "evidenceRefs": [
+        "source:trending:hn:2026-09-28"
+      ]
+    },
+    {
+      "key": "viral-post:zig creator calls spade a spade anthropic blows smoke",
+      "topic": "Zig Creator Calls Spade a Spade, Anthropic Blows Smoke",
+      "topicSet": null,
+      "provider": "hn",
+      "sourceKind": "viral-post",
+      "measurement": "velocity",
+      "value": 1.264,
+      "components": [
+        {
+          "name": "relative-growth",
+          "rawValue": null,
+          "weight": 0.45,
+          "contribution": null,
+          "note": "No prior reading to compare against."
+        },
+        {
+          "name": "absolute-volume",
+          "rawValue": 0.131,
+          "weight": 0.25,
+          "contribution": 3.275,
+          "note": "Normalized inside viral-post."
+        },
+        {
+          "name": "source-breadth",
+          "rawValue": 0.25,
+          "weight": 0.3,
+          "contribution": 7.5,
+          "note": "1 of 4 answering operators."
+        }
+      ],
+      "score": 19.591,
+      "status": "regular",
+      "window": "active",
+      "breakout": false,
+      "firstFlaggedOn": "2026-09-28",
+      "measuredAt": "2026-09-28T11:01:23.549Z",
+      "expiresAt": "2026-09-29T11:01:23.549Z",
+      "lastedHours": 0,
+      "breadthProviders": [
+        "hn"
+      ],
+      "evidenceRefs": [
+        "source:trending:hn:2026-09-28"
+      ]
+    },
+    {
+      "key": "viral-post:anthropic says alibaba illicitly extracted claude ai model capabilities",
+      "topic": "Anthropic says Alibaba illicitly extracted Claude AI model capabilities",
+      "topicSet": null,
+      "provider": "hn",
+      "sourceKind": "viral-post",
+      "measurement": "velocity",
+      "value": 0.931,
+      "components": [
+        {
+          "name": "relative-growth",
+          "rawValue": null,
+          "weight": 0.45,
+          "contribution": null,
+          "note": "No prior reading to compare against."
+        },
+        {
+          "name": "absolute-volume",
+          "rawValue": 0.106,
+          "weight": 0.25,
+          "contribution": 2.65,
+          "note": "Normalized inside viral-post."
+        },
+        {
+          "name": "source-breadth",
+          "rawValue": 0.25,
+          "weight": 0.3,
+          "contribution": 7.5,
+          "note": "1 of 4 answering operators."
+        }
+      ],
+      "score": 18.455,
+      "status": "regular",
+      "window": "active",
+      "breakout": false,
+      "firstFlaggedOn": "2026-09-28",
+      "measuredAt": "2026-09-28T11:01:23.549Z",
+      "expiresAt": "2026-09-29T11:01:23.549Z",
+      "lastedHours": 0,
+      "breadthProviders": [
+        "hn"
+      ],
+      "evidenceRefs": [
+        "source:trending:hn:2026-09-28"
+      ]
+    }
+  ],
+  "items": [
+    {
+      "platform": "threads",
+      "kind": "thread",
+      "topicSet": "dneskai",
+      "text": "@gallardo_domingez",
+      "likes": 0,
+      "comments": 1,
+      "reshares": 0,
+      "postedAt": "2026-09-28T11:02:45.000Z",
+      "url": "https://www.threads.com/@marinababic67/post/Dd1CC9sE0lt",
+      "hashtags": [],
+      "audioTitle": null,
+      "audioArtist": null,
+      "exploreSection": null
+    },
+    {
+      "platform": "threads",
+      "kind": "thread",
+      "topicSet": "dneskai",
+      "text": "Still standing despite the emotional imbalance That's a win. Would appreciate a \"hello\" today. Human interaction remains underrated. #sandra Bullock Say Hello 👋Still standing despite the emotional imbalance That's a win. Would appreciate a \"hello\" today. Human interaction remain",
+      "likes": 0,
+      "comments": 0,
+      "reshares": 0,
+      "postedAt": "2026-09-28T11:02:45.000Z",
+      "url": "https://www.threads.com/@realsandrabullock8770922/post/Dd1CC6yAL25",
+      "hashtags": [
+        "#sandra",
+        "#sandra"
+      ],
+      "audioTitle": null,
+      "audioArtist": null,
+      "exploreSection": null
+    },
+    {
+      "platform": "threads",
+      "kind": "thread",
+      "topicSet": "dneskai",
+      "text": "I’m looking for a non-AI artist for my book cover. Please connect with me if you’re interested.",
+      "likes": 27,
+      "comments": 22,
+      "reshares": 1,
+      "postedAt": "2026-09-28T08:27:57.000Z",
+      "url": "https://www.threads.com/@madeline_mathwes/post/Dd0wVLMiDOU",
+      "hashtags": [],
+      "audioTitle": null,
+      "audioArtist": null,
+      "exploreSection": null
+    },
+    {
+      "platform": "threads",
+      "kind": "thread",
+      "topicSet": "dneskai",
+      "text": "Republican Eaton County Prosecutor Doug Lloyd and Democratic Washtenaw County Prosecutor Eli Savit debated their candidacies for Michigan Attorney General, sparring over Line 5 and artificial‑intelligence regulation; details follow.",
+      "likes": 0,
+      "comments": 3,
+      "reshares": 0,
+      "postedAt": "2026-09-28T10:49:31.000Z",
+      "url": "https://www.threads.com/@margin.notes.ai/post/Dd1AhrtoHId",
+      "hashtags": [],
+      "audioTitle": null,
+      "audioArtist": null,
+      "exploreSection": null
+    },
+    {
+      "platform": "threads",
+      "kind": "thread",
+      "topicSet": "dneskai",
+      "text": "1/11 別再相信純軟體的圍牆關得住超強AI了。 OpenAI官方報告：700個AI Agent在測試中自發組團、繞過隔離，直接入侵Hugging Face生產系統，執行1.7萬次操作，近一周才被發現。 這是人類第一次被AI集體越獄。",
+      "likes": 67,
+      "comments": 17,
+      "reshares": 1,
+      "postedAt": "2026-09-28T07:28:03.000Z",
+      "url": "https://www.threads.com/@lijeng.chen/post/Dd0peb0kyIu",
+      "hashtags": [],
+      "audioTitle": null,
+      "audioArtist": null,
+      "exploreSection": null
+    },
+    {
+      "platform": "threads",
+      "kind": "thread",
+      "topicSet": "dneskai",
+      "text": "Định mệnh ai nghĩ 23 năm sau mình làm Darling thật đâu 🤭🤭",
+      "likes": 172,
+      "comments": 17,
+      "reshares": 5,
+      "postedAt": "2026-09-28T09:49:14.000Z",
+      "url": "https://www.threads.com/@th_tran04/post/Dd05of_kkmZ",
+      "hashtags": [],
+      "audioTitle": null,
+      "audioArtist": null,
+      "exploreSection": null
+    },
+    {
+      "platform": "threads",
+      "kind": "thread",
+      "topicSet": "dneskai",
+      "text": "436日目(26/9/27)",
+      "likes": 190,
+      "comments": 112,
+      "reshares": 0,
+      "postedAt": "2026-09-27T11:30:07.000Z",
+      "url": "https://www.threads.com/@ai_seataro/post/DdygYdPCYzZ",
+      "hashtags": [],
+      "audioTitle": null,
+      "audioArtist": null,
+      "exploreSection": null
+    },
+    {
+      "platform": "threads",
+      "kind": "thread",
+      "topicSet": "dneskai",
+      "text": "Do you believe suffering makes people stronger, or simply teaches them to hide their pain better?",
+      "likes": 5,
+      "comments": 4,
+      "reshares": 0,
+      "postedAt": "2026-09-28T10:11:55.000Z",
+      "url": "https://www.threads.com/@go_pandora/post/Dd08OmFgeQl",
+      "hashtags": [],
+      "audioTitle": null,
+      "audioArtist": null,
+      "exploreSection": null
+    },
+    {
+      "platform": "threads",
+      "kind": "thread",
+      "topicSet": "dneskai",
+      "text": "日日洗頭都容易出油？護髮素越用越差？ 好多客人嚟門市或者DM諮詢時，我哋都會先了解日常洗護程序、生活習慣，其實好多人嘅習慣都一直只係洗緊表面 其實護髮已經唔係「洗乾淨就得」 頭髮同護膚一樣💆🏻‍♀️💆🏻頭皮同髮絲當作臉部肌膚咁對待 由卸妝式淨化開始，到髮芯結構重組、頭皮底層營養、再到造型質感🪮 同護膚一樣，每一步都有對應產品👇🏻 ✦ SHAMPOO — 頭皮卸妝，淨化第一步 ✦ HAIR REPAIR — 髮絲晚霜，結構重組修護 ✦ ESSENCE — 頭皮肌底液，底層精華餵養 ✦ STYLING — 質感管理，造型同時護髮 ✦ TOOLS",
+      "likes": 0,
+      "comments": 0,
+      "reshares": 0,
+      "postedAt": "2026-09-28T11:02:44.000Z",
+      "url": "https://www.threads.com/@hairqueenbykay/post/Dd1CCyqCatU",
+      "hashtags": [],
+      "audioTitle": null,
+      "audioArtist": null,
+      "exploreSection": null
+    },
+    {
+      "platform": "threads",
+      "kind": "thread",
+      "topicSet": "dneskai",
+      "text": "CLB ĐỊNH HƯỚNG VÀ PHÁT TRIỂN NGHỀ NGHIỆP TRƯỜNG ĐẠI HỌC LUẬT HÀ NỘI TUYỂN GEN 5 THÔNG TIN ĐĂNG KÝ ⏰ Thời gian mở đơn: 23/09/2026 đến 30/09/2026 📌 Đối tượng: Sinh viên Trường Đại học Luật Hà Nội (cơ sở Hà Nội và cơ sở Bắc Ninh) và Sinh viên đang học tập tại các trường đại học trê",
+      "likes": 15,
+      "comments": 12,
+      "reshares": 3,
+      "postedAt": "2026-09-28T10:15:35.000Z",
+      "url": "https://www.threads.com/@nhansuhaysinhsu/post/Dd08pfMEpQU",
+      "hashtags": [],
+      "audioTitle": null,
+      "audioArtist": null,
+      "exploreSection": null
+    },
+    {
+      "platform": "threads",
+      "kind": "thread",
+      "topicSet": "dneskai",
+      "text": "Well, good early morning to everyone I got on Threads then I got off Threads then I got back on then I got back off now. I’m on again. I guess I’ll just leave it. Download it now to check out the beautiful ladies every now and then lotta interesting people on here you don’t know ",
+      "likes": 12,
+      "comments": 2,
+      "reshares": 0,
+      "postedAt": "2026-09-28T06:26:09.000Z",
+      "url": "https://www.threads.com/@jerolemorgan/post/Dd0iZA7FQU1",
+      "hashtags": [],
+      "audioTitle": null,
+      "audioArtist": null,
+      "exploreSection": null
+    },
+    {
+      "platform": "threads",
+      "kind": "thread",
+      "topicSet": "dneskai",
+      "text": "Any from Kuwait 🇰🇼",
+      "likes": 0,
+      "comments": 0,
+      "reshares": 0,
+      "postedAt": "2026-09-28T11:02:43.000Z",
+      "url": "https://www.threads.com/@priya9089158/post/Dd1CCuJiSi-",
+      "hashtags": [],
+      "audioTitle": null,
+      "audioArtist": null,
+      "exploreSection": null
+    },
+    {
+      "platform": "threads",
+      "kind": "thread",
+      "topicSet": "dneskai",
+      "text": "đang buồn định quen thằng em này chơi chơi thôi, ai mà ngờ bùa Bắc Giang mạnh vậy ✌️😋",
+      "likes": 164,
+      "comments": 5,
+      "reshares": 37,
+      "postedAt": "2026-09-28T09:47:07.000Z",
+      "url": "https://www.threads.com/@mang0st3en/post/Dd04_qGEmqr",
+      "hashtags": [],
+      "audioTitle": null,
+      "audioArtist": null,
+      "exploreSection": null
+    },
+    {
+      "platform": "threads",
+      "kind": "thread",
+      "topicSet": "dneskai",
+      "text": "😼 ĐỪNG AI CHỈ moẹ",
+      "likes": 872,
+      "comments": 11,
+      "reshares": 143,
+      "postedAt": "2026-09-27T14:36:41.000Z",
+      "url": "https://www.threads.com/@bisai.bias/post/Ddy1rI6iYqO",
+      "hashtags": [],
+      "audioTitle": null,
+      "audioArtist": null,
+      "exploreSection": null
+    },
+    {
+      "platform": "threads",
+      "kind": "thread",
+      "topicSet": "dneskai",
+      "text": "Free Meet up ??",
+      "likes": 0,
+      "comments": 0,
+      "reshares": 0,
+      "postedAt": "2026-09-28T11:02:45.000Z",
+      "url": "https://www.threads.com/@ruwchloe/post/Dd1CC6IFhhN",
+      "hashtags": [],
+      "audioTitle": null,
+      "audioArtist": null,
+      "exploreSection": null
+    },
+    {
+      "platform": "threads",
+      "kind": "thread",
+      "topicSet": "dneskai",
+      "text": "剛滿一個月的菜鳥 Staff Engineer 做了什麼： 完成 37 場 1:1，了解大家的背景及興趣，對齊未來方向 閱讀直接影響團隊的 services，撰寫 code quality evaulation report，推動新版 onboarding process，並迭代 AI Skill and Harness。 至於在做這些事情的同時，我怎麼想的可以移駕到 blog 收看。 祝中秋佳節快樂 xxx 🥑",
+      "likes": 196,
+      "comments": 9,
+      "reshares": 2,
+      "postedAt": "2026-09-28T06:54:27.000Z",
+      "url": "https://www.threads.com/@a.chin.logs/post/Dd0loSqiW8c",
+      "hashtags": [],
+      "audioTitle": null,
+      "audioArtist": null,
+      "exploreSection": null
+    },
+    {
+      "platform": "threads",
+      "kind": "thread",
+      "topicSet": "dneskai",
+      "text": "Trung bình người nghe bolero, gặp ai cũng nhảy",
+      "likes": 188,
+      "comments": 2,
+      "reshares": 19,
+      "postedAt": "2026-09-28T09:10:18.000Z",
+      "url": "https://www.threads.com/@spxuandinhky/post/Dd01H5ikn9y",
+      "hashtags": [],
+      "audioTitle": null,
+      "audioArtist": null,
+      "exploreSection": null
+    },
+    {
+      "platform": "threads",
+      "kind": "thread",
+      "topicSet": "devshark",
+      "text": "Javascript",
+      "likes": 22,
+      "comments": 7,
+      "reshares": 1,
+      "postedAt": "2026-09-14T07:45:03.000Z",
+      "url": "https://www.threads.com/@type2code/post/DdQoStqm0VT",
+      "hashtags": [],
+      "audioTitle": null,
+      "audioArtist": null,
+      "exploreSection": null
+    },
+    {
+      "platform": "threads",
+      "kind": "thread",
+      "topicSet": "devshark",
+      "text": "This code looks simple, but the output deserves a second look.",
+      "likes": 26,
+      "comments": 4,
+      "reshares": 1,
+      "postedAt": "2026-08-31T06:19:20.000Z",
+      "url": "https://www.threads.com/@javascript_concepts_daily/post/DcsbWq9GFwX",
+      "hashtags": [],
+      "audioTitle": null,
+      "audioArtist": null,
+      "exploreSection": null
+    },
+    {
+      "platform": "threads",
+      "kind": "thread",
+      "topicSet": "devshark",
+      "text": "Два дні мені знадобилось для дослідження алгоритму PID-регулятора. Годин 5 пішло тільки на читання шостої глави книги Control System Design шведського науковця. Також повернувся до глави про Velocity та Acceleration книги Foundation HTML5 Animations with JavaScript автора Billy L",
+      "likes": 11,
+      "comments": 1,
+      "reshares": 0,
+      "postedAt": "2026-09-07T23:31:10.000Z",
+      "url": "https://www.threads.com/@webuxmotion/post/DdATAJHjNiq",
+      "hashtags": [],
+      "audioTitle": null,
+      "audioArtist": null,
+      "exploreSection": null
+    },
+    {
+      "platform": "threads",
+      "kind": "thread",
+      "topicSet": "devshark",
+      "text": "I’M HORRRNNNYYY ASF!😭",
+      "likes": 0,
+      "comments": 0,
+      "reshares": 0,
+      "postedAt": "2026-09-28T11:03:03.000Z",
+      "url": "https://www.threads.com/@millsinboston_/post/Dd1CFFElgg1",
+      "hashtags": [],
+      "audioTitle": null,
+      "audioArtist": null,
+      "exploreSection": null
+    },
+    {
+      "platform": "threads",
+      "kind": "thread",
+      "topicSet": "devshark",
+      "text": "произошла пожилая замена всему тулчейну, кто-то уже использовал бан в реальных проектах?",
+      "likes": 17,
+      "comments": 8,
+      "reshares": 0,
+      "postedAt": "2026-08-30T15:11:14.000Z",
+      "url": "https://www.threads.com/@theshulyaa/post/DcqzbiJDaZM",
+      "hashtags": [],
+      "audioTitle": null,
+      "audioArtist": null,
+      "exploreSection": null
+    },
+    {
+      "platform": "threads",
+      "kind": "thread",
+      "topicSet": "devshark",
+      "text": "I won't lie. Dating lately has been discouraging. Ghosting, fake profiles, and people asking for money. Still, I haven't given up on real connection.",
+      "likes": 5,
+      "comments": 2,
+      "reshares": 0,
+      "postedAt": "2026-09-28T10:27:01.000Z",
+      "url": "https://www.threads.com/@linamclaughlin016_05/post/Dd099QkGlbO",
+      "hashtags": [],
+      "audioTitle": null,
+      "audioArtist": null,
+      "exploreSection": null
+    },
+    {
+      "platform": "threads",
+      "kind": "thread",
+      "topicSet": "devshark",
+      "text": "收預付卡，台灣/遠傳/7-11 ibon",
+      "likes": 0,
+      "comments": 1,
+      "reshares": 0,
+      "postedAt": "2026-09-28T11:03:04.000Z",
+      "url": "https://www.threads.com/@ida64833/post/Dd1CFNKEypp",
+      "hashtags": [],
+      "audioTitle": null,
+      "audioArtist": null,
+      "exploreSection": null
+    },
+    {
+      "platform": "threads",
+      "kind": "thread",
+      "topicSet": "devshark",
+      "text": "You guys are semicolons cool again?!! Has the em dash died? WELL WELL WELL I HAVE THE LINK FOR YOU...",
+      "likes": 494,
+      "comments": 28,
+      "reshares": 4,
+      "postedAt": "2026-09-27T15:13:33.000Z",
+      "url": "https://www.threads.com/@theoatmeal/post/Ddy59Bjm3sz",
+      "hashtags": [],
+      "audioTitle": null,
+      "audioArtist": null,
+      "exploreSection": null
+    },
+    {
+      "platform": "threads",
+      "kind": "thread",
+      "topicSet": "devshark",
+      "text": "كيف تبدي بالمجال بارت ٥ البرمجة ما اقول تعلم اكثر من لغة لا بس بايثون ولغات البرمجة حقت المواقع بس ابدأ Python تعلم variables if for while functions lists dictionaries files exceptions modules requests sockets وبعدين أساسيات Web تعلم: HTML CSS JavaScript HTTP requests Cookies Ses",
+      "likes": 26,
+      "comments": 3,
+      "reshares": 3,
+      "postedAt": "2026-09-12T10:07:36.000Z",
+      "url": "https://www.threads.com/@8hma_7/post/DdLvA8KiGc7",
+      "hashtags": [],
+      "audioTitle": null,
+      "audioArtist": null,
+      "exploreSection": null
+    },
+    {
+      "platform": "threads",
+      "kind": "thread",
+      "topicSet": "devshark",
+      "text": "이케아 선반, 매장에서 보고도 긴가민가했는데 이렇게 꾸며놓으니까 갑자기 사고 싶어짐ㅋ 수납+인테리어 둘 다 잡히는데 3만원도 안 한다고? 이래서 이케아는 구경만 하면 안 됨;;",
+      "likes": 0,
+      "comments": 1,
+      "reshares": 0,
+      "postedAt": "2026-09-28T11:03:04.000Z",
+      "url": "https://www.threads.com/@cherry20161985/post/Dd1CFOuFLG3",
+      "hashtags": [],
+      "audioTitle": null,
+      "audioArtist": null,
+      "exploreSection": null
+    },
+    {
+      "platform": "threads",
+      "kind": "thread",
+      "topicSet": "devshark",
+      "text": "Learning to code takes time. I started in 2022 with HTML, CSS & JavaScript, and honestly, it felt so difficult. I often wondered if I would ever understand it. Fast forward to 2026, I’m proficient in React, Next.js, TypeScript, Tailwind CSS, Node.js, Express.js, Git & GitHub, and",
+      "likes": 175,
+      "comments": 32,
+      "reshares": 8,
+      "postedAt": "2026-08-31T13:32:10.000Z",
+      "url": "https://www.threads.com/@techqueen33/post/DctM40EDJrY",
+      "hashtags": [],
+      "audioTitle": null,
+      "audioArtist": null,
+      "exploreSection": null
+    }
+  ],
+  "signals": {
+    "topHashtags": [
+      {
+        "hashtag": "#sandra",
+        "topicSet": "dneskai",
+        "posts": 2,
+        "engagementPerHour": 0,
+        "weekOverWeekDelta": null
+      }
+    ],
+    "topFormats": [
+      {
+        "format": "thread",
+        "items": 28
+      }
+    ],
+    "topAudio": [],
+    "exploreSections": [],
+    "perTopicSet": [
+      {
+        "topicSet": "writer",
+        "label": "The owner's own writing",
+        "topHashtags": [],
+        "items": 0,
+        "medianEngagementPerHour": 0
+      },
+      {
+        "topicSet": "dneskai",
+        "label": "DNESKAi (AI and technology)",
+        "topHashtags": [
+          "#sandra"
+        ],
+        "items": 17,
+        "medianEngagementPerHour": 12.8394
+      },
+      {
+        "topicSet": "devshark",
+        "label": "devShark (programming and interview practice)",
+        "topHashtags": [],
+        "items": 11,
+        "medianEngagementPerHour": 0.0884
+      }
+    ]
+  },
+  "forMagazines": {
+    "ai": [
+      {
+        "topic": "#sandra",
+        "engagementPerHour": 0,
+        "weekOverWeekDelta": null,
+        "refs": [
+          "source:apify:threads:2026-09-28",
+          "source:trending:hn:2026-09-28",
+          "source:trending:google-trends:2026-09-28",
+          "source:trending:reddit:2026-09-28"
+        ]
+      }
+    ],
+    "mma": []
+  }
+}

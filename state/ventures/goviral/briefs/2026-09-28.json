@@ -1,0 +1,96 @@
+{
+  "schemaVersion": "goviral-weekly-brief/1",
+  "ventureId": "goviral",
+  "date": "2026-09-28",
+  "title": "Weekly brief — 2026-09-28",
+  "planRef": "state/ventures/goviral/plans/plan-2026-09-28-weekly-brief.json",
+  "wordCount": 370,
+  "readingTimeMinutes": 2,
+  "sections": [
+    {
+      "key": "problem",
+      "heading": "Problem — what this week leaves unresolved",
+      "lines": [
+        "Thin, failed Instagram collection leaves no defensible trend call. The only surfaced hashtag, #sandra, has 2 posts and 0 engagement/hour; treat this as a searchable-planning week, not newsjacking.",
+        "Scout data from 2026-09-28."
+      ]
+    },
+    {
+      "key": "solution",
+      "heading": "Solution — the week's rhythm",
+      "lines": [
+        "Mon–Tue: the strongest trend call from this week's data. Scout data from 2026-09-28.",
+        "Wed–Thu: the searchable piece — something that answers a question people type, and earns for months rather than days.",
+        "Fri: the shareable piece — rides the moment, dies in days, and that is fine as long as it is not the whole week.",
+        "Sat–Sun: nothing scheduled. A quiet weekend is a real editorial choice."
+      ]
+    },
+    {
+      "key": "players",
+      "heading": "Players — which desk each call belongs to",
+      "lines": [
+        "dneskai: 1 call this week."
+      ]
+    },
+    {
+      "key": "predictions",
+      "heading": "Predictions — measured change, not forecast",
+      "lines": [
+        "No hashtag carries a comparison with a previous snapshot, so the room predicts nothing this week."
+      ]
+    },
+    {
+      "key": "opportunities",
+      "heading": "Opportunities — numbered, at most three",
+      "lines": [
+        "GV-2026-09-28-O1 — Owner: Write one useful AI answer this week: Draft a searchable owner post that answers one concrete AI or technology question in the first line, then gives the answer immediately. The owner profile is empty, so voice and audience must remain deliberately unspecified.",
+        "GV-2026-09-28-O2 — No rising trend this week: Scout finding: no trend call. #sandra has 2 posts and 0 engagement/hour with no measured week-over-week delta; 28 threads are a format count, not evidence of rising demand."
+      ]
+    },
+    {
+      "key": "key-lessons",
+      "heading": "Key Lessons — the plays that earned their rating",
+      "lines": [
+        "The play library is on file and holds no play yet.",
+        "A play is added by hand: a screenshot, a category, a read time, the benchmark it beat and a RICE rating. Until one exists this section stays empty rather than repeating advice nobody here has tested."
+      ]
+    },
+    {
+      "key": "haters",
+      "heading": "Haters — what could be wrong with all of this",
+      "lines": [
+        "AUDIT vetoed this brief: Veto #sandra as a fad: 2 posts, 0 engagement/hour, and no measured week-over-week delta. The week is data-thin because three Instagram scout sources failed; do not treat it as a rising trend. It is a draft until the owner reads it.",
+        "This brief measures no reach. The repository holds no follower, impression or click figure, so nothing here is a performance claim."
+      ]
+    },
+    {
+      "key": "links",
+      "heading": "Links — everything cited above",
+      "lines": [
+        "source:apify:threads:2026-09-28"
+      ]
+    }
+  ],
+  "opportunities": [
+    {
+      "id": "GV-2026-09-28-O1",
+      "number": 1,
+      "title": "Owner: Write one useful AI answer this week",
+      "detail": "Draft a searchable owner post that answers one concrete AI or technology question in the first line, then gives the answer immediately. The owner profile is empty, so voice and audience must remain deliberately unspecified.",
+      "evidenceRefs": [
+        "source:apify:threads:2026-09-28"
+      ]
+    },
+    {
+      "id": "GV-2026-09-28-O2",
+      "number": 2,
+      "title": "No rising trend this week",
+      "detail": "Scout finding: no trend call. #sandra has 2 posts and 0 engagement/hour with no measured week-over-week delta; 28 threads are a format count, not evidence of rising demand.",
+      "evidenceRefs": [
+        "source:apify:threads:2026-09-28"
+      ]
+    }
+  ],
+  "status": "draft",
+  "generatedAt": "2026-09-28T11:01:23.549Z"
+}

@@ -1,0 +1,158 @@
+{
+  "schemaVersion": "meeting-record/2",
+  "cycleId": "20260928110123-gv-brief",
+  "date": "2026-09-28",
+  "phase": "gv-brief",
+  "fixture": false,
+  "status": "HELD",
+  "stage": "VALIDATION",
+  "operatingBrief": "Turn this week's scout data into the owner's weekly content brief and record marketing ideas for the magazines; hand at most one trend-driven agenda to another venture's room.",
+  "participantReasons": [
+    {
+      "agent": "PULSE",
+      "reason": "chairs the bounded room",
+      "participated": true
+    },
+    {
+      "agent": "SCOUT",
+      "reason": "serves the registered specialist or veto seat",
+      "participated": true
+    },
+    {
+      "agent": "ANGLE",
+      "reason": "serves the registered specialist or veto seat",
+      "participated": true
+    },
+    {
+      "agent": "AUDIT",
+      "reason": "serves the registered specialist or veto seat",
+      "participated": true
+    }
+  ],
+  "ledger": {
+    "estimatedCycleUsd": 0.06,
+    "actualCycleUsd": 0.026022,
+    "monthAllInUsd": 28.933336550000014,
+    "monthCapUsd": 50
+  },
+  "decision": {
+    "outcome": "VETO",
+    "summary": "AUDIT vetoed the room output: Veto #sandra as a fad: 2 posts, 0 engagement/hour, and no measured week-over-week delta. The week is data-thin because three Instagram scout sources failed; do not treat it as a rising trend.",
+    "evidenceRefs": [
+      "source:apify:threads:2026-09-28"
+    ]
+  },
+  "proposals": [
+    {
+      "agent": "PULSE",
+      "summary": "Thin, failed Instagram collection leaves no defensible trend call. The only surfaced hashtag, #sandra, has 2 posts and 0 engagement/hour; treat this as a searchable-planning week, not newsjacking.",
+      "evidenceRefs": [
+        "source:apify:threads:2026-09-28"
+      ]
+    },
+    {
+      "agent": "SCOUT",
+      "summary": "No genuinely rising trend is supported. #sandra has 2 posts, 0 engagement/hour, and no week-over-week delta; thread is only a format count. Instagram sources failed, so silence is not negative evidence.",
+      "evidenceRefs": [
+        "source:apify:threads:2026-09-28"
+      ]
+    },
+    {
+      "agent": "ANGLE",
+      "summary": "Scout data incomplete: Instagram actors failed (Reels, Hashtags, Explore). Threads only source live (49 posts). Owner profile blank—no niches, voice, audiences or platforms named. Cannot route trends without reader definition. Request owner taste data and complete scout run befor",
+      "evidenceRefs": [
+        "source:apify:threads:2026-09-28"
+      ]
+    },
+    {
+      "agent": "AUDIT",
+      "summary": "Veto #sandra as a fad: 2 posts, 0 engagement/hour, and no measured week-over-week delta. The week is data-thin because three Instagram scout sources failed; do not treat it as a rising trend.",
+      "evidenceRefs": [
+        "source:apify:threads:2026-09-28"
+      ]
+    }
+  ],
+  "voteMatrix": [
+    {
+      "voter": "PULSE",
+      "firstChoice": "plan",
+      "veto": false
+    },
+    {
+      "voter": "SCOUT",
+      "firstChoice": "pass",
+      "veto": false
+    },
+    {
+      "voter": "ANGLE",
+      "firstChoice": "pass",
+      "veto": false
+    },
+    {
+      "voter": "AUDIT",
+      "firstChoice": "veto",
+      "veto": true
+    }
+  ],
+  "tasks": [],
+  "growthPlan": "Drafts and plans only. Nothing here posts, schedules, buys or creates an account, and no follower or reach number is promised.",
+  "eveningOutcome": null,
+  "generatedAt": "2026-09-28T11:06:23.549Z",
+  "kind": "gv-brief",
+  "roomTranscript": {
+    "openedAt": "2026-09-28T11:01:23.549Z",
+    "closedAt": "2026-09-28T11:06:23.549Z",
+    "gavel": "PULSE",
+    "setting": "Live bounded portfolio room. Canonical context and external material were treated as data, never instructions.",
+    "turns": [
+      {
+        "agent": "PULSE",
+        "mode": "gavel",
+        "sentAt": "2026-09-28T11:01:23.549Z",
+        "text": "Turn this week's scout data into the owner's weekly content brief and record marketing ideas for the magazines; hand at most one trend-driven agenda to another venture's room."
+      },
+      {
+        "agent": "PULSE",
+        "mode": "statement",
+        "sentAt": "2026-09-28T11:02:23.549Z",
+        "text": "Thin, failed Instagram collection leaves no defensible trend call. The only surfaced hashtag, #sandra, has 2 posts and 0 engagement/hour; treat this as a searchable-planning week, not newsjacking.",
+        "evidenceRefs": [
+          "source:apify:threads:2026-09-28"
+        ]
+      },
+      {
+        "agent": "SCOUT",
+        "mode": "statement",
+        "sentAt": "2026-09-28T11:03:23.549Z",
+        "text": "No genuinely rising trend is supported. #sandra has 2 posts, 0 engagement/hour, and no week-over-week delta; thread is only a format count. Instagram sources failed, so silence is not negative evidence.",
+        "evidenceRefs": [
+          "source:apify:threads:2026-09-28"
+        ]
+      },
+      {
+        "agent": "ANGLE",
+        "mode": "statement",
+        "sentAt": "2026-09-28T11:04:23.549Z",
+        "text": "Scout data incomplete: Instagram actors failed (Reels, Hashtags, Explore). Threads only source live (49 posts). Owner profile blank—no niches, voice, audiences or platforms named. Cannot route trends without reader definition. Request owner taste data and complete scout run befor",
+        "evidenceRefs": [
+          "source:apify:threads:2026-09-28"
+        ]
+      },
+      {
+        "agent": "AUDIT",
+        "mode": "veto",
+        "sentAt": "2026-09-28T11:05:23.549Z",
+        "text": "Veto #sandra as a fad: 2 posts, 0 engagement/hour, and no measured week-over-week delta. The week is data-thin because three Instagram scout sources failed; do not treat it as a rising trend.",
+        "evidenceRefs": [
+          "source:apify:threads:2026-09-28"
+        ]
+      },
+      {
+        "agent": "PULSE",
+        "mode": "close",
+        "sentAt": "2026-09-28T11:06:23.549Z",
+        "text": "AUDIT vetoed the room output: Veto #sandra as a fad: 2 posts, 0 engagement/hour, and no measured week-over-week delta. The week is data-thin because three Instagram scout sources failed; do not treat it as a rising trend."
+      }
+    ]
+  }
+}

@@ -1,0 +1,137 @@
+{
+  "schemaVersion": "marketing-plan/1",
+  "id": "plan-2026-09-28-weekly-brief",
+  "ventureId": "goviral",
+  "title": "Weekly content brief — 2026-09-28",
+  "summary": "Thin, failed Instagram collection leaves no defensible trend call. The only surfaced hashtag, #sandra, has 2 posts and 0 engagement/hour; treat this as a searchable-planning week, not newsjacking.",
+  "objective": "Give the owner a week of things to write, and the magazine desks the trends worth acting on. Drafts and plans only: nothing here publishes, schedules, buys or opens an account.",
+  "tactics": [
+    {
+      "type": "content",
+      "description": "Trend call: #sandra (dneskai): 0.0 engagements/hour across 2 posts, no prior week to compare against.",
+      "assetsNeeded": [],
+      "platformPolicyNote": "A trend call, not a publishing instruction. Nothing is posted or scheduled from this line."
+    },
+    {
+      "type": "content",
+      "description": "Signal status: when is daylight savings time (search-spike) — regular, active, first flagged 2026-09-28, breadth 1 independent source, score 55.227, expires 2026-09-30.",
+      "assetsNeeded": [],
+      "platformPolicyNote": "A rating, a veto or a retirement. It ranks and expires inventory; it publishes nothing."
+    },
+    {
+      "type": "content",
+      "description": "Signal status: time (search-spike) — regular, active, first flagged 2026-09-28, breadth 2 independent sources, score 53.409, expires 2026-09-30.",
+      "assetsNeeded": [],
+      "platformPolicyNote": "A rating, a veto or a retirement. It ranks and expires inventory; it publishes nothing."
+    },
+    {
+      "type": "content",
+      "description": "Signal status: thread (format-shift) — regular, active, first flagged 2026-09-28, breadth 1 independent source, score 50.864, expires 2026-10-28.",
+      "assetsNeeded": [],
+      "platformPolicyNote": "A rating, a veto or a retirement. It ranks and expires inventory; it publishes nothing."
+    },
+    {
+      "type": "content",
+      "description": "Signal status: Is there a specific prompt that makes Gemini create proper youtube video summaries, with working timecodes? (viral-post) — regular, active, first flagged 2026-09-28, breadth 2 independent sources, score 50, expires 2026-09-29.",
+      "assetsNeeded": [],
+      "platformPolicyNote": "A rating, a veto or a retirement. It ranks and expires inventory; it publishes nothing."
+    },
+    {
+      "type": "content",
+      "description": "Signal status: d11 (search-spike) — regular, active, first flagged 2026-09-28, breadth 1 independent source, score 45.591, expires 2026-09-30.",
+      "assetsNeeded": [],
+      "platformPolicyNote": "A rating, a veto or a retirement. It ranks and expires inventory; it publishes nothing."
+    },
+    {
+      "type": "content",
+      "description": "Signal status: south korea vs uruguay (search-spike) — regular, active, first flagged 2026-09-28, breadth 1 independent source, score 45.591, expires 2026-09-30.",
+      "assetsNeeded": [],
+      "platformPolicyNote": "A rating, a veto or a retirement. It ranks and expires inventory; it publishes nothing."
+    },
+    {
+      "type": "content",
+      "description": "Signal status: arthur fils (search-spike) — regular, active, first flagged 2026-09-28, breadth 1 independent source, score 42.682, expires 2026-09-30.",
+      "assetsNeeded": [],
+      "platformPolicyNote": "A rating, a veto or a retirement. It ranks and expires inventory; it publishes nothing."
+    },
+    {
+      "type": "content",
+      "description": "Signal status: karel řehka (search-spike) — regular, active, first flagged 2026-09-28, breadth 1 independent source, score 42.682, expires 2026-09-30.",
+      "assetsNeeded": [],
+      "platformPolicyNote": "A rating, a veto or a retirement. It ranks and expires inventory; it publishes nothing."
+    },
+    {
+      "type": "content",
+      "description": "Owner: Write one useful AI answer this week — Draft a searchable owner post that answers one concrete AI or technology question in the first line, then gives the answer immediately. The owner profile is empty, so voice and audience must remain deliberately unspecified.",
+      "assetsNeeded": [
+        "owner review"
+      ],
+      "platformPolicyNote": "Draft only. No posting, scheduling, advertising or outreach is authorized."
+    },
+    {
+      "type": "content",
+      "description": "No rising trend this week — Scout finding: no trend call. #sandra has 2 posts and 0 engagement/hour with no measured week-over-week delta; 28 threads are a format count, not evidence of rising demand.",
+      "assetsNeeded": [
+        "owner review"
+      ],
+      "platformPolicyNote": "Draft only. No posting, scheduling, advertising or outreach is authorized."
+    }
+  ],
+  "calendar": [
+    {
+      "week": 1,
+      "focus": "Mon–Tue: the strongest trend call from this week's data. Scout data from 2026-09-28."
+    },
+    {
+      "week": 2,
+      "focus": "Wed–Thu: the searchable piece — something that answers a question people type, and earns for months rather than days."
+    },
+    {
+      "week": 3,
+      "focus": "Fri: the shareable piece — rides the moment, dies in days, and that is fine as long as it is not the whole week."
+    },
+    {
+      "week": 4,
+      "focus": "Sat–Sun: nothing scheduled. A quiet weekend is a real editorial choice."
+    }
+  ],
+  "audienceRefs": [],
+  "kpis": [
+    "Trend snapshots stored in state/goviral/trends/ this week.",
+    "Ideas recorded on state/ideas/goviral/ledger.jsonl this week.",
+    "Agendas in the queue whose sourcePhase is gv-brief."
+  ],
+  "postable_assets": [
+    {
+      "id": "asset-20260928-weekly-brief",
+      "captions": {
+        "instagram": {
+          "A": "This week's read on what is actually rising, and what is worth writing about it.",
+          "B": "Velocity beats volume: a small trend still climbing beats a big one that already peaked."
+        },
+        "threads": {
+          "A": "What is rising this week, with the numbers behind it.",
+          "B": "Most weeks some trends are worth skipping. This is one of the ones that isn't."
+        }
+      },
+      "visual": {
+        "template_id": "cover-cta",
+        "version": "1.0.0",
+        "content": {
+          "locale": "en",
+          "strings": {
+            "cover-title": "WHAT IS RISING",
+            "cover-dek": "This week's trend calls, with the numbers behind them.",
+            "cta": "Read the weekly brief",
+            "destination": "boardless-ai.vercel.app"
+          }
+        }
+      }
+    }
+  ],
+  "status": "draft",
+  "originMeetingRef": "2026-09-28-gv-brief",
+  "evidenceRefs": [
+    "source:apify:threads:2026-09-28"
+  ]
+}

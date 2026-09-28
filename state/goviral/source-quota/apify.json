@@ -1,8 +1,29 @@
 {
   "schemaVersion": "goviral-apify-quota/1",
-  "month": "2026-08",
-  "estimatedUsedUsd": 0,
+  "month": "2026-09",
+  "estimatedUsedUsd": 3.707776,
   "reservedPerRun": 1.4,
-  "updatedAt": "2026-08-29T00:00:00.000Z",
-  "perActorCounts": {}
+  "updatedAt": "2026-09-28T11:01:23.549Z",
+  "perActorCounts": {
+    "instagram-popular-reels": {
+      "runs": 2,
+      "items": 0,
+      "estimatedUsd": 0.288
+    },
+    "instagram-hashtags": {
+      "runs": 2,
+      "items": 0,
+      "estimatedUsd": 0.15
+    },
+    "threads-primary": {
+      "runs": 2,
+      "items": 49,
+      "estimatedUsd": 0.051
+    },
+    "instagram-explore": {
+      "runs": 1,
+      "items": 0,
+      "estimatedUsd": 0.478
+    }
+  }
 }

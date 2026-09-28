@@ -1,0 +1,12 @@
+{
+  "schemaVersion": 1,
+  "fixture": false,
+  "cycleId": "20260928110123-gv-brief",
+  "phase": "gv-brief",
+  "outcome": "VETO",
+  "summary": "AUDIT vetoed the room output: Veto #sandra as a fad: 2 posts, 0 engagement/hour, and no measured week-over-week delta. The week is data-thin because three Instagram scout sources failed; do not treat it as a rising trend.",
+  "evidenceRefs": [
+    "source:apify:threads:2026-09-28"
+  ],
+  "generatedAt": "2026-09-28T11:06:23.549Z"
+}
