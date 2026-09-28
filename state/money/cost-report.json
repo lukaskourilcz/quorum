@@ -1,14 +1,14 @@
 {
   "schemaVersion": "cost-report/1",
-  "generatedAt": "2026-09-28T11:13:18.785Z",
+  "generatedAt": "2026-09-28T13:29:52.981Z",
   "month": "2026-09",
   "currency": "USD",
   "metered": {
     "total": {
-      "totalUsd": 9.93333655,
-      "modelUsd": 9.92533655,
-      "mediaUsd": 0.008,
-      "calls": 321
+      "totalUsd": 10.12661105,
+      "modelUsd": 10.10661105,
+      "mediaUsd": 0.02,
+      "calls": 330
     },
     "editions": [
       {
@@ -346,6 +346,20 @@
       }
     ],
     "decisions": [
+      {
+        "cycleId": "20260928131925-cu-edition",
+        "phase": "cu-edition",
+        "ventureId": "caught-up",
+        "outcome": "EDITION",
+        "decidedAt": "2026-09-28T13:19:30.940Z",
+        "cost": {
+          "totalUsd": 0.1932745,
+          "modelUsd": 0.1812745,
+          "mediaUsd": 0.012,
+          "calls": 9
+        },
+        "note": null
+      },
       {
         "cycleId": "20260928110123-gv-brief",
         "phase": "gv-brief",
@@ -1751,13 +1765,13 @@
       {
         "phase": "cu-edition",
         "ventureId": "caught-up",
-        "cycles": 23,
-        "meteredUsd": 5.63823425,
+        "cycles": 24,
+        "meteredUsd": 5.83150875,
         "comparable": {
-          "cycles": 21,
-          "envelopeUsd": 12.18,
-          "meteredUsd": 5.27917725,
-          "varianceUsd": -6.90082275,
+          "cycles": 22,
+          "envelopeUsd": 12.76,
+          "meteredUsd": 5.47245175,
+          "varianceUsd": -7.28754825,
           "overspentCycles": 0
         }
       },
@@ -1832,7 +1846,7 @@
   "billed": null,
   "reconciliation": {
     "status": "unavailable",
-    "meteredUsd": 9.93333655,
+    "meteredUsd": 10.12661105,
     "billedUsd": null,
     "differenceUsd": null,
     "toleranceUsd": 0.01,
