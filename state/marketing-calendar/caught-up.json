@@ -436,27 +436,39 @@
   "weeks": [
     {
       "week": 1,
-      "dates": "4–11 Oct",
+      "dates": "4 Oct",
+      "theme": "Den spuštění — Spuštění uprostřed mesic.ai",
+      "focus": "Jen neděle 4. 10.: launch set a tři připnuté posty. Ne 4. 10. launch set (3 připnuté posty, Threads intro, story, „mesic.ai už běží“); první plný týden: AI v marketingu 4.0, veřejná správa a trh práce, hackathon 8.–9. 10., Digitální garáž 9. 10.; průvodce mesic.ai 10. 10.; IG 12:00 (A)."
+    },
+    {
+      "week": 2,
+      "dates": "5–11 Oct",
       "theme": "Spuštění uprostřed mesic.ai",
       "focus": "Ne 4. 10. launch set (3 připnuté posty, Threads intro, story, „mesic.ai už běží“); první plný týden: AI v marketingu 4.0, veřejná správa a trh práce, hackathon 8.–9. 10., Digitální garáž 9. 10.; průvodce mesic.ai 10. 10.; IG 12:00 (A)."
     },
     {
-      "week": 2,
+      "week": 3,
       "dates": "12–18 Oct",
       "theme": "Boost + justice, finance, práce",
       "focus": "Boost 150 Kč/den 12.–18. 10.; Den AI v justici, AI-Ready, roundtable „Přestavět práci, nebo propouštět?“, Čupr, Rakathon."
     },
     {
-      "week": 3,
+      "week": 4,
       "dates": "19–25 Oct",
       "theme": "Čas B + kultura, energetika, video",
       "focus": "IG 17:30 (B); AI v kultuře, Vedlejší účinky AI, vývoj aplikací, AI Restart, AI Video Show; review 25. 10. rozhodne o čase."
     },
     {
-      "week": 4,
-      "dates": "26 Oct–2 Nov",
+      "week": 5,
+      "dates": "26 Oct–1 Nov",
       "theme": "Konec mesic.ai, svátek, Dny AI",
       "focus": "Humanoidi, AI ROI, bezpečnost agentů; 28. 10. svátek bez práce navíc; DevFest.cz 30. 10.; konec mesic.ai 31. 10.; „Říjen v AI + mesic.ai v kostce“ 1. 11.; Dny AI 2. 11.; review okna."
+    },
+    {
+      "week": 6,
+      "dates": "2 Nov",
+      "theme": "Dny AI začínají",
+      "focus": "Jen pondělí 2. 11.: teaser Dnů AI (2.–15. 11.) a ohlédnutí za měsícem, konec 30denního plánu."
     }
   ],
   "entries": [

@@ -133,17 +133,18 @@ describe("derived views", () => {
   });
 
   it("opens on this week while the plan runs and on the launch week otherwise", () => {
-    expect(defaultCalendarWeek("2026-09-28", doc)).toBe("2026-11-02");
-    expect(defaultCalendarWeek("2026-11-18", doc)).toBe("2026-11-16");
-    expect(defaultCalendarWeek("2027-01-10", doc)).toBe("2026-11-30");
-    expect(defaultCalendarWeek("2026-09-28", doc, "2026-11-12")).toBe("2026-11-09");
-    expect(defaultCalendarWeek("2026-09-28", doc, "not-a-date")).toBe("2026-11-02");
+    // The plan runs Sun 4 Oct – Mon 2 Nov 2026, so the launch week is the week of Mon 28 Sep.
+    expect(defaultCalendarWeek("2026-09-20", doc)).toBe("2026-09-28");
+    expect(defaultCalendarWeek("2026-10-21", doc)).toBe("2026-10-19");
+    expect(defaultCalendarWeek("2027-01-10", doc)).toBe("2026-11-02");
+    expect(defaultCalendarWeek("2026-09-20", doc, "2026-10-14")).toBe("2026-10-12");
+    expect(defaultCalendarWeek("2026-09-20", doc, "not-a-date")).toBe("2026-09-28");
   });
 
   it("counts down to launch, then counts days", () => {
-    expect(calendarPhase("2026-09-28", doc)).toEqual({ phase: "before", daysToLaunch: 38 });
-    expect(calendarPhase("2026-11-05", doc)).toEqual({ phase: "running", day: 1, of: 30 });
-    expect(calendarPhase("2026-12-06", doc)).toEqual({ phase: "after", daysSinceEnd: 2 });
+    expect(calendarPhase("2026-09-28", doc)).toEqual({ phase: "before", daysToLaunch: 6 });
+    expect(calendarPhase("2026-10-04", doc)).toEqual({ phase: "running", day: 1, of: 30 });
+    expect(calendarPhase("2026-11-04", doc)).toEqual({ phase: "after", daysSinceEnd: 2 });
   });
 
   it("sums effort and counts posts, ads and progress", () => {
@@ -169,7 +170,7 @@ describe("derived views", () => {
     const counts = filterCounts(entries, { ...EMPTY_CALENDAR_FILTERS, platform: "threads" }, "2026-09-28", "platform");
     expect(counts.threads).toBe(threads.length);
     expect(Object.values(counts).reduce((sum, value) => sum + value, 0)).toBe(entries.length);
-    expect(filterCalendarEntries(entries, { ...EMPTY_CALENDAR_FILTERS, upcomingOnly: true }, "2026-11-20").every((entry) => entry.date >= "2026-11-20")).toBe(true);
+    expect(filterCalendarEntries(entries, { ...EMPTY_CALENDAR_FILTERS, upcomingOnly: true }, "2026-10-20").every((entry) => entry.date >= "2026-10-20")).toBe(true);
     expect(nextUp(entries, "2026-09-28", "10:00")?.id).toBe(entries[0]!.id);
   });
 

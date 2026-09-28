@@ -41,7 +41,7 @@ builds and on the morning room's day checkpoint. Never hand-edit the generated b
 <!-- GENERATED:CURRENT-OPERATING-TRUTH:START -->
 ## Current operating truth (generated)
 
-Refreshed from committed state: **2026-09-28T10:12:15.449Z**. This block is generated deterministically; edit the source state, not these lines.
+Refreshed from committed state: **2026-09-28T11:13:14.113Z**. This block is generated deterministically; edit the source state, not these lines.
 
 | Item | Current value |
 | --- | --- |
