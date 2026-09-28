@@ -15,9 +15,8 @@ describe("Carousel Studio gallery and showcase", () => {
     const snapshot = await readCarouselStudio();
     expect(snapshot.templates).toHaveLength(13);
     expect(snapshot.templates.every((entry) => entry.template.status === "live" && entry.allChecksPass)).toBe(true);
-    // The gallery's picker offers running ventures' brands only (operations-2026-09b); the
-    // renderer still holds every brand's tokens.
-    expect(snapshot.brands.map((brand) => brand.id)).toEqual(["caught-up"]);
+    // The picker includes DNESKAi and manual devShark curation; other paused brands stay archived.
+    expect(snapshot.brands.map((brand) => brand.id)).toEqual(["caught-up", "devshark"]);
     // The gallery's picker is every canvas the studio renders. Which of them a template is
     // offered is per-template: only a layout composed for 9:16 is offered the story.
     expect(snapshot.formats).toEqual(["instagram-square", "instagram-portrait", "instagram-story", "threads"]);
