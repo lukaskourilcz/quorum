@@ -9,3 +9,9 @@
 - [ ] **Record actual provider payments in the treasury ledger.** The owner supplies amounts/currency and dates for fal.ai credit, Anthropic credit and Apify invoices; do not substitute advertised prices or estimated usage for payments. [imp:3] [owner:me] [time:15m] [kind:setup]
 
 - [ ] **Cancel or retain the unused Apify subscription.** No current DNESKAi article source needs Apify. Cancellation needs the owner's instruction; if retained for a future approved source, review the $24 hard usage limit because recurring included credit is $19 (invoice $22.99 with tax). The extra $5 promotion expires 16 October. [imp:3] [owner:me] [time:5m] [kind:decision]
+
+- [ ] **Add the Instagram and Threads credentials** (`SOCIAL-PLATFORM-CREDENTIALS`) — each brand needs its
+  account ID and access token as GitHub Actions secrets before any channel can be considered.
+  Missing now — caught-up: CAUGHT_UP_THREADS_ACCESS_TOKEN, CAUGHT_UP_THREADS_USER_ID, CAUGHT_UP_INSTAGRAM_ACCESS_TOKEN, CAUGHT_UP_INSTAGRAM_USER_ID.
+  Until they exist every per-venture gate stays locked and no post is attempted, whatever the
+  readiness counters say. [imp:4] [owner:me] [time:45m] [kind:setup]
