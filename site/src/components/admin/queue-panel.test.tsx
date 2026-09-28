@@ -70,10 +70,10 @@ const render = (value: AdminQueueSnapshot, filters = waiting, writesConfigured =
   renderToStaticMarkup(<QueuePanel filters={filters} snapshot={value} writesConfigured={writesConfigured} />);
 
 describe("the Queue panel", () => {
-  it("says when nothing waits and when the next room sits", () => {
+  it("does not promise a scheduled room when social production is paused", () => {
     const html = render(snapshot([]));
     expect(html).toContain("Nothing is waiting.");
-    expect(html).toContain("marketingShark&#x27;s next room sits at 07:00.");
+    expect(html).toContain("No social drafts need review. Scheduled social production is paused.");
     expect(html).not.toContain("<button");
   });
 

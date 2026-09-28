@@ -916,7 +916,9 @@ export default async function AdminPage({
       }
       lead={
         selectedVenture
-          ? `The latest work ${ventureName(selectedVenture.id, selectedVenture.name)} has saved. The project runs itself; this page is for reading its output.`
+          ? selectedVenture.id === "carousel-studio"
+            ? "Curate saved content, edit slides and export carousels. Scheduled production is paused."
+            : `The latest work ${ventureName(selectedVenture.id, selectedVenture.name)} has saved.`
           : selectedView
             ? SECTION_LEADS[selectedView]
             : "What the company shipped, what it spends, and the few things waiting on your signature. Everything else runs on its own."

@@ -33,7 +33,7 @@ const chipClass = "admin-focus-ring inline-flex min-h-[var(--admin-touch-target)
 
 function emptyCopy(group: QueueGroup, filtered: boolean): { title: string; description: string } {
   if (filtered) return { title: `No ${QUEUE_GROUP_LABELS[group].toLowerCase()} posts match these filters.`, description: "Clear the venture or platform filter to see the rest." };
-  if (group === "waiting") return { title: "Nothing is waiting.", description: "marketingShark's next room sits at 07:00." };
+  if (group === "waiting") return { title: "Nothing is waiting.", description: "No social drafts need review. Scheduled social production is paused." };
   return { title: `Nothing is ${QUEUE_GROUP_LABELS[group].toLowerCase()} right now.`, description: "Posts move here on their own as they are approved, sent or stopped." };
 }
 
