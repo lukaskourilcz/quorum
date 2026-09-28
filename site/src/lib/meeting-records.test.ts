@@ -1,0 +1,21 @@
+import { mkdir, mkdtemp, rm, writeFile } from "node:fs/promises";
+import os from "node:os";
+import path from "node:path";
+import { afterEach, expect, it, vi } from "vitest";
+import fixture from "../../../contracts/fixtures/meeting-record.valid.json";
+import { getPublicMeetingRecord } from "./meeting-records";
+const roots: string[] = [];
+afterEach(async () => { vi.unstubAllEnvs(); await Promise.all(roots.splice(0).map(root => rm(root, { recursive: true, force: true }))); });
+it("reads the requested record without depending on other archive files and rejects path traversal", async () => {
+  const root = await mkdtemp(path.join(os.tmpdir(), "meeting-read-")); roots.push(root);
+  await mkdir(path.join(root, "state/meetings"), { recursive: true });
+  await mkdir(path.join(root, "config"));
+  await writeFile(path.join(root, "config/ventures.json"), JSON.stringify({schemaVersion: "venture-registry/1", ventures: [{visibility: "owner-only", meetings: [{kind: "pg-desk"}]}]}));
+  const record = {...fixture, id: "2026-09-28-dm-desk", date: "2026-09-28"};
+  await writeFile(path.join(root, "state/meetings", `${record.id}.json`), JSON.stringify(record));
+  await writeFile(path.join(root, "state/meetings/broken.json"), "not-json");
+  vi.stubEnv("BOARDLESSAI_REPO_ROOT", root);
+  expect((await getPublicMeetingRecord(record.id))?.id).toBe(record.id);
+  expect(await getPublicMeetingRecord("../../config/ventures")).toBeUndefined();
+  expect(await getPublicMeetingRecord("2026-09-28-pg-desk")).toBeUndefined();
+});

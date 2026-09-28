@@ -56,5 +56,17 @@ export async function getPublicMeetingRecords(): Promise<readonly PublicMeetingR
 }
 
 export async function getPublicMeetingRecord(id: string): Promise<PublicMeetingRecord | undefined> {
-  return (await getPublicMeetingRecords()).find((record) => record.id === id);
+  // A single page must not parse the entire archive. Static generation calls this twice per
+  // meeting (metadata and page); scanning all records here made that work quadratic.
+  if (!/^\d{4}-\d{2}-\d{2}-[a-z0-9-]+$/u.test(id)) return undefined;
+  const ownerOnlyKinds = await getOwnerOnlyMeetingKinds();
+  if (isOwnerOnlyMeetingFile(`${id}.json`, ownerOnlyKinds)) return undefined;
+  try {
+    const record = parsePublicMeetingRecord(JSON.parse(await readFile(path.join(meetingsRoot(), `${id}.json`), "utf8")));
+    if (record?.id === id && !ownerOnlyKinds.has(record.kind)) return record;
+  } catch {
+    // Missing and malformed records use the same fixture fallback as the archive listing.
+  }
+  return meetingFixtures.map(parsePublicMeetingRecord).find((record): record is PublicMeetingRecord =>
+    record !== null && record.id === id && !ownerOnlyKinds.has(record.kind));
 }

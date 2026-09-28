@@ -190,10 +190,10 @@ export function AdminSidebar({
               <ShieldAlert aria-hidden="true" className="size-3.5" /> Needs you
               <span className="admin-tabular ml-auto text-[var(--admin-sidebar-foreground)]" data-admin-attention-total>{attentionTotal}</span>
             </p>
-            {attention.map((entry) => (
+            {attention.filter(entry => entry.label !== "Unreadable files" || entry.value > 0).map((entry) => (
               <p className="flex gap-2 py-0.5 text-[length:var(--admin-type-micro)] text-[var(--admin-sidebar-muted)]" data-admin-attention-item={entry.label} key={entry.label}>
-                <span className="truncate">{entry.label}</span>
-                <span className="admin-tabular ml-auto text-[var(--admin-sidebar-foreground)]">{entry.value}</span>
+                <span className="truncate">{entry.label === "Unreadable files" ? `${entry.value} ${entry.value === 1 ? "file could" : "files could"} not be read.` : entry.label}</span>
+                {entry.label !== "Unreadable files" ? <span className="admin-tabular ml-auto text-[var(--admin-sidebar-foreground)]">{entry.value}</span> : null}
               </p>
             ))}
           </div>
