@@ -120,7 +120,7 @@ describe("what a run report says about the picture", () => {
     // Presence, never a value. Nothing in the block can carry a key.
     expect(JSON.stringify(readiness)).not.toContain("present-not-printed");
     expect(readiness.gateModelConfigured).toBe(true);
-    expect(readiness.caps).toEqual({ perArticleUsd: 0.02, perDayUsd: 0.1, generatedImagesPerDay: 2 });
+    expect(readiness.caps).toEqual({ perArticleUsd: 0.05, perDayUsd: 0.1, generatedImagesPerDay: 4 });
     expect(readiness.illustrationRung).toBe("dark");
   });
 

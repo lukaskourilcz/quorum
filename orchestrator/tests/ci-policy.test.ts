@@ -291,7 +291,7 @@ describe("automation policy", () => {
     // and the job-level guard is what makes a locked scheduled hour cost nothing when it does:
     // a step-level check has already paid for the runner.
     expect(social).not.toMatch(/^\s*schedule:/mu);
-    expect(social).toContain("if: ${{ github.event_name != 'schedule' || vars.SOCIAL_KILL_SWITCH != 'true' }}");
+    expect(social).toContain("if: ${{ false }}");
     expect(health).not.toContain("timezone:");
   });
 
@@ -338,12 +338,9 @@ describe("automation policy", () => {
         schedules.push({ file: name, expression: match[1]! });
       }
     }
-    // 18, not 19: the hourly social publisher is commented out until a channel exists, so its
-    // twenty-four daily firings no longer confirm there is nothing to publish.
-    // The backstop sweeps, daily health run and bounded reference polling: the social
-    // publisher's hourly schedule is commented out until a channel exists.
+    // Backstop sweeps plus daily health; retired social workflows have no schedule.
     expect(schedules.length, "no schedules found; the cron guard is asserting nothing")
-      .toBe(deployedCronExpressions().length + 2);
+      .toBe(deployedCronExpressions().length + 1);
 
     for (const { file, expression } of schedules) {
       const minute = expression.trim().split(/\s+/u)[0]!;
@@ -386,7 +383,7 @@ describe("automation policy", () => {
     ).toEqual([...deployedCronExpressions()].sort());
     // The per-slot expressions still exist and still drive the Vercel side; what changed is that
     // GitHub no longer deploys them.
-    expect(scheduledCronExpressions(readVentureRegistry()).length).toBeGreaterThan(deployed.length);
+    expect(scheduledCronExpressions(readVentureRegistry()).length).toBe(3);
   });
 
   it("keys the release-gate verdict on content, not on the moving cycle sha", async () => {

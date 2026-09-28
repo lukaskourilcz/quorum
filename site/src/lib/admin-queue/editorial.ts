@@ -7,10 +7,11 @@ import { queueStore, QueueActionError } from "./store";
 import { rawObject } from "./item";
 
 const HASH = /^[a-f0-9]{64}$/u;
-const IMAGE_IDS = ["photo-1", "photo-2", "fal"] as const;
+const IMAGE_IDS = ["photo-1", "photo-2", "fal", "candidate-1", "candidate-2", "candidate-3", "candidate-4"] as const;
 export interface EditorialCard {
   id: string; hash: string; date: string; title: string; body: string; titles: string[];
   images: { id: string; available: boolean; alt: string; credit: string; reason: string | null }[];
+  ready: boolean;
   decision: "pending" | "approve" | "reject";
 }
 
@@ -19,27 +20,30 @@ export function editorialCard(value: unknown): EditorialCard | null {
   const articlePackage = rawObject(raw?.package);
   const article = rawObject(rawObject(articlePackage?.article)?.cs);
   const frontmatter = rawObject(article?.frontmatter);
-  if (raw?.schemaVersion !== "editorial-review/1" || typeof raw.id !== "string" || !HASH.test(raw.id) ||
+  if (!raw || !["editorial-review/1", "editorial-review/2"].includes(String(raw?.schemaVersion)) || typeof raw.id !== "string" || !HASH.test(raw.id) ||
       articlePackage?.idempotencyKey !== raw.id || articlePackage.status !== "edition" ||
       typeof articlePackage.date !== "string" || typeof frontmatter?.title !== "string" || typeof article?.body !== "string" ||
       !Array.isArray(raw.titles) || !raw.titles.every(title => typeof title === "string" && title.length <= 240) ||
-      !Array.isArray(raw.images) || raw.images.length !== 3) return null;
+      !Array.isArray(raw.images) || raw.images.length !== (raw.schemaVersion === "editorial-review/2" ? 4 : 3)) return null;
   const images: EditorialCard["images"] = [];
   for (const value of raw.images) {
     const slot = rawObject(value);
     if (!slot || !IMAGE_IDS.includes(slot.id as typeof IMAGE_IDS[number])) return null;
     const image = rawObject(slot.image);
     const licence = rawObject(image?.license);
-    const available = !!image && image.origin === (slot.id === "fal" ? "illustration" : "photo") &&
+    const available = !!image && (raw.schemaVersion === "editorial-review/2" ? ["photo", "illustration"].includes(String(image.origin)) : image.origin === (slot.id === "fal" ? "illustration" : "photo")) &&
       typeof image.thumb_bytes_base64 === "string" && typeof image.alt_cs === "string";
     images.push({ id: slot.id as string, available, alt: available ? image!.alt_cs as string : "",
-      credit: typeof licence?.author === "string" && typeof licence?.name === "string" ? `${licence.author} · ${licence.name}` : "",
+      credit: typeof licence?.author === "string" && typeof licence?.name === "string" ? `${image?.origin === "illustration" ? "AI illustration · " : ""}${licence.author} · ${licence.name}` : "",
       reason: available ? null : "This candidate is unavailable. Check image generation and budget in Settings." });
   }
-  if (new Set(images.map(image => image.id)).size !== 3) return null;
+  if (new Set(images.map(image => image.id)).size !== raw.images.length) return null;
   return { id: raw.id, hash: createHash("sha256").update(JSON.stringify(value)).digest("hex"),
     date: articlePackage.date, title: frontmatter.title, body: article.body.slice(0, 60_000),
-    titles: raw.titles as string[], images, decision: "pending" };
+    titles: raw.titles as string[], images,
+    ready: raw.schemaVersion === "editorial-review/1" || (images.every(image => image.available) &&
+      new Set((raw.titles as string[]).map(title => title.normalize("NFC").trim().toLocaleLowerCase("cs"))).size === 4 &&
+      new Set(raw.images.map(slot => rawObject(rawObject(slot)?.image)?.hero_bytes_base64)).size === 4), decision: "pending" };
 }
 
 /** Read current GitHub records; a deployment's bundled state is never an approval authority. */
@@ -84,6 +88,7 @@ export async function applyEditorialDecision(value: unknown, root = queueReposit
   const card = editorialCard(stored?.value);
   if (!card) throw new QueueActionError("NOT_FOUND", "This article review is unavailable.");
   if (card.hash !== raw.hash) throw new QueueActionError("CONFLICT", "The article changed. Reload and review the new version.");
+  if (raw.action === "approve" && !card.ready) throw new QueueActionError("REFUSED", "This article needs four distinct headlines and four distinct reviewed images before approval.");
   if (raw.action === "approve" && !card.images.find(image => image.id === raw.imageId)?.available) {
     throw new QueueActionError("REFUSED", "Choose an available, reviewed image.");
   }

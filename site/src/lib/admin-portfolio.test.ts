@@ -264,8 +264,8 @@ describe("the admin navigation", () => {
     const navigable = navigableVentures(portfolio).map(({ id }) => id);
     expect(navigable).toEqual(registry.ventures.filter(({ status }) => status === "operating").map(({ id }) => id));
     expect(navigable).not.toContain("contest-radar");
-    // WebDev Signal runs as the DNESKAi day's pre-step (`operations-2026-09b`), so it stays.
-    expect(navigable).toContain("webdev-signal");
+    // The owner paused WebDev Signal on 2026-09-28; its archive remains addressable.
+    expect(navigable).not.toContain("webdev-signal");
     expect(portfolio.ventures.map(({ id }) => id)).toContain("contest-radar");
   });
 

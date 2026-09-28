@@ -21,22 +21,6 @@
       "schedule": "0 5 * * *"
     },
     {
-      "path": "/api/cron/ms-daily",
-      "schedule": "0 5 * * *"
-    },
-    {
-      "path": "/api/cron/ms-daily",
-      "schedule": "0 6 * * *"
-    },
-    {
-      "path": "/api/cron/gv-brief",
-      "schedule": "0 11 * * *"
-    },
-    {
-      "path": "/api/cron/gv-brief",
-      "schedule": "0 12 * * *"
-    },
-    {
       "path": "/api/cron/cu-edition",
       "schedule": "0 7 * * *"
     },

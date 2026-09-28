@@ -73,8 +73,7 @@ export function publicVentures(registry: VentureRegistry): VentureRegistry["vent
  * without depending on today's operational state.
  *
  * Absent phases are absent deliberately, not forgotten: the council shifts and `founding` are
- * company-wide; `studio` is the Design Lab and `gv-brief` is GoVIRAL, both shared machinery the
- * portfolio consumes; `mma-intake` and `mma-analysis` are FightAIQ, MMA Files' data supplier.
+ * company-wide; `mma-intake` and `mma-analysis` are FightAIQ, MMA Files' data supplier.
  * None of those can be paused from Settings, so no phase of theirs resolves to a venture here.
  */
 export const PHASE_VENTURES: Readonly<Partial<Record<RunnablePhase, string>>> = {
@@ -83,6 +82,8 @@ export const PHASE_VENTURES: Readonly<Partial<Record<RunnablePhase, string>>> = 
   // an owner-dispatched run. `mma-day` is the one deliberate exception to "FightAIQ never pauses":
   // its data checks are steps of the MMA Files day, so pausing that magazine stands them down with
   // it — FightAIQ still cannot be paused on its own, and has no switch in Settings.
+  "gv-brief": "goviral",
+  "studio": "carousel-studio",
   "cu-day": "caught-up",
   "mma-day": "mma-files",
   "dm-day": "door-money",

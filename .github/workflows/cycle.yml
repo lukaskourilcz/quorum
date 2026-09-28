@@ -32,8 +32,6 @@ on:
           - morning
           - afternoon
           - cu-product
-          - gv-brief
-          - ms-daily
           - night
       trigger:
         # What kind of firing this dispatch is, which decides whether it claims a slot.
@@ -84,7 +82,9 @@ jobs:
       JINA_API_KEY: ${{ secrets.JINA_API_KEY }}
       THE_ODDS_API_KEY: ${{ secrets.THE_ODDS_API_KEY }}
       CITO_API_KEY: ${{ secrets.CITO_API_KEY }}
-      APIFY_TOKEN: ${{ secrets.APIFY_TOKEN }}
+      # Owner scope 2026-09-28: Apify only for DNESKAi information sources.
+      # No direct editorial Apify source exists yet; current callers are social scouts.
+      APIFY_TOKEN: ""
       PEXELS_API_KEY: ${{ secrets.PEXELS_API_KEY }}
       PIXABAY_API_KEY: ${{ secrets.PIXABAY_API_KEY }}
       FAL_KEY: ${{ secrets.FAL_KEY }}
@@ -582,13 +582,6 @@ jobs:
         run: |
           echo "The repository release gate failed; the cycle did not run."
           exit 1
-
-      - name: Sync committed devShark source into MarketingShark
-        if: ${{ steps.guard.outputs.proceed == 'true' && steps.mode.outputs.skip != 'true' && steps.mode.outputs.phase == 'ms-daily' && steps.mode.outputs.dry != 'true' && steps.mode.outputs.delivery_only != 'true' }}
-        run: |
-          git clone --depth 1 --branch main https://github.com/lukaskourilcz/react-express-app.git "$RUNNER_TEMP/devshark-source"
-          pnpm marketingshark:import-bank -- --brand devshark --source "$RUNNER_TEMP/devshark-source"
-          pnpm marketingshark:import-challenges -- --brand devshark --source "$RUNNER_TEMP/devshark-source"
 
       - name: Run cycle
         id: run

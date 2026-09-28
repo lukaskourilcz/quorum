@@ -4,7 +4,10 @@
   "properties": {
     "schemaVersion": {
       "type": "string",
-      "const": "editorial-review/1"
+      "enum": [
+        "editorial-review/1",
+        "editorial-review/2"
+      ]
     },
     "id": {
       "type": "string",
@@ -1567,7 +1570,7 @@
     },
     "images": {
       "minItems": 3,
-      "maxItems": 3,
+      "maxItems": 4,
       "type": "array",
       "items": {
         "type": "object",
@@ -1577,7 +1580,11 @@
             "enum": [
               "photo-1",
               "photo-2",
-              "fal"
+              "fal",
+              "candidate-1",
+              "candidate-2",
+              "candidate-3",
+              "candidate-4"
             ]
           },
           "image": {

@@ -287,7 +287,7 @@ describe("a render and the verdict that judges it", () => {
     const budget = new ImageProgramBudget({ usd: 0, generatedImages: 0 });
     // The 21 August shape: the article has already spent most of its cap on a search and three
     // curated looks, and what is left covers the render but not the verdict.
-    budget.record(0.0175);
+    budget.record(IMAGE_GATE_ARTICLE_CAP_USD - 0.0025);
     expect(budget.reserveGeneratedImage(0.004, GENERATED_GATE_ESTIMATE_USD)).toBe("article-cap");
     // The day figure alone is untouched and would still have allowed it — which is exactly what
     // the old check consulted, and why the $0.004 was spent before the gate refused it. Exactly
@@ -302,7 +302,7 @@ describe("a render and the verdict that judges it", () => {
   });
 
   it("keeps the day limit a count, whatever the money says", () => {
-    const budget = new ImageProgramBudget({ usd: 0.02, generatedImages: 2 });
+    const budget = new ImageProgramBudget({ usd: 0.02, generatedImages: 4 });
     expect(budget.reserveGeneratedImage(0.004, GENERATED_GATE_ESTIMATE_USD)).toBe("generation-day-limit");
   });
 });

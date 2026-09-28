@@ -1,11 +1,8 @@
 import { rm } from "node:fs/promises";
 import path from "node:path";
 import { EditorialReviewSchema } from "../contracts/editorial-review.js";
-import { MeetingRecordSchema } from "../contracts/meeting-record.js";
 import { atomicWriteJson, readJson } from "../state.js";
-import { configRoot, repoRoot, stateRoot } from "../paths.js";
-import { storeEditionCarouselSummary } from "../studio/carousel-summary-store.js";
-import { composeEditionSocialPack } from "../social/pack.js";
+import { stateRoot } from "../paths.js";
 import { approvedEditorialPackage, reviewFiles } from "./review.js";
 import type { DatasetEntry } from "../contracts/boardless-dataset.js";
 
@@ -22,7 +19,6 @@ export async function releaseReviewedArticles(input: {
   readLesson?: (date: string) => Promise<DatasetEntry | null>;
 } = {}): Promise<string[]> {
   const root = input.root ?? stateRoot;
-  const repositoryRoot = input.repositoryRoot ?? repoRoot;
   const now = input.now ?? new Date();
   const artifacts: string[] = [];
   for (const file of await reviewFiles(root)) {
@@ -36,25 +32,16 @@ export async function releaseReviewedArticles(input: {
     if (receipt?.packageHash === approved.idempotencyKey) continue;
     const releaseLockPath = `editorial/releases/date-${approved.date}.json`;
     const releaseLock = await readJson<{ reviewId?: string } | null>(root, releaseLockPath, null);
-    if (releaseLock && releaseLock.reviewId !== review.data.id) throw new Error(`An article for ${approved.date} was already released; existing social drafts must not be overwritten`);
+    if (releaseLock && releaseLock.reviewId !== review.data.id) throw new Error(`An article for ${approved.date} was already released; the existing article must not be overwritten`);
     const outbox = `edition/outbox/${approved.date}-${approved.idempotencyKey}.json`;
-    // Stage 2 must be ready before a release receipt. Retry never re-approves social drafts.
-    const meeting = MeetingRecordSchema.parse(await readJson(root, `meetings/${approved.date}-cu-edition.json`, null));
-    const baseUrl = process.env.CAUGHT_UP_SITE_URL;
-    if (!baseUrl) throw new Error("CAUGHT_UP_SITE_URL is required to prepare reviewed article social drafts");
-    await storeEditionCarouselSummary(root, approved);
-    const lesson = approved.article.cs.frontmatter.practical ? null : await (input.readLesson?.(approved.date) ?? Promise.resolve(null));
-    const pack = await composeEditionSocialPack({ editionPackage: approved, meeting, lesson,
-      destinations: { cs: new URL(`/articles/${approved.article.cs.frontmatter.slug}`, baseUrl).toString() },
-      repoRoot: repositoryRoot, stateRoot: root, configRoot: input.configurationRoot ?? configRoot, now, hostFrames: true });
-    if (!pack) throw new Error("The approved article's social drafts could not be prepared");
+    // Article-only scope: approval stages delivery without creating social content.
     await atomicWriteJson(root, outbox, approved);
     await atomicWriteJson(root, releaseLockPath, { reviewId: review.data.id, packageHash: approved.idempotencyKey });
     await atomicWriteJson(root, receiptPath, { schemaVersion: "editorial-release/1", reviewId: review.data.id,
-      packageHash: approved.idempotencyKey, releasedAt: now.toISOString(), socialApproval: "required" });
+      packageHash: approved.idempotencyKey, releasedAt: now.toISOString(), socialApproval: "not-requested" });
     const original = `edition/outbox/${approved.date}-${review.data.id}.json`;
     if (original !== outbox) await rm(path.join(root, original), { force: true });
-    artifacts.push(outbox, original, receiptPath, ...pack.artifactPaths);
+    artifacts.push(outbox, original, receiptPath, releaseLockPath);
   }
   return artifacts;
 }

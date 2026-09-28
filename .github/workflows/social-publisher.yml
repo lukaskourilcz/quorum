@@ -31,7 +31,8 @@ jobs:
     # A scheduled firing with the kill switch on never starts a runner. A dispatch always runs:
     # the owner started it by hand or approved a post in the Admin Queue (#574), and wants the
     # run's answer either way. The Queue's dispatch is a wake-up; this run decides what sends.
-    if: ${{ github.event_name != 'schedule' || vars.SOCIAL_KILL_SWITCH != 'true' }}
+    # Owner scope: DNESKAi articles only; social automation is retired.
+    if: ${{ false }}
     runs-on: ubuntu-latest
     # Two orchestrator suites, the claim push, Direct Meta's container waits and Buffer's read-back
     # (up to about three and a half minutes when LinkedIn is slow) leave fifteen minutes no margin.

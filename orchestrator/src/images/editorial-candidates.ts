@@ -6,7 +6,7 @@ import { heroAltCs } from "./alt.js";
 
 export type EditorialHeroResult = HeroLadderResult & { reviewImages: EditorialReview["images"] };
 
-/** Two separate, vision-approved free-provider photos and one budgeted fal illustration. */
+/** Four distinct reviewed options: up to three licensed photos, with budgeted illustrations filling the remaining slots. */
 export async function selectEditorialCandidates(context: LadderContext & { subjectQuery: string }, dependencies: LadderDependencies = {}): Promise<EditorialHeroResult> {
   const images: EditorialReview["images"] = [];
   const verdicts: HeroLadderResult["verdicts"] = [];
@@ -29,25 +29,37 @@ export async function selectEditorialCandidates(context: LadderContext & { subje
       if (!candidate || seen.has(candidate.sourceUrl)) return [];
       seen.add(candidate.sourceUrl);
       return [candidate];
-    }).slice(0, 2);
+    }).slice(0, 3);
   let first: HeroLadderResult["candidate"] = null;
-  for (const [index, id] of (["photo-1", "photo-2"] as const).entries()) {
+  let firstIllustration: HeroLadderResult["illustration"];
+  const seenBytes = new Set<string>();
+  const compositions = ["wide, asymmetrical composition", "close-up detail with strong negative space", "overhead composition with separate objects", "layered geometric editorial composition"];
+  for (const [index, id] of (["candidate-1", "candidate-2", "candidate-3", "candidate-4"] as const).entries()) {
     const candidate = eligible[index];
-    const image = candidate ? await materializeLicensedPhoto({
+    let image = candidate ? await materializeLicensedPhoto({
       candidate, venture: "caught-up", slug: `${context.illustrationSlug ?? context.seed}-${id}`,
       altCs: heroAltCs(candidate, candidate.title, context.article.titleCs)
     }).catch(() => null) : null;
+    if (image && seenBytes.has(image.hero_bytes_base64)) image = null;
     if (image && !first) first = candidate ?? null;
-    images.push({ id, image, unavailableReason: image ? null : "No licensed photograph passed image review within the available budget." });
+    if (!image) {
+      const brief = context.brief ?? { phrases: [context.subjectQuery], concept: null, negatives: [] };
+      const generated = await illustrationRung({ ...context, seed: `${context.seed}-${id}`,
+        brief: { ...brief, phrases: [...brief.phrases.slice(0, 2), compositions[index]!] },
+        illustrationSlug: `${context.illustrationSlug ?? context.seed}-${id}` }, dependencies);
+      if (generated.verdict) verdicts.push(generated.verdict);
+      image = generated.image;
+      if (image && seenBytes.has(image.hero_bytes_base64)) image = null;
+      if (image && !firstIllustration) firstIllustration = image;
+    }
+    if (image) seenBytes.add(image.hero_bytes_base64);
+    images.push({ id, image, unavailableReason: image ? null : "No distinct image passed review within the available image budget. Check provider configuration and the image run report." });
   }
-  const generated = await illustrationRung({ ...context, illustrationSlug: `${context.illustrationSlug ?? context.seed}-fal` }, dependencies);
-  if (generated.verdict) verdicts.push(generated.verdict);
-  images.push({ id: "fal", image: generated.image, unavailableReason: generated.image ? null : "The fal illustration is unavailable: check image generation configuration, budget and image review." });
-  return { candidate: first, ...(generated.image && !first ? { illustration: generated.image } : {}),
-    rung: first ? "search" : generated.image ? "illustration" : "plate", verdicts, skippedProviders, reviewImages: images };
+  return { candidate: first, ...(!first && firstIllustration ? { illustration: firstIllustration } : {}),
+    rung: first ? "search" : firstIllustration ? "illustration" : "plate", verdicts, skippedProviders, reviewImages: images };
 }
 
 export function unavailableEditorialImages(): EditorialReview["images"] {
-  return ["photo-1", "photo-2", "fal"].map(id => ({ id: id as "photo-1" | "photo-2" | "fal", image: null,
+  return (["candidate-1", "candidate-2", "candidate-3", "candidate-4"] as const).map(id => ({ id, image: null,
     unavailableReason: "Image candidates have not been generated for this article." }));
 }

@@ -31,7 +31,11 @@
       "enum": [
         "photo-1",
         "photo-2",
-        "fal"
+        "fal",
+        "candidate-1",
+        "candidate-2",
+        "candidate-3",
+        "candidate-4"
       ]
     },
     "decidedAt": {

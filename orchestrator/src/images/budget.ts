@@ -7,16 +7,17 @@ import { BudgetLedgerEntrySchema, hasLedgerEntry, type BudgetLedgerEntry } from 
  * Three numbers, all from `article-image-fit-2026-08-08`, all inside the $50 all-in operating cap
  * of `budget-2026-08f`. They are hard limits in one direction only: a run that hits one descends a
  * rung of the certainty ladder and keeps going. An article can always ship with the FRAME plate,
- * so a cap can cost a photograph and must never cost a publication.
+ * For DNESKAi, an incomplete four-image review remains blocked for owner review.
  *
  * The day figure is read from the ledger rather than counted in memory. A cycle is one process,
  * but three cycles run a day and the morning slot cannot know what the night slot spent unless it
  * looks; an in-memory counter would reset to zero at every slot and the day cap would be three
  * times what the owner approved.
  */
-export const IMAGE_GATE_ARTICLE_CAP_USD = 0.02;
+// The owner requested four reviewed image choices on 2026-09-28. The daily $0.10 cap stays.
+export const IMAGE_GATE_ARTICLE_CAP_USD = 0.05;
 export const IMAGE_PROGRAM_DAY_CAP_USD = 0.1;
-export const IMAGE_GENERATION_DAY_LIMIT = 2;
+export const IMAGE_GENERATION_DAY_LIMIT = 4;
 
 /**
  * What looking at one rendered illustration costs, reserved before the render is commissioned.
@@ -146,7 +147,7 @@ export class ImageProgramBudget {
  *
  * Written before the gate is asked, because the renderer has already billed by then: an
  * illustration the gate refuses cost exactly what one it accepts cost, and a counter that only
- * saw the accepted ones would let a bad day render far more than two.
+ * saw the accepted ones would let a bad day render far more than the daily limit.
  *
  * There is no usage to read back — the renderer bills per megapixel and returns no cost — so the
  * ledger carries the fixed published rate rounded up. Token counts are zero because there are

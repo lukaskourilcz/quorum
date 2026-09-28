@@ -1,7 +1,6 @@
 name: Public Instagram reference monitor
 on:
-  schedule:
-    - cron: "55 2,8,14,20 * * *"
+  # Social-format monitoring is outside the owner’s DNESKAi information-source scope.
   workflow_dispatch:
 permissions:
   contents: write
@@ -11,7 +10,7 @@ concurrency:
   cancel-in-progress: false
 jobs:
   monitor:
-    if: ${{ vars.AUTONOMY_KILL_SWITCH != 'true' }}
+    if: ${{ false }} # Held until a new owner scope authorizes reference monitoring.
     runs-on: ubuntu-latest
     timeout-minutes: 8
     env:

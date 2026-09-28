@@ -21,16 +21,14 @@ describe("the venture pause switch", () => {
     }
   });
 
-  it("never gates the shared machinery or the council", () => {
-    // The Design Lab renders every venture's decks, GoVIRAL supplies the magazines and FightAIQ
-    // is MMA Files' data supplier — none of them may be paused from Settings, so none of their
-    // phases may resolve to a venture here. The council shifts are company-wide.
+  it("keeps the council and FightAIQ supplier mapping unchanged", () => {
+    // GoVIRAL and Design Lab now respect venture pauses; council shifts remain company-wide.
     const gatedVentures = new Set(Object.values(PHASE_VENTURES));
-    for (const ventureId of ["carousel-studio", "goviral", "fightaiq", "webdev-signal"]) {
+    for (const ventureId of ["fightaiq", "webdev-signal"]) {
       expect(gatedVentures.has(ventureId), ventureId).toBe(false);
     }
     const registry = readVentureRegistry();
-    for (const phase of ["morning", "afternoon", "night", "studio", "gv-brief", "mma-intake", "mma-analysis"] as const) {
+    for (const phase of ["morning", "afternoon", "night", "mma-intake", "mma-analysis"] as const) {
       expect(pausedVentureForPhase(registry, phase), phase).toBeNull();
     }
   });
@@ -51,7 +49,7 @@ describe("the venture pause switch", () => {
   });
 
   it("ends a paused venture's live phase before anything runs, at zero dollars", async () => {
-    for (const phase of ["dm-desk", "dm-growth"] as const) {
+    for (const phase of ["dm-desk", "dm-growth", "gv-brief", "studio", "ms-daily"] as const) {
       const result = await runCycle({
         phase,
         dry: false,

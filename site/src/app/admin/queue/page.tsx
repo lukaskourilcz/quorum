@@ -52,15 +52,15 @@ export default async function QueuePage({
       ]}
       brandId="global"
       breadcrumb="Queue"
-      lead="Review article headlines and images first, then approve each social post. Edit the text here, open the graphic in the Design Lab, and approve it for its window or for the next hour. An approval queues the post and starts the publisher, which sends it only while every lock is open."
+      lead="Read the DNESKAi article, choose one of four headlines and four images, then approve delivery."
       sections={adminSections("queue", { queue: snapshot.counts.waiting })}
       title="Queue"
       workspaces={workspaces}
     >
       <AdminWriteProvider enabled={writesConfigured}>
         <EditorialQueuePanel {...editorial} />
-        <h2 className="mb-4 text-xl font-semibold">Step 2 · Social posts</h2>
-        <QueuePanel filters={filters} snapshot={snapshot} writesConfigured={writesConfigured} />
+        <details><summary className="cursor-pointer py-4">Archived social drafts · automation stopped</summary>
+        <QueuePanel filters={filters} snapshot={snapshot} writesConfigured={false} /></details>
       </AdminWriteProvider>
     </AdminShell>
   );

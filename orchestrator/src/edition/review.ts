@@ -20,7 +20,7 @@ export async function storeEditorialReview(root: string, edition: EditionPackage
     return relative;
   }
   const review = EditorialReviewSchema.parse({
-    schemaVersion: "editorial-review/1", id: edition.idempotencyKey, createdAt: now.toISOString(),
+    schemaVersion: images.length === 4 ? "editorial-review/2" : "editorial-review/1", id: edition.idempotencyKey, createdAt: now.toISOString(),
     package: edition,
     titles: [...new Set([edition.article.cs.frontmatter.title, ...(edition.article.cs.frontmatter.alternative_headlines ?? [])])].slice(0, 4),
     images
@@ -41,6 +41,10 @@ export function approvedEditorialPackage(rawReview: unknown, rawDecision: unknow
   if (!parsed.success || !decision.success) return null;
   const review = parsed.data;
   const selection = decision.data;
+  if (review.schemaVersion === "editorial-review/2" &&
+      (new Set(review.titles.map(title => title.normalize("NFC").trim().toLocaleLowerCase("cs"))).size !== 4 ||
+       review.images.some(slot => !slot.image) ||
+       new Set(review.images.map(slot => slot.image?.hero_bytes_base64)).size !== 4)) return null;
   if (selection.action !== "approve" || selection.reviewId !== review.id || selection.reviewHash !== editorialReviewHash(review)) return null;
   if (!hasValidEditionPackageHash(review.package) || review.package.status !== "edition") return null;
   const image = review.images.find(candidate => candidate.id === selection.imageId)?.image;

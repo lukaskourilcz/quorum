@@ -121,7 +121,7 @@
     {
       "id": "goviral",
       "name": "GoVIRAL",
-      "status": "operating",
+      "status": "paused",
       "visibility": "public",
       "taste": true,
       "ledgerNamespace": "goviral",
@@ -158,7 +158,8 @@
             }
           }
         }
-      ]
+      ],
+      "pausedOn": "2026-09-28"
     },
     {
       "id": "booksofhistory",
@@ -280,7 +281,7 @@
     {
       "id": "carousel-studio",
       "name": "Design Lab",
-      "status": "operating",
+      "status": "paused",
       "visibility": "public",
       "taste": true,
       "ledgerNamespace": "carousel-studio",
@@ -297,12 +298,13 @@
         "inspiration",
         "hooks"
       ],
-      "meetings": []
+      "meetings": [],
+      "pausedOn": "2026-09-28"
     },
     {
       "id": "marketingshark",
       "name": "marketingShark",
-      "status": "operating",
+      "status": "paused",
       "visibility": "public",
       "taste": false,
       "$tasteComment": "false on purpose. taste:true adds a PALATE pre-step to the venture's first meeting, which is a second model call; this room is designed around exactly one paid call per brand per day.",
@@ -339,7 +341,8 @@
             }
           }
         }
-      ]
+      ],
+      "pausedOn": "2026-09-28"
     },
     {
       "id": "mma-files",
@@ -645,7 +648,7 @@
     {
       "id": "webdev-signal",
       "name": "WebDev Signal",
-      "status": "operating",
+      "status": "paused",
       "visibility": "owner-only",
       "taste": false,
       "ledgerNamespace": "webdev-signal",
@@ -683,7 +686,8 @@
         "delivery",
         "results"
       ],
-      "meetings": []
+      "meetings": [],
+      "pausedOn": "2026-09-28"
     },
     {
       "id": "contest-radar",
