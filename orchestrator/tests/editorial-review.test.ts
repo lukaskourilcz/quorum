@@ -81,7 +81,10 @@ describe("owner editorial gate", () => {
         image: { ...image, hero_bytes_base64: Buffer.from(`distinct-image-${index}`).toString("base64") }, unavailableReason: null })) });
     const approve = (value: typeof current) => approvedEditorialPackage(value, {
       ...decision, imageId: "candidate-4", reviewHash: editorialReviewHash(value) });
-    expect(approve(current)?.image.hero_bytes_base64).toBe(current.images[3]!.image!.hero_bytes_base64);
+    const approved = approve(current);
+    expect(approved?.status).toBe("edition");
+    if (approved?.status !== "edition") throw new Error("Complete review should release");
+    expect(approved.image.hero_bytes_base64).toBe(current.images[3]!.image!.hero_bytes_base64);
     const missing = structuredClone(current);
     missing.images[0] = { id: "candidate-1", image: null, unavailableReason: "Provider unavailable" };
     expect(approve(missing)).toBeNull();
