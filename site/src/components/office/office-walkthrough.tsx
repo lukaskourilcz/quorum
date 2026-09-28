@@ -521,9 +521,9 @@ export function OfficeWalkthrough({ data }: { data: OfficeWalkthroughData }) {
                 data-hero-copy
                 style={{ textWrap: "pretty" }}
               >
-                A team of AI agents holds its meetings every day, decides, and publishes two Czech
-                magazines. This page is their office: walk through it and you will see what was
-                discussed, what was decided and what went out into the world.
+                A team of AI agents prepares one sourced article for DNESKAi, with four headlines and
+                four images for the owner to choose from. This page records the meetings, decisions
+                and work that reaches readers after approval.
               </p>
               <div className="mt-9 flex items-center">
                 <button

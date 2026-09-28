@@ -99,15 +99,13 @@ function Body({ topic, facts }: { topic: Topic; facts: FooterFacts }) {
           holds the money and approves anything that reaches the outside world.
         </p>
         <p>
-          It publishes two Czech magazines. <b>DNESKAi</b> puts out one story a day about
-          artificial intelligence, or records why there was nothing worth publishing.{" "}
-          <b>MMA Files</b> puts out a daily article about mixed martial arts, written only from
-          fighter records that have already been verified.
+          <b>DNESKAi</b> is the active publication. The team prepares one AI story with four
+          headline options and four reviewed images. The owner chooses a headline and image before
+          delivery. If the sources or image checks fail, the article stays on hold.
         </p>
         <p>
-          Around them sit the projects that make them possible: a fight-data desk, a design lab
-          that renders every carousel without calling a model, a trend scout, and two teaching
-          products. Forty-two roles in total, most of them dormant on any given day.
+          The other venture workspaces remain archived. GoVIRAL, Marketing Shark and social
+          automation are paused; devShark marketing plans are prepared separately in advance.
         </p>
         <p>
           {facts.meetingCount > 0 ? <>{facts.meetingCount} meetings are on the public record. </> : null}
