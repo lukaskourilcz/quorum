@@ -2,8 +2,10 @@
 
 Version: 2026-09-28
 
-Authority: GitHub #592. The owner moved the devShark and DNESKAi launch to **Thursday 5 November
-2026** on 28 September; both plans run 5 Nov to 4 Dec.
+Authority: GitHub #592. On 28 September the owner set the devShark and DNESKAi launch to **Sunday
+4 October 2026**; both plans run 4 Oct to 2 Nov. For those 30 days devShark promotes its launch
+price: 55 % below the regular Premium price (which applies from 3 Nov), monthly and yearly, kept for the lifetime of any subscription started by 2 Nov
+(marketingShark may name it from the fact sheet dated 4 Oct in `config/marketingshark.json`).
 
 `/admin/calendar` shows the 30-day marketing plan of devShark and of DNESKAi on one screen each:
 every post, ad, task and review, day by day, with the status the Queue reports. You read the plan

@@ -388,11 +388,13 @@ describe("marketingShark CHUM packet", () => {
   it("reads the fact sheet block in effect on the run date, so a change of facts is one new block", async () => {
     const brand = await devshark();
     const current = factSheetFor(brand, "2026-09-26")!;
-    const launched = { ...current, effectiveFrom: "2026-10-01", recordedAt: "2026-09-30", maturity: "Publicly launched." };
+    // The synthetic block comes after the newest real one, so the ordering rule below still holds.
+    const newest = brand.factSheets!.at(-1)!;
+    const launched = { ...current, effectiveFrom: "2027-01-01", recordedAt: "2026-12-31", maturity: "Publicly launched." };
     const later = { ...brand, factSheets: [...brand.factSheets!, launched] };
-    expect(factSheetFor(later, "2026-09-30")!.maturity).toBe(current.maturity);
-    expect(factSheetFor(later, "2026-10-01")!.maturity).toBe("Publicly launched.");
-    expect(buildChumPacket({ brand: later, question, hookLines: null, hookId: null, date: "2026-10-02" })).toContain("maturity: Publicly launched.");
+    expect(factSheetFor(later, "2026-12-31")!.maturity).toBe(newest.maturity);
+    expect(factSheetFor(later, "2027-01-01")!.maturity).toBe("Publicly launched.");
+    expect(buildChumPacket({ brand: later, question, hookLines: null, hookId: null, date: "2027-01-02" })).toContain("maturity: Publicly launched.");
     // A block written without the engagement rule still carries it into the packet.
     const forgetful = { ...brand, factSheets: [{ ...current, neverClaim: current.neverClaim.filter((claim) => claim !== ENGAGEMENT_NEVER_CLAIM) }] };
     expect(buildChumPacket({ brand: forgetful, question, hookLines: null, hookId: null, date: "2026-09-26" })).toContain(`- ${ENGAGEMENT_NEVER_CLAIM}`);
@@ -401,6 +403,23 @@ describe("marketingShark CHUM packet", () => {
     const shuffled = { ...config, brands: [{ ...brand, factSheets: [launched, current] }] };
     expect(MarketingSharkConfig.safeParse(shuffled).success).toBe(false);
     expect(MarketingSharkConfig.safeParse({ ...config, brands: [later] }).success).toBe(true);
+  });
+
+  it("opens the launch offer on 4 Oct 2026 and not a day earlier", async () => {
+    // The owner decided on 2026-09-28: marketing starts 4 Oct with a launch price 55 % below the
+    // regular Premium price, kept for the lifetime of subscriptions started by 2 Nov. The price may be named only from that block on,
+    // and only next to the regular price and the end date.
+    const brand = await devshark();
+    expect(factSheetText(factSheetFor(brand, "2026-10-03"))).not.toMatch(/€|55 %/u);
+    const launch = factSheetFor(brand, "2026-10-04")!;
+    expect(launch.effectiveFrom).toBe("2026-10-04");
+    // Premium was never sold before, so the offer is a launch price against the regular price that
+    // applies from 3 Nov, not a reduction from a price anyone paid (Omnibus, art. 6a).
+    expect(launch.allowedClaims.join("\n")).toMatch(/regular price is 3\.99 € a month or 39\.99 € a year, VAT included, from 3 Nov 2026/u);
+    expect(launch.allowedClaims.join("\n")).toMatch(/Launch price until 2 Nov 2026: 1\.80 €\/month or 18\.00 €\/year, 55 % below the regular price, kept for the lifetime of the subscription/u);
+    expect(launch.neverClaim.some((claim) => claim.includes("never 'lowest price in 30 days'"))).toBe(true);
+    expect(launch.neverClaim.some((claim) => claim.startsWith("That learning is free"))).toBe(true);
+    expect(launch.neverClaim).toContain(ENGAGEMENT_NEVER_CLAIM);
   });
 
   it("records the freemium decision without letting a price or a free claim through", async () => {

@@ -16,16 +16,17 @@ The older devShark checklist below also includes LinkedIn/Buffer, outside this s
 activation. Its proposed countersignature is not a blocker for the now-authorized implementation;
 it remains relevant if the owner later expands that older scope.
 
-## Marketing launch on 5 Nov · 2026-09-28
+## Marketing launch on 4 Oct · 2026-09-28
 
-`/admin/calendar` holds both 30-day plans (5 Nov to 4 Dec) and their pre-launch checklists: 21
-items for devShark, 27 for DNESKAi, due between now and 4 Nov. Tick them there; the checklist is
-the list, and these are the three the plans cannot start without. `docs/MARKETING-CALENDAR.md`
-explains the screen. The Calendar is on `main` and reaches the live admin with the next deploy.
+`/admin/calendar` holds both 30-day plans (4 Oct to 2 Nov) and their pre-launch checklists, due
+between now and 3 Oct; the product work that shipped on 28 Sep is already ticked. Tick the rest
+there; the checklist is the list, and these are the ones the plans cannot start without.
+`docs/MARKETING-CALENDAR.md` explains the screen.
 
-- [ ] **Create both Threads profiles before 5 Nov** — @devshark.app and @dneskai, each from its Instagram account with the same handle; keep them empty until launch day and record the URLs in the plans' `channels[]`. The Meta connection items above cover the tokens. [imp:5] [owner:me] [time:20m] [kind:setup]
+- [ ] **Stripe live for devShark by 2 Oct** — the whole devShark plan sells the launch price (55 % below the regular Premium price, kept for the lifetime of subscriptions started 4 Oct – 2 Nov). The steps, the coupon and its env var are in react-express-app `NEEDED.md`; until `BILLING_ENABLED=true` the offer cannot be bought. If it slips, move the fact sheet block dated 2026-10-04 in `config/marketingshark.json` to the day billing goes live, so no draft names a price nobody can pay. [imp:5] [owner:me] [time:1h] [kind:setup]
+- [ ] **Create both Threads profiles before 4 Oct** — @devshark.app and @dneskai, each from its Instagram account with the same handle; keep them empty until launch day and record the URLs in the plans' `channels[]`. The Meta connection items above cover the tokens. [imp:5] [owner:me] [time:20m] [kind:setup]
 - [ ] **Make both Instagram accounts professional** — @devshark.app is still personal (item above); @dneskai already is. Insights, boosting and the publisher all need it. [imp:5] [owner:me] [time:10m] [kind:setup]
-- [ ] **Record the day-0 baselines on 4 Nov** — followers, profile visits and reach for IG and Threads, devShark sign-ups and PostHog `premium_page_viewed`, DNESKAi UTM visits; screenshots into each plan's review log. Every KPI target in the Calendar is measured against these numbers. [imp:4] [owner:me] [time:30m] [kind:content]
+- [ ] **Record the day-0 baselines on 3 Oct** — followers, profile visits and reach for IG and Threads, devShark sign-ups and PostHog `premium_page_viewed`, DNESKAi UTM visits; screenshots into each plan's review log. Every KPI target in the Calendar is measured against these numbers. [imp:4] [owner:me] [time:30m] [kind:content]
 
 ## Focus sweep · 2026-09-26
 
@@ -84,7 +85,7 @@ already answer them.
 - [ ] **Turn on the practical item once DNESKAi renders it** — set `article.practicalItem` to `true` in `config/edition-quality.json` (#553) now that aifirst#99 validates and renders the field (the reader accepts quorum's `{ variant, items[] }` block as it stands). Until the switch is on the writer never sees the field, the story card falls back to the day's lesson, and the Friday tools post finds no tools and records why. The branch estimated under $0.20 a month of the existing model share. [imp:3] [owner:me] [time:5m] [kind:decision]
 - [ ] **Post the code question's first reply by hand** — until #587 connects devShark's Threads, approve and export `ms-<date>-devshark-en-threads-qotd` in the Queue, post the question at 09:00, then post `first-reply.txt` under it (#592). [imp:3] [owner:me] [time:5m] [kind:content]
 - [ ] **Fill the Friday tools prices before approving** — each Friday draft carries a `[DOPLNIT: ověřit u výrobce]` slot per tool; check the maker's price, edit it into the caption (or drop the line), then approve (#592). [imp:2] [owner:me] [time:10m] [kind:content]
-- [ ] **Review the November events before the 5 Nov launch** — `pnpm events:import` merged 47 verified Czech and Slovak AI events (28 Oct – 31 Dec 2026, from the marketing plan's research) into `state/ventures/caught-up/events/events.json`; the receipt is `receipts/2026-09-28-import-ea06e2843443.json`. Open the admin Akce tab, correct or archive any you would not publish (future events are editable), and run `pnpm events:candidates` for the ČAUI Luma calendar's newer ones (#554, #592). The cycle syncs the store to aifirst `data/events.json`. [imp:3] [owner:me] [time:30m] [kind:content]
+- [ ] **Review the imported events before the 4 Oct launch** — `pnpm events:import` merged 47 verified Czech and Slovak AI events (28 Oct – 31 Dec 2026, from the marketing plan's research) into `state/ventures/caught-up/events/events.json`; the receipt is `receipts/2026-09-28-import-ea06e2843443.json`. Open the admin Akce tab, correct or archive any you would not publish (future events are editable), and run `pnpm events:candidates` for the ČAUI Luma calendar's newer ones (#554, #592). The cycle syncs the store to aifirst `data/events.json`. [imp:3] [owner:me] [time:30m] [kind:content]
 - [ ] **Show the event candidates in the admin Akce tab** — `pnpm events:candidates` writes `state/ventures/caught-up/events/candidates.json` (#554), and no admin view reads it yet, so accepting one means opening the file. No workflow runs the command. [imp:2] [owner:ai] [time:2h] [kind:setup]
 - [ ] **Decide whether the office digest is reposted anywhere, or stays a page** — each recorded day now has a public `/results/<date>` page in the sitemap, so linking one by hand needs no channel or approval. A repost through a channel would be the first time the office record leaves this site, and it needs a `HUMAN_APPROVAL` scope. [imp:2] [owner:me] [time:15m] [kind:decision]
 - [ ] **Regenerate the edition rubric receipts before porting its CI check** — `7208396f` on `claude/elegant-cori-h9cdgb` grades each committed edition against a versioned rubric and adds `pnpm edition:rubric -- --check` to CI (#535). Its receipts under `state/quality/edition-rubric/` stop at 2026-09-16, and the editions `main` has recorded since then have none, so the check would fail on arrival. Port the rubric, regenerate every receipt from 2026-09-16 on and commit them, then land the CI step. [imp:2] [owner:ai] [time:1h] [kind:setup]
