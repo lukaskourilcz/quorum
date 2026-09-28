@@ -1,0 +1,107 @@
+{
+  "schemaVersion": 1,
+  "mode": "log",
+  "status": "sent",
+  "subject": "[BoardlessAI] Digest — 2026-09-27",
+  "digest": {
+    "schemaVersion": "daily-digest/1",
+    "date": "2026-09-27",
+    "meetings": [
+      {
+        "ventureId": "caught-up",
+        "kind": "cu-day",
+        "held": false,
+        "outcome": null,
+        "bullets": [
+          {
+            "text": "DNESKAi daily desk was not held; inspect the public week schedule.",
+            "roomLink": "/calendar/2026-09-21"
+          }
+        ],
+        "costUsd": 0
+      },
+      {
+        "ventureId": "global",
+        "kind": "morning",
+        "held": true,
+        "outcome": "NO_ACTION",
+        "bullets": [
+          {
+            "text": "The council held the internal work item. No external action, business claim or stage change was approved.",
+            "roomLink": "/standups/20260927093953-morning/room"
+          }
+        ],
+        "costUsd": 0.125997
+      },
+      {
+        "ventureId": "marketingshark",
+        "kind": "ms-daily",
+        "held": false,
+        "outcome": null,
+        "bullets": [
+          {
+            "text": "marketingShark daily carousel room was not held; inspect the public week schedule.",
+            "roomLink": "/calendar/2026-09-21"
+          }
+        ],
+        "costUsd": 0
+      },
+      {
+        "ventureId": "goviral",
+        "kind": "gv-brief",
+        "held": false,
+        "outcome": "NO_ACTION",
+        "bullets": [
+          {
+            "text": "This room meets on Mondays. Nothing was spent.",
+            "roomLink": "/meetings/2026-09-27-gv-brief"
+          }
+        ],
+        "costUsd": 0
+      }
+    ],
+    "operations": [
+      {
+        "ventureId": "global",
+        "type": "delivery",
+        "status": "none",
+        "text": "No delivery or release proof was recorded today.",
+        "ref": null
+      },
+      {
+        "ventureId": "global",
+        "type": "failure",
+        "status": "none",
+        "text": "No social publishing failure was recorded today.",
+        "ref": null
+      },
+      {
+        "ventureId": "caught-up",
+        "type": "social-gate",
+        "status": "locked",
+        "text": "caught-up social check locked; ready count 10/7.",
+        "ref": "social/activation.json"
+      },
+      {
+        "ventureId": "mma-files",
+        "type": "social-gate",
+        "status": "paused",
+        "text": "mma-files social check paused; ready count 10/10.",
+        "ref": "social/activation.json"
+      },
+      {
+        "ventureId": "titty-tuesdays",
+        "type": "social-gate",
+        "status": "paused",
+        "text": "titty-tuesdays social check paused; ready count 0/4.",
+        "ref": "social/activation.json"
+      }
+    ],
+    "portfolioLine": "Recorded API spend $0.1260 against the $1.00 daily budget.",
+    "bodyWordCount": 93
+  },
+  "bodyWordCount": 123,
+  "compressed": false,
+  "truncated": false,
+  "sentAt": "2026-09-28T04:01:55.402Z"
+}
