@@ -69,17 +69,9 @@ export interface AdminPortfolio {
   ventures: AdminVenture[];
 }
 
-/**
- * The ventures the admin navigation offers: operating ones only.
- *
- * A paused venture leaves the workspace navigation and the command palette
- * (`operations-2026-09b`); Settings lists it under "Paused ventures", and its archive stays at
- * `/admin?venture=<id>`. An exploration (Contest Radar) is not running either, and the owner took
- * it out of the navigation on 2026-09-26; its workspace still opens at its own URL. Every page
- * that builds the navigation goes through this one filter.
- */
+/** Scheduled ventures and the owner's manual Design Lab workspace share the navigation. */
 export function navigableVentures(portfolio: AdminPortfolio): AdminVenture[] {
-  return portfolio.ventures.filter((venture) => venture.status === "operating");
+  return portfolio.ventures.filter((venture) => venture.status === "operating" || venture.id === "carousel-studio");
 }
 
 /**

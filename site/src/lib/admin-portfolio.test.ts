@@ -251,9 +251,9 @@ describe("the admin navigation", () => {
 
   it("offers operating ventures only", () => {
     const portfolio = {
-      ventures: [venture("running", "operating"), venture("exploring", "exploration"), venture("resting", "paused")]
+      ventures: [venture("running", "operating"), venture("exploring", "exploration"), venture("resting", "paused"), venture("carousel-studio", "paused")]
     };
-    expect(navigableVentures(portfolio).map(({ id }) => id)).toEqual(["running"]);
+    expect(navigableVentures(portfolio).map(({ id }) => id)).toEqual(["running", "carousel-studio"]);
   });
 
   it("leaves Contest Radar out of the real registry's navigation and keeps its workspace", async () => {
@@ -262,7 +262,7 @@ describe("the admin navigation", () => {
       ventures: Array<{ id: string; status: string }>;
     };
     const navigable = navigableVentures(portfolio).map(({ id }) => id);
-    expect(navigable).toEqual(registry.ventures.filter(({ status }) => status === "operating").map(({ id }) => id));
+    expect(navigable).toEqual(registry.ventures.filter(({ id, status }) => status === "operating" || id === "carousel-studio").map(({ id }) => id));
     expect(navigable).not.toContain("contest-radar");
     // The owner paused WebDev Signal on 2026-09-28; its archive remains addressable.
     expect(navigable).not.toContain("webdev-signal");

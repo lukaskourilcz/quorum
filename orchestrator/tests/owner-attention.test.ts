@@ -110,7 +110,7 @@ describe("reading the inbox", () => {
      * it measures the curated-copy registry rather than the owner's progress.
      */
     for (const id of NEW_VENTURE_APPROVALS) {
-      expect(new RegExp(`^- \\[[ x]\\] HUMAN_APPROVAL ${id}\\b`, "mu").test(inbox), id).toBe(true);
+      expect(new RegExp(`^- (?:\\[[ x]\\]|WITHDRAWN) HUMAN_APPROVAL ${id}\\b`, "mu").test(inbox), id).toBe(true);
     }
 
     const pending = NEW_VENTURE_APPROVALS
@@ -123,6 +123,15 @@ describe("reading the inbox", () => {
       expect(byId.get(id)?.needsPlainCopy, id).toBeUndefined();
     }
   });
+});
+
+it("withdraws social automation without recording approval", async () => {
+  const inbox = await readFile(path.resolve(process.cwd(), "../state/INBOX.md"), "utf8");
+  expect(parseInboxApprovals(inbox).map(item => item.id).filter(id => id.startsWith("DEVSHARK-SOCIAL-"))).toEqual([]);
+  for (const id of ["001", "002", "003"]) {
+    expect(inbox).toContain(`- WITHDRAWN HUMAN_APPROVAL DEVSHARK-SOCIAL-${id}`);
+    expect(inbox).not.toContain(`- [x] HUMAN_APPROVAL DEVSHARK-SOCIAL-${id}`);
+  }
 });
 
 describe("reading the owner's task list", () => {
@@ -198,7 +207,11 @@ describe("probing the runtime", () => {
 
   it("treats a blank key as missing", () => {
     expect(runtimeGaps({ APIFY_TOKEN: "  ", FAL_KEY: "" }).map((gap) => gap.id))
-      .toEqual(["APIFY_TOKEN", "FAL_KEY"]);
+      .toEqual(["FAL_KEY"]);
+  });
+
+  it("does not request retired GoVIRAL credentials", () => {
+    expect(runtimeGaps({}).map(gap => gap.id)).not.toContain("APIFY_TOKEN");
   });
 
   it("writes one row per job", () => {
@@ -258,7 +271,7 @@ describe("the collected file", () => {
     const { repoRoot, stateRoot } = await root({ inbox: INBOX, needed: NEEDED });
     const before = (await collectOwnerAttention({ repoRoot, stateRoot, now: NOW, env: {} })).record;
     expect(before.approvals.map((entry) => entry.id)).toContain("APIFY-ACCOUNT-001");
-    expect(before.manualTasks.map((task) => task.id)).toContain("APIFY_TOKEN");
+    expect(before.manualTasks.map((task) => task.id)).toContain("FAL_KEY");
 
     // Countersign the inbox entry and set the key: the next run must forget both, with no second
     // place to update.
@@ -267,11 +280,11 @@ describe("the collected file", () => {
       INBOX.replace("- [ ] HUMAN_APPROVAL APIFY-ACCOUNT-001", "- [x] HUMAN_APPROVAL APIFY-ACCOUNT-001")
     );
     const after = (await collectOwnerAttention({
-      repoRoot, stateRoot, now: NOW, env: { APIFY_TOKEN: "set" }
+      repoRoot, stateRoot, now: NOW, env: { FAL_KEY: "set" }
     })).record;
 
     expect(after.approvals.map((entry) => entry.id)).not.toContain("APIFY-ACCOUNT-001");
-    expect(after.manualTasks.map((task) => task.id)).not.toContain("APIFY_TOKEN");
+    expect(after.manualTasks.map((task) => task.id)).not.toContain("FAL_KEY");
   });
 
   it("reads a missing source as an empty one rather than failing the cycle", async () => {

@@ -185,8 +185,8 @@ const PLAIN_COPY: Readonly<Record<string, { plain: string; steps?: string[]; urg
  * - `THE_ODDS_API_KEY` serves FightAIQ alone, which is paused (`operations-2026-09b`). Whoever
  *   resumes FightAIQ restores this probe in the change that returns its switches to `cycle.yml`.
  */
+// Apify social collection is retired; a missing token is intentional, not owner work.
 const RUNTIME_PROBES: ReadonlyArray<{ id: string; title: string }> = [
-  { id: "APIFY_TOKEN", title: "GoVIRAL has no trend data source" },
   { id: "FAL_KEY", title: "No image rendering key is configured" }
 ];
 
