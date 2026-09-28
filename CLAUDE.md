@@ -15,6 +15,7 @@ Council runs via API in `orchestrator/`; you are the human-invoked engineer.
   workspace, WebDev Signal and the Contest Radar exploration.
   Since the owner's 2026-09-28 scope decision, only DNESKAi article production operates.
   GoVIRAL, Marketing Shark, Design Lab and WebDev Signal are paused alongside the other ventures.
+  Design Lab remains in Admin for manual content and carousel curation; pause affects scheduling.
   Contest Radar remains exploration with no room. Records are retained. The registry owns each
   venture room and envelope; `config/venture-capabilities.json` retains the deny-by-default graph.
   Article review requires four headline and four reviewed image choices; the owner selects before

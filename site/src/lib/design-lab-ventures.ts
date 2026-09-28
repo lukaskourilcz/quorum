@@ -112,7 +112,8 @@ export function designLabBrandVenture(id: string): string {
  *
  * The renderer's registry decides what the studio *can* draw; the venture registry decides what
  * is running. A brand is offered when its venture is not paused and, for a marketingShark brand,
- * when that brand is enabled. A paused venture's brand keeps its tokens, so its recorded decks
+ * when that brand is enabled. devShark remains available for owner-led curation while paused.
+ * A paused venture's brand keeps its tokens, so its recorded decks
  * still render at their own address. If either file cannot be read, every brand is offered, as
  * before this rule existed, rather than an empty studio.
  */
@@ -131,6 +132,8 @@ export async function activeDesignLabVentureIds(
     return designLabVentureIds().filter((id) => {
       const venture = BRAND_VENTURE[id] ?? id;
       const ventureStatus = status.get(venture);
+      // devShark content is curated manually even while marketing automation is paused.
+      if (id === "devshark" && ventureStatus) return enabledBrands.has(id);
       if (!ventureStatus || ventureStatus === "paused") return false;
       return venture !== "marketingshark" || enabledBrands.has(id);
     });
