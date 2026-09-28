@@ -63,7 +63,7 @@ export function DesignLabVentureSection({ venture, selectedArticle = null }: { v
       ) : venture.publishesArticles ? (
         <DesignLabWorkspace
           articles={venture.articles}
-          emptyTitle={venture.id === "devshark" ? "marketingShark has not drafted a devShark package yet. Its next room sits at 07:00." : undefined}
+          emptyTitle={venture.id === "devshark" ? "No devShark packages are saved here yet. Prepare the content in your 30-day plan; scheduled drafting is paused." : undefined}
           initialArticleId={selectedArticle}
           presets={venture.presets}
         />
