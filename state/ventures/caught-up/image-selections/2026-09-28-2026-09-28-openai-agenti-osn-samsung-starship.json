@@ -1,0 +1,80 @@
+{
+  "schemaVersion": "image-selection/1",
+  "venture": "caught-up",
+  "slug": "2026-09-28-openai-agenti-osn-samsung-starship",
+  "date": "2026-09-28",
+  "rung": "plate",
+  "selected": null,
+  "verdicts": [
+    {
+      "mode": "search",
+      "considered": 6,
+      "selected": null,
+      "reason": "all-candidates-rejected",
+      "candidates": [
+        {
+          "candidateId": "pexels:9242888",
+          "provider": "pexels",
+          "fit": 6,
+          "vetoes": [],
+          "reason": "Authentic photograph of motherboard assembly shows technology in action, but lacks the conceptual breadth to represent autonomous AI agents, cyber attacks, and firmware failures.",
+          "sceneCs": "deska s plošnými spoji v ruce"
+        },
+        {
+          "candidateId": "wikimedia:179520469",
+          "provider": "wikimedia",
+          "fit": 2,
+          "vetoes": [
+            "ai-generated-look",
+            "dated-aesthetic"
+          ],
+          "reason": "Stylized circuit-board brain is a clichéd, overused visual metaphor for AI that reads as stock imagery and dated mid-2000s design aesthetics.",
+          "sceneCs": "mozek ze spojů a čipů"
+        },
+        {
+          "candidateId": "openverse:00de4c50-7cec-4609-9f6d-e605679a28a8",
+          "provider": "openverse",
+          "fit": 5,
+          "vetoes": [],
+          "reason": "Museum or exhibition display of circuit boards suggests technology expertise and investigation, relevant to security research, but feels institutional rather than urgent or active.",
+          "sceneCs": "výstava desky plošných spojů v galerii"
+        },
+        {
+          "candidateId": "pixabay:3963945",
+          "provider": "pixabay",
+          "fit": 1,
+          "vetoes": [
+            "ai-generated-look"
+          ],
+          "reason": "Glowing ethereal sphere with grid overlay is a generic AI/tech visualization with artificial styling that obscures rather than illustrates the concrete technical story.",
+          "sceneCs": "svítící abstraktní koule a síť"
+        },
+        {
+          "candidateId": "pexels:28767589",
+          "provider": "pexels",
+          "fit": 3,
+          "vetoes": [
+            "ai-generated-look",
+            "dated-aesthetic"
+          ],
+          "reason": "Thermographic microchip visualization with neon pink-blue coloring is a dated design cliché from popular tech media, too stylized to feel credible.",
+          "sceneCs": "termální vizualizace čipu v neonových barvách"
+        },
+        {
+          "candidateId": "pixabay:3435575",
+          "provider": "pixabay",
+          "fit": 2,
+          "vetoes": [
+            "ai-generated-look"
+          ],
+          "reason": "Hand releasing glowing digital particles is a generic metaphor for AI/automation lacking specificity to the story's concrete technical incidents.",
+          "sceneCs": "ruka s digitálními částicemi"
+        }
+      ],
+      "skipped": [],
+      "costUsd": 0.005505
+    }
+  ],
+  "skippedProviders": [],
+  "recordedAt": "2026-09-28T03:08:49.855Z"
+}

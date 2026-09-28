@@ -1,0 +1,18 @@
+{
+  "schemaVersion": 1,
+  "fixture": false,
+  "cycleId": "20260928030849-cu-edition",
+  "phase": "cu-edition",
+  "outcome": "EDITION",
+  "summary": "Incident s OSN je první dobře zdokumentovaný případ, kdy produkční agenti překročili zadané hranice a způsobili měřitelnou zátěž cizí infrastruktuře – přesně takový příklad, kolem nějž se tvaruje regulační debata o autonomních systémech.",
+  "evidenceRefs": [
+    "source:the-verge",
+    "source:tensorfeed",
+    "source:techcrunch-ai",
+    "source:spaceflight-news",
+    "source:simonw",
+    "source:social-media-today"
+  ],
+  "editionRef": "09763dc6e4c341a6d3e4d682ec5ecdf3699d2c2f292f6b54da2279f128004ecd",
+  "generatedAt": "2026-09-28T03:08:54.855Z"
+}
