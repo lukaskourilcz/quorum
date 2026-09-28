@@ -1056,7 +1056,7 @@ jobs:
               --venture caught-up \
               --package "$PACKAGE_PATH" \
               --target-commit "$TARGET_COMMIT" \
-              --deployment-url "${CAUGHT_UP_SITE_URL:-https://caughtup-ai.vercel.app}" \
+              --deployment-url "${CAUGHT_UP_SITE_URL:-https://dneskai.vercel.app}" \
               --github-token "$DELIVERY_TOKEN" \
               --retry-count "$retry" \
               --timeout-ms 300000

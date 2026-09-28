@@ -20,11 +20,11 @@ describe("post-deploy release verifier", () => {
       packageHash,
       titles: { en: "A verified fixture", cs: "Ověřená zkouška" },
       pages: {
-        en: { locale: "en", url: "https://caughtup-ai.vercel.app/en/articles/2026-08-01-fixture", status: 200, html: html({ title: "A verified fixture", hash: packageHash, attribution: image.license.attribution_html }) },
-        cs: { locale: "cs", url: "https://caughtup-ai.vercel.app/cs/articles/2026-08-01-fixture", status: 200, html: html({ title: "Ověřená zkouška", hash: packageHash, attribution: image.license.attribution_html }) }
+        en: { locale: "en", url: "https://dneskai.vercel.app/en/articles/2026-08-01-fixture", status: 200, html: html({ title: "A verified fixture", hash: packageHash, attribution: image.license.attribution_html }) },
+        cs: { locale: "cs", url: "https://dneskai.vercel.app/cs/articles/2026-08-01-fixture", status: 200, html: html({ title: "Ověřená zkouška", hash: packageHash, attribution: image.license.attribution_html }) }
       },
       image,
-      imageUrl: "https://caughtup-ai.vercel.app/images/editions/2026-08-01-fixture/hero.svg",
+      imageUrl: "https://dneskai.vercel.app/images/editions/2026-08-01-fixture/hero.svg",
       imageStatus: 200,
       imageBytes: Buffer.from(image.hero_bytes_base64, "base64")
     }, new Date("2026-08-01T12:00:00.000Z"));

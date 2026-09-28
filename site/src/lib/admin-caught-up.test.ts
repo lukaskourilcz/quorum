@@ -28,7 +28,7 @@ describe("DNESKAi engine strip", () => {
         date: "2026-08-08",
         status: "delivered",
         editionStatus: "edition",
-        articleUrl: "https://caughtup-ai.vercel.app/articles/2026-08-08-openai-astra-kyberneticky-prach"
+        articleUrl: "https://dneskai.vercel.app/articles/2026-08-08-openai-astra-kyberneticky-prach"
       },
       // No `date` field at all — the append receipt stamps `recordedAt`.
       "ventures/caught-up/datasets/2026-08-08-ai-lessons.json": {
@@ -110,7 +110,7 @@ describe("the configured repository root", () => {
       "edition/deliveries/2026-08-09.json": {
         date: "2026-08-09",
         editionStatus: "edition",
-        articleUrl: "https://caughtup-ai.vercel.app/articles/ranni-prehled"
+        articleUrl: "https://dneskai.vercel.app/articles/ranni-prehled"
       },
       "ventures/caught-up/streams/2026-08-09-events.json": { date: "2026-08-09", stream: "events", added: ["a", "b"] },
       "ventures/caught-up/datasets/2026-08-09-community.json": { dataset: "community", recordedAt: "2026-08-09T01:00:00.000Z" }

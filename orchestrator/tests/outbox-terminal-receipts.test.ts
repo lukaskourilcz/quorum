@@ -215,7 +215,7 @@ describe("a delivered package is kept and points at what it published", () => {
     expect(editionArticleUrl({
       status: "edition",
       article: { cs: { frontmatter: { slug: "tri-laboratore" } } }
-    } as never)).toBe("https://caughtup-ai.vercel.app/articles/tri-laboratore");
+    } as never)).toBe("https://dneskai.vercel.app/articles/tri-laboratore");
   });
 });
 

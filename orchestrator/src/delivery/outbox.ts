@@ -388,7 +388,7 @@ async function raiseInboxOnce(root: string, date: string, code: DeliveryFailureC
 }
 
 /** Where DNESKAi serves the article a package delivered. Czech renders at the site root. */
-const DNESKAI_SITE = "https://caughtup-ai.vercel.app";
+const DNESKAI_SITE = "https://dneskai.vercel.app";
 
 export function editionArticleUrl(editionPackage: EditionPackage): string | null {
   return editionPackage.status === "edition"

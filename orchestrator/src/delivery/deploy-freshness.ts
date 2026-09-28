@@ -36,7 +36,7 @@ export interface DeployFreshness {
 
 const SITE: Readonly<Record<string, string>> = {
   "mma-files": "https://mma-files.vercel.app",
-  "caught-up": "https://caughtup-ai.vercel.app"
+  "caught-up": "https://dneskai.vercel.app"
 };
 
 async function defaultProbe(url: string): Promise<number> {
