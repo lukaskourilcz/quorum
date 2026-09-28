@@ -39,8 +39,8 @@ describe("the backstop sweep", () => {
     for (const expression of deployed) {
       expect(expression).toMatch(new RegExp(`^${CRON_MINUTE} \\d{1,2} \\* \\* \\*$`, "u"));
     }
-    // Far fewer than the per-slot expressions the Vercel side still uses.
-    expect(deployed.length).toBeLessThanOrEqual(resolveScheduledClock(liveRegistry).length);
+    // Only the DNESKAi desk and company checkpoint remain on the clock.
+    expect(resolveScheduledClock(liveRegistry).map(slot => slot.phase)).toEqual(["cu-day", "morning"]);
   });
 
   it("has no running slot after 21:00 Prague, which only the removed late sweeps could reach", () => {

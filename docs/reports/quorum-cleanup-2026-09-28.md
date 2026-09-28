@@ -38,3 +38,5 @@ existing validated preview/production commands.
 The 28 September DNESKAi article exists but its legacy image options are unavailable. A successful
 future four-image review and the owner's selection are still required to prove live delivery.
 No article or social post has been approved on the owner's behalf.
+
+The live authenticated Queue successfully read the current 28 September article. The old blanket token-renewal task was removed; write/dispatch permissions remain to be proved by the first real owner approval. No test approval was fabricated. Optional missing photo-provider keys now stay in image reports rather than being automatically appended as required tasks.

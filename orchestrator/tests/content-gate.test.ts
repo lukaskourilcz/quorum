@@ -234,6 +234,9 @@ describe("every failure descends, and none of them costs the run", () => {
 describe("the shedding ladder", () => {
   it("drops scoring first, because an unscored day still published", async () => {
     const registry = await loadVentureRegistry();
+    const goviral = registry.ventures.find(venture => venture.id === "goviral")!;
+    goviral.status = "operating";
+    delete goviral.pausedOn;
     const base = {
       registry,
       budgetDecisionRaw: "Status: countersigned\nSignature / explicit approval reference: owner\nSelection: [x] Shape A [ ] Shape B",

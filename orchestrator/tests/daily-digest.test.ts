@@ -44,7 +44,7 @@ async function fixtureDigest(finalMeetingFailed = false) {
 
 describe("one daily portfolio digest", () => {
   it("groups the whole day's schedule and records missed work in one line", async () => {
-    const digest = await fixtureDigest();
+    const digest = await fixtureDigest(true);
     // Counted off the clock rather than pinned to a number: the digest's promise is that it
     // accounts for every slot the day has, not that the day has any particular count.
     expect(digest.meetings).toHaveLength(MEETING_CLOCK.length);

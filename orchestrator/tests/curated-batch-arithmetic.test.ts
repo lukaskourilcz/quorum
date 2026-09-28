@@ -37,13 +37,13 @@ function afterSearchAndCurated(searchUsd: number, curatedUsd: number): ImageProg
 }
 
 describe("what the curated rung leaves for the illustration rung", () => {
-  it("refused a render after three separate curated looks, at either shortlist size", () => {
+  it("has room for a render after either historical shortlist under the four-choice allowance", () => {
     for (const search of [SEARCH_TWELVE_USD, SEARCH_EIGHT_USD]) {
       const budget = afterSearchAndCurated(search, CURATED_SEQUENTIAL_USD);
       expect(
         budget.reserveGeneratedImage(ILLUSTRATION_USD_PER_IMAGE, GENERATED_GATE_ESTIMATE_USD),
         `search ${search}`
-      ).toBe("article-cap");
+      ).toBeNull();
     }
   });
 
@@ -53,11 +53,11 @@ describe("what the curated rung leaves for the illustration rung", () => {
     expect(budget.reserveGeneratedImage(ILLUSTRATION_USD_PER_IMAGE, GENERATED_GATE_ESTIMATE_USD)).toBeNull();
   });
 
-  it("still cannot reach it from a twelve-candidate search, which is honest rather than a regression", () => {
+  it("has room for a render after the historical twelve-candidate search", () => {
     // Batching bought about $0.0017. A twelve-candidate search costs $0.0038 more than an eight,
     // so the wide search remains the expensive choice and the rung below it stays out of reach.
     const budget = afterSearchAndCurated(SEARCH_TWELVE_USD, CURATED_BATCHED_USD);
-    expect(budget.reserveGeneratedImage(ILLUSTRATION_USD_PER_IMAGE, GENERATED_GATE_ESTIMATE_USD)).toBe("article-cap");
+    expect(budget.reserveGeneratedImage(ILLUSTRATION_USD_PER_IMAGE, GENERATED_GATE_ESTIMATE_USD)).toBeNull();
   });
 
   it("keeps the shortlist bounded, because every candidate on it is a thumbnail the model reads", () => {

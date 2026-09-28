@@ -19,7 +19,7 @@ describe("WebDev Signal registration", () => {
     // `operating` is what gives the owner a pause switch for the daily scan; the editions stay
     // held because no account, connection or publishing authority exists.
     expect(matches[0]).toMatchObject({
-      status: "operating",
+      status: "paused",
       visibility: "owner-only",
       taste: false,
       ledgerNamespace: "webdev-signal",

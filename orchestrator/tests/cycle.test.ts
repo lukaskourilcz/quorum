@@ -1,6 +1,7 @@
+import * as ventureRegistry from "../src/ventures/registry.js";
 import { readdir, readFile, rm } from "node:fs/promises";
 import path from "node:path";
-import { describe, expect, it } from "vitest";
+import { describe, expect, it, vi } from "vitest";
 import { runCycle } from "../src/cycle.js";
 import { MeetingRecordSchema } from "../src/contracts/meeting-record.js";
 import { EditorialSlateSchema } from "../src/contracts/mma-files.js";
@@ -365,6 +366,12 @@ describe("cycle preflight", () => {
   });
 
   it("rotates the morning idea across the portfolio and leaves the Caught Up room alone", async () => {
+    const registry = await ventureRegistry.loadVentureRegistry();
+    const goviral = registry.ventures.find(venture => venture.id === "goviral")!;
+    goviral.status = "operating";
+    delete goviral.pausedOn;
+    const registryMock = vi.spyOn(ventureRegistry, "loadVentureRegistry").mockResolvedValue(registry);
+    try {
     // Caught Up used to receive every morning idea because the namespace was a constant at the
     // call site. On a day the rotation names another venture, the idea lands in that venture's
     // ledger and the Caught Up product room has nothing to adopt — a normal day, not a gap.
@@ -403,5 +410,6 @@ describe("cycle preflight", () => {
     expect(record.caughtUpIdeaRef).not.toBe(standup.caughtUpIdeaRef);
     expect((record.ideaVerdicts ?? []).map((entry) => entry.ideaId))
       .not.toContain(standup.caughtUpIdeaRef);
+    } finally { registryMock.mockRestore(); }
   });
 });

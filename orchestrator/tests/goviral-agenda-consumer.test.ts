@@ -11,6 +11,17 @@ vi.mock("../src/paths.js", async (importOriginal) => {
   return { ...actual, stateRoot: root };
 });
 
+// Archived capability rehearsal: operational pauses are tested by venture-pause.test.ts.
+vi.mock("../src/ventures/registry.js", async (importOriginal) => {
+  const actual = await importOriginal<typeof import("../src/ventures/registry.js")>();
+  return { ...actual, loadVentureRegistry: async () => {
+    const registry = await actual.loadVentureRegistry();
+    const venture = registry.ventures.find(venture => venture.id === "goviral")!;
+    venture.status = "operating"; delete venture.pausedOn;
+    return registry;
+  } };
+});
+
 vi.mock("../src/llm/call.js", async (importOriginal) => {
   const actual = await importOriginal<typeof import("../src/llm/call.js")>();
   return {

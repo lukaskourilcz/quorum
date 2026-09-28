@@ -11,10 +11,10 @@ import {
 import path from "node:path";
 
 describe("venture agent controls", () => {
-  it("creates social drafts while the separate health gate controls publishing", async () => {
+  it("disables social production while keeping article roles enabled", async () => {
     const controls = await loadVentureAgentControls();
-    expect(caughtUpSocialProductionEnabled(controls)).toBe(true);
-    expect([...disabledAgentsForVenture(controls, "caught-up")]).toEqual(["THREADS", "INSTAGRAM"]);
+    expect(caughtUpSocialProductionEnabled(controls)).toBe(false);
+    expect([...disabledAgentsForVenture(controls, "caught-up")]).toEqual(["SPARK", "THREADS", "INSTAGRAM", "FRAME"]);
     expect(enabledAgentsForVenture(controls, "caught-up", ["HERALD", "STET", "HACEK", "THREADS"]))
       .toEqual(["HERALD", "STET", "HACEK"]);
   });

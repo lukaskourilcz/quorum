@@ -91,7 +91,7 @@ export async function auditSocialRelease(repoRoot = defaultRepoRoot, options: { 
     readFile(path.join(repoRoot, "orchestrator/src/social/campaigns.ts"), "utf8"), readFile(path.join(repoRoot, "orchestrator/src/social/daily.ts"), "utf8"), readFile(path.join(repoRoot, "orchestrator/src/social/results.ts"), "utf8"),
     readFile(path.join(repoRoot, "orchestrator/src/social/learning.ts"), "utf8"), readFile(path.join(repoRoot, "orchestrator/src/social/health.ts"), "utf8"), readFile(path.join(repoRoot, "orchestrator/src/cycle.ts"), "utf8"),
     readFile(path.join(repoRoot, "site/src/lib/social-profiles/model.ts"), "utf8"), readFile(path.join(repoRoot, "site/src/lib/social-profiles/snapshot.ts"), "utf8"), readFile(path.join(repoRoot, "site/src/components/admin/social-profiles-workspace.tsx"), "utf8"),
-    readFile(path.join(repoRoot, "site/src/proxy.ts"), "utf8"), readFile(path.join(repoRoot, "docs/SOCIAL-DISTRIBUTION-RELEASE.md"), "utf8"), readFile(path.join(repoRoot, "docs/NEEDED.md"), "utf8")
+    readFile(path.join(repoRoot, "site/src/proxy.ts"), "utf8"), readFile(path.join(repoRoot, "docs/SOCIAL-DISTRIBUTION-RELEASE.md"), "utf8"), readFile(path.join(repoRoot, "docs/NEEDED-INACTIVE-TASKS.md"), "utf8")
   ]);
   const checks: SocialReleaseCheck[] = [];
   const simulationMatrix = JSON.parse(await readFile(path.join(repoRoot, "contracts/fixtures/social-profile-simulation-matrix.json"), "utf8")) as { schemaVersion?: unknown; count?: unknown };
@@ -165,7 +165,7 @@ export async function auditSocialRelease(repoRoot = defaultRepoRoot, options: { 
 
   checks.push(check("staged-release-and-owner-actions", ["Stage 0", "Stage 1", "Stage 2", "Stage 3", "Stage 4", "Rollback", "no live credentials", "zero live connections"].every((value) => releaseDoc.includes(value))
     && neededDoc.includes("SOCIAL-DISTRIBUTION-CONNECTION-001") && neededDoc.includes("countersign") && releaseDoc.includes("#430 remains held"),
-  "Release guidance keeps all connections held through validation, names one owner-only setup item, stages any future canary and preserves evidence on rollback.", ["docs/SOCIAL-DISTRIBUTION-RELEASE.md", "docs/NEEDED.md"]));
+  "Release guidance keeps all connections held through validation, names one owner-only setup item, stages any future canary and preserves evidence on rollback.", ["docs/SOCIAL-DISTRIBUTION-RELEASE.md", "docs/NEEDED-INACTIVE-TASKS.md"]));
 
   checks.push(check("optional-absence-nonblocking", !(await exists(repoRoot, "site/src/app/admin/ventures/contest-radar/page.tsx")) && !adminModel.includes('id: "contest-radar"') && !publisher.profiles.some(({ ventureRef }) => ventureRef === "contest-radar"),
   "Contest Radar remains absent from Social profiles, Admin sections and release authority; its held optional integration does not block release.", ["config/social-publisher-registry.json", "site/src/lib/social-profiles/model.ts"]));

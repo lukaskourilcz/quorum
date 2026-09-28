@@ -15,7 +15,6 @@ import { disabledAgentsForVenture, loadVentureAgentControls } from "../ventures/
 import { fighterIdentityPhoto } from "../images/fighter-photo.js";
 import { ImageProgramBudget, readImageProgramSpendToday } from "../images/budget.js";
 import { selectArticleHero, type HeroLadderResult } from "../images/ladder.js";
-import { recordSkippedProviders } from "../images/skipped-providers.js";
 import { storeImageSelection } from "../images/verdict-store.js";
 import type { VisualBrief } from "../images/visual-brief.js";
 import { loadFixedMonthlyUsd } from "../money/fixed-costs.js";
@@ -854,7 +853,7 @@ export async function runLiveArticleProduction(input: {
         article: request.article,
         illustrationSlug: articleSlug
       });
-      await recordSkippedProviders(result.skippedProviders);
+      // Optional missing providers remain in the image report, not the required owner checklist.
       return result;
     };
     // Composition needs both the venture's own gate and a channel for the result to reach. Every

@@ -27,7 +27,6 @@ import { caughtUpBudgetMode } from "../finance/budget-plan.js";
 import { ImageProgramBudget, readImageProgramSpendToday } from "../images/budget.js";
 import { type HeroLadderResult } from "../images/ladder.js";
 import type { VisualBrief } from "../images/visual-brief.js";
-import { recordSkippedProviders } from "../images/skipped-providers.js";
 import { imageProgramReadiness } from "../images/readiness.js";
 import { storeImageSelection } from "../images/verdict-store.js";
 import { loadFixedMonthlyUsd } from "../money/fixed-costs.js";
@@ -325,7 +324,7 @@ export async function runLiveEdition(input: {
         rung: result.rung,
         verdicts: result.verdicts
       };
-      await recordSkippedProviders(result.skippedProviders);
+      // Optional missing providers remain in the image report, not the required owner checklist.
       return result;
     };
     const gateway = new BudgetedEditionModelGateway(

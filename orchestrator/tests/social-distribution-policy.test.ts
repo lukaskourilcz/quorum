@@ -94,7 +94,7 @@ describe("Social Distribution founding policy", () => {
       text("orchestrator/src/social/meta-graph.ts"),
       text("orchestrator/src/social/runner.ts"),
       text("orchestrator/src/social/activation.ts"),
-      text("docs/NEEDED.md")
+      text("docs/NEEDED-INACTIVE-TASKS.md")
     ]);
     const runtime = `${meta}\n${metaGraph}\n${runner}\n${activation}`;
 

@@ -147,7 +147,7 @@ describe("REV-11 external edges", () => {
     const cycle = await text(".github/workflows/cycle.yml");
     const social = await text(".github/workflows/social-publisher.yml");
     expect(cycle).toContain("if: ${{ vars.AUTONOMY_KILL_SWITCH != 'true' }}");
-    expect(social).toContain("if: ${{ github.event_name != 'schedule' || vars.SOCIAL_KILL_SWITCH != 'true' }}");
+    expect(social).toContain("if: ${{ false }}");
     expect(social).toContain("SOCIAL_KILL_SWITCH: ${{ vars.SOCIAL_KILL_SWITCH }}");
   });
 

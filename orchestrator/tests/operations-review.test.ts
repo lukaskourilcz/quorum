@@ -200,14 +200,15 @@ describe("resolving what the board asked for", () => {
 });
 
 describe("the ideation rotation", () => {
-  it("picks the same venture for the same date, and moves on the next one", async () => {
+  it("keeps the sole operating idea venture as the daily target", async () => {
     const stateRoot = path.join(repoRoot, "state");
     const monday = await resolveRotationTarget({ stateRoot, now: new Date("2026-08-03T04:00:00.000Z") });
     const again = await resolveRotationTarget({ stateRoot, now: new Date("2026-08-03T23:00:00.000Z") });
     const tuesday = await resolveRotationTarget({ stateRoot, now: new Date("2026-08-04T04:00:00.000Z") });
 
     expect(monday?.ventureId).toBe(again?.ventureId);
-    expect(monday?.ventureId).not.toBe(tuesday?.ventureId);
+    expect(monday?.ventureId).toBe("caught-up");
+    expect(tuesday?.ventureId).toBe("caught-up");
     expect(monday?.growthObjective.length).toBeGreaterThan(0);
   });
 

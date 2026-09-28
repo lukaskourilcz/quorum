@@ -427,19 +427,13 @@ describe("Kvórum desk runner", () => {
         path.join(root, MEETING_AGENDA_PATH),
         "utf8"
       )) as unknown);
-      expect(agendaQueue.agendas).toHaveLength(2);
+      expect(agendaQueue.agendas).toHaveLength(1);
       expect(agendaQueue.agendas.find((agenda) => agenda.id === inbound.agenda.id)).toMatchObject({
         status: "consumed",
         consumedBy: "20260812-kv-desk-live"
       });
-      expect(agendaQueue.agendas.find((agenda) => agenda.phase === "gv-brief")).toMatchObject({
-        status: "pending",
-        ventureId: "goviral",
-        requestedBy: "TRIBUN",
-        sourcePhase: "kv-desk",
-        notBefore: "2026-08-13",
-        evidenceRefs: [followUpRef]
-      });
+      // Retired GoVIRAL cannot acquire new follow-up work.
+      expect(agendaQueue.agendas.some((agenda) => agenda.phase === "gv-brief")).toBe(false);
       expect(result.artifacts).toContain(MEETING_AGENDA_PATH);
     } finally {
       await Promise.all([

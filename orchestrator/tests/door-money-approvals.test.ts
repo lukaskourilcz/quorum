@@ -56,9 +56,9 @@ describe("Door Money owner approvals", () => {
     expect(results).toContain("D9");
   });
 
-  it("gives the owner one matching NEEDED action per approval", async () => {
-    const needed = await readFile(path.join(repoRoot, "docs", "NEEDED.md"), "utf8");
-    for (const id of APPROVAL_IDS) {
+  it("keeps outstanding inactive tasks separately without resurrecting completed approvals", async () => {
+    const needed = await readFile(path.join(repoRoot, "docs", "NEEDED-INACTIVE-TASKS.md"), "utf8");
+    for (const id of APPROVAL_IDS.filter(id => id !== "DM-RESULTS-004")) {
       const matching = needed.split("\n- [").filter((item) => item.includes(id));
       expect(matching, id).toHaveLength(1);
       expect(matching[0]).toContain("[owner:me]");
