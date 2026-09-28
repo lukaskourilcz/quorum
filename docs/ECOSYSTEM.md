@@ -62,13 +62,13 @@ Refreshed from committed state: **2026-09-28T11:13:14.113Z**. This block is gene
 
 | Project | Mode | Rooms | Disabled optional roles | Social readiness |
 | --- | --- | --- | --- | --- |
-| Caught Up | operating | cu-edition 05:00; cu-product 17:00 | THREADS, INSTAGRAM | locked (10/7) |
+| Caught Up | operating | cu-edition 05:00; cu-product 17:00 | SPARK, THREADS, INSTAGRAM, FRAME | locked (10/7) |
 | Titty Tuesdays | paused | tt-marketing 11:00 | QUILL, THREADS, INSTAGRAM | paused (0/4) |
-| GoVIRAL | operating | gv-brief 13:00 | none | not applicable |
+| GoVIRAL | paused | gv-brief 13:00 | none | not applicable |
 | BOOKSOFHISTORY | paused | bh-desk 12:00 | none | not applicable |
 | FightAIQ | paused | mma-intake 08:00; mma-analysis 19:00 | none | not applicable |
-| Design Lab | operating | deterministic service only | none | not applicable |
-| marketingShark | operating | ms-daily 07:00 | none | locked (0/3) |
+| Design Lab | paused | deterministic service only | none | not applicable |
+| marketingShark | paused | ms-daily 07:00 | none | locked (0/3) |
 | MMA Files | paused | mag-editorial 09:00; mag-desk 20:00 | REACH | paused (10/10) |
 | Door Money | paused | dm-desk 15:00; dm-growth 16:00 | none | not applicable |
 | Tehdejší svět | paused | ts-desk 18:00 | none | not applicable |

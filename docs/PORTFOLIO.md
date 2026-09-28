@@ -1,5 +1,7 @@
 # BoardlessAI project model
 
+> Current scope (2026-09-28): only DNESKAi article production operates. GoVIRAL, Marketing Shark, Design Lab and WebDev Signal are paused. The operating descriptions below document retained capabilities, not authorization to run them. See `state/decisions/2026-09-28-active-venture-cleanup.md`.
+
 BoardlessAI is one guarded operating system with eleven public project workspaces and
 three owner-only entries: Personal Growth, WebDev Signal and the Contest Radar exploration.
 Since `operations-2026-09b` only DNESKAi, marketingShark, GoVIRAL, the Design Lab and WebDev

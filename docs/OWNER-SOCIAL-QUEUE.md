@@ -1,3 +1,5 @@
+> Superseded for current operations on 2026-09-28: BoardlessAI produces DNESKAi articles only, with four headlines and four image choices. Article approval no longer creates social drafts. Social automation is paused. This document describes archived capabilities.
+
 # Owner-reviewed DNESKAi and devShark publishing
 
 Implementation: quorum #585–#588 and react-express-app #237. Authority is the

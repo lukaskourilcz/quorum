@@ -13,16 +13,12 @@ Council runs via API in `orchestrator/`; you are the human-invoked engineer.
   Tuesdays, GoVIRAL, BOOKSOFHISTORY, FightAIQ, Design Lab, marketingShark, MMA Files,
   Door Money, Tehdejší svět and Kvórum, plus three owner-only entries: the Personal Growth
   workspace, WebDev Signal and the Contest Radar exploration.
-  Since `operations-2026-09b` only DNESKAi, marketingShark (devShark), GoVIRAL, the Design Lab
-  and WebDev Signal run; every other public venture and Personal Growth are `paused`, and
-  Contest Radar stays an `exploration` with no room. A paused venture leaves the clock
-  (`site/vercel.json` and the sweep derive from the registry), the admin navigation and the
-  Design Lab, and is listed in Settings. The registry also owns each venture room and envelope.
-  `config/venture-capabilities.json` is the separate deny-by-default graph for exact
-  cross-boundary data and service handoffs. Its `webdev-signal` node is live: the founding
-  record (`state/decisions/2026-08-28-webdev-signal-founding.md`) is countersigned, and
-  `2026-09-15-webdev-signal-daily-runner.md` runs the desk as a `$0` pre-step of `cu-day` with
-  its editions held.
+  Since the owner's 2026-09-28 scope decision, only DNESKAi article production operates.
+  GoVIRAL, Marketing Shark, Design Lab and WebDev Signal are paused alongside the other ventures.
+  Contest Radar remains exploration with no room. Records are retained. The registry owns each
+  venture room and envelope; `config/venture-capabilities.json` retains the deny-by-default graph.
+  Article review requires four headline and four reviewed image choices; the owner selects before
+  delivery. No social drafts or devShark marketing automation are produced.
 - `studio/` — `@boardlessai/carousel-studio`, the deterministic render package. It is
   consumed as built output (`dist/`, gitignored). `pnpm install` builds it through the
   studio's `prepare`, and the gates rebuild it through `pre*` scripts in `site` and
