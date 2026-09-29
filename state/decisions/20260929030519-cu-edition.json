@@ -1,0 +1,19 @@
+{
+  "schemaVersion": 1,
+  "fixture": false,
+  "cycleId": "20260929030519-cu-edition",
+  "phase": "cu-edition",
+  "outcome": "EDITION",
+  "summary": "Tři bezpečnostní události kolem OpenAI ve stejném týdnu – stažený model, napadené vládní systémy a soudní žaloba – tvoří dohromady obraz, který mění debatu o AI bezpečnosti od slov k důsledkům.",
+  "evidenceRefs": [
+    "source:platformer",
+    "source:the-register",
+    "source:ars-technica",
+    "source:the-verge",
+    "source:simonw",
+    "source:spaceflight-news",
+    "source:tensorfeed"
+  ],
+  "editionRef": "94feb4fff62ee947065ce858c4511ecc2058ef0170b66dfc58a9225ca5b98487",
+  "generatedAt": "2026-09-29T03:05:24.612Z"
+}

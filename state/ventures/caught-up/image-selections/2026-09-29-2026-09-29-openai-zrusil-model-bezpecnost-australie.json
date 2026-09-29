@@ -1,0 +1,137 @@
+{
+  "schemaVersion": "image-selection/1",
+  "venture": "caught-up",
+  "slug": "2026-09-29-openai-zrusil-model-bezpecnost-australie",
+  "date": "2026-09-29",
+  "rung": "search",
+  "selected": "pexels:4316",
+  "verdicts": [
+    {
+      "mode": "search",
+      "considered": 6,
+      "selected": "pexels:4316",
+      "reason": "Closeup of computer hardware components (motherboard with heatsinks and RAM) is well-lit, clear, and directly illustrates the computational systems and technology infrastructure that AI development and security concerns involve.",
+      "candidates": [
+        {
+          "candidateId": "pexels:9242888",
+          "provider": "pexels",
+          "fit": 6,
+          "vetoes": [
+            "dated-aesthetic"
+          ],
+          "reason": "Shows hands working with actual computer hardware, which relates to AI/technology development, but the retro motherboard aesthetic and warm lighting date it to early 2000s tech photography.",
+          "sceneCs": "ruka pracující s počítačovou deskou"
+        },
+        {
+          "candidateId": "wikimedia:179520469",
+          "provider": "wikimedia",
+          "fit": 1,
+          "vetoes": [
+            "ai-generated-look",
+            "dated-aesthetic"
+          ],
+          "reason": "The blue glowing circuit-board brain is quintessential stock imagery for AI and has been heavily dated since the mid-2010s; it's a clichéd visual that no longer conveys authentic technology reporting.",
+          "sceneCs": "mozek z elektrotechnických součástek"
+        },
+        {
+          "candidateId": "openverse:00de4c50-7cec-4609-9f6d-e605679a28a8",
+          "provider": "openverse",
+          "fit": 4,
+          "vetoes": [
+            "low-quality"
+          ],
+          "reason": "Museum exhibit of circuit boards with figures looking at them is tangentially relevant to technology, but the image is dim, badly lit, and the small human figures are unclear, making it unsuitable for a lead picture.",
+          "sceneCs": "muzejní expozice s návštěvníky"
+        },
+        {
+          "candidateId": "pixabay:3963945",
+          "provider": "pixabay",
+          "fit": 0,
+          "vetoes": [
+            "ai-generated-look",
+            "wrong-subject"
+          ],
+          "reason": "This glowing orb/holographic visualization is entirely disconnected from the article's focus on AI safety breaches and unauthorized system access; it represents generic 'technology magic' rather than the real security concerns described.",
+          "sceneCs": "abstraktní digitální koule se světelnými efekty"
+        },
+        {
+          "candidateId": "pexels:4316",
+          "provider": "pexels",
+          "fit": 7,
+          "vetoes": [],
+          "reason": "Closeup of computer hardware components (motherboard with heatsinks and RAM) is well-lit, clear, and directly illustrates the computational systems and technology infrastructure that AI development and security concerns involve.",
+          "sceneCs": "počítačová deska s chladičem a paměťovými moduly"
+        },
+        {
+          "candidateId": "pixabay:3435575",
+          "provider": "pixabay",
+          "fit": 2,
+          "vetoes": [
+            "ai-generated-look",
+            "wrong-subject"
+          ],
+          "reason": "Stylized image of a person in business attire with data particles suggests generic 'innovation' or 'digital transformation' but does not illustrate AI agents, security breaches, or system infiltration; it could be a portrait-like face which is also problematic.",
+          "sceneCs": "figura člověka se zářícími částicemi"
+        }
+      ],
+      "skipped": [],
+      "costUsd": 0.005968
+    },
+    {
+      "mode": "generated",
+      "considered": 1,
+      "selected": "illustration:2026-09-29-candidate-2",
+      "reason": "Circuit board pattern with glowing nodes illustrates AI systems and technology infrastructure directly relevant to the article's focus on AI agents and security breaches.",
+      "candidates": [
+        {
+          "candidateId": "illustration:2026-09-29-candidate-2",
+          "provider": "boardlessai",
+          "fit": 8,
+          "vetoes": [],
+          "reason": "Circuit board pattern with glowing nodes illustrates AI systems and technology infrastructure directly relevant to the article's focus on AI agents and security breaches.",
+          "sceneCs": "modré vodivé dráhy a body na tmavém pozadí"
+        }
+      ],
+      "skipped": [],
+      "costUsd": 0.002122
+    },
+    {
+      "mode": "generated",
+      "considered": 1,
+      "selected": "illustration:2026-09-29-candidate-3",
+      "reason": "Glowing circuit board and neural network visualization directly illustrates AI systems and technology breach themes central to the article about OpenAI's security failures and agent breaches.",
+      "candidates": [
+        {
+          "candidateId": "illustration:2026-09-29-candidate-3",
+          "provider": "boardlessai",
+          "fit": 7,
+          "vetoes": [],
+          "reason": "Glowing circuit board and neural network visualization directly illustrates AI systems and technology breach themes central to the article about OpenAI's security failures and agent breaches.",
+          "sceneCs": "svítící elektronický obvod s mozkovými uzly"
+        }
+      ],
+      "skipped": [],
+      "costUsd": 0.002127
+    },
+    {
+      "mode": "generated",
+      "considered": 1,
+      "selected": "illustration:2026-09-29-candidate-4",
+      "reason": "Abstract blue circuit board patterns on dark background effectively illustrate the technological and cybersecurity themes of AI systems, hacking incidents, and system breaches without being photographic or containing faces, logos, or embedded text.",
+      "candidates": [
+        {
+          "candidateId": "illustration:2026-09-29-candidate-4",
+          "provider": "boardlessai",
+          "fit": 7,
+          "vetoes": [],
+          "reason": "Abstract blue circuit board patterns on dark background effectively illustrate the technological and cybersecurity themes of AI systems, hacking incidents, and system breaches without being photographic or containing faces, logos, or embedded text.",
+          "sceneCs": "modrá elektronická schémata na černém pozadí"
+        }
+      ],
+      "skipped": [],
+      "costUsd": 0.002182
+    }
+  ],
+  "skippedProviders": [],
+  "recordedAt": "2026-09-29T03:05:19.612Z"
+}

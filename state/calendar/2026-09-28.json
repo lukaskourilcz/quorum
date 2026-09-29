@@ -21,7 +21,9 @@
       "at": "2026-09-29T03:00:00.000Z",
       "tz": "Europe/Prague",
       "kind": "cu-day",
-      "status": "scheduled"
+      "status": "held",
+      "meetingRef": "meetings/2026-09-29-cu-edition",
+      "decisionOneLiner": "Tři bezpečnostní události kolem OpenAI ve stejném týdnu – stažený model, napadené vládní systémy a soudní žaloba – tvoří dohromady obraz, který mění debatu o AI bezpečnosti od slov"
     },
     {
       "at": "2026-09-29T04:00:00.000Z",
