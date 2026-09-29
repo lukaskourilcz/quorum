@@ -3,8 +3,8 @@
   "nodeId": "carousel-studio",
   "displayName": "Design Lab renderer",
   "policyVersion": "1.0.0",
-  "generatedAt": "2026-09-27T09:39:53.422Z",
-  "observedAt": "2026-09-27T09:39:53.422Z",
+  "generatedAt": "2026-09-29T04:00:58.422Z",
+  "observedAt": "2026-09-29T04:00:58.422Z",
   "lifecycleStage": "operating",
   "state": "unavailable",
   "reason": "No valid live or recovery receipt is available.",
@@ -47,5 +47,5 @@
   ],
   "ownerAttentionRefs": [],
   "latestRunReceiptRefs": [],
-  "snapshotHash": "f2b79df9c1a5089c5f7b22733f330310a3681e2fd8dfb375c7e643201dc39e63"
+  "snapshotHash": "9e4b05e3a58182b00c5b9b48ed7b2c49aec81a8f844d49e9f6cd15e9196c6d66"
 }

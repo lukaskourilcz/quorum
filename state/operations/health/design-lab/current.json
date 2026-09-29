@@ -3,8 +3,8 @@
   "nodeId": "design-lab",
   "displayName": "Design Lab service",
   "policyVersion": "1.0.0",
-  "generatedAt": "2026-09-27T09:39:53.422Z",
-  "observedAt": "2026-09-27T09:39:53.422Z",
+  "generatedAt": "2026-09-29T04:00:58.422Z",
+  "observedAt": "2026-09-29T04:00:58.422Z",
   "lifecycleStage": "operating",
   "state": "unavailable",
   "reason": "No valid live or recovery receipt is available.",
@@ -47,5 +47,5 @@
   ],
   "ownerAttentionRefs": [],
   "latestRunReceiptRefs": [],
-  "snapshotHash": "4b63d528993942730f984a7b84b3a4be38f4f31b65027259675ad4491df44371"
+  "snapshotHash": "4201bcb98fd4240128e61e595686dca0357dbe1ac4d025b8d6935778f204bc14"
 }

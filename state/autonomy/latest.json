@@ -1,6 +1,6 @@
 {
   "schemaVersion": "autonomy-snapshot/1",
-  "generatedAt": "2026-09-27T09:39:53.422Z",
+  "generatedAt": "2026-09-29T04:00:58.422Z",
   "metricsIngestionEnabled": false,
   "growth": [
     {
@@ -111,7 +111,7 @@
     },
     {
       "venture": "marketingshark",
-      "objective": "Draft one complete English post package per active brand each weekday",
+      "objective": "Draft one complete English post package per active brand each day",
       "signals": [
         {
           "id": "package-cadence",
@@ -261,13 +261,13 @@
       "evidence": 4,
       "other": 21
     },
-    "vetoRate": 0.0787,
+    "vetoRate": 0.0801,
     "firstPassRate": 0,
     "retryRate": 0,
     "sourceAgreementRate": 0.4151,
     "verifierPassRate": 0,
     "denominators": {
-      "meetings": 356,
+      "meetings": 362,
       "proofs": 0,
       "fighterFields": 636
     }

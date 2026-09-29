@@ -20,6 +20,7 @@ Collapsed superseded entries: 0.
 
 | ID | Title (≤8 words) | Current status | Last reason |
 | --- | --- | --- | --- |
+| idea-2026-09-29-36e3f3e0 | Add a Source-Mix Review Field | vetoed | VAULT hard stop: Identical core mechanism: add internal source-category field to publishing records, review periodicall… |
 | idea-2026-09-09-8a6a90f2 | Add a Pre-Publish Source Check | vetoed | VAULT hard stop: Identical core mechanism: pre-publish checklist recording source category and second-source presence,… |
 | idea-2026-08-05-bbffd7f5 | Evidence Gap Triage Card | vetoed | VAULT already hard-stopped idea-2026-08-05-bbffd7f5 as a duplicate without qualifying revival evidence. |
 | idea-2026-08-04-f66c928d | Single-Gap Specialist Agenda Brief | vetoed | VAULT hard stop: Both propose identical bounded internal briefs selecting one open evidence gap with specialist follow-… |
