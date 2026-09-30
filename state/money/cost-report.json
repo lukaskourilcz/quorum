@@ -1,14 +1,14 @@
 {
   "schemaVersion": "cost-report/1",
-  "generatedAt": "2026-09-29T07:09:36.021Z",
+  "generatedAt": "2026-09-30T03:14:51.517Z",
   "month": "2026-09",
   "currency": "USD",
   "metered": {
     "total": {
-      "totalUsd": 10.45023555,
-      "modelUsd": 10.41823555,
-      "mediaUsd": 0.032,
-      "calls": 347
+      "totalUsd": 10.7797468,
+      "modelUsd": 10.7357468,
+      "mediaUsd": 0.044,
+      "calls": 357
     },
     "editions": [
       {
@@ -346,6 +346,34 @@
       }
     ],
     "decisions": [
+      {
+        "cycleId": "20260930030112-cu-product",
+        "phase": "cu-product",
+        "ventureId": "caught-up",
+        "outcome": "defer",
+        "decidedAt": "2026-09-30T03:01:16.423Z",
+        "cost": {
+          "totalUsd": 0,
+          "modelUsd": 0,
+          "mediaUsd": 0,
+          "calls": 0
+        },
+        "note": "No ledger row carries this cycle id; the room decided without billing a call."
+      },
+      {
+        "cycleId": "20260930030112-cu-edition",
+        "phase": "cu-edition",
+        "ventureId": "caught-up",
+        "outcome": "EDITION",
+        "decidedAt": "2026-09-30T03:01:17.423Z",
+        "cost": {
+          "totalUsd": 0.32951125,
+          "modelUsd": 0.31751125,
+          "mediaUsd": 0.012,
+          "calls": 10
+        },
+        "note": null
+      },
       {
         "cycleId": "20260929030519-cu-product",
         "phase": "cu-product",
@@ -1793,13 +1821,13 @@
       {
         "phase": "cu-edition",
         "ventureId": "caught-up",
-        "cycles": 25,
-        "meteredUsd": 6.02733525,
+        "cycles": 26,
+        "meteredUsd": 6.3568465,
         "comparable": {
-          "cycles": 23,
-          "envelopeUsd": 13.34,
-          "meteredUsd": 5.66827825,
-          "varianceUsd": -7.67172175,
+          "cycles": 24,
+          "envelopeUsd": 13.92,
+          "meteredUsd": 5.9977895,
+          "varianceUsd": -7.9222105,
           "overspentCycles": 0
         }
       },
@@ -1874,7 +1902,7 @@
   "billed": null,
   "reconciliation": {
     "status": "unavailable",
-    "meteredUsd": 10.45023555,
+    "meteredUsd": 10.7797468,
     "billedUsd": null,
     "differenceUsd": null,
     "toleranceUsd": 0.01,
