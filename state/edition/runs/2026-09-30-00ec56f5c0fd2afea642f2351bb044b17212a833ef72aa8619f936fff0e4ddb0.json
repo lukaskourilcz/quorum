@@ -1,0 +1,295 @@
+{
+  "schemaVersion": 1,
+  "runId": "5a91ca36-2470-457b-abe7-740330c23dc8",
+  "date": "2026-09-30",
+  "mode": "production",
+  "status": "edition",
+  "startedAt": "2026-09-30T03:01:20.708Z",
+  "completedAt": "2026-09-30T03:05:59.830Z",
+  "stages": [
+    {
+      "name": "curate",
+      "status": "success",
+      "startedAt": "2026-09-30T03:01:20.740Z",
+      "completedAt": "2026-09-30T03:01:42.781Z",
+      "durationMs": 22041
+    },
+    {
+      "name": "write",
+      "status": "failed",
+      "startedAt": "2026-09-30T03:01:42.782Z",
+      "completedAt": "2026-09-30T03:03:43.972Z",
+      "durationMs": 121190,
+      "errorCode": "InvalidModelOutputError",
+      "errorMessage": "write: [\n  {\n    \"origin\": \"array\",\n    \"code\": \"too_big\",\n    \"maximum\": 6,\n    \"inclusive\": true,\n    \"path\": [\n      \"tags\"\n    ],\n    \"message\": \"Too big: expected array to have <=6 items\"\n  },\n  {\n    \"expected\": \"array\",\n    \"code\": \"invalid_type\",\n    \"path\": [\n      \"what_changed\"\n    ],\n    \"message\": \"Invalid input: expected array, received string\"\n  },\n  {\n    \"origin\": \"string\",\n    \"code\": \"too_big\",\n    \"maximum\": 4,\n    \"inclusive\": true,\n    \"path\": [\n      \"what_changed\"\n    ],\n"
+    },
+    {
+      "name": "rewrite_1",
+      "status": "success",
+      "startedAt": "2026-09-30T03:03:43.973Z",
+      "completedAt": "2026-09-30T03:05:34.505Z",
+      "durationMs": 110532
+    },
+    {
+      "name": "stet_1",
+      "status": "success",
+      "startedAt": "2026-09-30T03:05:34.506Z",
+      "completedAt": "2026-09-30T03:05:34.511Z",
+      "durationMs": 5
+    },
+    {
+      "name": "quality_1",
+      "status": "success",
+      "startedAt": "2026-09-30T03:05:34.512Z",
+      "completedAt": "2026-09-30T03:05:34.512Z",
+      "durationMs": 0
+    },
+    {
+      "name": "assemble_package",
+      "status": "success",
+      "startedAt": "2026-09-30T03:05:34.512Z",
+      "completedAt": "2026-09-30T03:05:59.827Z",
+      "durationMs": 25315
+    }
+  ],
+  "regenerationAttempts": 1,
+  "stetBlocks": 0,
+  "hacekBlocks": 0,
+  "usage": [
+    {
+      "provider": "anthropic",
+      "model": "claude-sonnet-4-6",
+      "stage": "curate",
+      "inputTokens": 12565,
+      "outputTokens": 1064,
+      "cacheReadTokens": 0,
+      "cacheWriteTokens": 0,
+      "costUsd": 0.053655
+    },
+    {
+      "provider": "anthropic",
+      "model": "claude-sonnet-4-6",
+      "stage": "write",
+      "inputTokens": 14319,
+      "outputTokens": 5180,
+      "cacheReadTokens": 0,
+      "cacheWriteTokens": 2470,
+      "costUsd": 0.1299195,
+      "contractRepairs": [
+        {
+          "field": "what_changed",
+          "received": "[\n  \"OpenAI spustilo Dots – prvního agenta pro firemní práci, dostupného zatím jen placeným uživatelům.\",\n  \"Sam Altman …",
+          "detail": "Expected ',' or ']' after array element in JSON at position 368 (line 5 column 57) near «.\",\n  \"Trump dekrétem přejmenoval „artificial intelligence\" na „Super Intelligence\" ve vší federální komunikaci.\"\n]»",
+          "reason": "json_string_undecodable"
+        }
+      ]
+    },
+    {
+      "provider": "anthropic",
+      "model": "claude-sonnet-4-6",
+      "stage": "rewrite",
+      "inputTokens": 14198,
+      "outputTokens": 4637,
+      "cacheReadTokens": 0,
+      "cacheWriteTokens": 2649,
+      "costUsd": 0.12208275
+    }
+  ],
+  "measuredCostUsd": 0.30565725,
+  "quality": {
+    "metrics": {
+      "successfulSources": 30,
+      "candidateItems": 80,
+      "citedSources": 8,
+      "signalStrength": 87,
+      "maximumSingleSourceShare": 0.375,
+      "sourceDiversity": 0.75,
+      "duplicateStorySimilarity": 0.1111111111111111,
+      "repeatedTopicFrequency": 0.3333333333333333,
+      "primarySourceRelevant": false,
+      "primarySourcePresent": false,
+      "unsupportedWatchlistItems": 0,
+      "costPerRun": 0.30565725
+    },
+    "result": {
+      "passed": true,
+      "enforced": true,
+      "violations": [],
+      "action": "publish"
+    }
+  },
+  "stet": {
+    "passed": true,
+    "score": 50,
+    "violations": []
+  },
+  "imageProgram": {
+    "readiness": {
+      "providers": {
+        "openverse": "keyless",
+        "wikimedia": "keyless",
+        "pexels": "present",
+        "pixabay": "present"
+      },
+      "gateModelConfigured": true,
+      "caps": {
+        "perArticleUsd": 0.05,
+        "perDayUsd": 0.1,
+        "generatedImagesPerDay": 4
+      },
+      "spentToday": {
+        "usd": 0,
+        "generatedImages": 0
+      },
+      "illustrationRung": "armed"
+    },
+    "rung": "search",
+    "verdicts": [
+      {
+        "mode": "search",
+        "considered": 6,
+        "selected": "pexels:22669860",
+        "reason": "Conference or large audience gathering with professional staging effectively illustrates tech industry announcements and events, generic enough for multiple news angles without identifying specific people.",
+        "candidates": [
+          {
+            "candidateId": "pexels:29708260",
+            "provider": "pexels",
+            "fit": 2,
+            "vetoes": [
+              "recognisable-face"
+            ],
+            "reason": "Shows a specific person on stage at what appears to be a specific event or presentation, which violates the rule against photographing named individuals.",
+            "sceneCs": "muž mluvící na pódiu"
+          },
+          {
+            "candidateId": "pexels:36169773",
+            "provider": "pexels",
+            "fit": 6,
+            "vetoes": [],
+            "reason": "Close-up of circuit board components illustrates AI/chip manufacturing theme, though the technical nature fits better with AMD chip acquisition angle than other parts of the story.",
+            "sceneCs": "elektronické součástky na desce"
+          },
+          {
+            "candidateId": "pexels:1089438",
+            "provider": "pexels",
+            "fit": 1,
+            "vetoes": [
+              "dated-aesthetic",
+              "ai-generated-look"
+            ],
+            "reason": "The classic 'green Matrix code' visual is stock cliché imagery that has become dated and clichéd, worse still for AI/tech coverage where it reads as generic pastiche.",
+            "sceneCs": "zelený kód na černém pozadí"
+          },
+          {
+            "candidateId": "pixabay:1283624",
+            "provider": "pixabay",
+            "fit": 4,
+            "vetoes": [
+              "embedded-text"
+            ],
+            "reason": "Shows source code or programming text, which illustrates tech/AI theme but contains legible embedded text burned into the frame.",
+            "sceneCs": "zdrojový kód na monitoru"
+          },
+          {
+            "candidateId": "pixabay:5710164",
+            "provider": "pixabay",
+            "fit": 3,
+            "vetoes": [],
+            "reason": "Generic image of hands at desk could illustrate work/business broadly but is too generic and non-specific to meaningfully illustrate this particular story about OpenAI, Trump policy, or AMD acquisition.",
+            "sceneCs": "ruce na psacím stole"
+          },
+          {
+            "candidateId": "pexels:22669860",
+            "provider": "pexels",
+            "fit": 7,
+            "vetoes": [],
+            "reason": "Conference or large audience gathering with professional staging effectively illustrates tech industry announcements and events, generic enough for multiple news angles without identifying specific people.",
+            "sceneCs": "publikum v posluchárně"
+          }
+        ],
+        "skipped": [],
+        "costUsd": 0.005273
+      },
+      {
+        "mode": "generated",
+        "considered": 1,
+        "selected": "illustration:2026-09-30-candidate-2",
+        "reason": "Abstract rendering of light rays and connections works as metaphorical illustration for AI technology and digital systems, fitting the technical briefing nature and avoiding all specified image pitfalls.",
+        "candidates": [
+          {
+            "candidateId": "illustration:2026-09-30-candidate-2",
+            "provider": "boardlessai",
+            "fit": 7,
+            "vetoes": [],
+            "reason": "Abstract rendering of light rays and connections works as metaphorical illustration for AI technology and digital systems, fitting the technical briefing nature and avoiding all specified image pitfalls.",
+            "sceneCs": "abstraktní světelné paprsky a čáry na tmavém pozadí"
+          }
+        ],
+        "skipped": [],
+        "costUsd": 0.002177
+      },
+      {
+        "mode": "generated",
+        "considered": 1,
+        "selected": null,
+        "reason": "all-candidates-rejected",
+        "candidates": [
+          {
+            "candidateId": "illustration:2026-09-30-candidate-3",
+            "provider": "boardlessai",
+            "fit": 6,
+            "vetoes": [],
+            "reason": "A sleek, futuristic dashboard interface with glowing blue lines and gauges suggests technological advancement and control systems appropriate for AI and tech industry coverage, though somewhat generic and not specific to the article's three distinct topics.",
+            "sceneCs": "futuristický palubní deska s modrým neonem"
+          }
+        ],
+        "skipped": [],
+        "costUsd": 0.002207
+      },
+      {
+        "mode": "generated",
+        "considered": 1,
+        "selected": null,
+        "reason": "all-candidates-rejected",
+        "candidates": [
+          {
+            "candidateId": "illustration:2026-09-30-candidate-4",
+            "provider": "boardlessai",
+            "fit": 6,
+            "vetoes": [],
+            "reason": "Abstract circuit board illustration with symmetrical connector nodes and wire traces effectively conveys technology and AI hardware themes without identifying individuals or violating content rules, though somewhat generic for a briefing covering three distinct business stories.",
+            "sceneCs": "abstraktní schéma desek plošných spojů s konektory"
+          }
+        ],
+        "skipped": [],
+        "costUsd": 0.002197
+      }
+    ]
+  },
+  "packageStatus": "edition",
+  "warnings": [
+    "content_invalid:write: [\n  {\n    \"origin\": \"array\",\n    \"code\": \"too_big\",\n    \"maximum\": 6,\n    \"inclusive\": true,\n    \"path\": [\n      \"tags\"\n    ],\n    \"message\": \"Too big: expected array to have <=6 items\"\n  },\n  {\n    \"expected\": \"array\",\n    \"code\": \"invalid_type\",\n    \"path\": [\n      \"what_changed\"\n    ],\n    \"message\": \"Invalid input: expected array, received string\"\n  },\n  {\n    \"origin\": \"string\",\n    \"code\": \"too_big\",\n    \"maximum\": 4,\n    \"inclusive\": true,\n    \"path\": [\n      \"what_changed\"\n    ],\n    \"message\": \"Too big: expected string to have <=4 characters\"\n  }\n]",
+    "image_rung:search",
+    "image_gate:search:selected",
+    "image_gate:generated:selected",
+    "image_gate:generated:all-candidates-rejected"
+  ],
+  "sourceSummary": {
+    "successfulSources": 30,
+    "candidateItems": 80,
+    "evidenceRefs": [
+      "source:404-media",
+      "source:anthropic-news",
+      "source:ars-technica",
+      "source:arxiv-cs-ai",
+      "source:bluesky-language-models",
+      "source:deepmind-blog",
+      "source:digiday",
+      "source:github-ai-releases",
+      "source:google-research",
+      "source:hf-blog",
+      "source:hn-frontpage",
+      "source:import-ai"
+    ]
+  }
+}

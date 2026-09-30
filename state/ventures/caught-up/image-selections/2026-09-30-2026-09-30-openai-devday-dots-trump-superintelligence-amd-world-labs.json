@@ -1,0 +1,131 @@
+{
+  "schemaVersion": "image-selection/1",
+  "venture": "caught-up",
+  "slug": "2026-09-30-openai-devday-dots-trump-superintelligence-amd-world-labs",
+  "date": "2026-09-30",
+  "rung": "search",
+  "selected": "pexels:22669860",
+  "verdicts": [
+    {
+      "mode": "search",
+      "considered": 6,
+      "selected": "pexels:22669860",
+      "reason": "Conference or large audience gathering with professional staging effectively illustrates tech industry announcements and events, generic enough for multiple news angles without identifying specific people.",
+      "candidates": [
+        {
+          "candidateId": "pexels:29708260",
+          "provider": "pexels",
+          "fit": 2,
+          "vetoes": [
+            "recognisable-face"
+          ],
+          "reason": "Shows a specific person on stage at what appears to be a specific event or presentation, which violates the rule against photographing named individuals.",
+          "sceneCs": "muž mluvící na pódiu"
+        },
+        {
+          "candidateId": "pexels:36169773",
+          "provider": "pexels",
+          "fit": 6,
+          "vetoes": [],
+          "reason": "Close-up of circuit board components illustrates AI/chip manufacturing theme, though the technical nature fits better with AMD chip acquisition angle than other parts of the story.",
+          "sceneCs": "elektronické součástky na desce"
+        },
+        {
+          "candidateId": "pexels:1089438",
+          "provider": "pexels",
+          "fit": 1,
+          "vetoes": [
+            "dated-aesthetic",
+            "ai-generated-look"
+          ],
+          "reason": "The classic 'green Matrix code' visual is stock cliché imagery that has become dated and clichéd, worse still for AI/tech coverage where it reads as generic pastiche.",
+          "sceneCs": "zelený kód na černém pozadí"
+        },
+        {
+          "candidateId": "pixabay:1283624",
+          "provider": "pixabay",
+          "fit": 4,
+          "vetoes": [
+            "embedded-text"
+          ],
+          "reason": "Shows source code or programming text, which illustrates tech/AI theme but contains legible embedded text burned into the frame.",
+          "sceneCs": "zdrojový kód na monitoru"
+        },
+        {
+          "candidateId": "pixabay:5710164",
+          "provider": "pixabay",
+          "fit": 3,
+          "vetoes": [],
+          "reason": "Generic image of hands at desk could illustrate work/business broadly but is too generic and non-specific to meaningfully illustrate this particular story about OpenAI, Trump policy, or AMD acquisition.",
+          "sceneCs": "ruce na psacím stole"
+        },
+        {
+          "candidateId": "pexels:22669860",
+          "provider": "pexels",
+          "fit": 7,
+          "vetoes": [],
+          "reason": "Conference or large audience gathering with professional staging effectively illustrates tech industry announcements and events, generic enough for multiple news angles without identifying specific people.",
+          "sceneCs": "publikum v posluchárně"
+        }
+      ],
+      "skipped": [],
+      "costUsd": 0.005273
+    },
+    {
+      "mode": "generated",
+      "considered": 1,
+      "selected": "illustration:2026-09-30-candidate-2",
+      "reason": "Abstract rendering of light rays and connections works as metaphorical illustration for AI technology and digital systems, fitting the technical briefing nature and avoiding all specified image pitfalls.",
+      "candidates": [
+        {
+          "candidateId": "illustration:2026-09-30-candidate-2",
+          "provider": "boardlessai",
+          "fit": 7,
+          "vetoes": [],
+          "reason": "Abstract rendering of light rays and connections works as metaphorical illustration for AI technology and digital systems, fitting the technical briefing nature and avoiding all specified image pitfalls.",
+          "sceneCs": "abstraktní světelné paprsky a čáry na tmavém pozadí"
+        }
+      ],
+      "skipped": [],
+      "costUsd": 0.002177
+    },
+    {
+      "mode": "generated",
+      "considered": 1,
+      "selected": null,
+      "reason": "all-candidates-rejected",
+      "candidates": [
+        {
+          "candidateId": "illustration:2026-09-30-candidate-3",
+          "provider": "boardlessai",
+          "fit": 6,
+          "vetoes": [],
+          "reason": "A sleek, futuristic dashboard interface with glowing blue lines and gauges suggests technological advancement and control systems appropriate for AI and tech industry coverage, though somewhat generic and not specific to the article's three distinct topics.",
+          "sceneCs": "futuristický palubní deska s modrým neonem"
+        }
+      ],
+      "skipped": [],
+      "costUsd": 0.002207
+    },
+    {
+      "mode": "generated",
+      "considered": 1,
+      "selected": null,
+      "reason": "all-candidates-rejected",
+      "candidates": [
+        {
+          "candidateId": "illustration:2026-09-30-candidate-4",
+          "provider": "boardlessai",
+          "fit": 6,
+          "vetoes": [],
+          "reason": "Abstract circuit board illustration with symmetrical connector nodes and wire traces effectively conveys technology and AI hardware themes without identifying individuals or violating content rules, though somewhat generic for a briefing covering three distinct business stories.",
+          "sceneCs": "abstraktní schéma desek plošných spojů s konektory"
+        }
+      ],
+      "skipped": [],
+      "costUsd": 0.002197
+    }
+  ],
+  "skippedProviders": [],
+  "recordedAt": "2026-09-30T03:01:12.423Z"
+}

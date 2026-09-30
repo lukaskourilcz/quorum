@@ -1,0 +1,17 @@
+{
+  "schemaVersion": 1,
+  "fixture": false,
+  "cycleId": "20260930030112-cu-edition",
+  "phase": "cu-edition",
+  "outcome": "EDITION",
+  "summary": "OpenAI v jediném dni podmínil vstup na burzu bezpečností modelů, spustil placeného agenta a čelil dekretu, který přejmenoval celé odvětví – tři změny s přímým dopadem na investory, vývojáře i regulátory najednou.",
+  "evidenceRefs": [
+    "source:platformer",
+    "source:the-verge",
+    "source:ars-technica",
+    "source:simonw",
+    "source:tensorfeed"
+  ],
+  "editionRef": "00ec56f5c0fd2afea642f2351bb044b17212a833ef72aa8619f936fff0e4ddb0",
+  "generatedAt": "2026-09-30T03:01:17.423Z"
+}
