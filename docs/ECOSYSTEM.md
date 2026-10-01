@@ -41,7 +41,7 @@ builds and on the morning room's day checkpoint. Never hand-edit the generated b
 <!-- GENERATED:CURRENT-OPERATING-TRUTH:START -->
 ## Current operating truth (generated)
 
-Refreshed from committed state: **2026-09-30T04:01:48.184Z**. This block is generated deterministically; edit the source state, not these lines.
+Refreshed from committed state: **2026-10-01T04:01:39.331Z**. This block is generated deterministically; edit the source state, not these lines.
 
 | Item | Current value |
 | --- | --- |
@@ -49,10 +49,10 @@ Refreshed from committed state: **2026-09-30T04:01:48.184Z**. This block is gene
 | Agent roster | 40 active: 25 Anthropic, 15 OpenAI |
 | Scheduled specialist/service rooms | 14; combined maximum room envelopes $1.61 if every room is commissioned |
 | Approved spend boundary | $50.00 all-in monthly; $25.00 model/API share; $1.00 daily model/API pace |
-| Recorded API spend | $10.78 this month; $25.06 cumulative |
+| Recorded API spend | $0.34 this month; $25.53 cumulative |
 | Entered fixed costs | $22.99 monthly |
 | Recognized revenue | $0.00 |
-| KPI quarter | 2026-Q1; open; 31 on track, 4 at risk, 30 off track, 26 unavailable |
+| KPI quarter | 2026-Q1; open; 31 on track, 4 at risk, 32 off track, 24 unavailable |
 | Critical KPI gaps | company.valid-window-rate, company.monthly-all-in-usd, marketingshark.package-completeness, marketingshark.truth-gate-violations, door-money.desk-reliability, door-money.cash-spend, tehdejsi-svet.cycle-reliability, tehdejsi-svet.language-parity, tehdejsi-svet.research-spend-usd, kvorum.desk-reliability, kvorum.published-claim-reference-rate, kvorum.apify-monthly-usd, personal-growth.unavailable-honesty-rate |
 | FightAIQ analysis | approved by D8; production still requires `FIGHTAIQ_ANALYSIS_ENABLED=true` plus live and evidence gates |
 | Visitor/engagement measurement | disabled (`METRICS_INGESTION_ENABLED=false`) |

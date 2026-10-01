@@ -1,0 +1,1222 @@
+{
+  "schemaVersion": "ops-report/1",
+  "period": "monthly",
+  "periodKey": "2026-09",
+  "generatedAt": "2026-10-01T04:00:58.027Z",
+  "meetings": {
+    "scheduled": 174,
+    "held": 49,
+    "skipped": [
+      {
+        "date": "2026-09-01",
+        "phase": "bh-desk",
+        "reason": "The checks on the code behind this meeting did not pass, so it did not meet and nothing was spent."
+      },
+      {
+        "date": "2026-09-01",
+        "phase": "cu-day",
+        "reason": "The checks on the code behind this meeting did not pass, so it did not meet and nothing was spent."
+      },
+      {
+        "date": "2026-09-01",
+        "phase": "cu-edition",
+        "reason": "The checks on the code behind this meeting did not pass, so it did not meet and nothing was spent."
+      },
+      {
+        "date": "2026-09-01",
+        "phase": "dm-day",
+        "reason": "The checks on the code behind this meeting did not pass, so it did not meet and nothing was spent."
+      },
+      {
+        "date": "2026-09-01",
+        "phase": "gv-brief",
+        "reason": "The checks on the code behind this meeting did not pass, so it did not meet and nothing was spent."
+      },
+      {
+        "date": "2026-09-01",
+        "phase": "kv-desk",
+        "reason": "The checks on the code behind this meeting did not pass, so it did not meet and nothing was spent."
+      },
+      {
+        "date": "2026-09-01",
+        "phase": "mma-day",
+        "reason": "The checks on the code behind this meeting did not pass, so it did not meet and nothing was spent."
+      },
+      {
+        "date": "2026-09-01",
+        "phase": "morning",
+        "reason": "The checks on the code behind this meeting did not pass, so it did not meet and nothing was spent."
+      },
+      {
+        "date": "2026-09-01",
+        "phase": "ms-daily",
+        "reason": "The checks on the code behind this meeting did not pass, so it did not meet and nothing was spent."
+      },
+      {
+        "date": "2026-09-01",
+        "phase": "pg-desk",
+        "reason": "The checks on the code behind this meeting did not pass, so it did not meet and nothing was spent."
+      },
+      {
+        "date": "2026-09-01",
+        "phase": "ts-desk",
+        "reason": "The checks on the code behind this meeting did not pass, so it did not meet and nothing was spent."
+      },
+      {
+        "date": "2026-09-01",
+        "phase": "tt-marketing",
+        "reason": "The countersign-aware budget shape disabled this phase."
+      },
+      {
+        "date": "2026-09-02",
+        "phase": "bh-desk",
+        "reason": "The checks on the code behind this meeting did not pass, so it did not meet and nothing was spent."
+      },
+      {
+        "date": "2026-09-02",
+        "phase": "cu-day",
+        "reason": "The checks on the code behind this meeting did not pass, so it did not meet and nothing was spent."
+      },
+      {
+        "date": "2026-09-02",
+        "phase": "cu-edition",
+        "reason": "The checks on the code behind this meeting did not pass, so it did not meet and nothing was spent."
+      },
+      {
+        "date": "2026-09-02",
+        "phase": "dm-day",
+        "reason": "The checks on the code behind this meeting did not pass, so it did not meet and nothing was spent."
+      },
+      {
+        "date": "2026-09-02",
+        "phase": "gv-brief",
+        "reason": "The checks on the code behind this meeting did not pass, so it did not meet and nothing was spent."
+      },
+      {
+        "date": "2026-09-02",
+        "phase": "kv-desk",
+        "reason": "The checks on the code behind this meeting did not pass, so it did not meet and nothing was spent."
+      },
+      {
+        "date": "2026-09-02",
+        "phase": "mma-day",
+        "reason": "The checks on the code behind this meeting did not pass, so it did not meet and nothing was spent."
+      },
+      {
+        "date": "2026-09-02",
+        "phase": "morning",
+        "reason": "The checks on the code behind this meeting did not pass, so it did not meet and nothing was spent."
+      },
+      {
+        "date": "2026-09-02",
+        "phase": "ms-daily",
+        "reason": "The checks on the code behind this meeting did not pass, so it did not meet and nothing was spent."
+      },
+      {
+        "date": "2026-09-02",
+        "phase": "pg-desk",
+        "reason": "The checks on the code behind this meeting did not pass, so it did not meet and nothing was spent."
+      },
+      {
+        "date": "2026-09-02",
+        "phase": "ts-desk",
+        "reason": "The checks on the code behind this meeting did not pass, so it did not meet and nothing was spent."
+      },
+      {
+        "date": "2026-09-02",
+        "phase": "tt-marketing",
+        "reason": "The countersign-aware budget shape disabled this phase."
+      },
+      {
+        "date": "2026-09-03",
+        "phase": "bh-desk",
+        "reason": "The checks on the code behind this meeting did not pass, so it did not meet and nothing was spent."
+      },
+      {
+        "date": "2026-09-03",
+        "phase": "cu-day",
+        "reason": "The checks on the code behind this meeting did not pass, so it did not meet and nothing was spent."
+      },
+      {
+        "date": "2026-09-03",
+        "phase": "cu-edition",
+        "reason": "The checks on the code behind this meeting did not pass, so it did not meet and nothing was spent."
+      },
+      {
+        "date": "2026-09-03",
+        "phase": "dm-day",
+        "reason": "The checks on the code behind this meeting did not pass, so it did not meet and nothing was spent."
+      },
+      {
+        "date": "2026-09-03",
+        "phase": "gv-brief",
+        "reason": "The checks on the code behind this meeting did not pass, so it did not meet and nothing was spent."
+      },
+      {
+        "date": "2026-09-03",
+        "phase": "kv-desk",
+        "reason": "The checks on the code behind this meeting did not pass, so it did not meet and nothing was spent."
+      },
+      {
+        "date": "2026-09-03",
+        "phase": "mma-day",
+        "reason": "The checks on the code behind this meeting did not pass, so it did not meet and nothing was spent."
+      },
+      {
+        "date": "2026-09-03",
+        "phase": "morning",
+        "reason": "The checks on the code behind this meeting did not pass, so it did not meet and nothing was spent."
+      },
+      {
+        "date": "2026-09-03",
+        "phase": "ms-daily",
+        "reason": "The checks on the code behind this meeting did not pass, so it did not meet and nothing was spent."
+      },
+      {
+        "date": "2026-09-03",
+        "phase": "pg-desk",
+        "reason": "The checks on the code behind this meeting did not pass, so it did not meet and nothing was spent."
+      },
+      {
+        "date": "2026-09-03",
+        "phase": "ts-desk",
+        "reason": "The checks on the code behind this meeting did not pass, so it did not meet and nothing was spent."
+      },
+      {
+        "date": "2026-09-03",
+        "phase": "tt-marketing",
+        "reason": "The countersign-aware budget shape disabled this phase."
+      },
+      {
+        "date": "2026-09-04",
+        "phase": "bh-desk",
+        "reason": "The checks on the code behind this meeting did not pass, so it did not meet and nothing was spent."
+      },
+      {
+        "date": "2026-09-04",
+        "phase": "cu-day",
+        "reason": "The checks on the code behind this meeting did not pass, so it did not meet and nothing was spent."
+      },
+      {
+        "date": "2026-09-04",
+        "phase": "cu-edition",
+        "reason": "The checks on the code behind this meeting did not pass, so it did not meet and nothing was spent."
+      },
+      {
+        "date": "2026-09-04",
+        "phase": "dm-day",
+        "reason": "The checks on the code behind this meeting did not pass, so it did not meet and nothing was spent."
+      },
+      {
+        "date": "2026-09-04",
+        "phase": "gv-brief",
+        "reason": "The checks on the code behind this meeting did not pass, so it did not meet and nothing was spent."
+      },
+      {
+        "date": "2026-09-04",
+        "phase": "kv-desk",
+        "reason": "The checks on the code behind this meeting did not pass, so it did not meet and nothing was spent."
+      },
+      {
+        "date": "2026-09-04",
+        "phase": "mma-day",
+        "reason": "The checks on the code behind this meeting did not pass, so it did not meet and nothing was spent."
+      },
+      {
+        "date": "2026-09-04",
+        "phase": "morning",
+        "reason": "The checks on the code behind this meeting did not pass, so it did not meet and nothing was spent."
+      },
+      {
+        "date": "2026-09-04",
+        "phase": "ms-daily",
+        "reason": "The checks on the code behind this meeting did not pass, so it did not meet and nothing was spent."
+      },
+      {
+        "date": "2026-09-04",
+        "phase": "pg-desk",
+        "reason": "The checks on the code behind this meeting did not pass, so it did not meet and nothing was spent."
+      },
+      {
+        "date": "2026-09-04",
+        "phase": "ts-desk",
+        "reason": "The checks on the code behind this meeting did not pass, so it did not meet and nothing was spent."
+      },
+      {
+        "date": "2026-09-04",
+        "phase": "tt-marketing",
+        "reason": "The countersign-aware budget shape disabled this phase."
+      },
+      {
+        "date": "2026-09-05",
+        "phase": "bh-desk",
+        "reason": "The checks on the code behind this meeting did not pass, so it did not meet and nothing was spent."
+      },
+      {
+        "date": "2026-09-05",
+        "phase": "cu-day",
+        "reason": "The checks on the code behind this meeting did not pass, so it did not meet and nothing was spent."
+      },
+      {
+        "date": "2026-09-05",
+        "phase": "cu-edition",
+        "reason": "The checks on the code behind this meeting did not pass, so it did not meet and nothing was spent."
+      },
+      {
+        "date": "2026-09-05",
+        "phase": "dm-day",
+        "reason": "The checks on the code behind this meeting did not pass, so it did not meet and nothing was spent."
+      },
+      {
+        "date": "2026-09-05",
+        "phase": "gv-brief",
+        "reason": "The checks on the code behind this meeting did not pass, so it did not meet and nothing was spent."
+      },
+      {
+        "date": "2026-09-05",
+        "phase": "kv-desk",
+        "reason": "The checks on the code behind this meeting did not pass, so it did not meet and nothing was spent."
+      },
+      {
+        "date": "2026-09-05",
+        "phase": "mma-day",
+        "reason": "The checks on the code behind this meeting did not pass, so it did not meet and nothing was spent."
+      },
+      {
+        "date": "2026-09-05",
+        "phase": "morning",
+        "reason": "The checks on the code behind this meeting did not pass, so it did not meet and nothing was spent."
+      },
+      {
+        "date": "2026-09-05",
+        "phase": "ms-daily",
+        "reason": "The checks on the code behind this meeting did not pass, so it did not meet and nothing was spent."
+      },
+      {
+        "date": "2026-09-05",
+        "phase": "pg-desk",
+        "reason": "The checks on the code behind this meeting did not pass, so it did not meet and nothing was spent."
+      },
+      {
+        "date": "2026-09-05",
+        "phase": "ts-desk",
+        "reason": "The checks on the code behind this meeting did not pass, so it did not meet and nothing was spent."
+      },
+      {
+        "date": "2026-09-05",
+        "phase": "tt-marketing",
+        "reason": "The countersign-aware budget shape disabled this phase."
+      },
+      {
+        "date": "2026-09-06",
+        "phase": "bh-desk",
+        "reason": "The checks on the code behind this meeting did not pass, so it did not meet and nothing was spent."
+      },
+      {
+        "date": "2026-09-06",
+        "phase": "cu-day",
+        "reason": "The checks on the code behind this meeting did not pass, so it did not meet and nothing was spent."
+      },
+      {
+        "date": "2026-09-06",
+        "phase": "cu-edition",
+        "reason": "The checks on the code behind this meeting did not pass, so it did not meet and nothing was spent."
+      },
+      {
+        "date": "2026-09-06",
+        "phase": "dm-day",
+        "reason": "The checks on the code behind this meeting did not pass, so it did not meet and nothing was spent."
+      },
+      {
+        "date": "2026-09-06",
+        "phase": "gv-brief",
+        "reason": "The checks on the code behind this meeting did not pass, so it did not meet and nothing was spent."
+      },
+      {
+        "date": "2026-09-06",
+        "phase": "kv-desk",
+        "reason": "The checks on the code behind this meeting did not pass, so it did not meet and nothing was spent."
+      },
+      {
+        "date": "2026-09-06",
+        "phase": "mma-day",
+        "reason": "The checks on the code behind this meeting did not pass, so it did not meet and nothing was spent."
+      },
+      {
+        "date": "2026-09-06",
+        "phase": "morning",
+        "reason": "The checks on the code behind this meeting did not pass, so it did not meet and nothing was spent."
+      },
+      {
+        "date": "2026-09-06",
+        "phase": "ms-daily",
+        "reason": "The checks on the code behind this meeting did not pass, so it did not meet and nothing was spent."
+      },
+      {
+        "date": "2026-09-06",
+        "phase": "pg-desk",
+        "reason": "The checks on the code behind this meeting did not pass, so it did not meet and nothing was spent."
+      },
+      {
+        "date": "2026-09-06",
+        "phase": "ts-desk",
+        "reason": "The checks on the code behind this meeting did not pass, so it did not meet and nothing was spent."
+      },
+      {
+        "date": "2026-09-06",
+        "phase": "tt-marketing",
+        "reason": "The countersign-aware budget shape disabled this phase."
+      },
+      {
+        "date": "2026-09-07",
+        "phase": "bh-desk",
+        "reason": "The checks on the code behind this meeting did not pass, so it did not meet and nothing was spent."
+      },
+      {
+        "date": "2026-09-07",
+        "phase": "cu-day",
+        "reason": "The checks on the code behind this meeting did not pass, so it did not meet and nothing was spent."
+      },
+      {
+        "date": "2026-09-07",
+        "phase": "cu-edition",
+        "reason": "The checks on the code behind this meeting did not pass, so it did not meet and nothing was spent."
+      },
+      {
+        "date": "2026-09-07",
+        "phase": "dm-day",
+        "reason": "No run arrived for this slot. Nothing was written down about why, nobody was asked anything and nothing was spent."
+      },
+      {
+        "date": "2026-09-07",
+        "phase": "gv-brief",
+        "reason": "The checks on the code behind this meeting did not pass, so it did not meet and nothing was spent."
+      },
+      {
+        "date": "2026-09-07",
+        "phase": "kv-desk",
+        "reason": "No run arrived for this slot. Nothing was written down about why, nobody was asked anything and nothing was spent."
+      },
+      {
+        "date": "2026-09-07",
+        "phase": "mma-day",
+        "reason": "The checks on the code behind this meeting did not pass, so it did not meet and nothing was spent."
+      },
+      {
+        "date": "2026-09-07",
+        "phase": "morning",
+        "reason": "The checks on the code behind this meeting did not pass, so it did not meet and nothing was spent."
+      },
+      {
+        "date": "2026-09-07",
+        "phase": "ms-daily",
+        "reason": "The checks on the code behind this meeting did not pass, so it did not meet and nothing was spent."
+      },
+      {
+        "date": "2026-09-07",
+        "phase": "pg-desk",
+        "reason": "No run arrived for this slot. Nothing was written down about why, nobody was asked anything and nothing was spent."
+      },
+      {
+        "date": "2026-09-07",
+        "phase": "ts-desk",
+        "reason": "No run arrived for this slot. Nothing was written down about why, nobody was asked anything and nothing was spent."
+      },
+      {
+        "date": "2026-09-07",
+        "phase": "tt-marketing",
+        "reason": "The countersign-aware budget shape disabled this phase."
+      },
+      {
+        "date": "2026-09-08",
+        "phase": "bh-desk",
+        "reason": "No run arrived for this slot. Nothing was written down about why, nobody was asked anything and nothing was spent."
+      },
+      {
+        "date": "2026-09-08",
+        "phase": "dm-day",
+        "reason": "No run arrived for this slot. Nothing was written down about why, nobody was asked anything and nothing was spent."
+      },
+      {
+        "date": "2026-09-08",
+        "phase": "kv-desk",
+        "reason": "No run arrived for this slot. Nothing was written down about why, nobody was asked anything and nothing was spent."
+      },
+      {
+        "date": "2026-09-08",
+        "phase": "morning",
+        "reason": "No run arrived for this slot. Nothing was written down about why, nobody was asked anything and nothing was spent."
+      },
+      {
+        "date": "2026-09-08",
+        "phase": "pg-desk",
+        "reason": "No run arrived for this slot. Nothing was written down about why, nobody was asked anything and nothing was spent."
+      },
+      {
+        "date": "2026-09-08",
+        "phase": "ts-desk",
+        "reason": "No run arrived for this slot. Nothing was written down about why, nobody was asked anything and nothing was spent."
+      },
+      {
+        "date": "2026-09-08",
+        "phase": "tt-marketing",
+        "reason": "The countersign-aware budget shape disabled this phase."
+      },
+      {
+        "date": "2026-09-09",
+        "phase": "bh-desk",
+        "reason": "No run arrived for this slot. Nothing was written down about why, nobody was asked anything and nothing was spent."
+      },
+      {
+        "date": "2026-09-09",
+        "phase": "dm-day",
+        "reason": "No run arrived for this slot. Nothing was written down about why, nobody was asked anything and nothing was spent."
+      },
+      {
+        "date": "2026-09-09",
+        "phase": "kv-desk",
+        "reason": "No run arrived for this slot. Nothing was written down about why, nobody was asked anything and nothing was spent."
+      },
+      {
+        "date": "2026-09-09",
+        "phase": "pg-desk",
+        "reason": "No run arrived for this slot. Nothing was written down about why, nobody was asked anything and nothing was spent."
+      },
+      {
+        "date": "2026-09-09",
+        "phase": "ts-desk",
+        "reason": "No run arrived for this slot. Nothing was written down about why, nobody was asked anything and nothing was spent."
+      },
+      {
+        "date": "2026-09-09",
+        "phase": "tt-marketing",
+        "reason": "The countersign-aware budget shape disabled this phase."
+      },
+      {
+        "date": "2026-09-10",
+        "phase": "bh-desk",
+        "reason": "No run arrived for this slot. Nothing was written down about why, nobody was asked anything and nothing was spent."
+      },
+      {
+        "date": "2026-09-10",
+        "phase": "dm-day",
+        "reason": "No run arrived for this slot. Nothing was written down about why, nobody was asked anything and nothing was spent."
+      },
+      {
+        "date": "2026-09-10",
+        "phase": "kv-desk",
+        "reason": "No run arrived for this slot. Nothing was written down about why, nobody was asked anything and nothing was spent."
+      },
+      {
+        "date": "2026-09-10",
+        "phase": "morning",
+        "reason": "No run arrived for this slot. Nothing was written down about why, nobody was asked anything and nothing was spent."
+      },
+      {
+        "date": "2026-09-10",
+        "phase": "pg-desk",
+        "reason": "No run arrived for this slot. Nothing was written down about why, nobody was asked anything and nothing was spent."
+      },
+      {
+        "date": "2026-09-10",
+        "phase": "ts-desk",
+        "reason": "No run arrived for this slot. Nothing was written down about why, nobody was asked anything and nothing was spent."
+      },
+      {
+        "date": "2026-09-10",
+        "phase": "tt-marketing",
+        "reason": "The countersign-aware budget shape disabled this phase."
+      },
+      {
+        "date": "2026-09-11",
+        "phase": "bh-desk",
+        "reason": "No run arrived for this slot. Nothing was written down about why, nobody was asked anything and nothing was spent."
+      },
+      {
+        "date": "2026-09-11",
+        "phase": "dm-day",
+        "reason": "No run arrived for this slot. Nothing was written down about why, nobody was asked anything and nothing was spent."
+      },
+      {
+        "date": "2026-09-11",
+        "phase": "kv-desk",
+        "reason": "No run arrived for this slot. Nothing was written down about why, nobody was asked anything and nothing was spent."
+      },
+      {
+        "date": "2026-09-11",
+        "phase": "morning",
+        "reason": "No run arrived for this slot. Nothing was written down about why, nobody was asked anything and nothing was spent."
+      },
+      {
+        "date": "2026-09-11",
+        "phase": "pg-desk",
+        "reason": "No run arrived for this slot. Nothing was written down about why, nobody was asked anything and nothing was spent."
+      },
+      {
+        "date": "2026-09-11",
+        "phase": "ts-desk",
+        "reason": "No run arrived for this slot. Nothing was written down about why, nobody was asked anything and nothing was spent."
+      },
+      {
+        "date": "2026-09-11",
+        "phase": "tt-marketing",
+        "reason": "The countersign-aware budget shape disabled this phase."
+      },
+      {
+        "date": "2026-09-12",
+        "phase": "bh-desk",
+        "reason": "No run arrived for this slot. Nothing was written down about why, nobody was asked anything and nothing was spent."
+      },
+      {
+        "date": "2026-09-12",
+        "phase": "dm-day",
+        "reason": "No run arrived for this slot. Nothing was written down about why, nobody was asked anything and nothing was spent."
+      },
+      {
+        "date": "2026-09-12",
+        "phase": "kv-desk",
+        "reason": "No run arrived for this slot. Nothing was written down about why, nobody was asked anything and nothing was spent."
+      },
+      {
+        "date": "2026-09-12",
+        "phase": "pg-desk",
+        "reason": "No run arrived for this slot. Nothing was written down about why, nobody was asked anything and nothing was spent."
+      },
+      {
+        "date": "2026-09-12",
+        "phase": "ts-desk",
+        "reason": "No run arrived for this slot. Nothing was written down about why, nobody was asked anything and nothing was spent."
+      },
+      {
+        "date": "2026-09-12",
+        "phase": "tt-marketing",
+        "reason": "The countersign-aware budget shape disabled this phase."
+      },
+      {
+        "date": "2026-09-13",
+        "phase": "bh-desk",
+        "reason": "No run arrived for this slot. Nothing was written down about why, nobody was asked anything and nothing was spent."
+      },
+      {
+        "date": "2026-09-13",
+        "phase": "dm-day",
+        "reason": "No run arrived for this slot. Nothing was written down about why, nobody was asked anything and nothing was spent."
+      },
+      {
+        "date": "2026-09-13",
+        "phase": "kv-desk",
+        "reason": "No run arrived for this slot. Nothing was written down about why, nobody was asked anything and nothing was spent."
+      },
+      {
+        "date": "2026-09-13",
+        "phase": "morning",
+        "reason": "No run arrived for this slot. Nothing was written down about why, nobody was asked anything and nothing was spent."
+      },
+      {
+        "date": "2026-09-13",
+        "phase": "ms-daily",
+        "reason": "No run arrived for this slot. Nothing was written down about why, nobody was asked anything and nothing was spent."
+      },
+      {
+        "date": "2026-09-13",
+        "phase": "pg-desk",
+        "reason": "No run arrived for this slot. Nothing was written down about why, nobody was asked anything and nothing was spent."
+      },
+      {
+        "date": "2026-09-13",
+        "phase": "ts-desk",
+        "reason": "No run arrived for this slot. Nothing was written down about why, nobody was asked anything and nothing was spent."
+      },
+      {
+        "date": "2026-09-13",
+        "phase": "tt-marketing",
+        "reason": "No run arrived for this slot. Nothing was written down about why, nobody was asked anything and nothing was spent."
+      },
+      {
+        "date": "2026-09-14",
+        "phase": "bh-desk",
+        "reason": "No run arrived for this slot. Nothing was written down about why, nobody was asked anything and nothing was spent."
+      },
+      {
+        "date": "2026-09-14",
+        "phase": "dm-day",
+        "reason": "No run arrived for this slot. Nothing was written down about why, nobody was asked anything and nothing was spent."
+      },
+      {
+        "date": "2026-09-14",
+        "phase": "gv-brief",
+        "reason": "The run behind this meeting failed before it finished."
+      },
+      {
+        "date": "2026-09-14",
+        "phase": "kv-desk",
+        "reason": "No run arrived for this slot. Nothing was written down about why, nobody was asked anything and nothing was spent."
+      },
+      {
+        "date": "2026-09-14",
+        "phase": "morning",
+        "reason": "The run behind this meeting failed before it finished."
+      },
+      {
+        "date": "2026-09-14",
+        "phase": "ms-daily",
+        "reason": "No run arrived for this slot. Nothing was written down about why, nobody was asked anything and nothing was spent."
+      },
+      {
+        "date": "2026-09-14",
+        "phase": "pg-desk",
+        "reason": "No run arrived for this slot. Nothing was written down about why, nobody was asked anything and nothing was spent."
+      },
+      {
+        "date": "2026-09-14",
+        "phase": "ts-desk",
+        "reason": "No run arrived for this slot. Nothing was written down about why, nobody was asked anything and nothing was spent."
+      },
+      {
+        "date": "2026-09-14",
+        "phase": "tt-marketing",
+        "reason": "The countersign-aware budget shape disabled this phase."
+      },
+      {
+        "date": "2026-09-15",
+        "phase": "bh-desk",
+        "reason": "No run arrived for this slot. Nothing was written down about why, nobody was asked anything and nothing was spent."
+      },
+      {
+        "date": "2026-09-15",
+        "phase": "dm-day",
+        "reason": "No run arrived for this slot. Nothing was written down about why, nobody was asked anything and nothing was spent."
+      },
+      {
+        "date": "2026-09-15",
+        "phase": "kv-desk",
+        "reason": "No run arrived for this slot. Nothing was written down about why, nobody was asked anything and nothing was spent."
+      },
+      {
+        "date": "2026-09-15",
+        "phase": "morning",
+        "reason": "The run behind this meeting failed before it finished."
+      },
+      {
+        "date": "2026-09-15",
+        "phase": "ms-daily",
+        "reason": "No run arrived for this slot. Nothing was written down about why, nobody was asked anything and nothing was spent."
+      },
+      {
+        "date": "2026-09-15",
+        "phase": "ts-desk",
+        "reason": "No run arrived for this slot. Nothing was written down about why, nobody was asked anything and nothing was spent."
+      },
+      {
+        "date": "2026-09-15",
+        "phase": "tt-marketing",
+        "reason": "The countersign-aware budget shape disabled this phase."
+      },
+      {
+        "date": "2026-09-16",
+        "phase": "bh-desk",
+        "reason": "No run arrived for this slot. Nothing was written down about why, nobody was asked anything and nothing was spent."
+      },
+      {
+        "date": "2026-09-16",
+        "phase": "dm-day",
+        "reason": "No run arrived for this slot. Nothing was written down about why, nobody was asked anything and nothing was spent."
+      },
+      {
+        "date": "2026-09-16",
+        "phase": "kv-desk",
+        "reason": "No run arrived for this slot. Nothing was written down about why, nobody was asked anything and nothing was spent."
+      },
+      {
+        "date": "2026-09-16",
+        "phase": "mma-day",
+        "reason": "No run arrived for this slot. Nothing was written down about why, nobody was asked anything and nothing was spent."
+      },
+      {
+        "date": "2026-09-16",
+        "phase": "morning",
+        "reason": "No run arrived for this slot. Nothing was written down about why, nobody was asked anything and nothing was spent."
+      },
+      {
+        "date": "2026-09-16",
+        "phase": "ts-desk",
+        "reason": "No run arrived for this slot. Nothing was written down about why, nobody was asked anything and nothing was spent."
+      },
+      {
+        "date": "2026-09-16",
+        "phase": "tt-marketing",
+        "reason": "The countersign-aware budget shape disabled this phase."
+      },
+      {
+        "date": "2026-09-17",
+        "phase": "bh-desk",
+        "reason": "No run arrived for this slot. Nothing was written down about why, nobody was asked anything and nothing was spent."
+      },
+      {
+        "date": "2026-09-17",
+        "phase": "dm-day",
+        "reason": "No run arrived for this slot. Nothing was written down about why, nobody was asked anything and nothing was spent."
+      },
+      {
+        "date": "2026-09-17",
+        "phase": "kv-desk",
+        "reason": "No run arrived for this slot. Nothing was written down about why, nobody was asked anything and nothing was spent."
+      },
+      {
+        "date": "2026-09-17",
+        "phase": "mma-day",
+        "reason": "No run arrived for this slot. Nothing was written down about why, nobody was asked anything and nothing was spent."
+      },
+      {
+        "date": "2026-09-17",
+        "phase": "morning",
+        "reason": "No run arrived for this slot. Nothing was written down about why, nobody was asked anything and nothing was spent."
+      },
+      {
+        "date": "2026-09-17",
+        "phase": "ts-desk",
+        "reason": "No run arrived for this slot. Nothing was written down about why, nobody was asked anything and nothing was spent."
+      },
+      {
+        "date": "2026-09-17",
+        "phase": "tt-marketing",
+        "reason": "The countersign-aware budget shape disabled this phase."
+      },
+      {
+        "date": "2026-09-18",
+        "phase": "bh-desk",
+        "reason": "No run arrived for this slot. Nothing was written down about why, nobody was asked anything and nothing was spent."
+      },
+      {
+        "date": "2026-09-18",
+        "phase": "dm-day",
+        "reason": "No run arrived for this slot. Nothing was written down about why, nobody was asked anything and nothing was spent."
+      },
+      {
+        "date": "2026-09-18",
+        "phase": "kv-desk",
+        "reason": "No run arrived for this slot. Nothing was written down about why, nobody was asked anything and nothing was spent."
+      },
+      {
+        "date": "2026-09-18",
+        "phase": "mma-day",
+        "reason": "No run arrived for this slot. Nothing was written down about why, nobody was asked anything and nothing was spent."
+      },
+      {
+        "date": "2026-09-18",
+        "phase": "morning",
+        "reason": "The run behind this meeting failed before it finished."
+      },
+      {
+        "date": "2026-09-18",
+        "phase": "ts-desk",
+        "reason": "No run arrived for this slot. Nothing was written down about why, nobody was asked anything and nothing was spent."
+      },
+      {
+        "date": "2026-09-18",
+        "phase": "tt-marketing",
+        "reason": "The countersign-aware budget shape disabled this phase."
+      },
+      {
+        "date": "2026-09-19",
+        "phase": "bh-desk",
+        "reason": "No run arrived for this slot. Nothing was written down about why, nobody was asked anything and nothing was spent."
+      },
+      {
+        "date": "2026-09-19",
+        "phase": "dm-day",
+        "reason": "No run arrived for this slot. Nothing was written down about why, nobody was asked anything and nothing was spent."
+      },
+      {
+        "date": "2026-09-19",
+        "phase": "kv-desk",
+        "reason": "No run arrived for this slot. Nothing was written down about why, nobody was asked anything and nothing was spent."
+      },
+      {
+        "date": "2026-09-19",
+        "phase": "mma-day",
+        "reason": "No run arrived for this slot. Nothing was written down about why, nobody was asked anything and nothing was spent."
+      },
+      {
+        "date": "2026-09-19",
+        "phase": "morning",
+        "reason": "No run arrived for this slot. Nothing was written down about why, nobody was asked anything and nothing was spent."
+      },
+      {
+        "date": "2026-09-19",
+        "phase": "ts-desk",
+        "reason": "No run arrived for this slot. Nothing was written down about why, nobody was asked anything and nothing was spent."
+      },
+      {
+        "date": "2026-09-19",
+        "phase": "tt-marketing",
+        "reason": "The countersign-aware budget shape disabled this phase."
+      },
+      {
+        "date": "2026-09-20",
+        "phase": "bh-desk",
+        "reason": "No run arrived for this slot. Nothing was written down about why, nobody was asked anything and nothing was spent."
+      },
+      {
+        "date": "2026-09-20",
+        "phase": "dm-day",
+        "reason": "No run arrived for this slot. Nothing was written down about why, nobody was asked anything and nothing was spent."
+      },
+      {
+        "date": "2026-09-20",
+        "phase": "kv-desk",
+        "reason": "No run arrived for this slot. Nothing was written down about why, nobody was asked anything and nothing was spent."
+      },
+      {
+        "date": "2026-09-20",
+        "phase": "mma-day",
+        "reason": "No run arrived for this slot. Nothing was written down about why, nobody was asked anything and nothing was spent."
+      },
+      {
+        "date": "2026-09-20",
+        "phase": "ts-desk",
+        "reason": "No run arrived for this slot. Nothing was written down about why, nobody was asked anything and nothing was spent."
+      },
+      {
+        "date": "2026-09-20",
+        "phase": "tt-marketing",
+        "reason": "The countersign-aware budget shape disabled this phase."
+      },
+      {
+        "date": "2026-09-21",
+        "phase": "bh-desk",
+        "reason": "No run arrived for this slot. Nothing was written down about why, nobody was asked anything and nothing was spent."
+      },
+      {
+        "date": "2026-09-21",
+        "phase": "dm-day",
+        "reason": "No run arrived for this slot. Nothing was written down about why, nobody was asked anything and nothing was spent."
+      },
+      {
+        "date": "2026-09-21",
+        "phase": "gv-brief",
+        "reason": "No run arrived for this slot. Nothing was written down about why, nobody was asked anything and nothing was spent."
+      },
+      {
+        "date": "2026-09-21",
+        "phase": "kv-desk",
+        "reason": "No run arrived for this slot. Nothing was written down about why, nobody was asked anything and nothing was spent."
+      },
+      {
+        "date": "2026-09-21",
+        "phase": "mma-day",
+        "reason": "No run arrived for this slot. Nothing was written down about why, nobody was asked anything and nothing was spent."
+      },
+      {
+        "date": "2026-09-21",
+        "phase": "morning",
+        "reason": "No run arrived for this slot. Nothing was written down about why, nobody was asked anything and nothing was spent."
+      },
+      {
+        "date": "2026-09-21",
+        "phase": "ts-desk",
+        "reason": "No run arrived for this slot. Nothing was written down about why, nobody was asked anything and nothing was spent."
+      },
+      {
+        "date": "2026-09-21",
+        "phase": "tt-marketing",
+        "reason": "The countersign-aware budget shape disabled this phase."
+      },
+      {
+        "date": "2026-09-22",
+        "phase": "bh-desk",
+        "reason": "No run arrived for this slot. Nothing was written down about why, nobody was asked anything and nothing was spent."
+      },
+      {
+        "date": "2026-09-22",
+        "phase": "dm-day",
+        "reason": "No run arrived for this slot. Nothing was written down about why, nobody was asked anything and nothing was spent."
+      },
+      {
+        "date": "2026-09-22",
+        "phase": "kv-desk",
+        "reason": "No run arrived for this slot. Nothing was written down about why, nobody was asked anything and nothing was spent."
+      },
+      {
+        "date": "2026-09-22",
+        "phase": "mma-day",
+        "reason": "No run arrived for this slot. Nothing was written down about why, nobody was asked anything and nothing was spent."
+      },
+      {
+        "date": "2026-09-22",
+        "phase": "morning",
+        "reason": "No run arrived for this slot. Nothing was written down about why, nobody was asked anything and nothing was spent."
+      },
+      {
+        "date": "2026-09-22",
+        "phase": "ts-desk",
+        "reason": "No run arrived for this slot. Nothing was written down about why, nobody was asked anything and nothing was spent."
+      },
+      {
+        "date": "2026-09-22",
+        "phase": "tt-marketing",
+        "reason": "The countersign-aware budget shape disabled this phase."
+      },
+      {
+        "date": "2026-09-23",
+        "phase": "bh-desk",
+        "reason": "No run arrived for this slot. Nothing was written down about why, nobody was asked anything and nothing was spent."
+      },
+      {
+        "date": "2026-09-23",
+        "phase": "dm-day",
+        "reason": "No run arrived for this slot. Nothing was written down about why, nobody was asked anything and nothing was spent."
+      },
+      {
+        "date": "2026-09-23",
+        "phase": "kv-desk",
+        "reason": "No run arrived for this slot. Nothing was written down about why, nobody was asked anything and nothing was spent."
+      },
+      {
+        "date": "2026-09-23",
+        "phase": "mma-day",
+        "reason": "No run arrived for this slot. Nothing was written down about why, nobody was asked anything and nothing was spent."
+      },
+      {
+        "date": "2026-09-23",
+        "phase": "morning",
+        "reason": "No run arrived for this slot. Nothing was written down about why, nobody was asked anything and nothing was spent."
+      },
+      {
+        "date": "2026-09-23",
+        "phase": "ts-desk",
+        "reason": "No run arrived for this slot. Nothing was written down about why, nobody was asked anything and nothing was spent."
+      },
+      {
+        "date": "2026-09-23",
+        "phase": "tt-marketing",
+        "reason": "The countersign-aware budget shape disabled this phase."
+      },
+      {
+        "date": "2026-09-24",
+        "phase": "bh-desk",
+        "reason": "No run arrived for this slot. Nothing was written down about why, nobody was asked anything and nothing was spent."
+      },
+      {
+        "date": "2026-09-24",
+        "phase": "dm-day",
+        "reason": "No run arrived for this slot. Nothing was written down about why, nobody was asked anything and nothing was spent."
+      },
+      {
+        "date": "2026-09-24",
+        "phase": "kv-desk",
+        "reason": "No run arrived for this slot. Nothing was written down about why, nobody was asked anything and nothing was spent."
+      },
+      {
+        "date": "2026-09-24",
+        "phase": "mma-day",
+        "reason": "No run arrived for this slot. Nothing was written down about why, nobody was asked anything and nothing was spent."
+      },
+      {
+        "date": "2026-09-24",
+        "phase": "morning",
+        "reason": "No run arrived for this slot. Nothing was written down about why, nobody was asked anything and nothing was spent."
+      },
+      {
+        "date": "2026-09-24",
+        "phase": "ts-desk",
+        "reason": "No run arrived for this slot. Nothing was written down about why, nobody was asked anything and nothing was spent."
+      },
+      {
+        "date": "2026-09-24",
+        "phase": "tt-marketing",
+        "reason": "The countersign-aware budget shape disabled this phase."
+      },
+      {
+        "date": "2026-09-25",
+        "phase": "morning",
+        "reason": "The run behind this meeting failed before it finished."
+      },
+      {
+        "date": "2026-09-25",
+        "phase": "tt-marketing",
+        "reason": "The countersign-aware budget shape disabled this phase."
+      },
+      {
+        "date": "2026-09-26",
+        "phase": "morning",
+        "reason": "A run for this slot was paid for but left no record of the meeting, so what it produced was not kept."
+      },
+      {
+        "date": "2026-09-27",
+        "phase": "cu-day",
+        "reason": "The checks on the code behind this meeting did not pass, so it did not meet and nothing was spent."
+      },
+      {
+        "date": "2026-09-27",
+        "phase": "cu-edition",
+        "reason": "The checks on the code behind this meeting did not pass, so it did not meet and nothing was spent."
+      },
+      {
+        "date": "2026-09-27",
+        "phase": "morning",
+        "reason": "The checks on the code behind this meeting did not pass, so it did not meet and nothing was spent."
+      },
+      {
+        "date": "2026-09-27",
+        "phase": "ms-daily",
+        "reason": "The checks on the code behind this meeting did not pass, so it did not meet and nothing was spent."
+      },
+      {
+        "date": "2026-09-28",
+        "phase": "morning",
+        "reason": "The meeting ran, but what it wrote failed the checks that come before it is saved, so its record was not kept."
+      },
+      {
+        "date": "2026-09-28",
+        "phase": "ms-daily",
+        "reason": "The run behind this meeting failed before it finished."
+      }
+    ],
+    "missingDays": [
+      "2026-09-01",
+      "2026-09-02",
+      "2026-09-03",
+      "2026-09-04",
+      "2026-09-05",
+      "2026-09-06"
+    ]
+  },
+  "spend": {
+    "periodUsd": 10.9086198,
+    "mtdUsd": 10.9086198,
+    "capUsd": 50,
+    "byVenture": {
+      "goviral": 0.0844895,
+      "caught-up": 6.3568465,
+      "global": 3.1255718,
+      "marketingshark": 0.828033,
+      "fightaiq": 0.141564,
+      "mma-files": 0.372115
+    }
+  },
+  "content": {
+    "published": [],
+    "scores": null
+  },
+  "quality": {
+    "vetoRate": 0.0792,
+    "firstPassRate": null,
+    "retryRate": null
+  },
+  "incidents": [
+    {
+      "kind": "dropped-seat",
+      "date": "2026-09-09",
+      "note": "VIZE: Unparsable on both attempts: Response Response truncated at the 700-token cap for claude-sonnet-5; raise maxOutputTokens at the 700-token cap for claude-sonnet-5; raise maxOutputTokens"
+    },
+    {
+      "kind": "dropped-seat",
+      "date": "2026-09-09",
+      "note": "FORGE: Unparsable on both attempts: Response Response truncated at the 700-token cap for claude-sonnet-5; raise maxOutputTokens at the 700-token cap for claude-sonnet-5; raise maxOutputTokens"
+    },
+    {
+      "kind": "dropped-seat",
+      "date": "2026-09-12",
+      "note": "VIZE: Unparsable on both attempts: Response Response truncated at the 700-token cap for claude-sonnet-5; raise maxOutputTokens at the 700-token cap for claude-sonnet-5; raise maxOutputTokens"
+    },
+    {
+      "kind": "dropped-seat",
+      "date": "2026-09-12",
+      "note": "FORGE: Unparsable on both attempts: Response Response truncated at the 700-token cap for claude-sonnet-5; raise maxOutputTokens at the 700-token cap for claude-sonnet-5; raise maxOutputTokens"
+    },
+    {
+      "kind": "dropped-seat",
+      "date": "2026-09-20",
+      "note": "VIZE: Unparsable on both attempts: Response Response truncated at the 700-token cap for claude-sonnet-5; raise maxOutputTokens at the 700-token cap for claude-sonnet-5; raise maxOutputTokens"
+    },
+    {
+      "kind": "dropped-seat",
+      "date": "2026-09-20",
+      "note": "FORGE: Unparsable on both attempts: Response Response truncated at the 700-token cap for claude-sonnet-5; raise maxOutputTokens at the 700-token cap for claude-sonnet-5; raise maxOutputTokens"
+    },
+    {
+      "kind": "dropped-seat",
+      "date": "2026-09-25",
+      "note": "VIZE: Unparsable on both attempts: Response Response truncated at the 700-token cap for claude-sonnet-5; raise maxOutputTokens at the 700-token cap for claude-sonnet-5; raise maxOutputTokens"
+    },
+    {
+      "kind": "dropped-seat",
+      "date": "2026-09-25",
+      "note": "FORGE: Unparsable on both attempts: Response Response truncated at the 700-token cap for claude-sonnet-5; raise maxOutputTokens at the 700-token cap for claude-sonnet-5; raise maxOutputTokens"
+    },
+    {
+      "kind": "dropped-seat",
+      "date": "2026-09-27",
+      "note": "VIZE: Unparsable on both attempts: Response Response truncated at the 700-token cap for claude-sonnet-5; raise maxOutputTokens at the 700-token cap for claude-sonnet-5; raise maxOutputTokens"
+    },
+    {
+      "kind": "dropped-seat",
+      "date": "2026-09-27",
+      "note": "FORGE: Unparsable on both attempts: Response Response truncated at the 700-token cap for claude-sonnet-5; raise maxOutputTokens at the 700-token cap for claude-sonnet-5; raise maxOutputTokens"
+    },
+    {
+      "kind": "dropped-seat",
+      "date": "2026-09-29",
+      "note": "VIZE: Unparsable on both attempts: Response Response truncated at the 700-token cap for claude-sonnet-5; raise maxOutputTokens at the 700-token cap for claude-sonnet-5; raise maxOutputTokens"
+    },
+    {
+      "kind": "dropped-seat",
+      "date": "2026-09-29",
+      "note": "FORGE: Unparsable on both attempts: Response Response truncated at the 700-token cap for claude-sonnet-5; raise maxOutputTokens at the 700-token cap for claude-sonnet-5; raise maxOutputTokens"
+    },
+    {
+      "kind": "dropped-seat",
+      "date": "2026-09-30",
+      "note": "VIZE: Unparsable on both attempts: Response Response truncated at the 700-token cap for claude-sonnet-5; raise maxOutputTokens at the 700-token cap for claude-sonnet-5; raise maxOutputTokens"
+    },
+    {
+      "kind": "dropped-seat",
+      "date": "2026-09-30",
+      "note": "FORGE: Unparsable on both attempts: Response Response truncated at the 700-token cap for claude-sonnet-5; raise maxOutputTokens at the 700-token cap for claude-sonnet-5; raise maxOutputTokens"
+    }
+  ],
+  "fixTasks": {
+    "opened": 17,
+    "closed": 27
+  },
+  "perVenture": [
+    {
+      "ventureId": "caught-up",
+      "verdictSummary": "no verdict recorded this period",
+      "outputs": 0,
+      "spendUsd": 6.3568465
+    },
+    {
+      "ventureId": "fightaiq",
+      "verdictSummary": "no verdict recorded this period",
+      "outputs": 0,
+      "spendUsd": 0.141564
+    },
+    {
+      "ventureId": "global",
+      "verdictSummary": "no verdict recorded this period",
+      "outputs": 0,
+      "spendUsd": 3.1255718
+    },
+    {
+      "ventureId": "goviral",
+      "verdictSummary": "no verdict recorded this period",
+      "outputs": 0,
+      "spendUsd": 0.0844895
+    },
+    {
+      "ventureId": "marketingshark",
+      "verdictSummary": "no verdict recorded this period",
+      "outputs": 0,
+      "spendUsd": 0.828033
+    },
+    {
+      "ventureId": "mma-files",
+      "verdictSummary": "no verdict recorded this period",
+      "outputs": 0,
+      "spendUsd": 0.372115
+    }
+  ],
+  "narrative": null
+}
