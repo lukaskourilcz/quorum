@@ -660,15 +660,13 @@
         "version": "1.0.0",
         "providerId": "direct-meta",
         "apiVersion": "v26.0",
-        "loginMode": "instagram-facebook-login"
+        "loginMode": "instagram-login"
       },
       "credentialRef": "CAUGHT_UP_INSTAGRAM_ACCESS_TOKEN",
       "nativeAccountIdRef": "CAUGHT_UP_INSTAGRAM_USER_ID",
       "approvedScopes": [
-        "pages_show_list",
-        "pages_read_engagement",
-        "instagram_basic",
-        "instagram_content_publish"
+        "instagram_business_basic",
+        "instagram_business_content_publish"
       ],
       "supportedCapabilities": [
         "publish-original"

@@ -45,8 +45,8 @@ export function threadsTextLength(text: string): number {
  * Which official Graph host and publish scopes a connection uses.
  *
  * Threads has one. Instagram has two login paths that must never be mixed: Facebook Login on
- * `graph.facebook.com` with `instagram_basic` and `instagram_content_publish` (DNESKAi's connection),
- * and Instagram Login on `graph.instagram.com` with the `instagram_business_*` scopes (devShark's,
+ * `graph.facebook.com` with `instagram_basic` and `instagram_content_publish`,
+ * and Instagram Login on `graph.instagram.com` with the `instagram_business_*` scopes (DNESKAi and devShark,
  * which needs no Facebook Page).
  */
 function metaSurface(channel: Channel, target: ResolvedPublisherTarget): { host: string; scopes: readonly string[] } {

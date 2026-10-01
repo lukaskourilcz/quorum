@@ -39,14 +39,18 @@ MarketingShark uses the same social Queue for devShark's English content.
 
 The intended Instagram handles are **@dneskai** and **@devshark.app**. Recording a handle is
 not proof of account ownership or professional status. Both connections remain held.
-On 2026-09-27 Chrome showed the DNESKAi public profile while signed into a different profile.
-Meta's developer portal required developer registration and acceptance of Platform Terms;
-the owner approved acceptance and the displayed Meta account in-session. Registration is complete;
-My Apps showed no existing apps. The BoardlessAI Social Studio creation form now has Instagram
-and Threads selected with no business portfolio attached; final creation and OAuth remain pending. The owner confirmed DNESKAi is professional,
-devShark still needs conversion, and neither has a Threads profile. No Meta credentials were present in the
-repository's Actions secret inventory. Threads profiles do not yet exist.
+On 2026-09-27 the owner created **BoardlessAI Social Studio**, Meta app
+`1563788535067994`, with Instagram and Threads use cases. Its Instagram app ID is
+`4543962322555848`. The Instagram permissions `instagram_business_basic` and
+`instagram_business_content_publish` are ready for testing. No account OAuth grant or token
+has been issued. The owner approved adding both handles as Instagram Testers, but Meta
+rejected both submissions with “Form can't be saved,” including the direct Add account flow.
+Manual owner verification of that Meta form is pending.
 
+Chrome successfully switched into DNESKAi and its settings confirmed a Creator account;
+Apps and websites showed no authorized application. The owner confirmed devShark still
+needs professional conversion and neither account has a Threads profile. No Meta credentials
+were present in the repository's Actions secret inventory.
 Use one owner-controlled Meta developer app, with Instagram and Threads use cases/products.
 Each Instagram account must be Business or Creator. For accounts managed by the app owner,
 configure the necessary app roles/test accounts and accept their invitations. Follow the Meta
@@ -58,11 +62,11 @@ The existing connection routes are:
 | Account | API/login route | Required publishing permissions |
 | --- | --- | --- |
 | @devshark.app Instagram | Instagram Login; no Facebook Page required | `instagram_business_basic`, `instagram_business_content_publish` |
-| @dneskai Instagram | Facebook Login; linked Facebook Page required with current registry | `pages_show_list`, `pages_read_engagement`, `instagram_basic`, `instagram_content_publish` |
+| @dneskai Instagram | Instagram Login; no Facebook Page required | `instagram_business_basic`, `instagram_business_content_publish` |
 | DNESKAi Threads | Threads OAuth, separate token/account ID | `threads_basic`, `threads_content_publish` |
 
-If using Instagram Login for DNESKAi too, update its registry login mode and scope family
-before installing its token. Never mix tokens from the two login routes.
+Both Instagram registry bindings use Instagram Login. Never install a Facebook Login token
+in these bindings or mix the two scope families.
 Meta's [official Instagram Login collection](https://www.postman.com/meta/instagram/folder/6raa77c/instagram-api-with-instagram-login)
 confirms that this route needs a professional account but no linked Facebook Page.
 
