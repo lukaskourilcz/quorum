@@ -1,0 +1,154 @@
+{
+  "schemaVersion": "image-selection/1",
+  "venture": "caught-up",
+  "slug": "2026-10-01-paramount-wbd-fuse-gemini-4-argon-ram-zdrazovani",
+  "date": "2026-10-01",
+  "rung": "illustration",
+  "selected": null,
+  "verdicts": [
+    {
+      "mode": "search",
+      "considered": 6,
+      "selected": null,
+      "reason": "all-candidates-rejected",
+      "candidates": [
+        {
+          "candidateId": "pexels:36169774",
+          "provider": "pexels",
+          "fit": 3,
+          "vetoes": [
+            "dated-aesthetic"
+          ],
+          "reason": "Close-up of circuit board chips with shallow depth of field and moody lighting—this is overused cliché for tech stories and feels dated in its aesthetic presentation.",
+          "sceneCs": "detaily integrovaného obvodu s čipy"
+        },
+        {
+          "candidateId": "pixabay:430619",
+          "provider": "pixabay",
+          "fit": 1,
+          "vetoes": [
+            "ai-generated-look",
+            "recognisable-face"
+          ],
+          "reason": "The image shows a recognisable male face holding a camera against a synthetic-looking digital background; it reads as AI-generated and violates the no-recognisable-face rule.",
+          "sceneCs": "osoba s fotoaparátem a digitální pozadí"
+        },
+        {
+          "candidateId": "pexels:4211136",
+          "provider": "pexels",
+          "fit": 2,
+          "vetoes": [
+            "low-quality"
+          ],
+          "reason": "Stacked circuit boards in a plastic tray are poorly lit, heavily compressed, and lack compositional clarity—the image is muddy and uninviting.",
+          "sceneCs": "vrstvy desky plošných spojů v plastové přepravce"
+        },
+        {
+          "candidateId": "pixabay:763731",
+          "provider": "pixabay",
+          "fit": 0,
+          "vetoes": [
+            "wrong-subject",
+            "embedded-text"
+          ],
+          "reason": "A smartphone with burned-in text ('SECURITY BOARD') is off-brief for an article about media mergers, Google AI, and RAM pricing.",
+          "sceneCs": "mobilní telefon s textem na obrazovce"
+        },
+        {
+          "candidateId": "pexels:36169772",
+          "provider": "pexels",
+          "fit": 5,
+          "vetoes": [],
+          "reason": "Clean, well-composed flat-lay of a microchip and surrounding board components with neutral lighting; illustrates hardware/semiconductor topic generically without dated styling or major flaws, though somewhat generic.",
+          "sceneCs": "mikročip a elektronické součástky na desce plošných spojů"
+        },
+        {
+          "candidateId": "pexels:3665442",
+          "provider": "pexels",
+          "fit": 6,
+          "vetoes": [],
+          "reason": "Sharp, professionally lit macro shot of a green circuit board with a central processor; effectively illustrates semiconductor and computing hardware without dated clichés or recognisable faces, suitable for tech news.",
+          "sceneCs": "procesor na zelené desce plošných spojů"
+        }
+      ],
+      "skipped": [],
+      "costUsd": 0.005559
+    },
+    {
+      "mode": "generated",
+      "considered": 1,
+      "selected": "illustration:2026-10-01-candidate-1",
+      "reason": "Abstract circuit and connection motif appropriately illustrates the tech briefing's coverage of major corporate mergers and AI/cybersecurity developments without depicting any specific event or person.",
+      "candidates": [
+        {
+          "candidateId": "illustration:2026-10-01-candidate-1",
+          "provider": "boardlessai",
+          "fit": 7,
+          "vetoes": [],
+          "reason": "Abstract circuit and connection motif appropriately illustrates the tech briefing's coverage of major corporate mergers and AI/cybersecurity developments without depicting any specific event or person.",
+          "sceneCs": "modrá digitální schémata a propojovací prvky na černém pozadí"
+        }
+      ],
+      "skipped": [],
+      "costUsd": 0.002168
+    },
+    {
+      "mode": "generated",
+      "considered": 1,
+      "selected": null,
+      "reason": "all-candidates-rejected",
+      "candidates": [
+        {
+          "candidateId": "illustration:2026-10-01-candidate-2",
+          "provider": "boardlessai",
+          "fit": 6,
+          "vetoes": [],
+          "reason": "The image shows circuit board patterns with a brain-like motif, which relates to AI and technology themes in the article (Gemini 4, cybersecurity), though it's generic rather than specifically illustrating any particular news item.",
+          "sceneCs": "abstraktní mozek v modré elektronické síti"
+        }
+      ],
+      "skipped": [],
+      "costUsd": 0.002273
+    },
+    {
+      "mode": "generated",
+      "considered": 1,
+      "selected": "illustration:2026-10-01-candidate-3",
+      "reason": "Neon circuit board design with connected devices illustrates technology, AI systems, and digital connectivity themes relevant to Google's Gemini release and tech industry developments, though somewhat generic.",
+      "candidates": [
+        {
+          "candidateId": "illustration:2026-10-01-candidate-3",
+          "provider": "boardlessai",
+          "fit": 7,
+          "vetoes": [],
+          "reason": "Neon circuit board design with connected devices illustrates technology, AI systems, and digital connectivity themes relevant to Google's Gemini release and tech industry developments, though somewhat generic.",
+          "sceneCs": "neonové obrysy elektronických zařízení a spojovacích cest"
+        }
+      ],
+      "skipped": [],
+      "costUsd": 0.002163
+    },
+    {
+      "mode": "generated",
+      "considered": 1,
+      "selected": null,
+      "reason": "all-candidates-rejected",
+      "candidates": [
+        {
+          "candidateId": "illustration:2026-10-01-candidate-4",
+          "provider": "boardlessai",
+          "fit": 3,
+          "vetoes": [
+            "off-brief"
+          ],
+          "reason": "The image shows a stylized circuit-board clock, which might vaguely connect to technology timing, but the article is about a media merger, AI security, and memory pricing—none of which are about time management or clocks.",
+          "sceneCs": "digitální hodiny v kyberpunkové estetice"
+        }
+      ],
+      "skipped": [],
+      "costUsd": 0.002293
+    }
+  ],
+  "skippedProviders": [],
+  "recordedAt": "2026-10-01T03:01:14.957Z"
+}

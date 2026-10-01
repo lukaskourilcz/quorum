@@ -1,0 +1,318 @@
+{
+  "schemaVersion": 1,
+  "runId": "9b5cf604-e51b-4e8d-aa7c-1ee9f6cd7a69",
+  "date": "2026-10-01",
+  "mode": "production",
+  "status": "edition",
+  "startedAt": "2026-10-01T03:01:24.773Z",
+  "completedAt": "2026-10-01T03:06:43.174Z",
+  "stages": [
+    {
+      "name": "curate",
+      "status": "success",
+      "startedAt": "2026-10-01T03:01:24.802Z",
+      "completedAt": "2026-10-01T03:01:52.899Z",
+      "durationMs": 28097
+    },
+    {
+      "name": "write",
+      "status": "failed",
+      "startedAt": "2026-10-01T03:01:52.899Z",
+      "completedAt": "2026-10-01T03:04:09.391Z",
+      "durationMs": 136492,
+      "errorCode": "InvalidModelOutputError",
+      "errorMessage": "write: [\n  {\n    \"expected\": \"array\",\n    \"code\": \"invalid_type\",\n    \"path\": [\n      \"dispatches\"\n    ],\n    \"message\": \"Invalid input: expected array, received string\"\n  },\n  {\n    \"origin\": \"string\",\n    \"code\": \"too_big\",\n    \"maximum\": 4,\n    \"inclusive\": true,\n    \"path\": [\n      \"dispatches\"\n    ],\n    \"message\": \"Too big: expected string to have <=4 characters\"\n  }\n]"
+    },
+    {
+      "name": "rewrite_1",
+      "status": "success",
+      "startedAt": "2026-10-01T03:04:09.391Z",
+      "completedAt": "2026-10-01T03:06:07.179Z",
+      "durationMs": 117788
+    },
+    {
+      "name": "stet_1",
+      "status": "success",
+      "startedAt": "2026-10-01T03:06:07.180Z",
+      "completedAt": "2026-10-01T03:06:07.185Z",
+      "durationMs": 5
+    },
+    {
+      "name": "quality_1",
+      "status": "success",
+      "startedAt": "2026-10-01T03:06:07.186Z",
+      "completedAt": "2026-10-01T03:06:07.186Z",
+      "durationMs": 0
+    },
+    {
+      "name": "assemble_package",
+      "status": "success",
+      "startedAt": "2026-10-01T03:06:07.186Z",
+      "completedAt": "2026-10-01T03:06:43.172Z",
+      "durationMs": 35986
+    }
+  ],
+  "regenerationAttempts": 1,
+  "stetBlocks": 0,
+  "hacekBlocks": 0,
+  "usage": [
+    {
+      "provider": "anthropic",
+      "model": "claude-sonnet-4-6",
+      "stage": "curate",
+      "inputTokens": 12569,
+      "outputTokens": 1351,
+      "cacheReadTokens": 0,
+      "cacheWriteTokens": 0,
+      "costUsd": 0.057972
+    },
+    {
+      "provider": "anthropic",
+      "model": "claude-sonnet-4-6",
+      "stage": "write",
+      "inputTokens": 14322,
+      "outputTokens": 4732,
+      "cacheReadTokens": 0,
+      "cacheWriteTokens": 2470,
+      "costUsd": 0.1232085,
+      "contractRepairs": [
+        {
+          "field": "dispatches",
+          "received": "[\n  {\n    \"title\": \"Reddit ruší RSS a placené API\",\n    \"topic\": \"Platformy a přístup k datům\",\n    \"body\": \"Reddit od 1…",
+          "detail": "Expected ',' or '}' after property value in JSON at position 319 (line 5 column 224) near «SS se podle Redditu stal „běžnou cestou pro masový scraping\". Uživatelé, kteří RSS využívají mimo vlastní moderovanou ko»",
+          "reason": "json_string_undecodable"
+        }
+      ]
+    },
+    {
+      "provider": "anthropic",
+      "model": "claude-sonnet-4-6",
+      "stage": "rewrite",
+      "inputTokens": 14322,
+      "outputTokens": 5091,
+      "cacheReadTokens": 0,
+      "cacheWriteTokens": 2612,
+      "costUsd": 0.129126
+    }
+  ],
+  "measuredCostUsd": 0.3103065,
+  "quality": {
+    "metrics": {
+      "successfulSources": 30,
+      "candidateItems": 80,
+      "citedSources": 8,
+      "signalStrength": 82,
+      "maximumSingleSourceShare": 0.375,
+      "sourceDiversity": 0.78125,
+      "duplicateStorySimilarity": 0.09523809523809523,
+      "repeatedTopicFrequency": 0.3333333333333333,
+      "primarySourceRelevant": false,
+      "primarySourcePresent": false,
+      "unsupportedWatchlistItems": 0,
+      "costPerRun": 0.3103065
+    },
+    "result": {
+      "passed": true,
+      "enforced": true,
+      "violations": [],
+      "action": "publish"
+    }
+  },
+  "stet": {
+    "passed": true,
+    "score": 50,
+    "violations": []
+  },
+  "imageProgram": {
+    "readiness": {
+      "providers": {
+        "openverse": "keyless",
+        "wikimedia": "keyless",
+        "pexels": "present",
+        "pixabay": "present"
+      },
+      "gateModelConfigured": true,
+      "caps": {
+        "perArticleUsd": 0.05,
+        "perDayUsd": 0.1,
+        "generatedImagesPerDay": 4
+      },
+      "spentToday": {
+        "usd": 0,
+        "generatedImages": 0
+      },
+      "illustrationRung": "armed"
+    },
+    "rung": "illustration",
+    "verdicts": [
+      {
+        "mode": "search",
+        "considered": 6,
+        "selected": null,
+        "reason": "all-candidates-rejected",
+        "candidates": [
+          {
+            "candidateId": "pexels:36169774",
+            "provider": "pexels",
+            "fit": 3,
+            "vetoes": [
+              "dated-aesthetic"
+            ],
+            "reason": "Close-up of circuit board chips with shallow depth of field and moody lighting—this is overused cliché for tech stories and feels dated in its aesthetic presentation.",
+            "sceneCs": "detaily integrovaného obvodu s čipy"
+          },
+          {
+            "candidateId": "pixabay:430619",
+            "provider": "pixabay",
+            "fit": 1,
+            "vetoes": [
+              "ai-generated-look",
+              "recognisable-face"
+            ],
+            "reason": "The image shows a recognisable male face holding a camera against a synthetic-looking digital background; it reads as AI-generated and violates the no-recognisable-face rule.",
+            "sceneCs": "osoba s fotoaparátem a digitální pozadí"
+          },
+          {
+            "candidateId": "pexels:4211136",
+            "provider": "pexels",
+            "fit": 2,
+            "vetoes": [
+              "low-quality"
+            ],
+            "reason": "Stacked circuit boards in a plastic tray are poorly lit, heavily compressed, and lack compositional clarity—the image is muddy and uninviting.",
+            "sceneCs": "vrstvy desky plošných spojů v plastové přepravce"
+          },
+          {
+            "candidateId": "pixabay:763731",
+            "provider": "pixabay",
+            "fit": 0,
+            "vetoes": [
+              "wrong-subject",
+              "embedded-text"
+            ],
+            "reason": "A smartphone with burned-in text ('SECURITY BOARD') is off-brief for an article about media mergers, Google AI, and RAM pricing.",
+            "sceneCs": "mobilní telefon s textem na obrazovce"
+          },
+          {
+            "candidateId": "pexels:36169772",
+            "provider": "pexels",
+            "fit": 5,
+            "vetoes": [],
+            "reason": "Clean, well-composed flat-lay of a microchip and surrounding board components with neutral lighting; illustrates hardware/semiconductor topic generically without dated styling or major flaws, though somewhat generic.",
+            "sceneCs": "mikročip a elektronické součástky na desce plošných spojů"
+          },
+          {
+            "candidateId": "pexels:3665442",
+            "provider": "pexels",
+            "fit": 6,
+            "vetoes": [],
+            "reason": "Sharp, professionally lit macro shot of a green circuit board with a central processor; effectively illustrates semiconductor and computing hardware without dated clichés or recognisable faces, suitable for tech news.",
+            "sceneCs": "procesor na zelené desce plošných spojů"
+          }
+        ],
+        "skipped": [],
+        "costUsd": 0.005559
+      },
+      {
+        "mode": "generated",
+        "considered": 1,
+        "selected": "illustration:2026-10-01-candidate-1",
+        "reason": "Abstract circuit and connection motif appropriately illustrates the tech briefing's coverage of major corporate mergers and AI/cybersecurity developments without depicting any specific event or person.",
+        "candidates": [
+          {
+            "candidateId": "illustration:2026-10-01-candidate-1",
+            "provider": "boardlessai",
+            "fit": 7,
+            "vetoes": [],
+            "reason": "Abstract circuit and connection motif appropriately illustrates the tech briefing's coverage of major corporate mergers and AI/cybersecurity developments without depicting any specific event or person.",
+            "sceneCs": "modrá digitální schémata a propojovací prvky na černém pozadí"
+          }
+        ],
+        "skipped": [],
+        "costUsd": 0.002168
+      },
+      {
+        "mode": "generated",
+        "considered": 1,
+        "selected": null,
+        "reason": "all-candidates-rejected",
+        "candidates": [
+          {
+            "candidateId": "illustration:2026-10-01-candidate-2",
+            "provider": "boardlessai",
+            "fit": 6,
+            "vetoes": [],
+            "reason": "The image shows circuit board patterns with a brain-like motif, which relates to AI and technology themes in the article (Gemini 4, cybersecurity), though it's generic rather than specifically illustrating any particular news item.",
+            "sceneCs": "abstraktní mozek v modré elektronické síti"
+          }
+        ],
+        "skipped": [],
+        "costUsd": 0.002273
+      },
+      {
+        "mode": "generated",
+        "considered": 1,
+        "selected": "illustration:2026-10-01-candidate-3",
+        "reason": "Neon circuit board design with connected devices illustrates technology, AI systems, and digital connectivity themes relevant to Google's Gemini release and tech industry developments, though somewhat generic.",
+        "candidates": [
+          {
+            "candidateId": "illustration:2026-10-01-candidate-3",
+            "provider": "boardlessai",
+            "fit": 7,
+            "vetoes": [],
+            "reason": "Neon circuit board design with connected devices illustrates technology, AI systems, and digital connectivity themes relevant to Google's Gemini release and tech industry developments, though somewhat generic.",
+            "sceneCs": "neonové obrysy elektronických zařízení a spojovacích cest"
+          }
+        ],
+        "skipped": [],
+        "costUsd": 0.002163
+      },
+      {
+        "mode": "generated",
+        "considered": 1,
+        "selected": null,
+        "reason": "all-candidates-rejected",
+        "candidates": [
+          {
+            "candidateId": "illustration:2026-10-01-candidate-4",
+            "provider": "boardlessai",
+            "fit": 3,
+            "vetoes": [
+              "off-brief"
+            ],
+            "reason": "The image shows a stylized circuit-board clock, which might vaguely connect to technology timing, but the article is about a media merger, AI security, and memory pricing—none of which are about time management or clocks.",
+            "sceneCs": "digitální hodiny v kyberpunkové estetice"
+          }
+        ],
+        "skipped": [],
+        "costUsd": 0.002293
+      }
+    ]
+  },
+  "packageStatus": "edition",
+  "warnings": [
+    "content_invalid:write: [\n  {\n    \"expected\": \"array\",\n    \"code\": \"invalid_type\",\n    \"path\": [\n      \"dispatches\"\n    ],\n    \"message\": \"Invalid input: expected array, received string\"\n  },\n  {\n    \"origin\": \"string\",\n    \"code\": \"too_big\",\n    \"maximum\": 4,\n    \"inclusive\": true,\n    \"path\": [\n      \"dispatches\"\n    ],\n    \"message\": \"Too big: expected string to have <=4 characters\"\n  }\n]",
+    "image_rung:illustration",
+    "image_gate:search:all-candidates-rejected",
+    "image_gate:generated:selected",
+    "image_gate:generated:all-candidates-rejected"
+  ],
+  "sourceSummary": {
+    "successfulSources": 30,
+    "candidateItems": 80,
+    "evidenceRefs": [
+      "source:404-media",
+      "source:anthropic-news",
+      "source:ars-technica",
+      "source:arxiv-cs-lg",
+      "source:bluesky-language-models",
+      "source:deepmind-blog",
+      "source:digiday",
+      "source:github-ai-releases",
+      "source:google-research",
+      "source:hf-blog",
+      "source:hn-frontpage",
+      "source:import-ai"
+    ]
+  }
+}
