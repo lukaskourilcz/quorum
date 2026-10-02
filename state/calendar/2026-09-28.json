@@ -61,13 +61,17 @@
       "at": "2026-10-01T04:00:00.000Z",
       "tz": "Europe/Prague",
       "kind": "venture-morning",
-      "status": "scheduled"
+      "status": "held",
+      "meetingRef": "standups/2026-10-01-morning",
+      "decisionOneLiner": "The council held the internal work item. No external action, business claim or stage change was approved."
     },
     {
       "at": "2026-10-02T03:00:00.000Z",
       "tz": "Europe/Prague",
       "kind": "cu-day",
-      "status": "scheduled"
+      "status": "held",
+      "meetingRef": "meetings/2026-10-02-cu-edition",
+      "decisionOneLiner": "Google jako první hyperscalový provozovatel posílá výpočetní hardware na oběžnou dráhu – jde o ověřitelný posun v tom, kde fyzicky může vznikat cloudová infrastruktura, s přímými d"
     },
     {
       "at": "2026-10-02T04:00:00.000Z",

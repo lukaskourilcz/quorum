@@ -1,0 +1,280 @@
+{
+  "schemaVersion": 1,
+  "runId": "d82be73e-654b-4cc0-bae5-1848b42802d7",
+  "date": "2026-10-02",
+  "mode": "production",
+  "status": "edition",
+  "startedAt": "2026-10-02T03:01:19.383Z",
+  "completedAt": "2026-10-02T03:03:57.438Z",
+  "stages": [
+    {
+      "name": "curate",
+      "status": "success",
+      "startedAt": "2026-10-02T03:01:19.414Z",
+      "completedAt": "2026-10-02T03:01:38.778Z",
+      "durationMs": 19364
+    },
+    {
+      "name": "write",
+      "status": "success",
+      "startedAt": "2026-10-02T03:01:38.778Z",
+      "completedAt": "2026-10-02T03:03:29.550Z",
+      "durationMs": 110772
+    },
+    {
+      "name": "stet_0",
+      "status": "success",
+      "startedAt": "2026-10-02T03:03:29.551Z",
+      "completedAt": "2026-10-02T03:03:29.556Z",
+      "durationMs": 5
+    },
+    {
+      "name": "quality_0",
+      "status": "success",
+      "startedAt": "2026-10-02T03:03:29.556Z",
+      "completedAt": "2026-10-02T03:03:29.556Z",
+      "durationMs": 0
+    },
+    {
+      "name": "assemble_package",
+      "status": "success",
+      "startedAt": "2026-10-02T03:03:29.556Z",
+      "completedAt": "2026-10-02T03:03:57.434Z",
+      "durationMs": 27878
+    }
+  ],
+  "regenerationAttempts": 0,
+  "stetBlocks": 1,
+  "hacekBlocks": 0,
+  "usage": [
+    {
+      "provider": "anthropic",
+      "model": "claude-sonnet-4-6",
+      "stage": "curate",
+      "inputTokens": 11918,
+      "outputTokens": 934,
+      "cacheReadTokens": 0,
+      "cacheWriteTokens": 0,
+      "costUsd": 0.049764
+    },
+    {
+      "provider": "anthropic",
+      "model": "claude-sonnet-4-6",
+      "stage": "write",
+      "inputTokens": 13536,
+      "outputTokens": 4604,
+      "cacheReadTokens": 0,
+      "cacheWriteTokens": 2470,
+      "costUsd": 0.1189305
+    }
+  ],
+  "measuredCostUsd": 0.1686945,
+  "quality": {
+    "metrics": {
+      "successfulSources": 30,
+      "candidateItems": 80,
+      "citedSources": 7,
+      "signalStrength": 78,
+      "maximumSingleSourceShare": 0.42857142857142855,
+      "sourceDiversity": 0.6938775510204082,
+      "duplicateStorySimilarity": 0.09090909090909091,
+      "repeatedTopicFrequency": 0.5,
+      "primarySourceRelevant": false,
+      "primarySourcePresent": false,
+      "unsupportedWatchlistItems": 0,
+      "costPerRun": 0.1686945
+    },
+    "result": {
+      "passed": true,
+      "enforced": true,
+      "violations": [],
+      "action": "publish"
+    }
+  },
+  "stet": {
+    "passed": false,
+    "score": 45,
+    "violations": [
+      {
+        "code": "bureaucratic_filler",
+        "locale": "cs",
+        "message": "Použij přímé sloveso místo úřednické konstrukce."
+      }
+    ]
+  },
+  "unresolvedReview": {
+    "notice": "Published with unresolved editorial review findings, listed below. The review ran and recorded them; since 2026-08-04 a stylistic or topical finding does not stop publication. The checks that the article is accurate still do: supplied source links, cited sources, source diversity, primary sourcing, watchlist support and the cost caps.",
+    "findings": [
+      "stet:cs/bureaucratic_filler"
+    ]
+  },
+  "imageProgram": {
+    "readiness": {
+      "providers": {
+        "openverse": "keyless",
+        "wikimedia": "keyless",
+        "pexels": "present",
+        "pixabay": "present"
+      },
+      "gateModelConfigured": true,
+      "caps": {
+        "perArticleUsd": 0.05,
+        "perDayUsd": 0.1,
+        "generatedImagesPerDay": 4
+      },
+      "spentToday": {
+        "usd": 0,
+        "generatedImages": 0
+      },
+      "illustrationRung": "armed"
+    },
+    "rung": "search",
+    "verdicts": [
+      {
+        "mode": "search",
+        "considered": 6,
+        "selected": "pexels:4316",
+        "reason": "Close-up of real motherboard with heat sinks and components is authentic hardware photography that genuinely illustrates computing infrastructure and space/satellite capabilities.",
+        "candidates": [
+          {
+            "candidateId": "pexels:9242888",
+            "provider": "pexels",
+            "fit": 6,
+            "vetoes": [],
+            "reason": "Real hands working with computer hardware illustrates the tech industry topic, but the close-up angle and specific component-level focus feel more documentary than thematic.",
+            "sceneCs": "ruka s páječkou nad základní deskou"
+          },
+          {
+            "candidateId": "wikimedia:179520469",
+            "provider": "wikimedia",
+            "fit": 2,
+            "vetoes": [
+              "ai-generated-look",
+              "dated-aesthetic"
+            ],
+            "reason": "The glowing blue circuit-board brain is the clichéd stock image of AI thinking, dated styling, obviously algorithmic and misleading about the article's actual content.",
+            "sceneCs": "mozek z desek plošných spojů"
+          },
+          {
+            "candidateId": "openverse:00de4c50-7cec-4609-9f6d-e605679a28a8",
+            "provider": "openverse",
+            "fit": 5,
+            "vetoes": [],
+            "reason": "Museum or exhibition space with electronic components and circuit boards on display has tech relevance, but feels more historical/curatorial than urgent news about space and AI.",
+            "sceneCs": "expozice v muzeu s elektronickými součástkami"
+          },
+          {
+            "candidateId": "pixabay:3963945",
+            "provider": "pixabay",
+            "fit": 1,
+            "vetoes": [
+              "ai-generated-look"
+            ],
+            "reason": "This holographic brain rendering with lens flare is pure stock AI imagery, exactly the dated visual cliché that misleads readers about serious technology stories.",
+            "sceneCs": "digitální mozek s efekty"
+          },
+          {
+            "candidateId": "pexels:4316",
+            "provider": "pexels",
+            "fit": 7,
+            "vetoes": [],
+            "reason": "Close-up of real motherboard with heat sinks and components is authentic hardware photography that genuinely illustrates computing infrastructure and space/satellite capabilities.",
+            "sceneCs": "základní deska s chladičem"
+          },
+          {
+            "candidateId": "pixabay:3435575",
+            "provider": "pixabay",
+            "fit": 2,
+            "vetoes": [
+              "recognisable-face"
+            ],
+            "reason": "A person's hand/arm is visible even though the face is cropped, and the floating data particles aesthetic is too staged and generic for this specific multi-topic briefing.",
+            "sceneCs": "ruka člověka s digitálními částicemi"
+          }
+        ],
+        "skipped": [],
+        "costUsd": 0.005451
+      },
+      {
+        "mode": "generated",
+        "considered": 1,
+        "selected": "illustration:2026-10-02-candidate-2",
+        "reason": "Abstract neon-style design with circuits and glowing elements evokes technology, AI, and data processing themes directly relevant to the article's focus on Google's satellite infrastructure and computational advancement.",
+        "candidates": [
+          {
+            "candidateId": "illustration:2026-10-02-candidate-2",
+            "provider": "boardlessai",
+            "fit": 7,
+            "vetoes": [],
+            "reason": "Abstract neon-style design with circuits and glowing elements evokes technology, AI, and data processing themes directly relevant to the article's focus on Google's satellite infrastructure and computational advancement.",
+            "sceneCs": "abstraktní neonový design s technologickými prvky"
+          }
+        ],
+        "skipped": [],
+        "costUsd": 0.002165
+      },
+      {
+        "mode": "generated",
+        "considered": 1,
+        "selected": "illustration:2026-10-02-candidate-3",
+        "reason": "The schematic circuit-board dial illustration directly supports the article's technology focus, particularly the Google satellite and data infrastructure angle; the rendered aesthetic is appropriate for a tech briefing and contains no faces, logos, or embedded text.",
+        "candidates": [
+          {
+            "candidateId": "illustration:2026-10-02-candidate-3",
+            "provider": "boardlessai",
+            "fit": 7,
+            "vetoes": [],
+            "reason": "The schematic circuit-board dial illustration directly supports the article's technology focus, particularly the Google satellite and data infrastructure angle; the rendered aesthetic is appropriate for a tech briefing and contains no faces, logos, or embedded text.",
+            "sceneCs": "abstraktní elektronický schémat s digitálními prvky"
+          }
+        ],
+        "skipped": [],
+        "costUsd": 0.002205
+      },
+      {
+        "mode": "generated",
+        "considered": 1,
+        "selected": "illustration:2026-10-02-candidate-4",
+        "reason": "Illustration fits the space/satellite theme of Google's orbital data center, rendered in clean tech aesthetic appropriate for the brief, though the rocket focus is generic enough to serve multiple space-tech stories.",
+        "candidates": [
+          {
+            "candidateId": "illustration:2026-10-02-candidate-4",
+            "provider": "boardlessai",
+            "fit": 7,
+            "vetoes": [],
+            "reason": "Illustration fits the space/satellite theme of Google's orbital data center, rendered in clean tech aesthetic appropriate for the brief, though the rocket focus is generic enough to serve multiple space-tech stories.",
+            "sceneCs": "stylizované schéma hodin s raketou a elektrickými obvody"
+          }
+        ],
+        "skipped": [],
+        "costUsd": 0.0022
+      }
+    ]
+  },
+  "packageStatus": "edition",
+  "warnings": [
+    "stet:bureaucratic_filler",
+    "shipped_with_unresolved_review:stet:cs/bureaucratic_filler",
+    "image_rung:search",
+    "image_gate:search:selected",
+    "image_gate:generated:selected"
+  ],
+  "sourceSummary": {
+    "successfulSources": 30,
+    "candidateItems": 80,
+    "evidenceRefs": [
+      "source:404-media",
+      "source:anthropic-news",
+      "source:ars-technica",
+      "source:arxiv-cs-ai",
+      "source:bluesky-language-models",
+      "source:deepmind-blog",
+      "source:digiday",
+      "source:github-ai-releases",
+      "source:google-research",
+      "source:hf-blog",
+      "source:hn-frontpage",
+      "source:import-ai"
+    ]
+  }
+}

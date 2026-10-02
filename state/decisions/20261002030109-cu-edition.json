@@ -1,0 +1,16 @@
+{
+  "schemaVersion": 1,
+  "fixture": false,
+  "cycleId": "20261002030109-cu-edition",
+  "phase": "cu-edition",
+  "outcome": "EDITION",
+  "summary": "Google jako první hyperscalový provozovatel posílá výpočetní hardware na oběžnou dráhu – jde o ověřitelný posun v tom, kde fyzicky může vznikat cloudová infrastruktura, s přímými důsledky pro energetiku i bezpečnost dat.",
+  "evidenceRefs": [
+    "source:the-register",
+    "source:ars-technica",
+    "source:techcrunch-ai",
+    "source:github-ai-releases"
+  ],
+  "editionRef": "01ddf93a5a42d4380dd5cf2a0efbe7604516af8481911895d8d83b99d4de9bb9",
+  "generatedAt": "2026-10-02T03:01:14.229Z"
+}

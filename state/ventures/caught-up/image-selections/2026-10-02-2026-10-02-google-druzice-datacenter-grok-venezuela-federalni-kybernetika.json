@@ -1,0 +1,131 @@
+{
+  "schemaVersion": "image-selection/1",
+  "venture": "caught-up",
+  "slug": "2026-10-02-google-druzice-datacenter-grok-venezuela-federalni-kybernetika",
+  "date": "2026-10-02",
+  "rung": "search",
+  "selected": "pexels:4316",
+  "verdicts": [
+    {
+      "mode": "search",
+      "considered": 6,
+      "selected": "pexels:4316",
+      "reason": "Close-up of real motherboard with heat sinks and components is authentic hardware photography that genuinely illustrates computing infrastructure and space/satellite capabilities.",
+      "candidates": [
+        {
+          "candidateId": "pexels:9242888",
+          "provider": "pexels",
+          "fit": 6,
+          "vetoes": [],
+          "reason": "Real hands working with computer hardware illustrates the tech industry topic, but the close-up angle and specific component-level focus feel more documentary than thematic.",
+          "sceneCs": "ruka s páječkou nad základní deskou"
+        },
+        {
+          "candidateId": "wikimedia:179520469",
+          "provider": "wikimedia",
+          "fit": 2,
+          "vetoes": [
+            "ai-generated-look",
+            "dated-aesthetic"
+          ],
+          "reason": "The glowing blue circuit-board brain is the clichéd stock image of AI thinking, dated styling, obviously algorithmic and misleading about the article's actual content.",
+          "sceneCs": "mozek z desek plošných spojů"
+        },
+        {
+          "candidateId": "openverse:00de4c50-7cec-4609-9f6d-e605679a28a8",
+          "provider": "openverse",
+          "fit": 5,
+          "vetoes": [],
+          "reason": "Museum or exhibition space with electronic components and circuit boards on display has tech relevance, but feels more historical/curatorial than urgent news about space and AI.",
+          "sceneCs": "expozice v muzeu s elektronickými součástkami"
+        },
+        {
+          "candidateId": "pixabay:3963945",
+          "provider": "pixabay",
+          "fit": 1,
+          "vetoes": [
+            "ai-generated-look"
+          ],
+          "reason": "This holographic brain rendering with lens flare is pure stock AI imagery, exactly the dated visual cliché that misleads readers about serious technology stories.",
+          "sceneCs": "digitální mozek s efekty"
+        },
+        {
+          "candidateId": "pexels:4316",
+          "provider": "pexels",
+          "fit": 7,
+          "vetoes": [],
+          "reason": "Close-up of real motherboard with heat sinks and components is authentic hardware photography that genuinely illustrates computing infrastructure and space/satellite capabilities.",
+          "sceneCs": "základní deska s chladičem"
+        },
+        {
+          "candidateId": "pixabay:3435575",
+          "provider": "pixabay",
+          "fit": 2,
+          "vetoes": [
+            "recognisable-face"
+          ],
+          "reason": "A person's hand/arm is visible even though the face is cropped, and the floating data particles aesthetic is too staged and generic for this specific multi-topic briefing.",
+          "sceneCs": "ruka člověka s digitálními částicemi"
+        }
+      ],
+      "skipped": [],
+      "costUsd": 0.005451
+    },
+    {
+      "mode": "generated",
+      "considered": 1,
+      "selected": "illustration:2026-10-02-candidate-2",
+      "reason": "Abstract neon-style design with circuits and glowing elements evokes technology, AI, and data processing themes directly relevant to the article's focus on Google's satellite infrastructure and computational advancement.",
+      "candidates": [
+        {
+          "candidateId": "illustration:2026-10-02-candidate-2",
+          "provider": "boardlessai",
+          "fit": 7,
+          "vetoes": [],
+          "reason": "Abstract neon-style design with circuits and glowing elements evokes technology, AI, and data processing themes directly relevant to the article's focus on Google's satellite infrastructure and computational advancement.",
+          "sceneCs": "abstraktní neonový design s technologickými prvky"
+        }
+      ],
+      "skipped": [],
+      "costUsd": 0.002165
+    },
+    {
+      "mode": "generated",
+      "considered": 1,
+      "selected": "illustration:2026-10-02-candidate-3",
+      "reason": "The schematic circuit-board dial illustration directly supports the article's technology focus, particularly the Google satellite and data infrastructure angle; the rendered aesthetic is appropriate for a tech briefing and contains no faces, logos, or embedded text.",
+      "candidates": [
+        {
+          "candidateId": "illustration:2026-10-02-candidate-3",
+          "provider": "boardlessai",
+          "fit": 7,
+          "vetoes": [],
+          "reason": "The schematic circuit-board dial illustration directly supports the article's technology focus, particularly the Google satellite and data infrastructure angle; the rendered aesthetic is appropriate for a tech briefing and contains no faces, logos, or embedded text.",
+          "sceneCs": "abstraktní elektronický schémat s digitálními prvky"
+        }
+      ],
+      "skipped": [],
+      "costUsd": 0.002205
+    },
+    {
+      "mode": "generated",
+      "considered": 1,
+      "selected": "illustration:2026-10-02-candidate-4",
+      "reason": "Illustration fits the space/satellite theme of Google's orbital data center, rendered in clean tech aesthetic appropriate for the brief, though the rocket focus is generic enough to serve multiple space-tech stories.",
+      "candidates": [
+        {
+          "candidateId": "illustration:2026-10-02-candidate-4",
+          "provider": "boardlessai",
+          "fit": 7,
+          "vetoes": [],
+          "reason": "Illustration fits the space/satellite theme of Google's orbital data center, rendered in clean tech aesthetic appropriate for the brief, though the rocket focus is generic enough to serve multiple space-tech stories.",
+          "sceneCs": "stylizované schéma hodin s raketou a elektrickými obvody"
+        }
+      ],
+      "skipped": [],
+      "costUsd": 0.0022
+    }
+  ],
+  "skippedProviders": [],
+  "recordedAt": "2026-10-02T03:01:09.229Z"
+}
