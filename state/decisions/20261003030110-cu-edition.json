@@ -1,0 +1,17 @@
+{
+  "schemaVersion": 1,
+  "fixture": false,
+  "cycleId": "20261003030110-cu-edition",
+  "phase": "cu-edition",
+  "outcome": "EDITION",
+  "summary": "Apple poprvé explicitně spojil změnu oprávnění v macOS s rizikem AI agentů – jde o strukturální posun v tom, jak operační systém zachází s důvěrou aplikací, a týká se každého uživatele Macu.",
+  "evidenceRefs": [
+    "source:techcrunch-ai",
+    "source:the-verge",
+    "source:404-media",
+    "source:tensorfeed",
+    "source:ars-technica"
+  ],
+  "editionRef": "a85c36d1e647f683a55a88661c600c65a6f267af5cecf652bd19f46038984597",
+  "generatedAt": "2026-10-03T03:01:15.632Z"
+}

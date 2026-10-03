@@ -1,0 +1,269 @@
+{
+  "schemaVersion": 1,
+  "runId": "82fe228b-18ed-4024-af36-ca2503d192e1",
+  "date": "2026-10-03",
+  "mode": "production",
+  "status": "edition",
+  "startedAt": "2026-10-03T03:01:18.788Z",
+  "completedAt": "2026-10-03T03:03:59.720Z",
+  "stages": [
+    {
+      "name": "curate",
+      "status": "success",
+      "startedAt": "2026-10-03T03:01:18.814Z",
+      "completedAt": "2026-10-03T03:01:40.439Z",
+      "durationMs": 21625
+    },
+    {
+      "name": "write",
+      "status": "success",
+      "startedAt": "2026-10-03T03:01:40.439Z",
+      "completedAt": "2026-10-03T03:03:32.882Z",
+      "durationMs": 112443
+    },
+    {
+      "name": "stet_0",
+      "status": "success",
+      "startedAt": "2026-10-03T03:03:32.882Z",
+      "completedAt": "2026-10-03T03:03:32.886Z",
+      "durationMs": 4
+    },
+    {
+      "name": "quality_0",
+      "status": "success",
+      "startedAt": "2026-10-03T03:03:32.887Z",
+      "completedAt": "2026-10-03T03:03:32.887Z",
+      "durationMs": 0
+    },
+    {
+      "name": "assemble_package",
+      "status": "success",
+      "startedAt": "2026-10-03T03:03:32.887Z",
+      "completedAt": "2026-10-03T03:03:59.718Z",
+      "durationMs": 26831
+    }
+  ],
+  "regenerationAttempts": 0,
+  "stetBlocks": 0,
+  "hacekBlocks": 0,
+  "usage": [
+    {
+      "provider": "anthropic",
+      "model": "claude-sonnet-4-6",
+      "stage": "curate",
+      "inputTokens": 11222,
+      "outputTokens": 1115,
+      "cacheReadTokens": 0,
+      "cacheWriteTokens": 0,
+      "costUsd": 0.050391
+    },
+    {
+      "provider": "anthropic",
+      "model": "claude-sonnet-4-6",
+      "stage": "write",
+      "inputTokens": 14897,
+      "outputTokens": 4450,
+      "cacheReadTokens": 0,
+      "cacheWriteTokens": 2470,
+      "costUsd": 0.1207035
+    }
+  ],
+  "measuredCostUsd": 0.1710945,
+  "quality": {
+    "metrics": {
+      "successfulSources": 30,
+      "candidateItems": 80,
+      "citedSources": 8,
+      "signalStrength": 86,
+      "maximumSingleSourceShare": 0.25,
+      "sourceDiversity": 0.78125,
+      "duplicateStorySimilarity": 0.21052631578947367,
+      "repeatedTopicFrequency": 0.5,
+      "primarySourceRelevant": false,
+      "primarySourcePresent": false,
+      "unsupportedWatchlistItems": 0,
+      "costPerRun": 0.1710945
+    },
+    "result": {
+      "passed": true,
+      "enforced": true,
+      "violations": [],
+      "action": "publish"
+    }
+  },
+  "stet": {
+    "passed": true,
+    "score": 50,
+    "violations": []
+  },
+  "imageProgram": {
+    "readiness": {
+      "providers": {
+        "openverse": "keyless",
+        "wikimedia": "keyless",
+        "pexels": "present",
+        "pixabay": "present"
+      },
+      "gateModelConfigured": true,
+      "caps": {
+        "perArticleUsd": 0.05,
+        "perDayUsd": 0.1,
+        "generatedImagesPerDay": 4
+      },
+      "spentToday": {
+        "usd": 0,
+        "generatedImages": 0
+      },
+      "illustrationRung": "armed"
+    },
+    "rung": "search",
+    "verdicts": [
+      {
+        "mode": "search",
+        "considered": 6,
+        "selected": "pexels:4316",
+        "reason": "Clear, well-lit photograph of real computer hardware (motherboard with heatsinks and RAM) directly illustrates the tech/hardware theme without being a document of a specific event or person.",
+        "candidates": [
+          {
+            "candidateId": "pexels:9242888",
+            "provider": "pexels",
+            "fit": 6,
+            "vetoes": [],
+            "reason": "Shows hands working on computer hardware (motherboard), which relates to the tech topic, but the dated composition and close-up feel make it look like a how-to guide rather than editorial illustration.",
+            "sceneCs": "ruka pracující s základní deskou"
+          },
+          {
+            "candidateId": "openverse:00de4c50-7cec-4609-9f6d-e605679a28a8",
+            "provider": "openverse",
+            "fit": 3,
+            "vetoes": [
+              "dated-aesthetic"
+            ],
+            "reason": "Museum or exhibition display of old computers and circuit boards feels more historical artifact than contemporary AI/security story; the aesthetic and framing feel dated.",
+            "sceneCs": "muzejní expozice počítačů a elektroniky"
+          },
+          {
+            "candidateId": "pixabay:3435575",
+            "provider": "pixabay",
+            "fit": 2,
+            "vetoes": [
+              "ai-generated-look",
+              "recognisable-face"
+            ],
+            "reason": "Shows a recognisable face in corporate setting, and the glowing digital data effect has strong AI-generated aesthetic that violates guidelines.",
+            "sceneCs": "muž s digitálním efektem a hvězdami"
+          },
+          {
+            "candidateId": "pexels:28767589",
+            "provider": "pexels",
+            "fit": 2,
+            "vetoes": [
+              "ai-generated-look",
+              "dated-aesthetic"
+            ],
+            "reason": "Glowing neon chip illustration is pure cliché tech stock imagery—the blue-and-pink cyberpunk color treatment and theatrical lighting date it immediately to 2020s stock imagery trend.",
+            "sceneCs": "ilustrace čipu s neonovým osvětlením"
+          },
+          {
+            "candidateId": "pixabay:3963945",
+            "provider": "pixabay",
+            "fit": 1,
+            "vetoes": [
+              "ai-generated-look"
+            ],
+            "reason": "Abstract 3D render of neurons or digital nodes with lens flares and glowing effects is quintessential dated AI/tech cliché imagery that looks machine-generated.",
+            "sceneCs": "3D render digitálních neuronů se zářícími efekty"
+          },
+          {
+            "candidateId": "pexels:4316",
+            "provider": "pexels",
+            "fit": 7,
+            "vetoes": [],
+            "reason": "Clear, well-lit photograph of real computer hardware (motherboard with heatsinks and RAM) directly illustrates the tech/hardware theme without being a document of a specific event or person.",
+            "sceneCs": "detailní záběr na desku s chladičem a paměťovými moduly"
+          }
+        ],
+        "skipped": [],
+        "costUsd": 0.005637
+      },
+      {
+        "mode": "generated",
+        "considered": 1,
+        "selected": "illustration:2026-10-03-candidate-2",
+        "reason": "The circuit pattern effectively illustrates the technical nature of AI agents and disk access permissions, though it's a generic tech metaphor rather than specifically capturing the access control conflict described.",
+        "candidates": [
+          {
+            "candidateId": "illustration:2026-10-03-candidate-2",
+            "provider": "boardlessai",
+            "fit": 7,
+            "vetoes": [],
+            "reason": "The circuit pattern effectively illustrates the technical nature of AI agents and disk access permissions, though it's a generic tech metaphor rather than specifically capturing the access control conflict described.",
+            "sceneCs": "modré svítící obvody na černém pozadí"
+          }
+        ],
+        "skipped": [],
+        "costUsd": 0.002127
+      },
+      {
+        "mode": "generated",
+        "considered": 1,
+        "selected": "illustration:2026-10-03-candidate-3",
+        "reason": "A circuit board illustration with glowing connections and a central dial directly represents the technical core of the story about AI agents, disk access permissions, and Meta's SDK—clean, contemporary, and on-brief.",
+        "candidates": [
+          {
+            "candidateId": "illustration:2026-10-03-candidate-3",
+            "provider": "boardlessai",
+            "fit": 8,
+            "vetoes": [],
+            "reason": "A circuit board illustration with glowing connections and a central dial directly represents the technical core of the story about AI agents, disk access permissions, and Meta's SDK—clean, contemporary, and on-brief.",
+            "sceneCs": "svítící počítačový obvod s kulatou součástkou uprostřed"
+          }
+        ],
+        "skipped": [],
+        "costUsd": 0.002192
+      },
+      {
+        "mode": "generated",
+        "considered": 1,
+        "selected": "illustration:2026-10-03-candidate-4",
+        "reason": "The circuit board pattern is a generic illustration of technology and connectivity that suits an article about AI agents and system access, though it's somewhat abstract and doesn't specifically evoke the security or privacy concerns being described.",
+        "candidates": [
+          {
+            "candidateId": "illustration:2026-10-03-candidate-4",
+            "provider": "boardlessai",
+            "fit": 7,
+            "vetoes": [],
+            "reason": "The circuit board pattern is a generic illustration of technology and connectivity that suits an article about AI agents and system access, though it's somewhat abstract and doesn't specifically evoke the security or privacy concerns being described.",
+            "sceneCs": "modré elektronické obvody na černém pozadí"
+          }
+        ],
+        "skipped": [],
+        "costUsd": 0.002157
+      }
+    ]
+  },
+  "packageStatus": "edition",
+  "warnings": [
+    "image_rung:search",
+    "image_gate:search:selected",
+    "image_gate:generated:selected"
+  ],
+  "sourceSummary": {
+    "successfulSources": 30,
+    "candidateItems": 80,
+    "evidenceRefs": [
+      "source:404-media",
+      "source:anthropic-news",
+      "source:ars-technica",
+      "source:arxiv-cs-ai",
+      "source:bluesky-language-models",
+      "source:deepmind-blog",
+      "source:digiday",
+      "source:github-ai-releases",
+      "source:google-research",
+      "source:hf-blog",
+      "source:hn-frontpage",
+      "source:import-ai"
+    ]
+  }
+}

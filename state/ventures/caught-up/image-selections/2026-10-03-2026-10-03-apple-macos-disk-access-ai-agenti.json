@@ -1,0 +1,134 @@
+{
+  "schemaVersion": "image-selection/1",
+  "venture": "caught-up",
+  "slug": "2026-10-03-apple-macos-disk-access-ai-agenti",
+  "date": "2026-10-03",
+  "rung": "search",
+  "selected": "pexels:4316",
+  "verdicts": [
+    {
+      "mode": "search",
+      "considered": 6,
+      "selected": "pexels:4316",
+      "reason": "Clear, well-lit photograph of real computer hardware (motherboard with heatsinks and RAM) directly illustrates the tech/hardware theme without being a document of a specific event or person.",
+      "candidates": [
+        {
+          "candidateId": "pexels:9242888",
+          "provider": "pexels",
+          "fit": 6,
+          "vetoes": [],
+          "reason": "Shows hands working on computer hardware (motherboard), which relates to the tech topic, but the dated composition and close-up feel make it look like a how-to guide rather than editorial illustration.",
+          "sceneCs": "ruka pracující s základní deskou"
+        },
+        {
+          "candidateId": "openverse:00de4c50-7cec-4609-9f6d-e605679a28a8",
+          "provider": "openverse",
+          "fit": 3,
+          "vetoes": [
+            "dated-aesthetic"
+          ],
+          "reason": "Museum or exhibition display of old computers and circuit boards feels more historical artifact than contemporary AI/security story; the aesthetic and framing feel dated.",
+          "sceneCs": "muzejní expozice počítačů a elektroniky"
+        },
+        {
+          "candidateId": "pixabay:3435575",
+          "provider": "pixabay",
+          "fit": 2,
+          "vetoes": [
+            "ai-generated-look",
+            "recognisable-face"
+          ],
+          "reason": "Shows a recognisable face in corporate setting, and the glowing digital data effect has strong AI-generated aesthetic that violates guidelines.",
+          "sceneCs": "muž s digitálním efektem a hvězdami"
+        },
+        {
+          "candidateId": "pexels:28767589",
+          "provider": "pexels",
+          "fit": 2,
+          "vetoes": [
+            "ai-generated-look",
+            "dated-aesthetic"
+          ],
+          "reason": "Glowing neon chip illustration is pure cliché tech stock imagery—the blue-and-pink cyberpunk color treatment and theatrical lighting date it immediately to 2020s stock imagery trend.",
+          "sceneCs": "ilustrace čipu s neonovým osvětlením"
+        },
+        {
+          "candidateId": "pixabay:3963945",
+          "provider": "pixabay",
+          "fit": 1,
+          "vetoes": [
+            "ai-generated-look"
+          ],
+          "reason": "Abstract 3D render of neurons or digital nodes with lens flares and glowing effects is quintessential dated AI/tech cliché imagery that looks machine-generated.",
+          "sceneCs": "3D render digitálních neuronů se zářícími efekty"
+        },
+        {
+          "candidateId": "pexels:4316",
+          "provider": "pexels",
+          "fit": 7,
+          "vetoes": [],
+          "reason": "Clear, well-lit photograph of real computer hardware (motherboard with heatsinks and RAM) directly illustrates the tech/hardware theme without being a document of a specific event or person.",
+          "sceneCs": "detailní záběr na desku s chladičem a paměťovými moduly"
+        }
+      ],
+      "skipped": [],
+      "costUsd": 0.005637
+    },
+    {
+      "mode": "generated",
+      "considered": 1,
+      "selected": "illustration:2026-10-03-candidate-2",
+      "reason": "The circuit pattern effectively illustrates the technical nature of AI agents and disk access permissions, though it's a generic tech metaphor rather than specifically capturing the access control conflict described.",
+      "candidates": [
+        {
+          "candidateId": "illustration:2026-10-03-candidate-2",
+          "provider": "boardlessai",
+          "fit": 7,
+          "vetoes": [],
+          "reason": "The circuit pattern effectively illustrates the technical nature of AI agents and disk access permissions, though it's a generic tech metaphor rather than specifically capturing the access control conflict described.",
+          "sceneCs": "modré svítící obvody na černém pozadí"
+        }
+      ],
+      "skipped": [],
+      "costUsd": 0.002127
+    },
+    {
+      "mode": "generated",
+      "considered": 1,
+      "selected": "illustration:2026-10-03-candidate-3",
+      "reason": "A circuit board illustration with glowing connections and a central dial directly represents the technical core of the story about AI agents, disk access permissions, and Meta's SDK—clean, contemporary, and on-brief.",
+      "candidates": [
+        {
+          "candidateId": "illustration:2026-10-03-candidate-3",
+          "provider": "boardlessai",
+          "fit": 8,
+          "vetoes": [],
+          "reason": "A circuit board illustration with glowing connections and a central dial directly represents the technical core of the story about AI agents, disk access permissions, and Meta's SDK—clean, contemporary, and on-brief.",
+          "sceneCs": "svítící počítačový obvod s kulatou součástkou uprostřed"
+        }
+      ],
+      "skipped": [],
+      "costUsd": 0.002192
+    },
+    {
+      "mode": "generated",
+      "considered": 1,
+      "selected": "illustration:2026-10-03-candidate-4",
+      "reason": "The circuit board pattern is a generic illustration of technology and connectivity that suits an article about AI agents and system access, though it's somewhat abstract and doesn't specifically evoke the security or privacy concerns being described.",
+      "candidates": [
+        {
+          "candidateId": "illustration:2026-10-03-candidate-4",
+          "provider": "boardlessai",
+          "fit": 7,
+          "vetoes": [],
+          "reason": "The circuit board pattern is a generic illustration of technology and connectivity that suits an article about AI agents and system access, though it's somewhat abstract and doesn't specifically evoke the security or privacy concerns being described.",
+          "sceneCs": "modré elektronické obvody na černém pozadí"
+        }
+      ],
+      "skipped": [],
+      "costUsd": 0.002157
+    }
+  ],
+  "skippedProviders": [],
+  "recordedAt": "2026-10-03T03:01:10.632Z"
+}

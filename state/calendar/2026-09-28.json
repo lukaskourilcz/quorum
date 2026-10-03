@@ -77,13 +77,17 @@
       "at": "2026-10-02T04:00:00.000Z",
       "tz": "Europe/Prague",
       "kind": "venture-morning",
-      "status": "scheduled"
+      "status": "held",
+      "meetingRef": "standups/2026-10-02-morning",
+      "decisionOneLiner": "The council held the internal work item. No external action, business claim or stage change was approved."
     },
     {
       "at": "2026-10-03T03:00:00.000Z",
       "tz": "Europe/Prague",
       "kind": "cu-day",
-      "status": "scheduled"
+      "status": "held",
+      "meetingRef": "meetings/2026-10-03-cu-edition",
+      "decisionOneLiner": "Apple poprvé explicitně spojil změnu oprávnění v macOS s rizikem AI agentů – jde o strukturální posun v tom, jak operační systém zachází s důvěrou aplikací, a týká se každého uživa"
     },
     {
       "at": "2026-10-03T04:00:00.000Z",
