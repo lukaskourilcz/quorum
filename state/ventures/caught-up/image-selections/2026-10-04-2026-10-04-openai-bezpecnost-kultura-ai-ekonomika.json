@@ -1,0 +1,135 @@
+{
+  "schemaVersion": "image-selection/1",
+  "venture": "caught-up",
+  "slug": "2026-10-04-openai-bezpecnost-kultura-ai-ekonomika",
+  "date": "2026-10-04",
+  "rung": "search",
+  "selected": "pexels:28767589",
+  "verdicts": [
+    {
+      "mode": "search",
+      "considered": 6,
+      "selected": "pexels:28767589",
+      "reason": "Stylized but not photographic representation of a microchip with neon/thermal coloring. While it has some aesthetic styling, it successfully illustrates semiconductor/hardware concepts without looking photorealistic as a specific moment, and avoids the worst clichés.",
+      "candidates": [
+        {
+          "candidateId": "pexels:9242888",
+          "provider": "pexels",
+          "fit": 6,
+          "vetoes": [
+            "dated-aesthetic"
+          ],
+          "reason": "Shows actual hardware assembly work which relates to hardware/AI infrastructure topics, but the vintage aesthetic and specific context (appears to be product-specific board) dates it badly and feels like a document of a particular moment rather than illustrating a general concept.",
+          "sceneCs": "člověk osazující součástku do desky plošných spojů"
+        },
+        {
+          "candidateId": "wikimedia:179520469",
+          "provider": "wikimedia",
+          "fit": 1,
+          "vetoes": [
+            "ai-generated-look"
+          ],
+          "reason": "This is a classic stock cliché—the glowing circuit-board brain shape—that screams AI-generated aesthetics or mid-2000s tech illustration stock art, exactly the type of image the rules forbid.",
+          "sceneCs": "modrý mozek skládaný z elektronických součástek"
+        },
+        {
+          "candidateId": "openverse:00de4c50-7cec-4609-9f6d-e605679a28a8",
+          "provider": "openverse",
+          "fit": 4,
+          "vetoes": [
+            "low-quality"
+          ],
+          "reason": "Museum or exhibition setting with hardware display on screens and in cases relates tangentially to technology, but the blurred distant figures, unclear focus, and documentary-like nature (appears to capture a specific venue/event) make it unsuitable.",
+          "sceneCs": "expozice v muzeu s elektronickými exponáty na obrazovce"
+        },
+        {
+          "candidateId": "pixabay:3435575",
+          "provider": "pixabay",
+          "fit": 0,
+          "vetoes": [
+            "recognisable-face",
+            "ai-generated-look"
+          ],
+          "reason": "Shows a recognizable profile of a person's face and the glowing particle effect is a classic AI-generated visual trope, making this entirely unsuitable for a briefing about AI and security.",
+          "sceneCs": "tvář člověka s efektem svítících částic"
+        },
+        {
+          "candidateId": "pexels:28767589",
+          "provider": "pexels",
+          "fit": 7,
+          "vetoes": [],
+          "reason": "Stylized but not photographic representation of a microchip with neon/thermal coloring. While it has some aesthetic styling, it successfully illustrates semiconductor/hardware concepts without looking photorealistic as a specific moment, and avoids the worst clichés.",
+          "sceneCs": "grafická vizualizace čipu s barevným efektem"
+        },
+        {
+          "candidateId": "pixabay:3963945",
+          "provider": "pixabay",
+          "fit": 2,
+          "vetoes": [
+            "ai-generated-look"
+          ],
+          "reason": "Abstract visualization with globe, light bursts and generic tech symbolism has a strong AI-generated or slick render aesthetic typical of tech marketing, feeling dated and clichéd for serious technology reporting.",
+          "sceneCs": "abstraktní globus se světelnými efekty"
+        }
+      ],
+      "skipped": [],
+      "costUsd": 0.006089
+    },
+    {
+      "mode": "generated",
+      "considered": 1,
+      "selected": "illustration:2026-10-04-candidate-2",
+      "reason": "Abstract blue circuit board patterns effectively illustrate technological topics and AI-related content without depicting specific events or people.",
+      "candidates": [
+        {
+          "candidateId": "illustration:2026-10-04-candidate-2",
+          "provider": "boardlessai",
+          "fit": 7,
+          "vetoes": [],
+          "reason": "Abstract blue circuit board patterns effectively illustrate technological topics and AI-related content without depicting specific events or people.",
+          "sceneCs": "abstraktní modrý obvod na černém pozadí"
+        }
+      ],
+      "skipped": [],
+      "costUsd": 0.002113
+    },
+    {
+      "mode": "generated",
+      "considered": 1,
+      "selected": "illustration:2026-10-04-candidate-3",
+      "reason": "Vyhovující technologická ilustrace vhodná pro článek o AI bezpečnosti a kultuře v tech firmě, ačkoli je poměrně obecná.",
+      "candidates": [
+        {
+          "candidateId": "illustration:2026-10-04-candidate-3",
+          "provider": "boardlessai",
+          "fit": 7,
+          "vetoes": [],
+          "reason": "Vyhovující technologická ilustrace vhodná pro článek o AI bezpečnosti a kultuře v tech firmě, ačkoli je poměrně obecná.",
+          "sceneCs": "modrý svítící elektromagnetický diagram na černém pozadí"
+        }
+      ],
+      "skipped": [],
+      "costUsd": 0.002228
+    },
+    {
+      "mode": "generated",
+      "considered": 1,
+      "selected": "illustration:2026-10-04-candidate-4",
+      "reason": "Abstract circuit-eye illustration effectively conveys themes of AI surveillance, security monitoring, and technological scrutiny relevant to the article's discussion of OpenAI's security culture and data privacy concerns.",
+      "candidates": [
+        {
+          "candidateId": "illustration:2026-10-04-candidate-4",
+          "provider": "boardlessai",
+          "fit": 7,
+          "vetoes": [],
+          "reason": "Abstract circuit-eye illustration effectively conveys themes of AI surveillance, security monitoring, and technological scrutiny relevant to the article's discussion of OpenAI's security culture and data privacy concerns.",
+          "sceneCs": "stylizované oko s modrými elektrickými obvody na černém pozadí"
+        }
+      ],
+      "skipped": [],
+      "costUsd": 0.002218
+    }
+  ],
+  "skippedProviders": [],
+  "recordedAt": "2026-10-04T03:01:14.387Z"
+}

@@ -93,13 +93,17 @@
       "at": "2026-10-03T04:00:00.000Z",
       "tz": "Europe/Prague",
       "kind": "venture-morning",
-      "status": "scheduled"
+      "status": "held",
+      "meetingRef": "standups/2026-10-03-morning",
+      "decisionOneLiner": "The council held the internal work item. No external action, business claim or stage change was approved."
     },
     {
       "at": "2026-10-04T03:00:00.000Z",
       "tz": "Europe/Prague",
       "kind": "cu-day",
-      "status": "scheduled"
+      "status": "held",
+      "meetingRef": "meetings/2026-10-04-cu-edition",
+      "decisionOneLiner": "Robinsonova resignace přichází od člověka s přímou odpovědností za bezpečnostní dokumentaci OpenAI a otevírá otázku, zda kultura rychlého vydávání a skutečná bezpečnostní zodpovědn"
     },
     {
       "at": "2026-10-04T04:00:00.000Z",

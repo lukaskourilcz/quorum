@@ -1,0 +1,17 @@
+{
+  "schemaVersion": 1,
+  "fixture": false,
+  "cycleId": "20261004030114-cu-edition",
+  "phase": "cu-edition",
+  "outcome": "EDITION",
+  "summary": "Robinsonova resignace přichází od člověka s přímou odpovědností za bezpečnostní dokumentaci OpenAI a otevírá otázku, zda kultura rychlého vydávání a skutečná bezpečnostní zodpovědnost mohou existovat vedle sebe.",
+  "evidenceRefs": [
+    "source:techcrunch-ai",
+    "source:wired-ai",
+    "source:tensorfeed",
+    "source:hn-frontpage",
+    "source:404-media"
+  ],
+  "editionRef": "c85b76f0a83bad709aa39bb39c741ea35a52c5cf3b25c4a5ec4b7c2a570d81eb",
+  "generatedAt": "2026-10-04T03:01:19.387Z"
+}

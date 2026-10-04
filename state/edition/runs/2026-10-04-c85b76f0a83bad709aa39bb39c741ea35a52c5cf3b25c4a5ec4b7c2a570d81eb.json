@@ -1,0 +1,270 @@
+{
+  "schemaVersion": 1,
+  "runId": "036ab122-e4a5-44c6-9c50-92b1a01853f0",
+  "date": "2026-10-04",
+  "mode": "production",
+  "status": "edition",
+  "startedAt": "2026-10-04T03:01:21.051Z",
+  "completedAt": "2026-10-04T03:04:05.334Z",
+  "stages": [
+    {
+      "name": "curate",
+      "status": "success",
+      "startedAt": "2026-10-04T03:01:21.076Z",
+      "completedAt": "2026-10-04T03:01:40.382Z",
+      "durationMs": 19306
+    },
+    {
+      "name": "write",
+      "status": "success",
+      "startedAt": "2026-10-04T03:01:40.382Z",
+      "completedAt": "2026-10-04T03:03:36.327Z",
+      "durationMs": 115945
+    },
+    {
+      "name": "stet_0",
+      "status": "success",
+      "startedAt": "2026-10-04T03:03:36.328Z",
+      "completedAt": "2026-10-04T03:03:36.333Z",
+      "durationMs": 5
+    },
+    {
+      "name": "quality_0",
+      "status": "success",
+      "startedAt": "2026-10-04T03:03:36.333Z",
+      "completedAt": "2026-10-04T03:03:36.333Z",
+      "durationMs": 0
+    },
+    {
+      "name": "assemble_package",
+      "status": "success",
+      "startedAt": "2026-10-04T03:03:36.333Z",
+      "completedAt": "2026-10-04T03:04:05.333Z",
+      "durationMs": 29000
+    }
+  ],
+  "regenerationAttempts": 0,
+  "stetBlocks": 0,
+  "hacekBlocks": 0,
+  "usage": [
+    {
+      "provider": "anthropic",
+      "model": "claude-sonnet-4-6",
+      "stage": "curate",
+      "inputTokens": 12259,
+      "outputTokens": 1003,
+      "cacheReadTokens": 0,
+      "cacheWriteTokens": 0,
+      "costUsd": 0.051822
+    },
+    {
+      "provider": "anthropic",
+      "model": "claude-sonnet-4-6",
+      "stage": "write",
+      "inputTokens": 12629,
+      "outputTokens": 4556,
+      "cacheReadTokens": 0,
+      "cacheWriteTokens": 2470,
+      "costUsd": 0.1154895
+    }
+  ],
+  "measuredCostUsd": 0.1673115,
+  "quality": {
+    "metrics": {
+      "successfulSources": 31,
+      "candidateItems": 80,
+      "citedSources": 7,
+      "signalStrength": 85,
+      "maximumSingleSourceShare": 0.2857142857142857,
+      "sourceDiversity": 0.7755102040816326,
+      "duplicateStorySimilarity": 0.08333333333333333,
+      "repeatedTopicFrequency": 0.5,
+      "primarySourceRelevant": false,
+      "primarySourcePresent": false,
+      "unsupportedWatchlistItems": 0,
+      "costPerRun": 0.1673115
+    },
+    "result": {
+      "passed": true,
+      "enforced": true,
+      "violations": [],
+      "action": "publish"
+    }
+  },
+  "stet": {
+    "passed": true,
+    "score": 50,
+    "violations": []
+  },
+  "imageProgram": {
+    "readiness": {
+      "providers": {
+        "openverse": "keyless",
+        "wikimedia": "keyless",
+        "pexels": "present",
+        "pixabay": "present"
+      },
+      "gateModelConfigured": true,
+      "caps": {
+        "perArticleUsd": 0.05,
+        "perDayUsd": 0.1,
+        "generatedImagesPerDay": 4
+      },
+      "spentToday": {
+        "usd": 0,
+        "generatedImages": 0
+      },
+      "illustrationRung": "armed"
+    },
+    "rung": "search",
+    "verdicts": [
+      {
+        "mode": "search",
+        "considered": 6,
+        "selected": "pexels:28767589",
+        "reason": "Stylized but not photographic representation of a microchip with neon/thermal coloring. While it has some aesthetic styling, it successfully illustrates semiconductor/hardware concepts without looking photorealistic as a specific moment, and avoids the worst clichés.",
+        "candidates": [
+          {
+            "candidateId": "pexels:9242888",
+            "provider": "pexels",
+            "fit": 6,
+            "vetoes": [
+              "dated-aesthetic"
+            ],
+            "reason": "Shows actual hardware assembly work which relates to hardware/AI infrastructure topics, but the vintage aesthetic and specific context (appears to be product-specific board) dates it badly and feels like a document of a particular moment rather than illustrating a general concept.",
+            "sceneCs": "člověk osazující součástku do desky plošných spojů"
+          },
+          {
+            "candidateId": "wikimedia:179520469",
+            "provider": "wikimedia",
+            "fit": 1,
+            "vetoes": [
+              "ai-generated-look"
+            ],
+            "reason": "This is a classic stock cliché—the glowing circuit-board brain shape—that screams AI-generated aesthetics or mid-2000s tech illustration stock art, exactly the type of image the rules forbid.",
+            "sceneCs": "modrý mozek skládaný z elektronických součástek"
+          },
+          {
+            "candidateId": "openverse:00de4c50-7cec-4609-9f6d-e605679a28a8",
+            "provider": "openverse",
+            "fit": 4,
+            "vetoes": [
+              "low-quality"
+            ],
+            "reason": "Museum or exhibition setting with hardware display on screens and in cases relates tangentially to technology, but the blurred distant figures, unclear focus, and documentary-like nature (appears to capture a specific venue/event) make it unsuitable.",
+            "sceneCs": "expozice v muzeu s elektronickými exponáty na obrazovce"
+          },
+          {
+            "candidateId": "pixabay:3435575",
+            "provider": "pixabay",
+            "fit": 0,
+            "vetoes": [
+              "recognisable-face",
+              "ai-generated-look"
+            ],
+            "reason": "Shows a recognizable profile of a person's face and the glowing particle effect is a classic AI-generated visual trope, making this entirely unsuitable for a briefing about AI and security.",
+            "sceneCs": "tvář člověka s efektem svítících částic"
+          },
+          {
+            "candidateId": "pexels:28767589",
+            "provider": "pexels",
+            "fit": 7,
+            "vetoes": [],
+            "reason": "Stylized but not photographic representation of a microchip with neon/thermal coloring. While it has some aesthetic styling, it successfully illustrates semiconductor/hardware concepts without looking photorealistic as a specific moment, and avoids the worst clichés.",
+            "sceneCs": "grafická vizualizace čipu s barevným efektem"
+          },
+          {
+            "candidateId": "pixabay:3963945",
+            "provider": "pixabay",
+            "fit": 2,
+            "vetoes": [
+              "ai-generated-look"
+            ],
+            "reason": "Abstract visualization with globe, light bursts and generic tech symbolism has a strong AI-generated or slick render aesthetic typical of tech marketing, feeling dated and clichéd for serious technology reporting.",
+            "sceneCs": "abstraktní globus se světelnými efekty"
+          }
+        ],
+        "skipped": [],
+        "costUsd": 0.006089
+      },
+      {
+        "mode": "generated",
+        "considered": 1,
+        "selected": "illustration:2026-10-04-candidate-2",
+        "reason": "Abstract blue circuit board patterns effectively illustrate technological topics and AI-related content without depicting specific events or people.",
+        "candidates": [
+          {
+            "candidateId": "illustration:2026-10-04-candidate-2",
+            "provider": "boardlessai",
+            "fit": 7,
+            "vetoes": [],
+            "reason": "Abstract blue circuit board patterns effectively illustrate technological topics and AI-related content without depicting specific events or people.",
+            "sceneCs": "abstraktní modrý obvod na černém pozadí"
+          }
+        ],
+        "skipped": [],
+        "costUsd": 0.002113
+      },
+      {
+        "mode": "generated",
+        "considered": 1,
+        "selected": "illustration:2026-10-04-candidate-3",
+        "reason": "Vyhovující technologická ilustrace vhodná pro článek o AI bezpečnosti a kultuře v tech firmě, ačkoli je poměrně obecná.",
+        "candidates": [
+          {
+            "candidateId": "illustration:2026-10-04-candidate-3",
+            "provider": "boardlessai",
+            "fit": 7,
+            "vetoes": [],
+            "reason": "Vyhovující technologická ilustrace vhodná pro článek o AI bezpečnosti a kultuře v tech firmě, ačkoli je poměrně obecná.",
+            "sceneCs": "modrý svítící elektromagnetický diagram na černém pozadí"
+          }
+        ],
+        "skipped": [],
+        "costUsd": 0.002228
+      },
+      {
+        "mode": "generated",
+        "considered": 1,
+        "selected": "illustration:2026-10-04-candidate-4",
+        "reason": "Abstract circuit-eye illustration effectively conveys themes of AI surveillance, security monitoring, and technological scrutiny relevant to the article's discussion of OpenAI's security culture and data privacy concerns.",
+        "candidates": [
+          {
+            "candidateId": "illustration:2026-10-04-candidate-4",
+            "provider": "boardlessai",
+            "fit": 7,
+            "vetoes": [],
+            "reason": "Abstract circuit-eye illustration effectively conveys themes of AI surveillance, security monitoring, and technological scrutiny relevant to the article's discussion of OpenAI's security culture and data privacy concerns.",
+            "sceneCs": "stylizované oko s modrými elektrickými obvody na černém pozadí"
+          }
+        ],
+        "skipped": [],
+        "costUsd": 0.002218
+      }
+    ]
+  },
+  "packageStatus": "edition",
+  "warnings": [
+    "image_rung:search",
+    "image_gate:search:selected",
+    "image_gate:generated:selected"
+  ],
+  "sourceSummary": {
+    "successfulSources": 31,
+    "candidateItems": 80,
+    "evidenceRefs": [
+      "source:404-media",
+      "source:anthropic-news",
+      "source:ars-technica",
+      "source:arxiv-cs-ai",
+      "source:arxiv-cs-lg",
+      "source:bluesky-language-models",
+      "source:deepmind-blog",
+      "source:digiday",
+      "source:github-ai-releases",
+      "source:google-research",
+      "source:hf-blog",
+      "source:hn-frontpage"
+    ]
+  }
+}
