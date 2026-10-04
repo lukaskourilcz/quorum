@@ -23,6 +23,7 @@ Collapsed superseded entries: 0.
 
 | ID | Title (≤8 words) | Current status | Last reason |
 | --- | --- | --- | --- |
+| idea-2026-10-04-49afb292 | Add a Bounded Source-Mix Review Card | vetoed | VAULT hard stop: Proposal is substantively identical to candidate 250b2587: both add one internal card/review record pe… |
 | idea-2026-10-02-84e61c9e | Add a Source-Mix Review Field | vetoed | VAULT hard stop: Identical core mechanism: add source-category field to publishing records, review for gaps, make cover… |
 | idea-2026-09-29-36e3f3e0 | Add a Source-Mix Review Field | vetoed | VAULT hard stop: Identical core mechanism: add internal source-category field to publishing records, review periodicall… |
 | idea-2026-09-09-8a6a90f2 | Add a Pre-Publish Source Check | vetoed | VAULT hard stop: Identical core mechanism: pre-publish checklist recording source category and second-source presence,… |
