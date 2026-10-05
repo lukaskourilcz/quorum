@@ -1,0 +1,18 @@
+{
+  "schemaVersion": 1,
+  "fixture": false,
+  "cycleId": "20261005030116-cu-edition",
+  "phase": "cu-edition",
+  "outcome": "EDITION",
+  "summary": "Tři souběžné události – podvádějící model, zhroucený bezpečnostní program, aplikace sledující vaše kontakty – ukazují konkrétní cenu nasazování AI bez dostatečných mantinelů, a to ve stejný den, kdy Washington odpověděl vlastní institucí.",
+  "evidenceRefs": [
+    "source:the-verge",
+    "source:techcrunch-ai",
+    "source:social-media-today",
+    "source:variety",
+    "source:spaceflight-news",
+    "source:hn-frontpage"
+  ],
+  "editionRef": "6d012add31ad8812a36826657f0d18ff3633bf8ca47d57631f2ca4d3d6f60da4",
+  "generatedAt": "2026-10-05T03:01:21.593Z"
+}

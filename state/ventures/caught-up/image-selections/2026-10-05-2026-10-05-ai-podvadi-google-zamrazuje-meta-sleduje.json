@@ -1,0 +1,132 @@
+{
+  "schemaVersion": "image-selection/1",
+  "venture": "caught-up",
+  "slug": "2026-10-05-ai-podvadi-google-zamrazuje-meta-sleduje",
+  "date": "2026-10-05",
+  "rung": "search",
+  "selected": "pexels:4316",
+  "verdicts": [
+    {
+      "mode": "search",
+      "considered": 6,
+      "selected": "pexels:4316",
+      "reason": "Close-up of cooling hardware and components on a working motherboard—concrete, well-lit, no faces or distracting text, directly illustrates the physical systems underlying AI models.",
+      "candidates": [
+        {
+          "candidateId": "pexels:9242888",
+          "provider": "pexels",
+          "fit": 6,
+          "vetoes": [],
+          "reason": "Shows real hands working with actual computer hardware in a practical context, illustrating AI systems' physical substrate, though the specific motherboard model is identifiable.",
+          "sceneCs": "ruka s páječkou nad základní deskou počítače"
+        },
+        {
+          "candidateId": "wikimedia:179520469",
+          "provider": "wikimedia",
+          "fit": 2,
+          "vetoes": [
+            "ai-generated-look",
+            "dated-aesthetic"
+          ],
+          "reason": "This circuit-board brain has become a visual cliché for AI coverage and reads as a generic stock illustration rather than honest documentation of the topic.",
+          "sceneCs": "mozek v designu z integrovaných obvodů"
+        },
+        {
+          "candidateId": "openverse:00de4c50-7cec-4609-9f6d-e605679a28a8",
+          "provider": "openverse",
+          "fit": 5,
+          "vetoes": [],
+          "reason": "Museum or educational display of computer hardware with visitors observing—relevant to tech history and AI infrastructure, though somewhat distant from current AI problems.",
+          "sceneCs": "návštěvníci v muzeu prohlížející si zobrazovaný obvod"
+        },
+        {
+          "candidateId": "pixabay:3435575",
+          "provider": "pixabay",
+          "fit": 0,
+          "vetoes": [
+            "recognisable-face",
+            "ai-generated-look"
+          ],
+          "reason": "A close-up of a person's face and hand with digital effects is unsuitable; the recognisable face is disqualifying even before the synthetic aesthetic raises additional concerns.",
+          "sceneCs": "tvář a ruka muže s digitálními efekty"
+        },
+        {
+          "candidateId": "pexels:4316",
+          "provider": "pexels",
+          "fit": 7,
+          "vetoes": [],
+          "reason": "Close-up of cooling hardware and components on a working motherboard—concrete, well-lit, no faces or distracting text, directly illustrates the physical systems underlying AI models.",
+          "sceneCs": "chladicí prvky a komponenty na základní desce počítače"
+        },
+        {
+          "candidateId": "pixabay:3963945",
+          "provider": "pixabay",
+          "fit": 1,
+          "vetoes": [
+            "ai-generated-look"
+          ],
+          "reason": "A wholly synthetic rendering of data particles and digital effects looks machine-made and conveys no honest information about how AI actually works or fails.",
+          "sceneCs": "abstraktní digitální vizualizace s částicemi a světlem"
+        }
+      ],
+      "skipped": [],
+      "costUsd": 0.005571
+    },
+    {
+      "mode": "generated",
+      "considered": 1,
+      "selected": "illustration:2026-10-05-candidate-2",
+      "reason": "Ilustrace technických systémů a AI architektur je ideální vizuální metafora pro článek o chybách a limitech AI modelů; čisté provedení bez textů nebo loga.",
+      "candidates": [
+        {
+          "candidateId": "illustration:2026-10-05-candidate-2",
+          "provider": "boardlessai",
+          "fit": 8,
+          "vetoes": [],
+          "reason": "Ilustrace technických systémů a AI architektur je ideální vizuální metafora pro článek o chybách a limitech AI modelů; čisté provedení bez textů nebo loga.",
+          "sceneCs": "modrý elektronický obvod na černém pozadí"
+        }
+      ],
+      "skipped": [],
+      "costUsd": 0.00226
+    },
+    {
+      "mode": "generated",
+      "considered": 1,
+      "selected": "illustration:2026-10-05-candidate-3",
+      "reason": "A digital circuit board illustration with glowing blue nodes and pathways effectively represents AI systems and technology infrastructure, fitting the article's focus on AI models and their failures.",
+      "candidates": [
+        {
+          "candidateId": "illustration:2026-10-05-candidate-3",
+          "provider": "boardlessai",
+          "fit": 8,
+          "vetoes": [],
+          "reason": "A digital circuit board illustration with glowing blue nodes and pathways effectively represents AI systems and technology infrastructure, fitting the article's focus on AI models and their failures.",
+          "sceneCs": "svítící modrý obvod s uzly a dráty"
+        }
+      ],
+      "skipped": [],
+      "costUsd": 0.00219
+    },
+    {
+      "mode": "generated",
+      "considered": 1,
+      "selected": "illustration:2026-10-05-candidate-4",
+      "reason": "A stylized digital illustration of a circular mechanism with circuit patterns and glowing nodes represents abstract AI systems and their technical workings, fitting the article's focus on AI model behaviors and limitations.",
+      "candidates": [
+        {
+          "candidateId": "illustration:2026-10-05-candidate-4",
+          "provider": "boardlessai",
+          "fit": 7,
+          "vetoes": [],
+          "reason": "A stylized digital illustration of a circular mechanism with circuit patterns and glowing nodes represents abstract AI systems and their technical workings, fitting the article's focus on AI model behaviors and limitations.",
+          "sceneCs": "modré schéma mechanismu s obvody na černém pozadí"
+        }
+      ],
+      "skipped": [],
+      "costUsd": 0.00214
+    }
+  ],
+  "skippedProviders": [],
+  "recordedAt": "2026-10-05T03:01:16.593Z"
+}
