@@ -1,6 +1,6 @@
 {
   "schemaVersion": "cost-report/1",
-  "generatedAt": "2026-10-05T04:05:36.589Z",
+  "generatedAt": "2026-10-05T07:10:18.411Z",
   "month": "2026-10",
   "currency": "USD",
   "metered": {
@@ -173,11 +173,11 @@
         "cycles": 5,
         "meteredUsd": 0.630697,
         "comparable": {
-          "cycles": 5,
-          "envelopeUsd": 0.22413,
-          "meteredUsd": 0.630697,
-          "varianceUsd": 0.406567,
-          "overspentCycles": 5
+          "cycles": 4,
+          "envelopeUsd": 0.179304,
+          "meteredUsd": 0.504334,
+          "varianceUsd": 0.32503,
+          "overspentCycles": 4
         }
       }
     ]
@@ -192,7 +192,7 @@
     "note": "PROVIDER_BILLING_ENABLED is not set, so no billing request was made."
   },
   "unreadable": {
-    "decisions": 5,
+    "decisions": 4,
     "deliveries": 0,
     "envelopes": 0,
     "ledgerRows": 0
