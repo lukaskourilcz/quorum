@@ -1,0 +1,7 @@
+{
+  "schemaVersion": "meeting-skip/1",
+  "date": "2026-10-05",
+  "phase": "morning",
+  "reason": "The meeting ran, but what it wrote failed the checks that come before it is saved, so its record was not kept.",
+  "decidedAt": "2026-10-05T04:05:38.488Z"
+}
