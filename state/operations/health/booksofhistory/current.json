@@ -3,8 +3,8 @@
   "nodeId": "booksofhistory",
   "displayName": "BOOKSOFHISTORY",
   "policyVersion": "1.0.0",
-  "generatedAt": "2026-10-04T04:01:01.423Z",
-  "observedAt": "2026-10-04T04:01:01.423Z",
+  "generatedAt": "2026-10-06T04:00:52.775Z",
+  "observedAt": "2026-10-06T04:00:52.775Z",
   "lifecycleStage": "operating",
   "state": "unavailable",
   "reason": "No valid live or recovery receipt is available.",
@@ -47,5 +47,5 @@
   ],
   "ownerAttentionRefs": [],
   "latestRunReceiptRefs": [],
-  "snapshotHash": "254000094c073bc8ae6b369e510979557537bb18fb9752731add7d3e0c6a9c29"
+  "snapshotHash": "528d99659a7a8c3678feb747b93f4cffb6984786d7a0ba8951b7a0988eed1058"
 }

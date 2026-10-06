@@ -6,6 +6,7 @@
 
 | ID | Title (≤8 words) | Status | Last reason |
 | --- | --- | --- | --- |
+| idea-2026-10-06-cae8d86a | Add a Reader Question Tag to Publishing Records | proposed | VAULT variant: Both add one internal tag/card per published item to identify underrepresented coverage gaps without cha… |
 | idea-2026-10-03-250b2587 | Add a Bounded Source-Mix Review Card | proposed | VAULT variant: Both add internal source-category field to publishing records to track mix and flag gaps without workflo… |
 | idea-2026-10-01-a7cc5384 | Add a Source-Category Coverage Dashboard | proposed | VAULT variant: Proposes dashboard visualization of source-category coverage data already captured in existing field-bas… |
 | idea-2026-09-30-7da53b53 | Add a Post-Publish Source Coverage Snapshot | proposed | VAULT variant: Both add internal source-category recording to publishing records for post-hoc review. Key difference: p… |
