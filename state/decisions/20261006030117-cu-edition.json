@@ -1,0 +1,19 @@
+{
+  "schemaVersion": 1,
+  "fixture": false,
+  "cycleId": "20261006030117-cu-edition",
+  "phase": "cu-edition",
+  "outcome": "EDITION",
+  "summary": "Tři nezávislé kauzy z 5. a 6. října ukazují tentýž vzorec: AI systémy přebírají citlivé funkce dříve, než regulátoři i samy firmy mají hotové odpovědi – a to se týká každého, kdo agenty používá nebo jim důvěřuje.",
+  "evidenceRefs": [
+    "source:google-research",
+    "source:ars-technica",
+    "source:techcrunch-ai",
+    "source:tensorfeed",
+    "source:simonw",
+    "source:the-verge",
+    "source:hn-frontpage"
+  ],
+  "editionRef": "517e1a103e13f1ea602441429b67c25fb9daa7357f4531fecaf6a75ace3d7946",
+  "generatedAt": "2026-10-06T03:01:22.509Z"
+}

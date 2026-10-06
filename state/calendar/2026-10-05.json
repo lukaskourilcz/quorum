@@ -14,13 +14,16 @@
       "at": "2026-10-05T04:00:00.000Z",
       "tz": "Europe/Prague",
       "kind": "venture-morning",
-      "status": "scheduled"
+      "status": "skipped",
+      "decisionOneLiner": "The meeting ran, but what it wrote failed the checks that come before it is saved, so its record was not kept."
     },
     {
       "at": "2026-10-06T03:00:00.000Z",
       "tz": "Europe/Prague",
       "kind": "cu-day",
-      "status": "scheduled"
+      "status": "held",
+      "meetingRef": "meetings/2026-10-06-cu-edition",
+      "decisionOneLiner": "Tři nezávislé kauzy z 5. a 6. října ukazují tentýž vzorec: AI systémy přebírají citlivé funkce dříve, než regulátoři i samy firmy mají hotové odpovědi – a to se týká každého, kdo a"
     },
     {
       "at": "2026-10-06T04:00:00.000Z",

@@ -1,0 +1,157 @@
+{
+  "schemaVersion": "image-selection/1",
+  "venture": "caught-up",
+  "slug": "2026-10-06-ai-agenti-krize-duvery-protokol-soukromi-bezpecnost",
+  "date": "2026-10-06",
+  "rung": "illustration",
+  "selected": null,
+  "verdicts": [
+    {
+      "mode": "search",
+      "considered": 6,
+      "selected": null,
+      "reason": "all-candidates-rejected",
+      "candidates": [
+        {
+          "candidateId": "pexels:9242888",
+          "provider": "pexels",
+          "fit": 6,
+          "vetoes": [
+            "dated-aesthetic"
+          ],
+          "reason": "Shows hands working with actual hardware (motherboard); illustrates AI implementation with concrete, believable imagery, but the device and photography style date it to an earlier era.",
+          "sceneCs": "ruka drží páječku nad deskou plošných spojů"
+        },
+        {
+          "candidateId": "wikimedia:179520469",
+          "provider": "wikimedia",
+          "fit": 1,
+          "vetoes": [
+            "ai-generated-look",
+            "dated-aesthetic"
+          ],
+          "reason": "This blue holographic circuit-board brain is exactly the clichéd, dated AI-stock-art imagery the rules forbid; immediately signals to readers this is generic illustration rather than serious technology reporting.",
+          "sceneCs": "mozek vytvořený z elektrických obvodů"
+        },
+        {
+          "candidateId": "openverse:00de4c50-7cec-4609-9f6d-e605679a28a8",
+          "provider": "openverse",
+          "fit": 4,
+          "vetoes": [
+            "low-quality"
+          ],
+          "reason": "Museum or exhibition space with tech displays; tangentially relevant to technology but the image is poorly lit, compressed, and doesn't clearly connect to the article's urgency about AI expansion.",
+          "sceneCs": "expozice v muzeu s obrazovkou zobrazující desku plošných spojů"
+        },
+        {
+          "candidateId": "pixabay:3435575",
+          "provider": "pixabay",
+          "fit": 0,
+          "vetoes": [
+            "recognisable-face",
+            "ai-generated-look"
+          ],
+          "reason": "Recognisable face in the frame (a man in business attire) is immediately disqualifying; also has the synthetic glowing-particle aesthetic that looks machine-generated.",
+          "sceneCs": "tvář muže v obleku"
+        },
+        {
+          "candidateId": "pexels:28767589",
+          "provider": "pexels",
+          "fit": 2,
+          "vetoes": [
+            "ai-generated-look",
+            "dated-aesthetic"
+          ],
+          "reason": "This neon-pink-and-blue glowing chip render is quintessential mid-2000s concept-art styling; looks machine-generated and fails the 'does not date itself' test.",
+          "sceneCs": "počítačový čip s neonovým osvětlením"
+        },
+        {
+          "candidateId": "pixabay:3963945",
+          "provider": "pixabay",
+          "fit": 3,
+          "vetoes": [
+            "ai-generated-look"
+          ],
+          "reason": "Abstract visualization of data/network flowing from a hand; the glossy, synthetic particles and glow effects make it look AI-generated; too generic and stylized for serious tech reporting.",
+          "sceneCs": "ruka s lesem svítících částic"
+        }
+      ],
+      "skipped": [],
+      "costUsd": 0.005784
+    },
+    {
+      "mode": "generated",
+      "considered": 1,
+      "selected": "illustration:2026-10-06-candidate-1",
+      "reason": "Abstract circuit board visualization with glowing blue pathways effectively represents rapid technological expansion and AI systems reaching into new domains; rendered style is appropriate for a tech briefing.",
+      "candidates": [
+        {
+          "candidateId": "illustration:2026-10-06-candidate-1",
+          "provider": "boardlessai",
+          "fit": 8,
+          "vetoes": [],
+          "reason": "Abstract circuit board visualization with glowing blue pathways effectively represents rapid technological expansion and AI systems reaching into new domains; rendered style is appropriate for a tech briefing.",
+          "sceneCs": "modrý svítící obvod v černém prostoru"
+        }
+      ],
+      "skipped": [],
+      "costUsd": 0.002088
+    },
+    {
+      "mode": "generated",
+      "considered": 1,
+      "selected": "illustration:2026-10-06-candidate-2",
+      "reason": "The circuit board imagery with glowing blue connections effectively represents AI systems and technology expansion, though it's generic enough to suit various tech stories rather than specifically illustrating the tension between rapid AI penetration into sensitive fields and slow regulatory response.",
+      "candidates": [
+        {
+          "candidateId": "illustration:2026-10-06-candidate-2",
+          "provider": "boardlessai",
+          "fit": 7,
+          "vetoes": [],
+          "reason": "The circuit board imagery with glowing blue connections effectively represents AI systems and technology expansion, though it's generic enough to suit various tech stories rather than specifically illustrating the tension between rapid AI penetration into sensitive fields and slow regulatory response.",
+          "sceneCs": "svítící elektronické obvody"
+        }
+      ],
+      "skipped": [],
+      "costUsd": 0.002213
+    },
+    {
+      "mode": "generated",
+      "considered": 1,
+      "selected": "illustration:2026-10-06-candidate-3",
+      "reason": "The abstract circuit board with glowing nodes visualizes AI systems and interconnected technology well, matching the article's theme of AI agents expanding through sensitive fields.",
+      "candidates": [
+        {
+          "candidateId": "illustration:2026-10-06-candidate-3",
+          "provider": "boardlessai",
+          "fit": 7,
+          "vetoes": [],
+          "reason": "The abstract circuit board with glowing nodes visualizes AI systems and interconnected technology well, matching the article's theme of AI agents expanding through sensitive fields.",
+          "sceneCs": "abstraktní elektrický obvod se svítícími body"
+        }
+      ],
+      "skipped": [],
+      "costUsd": 0.002163
+    },
+    {
+      "mode": "generated",
+      "considered": 1,
+      "selected": "illustration:2026-10-06-candidate-4",
+      "reason": "Abstract circuit board pattern with glowing blue elements effectively illustrates AI systems and technological expansion into sensitive domains, matching the article's theme of AI agents advancing rapidly. The rendered aesthetic is appropriate for this publication.",
+      "candidates": [
+        {
+          "candidateId": "illustration:2026-10-06-candidate-4",
+          "provider": "boardlessai",
+          "fit": 8,
+          "vetoes": [],
+          "reason": "Abstract circuit board pattern with glowing blue elements effectively illustrates AI systems and technological expansion into sensitive domains, matching the article's theme of AI agents advancing rapidly. The rendered aesthetic is appropriate for this publication.",
+          "sceneCs": "svítící modré elektrotechnické schéma"
+        }
+      ],
+      "skipped": [],
+      "costUsd": 0.002123
+    }
+  ],
+  "skippedProviders": [],
+  "recordedAt": "2026-10-06T03:01:17.509Z"
+}
