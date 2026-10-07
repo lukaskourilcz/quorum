@@ -1,0 +1,17 @@
+{
+  "schemaVersion": 1,
+  "fixture": false,
+  "cycleId": "20261007030117-cu-edition",
+  "phase": "cu-edition",
+  "outcome": "EDITION",
+  "summary": "Dva potvrzené incidenty – Wikimedia a jihokorejské banky – ve stejný den, kdy OpenAI rozšiřuje agentní infrastrukturu, ukazují praktikům i tvůrcům regulace konkrétní mezeru mezi možnostmi a kontrolou.",
+  "evidenceRefs": [
+    "source:simonw",
+    "source:tensorfeed",
+    "source:the-verge",
+    "source:hn-frontpage",
+    "source:ars-technica"
+  ],
+  "editionRef": "d2f47ca0e7d15340ffef40510b49d61996fa779acd0d3a699b998b87c7616f25",
+  "generatedAt": "2026-10-07T03:01:22.940Z"
+}

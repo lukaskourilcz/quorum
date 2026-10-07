@@ -1,0 +1,158 @@
+{
+  "schemaVersion": "image-selection/1",
+  "venture": "caught-up",
+  "slug": "2026-10-07-openai-agenti-wikimedia-jizni-korea-decisions-api",
+  "date": "2026-10-07",
+  "rung": "illustration",
+  "selected": null,
+  "verdicts": [
+    {
+      "mode": "search",
+      "considered": 6,
+      "selected": null,
+      "reason": "all-candidates-rejected",
+      "candidates": [
+        {
+          "candidateId": "pexels:5050305",
+          "provider": "pexels",
+          "fit": 4,
+          "vetoes": [
+            "dated-aesthetic",
+            "low-quality"
+          ],
+          "reason": "Shallow depth-of-field server detail conveys technology but feels stylized and dated; modest blurriness reduces clarity suitable for a serious briefing.",
+          "sceneCs": "detaily serverů se žlutými kontrolkami"
+        },
+        {
+          "candidateId": "pexels:5380603",
+          "provider": "pexels",
+          "fit": 2,
+          "vetoes": [
+            "ai-generated-look",
+            "dated-aesthetic",
+            "low-quality"
+          ],
+          "reason": "Heavy green glow and silhouetted hand strongly evokes stock AI/hacker imagery; the overlit stylization and blur make it unsuitable for a credible technology brief.",
+          "sceneCs": "rukou ovládaná herní klávesnice v temné místnosti"
+        },
+        {
+          "candidateId": "pixabay:8118377",
+          "provider": "pixabay",
+          "fit": 3,
+          "vetoes": [
+            "wrong-subject",
+            "ai-generated-look"
+          ],
+          "reason": "Clean composition but this is classic stock photography of physical infrastructure interaction—visually clichéd and misleading for an article about autonomous AI agents losing oversight.",
+          "sceneCs": "ruka sahající na modrý servidor"
+        },
+        {
+          "candidateId": "pixabay:1853305",
+          "provider": "pixabay",
+          "fit": 5,
+          "vetoes": [
+            "embedded-text"
+          ],
+          "reason": "Clear, professional setup showing coding work, but visible embedded code on screen violates the no-text rule and the cropped view feels incomplete.",
+          "sceneCs": "monitor s kódem a laptop"
+        },
+        {
+          "candidateId": "pexels:17489153",
+          "provider": "pexels",
+          "fit": 6,
+          "vetoes": [
+            "dated-aesthetic"
+          ],
+          "reason": "Professionally lit server infrastructure with no faces or watermarks; the blue theatrical lighting is somewhat dated in aesthetic but communicates scale and technical systems clearly.",
+          "sceneCs": "servery v modré tovární osvětlení"
+        },
+        {
+          "candidateId": "pexels:207580",
+          "provider": "pexels",
+          "fit": 7,
+          "vetoes": [
+            "embedded-text"
+          ],
+          "reason": "Classic terminal output with good readability and authentic system feel, but embedded text and file paths directly violate the no-text-in-frame rule despite strong thematic relevance.",
+          "sceneCs": "zelený text na černé obrazovce s logy a data"
+        }
+      ],
+      "skipped": [],
+      "costUsd": 0.005469
+    },
+    {
+      "mode": "generated",
+      "considered": 1,
+      "selected": "illustration:2026-10-07-candidate-1",
+      "reason": "Abstraktní ilustrace digitálního propojení a síťové komunikace perfektně odpovídá tématu bezpečnosti AI agentů bez kontroly a jejich neoprávněných akcí v digitálním prostředí.",
+      "candidates": [
+        {
+          "candidateId": "illustration:2026-10-07-candidate-1",
+          "provider": "boardlessai",
+          "fit": 8,
+          "vetoes": [],
+          "reason": "Abstraktní ilustrace digitálního propojení a síťové komunikace perfektně odpovídá tématu bezpečnosti AI agentů bez kontroly a jejich neoprávněných akcí v digitálním prostředí.",
+          "sceneCs": "digitální síť s blikajícími prvky a geometrickými tvary"
+        }
+      ],
+      "skipped": [],
+      "costUsd": 0.002339
+    },
+    {
+      "mode": "generated",
+      "considered": 1,
+      "selected": "illustration:2026-10-07-candidate-2",
+      "reason": "Abstract blue lines and light trails evoke digital speed and technology without depicting specific people or events, fitting an article about AI agents and security concerns.",
+      "candidates": [
+        {
+          "candidateId": "illustration:2026-10-07-candidate-2",
+          "provider": "boardlessai",
+          "fit": 7,
+          "vetoes": [],
+          "reason": "Abstract blue lines and light trails evoke digital speed and technology without depicting specific people or events, fitting an article about AI agents and security concerns.",
+          "sceneCs": "abstraktní modré čáry a světelné stopy"
+        }
+      ],
+      "skipped": [],
+      "costUsd": 0.002099
+    },
+    {
+      "mode": "generated",
+      "considered": 1,
+      "selected": "illustration:2026-10-07-candidate-3",
+      "reason": "A digital visualization of networked systems and data flows effectively illustrates the concept of autonomous AI agents operating within interconnected systems, matching the article's theme of uncontrolled agents and security incidents.",
+      "candidates": [
+        {
+          "candidateId": "illustration:2026-10-07-candidate-3",
+          "provider": "boardlessai",
+          "fit": 8,
+          "vetoes": [],
+          "reason": "A digital visualization of networked systems and data flows effectively illustrates the concept of autonomous AI agents operating within interconnected systems, matching the article's theme of uncontrolled agents and security incidents.",
+          "sceneCs": "abstraktní digitální krajina s modrými linkami a prvky datové sítě"
+        }
+      ],
+      "skipped": [],
+      "costUsd": 0.002189
+    },
+    {
+      "mode": "generated",
+      "considered": 1,
+      "selected": "illustration:2026-10-07-candidate-4",
+      "reason": "Server room with glowing blue server racks effectively illustrates AI infrastructure and autonomous systems deployment without showing faces, logos or misleading specificity.",
+      "candidates": [
+        {
+          "candidateId": "illustration:2026-10-07-candidate-4",
+          "provider": "boardlessai",
+          "fit": 8,
+          "vetoes": [],
+          "reason": "Server room with glowing blue server racks effectively illustrates AI infrastructure and autonomous systems deployment without showing faces, logos or misleading specificity.",
+          "sceneCs": "svítící serverovna v temnu"
+        }
+      ],
+      "skipped": [],
+      "costUsd": 0.002069
+    }
+  ],
+  "skippedProviders": [],
+  "recordedAt": "2026-10-07T03:01:17.940Z"
+}

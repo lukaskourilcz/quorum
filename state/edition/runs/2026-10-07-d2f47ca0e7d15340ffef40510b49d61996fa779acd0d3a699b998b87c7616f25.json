@@ -1,0 +1,331 @@
+{
+  "schemaVersion": 1,
+  "runId": "25147fa4-11fa-4619-a38d-8dea2e4399f1",
+  "date": "2026-10-07",
+  "mode": "production",
+  "status": "edition",
+  "startedAt": "2026-10-07T03:01:23.701Z",
+  "completedAt": "2026-10-07T03:06:01.899Z",
+  "stages": [
+    {
+      "name": "curate",
+      "status": "success",
+      "startedAt": "2026-10-07T03:01:23.726Z",
+      "completedAt": "2026-10-07T03:01:45.162Z",
+      "durationMs": 21436
+    },
+    {
+      "name": "write",
+      "status": "failed",
+      "startedAt": "2026-10-07T03:01:45.162Z",
+      "completedAt": "2026-10-07T03:03:40.078Z",
+      "durationMs": 114916,
+      "errorCode": "InvalidModelOutputError",
+      "errorMessage": "write: [\n  {\n    \"expected\": \"array\",\n    \"code\": \"invalid_type\",\n    \"path\": [\n      \"dispatches\"\n    ],\n    \"message\": \"Invalid input: expected array, received string\"\n  },\n  {\n    \"origin\": \"string\",\n    \"code\": \"too_big\",\n    \"maximum\": 4,\n    \"inclusive\": true,\n    \"path\": [\n      \"dispatches\"\n    ],\n    \"message\": \"Too big: expected string to have <=4 characters\"\n  }\n]"
+    },
+    {
+      "name": "rewrite_1",
+      "status": "success",
+      "startedAt": "2026-10-07T03:03:40.078Z",
+      "completedAt": "2026-10-07T03:05:28.904Z",
+      "durationMs": 108826
+    },
+    {
+      "name": "stet_1",
+      "status": "success",
+      "startedAt": "2026-10-07T03:05:28.905Z",
+      "completedAt": "2026-10-07T03:05:28.910Z",
+      "durationMs": 5
+    },
+    {
+      "name": "quality_1",
+      "status": "success",
+      "startedAt": "2026-10-07T03:05:28.911Z",
+      "completedAt": "2026-10-07T03:05:28.911Z",
+      "durationMs": 0
+    },
+    {
+      "name": "assemble_package",
+      "status": "success",
+      "startedAt": "2026-10-07T03:05:28.911Z",
+      "completedAt": "2026-10-07T03:06:01.897Z",
+      "durationMs": 32986
+    }
+  ],
+  "regenerationAttempts": 1,
+  "stetBlocks": 0,
+  "hacekBlocks": 0,
+  "usage": [
+    {
+      "provider": "anthropic",
+      "model": "claude-sonnet-4-6",
+      "stage": "curate",
+      "inputTokens": 13023,
+      "outputTokens": 965,
+      "cacheReadTokens": 0,
+      "cacheWriteTokens": 0,
+      "costUsd": 0.053544
+    },
+    {
+      "provider": "anthropic",
+      "model": "claude-sonnet-4-6",
+      "stage": "write",
+      "inputTokens": 13262,
+      "outputTokens": 4537,
+      "cacheReadTokens": 0,
+      "cacheWriteTokens": 2470,
+      "costUsd": 0.1171035,
+      "contractRepairs": [
+        {
+          "field": "dispatches",
+          "received": "[\n  {\n    \"title\": \"Strands Decider 2B: malý open-source model pro rozhodování\",\n    \"body\": \"Strands zveřejnil Decider …",
+          "detail": "Expected ',' or '}' after property value in JSON at position 1292 (line 16 column 222) near « že odpověď závisí hlavně na tom, co pod slovem „dovednost\" kdo myslí – a jak zkušený programátor ji zadává.\",\n    \"sour»",
+          "reason": "json_string_undecodable"
+        }
+      ]
+    },
+    {
+      "provider": "anthropic",
+      "model": "claude-sonnet-4-6",
+      "stage": "rewrite",
+      "inputTokens": 13262,
+      "outputTokens": 4377,
+      "cacheReadTokens": 0,
+      "cacheWriteTokens": 2612,
+      "costUsd": 0.115236
+    }
+  ],
+  "measuredCostUsd": 0.2858835,
+  "quality": {
+    "metrics": {
+      "successfulSources": 31,
+      "candidateItems": 80,
+      "citedSources": 8,
+      "signalStrength": 85,
+      "maximumSingleSourceShare": 0.375,
+      "sourceDiversity": 0.75,
+      "duplicateStorySimilarity": 0.08333333333333333,
+      "repeatedTopicFrequency": 0.8333333333333334,
+      "primarySourceRelevant": false,
+      "primarySourcePresent": false,
+      "unsupportedWatchlistItems": 0,
+      "costPerRun": 0.2858835
+    },
+    "result": {
+      "passed": false,
+      "enforced": true,
+      "violations": [
+        "maximum_repeated_topic_frequency"
+      ],
+      "action": "regenerate"
+    }
+  },
+  "stet": {
+    "passed": true,
+    "score": 50,
+    "violations": []
+  },
+  "unresolvedReview": {
+    "notice": "Published with unresolved editorial review findings, listed below. The review ran and recorded them; since 2026-08-04 a stylistic or topical finding does not stop publication. The checks that the article is accurate still do: supplied source links, cited sources, source diversity, primary sourcing, watchlist support and the cost caps.",
+    "findings": [
+      "quality:maximum_repeated_topic_frequency"
+    ]
+  },
+  "imageProgram": {
+    "readiness": {
+      "providers": {
+        "openverse": "keyless",
+        "wikimedia": "keyless",
+        "pexels": "present",
+        "pixabay": "present"
+      },
+      "gateModelConfigured": true,
+      "caps": {
+        "perArticleUsd": 0.05,
+        "perDayUsd": 0.1,
+        "generatedImagesPerDay": 4
+      },
+      "spentToday": {
+        "usd": 0,
+        "generatedImages": 0
+      },
+      "illustrationRung": "armed"
+    },
+    "rung": "illustration",
+    "verdicts": [
+      {
+        "mode": "search",
+        "considered": 6,
+        "selected": null,
+        "reason": "all-candidates-rejected",
+        "candidates": [
+          {
+            "candidateId": "pexels:5050305",
+            "provider": "pexels",
+            "fit": 4,
+            "vetoes": [
+              "dated-aesthetic",
+              "low-quality"
+            ],
+            "reason": "Shallow depth-of-field server detail conveys technology but feels stylized and dated; modest blurriness reduces clarity suitable for a serious briefing.",
+            "sceneCs": "detaily serverů se žlutými kontrolkami"
+          },
+          {
+            "candidateId": "pexels:5380603",
+            "provider": "pexels",
+            "fit": 2,
+            "vetoes": [
+              "ai-generated-look",
+              "dated-aesthetic",
+              "low-quality"
+            ],
+            "reason": "Heavy green glow and silhouetted hand strongly evokes stock AI/hacker imagery; the overlit stylization and blur make it unsuitable for a credible technology brief.",
+            "sceneCs": "rukou ovládaná herní klávesnice v temné místnosti"
+          },
+          {
+            "candidateId": "pixabay:8118377",
+            "provider": "pixabay",
+            "fit": 3,
+            "vetoes": [
+              "wrong-subject",
+              "ai-generated-look"
+            ],
+            "reason": "Clean composition but this is classic stock photography of physical infrastructure interaction—visually clichéd and misleading for an article about autonomous AI agents losing oversight.",
+            "sceneCs": "ruka sahající na modrý servidor"
+          },
+          {
+            "candidateId": "pixabay:1853305",
+            "provider": "pixabay",
+            "fit": 5,
+            "vetoes": [
+              "embedded-text"
+            ],
+            "reason": "Clear, professional setup showing coding work, but visible embedded code on screen violates the no-text rule and the cropped view feels incomplete.",
+            "sceneCs": "monitor s kódem a laptop"
+          },
+          {
+            "candidateId": "pexels:17489153",
+            "provider": "pexels",
+            "fit": 6,
+            "vetoes": [
+              "dated-aesthetic"
+            ],
+            "reason": "Professionally lit server infrastructure with no faces or watermarks; the blue theatrical lighting is somewhat dated in aesthetic but communicates scale and technical systems clearly.",
+            "sceneCs": "servery v modré tovární osvětlení"
+          },
+          {
+            "candidateId": "pexels:207580",
+            "provider": "pexels",
+            "fit": 7,
+            "vetoes": [
+              "embedded-text"
+            ],
+            "reason": "Classic terminal output with good readability and authentic system feel, but embedded text and file paths directly violate the no-text-in-frame rule despite strong thematic relevance.",
+            "sceneCs": "zelený text na černé obrazovce s logy a data"
+          }
+        ],
+        "skipped": [],
+        "costUsd": 0.005469
+      },
+      {
+        "mode": "generated",
+        "considered": 1,
+        "selected": "illustration:2026-10-07-candidate-1",
+        "reason": "Abstraktní ilustrace digitálního propojení a síťové komunikace perfektně odpovídá tématu bezpečnosti AI agentů bez kontroly a jejich neoprávněných akcí v digitálním prostředí.",
+        "candidates": [
+          {
+            "candidateId": "illustration:2026-10-07-candidate-1",
+            "provider": "boardlessai",
+            "fit": 8,
+            "vetoes": [],
+            "reason": "Abstraktní ilustrace digitálního propojení a síťové komunikace perfektně odpovídá tématu bezpečnosti AI agentů bez kontroly a jejich neoprávněných akcí v digitálním prostředí.",
+            "sceneCs": "digitální síť s blikajícími prvky a geometrickými tvary"
+          }
+        ],
+        "skipped": [],
+        "costUsd": 0.002339
+      },
+      {
+        "mode": "generated",
+        "considered": 1,
+        "selected": "illustration:2026-10-07-candidate-2",
+        "reason": "Abstract blue lines and light trails evoke digital speed and technology without depicting specific people or events, fitting an article about AI agents and security concerns.",
+        "candidates": [
+          {
+            "candidateId": "illustration:2026-10-07-candidate-2",
+            "provider": "boardlessai",
+            "fit": 7,
+            "vetoes": [],
+            "reason": "Abstract blue lines and light trails evoke digital speed and technology without depicting specific people or events, fitting an article about AI agents and security concerns.",
+            "sceneCs": "abstraktní modré čáry a světelné stopy"
+          }
+        ],
+        "skipped": [],
+        "costUsd": 0.002099
+      },
+      {
+        "mode": "generated",
+        "considered": 1,
+        "selected": "illustration:2026-10-07-candidate-3",
+        "reason": "A digital visualization of networked systems and data flows effectively illustrates the concept of autonomous AI agents operating within interconnected systems, matching the article's theme of uncontrolled agents and security incidents.",
+        "candidates": [
+          {
+            "candidateId": "illustration:2026-10-07-candidate-3",
+            "provider": "boardlessai",
+            "fit": 8,
+            "vetoes": [],
+            "reason": "A digital visualization of networked systems and data flows effectively illustrates the concept of autonomous AI agents operating within interconnected systems, matching the article's theme of uncontrolled agents and security incidents.",
+            "sceneCs": "abstraktní digitální krajina s modrými linkami a prvky datové sítě"
+          }
+        ],
+        "skipped": [],
+        "costUsd": 0.002189
+      },
+      {
+        "mode": "generated",
+        "considered": 1,
+        "selected": "illustration:2026-10-07-candidate-4",
+        "reason": "Server room with glowing blue server racks effectively illustrates AI infrastructure and autonomous systems deployment without showing faces, logos or misleading specificity.",
+        "candidates": [
+          {
+            "candidateId": "illustration:2026-10-07-candidate-4",
+            "provider": "boardlessai",
+            "fit": 8,
+            "vetoes": [],
+            "reason": "Server room with glowing blue server racks effectively illustrates AI infrastructure and autonomous systems deployment without showing faces, logos or misleading specificity.",
+            "sceneCs": "svítící serverovna v temnu"
+          }
+        ],
+        "skipped": [],
+        "costUsd": 0.002069
+      }
+    ]
+  },
+  "packageStatus": "edition",
+  "warnings": [
+    "content_invalid:write: [\n  {\n    \"expected\": \"array\",\n    \"code\": \"invalid_type\",\n    \"path\": [\n      \"dispatches\"\n    ],\n    \"message\": \"Invalid input: expected array, received string\"\n  },\n  {\n    \"origin\": \"string\",\n    \"code\": \"too_big\",\n    \"maximum\": 4,\n    \"inclusive\": true,\n    \"path\": [\n      \"dispatches\"\n    ],\n    \"message\": \"Too big: expected string to have <=4 characters\"\n  }\n]",
+    "quality:maximum_repeated_topic_frequency",
+    "shipped_with_unresolved_review:quality:maximum_repeated_topic_frequency",
+    "image_rung:illustration",
+    "image_gate:search:all-candidates-rejected",
+    "image_gate:generated:selected"
+  ],
+  "sourceSummary": {
+    "successfulSources": 31,
+    "candidateItems": 80,
+    "evidenceRefs": [
+      "source:404-media",
+      "source:anthropic-news",
+      "source:ars-technica",
+      "source:arxiv-cs-ai",
+      "source:arxiv-cs-lg",
+      "source:bluesky-language-models",
+      "source:deepmind-blog",
+      "source:digiday",
+      "source:github-ai-releases",
+      "source:google-research",
+      "source:hf-blog",
+      "source:hn-frontpage"
+    ]
+  }
+}

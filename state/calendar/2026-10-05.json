@@ -29,13 +29,17 @@
       "at": "2026-10-06T04:00:00.000Z",
       "tz": "Europe/Prague",
       "kind": "venture-morning",
-      "status": "scheduled"
+      "status": "held",
+      "meetingRef": "standups/2026-10-06-morning",
+      "decisionOneLiner": "The council held the internal work item. No external action, business claim or stage change was approved."
     },
     {
       "at": "2026-10-07T03:00:00.000Z",
       "tz": "Europe/Prague",
       "kind": "cu-day",
-      "status": "scheduled"
+      "status": "held",
+      "meetingRef": "meetings/2026-10-07-cu-edition",
+      "decisionOneLiner": "Dva potvrzené incidenty – Wikimedia a jihokorejské banky – ve stejný den, kdy OpenAI rozšiřuje agentní infrastrukturu, ukazují praktikům i tvůrcům regulace konkrétní mezeru mezi mo"
     },
     {
       "at": "2026-10-07T04:00:00.000Z",
