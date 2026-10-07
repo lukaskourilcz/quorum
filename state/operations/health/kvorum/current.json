@@ -3,8 +3,8 @@
   "nodeId": "kvorum",
   "displayName": "Kvórum",
   "policyVersion": "1.0.0",
-  "generatedAt": "2026-10-06T04:00:52.775Z",
-  "observedAt": "2026-10-06T04:00:52.775Z",
+  "generatedAt": "2026-10-07T04:01:01.231Z",
+  "observedAt": "2026-10-07T04:01:01.231Z",
   "lifecycleStage": "operating",
   "state": "unavailable",
   "reason": "No valid live or recovery receipt is available.",
@@ -50,5 +50,5 @@
   ],
   "ownerAttentionRefs": [],
   "latestRunReceiptRefs": [],
-  "snapshotHash": "f8ffdaa75189c84729cff2d8a39081b985f1d232bbbbf89a7af016b17326becc"
+  "snapshotHash": "a4a6b8b00f15b951e1d97c1d7d1a65ea3b26548cda30ab1890c25165c4d85529"
 }
