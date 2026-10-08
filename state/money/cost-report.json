@@ -1,17 +1,45 @@
 {
   "schemaVersion": "cost-report/1",
-  "generatedAt": "2026-10-07T07:10:01.176Z",
+  "generatedAt": "2026-10-08T03:13:19.618Z",
   "month": "2026-10",
   "currency": "USD",
   "metered": {
     "total": {
-      "totalUsd": 2.7721385,
-      "modelUsd": 2.6761385,
-      "mediaUsd": 0.096,
-      "calls": 129
+      "totalUsd": 2.993288,
+      "modelUsd": 2.885288,
+      "mediaUsd": 0.108,
+      "calls": 138
     },
     "editions": [],
     "decisions": [
+      {
+        "cycleId": "20261008030114-cu-product",
+        "phase": "cu-product",
+        "ventureId": "caught-up",
+        "outcome": "defer",
+        "decidedAt": "2026-10-08T03:01:18.498Z",
+        "cost": {
+          "totalUsd": 0,
+          "modelUsd": 0,
+          "mediaUsd": 0,
+          "calls": 0
+        },
+        "note": "No ledger row carries this cycle id; the room decided without billing a call."
+      },
+      {
+        "cycleId": "20261008030114-cu-edition",
+        "phase": "cu-edition",
+        "ventureId": "caught-up",
+        "outcome": "EDITION",
+        "decidedAt": "2026-10-08T03:01:19.498Z",
+        "cost": {
+          "totalUsd": 0.2211495,
+          "modelUsd": 0.2091495,
+          "mediaUsd": 0.012,
+          "calls": 9
+        },
+        "note": null
+      },
       {
         "cycleId": "20261007030117-cu-product",
         "phase": "cu-product",
@@ -213,13 +241,13 @@
       {
         "phase": "cu-edition",
         "ventureId": "caught-up",
-        "cycles": 7,
-        "meteredUsd": 1.8882315,
+        "cycles": 8,
+        "meteredUsd": 2.109381,
         "comparable": {
-          "cycles": 7,
-          "envelopeUsd": 4.06,
-          "meteredUsd": 1.8882315,
-          "varianceUsd": -2.1717685,
+          "cycles": 8,
+          "envelopeUsd": 4.64,
+          "meteredUsd": 2.109381,
+          "varianceUsd": -2.530619,
           "overspentCycles": 0
         }
       },
@@ -241,7 +269,7 @@
   "billed": null,
   "reconciliation": {
     "status": "unavailable",
-    "meteredUsd": 2.7721385,
+    "meteredUsd": 2.993288,
     "billedUsd": null,
     "differenceUsd": null,
     "toleranceUsd": 0.01,
