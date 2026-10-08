@@ -3,8 +3,8 @@
   "nodeId": "scheduler-service",
   "displayName": "Scheduler service",
   "policyVersion": "1.0.0",
-  "generatedAt": "2026-10-07T04:01:01.231Z",
-  "observedAt": "2026-10-07T04:01:01.231Z",
+  "generatedAt": "2026-10-08T04:00:58.185Z",
+  "observedAt": "2026-10-08T04:00:58.185Z",
   "lifecycleStage": "operating",
   "state": "unavailable",
   "reason": "No valid live or recovery receipt is available.",
@@ -47,5 +47,5 @@
   ],
   "ownerAttentionRefs": [],
   "latestRunReceiptRefs": [],
-  "snapshotHash": "9c7d6db2d31dc27815e87b3935b7d73f460f8422943bb5213c8fd80508bff1b6"
+  "snapshotHash": "95b06dfb9bc1bbd8b05318379d4985c5f51534df42435fa8ced333a769636d46"
 }
