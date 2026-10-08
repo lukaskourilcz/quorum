@@ -1,0 +1,18 @@
+{
+  "schemaVersion": 1,
+  "fixture": false,
+  "cycleId": "20261008030114-cu-edition",
+  "phase": "cu-edition",
+  "outcome": "EDITION",
+  "summary": "Smrt Margarety Hamiltonové připomíná, na čích ramenou stojí každý dnešní softwarový systém; zároveň repricing Haiku 5.5 a Microsoftův hardwarový sázka mění podmínky pro každého, kdo dnes AI nasazuje ve velkém.",
+  "evidenceRefs": [
+    "source:hn-frontpage",
+    "source:simonw",
+    "source:techcrunch-ai",
+    "source:the-register",
+    "source:google-research",
+    "source:tensorfeed"
+  ],
+  "editionRef": "1a683def0ffc1719b56a7c7a1039985dd88db763ced0d3e25f6266d7ba15df5b",
+  "generatedAt": "2026-10-08T03:01:19.498Z"
+}

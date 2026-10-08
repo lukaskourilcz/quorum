@@ -1,0 +1,132 @@
+{
+  "schemaVersion": "image-selection/1",
+  "venture": "caught-up",
+  "slug": "2026-10-08-hamilton-haiku-microsoft-ai-den",
+  "date": "2026-10-08",
+  "rung": "search",
+  "selected": "pexels:28767589",
+  "verdicts": [
+    {
+      "mode": "search",
+      "considered": 6,
+      "selected": "pexels:28767589",
+      "reason": "Clean, contemporary illustration of a chip with professional color grading; represents computing hardware and aligns with article's themes of AI, inference, and hardware without being dated stock art or looking AI-generated.",
+      "candidates": [
+        {
+          "candidateId": "pexels:9242888",
+          "provider": "pexels",
+          "fit": 6,
+          "vetoes": [],
+          "reason": "Genuine hardware assembly shows technical work but feels like documentation of specific action rather than thematic illustration; the article covers multiple topics (death of historical figure, AI pricing, Microsoft's vision) and this image is too narrowly focused on one technical moment.",
+          "sceneCs": "ruka zapojující kabel do základní desky"
+        },
+        {
+          "candidateId": "wikimedia:179520469",
+          "provider": "wikimedia",
+          "fit": 1,
+          "vetoes": [
+            "ai-generated-look",
+            "dated-aesthetic"
+          ],
+          "reason": "This is the exact blue holographic brain circuit cliché that the rules explicitly forbid; it screams mid-2010s stock imagery and AI-themed marketing graphics.",
+          "sceneCs": "modrný mozek ze zdrojů"
+        },
+        {
+          "candidateId": "openverse:00de4c50-7cec-4609-9f6d-e605679a28a8",
+          "provider": "openverse",
+          "fit": 5,
+          "vetoes": [],
+          "reason": "Museum or exhibition display of computing history could work thematically with the article's historical element and AI topic, but the museum context and small figurines feel oblique rather than direct illustration.",
+          "sceneCs": "muzejní expozice s figurkami a obrazovkou"
+        },
+        {
+          "candidateId": "pixabay:3435575",
+          "provider": "pixabay",
+          "fit": 0,
+          "vetoes": [
+            "ai-generated-look",
+            "dated-aesthetic"
+          ],
+          "reason": "Stylized hand with glowing particles is another dated stock-art cliché from mid-2010s tech marketing; the rendering and aesthetic immediately date it.",
+          "sceneCs": "ruka s kouskem internetu"
+        },
+        {
+          "candidateId": "pexels:28767589",
+          "provider": "pexels",
+          "fit": 7,
+          "vetoes": [],
+          "reason": "Clean, contemporary illustration of a chip with professional color grading; represents computing hardware and aligns with article's themes of AI, inference, and hardware without being dated stock art or looking AI-generated.",
+          "sceneCs": "mikroprocesor v modro-růžovém osvětlení"
+        },
+        {
+          "candidateId": "pixabay:3963945",
+          "provider": "pixabay",
+          "fit": 2,
+          "vetoes": [
+            "ai-generated-look"
+          ],
+          "reason": "Overly stylized globe with glowing effects and particle distortions reads as AI-generated or heavily filtered; too abstract and decorative for serious illustration.",
+          "sceneCs": "abstraktní globus s světelnými efekty"
+        }
+      ],
+      "skipped": [],
+      "costUsd": 0.005665
+    },
+    {
+      "mode": "generated",
+      "considered": 1,
+      "selected": "illustration:2026-10-08-candidate-2",
+      "reason": "Glowing circuit board pattern effectively illustrates the technology theme of AI inference and computing developments, though somewhat generic for the specific article content.",
+      "candidates": [
+        {
+          "candidateId": "illustration:2026-10-08-candidate-2",
+          "provider": "boardlessai",
+          "fit": 7,
+          "vetoes": [],
+          "reason": "Glowing circuit board pattern effectively illustrates the technology theme of AI inference and computing developments, though somewhat generic for the specific article content.",
+          "sceneCs": "svítící elektronické desky s logickými obvody"
+        }
+      ],
+      "skipped": [],
+      "costUsd": 0.002089
+    },
+    {
+      "mode": "generated",
+      "considered": 1,
+      "selected": "illustration:2026-10-08-candidate-3",
+      "reason": "Abstract circuit board pattern with glowing blue nodes and connections on black background illustrates AI technology and computing infrastructure generically, fitting an article about AI pricing, models and computing advances.",
+      "candidates": [
+        {
+          "candidateId": "illustration:2026-10-08-candidate-3",
+          "provider": "boardlessai",
+          "fit": 7,
+          "vetoes": [],
+          "reason": "Abstract circuit board pattern with glowing blue nodes and connections on black background illustrates AI technology and computing infrastructure generically, fitting an article about AI pricing, models and computing advances.",
+          "sceneCs": "svítící obvody a uzly"
+        }
+      ],
+      "skipped": [],
+      "costUsd": 0.002104
+    },
+    {
+      "mode": "generated",
+      "considered": 1,
+      "selected": "illustration:2026-10-08-candidate-4",
+      "reason": "Ilustrace výrazně reprezentuje technologické téma článku – vývoj AI modelů a počítačů nové generace. Abstraktní design s okem a obvody je čistý, kvalitně řešený a neobsahuje tváře ani texty.",
+      "candidates": [
+        {
+          "candidateId": "illustration:2026-10-08-candidate-4",
+          "provider": "boardlessai",
+          "fit": 8,
+          "vetoes": [],
+          "reason": "Ilustrace výrazně reprezentuje technologické téma článku – vývoj AI modelů a počítačů nové generace. Abstraktní design s okem a obvody je čistý, kvalitně řešený a neobsahuje tváře ani texty.",
+          "sceneCs": "digitální oko v elektrickém obvodu"
+        }
+      ],
+      "skipped": [],
+      "costUsd": 0.002349
+    }
+  ],
+  "skippedProviders": [],
+  "recordedAt": "2026-10-08T03:01:14.498Z"
+}
