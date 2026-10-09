@@ -1,6 +1,6 @@
 {
   "schemaVersion": "cost-report/1",
-  "generatedAt": "2026-10-09T04:05:27.028Z",
+  "generatedAt": "2026-10-09T07:06:23.302Z",
   "month": "2026-10",
   "currency": "USD",
   "metered": {
@@ -18,9 +18,9 @@
         "cycleIds": [
           "20261009030112-cu-edition"
         ],
-        "status": "delivered",
+        "status": "needs_reconciliation",
         "articleUrl": null,
-        "packageHash": "69ce62ed90b54b3228ad8a6ba92a51e901f4a5984d10b6da52fc6f632f366bdc",
+        "packageHash": "2ef70a3ff136f5b321f42d3aa736ae83a87d1b5d2622ddc026e8a7568db32014",
         "cost": {
           "totalUsd": 0.4034625,
           "modelUsd": 0.4034625,
@@ -31,6 +31,20 @@
       }
     ],
     "decisions": [
+      {
+        "cycleId": "20261009070114-cu-edition",
+        "phase": "cu-edition",
+        "ventureId": "caught-up",
+        "outcome": "NO_EDITION",
+        "decidedAt": "2026-10-09T07:01:19.473Z",
+        "cost": {
+          "totalUsd": 0,
+          "modelUsd": 0,
+          "mediaUsd": 0,
+          "calls": 0
+        },
+        "note": "No ledger row carries this cycle id; the room decided without billing a call."
+      },
       {
         "cycleId": "20261009030112-cu-product",
         "phase": "cu-product",
