@@ -769,3 +769,7 @@ The owner ended devShark social automation. These requests were withdrawn, never
   a day on any connection, or the publisher's hourly schedule. Tick it in your own commit after
   DEVSHARK-SOCIAL-001.
   Decision: `state/decisions/2026-09-26-devshark-social-queue.md` (`devshark-social-2026-09a`).
+
+- [ ] **CAUGHT-UP-DELIVERY-2026-10-09** — hash_conflict: > aifirst@0.1.0 consume:edition /home/runner/work/_temp/aifirst-delivery-1 > tsx scripts/consume-edition-package.ts /home/runner/work/quorum/quorum/state/edition/outbox/2026-10-09-2ef70a3ff136f5b321f42d3aa736ae83a87d1b5d2622ddc026e8a7568db32014.json /home/runner/work/_temp/aifirst-delivery-1 [delive.
+  RELAY marked the delivery `needs_reconciliation`; same-date content must not be overwritten automatically.
+  [imp:5] [owner:me] [time:20m] [kind:deploy]
