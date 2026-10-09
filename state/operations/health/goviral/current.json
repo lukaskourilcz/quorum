@@ -3,8 +3,8 @@
   "nodeId": "goviral",
   "displayName": "GoVIRAL",
   "policyVersion": "1.0.0",
-  "generatedAt": "2026-10-08T04:00:58.185Z",
-  "observedAt": "2026-10-08T04:00:58.185Z",
+  "generatedAt": "2026-10-09T04:00:56.536Z",
+  "observedAt": "2026-10-09T04:00:56.536Z",
   "lifecycleStage": "operating",
   "state": "unavailable",
   "reason": "No valid live or recovery receipt is available.",
@@ -47,5 +47,5 @@
   ],
   "ownerAttentionRefs": [],
   "latestRunReceiptRefs": [],
-  "snapshotHash": "fd3633e453f39a02737bc3c4a77f478138634f8e984af19393b984aed035c5db"
+  "snapshotHash": "f726369699d72b2179d30e8dedd912cd0c8e0af84e9a4ca49b5af6551ec3e8d8"
 }

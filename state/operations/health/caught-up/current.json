@@ -3,8 +3,8 @@
   "nodeId": "caught-up",
   "displayName": "Caught Up",
   "policyVersion": "1.0.0",
-  "generatedAt": "2026-10-08T04:00:58.185Z",
-  "observedAt": "2026-10-08T04:00:58.185Z",
+  "generatedAt": "2026-10-09T04:00:56.536Z",
+  "observedAt": "2026-10-09T04:00:56.536Z",
   "lifecycleStage": "operating",
   "state": "unavailable",
   "reason": "No valid live or recovery receipt is available.",
@@ -47,5 +47,5 @@
   ],
   "ownerAttentionRefs": [],
   "latestRunReceiptRefs": [],
-  "snapshotHash": "dac096a9ffbcbba762faebadcc8c7ad66fa6dc78f58b7eb50e61d7e3e9f2a80c"
+  "snapshotHash": "4e947fa2c2e93b935ee3c9f58e74d2c4bec7031d0c6a27b60e2a60f8bbb6c43b"
 }
