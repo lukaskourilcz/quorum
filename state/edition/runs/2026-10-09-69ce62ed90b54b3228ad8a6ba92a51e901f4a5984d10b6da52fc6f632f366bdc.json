@@ -1,0 +1,167 @@
+{
+  "schemaVersion": 1,
+  "runId": "21692bb4-609f-4181-b690-3d39ef4d3626",
+  "date": "2026-10-09",
+  "mode": "production",
+  "status": "no_edition",
+  "startedAt": "2026-10-09T03:01:16.860Z",
+  "completedAt": "2026-10-09T03:07:18.185Z",
+  "stages": [
+    {
+      "name": "curate",
+      "status": "success",
+      "startedAt": "2026-10-09T03:01:16.889Z",
+      "completedAt": "2026-10-09T03:01:36.723Z",
+      "durationMs": 19834
+    },
+    {
+      "name": "write",
+      "status": "failed",
+      "startedAt": "2026-10-09T03:01:36.723Z",
+      "completedAt": "2026-10-09T03:03:32.864Z",
+      "durationMs": 116141,
+      "errorCode": "InvalidModelOutputError",
+      "errorMessage": "write: [\n  {\n    \"expected\": \"array\",\n    \"code\": \"invalid_type\",\n    \"path\": [\n      \"dispatches\"\n    ],\n    \"message\": \"Invalid input: expected array, received string\"\n  },\n  {\n    \"origin\": \"string\",\n    \"code\": \"too_big\",\n    \"maximum\": 4,\n    \"inclusive\": true,\n    \"path\": [\n      \"dispatches\"\n    ],\n    \"message\": \"Too big: expected string to have <=4 characters\"\n  }\n]"
+    },
+    {
+      "name": "rewrite_1",
+      "status": "failed",
+      "startedAt": "2026-10-09T03:03:32.864Z",
+      "completedAt": "2026-10-09T03:05:18.007Z",
+      "durationMs": 105143,
+      "errorCode": "InvalidModelOutputError",
+      "errorMessage": "rewrite: [\n  {\n    \"expected\": \"array\",\n    \"code\": \"invalid_type\",\n    \"path\": [\n      \"uncertainty\"\n    ],\n    \"message\": \"Invalid input: expected array, received string\"\n  },\n  {\n    \"origin\": \"string\",\n    \"code\": \"too_big\",\n    \"maximum\": 3,\n    \"inclusive\": true,\n    \"path\": [\n      \"uncertainty\"\n    ],\n    \"message\": \"Too big: expected string to have <=3 characters\"\n  },\n  {\n    \"expected\": \"array\",\n    \"code\": \"invalid_type\",\n    \"path\": [\n      \"dispatches\"\n    ],\n    \"message\": \"Invali"
+    },
+    {
+      "name": "rewrite_2",
+      "status": "failed",
+      "startedAt": "2026-10-09T03:05:18.007Z",
+      "completedAt": "2026-10-09T03:07:18.183Z",
+      "durationMs": 120176,
+      "errorCode": "InvalidModelOutputError",
+      "errorMessage": "rewrite: [\n  {\n    \"expected\": \"array\",\n    \"code\": \"invalid_type\",\n    \"path\": [\n      \"dispatches\"\n    ],\n    \"message\": \"Invalid input: expected array, received string\"\n  },\n  {\n    \"origin\": \"string\",\n    \"code\": \"too_big\",\n    \"maximum\": 4,\n    \"inclusive\": true,\n    \"path\": [\n      \"dispatches\"\n    ],\n    \"message\": \"Too big: expected string to have <=4 characters\"\n  }\n]"
+    }
+  ],
+  "regenerationAttempts": 2,
+  "stetBlocks": 0,
+  "hacekBlocks": 0,
+  "usage": [
+    {
+      "provider": "anthropic",
+      "model": "claude-sonnet-4-6",
+      "stage": "curate",
+      "inputTokens": 10704,
+      "outputTokens": 897,
+      "cacheReadTokens": 0,
+      "cacheWriteTokens": 0,
+      "costUsd": 0.045567
+    },
+    {
+      "provider": "anthropic",
+      "model": "claude-sonnet-4-6",
+      "stage": "write",
+      "inputTokens": 13245,
+      "outputTokens": 4877,
+      "cacheReadTokens": 0,
+      "cacheWriteTokens": 2470,
+      "costUsd": 0.1221525,
+      "contractRepairs": [
+        {
+          "field": "dispatches",
+          "received": "[\n  {\n    \"title\": \"llama.cpp: vydání b11515\",\n    \"topic\": \"open-source AI\",\n    \"body\": \"Projekt llama.cpp zveřejnil s…",
+          "detail": "Expected ',' or '}' after property value in JSON at position 896 (line 15 column 48) near «s/\"\n  },\n  {\n    \"title\": \"Axios: Trump označuje slovo „AI\" za nepřátelské, Bílý dům ho přitom používá\",\n    \"topic\": \"p»",
+          "reason": "json_string_undecodable"
+        }
+      ]
+    },
+    {
+      "provider": "anthropic",
+      "model": "claude-sonnet-4-6",
+      "stage": "rewrite",
+      "inputTokens": 13251,
+      "outputTokens": 4680,
+      "cacheReadTokens": 0,
+      "cacheWriteTokens": 2612,
+      "costUsd": 0.119748,
+      "contractRepairs": [
+        {
+          "field": "uncertainty",
+          "received": "[\"FCC souhlas se spektrálními licencemi SpaceX není zaručen; bez něj jsou veškerá oznámení o „velkém operátorovi\" zatím …",
+          "detail": "Expected ',' or ']' after array element in JSON at position 114 (line 1 column 115) near «ručen; bez něj jsou veškerá oznámení o „velkém operátorovi\" zatím jen záměr.\", \"Anthropic nespecifikoval, jak přesně bud»",
+          "reason": "json_string_undecodable"
+        },
+        {
+          "field": "dispatches",
+          "received": "[\n  {\n    \"title\": \"Llama.cpp vydává build b11515\",\n    \"topic\": \"Otevřený software pro velké jazykové modely\",\n    \"bod…",
+          "detail": "Expected ',' or '}' after property value in JSON at position 1041 (line 17 column 61) near «    \"body\": \"Axios informuje, že Trump označoval slovo „AI\" za nepřátelské, zatímco Bílý dům AI nástroje používá. Jde o »",
+          "reason": "json_string_undecodable"
+        }
+      ]
+    },
+    {
+      "provider": "anthropic",
+      "model": "claude-sonnet-4-6",
+      "stage": "rewrite",
+      "inputTokens": 13250,
+      "outputTokens": 4423,
+      "cacheReadTokens": 0,
+      "cacheWriteTokens": 2640,
+      "costUsd": 0.115995,
+      "contractRepairs": [
+        {
+          "field": "dispatches",
+          "received": "[\n  {\n    \"title\": \"Terence Tao se ptá, co říci studentům matematiky\",\n    \"body\": \"Matematik Terence Tao publikoval na …",
+          "detail": "Expected double-quoted property name in JSON at position 516 (line 9 column 37) near «\": \"AI a věda\"\n  },\n  {\n    \"title\": \"Trump: kdo říká „AI\", je nepřítel; Bílý dům ji používá\",\n    \"body\": \"Axios mapuje»",
+          "reason": "json_string_undecodable"
+        }
+      ]
+    }
+  ],
+  "measuredCostUsd": 0.4034625,
+  "imageProgram": {
+    "readiness": {
+      "providers": {
+        "openverse": "keyless",
+        "wikimedia": "keyless",
+        "pexels": "present",
+        "pixabay": "present"
+      },
+      "gateModelConfigured": true,
+      "caps": {
+        "perArticleUsd": 0.05,
+        "perDayUsd": 0.1,
+        "generatedImagesPerDay": 4
+      },
+      "spentToday": {
+        "usd": 0,
+        "generatedImages": 0
+      },
+      "illustrationRung": "armed"
+    },
+    "verdicts": []
+  },
+  "packageStatus": "no_edition",
+  "warnings": [
+    "content_invalid:write: [\n  {\n    \"expected\": \"array\",\n    \"code\": \"invalid_type\",\n    \"path\": [\n      \"dispatches\"\n    ],\n    \"message\": \"Invalid input: expected array, received string\"\n  },\n  {\n    \"origin\": \"string\",\n    \"code\": \"too_big\",\n    \"maximum\": 4,\n    \"inclusive\": true,\n    \"path\": [\n      \"dispatches\"\n    ],\n    \"message\": \"Too big: expected string to have <=4 characters\"\n  }\n]",
+    "content_invalid:rewrite: [\n  {\n    \"expected\": \"array\",\n    \"code\": \"invalid_type\",\n    \"path\": [\n      \"uncertainty\"\n    ],\n    \"message\": \"Invalid input: expected array, received string\"\n  },\n  {\n    \"origin\": \"string\",\n    \"code\": \"too_big\",\n    \"maximum\": 3,\n    \"inclusive\": true,\n    \"path\": [\n      \"uncertainty\"\n    ],\n    \"message\": \"Too big: expected string to have <=3 characters\"\n  },\n  {\n    \"expected\": \"array\",\n    \"code\": \"invalid_type\",\n    \"path\": [\n      \"dispatches\"\n    ],\n    \"message\": \"Invalid input: expected array, received string\"\n  },\n  {\n    \"origin\": \"string\",\n    \"code\": \"too_big\",\n    \"maximum\": 4,\n    \"inclusive\": true,\n    \"path\": [\n      \"dispatches\"\n    ],\n    \"message\": \"Too big: expected string to have <=4 characters\"\n  }\n]",
+    "content_invalid:rewrite: [\n  {\n    \"expected\": \"array\",\n    \"code\": \"invalid_type\",\n    \"path\": [\n      \"dispatches\"\n    ],\n    \"message\": \"Invalid input: expected array, received string\"\n  },\n  {\n    \"origin\": \"string\",\n    \"code\": \"too_big\",\n    \"maximum\": 4,\n    \"inclusive\": true,\n    \"path\": [\n      \"dispatches\"\n    ],\n    \"message\": \"Too big: expected string to have <=4 characters\"\n  }\n]"
+  ],
+  "sourceSummary": {
+    "successfulSources": 31,
+    "candidateItems": 80,
+    "evidenceRefs": [
+      "source:404-media",
+      "source:anthropic-news",
+      "source:ars-technica",
+      "source:arxiv-cs-ai",
+      "source:arxiv-cs-lg",
+      "source:bluesky-language-models",
+      "source:deepmind-blog",
+      "source:digiday",
+      "source:github-ai-releases",
+      "source:google-research",
+      "source:hf-blog",
+      "source:hn-frontpage"
+    ]
+  }
+}
