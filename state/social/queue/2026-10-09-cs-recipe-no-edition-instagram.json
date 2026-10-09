@@ -1,0 +1,75 @@
+{
+  "schemaVersion": 2,
+  "id": "caught-up-2026-10-09-cs-recipe-no-edition-instagram",
+  "sourceVentureId": "caught-up",
+  "releaseId": "caught-up-2026-10-09-cs-recipe-no-edition",
+  "campaignId": "caught-up-2026-10-09-cs-recipe-no-edition",
+  "experimentId": null,
+  "target": {
+    "profileId": "social-profile-caught-up",
+    "profileRole": "venture-primary",
+    "role": "primary",
+    "connectionBindingRef": "social-connection-caught-up-instagram",
+    "capabilityRef": null,
+    "amplifierEligibilityRef": null,
+    "campaignApprovalRef": null
+  },
+  "action": "publish-original",
+  "sourcePackage": {
+    "schemaVersion": "approved-publish-package/1",
+    "artifactRef": "state/social/recipes/2026-10-09-no-edition.json",
+    "packageHash": "c49c8d6f8eb6cbeb21657fc5bae2db421f9f2602655fa1d9c7ccc9d7f8b8bd2e"
+  },
+  "locale": "cs",
+  "variant": "A",
+  "channel": "instagram",
+  "objective": "trust",
+  "audience": "Caught Up readers (cs)",
+  "destination": "https://dneskai.vercel.app/?utm_source=instagram&utm_medium=post&utm_campaign=no-edition",
+  "utm": {
+    "source": "instagram",
+    "medium": "organic_social",
+    "campaign": "no-edition",
+    "content": "2026-10-09-no-edition"
+  },
+  "content": {
+    "text": "Dnes vydání DNESKAi nevyšlo. Pojem dne:\n\nEvals: Evaly jsou strukturované testy schopností a bezpečnosti modelů: zkouškové benchmarky (MMLU, matematické sady), úlohové evaly pro agenty, red-teamové baterie pro rizika. Jimi se pokrok vykazuje a srovnává — nedokonale, protože veřejné benchmarky prosakují do trénovacích dat a skóre se nafukují.\n\nZdroj: Benchmark literature; model cards\n\nDalší vydání: https://dneskai.vercel.app/?utm_source=instagram&utm_medium=post&utm_campaign=no-edition\n\n#ai #umelainteligence #dneskai",
+    "altText": "Slide 1: Evals: Standardizované testy modelů — a věčný závod mezi benchmarky a modely, které se je naučí",
+    "assetPaths": [
+      "/social/caught-up/2026-10-09/no-edition/frame-01.jpg"
+    ],
+    "factualClaimRefs": [
+      "aifirst:data/ai-lessons.json#lex-041"
+    ],
+    "rendererVersion": "carousel-studio-1",
+    "contentHash": "d6a2d80f413dbc07e287a3abd111b75193bf2a744315adbeacdbde3070b8e004"
+  },
+  "publishWindow": {
+    "notBefore": "2026-10-09T10:00:00.000Z",
+    "notAfter": "2026-10-12T10:00:00.000Z"
+  },
+  "status": "draft",
+  "checks": {
+    "schema": "pending",
+    "brand": "pending",
+    "claims": "pending",
+    "quill": "pending",
+    "keeper": "pending",
+    "duplicate": "pending",
+    "accessibility": "pending",
+    "budget": "pending",
+    "capability": "pending",
+    "authority": "pending",
+    "policy": "pending"
+  },
+  "approvalProvenance": {
+    "approvalRef": "awaiting-owner-approval",
+    "selectionRef": "state/social/recipes/2026-10-09-no-edition.json",
+    "policyRef": "D2-autonomy-build-2026-08-01"
+  },
+  "selectedBy": "PULSE",
+  "createdAt": "2026-10-09T03:12:12.249Z",
+  "attempt": null,
+  "receiptId": null,
+  "migration": null
+}
