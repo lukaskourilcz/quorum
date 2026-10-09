@@ -71,13 +71,15 @@
       "kind": "cu-day",
       "status": "held",
       "meetingRef": "meetings/2026-10-09-cu-edition",
-      "decisionOneLiner": "The article failed its own checks on every attempt the budget allowed, so nothing was published."
+      "decisionOneLiner": "The day's writing budget was already spent, so no article was written."
     },
     {
       "at": "2026-10-09T04:00:00.000Z",
       "tz": "Europe/Prague",
       "kind": "venture-morning",
-      "status": "scheduled"
+      "status": "held",
+      "meetingRef": "standups/2026-10-09-morning",
+      "decisionOneLiner": "The council held the internal work item. No external action, business claim or stage change was approved."
     },
     {
       "at": "2026-10-10T03:00:00.000Z",

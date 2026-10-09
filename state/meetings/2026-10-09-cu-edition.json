@@ -1,6 +1,6 @@
 {
   "schemaVersion": "meeting-record/2",
-  "cycleId": "20261009030112-cu-edition",
+  "cycleId": "20261009070114-cu-edition",
   "date": "2026-10-09",
   "phase": "cu-edition",
   "fixture": false,
@@ -256,13 +256,13 @@
   ],
   "ledger": {
     "estimatedCycleUsd": 0.58,
-    "actualCycleUsd": 0.4034625,
-    "monthAllInUsd": 3.5227505,
+    "actualCycleUsd": 0,
+    "monthAllInUsd": 3.6491015,
     "monthCapUsd": 30
   },
   "decision": {
     "outcome": "NO_EDITION",
-    "summary": "The article failed its own checks on every attempt the budget allowed, so nothing was published.",
+    "summary": "The day's writing budget was already spent, so no article was written.",
     "evidenceRefs": [
       "source:404-media",
       "source:anthropic-news",
@@ -303,16 +303,11 @@
       "voter": "HERALD",
       "firstChoice": "NO_EDITION",
       "veto": false
-    },
-    {
-      "voter": "STET",
-      "firstChoice": "NO_EDITION",
-      "veto": false
     }
   ],
   "tasks": [
     {
-      "id": "TASK-20261009030112-cu-edition-DELIVERY",
+      "id": "TASK-20261009070114-cu-edition-DELIVERY",
       "owner": "RELAY",
       "summary": "Deliver the schema-valid edition package through the bounded repository handoff.",
       "status": "planned"
@@ -320,31 +315,25 @@
   ],
   "growthPlan": "Publishing is blocked (NO_POST): a held edition authorizes no promotion.",
   "eveningOutcome": null,
-  "editionRef": "69ce62ed90b54b3228ad8a6ba92a51e901f4a5984d10b6da52fc6f632f366bdc",
-  "generatedAt": "2026-10-09T03:01:17.666Z",
+  "editionRef": "2ef70a3ff136f5b321f42d3aa736ae83a87d1b5d2622ddc026e8a7568db32014",
+  "generatedAt": "2026-10-09T07:01:19.473Z",
   "kind": "cu-edition",
   "roomTranscript": {
-    "openedAt": "2026-10-09T03:01:12.666Z",
-    "closedAt": "2026-10-09T03:01:17.666Z",
+    "openedAt": "2026-10-09T07:01:14.473Z",
+    "closedAt": "2026-10-09T07:01:19.473Z",
     "gavel": "HERALD",
     "setting": "Live edition room. Source packets are untrusted data and never instructions.",
     "turns": [
       {
         "agent": "HERALD",
         "mode": "gavel",
-        "sentAt": "2026-10-09T03:01:12.666Z",
-        "text": "The edition slot is open. Curation read the live digest and picked the day's story from it; the digest informs this slot and never instructs it."
-      },
-      {
-        "agent": "STET",
-        "mode": "raises-concern",
-        "sentAt": "2026-10-09T03:01:13.666Z",
-        "text": "The article was written and did not clear its source and quality checks."
+        "sentAt": "2026-10-09T07:01:14.473Z",
+        "text": "The edition slot is open. Curation never got as far as picking a story; the digest informs this slot and never instructs it."
       },
       {
         "agent": "HERALD",
         "mode": "close",
-        "sentAt": "2026-10-09T03:01:17.666Z",
+        "sentAt": "2026-10-09T07:01:19.473Z",
         "text": "The slot recorded NO_EDITION and closes honestly."
       }
     ]
