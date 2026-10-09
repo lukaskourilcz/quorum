@@ -773,3 +773,10 @@ The owner ended devShark social automation. These requests were withdrawn, never
 - [ ] **CAUGHT-UP-DELIVERY-2026-10-09** — hash_conflict: > aifirst@0.1.0 consume:edition /home/runner/work/_temp/aifirst-delivery-1 > tsx scripts/consume-edition-package.ts /home/runner/work/quorum/quorum/state/edition/outbox/2026-10-09-2ef70a3ff136f5b321f42d3aa736ae83a87d1b5d2622ddc026e8a7568db32014.json /home/runner/work/_temp/aifirst-delivery-1 [delive.
   RELAY marked the delivery `needs_reconciliation`; same-date content must not be overwritten automatically.
   [imp:5] [owner:me] [time:20m] [kind:deploy]
+
+- [ ] **DELIVERY-QUEUE-CAUGHT-UP** — the publish queue is not draining.
+  Oldest held item: 2026-10-09 no_edition (hash_conflict).
+  Live counts are in state/delivery/queue-health/, rewritten every day. Items listed under
+  neverDrains need new bytes rather than another run; their own receipts say what the magazine
+  refused and why. Anything parked and not listed there is already scheduled to end.
+  [imp:5] [owner:me] [time:30m] [kind:deploy]
