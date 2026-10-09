@@ -1,17 +1,64 @@
 {
   "schemaVersion": "cost-report/1",
-  "generatedAt": "2026-10-08T07:10:14.359Z",
+  "generatedAt": "2026-10-09T03:18:19.800Z",
   "month": "2026-10",
   "currency": "USD",
   "metered": {
     "total": {
-      "totalUsd": 3.119288,
-      "modelUsd": 3.011288,
+      "totalUsd": 3.5227505,
+      "modelUsd": 3.4147505,
       "mediaUsd": 0.108,
-      "calls": 146
+      "calls": 150
     },
-    "editions": [],
+    "editions": [
+      {
+        "date": "2026-10-09",
+        "ventureId": "caught-up",
+        "phase": "cu-edition",
+        "cycleIds": [
+          "20261009030112-cu-edition"
+        ],
+        "status": "delivered",
+        "articleUrl": null,
+        "packageHash": "69ce62ed90b54b3228ad8a6ba92a51e901f4a5984d10b6da52fc6f632f366bdc",
+        "cost": {
+          "totalUsd": 0.4034625,
+          "modelUsd": 0.4034625,
+          "mediaUsd": 0,
+          "calls": 4
+        },
+        "note": null
+      }
+    ],
     "decisions": [
+      {
+        "cycleId": "20261009030112-cu-product",
+        "phase": "cu-product",
+        "ventureId": "caught-up",
+        "outcome": "defer",
+        "decidedAt": "2026-10-09T03:01:16.666Z",
+        "cost": {
+          "totalUsd": 0,
+          "modelUsd": 0,
+          "mediaUsd": 0,
+          "calls": 0
+        },
+        "note": "No ledger row carries this cycle id; the room decided without billing a call."
+      },
+      {
+        "cycleId": "20261009030112-cu-edition",
+        "phase": "cu-edition",
+        "ventureId": "caught-up",
+        "outcome": "NO_EDITION",
+        "decidedAt": "2026-10-09T03:01:17.666Z",
+        "cost": {
+          "totalUsd": 0.4034625,
+          "modelUsd": 0.4034625,
+          "mediaUsd": 0,
+          "calls": 4
+        },
+        "note": null
+      },
       {
         "cycleId": "20261008030114-cu-product",
         "phase": "cu-product",
@@ -241,13 +288,13 @@
       {
         "phase": "cu-edition",
         "ventureId": "caught-up",
-        "cycles": 8,
-        "meteredUsd": 2.109381,
+        "cycles": 9,
+        "meteredUsd": 2.5128435,
         "comparable": {
-          "cycles": 8,
-          "envelopeUsd": 4.64,
-          "meteredUsd": 2.109381,
-          "varianceUsd": -2.530619,
+          "cycles": 9,
+          "envelopeUsd": 5.22,
+          "meteredUsd": 2.5128435,
+          "varianceUsd": -2.7071565,
           "overspentCycles": 0
         }
       },
@@ -269,7 +316,7 @@
   "billed": null,
   "reconciliation": {
     "status": "unavailable",
-    "meteredUsd": 3.119288,
+    "meteredUsd": 3.5227505,
     "billedUsd": null,
     "differenceUsd": null,
     "toleranceUsd": 0.01,
