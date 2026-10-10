@@ -774,7 +774,7 @@ The owner ended devShark social automation. These requests were withdrawn, never
   RELAY marked the delivery `needs_reconciliation`; same-date content must not be overwritten automatically.
   [imp:5] [owner:me] [time:20m] [kind:deploy]
 
-- [ ] **DELIVERY-QUEUE-CAUGHT-UP** — the publish queue is not draining.
+- [x] **DELIVERY-QUEUE-CAUGHT-UP** — Resolved 2026-10-10: the queue drained. Original report: — the publish queue is not draining.
   Oldest held item: 2026-10-09 no_edition (hash_conflict).
   Live counts are in state/delivery/queue-health/, rewritten every day. Items listed under
   neverDrains need new bytes rather than another run; their own receipts say what the magazine
