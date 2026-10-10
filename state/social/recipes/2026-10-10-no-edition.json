@@ -1,0 +1,53 @@
+{
+  "schemaVersion": "dneskai-recipe/1",
+  "id": "dneskai-no-edition-2026-10-10",
+  "recipe": "no-edition",
+  "date": "2026-10-10",
+  "window": {
+    "from": "2026-10-10",
+    "to": "2026-10-10"
+  },
+  "sourceRefs": [
+    "aifirst:data/ai-lessons.json#lex-042"
+  ],
+  "slides": [
+    {
+      "text": "MCP: Model Context Protocol — otevřený standard, kterým se nástroje a data připojují k libovolnému AI asistentovi",
+      "alt": "Slide 1: MCP: Model Context Protocol — otevřený standard, kterým se nástroje a data připojují k libovolnému AI asistentovi"
+    }
+  ],
+  "visual": {
+    "template_id": "quote-card",
+    "version": "1.0.0",
+    "content": {
+      "locale": "cs",
+      "strings": {
+        "quote": "MCP: Model Context Protocol — otevřený standard, kterým se nástroje a data připojují k libovolnému AI asistentovi",
+        "attribution": "Pojem dne · DNESKAi"
+      }
+    }
+  },
+  "frames": [
+    {
+      "path": "/social/caught-up/2026-10-10/no-edition/frame-01.jpg",
+      "sha256": "a4f36c400aaf943dc49e829241b3ed15eb8e5922c94881a6658a81f8f4e20a34"
+    }
+  ],
+  "story": {
+    "frame": {
+      "path": "/social/caught-up/2026-10-10/no-edition/story.png",
+      "sha256": "2be6eceed24174eba011807c2a893cfc41f9509cb6afaaf7947cfded91fceefa"
+    },
+    "link": "https://dneskai.vercel.app/?utm_source=instagram&utm_medium=story&utm_campaign=no-edition"
+  },
+  "destination": "https://dneskai.vercel.app/?utm_source=instagram&utm_medium=post&utm_campaign=no-edition",
+  "instagram": {
+    "caption": "Dnes vydání DNESKAi nevyšlo. Pojem dne:\n\nMCP: MCP (Model Context Protocol), který Anthropic koncem roku 2024 uvolnil jako open source, standardizuje připojování asistentů k nástrojům a datům: postavíte jeden MCP server pro svou databázi či aplikaci a použije ho každý asistent s podporou MCP. Rychlé rozšíření napříč oborem z něj udělalo nejbližší obdobu USB portu pro agenty.\n\nZdroj: MCP specification, Anthropic 2024\n\nDalší vydání: https://dneskai.vercel.app/?utm_source=instagram&utm_medium=post&utm_campaign=no-edition\n\n#ai #umelainteligence #dneskai"
+  },
+  "threads": {
+    "text": "Dnes vydání DNESKAi nevyšlo. Pojem dne: MCP: MCP (Model Context Protocol), který Anthropic koncem roku 2024 uvolnil jako open source, standardizuje připojování asistentů k nástrojům a datům: postavíte jeden MCP server pro svou databázi či aplikaci a použije ho každý asistent s podporou MCP. Rychlé rozšíření napříč oborem z něj udělalo nejbližší obdobu USB portu pro agenty.\n\nZdroj: MCP specification…\n\nhttps://dneskai.vercel.app/?utm_source=threads&utm_medium=post&utm_campaign=no-edition"
+  },
+  "ownerSlots": [],
+  "status": "draft",
+  "spendUsd": 0
+}

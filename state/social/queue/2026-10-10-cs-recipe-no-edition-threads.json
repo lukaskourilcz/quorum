@@ -1,0 +1,73 @@
+{
+  "schemaVersion": 2,
+  "id": "caught-up-2026-10-10-cs-recipe-no-edition-threads",
+  "sourceVentureId": "caught-up",
+  "releaseId": "caught-up-2026-10-10-cs-recipe-no-edition",
+  "campaignId": "caught-up-2026-10-10-cs-recipe-no-edition",
+  "experimentId": null,
+  "target": {
+    "profileId": "social-profile-caught-up",
+    "profileRole": "venture-primary",
+    "role": "primary",
+    "connectionBindingRef": "social-connection-caught-up-threads",
+    "capabilityRef": null,
+    "amplifierEligibilityRef": null,
+    "campaignApprovalRef": null
+  },
+  "action": "publish-original",
+  "sourcePackage": {
+    "schemaVersion": "approved-publish-package/1",
+    "artifactRef": "state/social/recipes/2026-10-10-no-edition.json",
+    "packageHash": "e5b93780a3100cfa7ae7d81beb7c7b4368463e038e59df2e847811bf9923e69d"
+  },
+  "locale": "cs",
+  "variant": "A",
+  "channel": "threads",
+  "objective": "trust",
+  "audience": "Caught Up readers (cs)",
+  "destination": "https://dneskai.vercel.app/?utm_source=instagram&utm_medium=post&utm_campaign=no-edition",
+  "utm": {
+    "source": "threads",
+    "medium": "organic_social",
+    "campaign": "no-edition",
+    "content": "2026-10-10-no-edition"
+  },
+  "content": {
+    "text": "Dnes vydání DNESKAi nevyšlo. Pojem dne: MCP: MCP (Model Context Protocol), který Anthropic koncem roku 2024 uvolnil jako open source, standardizuje připojování asistentů k nástrojům a datům: postavíte jeden MCP server pro svou databázi či aplikaci a použije ho každý asistent s podporou MCP. Rychlé rozšíření napříč oborem z něj udělalo nejbližší obdobu USB portu pro agenty.\n\nZdroj: MCP specification…\n\nhttps://dneskai.vercel.app/?utm_source=threads&utm_medium=post&utm_campaign=no-edition",
+    "altText": "Textový příspěvek bez obrázku.",
+    "assetPaths": [],
+    "factualClaimRefs": [
+      "aifirst:data/ai-lessons.json#lex-042"
+    ],
+    "rendererVersion": "carousel-studio-1",
+    "contentHash": "8a98e2185c1a71794a95d482eabc66e311c6f316b51a0e88709806de60a60610"
+  },
+  "publishWindow": {
+    "notBefore": "2026-10-10T10:00:00.000Z",
+    "notAfter": "2026-10-13T10:00:00.000Z"
+  },
+  "status": "draft",
+  "checks": {
+    "schema": "pending",
+    "brand": "pending",
+    "claims": "pending",
+    "quill": "pending",
+    "keeper": "pending",
+    "duplicate": "pending",
+    "accessibility": "pending",
+    "budget": "pending",
+    "capability": "pending",
+    "authority": "pending",
+    "policy": "pending"
+  },
+  "approvalProvenance": {
+    "approvalRef": "awaiting-owner-approval",
+    "selectionRef": "state/social/recipes/2026-10-10-no-edition.json",
+    "policyRef": "D2-autonomy-build-2026-08-01"
+  },
+  "selectedBy": "PULSE",
+  "createdAt": "2026-10-10T03:11:24.496Z",
+  "attempt": null,
+  "receiptId": null,
+  "migration": null
+}
