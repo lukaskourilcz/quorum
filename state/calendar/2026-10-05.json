@@ -71,7 +71,7 @@
       "kind": "cu-day",
       "status": "held",
       "meetingRef": "meetings/2026-10-09-cu-edition",
-      "decisionOneLiner": "The day's writing budget was already spent, so no article was written."
+      "decisionOneLiner": "A different edition already holds this date in the magazine, so this one was held back. The owner has the technical report."
     },
     {
       "at": "2026-10-09T04:00:00.000Z",
@@ -85,7 +85,9 @@
       "at": "2026-10-10T03:00:00.000Z",
       "tz": "Europe/Prague",
       "kind": "cu-day",
-      "status": "scheduled"
+      "status": "held",
+      "meetingRef": "meetings/2026-10-10-cu-edition",
+      "decisionOneLiner": "The article failed its own checks on every attempt the budget allowed, so nothing was published."
     },
     {
       "at": "2026-10-10T04:00:00.000Z",
