@@ -3,8 +3,8 @@
   "nodeId": "fightaiq",
   "displayName": "FightAIQ",
   "policyVersion": "1.0.0",
-  "generatedAt": "2026-10-10T04:00:56.015Z",
-  "observedAt": "2026-10-10T04:00:56.015Z",
+  "generatedAt": "2026-10-11T04:00:53.526Z",
+  "observedAt": "2026-10-11T04:00:53.526Z",
   "lifecycleStage": "operating",
   "state": "unavailable",
   "reason": "No valid live or recovery receipt is available.",
@@ -47,5 +47,5 @@
   ],
   "ownerAttentionRefs": [],
   "latestRunReceiptRefs": [],
-  "snapshotHash": "43525ccba63763a5e87197094f9dece654b4597e0eb648b8766fc44c77ac633e"
+  "snapshotHash": "173138ed318785c04019947fc4ee1300647f8296d181c7803f3be407690a63eb"
 }
