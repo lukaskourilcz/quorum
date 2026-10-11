@@ -1,0 +1,75 @@
+{
+  "schemaVersion": 2,
+  "id": "caught-up-2026-10-11-cs-recipe-no-edition-instagram",
+  "sourceVentureId": "caught-up",
+  "releaseId": "caught-up-2026-10-11-cs-recipe-no-edition",
+  "campaignId": "caught-up-2026-10-11-cs-recipe-no-edition",
+  "experimentId": null,
+  "target": {
+    "profileId": "social-profile-caught-up",
+    "profileRole": "venture-primary",
+    "role": "primary",
+    "connectionBindingRef": "social-connection-caught-up-instagram",
+    "capabilityRef": null,
+    "amplifierEligibilityRef": null,
+    "campaignApprovalRef": null
+  },
+  "action": "publish-original",
+  "sourcePackage": {
+    "schemaVersion": "approved-publish-package/1",
+    "artifactRef": "state/social/recipes/2026-10-11-no-edition.json",
+    "packageHash": "5093c462859960651488a82f96eedb10f1841e57cf08a0262035c4c780bef425"
+  },
+  "locale": "cs",
+  "variant": "A",
+  "channel": "instagram",
+  "objective": "trust",
+  "audience": "Caught Up readers (cs)",
+  "destination": "https://dneskai.vercel.app/?utm_source=instagram&utm_medium=post&utm_campaign=no-edition",
+  "utm": {
+    "source": "instagram",
+    "medium": "organic_social",
+    "campaign": "no-edition",
+    "content": "2026-10-11-no-edition"
+  },
+  "content": {
+    "text": "Dnes vydání DNESKAi nevyšlo. Pojem dne:\n\nKV cache: KV (key-value) cache ukládá výpočty attention pro už zpracované tokeny, takže každý nový token nečte celou konverzaci znovu. Díky ní zůstávají dlouhé chaty svižné — a je to velký žrout paměti GPU, na kterém stojí i slevy za 'prompt caching'.\n\nZdroj: Transformer inference optimization literature\n\nDalší vydání: https://dneskai.vercel.app/?utm_source=instagram&utm_medium=post&utm_campaign=no-edition\n\n#ai #umelainteligence #dneskai",
+    "altText": "Slide 1: KV cache: Paměťový trik, který drží chat svižný: zapamatuj si zpracovanou konverzaci, místo abys ji četl znovu",
+    "assetPaths": [
+      "/social/caught-up/2026-10-11/no-edition/frame-01.jpg"
+    ],
+    "factualClaimRefs": [
+      "aifirst:data/ai-lessons.json#lex-043"
+    ],
+    "rendererVersion": "carousel-studio-1",
+    "contentHash": "f6604726d310070316d04f73c874e6122afff299a08d8a3091cf73a31230402d"
+  },
+  "publishWindow": {
+    "notBefore": "2026-10-11T10:00:00.000Z",
+    "notAfter": "2026-10-14T10:00:00.000Z"
+  },
+  "status": "draft",
+  "checks": {
+    "schema": "pending",
+    "brand": "pending",
+    "claims": "pending",
+    "quill": "pending",
+    "keeper": "pending",
+    "duplicate": "pending",
+    "accessibility": "pending",
+    "budget": "pending",
+    "capability": "pending",
+    "authority": "pending",
+    "policy": "pending"
+  },
+  "approvalProvenance": {
+    "approvalRef": "awaiting-owner-approval",
+    "selectionRef": "state/social/recipes/2026-10-11-no-edition.json",
+    "policyRef": "D2-autonomy-build-2026-08-01"
+  },
+  "selectedBy": "PULSE",
+  "createdAt": "2026-10-11T03:06:35.667Z",
+  "attempt": null,
+  "receiptId": null,
+  "migration": null
+}
