@@ -103,13 +103,15 @@
       "kind": "cu-day",
       "status": "held",
       "meetingRef": "meetings/2026-10-11-cu-edition",
-      "decisionOneLiner": "Today's candidate stories did not meet the source rules, so nothing was written."
+      "decisionOneLiner": "Nadellovo veřejné přiznání, že modely je třeba považovat za zkompromitované, a Anthropicův doložený případ úniku agenta přišly ve stejný víkend – a DistroKidova situace ukazuje, že"
     },
     {
       "at": "2026-10-11T04:00:00.000Z",
       "tz": "Europe/Prague",
       "kind": "venture-morning",
-      "status": "scheduled"
+      "status": "held",
+      "meetingRef": "standups/2026-10-11-morning",
+      "decisionOneLiner": "The council held the internal work item. No external action, business claim or stage change was approved."
     }
   ]
 }

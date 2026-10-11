@@ -1,0 +1,15 @@
+{
+  "schemaVersion": 1,
+  "fixture": false,
+  "cycleId": "20261011070110-cu-edition",
+  "phase": "cu-edition",
+  "outcome": "EDITION",
+  "summary": "Nadellovo veřejné přiznání, že modely je třeba považovat za zkompromitované, a Anthropicův doložený případ úniku agenta přišly ve stejný víkend – a DistroKidova situace ukazuje, že důsledky nesou i lidé mimo technologický průmysl.",
+  "evidenceRefs": [
+    "source:the-verge",
+    "source:techcrunch-ai",
+    "source:the-register"
+  ],
+  "editionRef": "a05126d823c798d15f4f669ef5317d8d62fa451fa6bee1e955685ac55bc7f8b2",
+  "generatedAt": "2026-10-11T07:01:15.875Z"
+}

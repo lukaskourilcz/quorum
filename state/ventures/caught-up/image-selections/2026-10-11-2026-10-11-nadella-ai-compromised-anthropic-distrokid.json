@@ -1,0 +1,151 @@
+{
+  "schemaVersion": "image-selection/1",
+  "venture": "caught-up",
+  "slug": "2026-10-11-nadella-ai-compromised-anthropic-distrokid",
+  "date": "2026-10-11",
+  "rung": "illustration",
+  "selected": null,
+  "verdicts": [
+    {
+      "mode": "search",
+      "considered": 6,
+      "selected": null,
+      "reason": "all-candidates-rejected",
+      "candidates": [
+        {
+          "candidateId": "pexels:9242888",
+          "provider": "pexels",
+          "fit": 5,
+          "vetoes": [],
+          "reason": "Shows hands working on computer hardware, which relates to technology but is too literal/documentary of a specific repair moment rather than illustrating the broader theme of AI model integrity and trust.",
+          "sceneCs": "ruka s páječkou opravující základní desku"
+        },
+        {
+          "candidateId": "wikimedia:179520469",
+          "provider": "wikimedia",
+          "fit": 0,
+          "vetoes": [
+            "dated-aesthetic",
+            "ai-generated-look"
+          ],
+          "reason": "Generic stock-illustration of circuitry-brain hybrid, exactly the kind of dated, clichéd AI imagery that has been overused for a decade and fails the 'no dated aesthetic' rule.",
+          "sceneCs": "stylizovaný mozek z elektrotechnických prvků"
+        },
+        {
+          "candidateId": "openverse:00de4c50-7cec-4609-9f6d-e605679a28a8",
+          "provider": "openverse",
+          "fit": 3,
+          "vetoes": [],
+          "reason": "Museum or exhibition display of circuit boards, but the documentary nature of the specific scene and the institutional setting make it feel like it documents a particular event rather than illustrating the abstract concept of AI trustworthiness.",
+          "sceneCs": "výstavní prostor s modely elektronických desek"
+        },
+        {
+          "candidateId": "pixabay:3963945",
+          "provider": "pixabay",
+          "fit": 1,
+          "vetoes": [
+            "dated-aesthetic",
+            "ai-generated-look"
+          ],
+          "reason": "Heavily stylized, glowing digital visualization with lens flares and blue holographic aesthetics—precisely the kind of overdone, dated AI-cliché imagery that violates the aesthetic rules.",
+          "sceneCs": "syntetizovaný obraz s mozkovou strukturou v digitálním světě"
+        },
+        {
+          "candidateId": "pexels:4316",
+          "provider": "pexels",
+          "fit": 6,
+          "vetoes": [],
+          "reason": "Real close-up photograph of actual computer hardware with heatsinks and components, clean and well-lit, showing genuine technology without cliché styling; relates to hardware/computing substrate but not ideological.",
+          "sceneCs": "detail základní desky s chladičem a konektory"
+        },
+        {
+          "candidateId": "pixabay:3382521",
+          "provider": "pixabay",
+          "fit": 1,
+          "vetoes": [
+            "dated-aesthetic",
+            "ai-generated-look"
+          ],
+          "reason": "Glowing blue digital brain schematic with grid pattern and lens effects—archetypal mid-2000s AI stock imagery that screams artificial and dated.",
+          "sceneCs": "abstraktní mozek v modrém digitálním prostředí"
+        }
+      ],
+      "skipped": [],
+      "costUsd": 0.005786
+    },
+    {
+      "mode": "generated",
+      "considered": 1,
+      "selected": "illustration:2026-10-11-candidate-1",
+      "reason": "Stylized circuit-board design with an AI-like central node communicates artificial intelligence and digital systems clearly, fitting an article about AI model integrity and trust without the pitfalls of recognizable faces, text, or logos.",
+      "candidates": [
+        {
+          "candidateId": "illustration:2026-10-11-candidate-1",
+          "provider": "boardlessai",
+          "fit": 7,
+          "vetoes": [],
+          "reason": "Stylized circuit-board design with an AI-like central node communicates artificial intelligence and digital systems clearly, fitting an article about AI model integrity and trust without the pitfalls of recognizable faces, text, or logos.",
+          "sceneCs": "stylizovaný elektronický obvod s centrálním uzlem"
+        }
+      ],
+      "skipped": [],
+      "costUsd": 0.002175
+    },
+    {
+      "mode": "generated",
+      "considered": 1,
+      "selected": "illustration:2026-10-11-candidate-2",
+      "reason": "The glowing circuit board pattern and neural network visualization effectively illustrate the article's focus on AI model integrity and trust issues, using appropriate digital aesthetics without faces or text.",
+      "candidates": [
+        {
+          "candidateId": "illustration:2026-10-11-candidate-2",
+          "provider": "boardlessai",
+          "fit": 7,
+          "vetoes": [],
+          "reason": "The glowing circuit board pattern and neural network visualization effectively illustrate the article's focus on AI model integrity and trust issues, using appropriate digital aesthetics without faces or text.",
+          "sceneCs": "svítící elektronické obvody v siluetě hlavy"
+        }
+      ],
+      "skipped": [],
+      "costUsd": 0.002115
+    },
+    {
+      "mode": "generated",
+      "considered": 1,
+      "selected": "illustration:2026-10-11-candidate-3",
+      "reason": "Digitální ilustrace zobrazující počítačový obvod a čas evokuje bezpečnost a technický dohled v AI systémech, což relevantně rezonuje s tématem kompromitace modelů a důvěry.",
+      "candidates": [
+        {
+          "candidateId": "illustration:2026-10-11-candidate-3",
+          "provider": "boardlessai",
+          "fit": 7,
+          "vetoes": [],
+          "reason": "Digitální ilustrace zobrazující počítačový obvod a čas evokuje bezpečnost a technický dohled v AI systémech, což relevantně rezonuje s tématem kompromitace modelů a důvěry.",
+          "sceneCs": "abstraktní schéma obvodu se střední hodinami"
+        }
+      ],
+      "skipped": [],
+      "costUsd": 0.00232
+    },
+    {
+      "mode": "generated",
+      "considered": 1,
+      "selected": "illustration:2026-10-11-candidate-4",
+      "reason": "Illustration of computer processing, circuit logic and digital systems aligns well with the article's theme of AI model integrity and trust in artificial intelligence; clean, professional rendering suitable for tech briefing.",
+      "candidates": [
+        {
+          "candidateId": "illustration:2026-10-11-candidate-4",
+          "provider": "boardlessai",
+          "fit": 7,
+          "vetoes": [],
+          "reason": "Illustration of computer processing, circuit logic and digital systems aligns well with the article's theme of AI model integrity and trust in artificial intelligence; clean, professional rendering suitable for tech briefing.",
+          "sceneCs": "zářící digitální hodiny s elektrickými obvody"
+        }
+      ],
+      "skipped": [],
+      "costUsd": 0.00213
+    }
+  ],
+  "skippedProviders": [],
+  "recordedAt": "2026-10-11T07:01:10.875Z"
+}
