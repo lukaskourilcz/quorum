@@ -3,13 +3,13 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "prebuild": "pnpm --filter @boardlessai/carousel-studio build",
-    "predev": "pnpm --filter @boardlessai/carousel-studio build",
-    "predev:e2e": "pnpm --filter @boardlessai/carousel-studio build",
-    "pretest": "pnpm --filter @boardlessai/carousel-studio build",
+    "prebuild": "pnpm --filter @boardlessai/carousel-studio build && pnpm --filter @boardlessai/orchestrator build",
+    "predev": "pnpm --filter @boardlessai/carousel-studio build && pnpm --filter @boardlessai/orchestrator build",
+    "predev:e2e": "pnpm --filter @boardlessai/carousel-studio build && pnpm --filter @boardlessai/orchestrator build",
+    "pretest": "pnpm --filter @boardlessai/carousel-studio build && pnpm --filter @boardlessai/orchestrator build",
     "pretest:e2e": "pnpm --filter @boardlessai/carousel-studio build",
     "pretest:e2e:admin-qa": "pnpm build",
-    "pretypecheck": "pnpm --filter @boardlessai/carousel-studio build",
+    "pretypecheck": "pnpm --filter @boardlessai/carousel-studio build && pnpm --filter @boardlessai/orchestrator build",
     "build": "next build",
     "dev": "next dev",
     "dev:e2e": "node --max-old-space-size=5120 node_modules/next/dist/bin/next dev --hostname 127.0.0.1",
@@ -32,7 +32,8 @@
     "react-dom": "19.2.8",
     "server-only": "0.0.1",
     "sharp": "0.35.4",
-    "tailwind-merge": "3.6.0"
+    "tailwind-merge": "3.6.0",
+    "@boardlessai/orchestrator": "workspace:*"
   },
   "devDependencies": {
     "@axe-core/playwright": "^4.12.1",

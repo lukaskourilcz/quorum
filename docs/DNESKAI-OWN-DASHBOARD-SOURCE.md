@@ -69,6 +69,9 @@ second outbox delivery. Network failures, 429 and 5xx retry after one and five m
 attempts total. Other failures and exhausted retries remain `reconciliation`. Receipts retain
 status codes, not response bodies or credentials. An accepted callback lost before receipt commit
 can retry safely because the receiving contract deduplicates this source identity.
+After inspecting a held delivery and fixing its cause, use `retry --packet-key <exact key>` to
+stage another bounded attempt series. The bridge retains the previous attempt count/status in a
+separate reconciliation record and still rechecks article authority before sending.
 
 The dispatch-only `marketing-source.yml` workflow defaults to inspection. An explicit send first
 pushes the staged outbox, sends signed packets, then pushes receipts even after delivery failure.

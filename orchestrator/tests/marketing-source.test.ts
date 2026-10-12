@@ -9,7 +9,7 @@ import { editorialReviewHash, storeEditorialReview } from "../src/edition/review
 import { atomicWriteJson, readJson } from "../src/state.js";
 import { signature, verifySourceRequest, parseSourcePacket, sha256 } from "../src/marketing-source/contract.js";
 import { NEWS_FRESHNESS_HOURS, localSourceReader, readSources, retractionPath } from "../src/marketing-source/producer.js";
-import { deliverSources, packetKey, reconcileSources } from "../src/marketing-source/outbox.js";
+import { deliverSources, packetKey, reconcileSources, retryReconciledSource } from "../src/marketing-source/outbox.js";
 import { configRoot } from "../src/paths.js";
 import { resolveVentureCapability } from "../src/ventures/capabilities.js";
 
@@ -118,6 +118,11 @@ describe("DNESKAi source bridge", () => {
     const raw = await readFile(path.join(root, `marketing-source/outbox/${packetKey(packet)}.json`), "utf8");
     expect(JSON.parse(raw).status).toBe("reconciliation"); expect(calls).toBe(3);
     expect(raw).not.toContain("must-not-be-recorded"); expect(raw).not.toContain(secret);
+    await retryReconciledSource(root, packetKey(packet), now);
+    expect(await readdir(path.join(root, "marketing-source/reconciliations"))).toHaveLength(1);
+    const retried = await readJson<{ attempts: number; status: string }>(root, `marketing-source/outbox/${packetKey(packet)}.json`, { attempts: -1, status: "unknown" });
+    expect(retried).toMatchObject({ attempts: 0, status: "pending" });
+    await expect(retryReconciledSource(root, packetKey(packet), now)).rejects.toThrow();
   });
   it("refuses disabled delivery, stale signatures, altered bytes and wrong-brand capability paths", async () => {
     const { input } = await fixture();

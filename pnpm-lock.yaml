@@ -76,6 +76,9 @@ importers:
       '@boardlessai/carousel-studio':
         specifier: workspace:*
         version: link:../studio
+      '@boardlessai/orchestrator':
+        specifier: workspace:*
+        version: link:../orchestrator
       '@resvg/resvg-js':
         specifier: ^2.6.2
         version: 2.6.2

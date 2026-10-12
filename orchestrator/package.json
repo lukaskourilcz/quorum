@@ -54,7 +54,8 @@
     "cost:report": "tsx src/finance/cost-report-cli.ts",
     "mma:retire": "tsx src/mma-files/retire-cli.ts",
     "social:activation": "tsx src/social/activation-cli.ts",
-    "marketing:source": "tsx src/marketing-source/cli.ts"
+    "marketing:source": "tsx src/marketing-source/cli.ts",
+    "prepare": "pnpm build"
   },
   "dependencies": {
     "@anthropic-ai/sdk": "0.113.0",
@@ -72,5 +73,11 @@
     "tsx": "4.23.1",
     "typescript": "5.9.3",
     "vitest": "4.1.11"
+  },
+  "exports": {
+    "./marketing-source": {
+      "types": "./dist/orchestrator/src/marketing-source/api.d.ts",
+      "default": "./dist/orchestrator/src/marketing-source/api.js"
+    }
   }
 }

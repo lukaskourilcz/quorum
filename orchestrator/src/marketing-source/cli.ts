@@ -7,12 +7,18 @@ import { atomicWriteJson, withFileLock } from "../state.js";
 import { repoRoot, stateRoot } from "../paths.js";
 import { MarketingCalendarSchema } from "../contracts/marketing-calendar.js";
 import { NEWS_FRESHNESS_HOURS, RetractionSchema, retractionPath } from "./producer.js";
-import { deliverSources, reconcileSources } from "./outbox.js";
+import { deliverSources, reconcileSources, retryReconciledSource } from "./outbox.js";
 
 const value = (args: string[], flag: string) => args.includes(flag) ? args[args.indexOf(flag) + 1] : undefined;
 async function main(): Promise<void> {
   const args = process.argv.slice(2).filter(arg => arg !== "--");
   const now = new Date();
+  if (args[0] === "retry") {
+    const key = value(args, "--packet-key");
+    if (!key) throw new Error("--packet-key is required");
+    await retryReconciledSource(stateRoot, key, now);
+    console.log(JSON.stringify({ packetKey: key, status: "retry-staged", recheckRequired: true })); return;
+  }
   if (args[0] === "export-calendars") {
     const output = value(args, "--output-dir");
     if (!output) throw new Error("--output-dir is required");
@@ -36,7 +42,7 @@ async function main(): Promise<void> {
     await withFileLock(stateRoot, "marketing-source/.lock", () => atomicWriteJson(stateRoot, retractionPath(record.sourceId), record));
     console.log(JSON.stringify({ sourceId, status: "retracted", reconciliationRequired: true })); return;
   }
-  if (args[0] && !["reconcile", "backfill"].includes(args[0])) throw new Error("Expected reconcile, backfill, retract or export-calendars");
+  if (args[0] && !["reconcile", "backfill"].includes(args[0])) throw new Error("Expected reconcile, backfill, retry, retract or export-calendars");
   const siteUrl = process.env.CAUGHT_UP_SITE_URL;
   if (!siteUrl) throw new Error("CAUGHT_UP_SITE_URL is required");
   const input = { root: stateRoot, siteUrl, now, freshnessHours: NEWS_FRESHNESS_HOURS };

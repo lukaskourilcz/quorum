@@ -1,6 +1,6 @@
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import { NextRequest } from "next/server";
-import { signature } from "../../../../../../orchestrator/src/marketing-source/contract";
+import { signature } from "@boardlessai/orchestrator/marketing-source";
 import { proxy } from "../../../../proxy";
 
 const read = vi.hoisted(() => vi.fn());

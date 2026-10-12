@@ -1,13 +1,10 @@
 import "server-only";
 import { readAdminJson, listAdminJson } from "./admin-repository";
 import { queueRepositoryRoot } from "./admin-queue/state";
-import { NEWS_FRESHNESS_HOURS, readNoEditionDates, readSources, type SourceReader } from "../../../orchestrator/src/marketing-source/producer";
-import { invalidation } from "../../../orchestrator/src/marketing-source/outbox";
-import { parseSourcePacket, sha256, type SourceQuery } from "../../../orchestrator/src/marketing-source/contract";
-import { resolveVentureCapabilityInMap } from "../../../orchestrator/src/ventures/capabilities";
-import { VentureCapabilityMapSchema } from "../../../orchestrator/src/contracts/venture-capability";
+import { NEWS_FRESHNESS_HOURS, readNoEditionDates, readSources, type SourceReader, invalidation,
+  parseSourcePacket, sha256, type SourceQuery, resolveVentureCapabilityInMap, VentureCapabilityMapSchema } from "@boardlessai/orchestrator/marketing-source";
 
-export { SourceQuerySchema } from "../../../orchestrator/src/marketing-source/contract";
+export { SourceQuerySchema } from "@boardlessai/orchestrator/marketing-source";
 
 export async function readAdminMarketingSources(query: SourceQuery, now = new Date()) {
   if (process.env.NODE_ENV === "production" && !process.env.BOARDLESSAI_GITHUB_TOKEN) throw new Error("Current source authority requires configured repository access");

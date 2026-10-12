@@ -1,6 +1,7 @@
 import { z } from "zod";
 import { access } from "node:fs/promises";
 import path from "node:path";
+import { randomUUID } from "node:crypto";
 import { atomicWriteJson, readJson, withFileLock } from "../state.js";
 import { resolveVentureCapability } from "../ventures/capabilities.js";
 import { parseSourcePacket, sha256, signature, SourcePacketSchema, type SourcePacket } from "./contract.js";
@@ -21,6 +22,18 @@ export function invalidation(previous: SourcePacket, reason: string, now: Date):
   if (!previous.eligible && previous.eligibilityReason === reason) return { ...previous, observedAt: now.toISOString() };
   return parseSourcePacket({ ...previous, sourceRevision: sha256({ previousRevision: previous.sourceRevision, reason }),
     eligible: false, eligibilityReason: reason, observedAt: now.toISOString() });
+}
+export async function retryReconciledSource(root: string, key: string, now: Date): Promise<void> {
+  if (!/^[a-f0-9]{64}$/u.test(key)) throw new Error("Expected an exact source packet key");
+  await withFileLock(root, "marketing-source/.lock", async () => {
+    const relative = `marketing-source/outbox/${key}.json`;
+    const entry = EntrySchema.parse(await readJson(root, relative, null));
+    if (entry.status !== "reconciliation") throw new Error("Only a reconciled failure may retry");
+    await atomicWriteJson(root, `marketing-source/reconciliations/${key}-${randomUUID()}.json`, {
+      schemaVersion: "marketing-source-reconciliation/1", action: "operator-retry", packetKey: key,
+      previousAttempts: entry.attempts, previousResponseCode: entry.responseCode, recordedAt: now.toISOString() });
+    await atomicWriteJson(root, relative, { ...entry, status: "pending", attempts: 0, nextAttemptAt: now.toISOString() });
+  });
 }
 async function assertCapability(root: string, configurationRoot?: string): Promise<void> {
   let paused = false;

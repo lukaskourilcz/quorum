@@ -1,5 +1,5 @@
 import { readAdminMarketingSources, SourceQuerySchema } from "@/lib/admin-marketing-source";
-import { verifySourceRequest } from "../../../../../../orchestrator/src/marketing-source/contract";
+import { verifySourceRequest } from "@boardlessai/orchestrator/marketing-source";
 
 export const runtime = "nodejs";
 export const dynamic = "force-dynamic";
