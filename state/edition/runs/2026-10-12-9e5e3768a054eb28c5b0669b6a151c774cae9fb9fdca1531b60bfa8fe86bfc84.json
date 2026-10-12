@@ -1,0 +1,287 @@
+{
+  "schemaVersion": 1,
+  "runId": "faf156d4-7237-414a-9a01-1738dedb8701",
+  "date": "2026-10-12",
+  "mode": "production",
+  "status": "edition",
+  "startedAt": "2026-10-12T03:01:21.432Z",
+  "completedAt": "2026-10-12T03:04:16.147Z",
+  "stages": [
+    {
+      "name": "curate",
+      "status": "success",
+      "startedAt": "2026-10-12T03:01:21.460Z",
+      "completedAt": "2026-10-12T03:01:42.154Z",
+      "durationMs": 20694
+    },
+    {
+      "name": "write",
+      "status": "success",
+      "startedAt": "2026-10-12T03:01:42.154Z",
+      "completedAt": "2026-10-12T03:03:38.079Z",
+      "durationMs": 115925
+    },
+    {
+      "name": "stet_0",
+      "status": "success",
+      "startedAt": "2026-10-12T03:03:38.080Z",
+      "completedAt": "2026-10-12T03:03:38.085Z",
+      "durationMs": 5
+    },
+    {
+      "name": "quality_0",
+      "status": "success",
+      "startedAt": "2026-10-12T03:03:38.086Z",
+      "completedAt": "2026-10-12T03:03:38.086Z",
+      "durationMs": 0
+    },
+    {
+      "name": "assemble_package",
+      "status": "success",
+      "startedAt": "2026-10-12T03:03:38.086Z",
+      "completedAt": "2026-10-12T03:04:16.145Z",
+      "durationMs": 38059
+    }
+  ],
+  "regenerationAttempts": 0,
+  "stetBlocks": 0,
+  "hacekBlocks": 0,
+  "usage": [
+    {
+      "provider": "anthropic",
+      "model": "claude-sonnet-4-6",
+      "stage": "curate",
+      "inputTokens": 12091,
+      "outputTokens": 952,
+      "cacheReadTokens": 0,
+      "cacheWriteTokens": 0,
+      "costUsd": 0.050553
+    },
+    {
+      "provider": "anthropic",
+      "model": "claude-sonnet-4-6",
+      "stage": "write",
+      "inputTokens": 10229,
+      "outputTokens": 4459,
+      "cacheReadTokens": 0,
+      "cacheWriteTokens": 2470,
+      "costUsd": 0.1068345
+    }
+  ],
+  "measuredCostUsd": 0.1573875,
+  "quality": {
+    "metrics": {
+      "successfulSources": 31,
+      "candidateItems": 80,
+      "citedSources": 7,
+      "signalStrength": 78,
+      "maximumSingleSourceShare": 0.42857142857142855,
+      "sourceDiversity": 0.6938775510204082,
+      "duplicateStorySimilarity": 0.07692307692307693,
+      "repeatedTopicFrequency": 0.5,
+      "primarySourceRelevant": false,
+      "primarySourcePresent": false,
+      "unsupportedWatchlistItems": 0,
+      "costPerRun": 0.1573875
+    },
+    "result": {
+      "passed": true,
+      "enforced": true,
+      "violations": [],
+      "action": "publish"
+    }
+  },
+  "stet": {
+    "passed": true,
+    "score": 50,
+    "violations": []
+  },
+  "imageProgram": {
+    "readiness": {
+      "providers": {
+        "openverse": "keyless",
+        "wikimedia": "keyless",
+        "pexels": "present",
+        "pixabay": "present"
+      },
+      "gateModelConfigured": true,
+      "caps": {
+        "perArticleUsd": 0.05,
+        "perDayUsd": 0.1,
+        "generatedImagesPerDay": 4
+      },
+      "spentToday": {
+        "usd": 0,
+        "generatedImages": 0
+      },
+      "illustrationRung": "armed"
+    },
+    "rung": "illustration",
+    "verdicts": [
+      {
+        "mode": "search",
+        "considered": 6,
+        "selected": null,
+        "reason": "all-candidates-rejected",
+        "candidates": [
+          {
+            "candidateId": "pexels:9242888",
+            "provider": "pexels",
+            "fit": 3,
+            "vetoes": [
+              "dated-aesthetic"
+            ],
+            "reason": "Shows generic computer hardware repair work, but the dated appearance of the motherboard and retro styling makes this feel archival rather than current, failing to convey the contemporary AI policy story.",
+            "sceneCs": "ruka se šroubovákem u staré základní desky"
+          },
+          {
+            "candidateId": "wikimedia:179520469",
+            "provider": "wikimedia",
+            "fit": 1,
+            "vetoes": [
+              "ai-generated-look"
+            ],
+            "reason": "This is the textbook example of the blue holographic brain circuit design the rules explicitly forbid—a clichéd, obvious AI illustration that looks machine-generated and misleads readers.",
+            "sceneCs": "mozkový obrys v podobě elektronického obvodu"
+          },
+          {
+            "candidateId": "openverse:00de4c50-7cec-4609-9f6d-e605679a28a8",
+            "provider": "openverse",
+            "fit": 5,
+            "vetoes": [],
+            "reason": "Museum or exhibition display of electronics and circuit boards with multiple visitors viewing displays—real-world, well-lit, shows AI/tech topic, but institutional setting feels somewhat detached from Washington policy discussions.",
+            "sceneCs": "návštěvníci v muzeu u expozic elektroniky"
+          },
+          {
+            "candidateId": "pixabay:3963945",
+            "provider": "pixabay",
+            "fit": 2,
+            "vetoes": [
+              "ai-generated-look",
+              "dated-aesthetic"
+            ],
+            "reason": "Glowing holographic hand with particles and grid overlays—exactly matches the forbidden aesthetic of lens-flare-era AI imagery that dates and misleads.",
+            "sceneCs": "zářící ruka s částicovými efekty"
+          },
+          {
+            "candidateId": "pexels:28767589",
+            "provider": "pexels",
+            "fit": 2,
+            "vetoes": [
+              "ai-generated-look",
+              "dated-aesthetic"
+            ],
+            "reason": "Neon-tinted computer chip with vaporwave aesthetic—this is precisely the styled, dated-looking silicon imagery the rules exclude as misleading.",
+            "sceneCs": "počítačový čip v neonových barvách"
+          },
+          {
+            "candidateId": "pixabay:3435575",
+            "provider": "pixabay",
+            "fit": 4,
+            "vetoes": [],
+            "reason": "Abstract image of business figure with data streams and particles suggesting intelligence/networks—generic enough to illustrate AI policy without obvious dated styling, though somewhat stock in nature.",
+            "sceneCs": "postava v obleku s datovými toky"
+          }
+        ],
+        "skipped": [],
+        "costUsd": 0.005671
+      },
+      {
+        "mode": "generated",
+        "considered": 1,
+        "selected": "illustration:2026-10-12-candidate-1",
+        "reason": "A stylized circuit-board visualization with glowing blue elements and a central clock mechanism effectively illustrates AI systems and technological concepts without showing recognizable faces or containing embedded text.",
+        "candidates": [
+          {
+            "candidateId": "illustration:2026-10-12-candidate-1",
+            "provider": "boardlessai",
+            "fit": 7,
+            "vetoes": [],
+            "reason": "A stylized circuit-board visualization with glowing blue elements and a central clock mechanism effectively illustrates AI systems and technological concepts without showing recognizable faces or containing embedded text.",
+            "sceneCs": "svítící elektronické schéma s hodinami"
+          }
+        ],
+        "skipped": [],
+        "costUsd": 0.002135
+      },
+      {
+        "mode": "generated",
+        "considered": 1,
+        "selected": "illustration:2026-10-12-candidate-2",
+        "reason": "Stylizovaný circuit board s neonovým osvětlením vhodně ilustruje téma umělé inteligence a technologií; bezpečný, čistý design bez tváří či loga.",
+        "candidates": [
+          {
+            "candidateId": "illustration:2026-10-12-candidate-2",
+            "provider": "boardlessai",
+            "fit": 8,
+            "vetoes": [],
+            "reason": "Stylizovaný circuit board s neonovým osvětlením vhodně ilustruje téma umělé inteligence a technologií; bezpečný, čistý design bez tváří či loga.",
+            "sceneCs": "abstraktní modré obvody a uzly na černém pozadí"
+          }
+        ],
+        "skipped": [],
+        "costUsd": 0.002325
+      },
+      {
+        "mode": "generated",
+        "considered": 1,
+        "selected": "illustration:2026-10-12-candidate-3",
+        "reason": "Ilustrace správně zachycuje technologické téma umělé inteligence a digitálního vývoje bez textů nebo rozpoznatelných obličejů, avšak je poměrně generická a neodlišuje se od běžných AI-related vizuálů.",
+        "candidates": [
+          {
+            "candidateId": "illustration:2026-10-12-candidate-3",
+            "provider": "boardlessai",
+            "fit": 7,
+            "vetoes": [],
+            "reason": "Ilustrace správně zachycuje technologické téma umělé inteligence a digitálního vývoje bez textů nebo rozpoznatelných obličejů, avšak je poměrně generická a neodlišuje se od běžných AI-related vizuálů.",
+            "sceneCs": "modrý elektronický obvod se světelným tónem"
+          }
+        ],
+        "skipped": [],
+        "costUsd": 0.002395
+      },
+      {
+        "mode": "generated",
+        "considered": 1,
+        "selected": "illustration:2026-10-12-candidate-4",
+        "reason": "Circuit board pattern with glowing nodes and connections is a generic AI/technology illustration that cleanly evokes artificial intelligence and digital systems without being specific to any moment or person, though it's somewhat overused as AI imagery.",
+        "candidates": [
+          {
+            "candidateId": "illustration:2026-10-12-candidate-4",
+            "provider": "boardlessai",
+            "fit": 7,
+            "vetoes": [],
+            "reason": "Circuit board pattern with glowing nodes and connections is a generic AI/technology illustration that cleanly evokes artificial intelligence and digital systems without being specific to any moment or person, though it's somewhat overused as AI imagery.",
+            "sceneCs": "svítící elektronické obvody na tmavém pozadí"
+          }
+        ],
+        "skipped": [],
+        "costUsd": 0.002195
+      }
+    ]
+  },
+  "packageStatus": "edition",
+  "warnings": [
+    "image_rung:illustration",
+    "image_gate:search:all-candidates-rejected",
+    "image_gate:generated:selected"
+  ],
+  "sourceSummary": {
+    "successfulSources": 31,
+    "candidateItems": 80,
+    "evidenceRefs": [
+      "source:404-media",
+      "source:anthropic-news",
+      "source:ars-technica",
+      "source:arxiv-cs-ai",
+      "source:arxiv-cs-lg",
+      "source:bluesky-language-models",
+      "source:deepmind-blog",
+      "source:digiday",
+      "source:github-ai-releases",
+      "source:google-research",
+      "source:hf-blog",
+      "source:hn-frontpage"
+    ]
+  }
+}

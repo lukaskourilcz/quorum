@@ -1,0 +1,16 @@
+{
+  "schemaVersion": 1,
+  "fixture": false,
+  "cycleId": "20261012030115-cu-edition",
+  "phase": "cu-edition",
+  "outcome": "EDITION",
+  "summary": "\">Přejmenování AI na „super inteligenci\" není jen slovní hříčka – zasahuje způsob, jakým budou formulovány zákony, a ukazuje, kdo si nárokuje autoritu nad tím, jak se o technologii mluví.",
+  "evidenceRefs": [
+    "source:the-verge",
+    "source:tensorfeed",
+    "source:techcrunch-ai",
+    "source:variety"
+  ],
+  "editionRef": "9e5e3768a054eb28c5b0669b6a151c774cae9fb9fdca1531b60bfa8fe86bfc84",
+  "generatedAt": "2026-10-12T03:01:20.341Z"
+}
