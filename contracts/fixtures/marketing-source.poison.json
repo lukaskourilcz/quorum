@@ -1,0 +1,37 @@
+{
+  "schemaVersion": "marketing-source/1",
+  "brand": "devshark",
+  "kind": "article",
+  "sourceId": "2026-10-13-fixture",
+  "sourceRevision": "fixture-version-1",
+  "contentHash": "3921d007ee83538f286b8ca8369585afdcd8be3a64854c0f1d41dca495acaa9e",
+  "canonicalUrl": "https://example.invalid/articles/2026-10-13-fixture",
+  "locale": "cs",
+  "observedAt": "2026-10-13T00:00:00Z",
+  "expiresAt": "2026-10-16T00:00:00Z",
+  "eligible": true,
+  "eligibilityReason": "Fixture only; no publication authorization",
+  "content": {
+    "title": "Fixture: vybraný článek",
+    "body": "Fixture only. Not live editorial evidence.",
+    "category": "",
+    "difficulty": null,
+    "code": null,
+    "options": [],
+    "answer": null,
+    "explanation": null,
+    "evidence": [
+      {
+        "url": "https://example.invalid/fixture-source",
+        "title": "Fixture evidence",
+        "excerpt": "Fixture only",
+        "checkedAt": "2026-10-13T00:00:00Z"
+      }
+    ],
+    "image": {
+      "url": "https://example.invalid/fixture.webp",
+      "alt": "Fixture illustration",
+      "licence": "BoardlessAI illustration; fixture only"
+    }
+  }
+}

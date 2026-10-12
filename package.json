@@ -64,7 +64,8 @@
     "finance:page": "pnpm --filter @boardlessai/orchestrator finance:page",
     "cost:report": "pnpm --filter @boardlessai/orchestrator cost:report",
     "mma:retire": "pnpm --filter @boardlessai/orchestrator mma:retire",
-    "social:activation": "pnpm --filter @boardlessai/orchestrator social:activation"
+    "social:activation": "pnpm --filter @boardlessai/orchestrator social:activation",
+    "marketing:source": "pnpm --filter @boardlessai/orchestrator marketing:source"
   },
   "devDependencies": {
     "vercel": "58.4.4"

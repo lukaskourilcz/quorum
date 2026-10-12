@@ -53,7 +53,8 @@
     "finance:page": "tsx src/finance/finance-page-cli.ts",
     "cost:report": "tsx src/finance/cost-report-cli.ts",
     "mma:retire": "tsx src/mma-files/retire-cli.ts",
-    "social:activation": "tsx src/social/activation-cli.ts"
+    "social:activation": "tsx src/social/activation-cli.ts",
+    "marketing:source": "tsx src/marketing-source/cli.ts"
   },
   "dependencies": {
     "@anthropic-ai/sdk": "0.113.0",

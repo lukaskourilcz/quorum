@@ -1,0 +1,62 @@
+name: DNESKAi source bridge
+on:
+  workflow_dispatch:
+    inputs:
+      send:
+        description: Send approved source versions to OwnDashboard (never social posts)
+        type: boolean
+        required: true
+        default: false
+permissions:
+  contents: write
+concurrency:
+  group: guarded-cycle-${{ github.ref }}
+  cancel-in-progress: false
+jobs:
+  sources:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    env:
+      CAUGHT_UP_SITE_URL: ${{ vars.CAUGHT_UP_SITE_URL }}
+      DNESKAI_MARKETING_SOURCE_ENABLED: ${{ vars.DNESKAI_MARKETING_SOURCE_ENABLED }}
+      OWN_DASHBOARD_MARKETING_SOURCE_URL: ${{ vars.OWN_DASHBOARD_MARKETING_SOURCE_URL }}
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          ref: ${{ github.ref }}
+      - name: Honor repository pause
+        run: test ! -e state/PAUSED
+      - uses: pnpm/action-setup@0ebf47130e4866e96fce0953f49152a61190b271 # v6.0.9
+      - uses: actions/setup-node@249970729cb0ef3589644e2896645e5dc5ba9c38 # v6.5.0
+        with:
+          node-version: "22"
+          package-manager-cache: false
+      - run: pnpm install --frozen-lockfile
+      - name: Reconcile and persist the outbox before network delivery
+        if: inputs.send
+        run: |
+          pnpm marketing:source -- reconcile --stage
+          git add state/marketing-source
+          if ! git diff --cached --quiet; then
+            git config user.name "boardlessai-source[bot]"
+            git config user.email "boardlessai-source[bot]@users.noreply.github.com"
+            git commit -m "marketing: stage approved DNESKAi sources"
+            git push origin "HEAD:$GITHUB_REF_NAME"
+          fi
+      - name: Inspect sources without changing state
+        if: ${{ !inputs.send }}
+        run: pnpm marketing:source -- reconcile
+      - name: Deliver signed source callbacks
+        id: delivery
+        if: inputs.send
+        env:
+          DNESKAI_MARKETING_SOURCE_SECRET: ${{ secrets.DNESKAI_MARKETING_SOURCE_SECRET }}
+        run: pnpm marketing:source -- reconcile --send
+      - name: Persist delivery receipts including failed attempts
+        if: ${{ !cancelled() && inputs.send && steps.delivery.outcome != 'skipped' }}
+        run: |
+          git add state/marketing-source
+          if ! git diff --cached --quiet; then
+            git commit -m "marketing: record DNESKAi source delivery outcomes"
+            git push origin "HEAD:$GITHUB_REF_NAME"
+          fi

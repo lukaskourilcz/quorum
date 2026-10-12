@@ -13,6 +13,7 @@ import {
 import { VentureOperationHealthSchema } from "../contracts/venture-operations.js";
 import { PersonalGrowthGoViralPacketSchema } from "../contracts/personal-growth.js";
 import { PersonalGrowthManualVentureReferenceSchema } from "../contracts/personal-growth-recommendations.js";
+import { SourcePacketSchema } from "../marketing-source/contract.js";
 import { configRoot as defaultConfigRoot } from "../paths.js";
 
 export interface CapabilityRequest {
@@ -32,6 +33,7 @@ export interface CapabilityResolution {
 }
 
 const payloadSchemas: Readonly<Record<string, ZodType>> = {
+  "marketing-source/1": SourcePacketSchema,
   "goviral-intelligence-packet/1": GoViralIntelligencePacketSchema,
   "bounded-render-summary/1": BoundedRenderSummarySchema,
   "approved-publish-package/1": ApprovedPublishPackageRefSchema,

@@ -1,4 +1,6 @@
 import type { Metadata } from "next";
+import { redirect } from "next/navigation";
+import { marketingCalendarDestination } from "@/lib/marketing-calendar-cutover";
 import { AdminShell, type AdminWorkspace } from "@/components/admin/admin-shell";
 import { AdminWriteProvider } from "@/components/admin/admin-write-mode";
 import { MarketingCalendarScreen } from "@/components/admin/marketing-calendar/marketing-calendar-screen";
@@ -27,6 +29,8 @@ export default async function CalendarPage({ searchParams }: { searchParams: Pro
   const requested = ALIASES[query.get("venture") ?? ""] ?? query.get("venture");
   // An unknown venture falls back to the first plan, the way an unknown tab falls back to a venture's first.
   const venture = isMarketingCalendarVenture(requested) ? requested : MARKETING_CALENDAR_VENTURES[0].id;
+  const destination = marketingCalendarDestination(venture);
+  if (destination) redirect(destination);
   const workspaces: AdminWorkspace[] = [
     { id: "global", name: "Company Overview", count: 0, href: "/admin", active: false },
     ...navigableVentures(portfolio).map((candidate) => ({

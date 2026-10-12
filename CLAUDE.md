@@ -31,6 +31,10 @@ Council runs via API in `orchestrator/`; you are the human-invoked engineer.
 - `state/marketing-calendar/` — the devShark and DNESKAi 30-day marketing plans
   (`marketing-calendar/1`) that `/admin/calendar` renders. A plan, not a scheduler:
   `docs/MARKETING-CALENDAR.md`.
+- `orchestrator/src/marketing-source/` — the owner-requested DNESKAi approved-article
+  export to OwnDashboard (#598). Signed source queries and outbox callbacks carry exact
+  editorial versions and invalidations. Article approval grants no social approval;
+  old social workflows remain held. `docs/DNESKAI-OWN-DASHBOARD-SOURCE.md` owns setup/cutover.
 
 ## Things a session will trip over
 
