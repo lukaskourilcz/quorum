@@ -3,8 +3,8 @@
   "nodeId": "contest-radar",
   "displayName": "Contest Radar",
   "policyVersion": "1.0.0",
-  "generatedAt": "2026-10-11T04:00:53.526Z",
-  "observedAt": "2026-10-11T04:00:53.526Z",
+  "generatedAt": "2026-10-13T04:01:02.594Z",
+  "observedAt": "2026-10-13T04:01:02.594Z",
   "lifecycleStage": "planned",
   "state": "held",
   "reason": "The node is not yet scheduled for live operation.",
@@ -45,5 +45,5 @@
   "unavailableReasons": [],
   "ownerAttentionRefs": [],
   "latestRunReceiptRefs": [],
-  "snapshotHash": "344b11abeb900e7f5ff991db01de8f18dc86b783a6bcfe6e511a0994541bb9d8"
+  "snapshotHash": "56f91491e8afb65405cfa5cd7dddd1b458c44c0c1d82afb346ab234875bc6948"
 }
