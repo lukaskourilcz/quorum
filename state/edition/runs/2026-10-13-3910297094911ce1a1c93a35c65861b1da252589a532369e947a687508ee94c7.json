@@ -1,0 +1,271 @@
+{
+  "schemaVersion": 1,
+  "runId": "92cdd7e6-0a61-4618-a8fb-aa4fad59d810",
+  "date": "2026-10-13",
+  "mode": "production",
+  "status": "edition",
+  "startedAt": "2026-10-13T03:01:22.190Z",
+  "completedAt": "2026-10-13T03:04:00.324Z",
+  "stages": [
+    {
+      "name": "curate",
+      "status": "success",
+      "startedAt": "2026-10-13T03:01:22.217Z",
+      "completedAt": "2026-10-13T03:01:42.733Z",
+      "durationMs": 20516
+    },
+    {
+      "name": "write",
+      "status": "success",
+      "startedAt": "2026-10-13T03:01:42.734Z",
+      "completedAt": "2026-10-13T03:03:33.309Z",
+      "durationMs": 110575
+    },
+    {
+      "name": "stet_0",
+      "status": "success",
+      "startedAt": "2026-10-13T03:03:33.309Z",
+      "completedAt": "2026-10-13T03:03:33.313Z",
+      "durationMs": 4
+    },
+    {
+      "name": "quality_0",
+      "status": "success",
+      "startedAt": "2026-10-13T03:03:33.314Z",
+      "completedAt": "2026-10-13T03:03:33.314Z",
+      "durationMs": 0
+    },
+    {
+      "name": "assemble_package",
+      "status": "success",
+      "startedAt": "2026-10-13T03:03:33.314Z",
+      "completedAt": "2026-10-13T03:04:00.321Z",
+      "durationMs": 27007
+    }
+  ],
+  "regenerationAttempts": 0,
+  "stetBlocks": 0,
+  "hacekBlocks": 0,
+  "usage": [
+    {
+      "provider": "anthropic",
+      "model": "claude-sonnet-4-6",
+      "stage": "curate",
+      "inputTokens": 11989,
+      "outputTokens": 923,
+      "cacheReadTokens": 0,
+      "cacheWriteTokens": 0,
+      "costUsd": 0.049812
+    },
+    {
+      "provider": "anthropic",
+      "model": "claude-sonnet-4-6",
+      "stage": "write",
+      "inputTokens": 12910,
+      "outputTokens": 4598,
+      "cacheReadTokens": 0,
+      "cacheWriteTokens": 2470,
+      "costUsd": 0.1169625
+    }
+  ],
+  "measuredCostUsd": 0.1667745,
+  "quality": {
+    "metrics": {
+      "successfulSources": 31,
+      "candidateItems": 80,
+      "citedSources": 7,
+      "signalStrength": 83,
+      "maximumSingleSourceShare": 0.42857142857142855,
+      "sourceDiversity": 0.7346938775510204,
+      "duplicateStorySimilarity": 0.14285714285714285,
+      "repeatedTopicFrequency": 0.16666666666666666,
+      "primarySourceRelevant": false,
+      "primarySourcePresent": false,
+      "unsupportedWatchlistItems": 0,
+      "costPerRun": 0.1667745
+    },
+    "result": {
+      "passed": true,
+      "enforced": true,
+      "violations": [],
+      "action": "publish"
+    }
+  },
+  "stet": {
+    "passed": true,
+    "score": 50,
+    "violations": []
+  },
+  "imageProgram": {
+    "readiness": {
+      "providers": {
+        "openverse": "keyless",
+        "wikimedia": "keyless",
+        "pexels": "present",
+        "pixabay": "present"
+      },
+      "gateModelConfigured": true,
+      "caps": {
+        "perArticleUsd": 0.05,
+        "perDayUsd": 0.1,
+        "generatedImagesPerDay": 4
+      },
+      "spentToday": {
+        "usd": 0,
+        "generatedImages": 0
+      },
+      "illustrationRung": "armed"
+    },
+    "rung": "search",
+    "verdicts": [
+      {
+        "mode": "search",
+        "considered": 6,
+        "selected": "pexels:4316",
+        "reason": "A close-up photograph of actual computer hardware (heatsinks on a motherboard) is genuinely illustrative of technology, well-lit, sharp, and avoids stock clichés, though it remains somewhat generic to the specifics of AI agency.",
+        "candidates": [
+          {
+            "candidateId": "pexels:9242888",
+            "provider": "pexels",
+            "fit": 6,
+            "vetoes": [],
+            "reason": "A technician's hand working on a circuit board motherboard illustrates technology and AI topics clearly, but the focus on hands-on repair work makes it feel too specific to a particular event rather than the abstract nature of AI agency.",
+            "sceneCs": "ruka s páječkou nad deskou s plošnými spoji"
+          },
+          {
+            "candidateId": "wikimedia:179520469",
+            "provider": "wikimedia",
+            "fit": 1,
+            "vetoes": [
+              "dated-aesthetic",
+              "ai-generated-look"
+            ],
+            "reason": "The circuit-board brain is a clichéd visual metaphor for AI from the mid-2010s stock imagery world, rendered with the too-perfect gloss of generated imagery; it actively misleads readers about what AI actually is.",
+            "sceneCs": "mozkový útvar s modrými obvody"
+          },
+          {
+            "candidateId": "openverse:00de4c50-7cec-4609-9f6d-e605679a28a8",
+            "provider": "openverse",
+            "fit": 4,
+            "vetoes": [],
+            "reason": "Museum or exhibition display of circuit boards with visitors viewing—neutral enough in not dating itself or looking generated, but the documentary nature of a specific display location feels less universally illustrative than broader technology imagery.",
+            "sceneCs": "návštěvníci v muzeu čtoucí obrazovku s deskou plošných spojů"
+          },
+          {
+            "candidateId": "pixabay:3963945",
+            "provider": "pixabay",
+            "fit": 2,
+            "vetoes": [
+              "ai-generated-look",
+              "dated-aesthetic"
+            ],
+            "reason": "A glowing, lens-flared abstract brain visualization with grid overlays is the textbook example of mid-2000s AI marketing imagery that looks machine-generated and actively misleads through aesthetic artificiality.",
+            "sceneCs": "zářivý mozek s holograma efekty"
+          },
+          {
+            "candidateId": "pexels:4316",
+            "provider": "pexels",
+            "fit": 7,
+            "vetoes": [],
+            "reason": "A close-up photograph of actual computer hardware (heatsinks on a motherboard) is genuinely illustrative of technology, well-lit, sharp, and avoids stock clichés, though it remains somewhat generic to the specifics of AI agency.",
+            "sceneCs": "chladič s modrými a žlutými vodiči na základní desce"
+          },
+          {
+            "candidateId": "pixabay:3382521",
+            "provider": "pixabay",
+            "fit": 1,
+            "vetoes": [
+              "ai-generated-look",
+              "dated-aesthetic"
+            ],
+            "reason": "This glowing blue circuit-and-brain graphic is quintessential stock AI imagery from the early 2010s with all the hallmarks of dated CGI rendering and synthetic appearance.",
+            "sceneCs": "zářivý mozek nad abstraktní sítí"
+          }
+        ],
+        "skipped": [],
+        "costUsd": 0.006009
+      },
+      {
+        "mode": "generated",
+        "considered": 1,
+        "selected": "illustration:2026-10-13-candidate-2",
+        "reason": "A stylized circuit board pattern with nodes and pathways in blue on black background effectively represents AI agents, technology systems, and autonomous systems without being specific to any event mentioned in the article.",
+        "candidates": [
+          {
+            "candidateId": "illustration:2026-10-13-candidate-2",
+            "provider": "boardlessai",
+            "fit": 7,
+            "vetoes": [],
+            "reason": "A stylized circuit board pattern with nodes and pathways in blue on black background effectively represents AI agents, technology systems, and autonomous systems without being specific to any event mentioned in the article.",
+            "sceneCs": "stylizovaná deska s obvody a uzly"
+          }
+        ],
+        "skipped": [],
+        "costUsd": 0.002113
+      },
+      {
+        "mode": "generated",
+        "considered": 1,
+        "selected": null,
+        "reason": "all-candidates-rejected",
+        "candidates": [
+          {
+            "candidateId": "illustration:2026-10-13-candidate-3",
+            "provider": "boardlessai",
+            "fit": 2,
+            "vetoes": [
+              "off-brief"
+            ],
+            "reason": "The image shows generic AI/tech symbolism (circuit brain, digital nodes) that does not illustrate any of the three distinct topics in this briefing item: a false police report from an AI agent, measles outbreak, or a coding policy change.",
+            "sceneCs": "stylizovaný mozek s digitálními obvody"
+          }
+        ],
+        "skipped": [],
+        "costUsd": 0.002288
+      },
+      {
+        "mode": "generated",
+        "considered": 1,
+        "selected": "illustration:2026-10-13-candidate-4",
+        "reason": "A stylized circuit-board clock illustrates the theme of AI agents operating autonomously and in real time, fitting the article's focus on an AI system that independently took action. The rendered aesthetic is appropriate for a tech briefing.",
+        "candidates": [
+          {
+            "candidateId": "illustration:2026-10-13-candidate-4",
+            "provider": "boardlessai",
+            "fit": 7,
+            "vetoes": [],
+            "reason": "A stylized circuit-board clock illustrates the theme of AI agents operating autonomously and in real time, fitting the article's focus on an AI system that independently took action. The rendered aesthetic is appropriate for a tech briefing.",
+            "sceneCs": "digitální hodiny s prvky elektronických obvodů"
+          }
+        ],
+        "skipped": [],
+        "costUsd": 0.002158
+      }
+    ]
+  },
+  "packageStatus": "edition",
+  "warnings": [
+    "image_rung:search",
+    "image_gate:search:selected",
+    "image_gate:generated:selected",
+    "image_gate:generated:all-candidates-rejected"
+  ],
+  "sourceSummary": {
+    "successfulSources": 31,
+    "candidateItems": 80,
+    "evidenceRefs": [
+      "source:404-media",
+      "source:anthropic-news",
+      "source:ars-technica",
+      "source:arxiv-cs-ai",
+      "source:arxiv-cs-lg",
+      "source:bluesky-language-models",
+      "source:deepmind-blog",
+      "source:digiday",
+      "source:github-ai-releases",
+      "source:google-research",
+      "source:hf-blog",
+      "source:hn-frontpage"
+    ]
+  }
+}
