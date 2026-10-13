@@ -59,7 +59,7 @@ describe("the Admin Operations boundary", () => {
     const directory = await root();
     await copyConfiguration(directory);
     const snapshot = await readAdminOperations(directory);
-    expect(snapshot.nodes).toHaveLength(25);
+    expect(snapshot.nodes).toHaveLength(26);
     expect(snapshot.nodes.find((node) => node.id === "webdev-signal")).toMatchObject({ lifecycleStage: "planned", health: "held", recordState: "missing" });
     expect(snapshot.nodes.find((node) => node.id === "contest-radar")).toMatchObject({ lifecycleStage: "planned", health: "held", recovery: { maximumAttempts: 0 } });
     expect(snapshot.capabilities.edges.length).toBeGreaterThan(0);

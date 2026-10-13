@@ -1,7 +1,7 @@
 {
   "schemaVersion": "operations-node-registry/1",
-  "registryVersion": "1.0.0",
-  "effectiveDate": "2026-08-26",
+  "registryVersion": "1.0.1",
+  "effectiveDate": "2026-10-13",
   "reviewDate": "2026-11-26",
   "nodes": [
     { "id": "caught-up", "displayName": "Caught Up" },
@@ -28,6 +28,7 @@
     { "id": "owner-attention", "displayName": "Owner attention" },
     { "id": "budget-service", "displayName": "Budget service" },
     { "id": "scheduler-service", "displayName": "Scheduler service" },
-    { "id": "admin-service", "displayName": "Admin service" }
+    { "id": "admin-service", "displayName": "Admin service" },
+    { "id": "own-dashboard", "displayName": "OwnDashboard source bridge" }
   ]
 }

@@ -58,10 +58,11 @@ describe("Social Profiles server snapshot", () => {
     expect(snapshot.posture).toMatchObject({ globalKillSwitch: "engaged", liveAuthorityGranted: false });
     expect(snapshot.ventureProfiles.find(({ profile }) => profile.ventureRef === "door-money")).toMatchObject({
       lifecycle: "proposed",
-      capability: { decision: "allowed", governingReference: "GitHub #424" },
+      capability: { decision: "denied", reason: "The #424 reference for door-money is stale or mismatched.", mapVersion: "1.6.0", governingReference: "GitHub #424" },
       connections: [],
       operationalMetrics: null
     });
+    expect(snapshot.ventureProfiles.find(({ profile }) => profile.ventureRef === "door-money")?.profile.capabilityRefs[0]?.mapVersion).toBe("1.5.0");
     expect(snapshot.ventureProfiles.find(({ profile }) => profile.ventureRef === "booksofhistory")?.capability.decision).toBe("denied");
     expect(snapshot.ventureProfiles.find(({ profile }) => profile.ventureRef === "tehdejsi-svet")?.capability.decision).toBe("denied");
     expect(snapshot.ventureProfiles.some(({ profile }) => ["personal-growth", "kvorum"].includes(profile.ventureRef ?? ""))).toBe(false);

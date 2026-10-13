@@ -62,6 +62,8 @@ describe("canonical operations health", () => {
       .toBe("manual");
     expect(slos.policies.find((policy) => policy.nodeId === "webdev-signal")?.lifecycleStage)
       .toBe("planned");
+    expect(slos.policies.find((policy) => policy.nodeId === "own-dashboard"))
+      .toMatchObject({ lifecycleStage: "setup-needed", cadence: { kind: "manual" }, dependencyNodeIds: [], costGuardrails: { maximumRunUsd: 0 } });
     expect(slos.policies.every((policy) => policy.exclusions.includes("fixture"))).toBe(true);
   });
 

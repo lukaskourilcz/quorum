@@ -144,6 +144,7 @@ describe("marketingShark's GoVIRAL trend hook", () => {
       ["intelligence-read", "goviral-intelligence-packet/1", "allowed", "orchestrator/src/ventures/marketingshark/intelligence.ts"]
     ]);
     expect(edges[1]!.governingReference).toBe("state/decisions/2026-09-26-devshark-social-queue.md");
-    expect(map.supersessionHistory.at(-1)).toMatchObject({ mapVersion: "1.5.0", decisionReference: "state/decisions/2026-09-26-devshark-social-queue.md" });
+    expect(map.supersessionHistory).toContainEqual(expect.objectContaining({ mapVersion: "1.5.0", decisionReference: "state/decisions/2026-09-26-devshark-social-queue.md" }));
+    expect(map.supersessionHistory.at(-1)).toMatchObject({ mapVersion: "1.6.0", decisionReference: "state/decisions/2026-10-13-dneskai-own-dashboard-source.md" });
   });
 });

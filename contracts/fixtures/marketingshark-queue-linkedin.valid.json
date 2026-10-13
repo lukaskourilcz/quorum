@@ -11,7 +11,7 @@
     "role": "primary",
     "connectionBindingRef": "social-connection-devshark-linkedin",
     "capabilityRef": {
-      "mapVersion": "1.5.0",
+      "mapVersion": "1.6.0",
       "source": "marketingshark",
       "target": "social-distribution",
       "capability": "approved-publish-package",
@@ -53,7 +53,7 @@
       "marketingshark:question:rm-abbr-19"
     ],
     "rendererVersion": "carousel-studio-1",
-    "contentHash": "a003a1d3c9c39dffbfcff187bd8462a2b6f3b13e1e10c83557a6dddfc4862e55"
+    "contentHash": "83b76d29183c6ab61e84d153ef9ea1fb4557a3d000f37b0632cedb8a68bbb1c8"
   },
   "publishWindow": {
     "notBefore": "2026-09-26T06:00:00.000Z",

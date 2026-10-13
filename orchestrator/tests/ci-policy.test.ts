@@ -74,6 +74,7 @@ describe("automation policy", () => {
       "cycle.yml",
       "delivery-doctor.yml",
       "health.yml",
+      "marketing-source.yml",
       "social-publisher.yml",
       "social-references.yml"
     ]);
@@ -89,6 +90,18 @@ describe("automation policy", () => {
           /uses:\s+[A-Za-z0-9_.-]+\/[A-Za-z0-9_.-]+@[0-9a-f]{40}/
         );
       }
+    }
+  });
+
+  it("keeps the source bridge manual and existing social publishers held", async () => {
+    const bridge = await readFile(path.join(workflowRoot, "marketing-source.yml"), "utf8");
+    expect(bridge).toContain("workflow_dispatch:");
+    expect(bridge).not.toMatch(/schedule:|cron:/u);
+    expect(bridge).toContain("default: false");
+    expect(bridge).toContain("DNESKAI_MARKETING_SOURCE_ENABLED");
+    expect(bridge).toContain("test ! -e state/PAUSED");
+    for (const name of ["social-publisher.yml", "social-references.yml"]) {
+      expect(await readFile(path.join(workflowRoot, name), "utf8")).toMatch(/if:\s*\$\{\{\s*false\s*\}\}/u);
     }
   });
 

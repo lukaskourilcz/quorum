@@ -35,11 +35,18 @@ function health(): VentureOperationHealth {
   };
 }
 
-async function inputs(profileId = "social-profile-caught-up") {
-  const [publisher, strategies] = await Promise.all([loadSocialPublisherRegistry(), loadSocialProfileStrategies()]);
+async function inputs(profileId = "social-profile-caught-up", currentMapFixture = false) {
+  const [publisher, strategies, map] = await Promise.all([loadSocialPublisherRegistry(), loadSocialProfileStrategies(), loadVentureCapabilityMap(configRoot)]);
+  const profile = publisher.profiles.find(({ id }) => id === profileId)!;
+  const strategy = strategies.strategies.find(({ profileId: id }) => id === profileId)!;
+  // Counterfactual unit inputs only: committed profile/strategy references retain their old pins.
+  if (currentMapFixture) {
+    profile.capabilityRefs = profile.capabilityRefs.map(ref => ({ ...ref, mapVersion: map.mapVersion }));
+    strategy.allowedCapabilities = strategy.allowedCapabilities.map(ref => ({ ...ref, mapVersion: map.mapVersion }));
+  }
   return {
-    profile: publisher.profiles.find(({ id }) => id === profileId)!,
-    strategy: strategies.strategies.find(({ profileId: id }) => id === profileId)!
+    profile,
+    strategy
   };
 }
 
@@ -104,7 +111,7 @@ describe("Social Distribution rolling inventory", () => {
   });
 
   it("accepts Door Money only through its exact bounded package and rejects GoVIRAL copy, denied capabilities and isolated sources", async () => {
-    const { profile, strategy } = await inputs("social-profile-door-money");
+    const { profile, strategy } = await inputs("social-profile-door-money", true);
     const capabilityMap = await loadVentureCapabilityMap(configRoot);
     const approved = importCapabilityInventoryCandidate({
       profile, strategy, capabilityMap, sourceKind: "approved-package", sourceVentureId: "door-money",

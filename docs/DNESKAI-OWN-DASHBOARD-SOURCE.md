@@ -119,3 +119,22 @@ After verifying both full imports, brand ownership and the old publisher holds, 
 `OWN_DASHBOARD_MARKETING_CUTOVER_VERIFIED=true` in the BoardlessAI site. `/admin/calendar` then
 redirects to the matching `?brand=dneskai` or `?brand=devshark` route. These settings remain unset/off
 in this change. The bridge provisions no secret, changes no paid plan, posts nothing and deploys nothing.
+
+## Capability registry verification
+
+PR #599's initial map 1.6.0 exposed 34 failures across 15 orchestrator test files in CI job
+115053396440. The same 15 files pass all 105 tests at parent revision `f6d2b0a`, verified in an
+isolated detached checkout with the same locked local dependencies. These were bridge regressions,
+not a demonstrated main-branch baseline failure: the new service was missing Operations node,
+SLO and recovery registrations, and current-map unit fixtures still carried the previous pin.
+
+OwnDashboard is now registered as a manual, isolated, setup-needed service with a $0 cost ceiling,
+no dependencies, zero automatic recovery attempts, no permitted recovery actions and no automatic
+resume. The capability map still grants only the exact caught-up → own-dashboard source edge.
+
+The real Social Distribution publisher and strategy registries retain map 1.5.0. Strict current-map
+checks deny those stale references until independently revalidated; adding this bridge does not
+renew owner approvals, strategy digests or queued social items. Current-map positive tests use
+synthetic contract fixtures or explicit in-memory counterfactual inputs. Regenerated marketingShark
+queue fixtures remain drafts and change only their capability pin and its derived payload hash.
+No real profile, campaign, approval, historical decision or calendar date was changed.

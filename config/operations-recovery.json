@@ -1,7 +1,7 @@
 {
   "schemaVersion": "operations-recovery-registry/1",
-  "registryVersion": "1.0.0",
-  "effectiveDate": "2026-08-26",
+  "registryVersion": "1.0.1",
+  "effectiveDate": "2026-10-13",
   "reviewDate": "2026-11-26",
   "defaults": {
     "phase": "routine",
@@ -40,6 +40,7 @@
     { "nodeId": "owner-attention", "permittedActions": ["reuse-last-valid", "rebuild-derived-view", "isolate-malformed-item", "postpone-next-window", "pause-scope"] },
     { "nodeId": "budget-service", "permittedActions": ["reconcile-ambiguous", "reuse-last-valid", "rebuild-derived-view", "postpone-next-window", "pause-scope"] },
     { "nodeId": "scheduler-service", "permittedActions": ["reconcile-ambiguous", "release-stale-lock", "rebuild-derived-view", "postpone-next-window", "pause-scope", "resume-transient"], "automaticResume": true },
-    { "nodeId": "admin-service", "maximumAttempts": 0, "permittedActions": [] }
+    { "nodeId": "admin-service", "maximumAttempts": 0, "permittedActions": [] },
+    { "nodeId": "own-dashboard", "maximumAttempts": 0, "permittedActions": [], "automaticResume": false, "pauseScope": "connection" }
   ]
 }

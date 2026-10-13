@@ -102,6 +102,8 @@ describe("isolated operations recovery", () => {
     expect(resolved.policies.every((policy) => policy.maximumIncrementalCostUsd === 0)).toBe(true);
     expect(resolved.policies.every((policy) => policy.prohibitedActions.includes("deployment"))).toBe(true);
     expect(resolved.policies.find((policy) => policy.nodeId === "webdev-signal")?.maximumAttempts).toBe(0);
+    expect(resolved.policies.find((policy) => policy.nodeId === "own-dashboard"))
+      .toMatchObject({ maximumAttempts: 0, permittedActions: [], maximumIncrementalCostUsd: 0, automaticResume: { allowed: false } });
   });
 
   it("reconciles an ambiguous result once through the owning primitive", async () => {

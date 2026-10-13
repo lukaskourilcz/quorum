@@ -82,10 +82,10 @@ describe("Autonomous Operations final release gate", () => {
     const first = await materializeOperationsState({ repoRoot, stateRoot, now: firstAt });
     const firstCurrent = await readFile(path.join(stateRoot, first.path), "utf8");
     const snapshot = JSON.parse(firstCurrent) as { nodes: Array<{ nodeId: string; health: string }> };
-    expect(snapshot.nodes).toHaveLength(25);
+    expect(snapshot.nodes).toHaveLength(26);
     expect(snapshot.nodes.find(({ nodeId }) => nodeId === "contest-radar")?.health).toBe("held");
     expect(snapshot.nodes.find(({ nodeId }) => nodeId === "webdev-signal")?.health).toBe("held");
-    expect(first.healthPaths).toHaveLength(25);
+    expect(first.healthPaths).toHaveLength(26);
     expect(first.incidentPath).toBe("operations/incidents/current.json");
     expect(JSON.parse(await readFile(path.join(stateRoot, first.incidentPath!), "utf8"))).toMatchObject({
       activeIncidentRefs: [],
@@ -163,7 +163,7 @@ describe("Autonomous Operations final release gate", () => {
     created.push(stateRoot);
     const first = await materializeOperationsState({ repoRoot, stateRoot, now: new Date("2026-08-26T09:00:00.000Z") });
     expect(first.path).toBe("operations/current.json");
-    expect(first.healthPaths).toHaveLength(25);
+    expect(first.healthPaths).toHaveLength(26);
     const snapshot = JSON.parse(await readFile(path.join(stateRoot, first.path), "utf8")) as { nodes: Array<{ nodeId: string; health: string }>; snapshotHash: string };
     expect(snapshot.nodes.find((node) => node.nodeId === "contest-radar")?.health).toBe("held");
     expect(snapshot.nodes.find((node) => node.nodeId === "caught-up")?.health).toBe("unavailable");
