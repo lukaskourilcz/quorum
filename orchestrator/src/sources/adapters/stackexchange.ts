@@ -6,6 +6,7 @@ import type {
 import { fetchJson, makeItem } from "./util.js";
 
 interface StackExchangeResponse {
+  has_more?: boolean;
   items?: Array<{
     question_id?: number;
     title?: string;
@@ -53,9 +54,7 @@ export async function fetchStackExchange(
   if (process.env.STACKEXCHANGE_KEY) {
     url.searchParams.set("key", process.env.STACKEXCHANGE_KEY);
   }
-  return projectQuestions(
-    await fetchJson<StackExchangeResponse>(url.toString(), context),
-    source,
-    context.now
-  );
+  const data = await fetchJson<StackExchangeResponse>(url.toString(), context);
+  if ((data.items?.length ?? 0) >= source.maxItems || data.has_more === true) context.reportIssue?.("upstream-cap");
+  return projectQuestions(data, source, context.now);
 }

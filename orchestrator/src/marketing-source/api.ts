@@ -7,3 +7,5 @@ export { VentureCapabilityMapSchema } from "../contracts/venture-capability.js";
 export { EditorialReviewSchema, EditorialPreviewSelectionSchema } from "../contracts/editorial-review.js";
 export { approvedEditorialPackage } from "../edition/review.js";
 export { editionPackageHash } from "../edition/package.js";
+export { DneskaiFeedRequestSchema, DneskaiFeedResponseSchema, type DneskaiFeedRequest, type DneskaiFeedResponse } from "./collection-contract.js";
+export { collectMarketingSources, validateCollectionQuery, InvalidCollectionQuery } from "./collection.js";

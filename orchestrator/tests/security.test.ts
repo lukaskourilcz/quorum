@@ -132,3 +132,42 @@ describe("untrusted source security", () => {
     expect(sanitized.promptInjectionSignals.length).toBeGreaterThan(0);
   });
 });
+
+describe("source transport deadline and streaming bounds", () => {
+  it("cancels oversized streamed content before reading a later chunk", async () => {
+    const cancel = vi.fn(); let pulled = 0;
+    const stream = new ReadableStream<Uint8Array>({ pull(controller) { pulled++; controller.enqueue(new Uint8Array(8)); }, cancel }, { highWaterMark: 0 });
+    await expect(safeFetch("https://source.example/feed", {
+      allowHosts: ["source.example"], maxBytes: 4,
+      fetchImpl: (async () => new Response(stream, { headers: { "content-type": "text/plain" } })) as typeof fetch,
+      resolveImpl: async () => ["203.0.113.10"]
+    })).rejects.toThrowError(/too large/);
+    expect(pulled).toBe(1); expect(cancel).toHaveBeenCalled();
+  });
+  it("bounds slow body reads after headers have arrived", async () => {
+    const cancel = vi.fn();
+    const stream = new ReadableStream<Uint8Array>({ pull() {}, cancel });
+    await expect(safeFetch("https://source.example/feed", {
+      allowHosts: ["source.example"], timeoutMs: 10,
+      fetchImpl: (async () => new Response(stream, { headers: { "content-type": "text/plain" } })) as typeof fetch,
+      resolveImpl: async () => ["203.0.113.10"]
+    })).rejects.toThrowError(/timed out/);
+    expect(cancel).toHaveBeenCalled();
+  });
+  it("bounds DNS and forbids starting a fetch after the deadline", async () => {
+    const fetchImpl = vi.fn();
+    await expect(safeFetch("https://source.example/feed", {
+      allowHosts: ["source.example"], timeoutMs: 10, fetchImpl,
+      resolveImpl: () => new Promise(() => {})
+    })).rejects.toThrowError(/timed out/);
+    expect(fetchImpl).not.toHaveBeenCalled();
+  });
+  it("honors the caller abort before DNS or network can complete", async () => {
+    const controller = new AbortController(); controller.abort(new Error("Fixture collection cancelled"));
+    const fetchImpl = vi.fn(); const resolveImpl = vi.fn(async () => ["203.0.113.10"]);
+    await expect(safeFetch("https://source.example/feed", {
+      allowHosts: ["source.example"], signal: controller.signal, fetchImpl, resolveImpl
+    })).rejects.toThrowError(/cancelled/);
+    expect(fetchImpl).not.toHaveBeenCalled(); expect(resolveImpl).not.toHaveBeenCalled();
+  });
+});

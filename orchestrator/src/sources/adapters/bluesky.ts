@@ -56,9 +56,7 @@ export async function fetchBluesky(
   url.searchParams.set("q", source.query ?? "language model");
   url.searchParams.set("sort", "top");
   url.searchParams.set("limit", String(source.maxItems));
-  return projectBluesky(
-    await fetchJson<BlueskyResponse>(url.toString(), context),
-    source,
-    context.now
-  );
+  const data = await fetchJson<BlueskyResponse>(url.toString(), context);
+  if ((data.posts?.length ?? 0) >= source.maxItems) context.reportIssue?.("upstream-cap");
+  return projectBluesky(data, source, context.now);
 }

@@ -65,7 +65,7 @@ async function sourceFetch(
   context: SourceFetchContext,
   options: Omit<SafeFetchOptions, "allowHosts"> = {}
 ) {
-  return safeFetch(url, { ...options, allowHosts: context.allowHosts });
+  return safeFetch(url, { ...options, allowHosts: context.allowHosts, signal: context.signal && options.signal ? AbortSignal.any([context.signal, options.signal]) : context.signal ?? options.signal });
 }
 
 export async function fetchText(

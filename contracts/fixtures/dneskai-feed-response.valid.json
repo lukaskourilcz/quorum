@@ -1,0 +1,20 @@
+{
+  "schemaVersion": "dneskai-feed/1",
+  "sources": [
+    {
+      "sourceId": "anthropic-news",
+      "status": "partial",
+      "errorCode": "unknown-date",
+      "items": [
+        {
+          "externalId": "fixture-research-only",
+          "title": "Fixture research candidate, never an approved article",
+          "url": "https://www.anthropic.com/news/fixture",
+          "publishedAt": null,
+          "summary": "",
+          "fetchedAt": "2026-10-13T20:00:00Z"
+        }
+      ]
+    }
+  ]
+}

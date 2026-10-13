@@ -60,8 +60,10 @@ export async function fetchGithub(
         const releases = await fetchJson<GithubRelease[]>(url.toString(), context, {
           headers
         });
+        if (releases.length >= 3) context.reportIssue?.("upstream-cap");
         return projectReleases(releases, repo, source, context.now);
       } catch {
+        context.reportIssue?.("fetch-failed");
         return [];
       }
     })

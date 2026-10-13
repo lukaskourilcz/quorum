@@ -46,9 +46,7 @@ export async function fetchSpaceflight(
   const url = new URL(source.url);
   url.searchParams.set("limit", String(source.maxItems));
   url.searchParams.set("ordering", "-published_at");
-  return projectSpaceflight(
-    await fetchJson<SpaceflightResponse>(url.toString(), context),
-    source,
-    context.now
-  );
+  const data = await fetchJson<SpaceflightResponse>(url.toString(), context);
+  if ((data.results?.length ?? 0) >= source.maxItems) context.reportIssue?.("upstream-cap");
+  return projectSpaceflight(data, source, context.now);
 }

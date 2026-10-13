@@ -1,0 +1,8 @@
+{
+  "action": "collect",
+  "sourceIds": [
+    "anthropic-news"
+  ],
+  "since": "2026-10-12T20:00:00Z",
+  "maxItems": 20
+}

@@ -42,6 +42,7 @@ import { KvorumEntityLexiconSchema } from "./kvorum-entities.js";
 import { KvorumMonitorReceiptSchema } from "./kvorum-monitor.js";
 import { KvorumSourceRegistrySchema } from "./kvorum-sources.js";
 import { MarketingCalendarSchema } from "./marketing-calendar.js";
+import { DneskaiFeedRequestSchema, DneskaiFeedResponseSchema } from "../marketing-source/collection-contract.js";
 import { SourcePacketSchema } from "../marketing-source/contract.js";
 import { MarketingPlanSchema } from "./marketing-plan.js";
 import { MarketingSharkQotdSchema } from "./marketingshark-qotd.js";
@@ -188,6 +189,8 @@ import {
 } from "./autonomy.js";
 
 export const ContractSchemas = {
+  "dneskai-feed-request": DneskaiFeedRequestSchema,
+  "dneskai-feed-response": DneskaiFeedResponseSchema,
   "action-packet": ActionPacketSchema,
   "audience-spec": AudienceSpecSchema,
   "boardless-dataset": BoardlessDatasetSchema,

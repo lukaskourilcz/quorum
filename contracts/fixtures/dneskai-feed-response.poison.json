@@ -1,0 +1,11 @@
+{
+  "schemaVersion": "dneskai-feed/1",
+  "sources": [
+    {
+      "sourceId": "anthropic-news",
+      "status": "approved",
+      "errorCode": null,
+      "items": []
+    }
+  ]
+}

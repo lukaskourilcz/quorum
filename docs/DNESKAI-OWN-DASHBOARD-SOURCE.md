@@ -187,3 +187,19 @@ renew owner approvals, strategy digests or queued social items. Current-map posi
 synthetic contract fixtures or explicit in-memory counterfactual inputs. Regenerated marketingShark
 queue fixtures remain drafts and change only their capability pin and its derived payload hash.
 No real profile, campaign, approval, historical decision or calendar date was changed.
+
+## Free research collection bridge
+
+`POST /admin/api/marketing-collection` is a separate, read-only research operation. It is disabled by default (`DNESKAI_COLLECTION_ENABLED=false`), reuses `DNESKAI_MARKETING_SOURCE_SECRET` and the existing `Authorization: Bearer`, `X-Marketing-Timestamp`, `X-Marketing-Signature` HMAC over `${timestamp}.${rawBody}`. Timestamp tolerance remains five minutes. Enabling article export does not enable collection. Production requires current repository access (`BOARDLESSAI_GITHUB_TOKEN`, with the existing repository/branch settings); configuration-read failure has no stale fallback.
+
+The exact shared `dneskai-feed/1` request/response schemas live in `contracts/dneskai-feed-*.schema.json` and the compiled marketing-source package. Request example:
+
+```json
+{"action":"collect","sourceIds":["anthropic-news"],"since":"2026-10-12T20:00:00Z","maxItems":20}
+```
+
+One request accepts 1–8 distinct IDs from the existing 32-source registry and 1–20 items per source. Unknown/duplicate IDs and a future `since` fail before source requests. Returned source entries correspond exactly to the requested IDs in request order; disabled or credential-unavailable sources return `error`. Body size is capped at 8 KiB, the entire operation at 50 seconds, adapter collection at 40 seconds, and every source transport retains HTTPS/host/DNS/redirect validation with an 8-second DNS/header/body deadline and a streamed 1 MB decompressed cap. Existing adapters are reused; Firecrawl and Jina, including keyless Jina, are prohibited on this route. Existing generation pipelines retain their default reader policy.
+
+`partial` means completeness is unverified: a response/item cap, upstream pagination, per-item failures, discarded invalid/duplicate records, or missing publication dates. Fixed `errorCode` values describe these conditions without URLs, credentials or provider error text. Undated items retain `publishedAt: null`; `fetchedAt` is observation time, never substituted as publication time. Invalid/future records are discarded. An entirely unreadable/failed response is `error`; a complete dated feed containing only records older than `since` is `ok` with no items. A receiver must never advance a successful-source cursor on `partial`, `error`, or the requested item cap. External IDs over 2,048 characters are rejected as invalid rather than silently truncated.
+
+Collection does not change the source registry, daily rotation, schedules, editorial reviews, outbox, image generation, article delivery, or social publishing. OwnDashboard owns scheduling, source cursors, candidate selection and target dates. The 22:00 Prague rotation and four-topic target are planning rules in OwnDashboard; these raw research items are not eligible approved `SourcePacket/1` articles. Genuine final title/image approval and current published-article authenticity checks remain required for that separate packet path. No owner decision is inferred by collection.

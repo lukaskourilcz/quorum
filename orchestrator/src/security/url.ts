@@ -112,6 +112,7 @@ export interface SafeFetchOptions {
   maxBytes?: number;
   maxRedirects?: number;
   timeoutMs?: number;
+  signal?: AbortSignal;
   fetchImpl?: typeof fetch;
   resolveImpl?: (hostname: string) => Promise<string[]>;
   responseHeaderNames?: readonly string[];
@@ -155,15 +156,20 @@ export async function safeFetch(
     if (!options.allowHosts.includes(url.hostname)) {
       throw new UnsafeUrlError(`Host is not allowlisted: ${url.hostname}`);
     }
-    const addresses = await resolveImpl(url.hostname);
-    if (addresses.some((address) => !isPublicAddress(address))) {
-      throw new UnsafeUrlError("DNS resolution includes a private address");
-    }
     const controller = new AbortController();
-    const timer = setTimeout(() => controller.abort(), options.timeoutMs ?? 8_000);
-    let response: Response;
+    const abort = () => controller.abort(options.signal?.reason);
+    if (options.signal?.aborted) abort();
+    options.signal?.addEventListener("abort", abort, { once: true });
+    const timer = setTimeout(() => controller.abort(new Error("Source request timed out")), options.timeoutMs ?? 8_000);
+    let response: Response | undefined;
     try {
-      response = await fetchImpl(url, {
+      controller.signal.throwIfAborted();
+      const addresses = await abortable(resolveImpl(url.hostname), controller.signal);
+      if (addresses.length === 0 || addresses.some((address) => !isPublicAddress(address))) {
+        throw new UnsafeUrlError("DNS resolution includes a private or missing address");
+      }
+      controller.signal.throwIfAborted();
+      response = await abortable(fetchImpl(url, {
         headers: {
           Accept: [
             ...(options.extraContentTypes ?? []),
@@ -175,43 +181,72 @@ export async function safeFetch(
         body: options.body,
         redirect: "manual",
         signal: controller.signal
-      });
+      }), controller.signal);
+      const explicitlyAccepted = options.acceptedStatuses?.includes(response.status) ?? false;
+      if (response.status >= 300 && response.status < 400 && !explicitlyAccepted) {
+        if (method !== "GET") {
+          throw new UnsafeUrlError("Redirects are forbidden for non-GET requests");
+        }
+        const location = response.headers.get("location");
+        if (!location || redirect === maxRedirects) {
+          throw new UnsafeUrlError("Unsafe or excessive redirect");
+        }
+        url = parseSafeHttpsUrl(new URL(location, url).toString());
+        continue;
+      }
+      if (!response.ok && !explicitlyAccepted) {
+        throw new UnsafeUrlError(`Source returned HTTP ${response.status}`);
+      }
+      const contentType = response.headers.get("content-type")?.split(";")[0] ?? "";
+      if (response.ok && !ALLOWED_CONTENT_TYPES.includes(contentType) && !(options.extraContentTypes ?? []).includes(contentType)) {
+        throw new UnsafeUrlError(`Unexpected content type: ${contentType}`);
+      }
+      const declaredLength = Number(response.headers.get("content-length") ?? 0);
+      if (declaredLength > maxBytes) {
+        throw new UnsafeUrlError("Declared response is too large");
+      }
+      const chunks: Uint8Array[] = [];
+      let total = 0;
+      const reader = response.body?.getReader();
+      try {
+        if (method !== "HEAD" && reader) {
+          while (true) {
+            const chunk = await abortable(reader.read(), controller.signal);
+            if (chunk.done) break;
+            total += chunk.value.byteLength;
+            if (total > maxBytes) throw new UnsafeUrlError("Decompressed response is too large");
+            chunks.push(chunk.value);
+          }
+        }
+      } finally {
+        // Cancellation is intentionally not awaited: an untrusted stream may never acknowledge it.
+        void reader?.cancel().catch(() => undefined);
+        reader?.releaseLock();
+      }
+      const buffer = new Uint8Array(total);
+      let offset = 0;
+      for (const chunk of chunks) { buffer.set(chunk, offset); offset += chunk.byteLength; }
+      const headers: Record<string, string> = {};
+      for (const requestedName of options.responseHeaderNames ?? []) {
+        const value = response.headers.get(requestedName);
+        if (value !== null) headers[requestedName.toLowerCase()] = value.slice(0, 256);
+      }
+      return { url: url.toString(), status: response.status, contentType, body: buffer, headers };
     } finally {
       clearTimeout(timer);
+      options.signal?.removeEventListener("abort", abort);
+      if (response?.body && !response.body.locked) void response.body.cancel().catch(() => undefined);
     }
-    const explicitlyAccepted = options.acceptedStatuses?.includes(response.status) ?? false;
-    if (response.status >= 300 && response.status < 400 && !explicitlyAccepted) {
-      if (method !== "GET") {
-        throw new UnsafeUrlError("Redirects are forbidden for non-GET requests");
-      }
-      const location = response.headers.get("location");
-      if (!location || redirect === maxRedirects) {
-        throw new UnsafeUrlError("Unsafe or excessive redirect");
-      }
-      url = parseSafeHttpsUrl(new URL(location, url).toString());
-      continue;
-    }
-    if (!response.ok && !explicitlyAccepted) {
-      throw new UnsafeUrlError(`Source returned HTTP ${response.status}`);
-    }
-    const contentType = response.headers.get("content-type")?.split(";")[0] ?? "";
-    if (response.ok && !ALLOWED_CONTENT_TYPES.includes(contentType) && !(options.extraContentTypes ?? []).includes(contentType)) {
-      throw new UnsafeUrlError(`Unexpected content type: ${contentType}`);
-    }
-    const declaredLength = Number(response.headers.get("content-length") ?? 0);
-    if (declaredLength > maxBytes) {
-      throw new UnsafeUrlError("Declared response is too large");
-    }
-    const buffer = new Uint8Array(await response.arrayBuffer());
-    if (buffer.byteLength > maxBytes) {
-      throw new UnsafeUrlError("Decompressed response is too large");
-    }
-    const headers: Record<string, string> = {};
-    for (const requestedName of options.responseHeaderNames ?? []) {
-      const value = response.headers.get(requestedName);
-      if (value !== null) headers[requestedName.toLowerCase()] = value.slice(0, 256);
-    }
-    return { url: url.toString(), status: response.status, contentType, body: buffer, headers };
   }
   throw new UnsafeUrlError("Redirect limit exceeded");
+}
+
+/** Bound DNS, headers and streamed body to the same deadline, including non-cooperating mocks. */
+function abortable<T>(pending: Promise<T>, signal: AbortSignal): Promise<T> {
+  return new Promise((resolve, reject) => {
+    const abort = () => reject(signal.reason ?? new Error("Source request aborted"));
+    signal.addEventListener("abort", abort, { once: true });
+    pending.then(resolve, reject).finally(() => signal.removeEventListener("abort", abort));
+    if (signal.aborted) abort();
+  });
 }

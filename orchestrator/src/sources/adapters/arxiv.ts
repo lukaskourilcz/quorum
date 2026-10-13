@@ -15,5 +15,7 @@ export async function fetchArxiv(
   url.searchParams.set("sortBy", "submittedDate");
   url.searchParams.set("sortOrder", "descending");
   url.searchParams.set("max_results", String(source.maxItems));
-  return parseRssFeed(await fetchText(url.toString(), context), source, context.now);
+  const items = await parseRssFeed(await fetchText(url.toString(), context), source, context.now);
+  if (items.length >= source.maxItems) context.reportIssue?.("upstream-cap");
+  return items;
 }

@@ -44,7 +44,7 @@ export function proxy(request: NextRequest) {
   const admin = pathname.startsWith("/admin");
   if (!admin) return securityHeaders(NextResponse.next(), false);
   // The exact source reader verifies a brand-bound HMAC over its raw body in the route handler.
-  if (pathname === "/admin/api/marketing-source") return securityHeaders(NextResponse.next(), true);
+  if (pathname === "/admin/api/marketing-source" || pathname === "/admin/api/marketing-collection") return securityHeaders(NextResponse.next(), true);
 
   const authorization = verifyAdminSessionToken(
     request.cookies.get(ADMIN_SESSION_COOKIE)?.value,

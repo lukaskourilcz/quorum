@@ -5,6 +5,10 @@ export async function fetchReadable(
   url: string,
   context: SourceFetchContext
 ): Promise<string | null> {
+  if (context.allowPaidReaders === false) {
+    context.reportIssue?.("reader-disabled");
+    return null;
+  }
   try {
     const firecrawlKey = process.env.FIRECRAWL_API_KEY;
     if (firecrawlKey) {

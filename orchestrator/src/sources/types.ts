@@ -87,4 +87,8 @@ export type SourceRegistry = z.infer<typeof SourceRegistrySchema>;
 export interface SourceFetchContext {
   allowHosts: readonly string[];
   now: Date;
+  signal?: AbortSignal;
+  /** Defaults preserve existing pipelines; collection must explicitly prohibit both readers. */
+  allowPaidReaders?: boolean;
+  reportIssue?: (code: "fetch-failed" | "upstream-cap" | "reader-disabled") => void;
 }

@@ -82,6 +82,7 @@ export async function fetchHtml(
       context.now
     );
   } catch {
+    context.reportIssue?.("fetch-failed");
     // Reader fallback below isolates a blocked or script-rendered publisher.
   }
   if (items.length > 0) return items;

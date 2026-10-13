@@ -49,7 +49,9 @@ export async function fetchHn(
   source: SourceConfig,
   context: SourceFetchContext
 ): Promise<SourceItem[]> {
-  const ids = (await fetchJson<unknown[]>(source.url, context))
+  const allIds = await fetchJson<unknown[]>(source.url, context);
+  if (allIds.length > source.maxItems) context.reportIssue?.("upstream-cap");
+  const ids = allIds
     .filter((value): value is number => Number.isInteger(value))
     .slice(0, source.maxItems);
   const items = await Promise.all(
@@ -58,6 +60,7 @@ export async function fetchHn(
         const url = new URL(`item/${id}.json`, source.url).toString();
         return projectHnItem(await fetchJson<HnItem>(url, context), source, context.now);
       } catch {
+        context.reportIssue?.("fetch-failed");
         return null;
       }
     })
