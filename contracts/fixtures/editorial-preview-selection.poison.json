@@ -1,0 +1,17 @@
+{
+  "schemaVersion": "editorial-preview-selection/1",
+  "scope": "preview-only",
+  "delivery": "enabled",
+  "repository": "lukaskourilcz/quorum",
+  "branch": "main",
+  "decision": {
+    "schemaVersion": "editorial-decision/1",
+    "reviewId": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+    "reviewHash": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+    "action": "approve",
+    "title": "Synthetic contract fixture headline",
+    "imageId": "candidate-1",
+    "decidedAt": "2026-09-27T10:01:00.000Z",
+    "actor": "owner"
+  }
+}

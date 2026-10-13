@@ -89,6 +89,55 @@ its own current owner approval and freshness policy before a social draft can us
 
 ## Calendar and publisher cutover audit
 
+### Isolated owner selection in Preview
+
+The optional owner-only `/admin/api/queue/articles/preview` route records a genuine selection
+without dispatching delivery. It requires `VERCEL_ENV=preview`,
+`DNESKAI_EDITORIAL_PREVIEW_SELECTION_ENABLED=true`, and an explicit
+`DNESKAI_EDITORIAL_PREVIEW_BRANCH` beginning with `codex/` that exactly matches
+`BOARDLESSAI_GITHUB_BRANCH`. The repository must be `lukaskourilcz/quorum`; a missing branch,
+`main`, another repository, another environment or the default disabled flag refuses the action
+before repository access. Configuration and credentials stay within the owner's authorized
+Preview scope; this change provisions none. Source lookup needs Contents read access only.
+Saving a preview selection additionally needs Contents write access for Quorum, with no Actions
+permission. Disable the selection flag when the authorized pilot ends; it defaults to false.
+
+GET with `?id=<exact review hash>` returns one real article review and any recorded preview
+selection. POST requires the owner's existing Admin session and an explicit matching `Origin`.
+Its bounded body is `{id, hash, action, title, imageId}`, with `action` equal to `approve` or
+`reject`. `hash` is the hash returned for that review. The owner must choose an existing headline
+and image; approval validates the exact package and requires all four distinct reviewed choices.
+The route does not choose for the owner, generate replacements or accept a caller-provided actor.
+
+The immutable record is `editorial-preview-selection/1`, published in
+`contracts/editorial-preview-selection.schema.json`, under
+`state/editorial/preview-selections/<review id>.json` on the configured branch. It embeds the
+owner's exact review-bound decision and explicitly records `scope: preview-only` and
+`delivery: disabled`. A repeat conflicts instead of overwriting it. It is never written to
+`editorial/decisions`, never dispatches a workflow, and is invisible to normal source export and
+article delivery. Even misfiling its envelope in `editorial/decisions` cannot turn it into a
+production-shaped decision. The legacy delivery-triggering Admin approval is refused in Preview;
+its existing production behavior is retained. No preview selection is copied or promoted to a
+production approval automatically.
+
+### What source eligibility currently proves
+
+The existing `marketing-source/1` reader requires a genuine exact production-shaped editorial
+decision and validates the resulting selected article package. It does **not** require a delivery
+receipt or fetch the canonical article/image URLs. The contract checks HTTPS syntax and content
+hashes, not remote publication. Therefore an approved, non-delivered article can technically
+produce a packet under the existing contract; such a packet alone does not prove a published
+article or available artwork. This change neither adds a preview eligibility shortcut nor weakens
+any publication gate. Preview-only selections remain held with no ready packet.
+
+For an actual DNESKAi source pilot, the owner still needs a separate production editorial
+decision for the exact headline and image, authorized magazine delivery, and verification that
+the canonical article and selected artwork are available with matching content and rights. The
+news expiry remains 72 hours from the authored evidence snapshot; selecting an older review
+cannot renew it. Separate OwnDashboard social approval remains required. Under a staging scope
+that prohibits production delivery, preview selection is review evidence only and cannot complete
+this published-source verification.
+
 On 2026-10-13 the real dry run found **14 held reviews, zero approved packets, zero dropped review
 records**. Five older edition records fail the no-edition receipt/package reader and count as
 dropped in the combined dry-run result; they grant no source eligibility. There are no saved

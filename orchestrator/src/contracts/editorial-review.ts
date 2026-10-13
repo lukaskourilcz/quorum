@@ -41,5 +41,15 @@ export const EditorialDecisionSchema = z.strictObject({
   actor: z.literal("owner")
 });
 
+/** A preview selection is evidence of a choice, never a magazine release decision. */
+export const EditorialPreviewSelectionSchema = z.strictObject({
+  schemaVersion: z.literal("editorial-preview-selection/1"),
+  scope: z.literal("preview-only"),
+  delivery: z.literal("disabled"),
+  repository: z.literal("lukaskourilcz/quorum"),
+  branch: z.string().regex(/^codex\/[A-Za-z0-9][A-Za-z0-9._/-]{0,180}$/u),
+  decision: EditorialDecisionSchema
+});
+
 export type EditorialReview = z.infer<typeof EditorialReviewSchema>;
 export type EditorialDecision = z.infer<typeof EditorialDecisionSchema>;

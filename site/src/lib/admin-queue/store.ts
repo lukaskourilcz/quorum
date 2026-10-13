@@ -25,6 +25,7 @@ export class QueueActionError extends Error {
 const WRITABLE_JSON = [
   /^state\/social\/design-revisions\/\d{4}-\d{2}-\d{2}-[a-f0-9]{12}\.json$/u,
   /^state\/editorial\/decisions\/[a-f0-9]{64}\.json$/u,
+  /^state\/editorial\/preview-selections\/[a-f0-9]{64}\.json$/u,
   /^state\/social\/(?:queue|queue-events)\/[A-Za-z0-9][A-Za-z0-9._-]*\.json$/u,
   /^state\/ventures\/marketingshark\/packages\/\d{4}-\d{2}-\d{2}\/[a-z0-9-]+\/revisions\/[a-f0-9]{12}\.json$/u
 ];
@@ -195,8 +196,8 @@ function githubStore(token: string): QueueStore {
     async create(relative, value, message) {
       const response = await put(relative, value, message);
       if (response.ok) return true;
-      // GitHub answers 422 when a create names a path that already has a blob.
-      if (response.status === 422) return false;
+      // An existing blob or a concurrent create cannot grant permission to replace it.
+      if (response.status === 409 || response.status === 422) return false;
       throw refused(response.status, "write");
     },
     async replace(relative, value, version, message) {

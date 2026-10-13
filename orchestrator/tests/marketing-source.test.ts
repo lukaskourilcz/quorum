@@ -3,9 +3,9 @@ import os from "node:os";
 import path from "node:path";
 import { afterEach, describe, expect, it } from "vitest";
 import { EditionPackageSchema } from "../src/contracts/edition-package.js";
-import { EditorialReviewSchema } from "../src/contracts/editorial-review.js";
+import { EditorialReviewSchema, EditorialPreviewSelectionSchema } from "../src/contracts/editorial-review.js";
 import { editionPackageHash } from "../src/edition/package.js";
-import { editorialReviewHash, storeEditorialReview } from "../src/edition/review.js";
+import { approvedEditorialPackage, editorialReviewHash, storeEditorialReview } from "../src/edition/review.js";
 import { atomicWriteJson, readJson } from "../src/state.js";
 import { signature, verifySourceRequest, parseSourcePacket, sha256 } from "../src/marketing-source/contract.js";
 import { NEWS_FRESHNESS_HOURS, localSourceReader, readSources, retractionPath } from "../src/marketing-source/producer.js";
@@ -35,6 +35,17 @@ async function fixture() {
 }
 
 describe("DNESKAi source bridge", () => {
+  it("never promotes an isolated preview selection to production source or delivery approval", async () => {
+    const { root, review, decision, input } = await fixture();
+    const preview = EditorialPreviewSelectionSchema.parse({ schemaVersion: "editorial-preview-selection/1", scope: "preview-only", delivery: "disabled",
+      repository: "lukaskourilcz/quorum", branch: "codex/marketing-source-bridge", decision });
+    await atomicWriteJson(root, `editorial/preview-selections/${review.id}.json`, preview);
+    expect((await reconcileSources(input)).packets).toEqual([]);
+    expect(approvedEditorialPackage(review, preview)).toBeNull();
+    // Even a misfiled preview envelope cannot be mistaken for a production-shaped decision.
+    await atomicWriteJson(root, `editorial/decisions/${review.id}.json`, preview);
+    expect((await reconcileSources(input)).packets).toEqual([]);
+  });
   it("exports exact selected content, recorded evidence and full selected rights without creating social state", async () => {
     const { root, approve, input, review } = await fixture();
     expect((await reconcileSources(input)).packets).toEqual([]);

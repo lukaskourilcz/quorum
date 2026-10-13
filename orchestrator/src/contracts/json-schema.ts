@@ -71,7 +71,7 @@ import { GoViralPlayLibrarySchema } from "./goviral-play-library.js";
 import { GoViralWeeklyBriefSchema } from "./goviral-weekly-brief.js";
 import { RatingRecordSchema } from "./rating.js";
 import { SeasonFileSchema } from "./season.js";
-import { EditorialReviewSchema, EditorialDecisionSchema } from "./editorial-review.js";
+import { EditorialReviewSchema, EditorialDecisionSchema, EditorialPreviewSelectionSchema } from "./editorial-review.js";
 import { SocialReferenceMonitorSchema, SocialReferenceQuotaSchema } from "./social-reference-monitor.js";
 import { SocialPackSchema } from "./social-pack.js";
 import { SocialAssetHoldSchema, SocialAssetRetentionSchema } from "./social-assets.js";
@@ -264,6 +264,7 @@ export const ContractSchemas = {
   "social-reference-quota": SocialReferenceQuotaSchema,
   "editorial-review": EditorialReviewSchema,
   "editorial-decision": EditorialDecisionSchema,
+  "editorial-preview-selection": EditorialPreviewSelectionSchema,
   "style-profile": StyleProfileSchema,
   "venture-registry": VentureRegistrySchema,
   "venture-capability-map": VentureCapabilityMapSchema,

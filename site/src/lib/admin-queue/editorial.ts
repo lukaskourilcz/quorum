@@ -76,6 +76,7 @@ export async function readEditorialQueue(root = queueRepositoryRoot()): Promise<
 }
 
 export async function applyEditorialDecision(value: unknown, root = queueRepositoryRoot(), now = new Date()) {
+  if (process.env.VERCEL_ENV === "preview") throw new QueueActionError("REFUSED", "Preview can save an isolated selection only. Magazine delivery is unavailable here.");
   const raw = rawObject(value);
   if (!raw || Object.keys(raw).some(key => !["id", "hash", "action", "title", "imageId"].includes(key)) ||
       typeof raw.id !== "string" || !HASH.test(raw.id) || typeof raw.hash !== "string" || !HASH.test(raw.hash) ||

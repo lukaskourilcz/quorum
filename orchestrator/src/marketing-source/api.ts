@@ -4,3 +4,6 @@ export { NEWS_FRESHNESS_HOURS, readNoEditionDates, readSources, type SourceReade
 export { invalidation } from "./outbox.js";
 export { resolveVentureCapabilityInMap } from "../ventures/capabilities.js";
 export { VentureCapabilityMapSchema } from "../contracts/venture-capability.js";
+export { EditorialReviewSchema, EditorialPreviewSelectionSchema } from "../contracts/editorial-review.js";
+export { approvedEditorialPackage } from "../edition/review.js";
+export { editionPackageHash } from "../edition/package.js";
