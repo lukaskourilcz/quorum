@@ -1,0 +1,18 @@
+{
+  "schemaVersion": 1,
+  "fixture": false,
+  "cycleId": "20261014030832-cu-edition",
+  "phase": "cu-edition",
+  "outcome": "EDITION",
+  "summary": "Character.AI v bankrotu, zaměstnanec OpenAI obviněn z odposlechu a spuštění Gemini 4 Argon se staly ve stejný den – souhrnně ukazují, kde se právě láme ekonomika, bezpečnost i infrastruktura AI průmyslu.",
+  "evidenceRefs": [
+    "source:tensorfeed",
+    "source:the-verge",
+    "source:deepmind-blog",
+    "source:simonw",
+    "source:platformer",
+    "source:techcrunch-ai"
+  ],
+  "editionRef": "a26f0313effbd2f543a979c11dbb39c79b64b3b1f086fb1b1de057e3b29c587c",
+  "generatedAt": "2026-10-14T03:08:37.807Z"
+}

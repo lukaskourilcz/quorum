@@ -1,0 +1,306 @@
+{
+  "schemaVersion": 1,
+  "runId": "68355e09-56ce-4539-823f-6055af6fda95",
+  "date": "2026-10-14",
+  "mode": "production",
+  "status": "edition",
+  "startedAt": "2026-10-14T03:08:37.210Z",
+  "completedAt": "2026-10-14T03:11:39.942Z",
+  "stages": [
+    {
+      "name": "curate",
+      "status": "success",
+      "startedAt": "2026-10-14T03:08:37.237Z",
+      "completedAt": "2026-10-14T03:09:03.212Z",
+      "durationMs": 25975
+    },
+    {
+      "name": "write",
+      "status": "success",
+      "startedAt": "2026-10-14T03:09:03.212Z",
+      "completedAt": "2026-10-14T03:11:12.874Z",
+      "durationMs": 129662
+    },
+    {
+      "name": "stet_0",
+      "status": "success",
+      "startedAt": "2026-10-14T03:11:12.874Z",
+      "completedAt": "2026-10-14T03:11:12.879Z",
+      "durationMs": 5
+    },
+    {
+      "name": "quality_0",
+      "status": "success",
+      "startedAt": "2026-10-14T03:11:12.880Z",
+      "completedAt": "2026-10-14T03:11:12.880Z",
+      "durationMs": 0
+    },
+    {
+      "name": "assemble_package",
+      "status": "success",
+      "startedAt": "2026-10-14T03:11:12.880Z",
+      "completedAt": "2026-10-14T03:11:39.941Z",
+      "durationMs": 27061
+    }
+  ],
+  "regenerationAttempts": 0,
+  "stetBlocks": 1,
+  "hacekBlocks": 0,
+  "usage": [
+    {
+      "provider": "anthropic",
+      "model": "claude-sonnet-4-6",
+      "stage": "curate",
+      "inputTokens": 12869,
+      "outputTokens": 1166,
+      "cacheReadTokens": 0,
+      "cacheWriteTokens": 0,
+      "costUsd": 0.056097
+    },
+    {
+      "provider": "anthropic",
+      "model": "claude-sonnet-4-6",
+      "stage": "write",
+      "inputTokens": 14346,
+      "outputTokens": 5298,
+      "cacheReadTokens": 0,
+      "cacheWriteTokens": 2470,
+      "costUsd": 0.1317705
+    }
+  ],
+  "measuredCostUsd": 0.1878675,
+  "quality": {
+    "metrics": {
+      "successfulSources": 29,
+      "candidateItems": 80,
+      "citedSources": 7,
+      "signalStrength": 89,
+      "maximumSingleSourceShare": 0.2857142857142857,
+      "sourceDiversity": 0.8163265306122449,
+      "duplicateStorySimilarity": 0.0625,
+      "repeatedTopicFrequency": 0.3333333333333333,
+      "primarySourceRelevant": true,
+      "primarySourcePresent": true,
+      "unsupportedWatchlistItems": 0,
+      "costPerRun": 0.1878675
+    },
+    "result": {
+      "passed": true,
+      "enforced": true,
+      "violations": [],
+      "action": "publish"
+    }
+  },
+  "stet": {
+    "passed": false,
+    "score": 45,
+    "violations": [
+      {
+        "code": "bureaucratic_filler",
+        "locale": "cs",
+        "message": "Použij přímé sloveso místo úřednické konstrukce."
+      }
+    ]
+  },
+  "unresolvedReview": {
+    "notice": "Published with unresolved editorial review findings, listed below. The review ran and recorded them; since 2026-08-04 a stylistic or topical finding does not stop publication. The checks that the article is accurate still do: supplied source links, cited sources, source diversity, primary sourcing, watchlist support and the cost caps.",
+    "findings": [
+      "stet:cs/bureaucratic_filler"
+    ]
+  },
+  "imageProgram": {
+    "readiness": {
+      "providers": {
+        "openverse": "keyless",
+        "wikimedia": "keyless",
+        "pexels": "present",
+        "pixabay": "present"
+      },
+      "gateModelConfigured": true,
+      "caps": {
+        "perArticleUsd": 0.05,
+        "perDayUsd": 0.1,
+        "generatedImagesPerDay": 4
+      },
+      "spentToday": {
+        "usd": 0,
+        "generatedImages": 0
+      },
+      "illustrationRung": "armed"
+    },
+    "rung": "illustration",
+    "verdicts": [
+      {
+        "mode": "search",
+        "considered": 6,
+        "selected": null,
+        "reason": "all-candidates-rejected",
+        "candidates": [
+          {
+            "candidateId": "pexels:9242888",
+            "provider": "pexels",
+            "fit": 2,
+            "vetoes": [
+              "dated-aesthetic"
+            ],
+            "reason": "Shows vintage computer motherboard assembly, but the dated visual style and specific hardware evoke 1990s-2000s nostalgia rather than current AI developments.",
+            "sceneCs": "ruka se šroubovákem u staré desky plošného spoje"
+          },
+          {
+            "candidateId": "wikimedia:179520469",
+            "provider": "wikimedia",
+            "fit": 1,
+            "vetoes": [
+              "ai-generated-look",
+              "dated-aesthetic"
+            ],
+            "reason": "Brain-shaped circuit board is a clichéd visual metaphor for AI from mid-2000s stock imagery; the synthetic, staged appearance and overdone styling disqualify it.",
+            "sceneCs": "mozek složený z elektronických součástek"
+          },
+          {
+            "candidateId": "openverse:00de4c50-7cec-4609-9f6d-e605679a28a8",
+            "provider": "openverse",
+            "fit": 3,
+            "vetoes": [
+              "low-quality"
+            ],
+            "reason": "Museum or exhibition display of electronics with poor lighting and slight blur makes the content unclear; insufficient visual quality for a lead picture.",
+            "sceneCs": "muzejní expozice elektroniky s figurínami"
+          },
+          {
+            "candidateId": "pixabay:3963945",
+            "provider": "pixabay",
+            "fit": 0,
+            "vetoes": [
+              "ai-generated-look",
+              "unsafe-content"
+            ],
+            "reason": "Heavily stylized, glowing sci-fi imagery with lens flares appears AI-generated or artificially manipulated; does not depict real technology.",
+            "sceneCs": "abstraktní svítící síť linií"
+          },
+          {
+            "candidateId": "pexels:28767589",
+            "provider": "pexels",
+            "fit": 1,
+            "vetoes": [
+              "ai-generated-look",
+              "dated-aesthetic"
+            ],
+            "reason": "Neon-glowing microchip with pink-and-blue color grading is quintessential AI-generated or heavily stylized stock imagery from recent years; lacks authenticity.",
+            "sceneCs": "graficky vykresleného čipu v neonových barvách"
+          },
+          {
+            "candidateId": "pixabay:3382521",
+            "provider": "pixabay",
+            "fit": 2,
+            "vetoes": [
+              "ai-generated-look"
+            ],
+            "reason": "Abstract neon brain circuit with glowing effects and grid background appears synthetic and AI-generated; too stylized and generic for credible illustration of real events.",
+            "sceneCs": "abstraktní mozek ze svítících linií"
+          }
+        ],
+        "skipped": [],
+        "costUsd": 0.005674
+      },
+      {
+        "mode": "generated",
+        "considered": 1,
+        "selected": "illustration:2026-10-14-candidate-1",
+        "reason": "The image illustrates AI/technology concepts abstractly with circuit patterns and a central processing eye, fitting the brief about AI developments, though it's a generic tech illustration rather than specifically tied to the day's news events.",
+        "candidates": [
+          {
+            "candidateId": "illustration:2026-10-14-candidate-1",
+            "provider": "boardlessai",
+            "fit": 7,
+            "vetoes": [],
+            "reason": "The image illustrates AI/technology concepts abstractly with circuit patterns and a central processing eye, fitting the brief about AI developments, though it's a generic tech illustration rather than specifically tied to the day's news events.",
+            "sceneCs": "modrá elektronická schéma s centrálním okem na černém pozadí"
+          }
+        ],
+        "skipped": [],
+        "costUsd": 0.002238
+      },
+      {
+        "mode": "generated",
+        "considered": 1,
+        "selected": "illustration:2026-10-14-candidate-2",
+        "reason": "A generic circuit board visualization with a brain-like center suggests AI/technology infrastructure and fits the article's coverage of multiple AI platforms and models, though it lacks specificity to the three distinct events mentioned.",
+        "candidates": [
+          {
+            "candidateId": "illustration:2026-10-14-candidate-2",
+            "provider": "boardlessai",
+            "fit": 7,
+            "vetoes": [],
+            "reason": "A generic circuit board visualization with a brain-like center suggests AI/technology infrastructure and fits the article's coverage of multiple AI platforms and models, though it lacks specificity to the three distinct events mentioned.",
+            "sceneCs": "svítící elektronická schémata se středovým uzlem"
+          }
+        ],
+        "skipped": [],
+        "costUsd": 0.002188
+      },
+      {
+        "mode": "generated",
+        "considered": 1,
+        "selected": "illustration:2026-10-14-candidate-3",
+        "reason": "Abstract circuit board with glowing nodes illustrates AI/technology systems conceptually; clean, clear, and on-brief for a tech briefing about AI companies and models, though somewhat generic.",
+        "candidates": [
+          {
+            "candidateId": "illustration:2026-10-14-candidate-3",
+            "provider": "boardlessai",
+            "fit": 7,
+            "vetoes": [],
+            "reason": "Abstract circuit board with glowing nodes illustrates AI/technology systems conceptually; clean, clear, and on-brief for a tech briefing about AI companies and models, though somewhat generic.",
+            "sceneCs": "svítící elektronický obvod s uzly a linkami"
+          }
+        ],
+        "skipped": [],
+        "costUsd": 0.002173
+      },
+      {
+        "mode": "generated",
+        "considered": 1,
+        "selected": "illustration:2026-10-14-candidate-4",
+        "reason": "An abstract circuit board or neural network illustration relating to AI systems; generic enough to work with any AI-focused article and shows no recognisable faces, logos, or dated aesthetic markers.",
+        "candidates": [
+          {
+            "candidateId": "illustration:2026-10-14-candidate-4",
+            "provider": "boardlessai",
+            "fit": 7,
+            "vetoes": [],
+            "reason": "An abstract circuit board or neural network illustration relating to AI systems; generic enough to work with any AI-focused article and shows no recognisable faces, logos, or dated aesthetic markers.",
+            "sceneCs": "abstraktní elektronický obvod s modrými linkami"
+          }
+        ],
+        "skipped": [],
+        "costUsd": 0.002168
+      }
+    ]
+  },
+  "packageStatus": "edition",
+  "warnings": [
+    "stet:bureaucratic_filler",
+    "shipped_with_unresolved_review:stet:cs/bureaucratic_filler",
+    "image_rung:illustration",
+    "image_gate:search:all-candidates-rejected",
+    "image_gate:generated:selected"
+  ],
+  "sourceSummary": {
+    "successfulSources": 29,
+    "candidateItems": 80,
+    "evidenceRefs": [
+      "source:404-media",
+      "source:anthropic-news",
+      "source:ars-technica",
+      "source:arxiv-cs-ai",
+      "source:bluesky-language-models",
+      "source:deepmind-blog",
+      "source:digiday",
+      "source:github-ai-releases",
+      "source:google-research",
+      "source:hf-blog",
+      "source:hn-frontpage",
+      "source:import-ai"
+    ]
+  }
+}
