@@ -1,6 +1,6 @@
 {
   "schemaVersion": "operations-snapshot/1",
-  "generatedAt": "2026-10-13T04:01:02.594Z",
+  "generatedAt": "2026-10-14T04:01:15.653Z",
   "nodes": [
     {
       "nodeId": "admin-service",
@@ -336,6 +336,24 @@
       ]
     },
     {
+      "nodeId": "own-dashboard",
+      "displayName": "OwnDashboard source bridge",
+      "lifecycleStage": "setup-needed",
+      "health": "setup-needed",
+      "reason": "Owner setup is required before live operational evidence can exist.",
+      "lastValidAt": null,
+      "nextExpectedAt": null,
+      "sloSatisfied": null,
+      "failureCount": 0,
+      "recoveryRefs": [],
+      "ownerAttentionRefs": [],
+      "costUsd": null,
+      "artifactsReused": 0,
+      "staleRecords": 0,
+      "malformedRecords": 0,
+      "evidenceRefs": []
+    },
+    {
       "nodeId": "owner-attention",
       "displayName": "Owner attention",
       "lifecycleStage": "operating",
@@ -396,7 +414,7 @@
       "health": "unavailable",
       "reason": "No valid live or recovery receipt is available.",
       "lastValidAt": null,
-      "nextExpectedAt": "2026-10-14T04:01:02.594Z",
+      "nextExpectedAt": "2026-10-15T04:01:15.653Z",
       "sloSatisfied": null,
       "failureCount": 0,
       "recoveryRefs": [],
@@ -464,5 +482,5 @@
   ],
   "malformedAdapterCount": 0,
   "unavailableAdapterCount": 0,
-  "snapshotHash": "4617d37496c7db154d80d6033c6e0bd19463bcc19a08eae15d39256620c921a1"
+  "snapshotHash": "4c7348f69855b11cb4d275d4dac7f8bff918bc4d690147d243f9a22c6a0b8b91"
 }

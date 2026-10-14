@@ -1,6 +1,6 @@
 {
   "schemaVersion": "operations-incident-snapshot/1",
-  "generatedAt": "2026-10-13T04:01:02.594Z",
+  "generatedAt": "2026-10-14T04:01:15.653Z",
   "activeIncidentRefs": [],
   "recentAttemptRefs": [],
   "pausedScopes": [],
@@ -26,6 +26,7 @@
     "marketingshark",
     "metrics-service",
     "mma-files",
+    "own-dashboard",
     "owner-attention",
     "personal-growth",
     "scheduler-service",
@@ -45,5 +46,5 @@
     "meanRecoveryMinutes": null,
     "costUsd": 0
   },
-  "snapshotHash": "a63b2cfec245bf7e50a8189c0698dd5855a773b342abf3358201e132c45e639e"
+  "snapshotHash": "a17f058aea82c644f0ee250e423b5ce582f2a9f013fb1fe7ff0e555bd5e6e6f0"
 }
