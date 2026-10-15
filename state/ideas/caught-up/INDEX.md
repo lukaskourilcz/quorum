@@ -6,6 +6,7 @@
 
 | ID | Title (≤8 words) | Status | Last reason |
 | --- | --- | --- | --- |
+| idea-2026-10-15-b30804a4 | Add a Source-Mix Decision Log | proposed | VAULT variant: Both add optional internal metadata to publishing records to identify source-mix gaps via periodic revie… |
 | idea-2026-10-14-e43f8bd8 | Add a Source-Question Review Prompt | proposed | VAULT variant: Both add optional internal prompts to publishing records for source-mix analysis without changing workfl… |
 | idea-2026-10-13-22835b7d | Add a Save-Check Recovery Note | proposed | VAULT novel: Closest prior idea overlaps only 0.41. |
 | idea-2026-10-09-d6fbcf2b | Add a One-Line Source Rationale | proposed | VAULT variant: Both add one optional internal line per publishing record to review periodically for sourcing insights w… |
