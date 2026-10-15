@@ -1,0 +1,53 @@
+{
+  "schemaVersion": "dneskai-recipe/1",
+  "id": "dneskai-no-edition-2026-10-15",
+  "recipe": "no-edition",
+  "date": "2026-10-15",
+  "window": {
+    "from": "2026-10-15",
+    "to": "2026-10-15"
+  },
+  "sourceRefs": [
+    "aifirst:data/ai-lessons.json#lex-047"
+  ],
+  "slides": [
+    {
+      "text": "Backpropagation: Algoritmus, kterým se učí všechny neuronové sítě: chybu protrasuj zpět a posuň každou váhu",
+      "alt": "Slide 1: Backpropagation: Algoritmus, kterým se učí všechny neuronové sítě: chybu protrasuj zpět a posuň každou váhu"
+    }
+  ],
+  "visual": {
+    "template_id": "quote-card",
+    "version": "1.0.0",
+    "content": {
+      "locale": "cs",
+      "strings": {
+        "quote": "Backpropagation: Algoritmus, kterým se učí všechny neuronové sítě: chybu protrasuj zpět a posuň každou váhu",
+        "attribution": "Pojem dne · DNESKAi"
+      }
+    }
+  },
+  "frames": [
+    {
+      "path": "/social/caught-up/2026-10-15/no-edition/frame-01.jpg",
+      "sha256": "5cf8e55a5ed55591126194476717a2d0f986536d5a931f9f045dc314a1765d15"
+    }
+  ],
+  "story": {
+    "frame": {
+      "path": "/social/caught-up/2026-10-15/no-edition/story.png",
+      "sha256": "941f3c7a572e0aceca173f50cb4089d891acf961bfba57f60978244f95b098a6"
+    },
+    "link": "https://dneskai.vercel.app/?utm_source=instagram&utm_medium=story&utm_campaign=no-edition"
+  },
+  "destination": "https://dneskai.vercel.app/?utm_source=instagram&utm_medium=post&utm_campaign=no-edition",
+  "instagram": {
+    "caption": "Dnes vydání DNESKAi nevyšlo. Pojem dne:\n\nBackpropagation: Backpropagation spočítá pro každou váhu v síti, jak moc přispěla k aktuální chybě — a každou pak posune tak, aby se chyba zmenšila. Zopakováno bilionkrát je tohle fyzická podstata 'tréninku', v jádru nezměněná od roku 1986.\n\nZdroj: Rumelhart, Hinton, Williams (1986)\n\nDalší vydání: https://dneskai.vercel.app/?utm_source=instagram&utm_medium=post&utm_campaign=no-edition\n\n#ai #umelainteligence #dneskai"
+  },
+  "threads": {
+    "text": "Dnes vydání DNESKAi nevyšlo. Pojem dne: Backpropagation: Backpropagation spočítá pro každou váhu v síti, jak moc přispěla k aktuální chybě — a každou pak posune tak, aby se chyba zmenšila. Zopakováno bilionkrát je tohle fyzická podstata 'tréninku', v jádru nezměněná od roku 1986.\n\nZdroj: Rumelhart, Hinton, Williams (1986)\n\nhttps://dneskai.vercel.app/?utm_source=threads&utm_medium=post&utm_campaign=no-edition"
+  },
+  "ownerSlots": [],
+  "status": "draft",
+  "spendUsd": 0
+}

@@ -1,0 +1,75 @@
+{
+  "schemaVersion": 2,
+  "id": "caught-up-2026-10-15-cs-recipe-no-edition-instagram",
+  "sourceVentureId": "caught-up",
+  "releaseId": "caught-up-2026-10-15-cs-recipe-no-edition",
+  "campaignId": "caught-up-2026-10-15-cs-recipe-no-edition",
+  "experimentId": null,
+  "target": {
+    "profileId": "social-profile-caught-up",
+    "profileRole": "venture-primary",
+    "role": "primary",
+    "connectionBindingRef": "social-connection-caught-up-instagram",
+    "capabilityRef": null,
+    "amplifierEligibilityRef": null,
+    "campaignApprovalRef": null
+  },
+  "action": "publish-original",
+  "sourcePackage": {
+    "schemaVersion": "approved-publish-package/1",
+    "artifactRef": "state/social/recipes/2026-10-15-no-edition.json",
+    "packageHash": "7ff289cafb8fbd20f1c372d7744132da04e8074b79363cf72c3bb96a683faeef"
+  },
+  "locale": "cs",
+  "variant": "A",
+  "channel": "instagram",
+  "objective": "trust",
+  "audience": "Caught Up readers (cs)",
+  "destination": "https://dneskai.vercel.app/?utm_source=instagram&utm_medium=post&utm_campaign=no-edition",
+  "utm": {
+    "source": "instagram",
+    "medium": "organic_social",
+    "campaign": "no-edition",
+    "content": "2026-10-15-no-edition"
+  },
+  "content": {
+    "text": "Dnes vydání DNESKAi nevyšlo. Pojem dne:\n\nBackpropagation: Backpropagation spočítá pro každou váhu v síti, jak moc přispěla k aktuální chybě — a každou pak posune tak, aby se chyba zmenšila. Zopakováno bilionkrát je tohle fyzická podstata 'tréninku', v jádru nezměněná od roku 1986.\n\nZdroj: Rumelhart, Hinton, Williams (1986)\n\nDalší vydání: https://dneskai.vercel.app/?utm_source=instagram&utm_medium=post&utm_campaign=no-edition\n\n#ai #umelainteligence #dneskai",
+    "altText": "Slide 1: Backpropagation: Algoritmus, kterým se učí všechny neuronové sítě: chybu protrasuj zpět a posuň každou váhu",
+    "assetPaths": [
+      "/social/caught-up/2026-10-15/no-edition/frame-01.jpg"
+    ],
+    "factualClaimRefs": [
+      "aifirst:data/ai-lessons.json#lex-047"
+    ],
+    "rendererVersion": "carousel-studio-1",
+    "contentHash": "cf87c3495721faf63a897b0c567bda17be5a045fd4b78b1b0bd254fbdd1f181e"
+  },
+  "publishWindow": {
+    "notBefore": "2026-10-15T10:00:00.000Z",
+    "notAfter": "2026-10-18T10:00:00.000Z"
+  },
+  "status": "draft",
+  "checks": {
+    "schema": "pending",
+    "brand": "pending",
+    "claims": "pending",
+    "quill": "pending",
+    "keeper": "pending",
+    "duplicate": "pending",
+    "accessibility": "pending",
+    "budget": "pending",
+    "capability": "pending",
+    "authority": "pending",
+    "policy": "pending"
+  },
+  "approvalProvenance": {
+    "approvalRef": "awaiting-owner-approval",
+    "selectionRef": "state/social/recipes/2026-10-15-no-edition.json",
+    "policyRef": "D2-autonomy-build-2026-08-01"
+  },
+  "selectedBy": "PULSE",
+  "createdAt": "2026-10-15T03:14:00.354Z",
+  "attempt": null,
+  "receiptId": null,
+  "migration": null
+}
