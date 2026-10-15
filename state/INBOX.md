@@ -791,3 +791,7 @@ The owner ended devShark social automation. These requests were withdrawn, never
   neverDrains need new bytes rather than another run; their own receipts say what the magazine
   refused and why. Anything parked and not listed there is already scheduled to end.
   [imp:5] [owner:me] [time:30m] [kind:deploy]
+
+- [ ] **CAUGHT-UP-DELIVERY-2026-10-15** — hash_conflict: > aifirst@0.1.0 consume:edition /home/runner/work/_temp/aifirst-delivery-1 > tsx scripts/consume-edition-package.ts /home/runner/work/quorum/quorum/state/edition/outbox/2026-10-15-fe7d117d5d1febcf1c7990d04516e098b953faff9d23d58fcc668263abc10925.json /home/runner/work/_temp/aifirst-delivery-1 [delive.
+  RELAY marked the delivery `needs_reconciliation`; same-date content must not be overwritten automatically.
+  [imp:5] [owner:me] [time:20m] [kind:deploy]
