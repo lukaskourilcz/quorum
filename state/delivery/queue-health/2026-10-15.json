@@ -1,6 +1,6 @@
 {
   "schemaVersion": "delivery-queue-health/1",
-  "checkedAt": "2026-10-15T04:05:26.245Z",
+  "checkedAt": "2026-10-15T07:07:40.830Z",
   "date": "2026-10-15",
   "ventures": [
     {
@@ -31,18 +31,34 @@
     {
       "venture": "caught-up",
       "waiting": [],
-      "parked": [],
+      "parked": [
+        {
+          "label": "2026-10-15 no_edition",
+          "packageHash": "fe7d117d5d1febcf1c7990d04516e098b953faff9d23d58fcc668263abc10925",
+          "date": "2026-10-15",
+          "code": "hash_conflict",
+          "disposition": "owner"
+        }
+      ],
       "oldestWaitingDate": null,
       "stalledDays": null,
-      "stalled": false,
-      "neverDrains": []
+      "stalled": true,
+      "neverDrains": [
+        {
+          "label": "2026-10-15 no_edition",
+          "packageHash": "fe7d117d5d1febcf1c7990d04516e098b953faff9d23d58fcc668263abc10925",
+          "date": "2026-10-15",
+          "code": "hash_conflict",
+          "disposition": "owner"
+        }
+      ]
     }
   ],
   "deploys": [
     {
       "venture": "caught-up",
-      "url": "https://dneskai.vercel.app/data/board/2026-10-15.json",
-      "expected": "2026-10-15",
+      "url": "https://dneskai.vercel.app/data/board/2026-10-11.json",
+      "expected": "2026-10-11",
       "status": 200,
       "live": true
     },
@@ -54,5 +70,5 @@
       "live": true
     }
   ],
-  "needsOwner": false
+  "needsOwner": true
 }
