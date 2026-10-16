@@ -1,0 +1,161 @@
+{
+  "schemaVersion": 1,
+  "runId": "9a338dde-73c4-4051-bf46-80ce6c04209c",
+  "date": "2026-10-16",
+  "mode": "production",
+  "status": "no_edition",
+  "startedAt": "2026-10-16T03:01:25.611Z",
+  "completedAt": "2026-10-16T03:08:22.114Z",
+  "stages": [
+    {
+      "name": "curate",
+      "status": "success",
+      "startedAt": "2026-10-16T03:01:25.627Z",
+      "completedAt": "2026-10-16T03:02:12.261Z",
+      "durationMs": 46634
+    },
+    {
+      "name": "write",
+      "status": "failed",
+      "startedAt": "2026-10-16T03:02:12.261Z",
+      "completedAt": "2026-10-16T03:04:10.062Z",
+      "durationMs": 117801,
+      "errorCode": "InvalidModelOutputError",
+      "errorMessage": "write: [\n  {\n    \"origin\": \"array\",\n    \"code\": \"too_big\",\n    \"maximum\": 6,\n    \"inclusive\": true,\n    \"path\": [\n      \"tags\"\n    ],\n    \"message\": \"Too big: expected array to have <=6 items\"\n  },\n  {\n    \"expected\": \"array\",\n    \"code\": \"invalid_type\",\n    \"path\": [\n      \"dispatches\"\n    ],\n    \"message\": \"Invalid input: expected array, received string\"\n  },\n  {\n    \"origin\": \"string\",\n    \"code\": \"too_big\",\n    \"maximum\": 4,\n    \"inclusive\": true,\n    \"path\": [\n      \"dispatches\"\n    ],\n    "
+    },
+    {
+      "name": "rewrite_1",
+      "status": "failed",
+      "startedAt": "2026-10-16T03:04:10.062Z",
+      "completedAt": "2026-10-16T03:06:04.856Z",
+      "durationMs": 114794,
+      "errorCode": "InvalidModelOutputError",
+      "errorMessage": "rewrite: [\n  {\n    \"expected\": \"array\",\n    \"code\": \"invalid_type\",\n    \"path\": [\n      \"uncertainty\"\n    ],\n    \"message\": \"Invalid input: expected array, received string\"\n  },\n  {\n    \"origin\": \"string\",\n    \"code\": \"too_big\",\n    \"maximum\": 3,\n    \"inclusive\": true,\n    \"path\": [\n      \"uncertainty\"\n    ],\n    \"message\": \"Too big: expected string to have <=3 characters\"\n  }\n]"
+    },
+    {
+      "name": "rewrite_2",
+      "status": "failed",
+      "startedAt": "2026-10-16T03:06:04.856Z",
+      "completedAt": "2026-10-16T03:08:22.113Z",
+      "durationMs": 137257,
+      "errorCode": "InvalidModelOutputError",
+      "errorMessage": "rewrite: [\n  {\n    \"expected\": \"array\",\n    \"code\": \"invalid_type\",\n    \"path\": [\n      \"dispatches\"\n    ],\n    \"message\": \"Invalid input: expected array, received string\"\n  },\n  {\n    \"origin\": \"string\",\n    \"code\": \"too_big\",\n    \"maximum\": 4,\n    \"inclusive\": true,\n    \"path\": [\n      \"dispatches\"\n    ],\n    \"message\": \"Too big: expected string to have <=4 characters\"\n  }\n]"
+    }
+  ],
+  "regenerationAttempts": 2,
+  "stetBlocks": 0,
+  "hacekBlocks": 0,
+  "usage": [
+    {
+      "provider": "anthropic",
+      "model": "claude-sonnet-4-6",
+      "stage": "curate",
+      "inputTokens": 10956,
+      "outputTokens": 1146,
+      "cacheReadTokens": 0,
+      "cacheWriteTokens": 0,
+      "costUsd": 0.050058
+    },
+    {
+      "provider": "anthropic",
+      "model": "claude-sonnet-4-6",
+      "stage": "write",
+      "inputTokens": 15522,
+      "outputTokens": 4436,
+      "cacheReadTokens": 0,
+      "cacheWriteTokens": 2470,
+      "costUsd": 0.1223685,
+      "contractRepairs": [
+        {
+          "field": "dispatches",
+          "received": "[{\"title\": \"Sega stahuje Shogun 2 remaster\", \"body\": \"Sega stáhla hru Total War: Shogun 2 – Complete Edition z prodeje k…",
+          "detail": "Expected ',' or '}' after property value in JSON at position 191 (line 1 column 192) near «dání. Na Steamu získala hodnocení „Overwhelmingly Negative\" poté, co hráči odhalili grafické chyby a artwork vypadající »",
+          "reason": "json_string_undecodable"
+        }
+      ]
+    },
+    {
+      "provider": "anthropic",
+      "model": "claude-sonnet-4-6",
+      "stage": "rewrite",
+      "inputTokens": 15532,
+      "outputTokens": 5072,
+      "cacheReadTokens": 0,
+      "cacheWriteTokens": 2648,
+      "costUsd": 0.132606,
+      "contractRepairs": [
+        {
+          "field": "uncertainty",
+          "received": "[\"Přímá příčina odchodu Bajariové – zda šlo o strategický spor, tlak akcionářů, nebo jiný důvod – z dostupných zdrojů je…",
+          "detail": "Expected ',' or ']' after array element in JSON at position 370 (line 1 column 371) near «tní výzkumníci popisují incident jako „pravděpodobně první\" případ tohoto druhu, nikoli jako definitivně potvrzený prece»",
+          "reason": "json_string_undecodable"
+        }
+      ]
+    },
+    {
+      "provider": "anthropic",
+      "model": "claude-sonnet-4-6",
+      "stage": "rewrite",
+      "inputTokens": 14098,
+      "outputTokens": 5125,
+      "cacheReadTokens": 0,
+      "cacheWriteTokens": 2611,
+      "costUsd": 0.12896025,
+      "contractRepairs": [
+        {
+          "field": "dispatches",
+          "received": "[\n  {\n    \"title\": \"Sega stáhla remaster Total War: Shogun 2 po katastrofálním startu\",\n    \"body\": \"Sega odebrala titul…",
+          "detail": "Expected ',' or '}' after property value in JSON at position 293 (line 4 column 206) near « 2011, získala na Steamu hodnocení „Overwhelmingly Negative\". Hráči na Redditu ukázali kusy herní grafiky, které podle n»",
+          "reason": "json_string_undecodable"
+        }
+      ]
+    }
+  ],
+  "measuredCostUsd": 0.43399275,
+  "imageProgram": {
+    "readiness": {
+      "providers": {
+        "openverse": "keyless",
+        "wikimedia": "keyless",
+        "pexels": "present",
+        "pixabay": "present"
+      },
+      "gateModelConfigured": true,
+      "caps": {
+        "perArticleUsd": 0.05,
+        "perDayUsd": 0.1,
+        "generatedImagesPerDay": 4
+      },
+      "spentToday": {
+        "usd": 0,
+        "generatedImages": 0
+      },
+      "illustrationRung": "armed"
+    },
+    "verdicts": []
+  },
+  "packageStatus": "no_edition",
+  "warnings": [
+    "content_invalid:write: [\n  {\n    \"origin\": \"array\",\n    \"code\": \"too_big\",\n    \"maximum\": 6,\n    \"inclusive\": true,\n    \"path\": [\n      \"tags\"\n    ],\n    \"message\": \"Too big: expected array to have <=6 items\"\n  },\n  {\n    \"expected\": \"array\",\n    \"code\": \"invalid_type\",\n    \"path\": [\n      \"dispatches\"\n    ],\n    \"message\": \"Invalid input: expected array, received string\"\n  },\n  {\n    \"origin\": \"string\",\n    \"code\": \"too_big\",\n    \"maximum\": 4,\n    \"inclusive\": true,\n    \"path\": [\n      \"dispatches\"\n    ],\n    \"message\": \"Too big: expected string to have <=4 characters\"\n  }\n]",
+    "content_invalid:rewrite: [\n  {\n    \"expected\": \"array\",\n    \"code\": \"invalid_type\",\n    \"path\": [\n      \"uncertainty\"\n    ],\n    \"message\": \"Invalid input: expected array, received string\"\n  },\n  {\n    \"origin\": \"string\",\n    \"code\": \"too_big\",\n    \"maximum\": 3,\n    \"inclusive\": true,\n    \"path\": [\n      \"uncertainty\"\n    ],\n    \"message\": \"Too big: expected string to have <=3 characters\"\n  }\n]",
+    "content_invalid:rewrite: [\n  {\n    \"expected\": \"array\",\n    \"code\": \"invalid_type\",\n    \"path\": [\n      \"dispatches\"\n    ],\n    \"message\": \"Invalid input: expected array, received string\"\n  },\n  {\n    \"origin\": \"string\",\n    \"code\": \"too_big\",\n    \"maximum\": 4,\n    \"inclusive\": true,\n    \"path\": [\n      \"dispatches\"\n    ],\n    \"message\": \"Too big: expected string to have <=4 characters\"\n  }\n]"
+  ],
+  "sourceSummary": {
+    "successfulSources": 28,
+    "candidateItems": 80,
+    "evidenceRefs": [
+      "source:404-media",
+      "source:anthropic-news",
+      "source:ars-technica",
+      "source:bluesky-language-models",
+      "source:deepmind-blog",
+      "source:digiday",
+      "source:github-ai-releases",
+      "source:google-research",
+      "source:hf-blog",
+      "source:hn-frontpage",
+      "source:import-ai",
+      "source:interconnects"
+    ]
+  }
+}
