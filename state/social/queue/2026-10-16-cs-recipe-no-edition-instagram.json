@@ -1,0 +1,75 @@
+{
+  "schemaVersion": 2,
+  "id": "caught-up-2026-10-16-cs-recipe-no-edition-instagram",
+  "sourceVentureId": "caught-up",
+  "releaseId": "caught-up-2026-10-16-cs-recipe-no-edition",
+  "campaignId": "caught-up-2026-10-16-cs-recipe-no-edition",
+  "experimentId": null,
+  "target": {
+    "profileId": "social-profile-caught-up",
+    "profileRole": "venture-primary",
+    "role": "primary",
+    "connectionBindingRef": "social-connection-caught-up-instagram",
+    "capabilityRef": null,
+    "amplifierEligibilityRef": null,
+    "campaignApprovalRef": null
+  },
+  "action": "publish-original",
+  "sourcePackage": {
+    "schemaVersion": "approved-publish-package/1",
+    "artifactRef": "state/social/recipes/2026-10-16-no-edition.json",
+    "packageHash": "10a3b9658da8418c0b72627926492867a1d18bc4016f2c736ce4ea94b65f3de4"
+  },
+  "locale": "cs",
+  "variant": "A",
+  "channel": "instagram",
+  "objective": "trust",
+  "audience": "Caught Up readers (cs)",
+  "destination": "https://dneskai.vercel.app/?utm_source=instagram&utm_medium=post&utm_campaign=no-edition",
+  "utm": {
+    "source": "instagram",
+    "medium": "organic_social",
+    "campaign": "no-edition",
+    "content": "2026-10-16-no-edition"
+  },
+  "content": {
+    "text": "Dnes vydání DNESKAi nevyšlo. Pojem dne:\n\nMixture of experts: Model mixture-of-experts rozdělí vrstvy na mnoho 'expertů' a každý token pošle jen několika z nich, takže v každém okamžiku počítá zlomek parametrů. Celková kapacita může být obrovská, zatímco cena za token zůstává mírná — architektura řady špičkových i otevřených vlajkových modelů.\n\nZdroj: MoE literature (Switch Transformer; Mixtral; DeepSeek)\n\nDalší vydání: https://dneskai.vercel.app/?utm_source=instagram&utm_medium=post&utm_campaign=no-edition\n\n#ai #umelainteligence #dneskai",
+    "altText": "Slide 1: Mixture of experts: Model složený ze specializovaných podsítí, z nichž se pro každý token probudí jen pár — obří kapacita, mírná cena",
+    "assetPaths": [
+      "/social/caught-up/2026-10-16/no-edition/frame-01.jpg"
+    ],
+    "factualClaimRefs": [
+      "aifirst:data/ai-lessons.json#lex-048"
+    ],
+    "rendererVersion": "carousel-studio-1",
+    "contentHash": "a63380f619f9b855d6cdc3607761e17ad97badde4de21cfa5f12cd4e1bcd7b7c"
+  },
+  "publishWindow": {
+    "notBefore": "2026-10-16T10:00:00.000Z",
+    "notAfter": "2026-10-19T10:00:00.000Z"
+  },
+  "status": "draft",
+  "checks": {
+    "schema": "pending",
+    "brand": "pending",
+    "claims": "pending",
+    "quill": "pending",
+    "keeper": "pending",
+    "duplicate": "pending",
+    "accessibility": "pending",
+    "budget": "pending",
+    "capability": "pending",
+    "authority": "pending",
+    "policy": "pending"
+  },
+  "approvalProvenance": {
+    "approvalRef": "awaiting-owner-approval",
+    "selectionRef": "state/social/recipes/2026-10-16-no-edition.json",
+    "policyRef": "D2-autonomy-build-2026-08-01"
+  },
+  "selectedBy": "PULSE",
+  "createdAt": "2026-10-16T03:11:54.827Z",
+  "attempt": null,
+  "receiptId": null,
+  "migration": null
+}
