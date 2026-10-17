@@ -1,0 +1,75 @@
+{
+  "schemaVersion": 2,
+  "id": "caught-up-2026-10-17-cs-recipe-no-edition-instagram",
+  "sourceVentureId": "caught-up",
+  "releaseId": "caught-up-2026-10-17-cs-recipe-no-edition",
+  "campaignId": "caught-up-2026-10-17-cs-recipe-no-edition",
+  "experimentId": null,
+  "target": {
+    "profileId": "social-profile-caught-up",
+    "profileRole": "venture-primary",
+    "role": "primary",
+    "connectionBindingRef": "social-connection-caught-up-instagram",
+    "capabilityRef": null,
+    "amplifierEligibilityRef": null,
+    "campaignApprovalRef": null
+  },
+  "action": "publish-original",
+  "sourcePackage": {
+    "schemaVersion": "approved-publish-package/1",
+    "artifactRef": "state/social/recipes/2026-10-17-no-edition.json",
+    "packageHash": "db9a4a8f623f8177f05b73702f0957544dbd953bcc8b207b3087d57d42f1b761"
+  },
+  "locale": "cs",
+  "variant": "A",
+  "channel": "instagram",
+  "objective": "trust",
+  "audience": "Caught Up readers (cs)",
+  "destination": "https://dneskai.vercel.app/?utm_source=instagram&utm_medium=post&utm_campaign=no-edition",
+  "utm": {
+    "source": "instagram",
+    "medium": "organic_social",
+    "campaign": "no-edition",
+    "content": "2026-10-17-no-edition"
+  },
+  "content": {
+    "text": "Dnes vydání DNESKAi nevyšlo. Pojem dne:\n\nDiffusion model: Difuzní modely se trénují přidáváním šumu do obrázků, dokud nezbude jen zrnění — a učí se každý krok vracet zpět. Generování pak spouští obrácený postup z čistého šumu, vedený vaším textovým zadáním. Takhle fungují Stable Diffusion, Midjourney i většina generátorů videa.\n\nZdroj: Ho et al., 2020; Stable Diffusion (2022)\n\nDalší vydání: https://dneskai.vercel.app/?utm_source=instagram&utm_medium=post&utm_campaign=no-edition\n\n#ai #umelainteligence #dneskai",
+    "altText": "Slide 1: Diffusion model: Generátor obrázků, který se učí ničením snímků šumem — a pak proces obrací",
+    "assetPaths": [
+      "/social/caught-up/2026-10-17/no-edition/frame-01.jpg"
+    ],
+    "factualClaimRefs": [
+      "aifirst:data/ai-lessons.json#lex-049"
+    ],
+    "rendererVersion": "carousel-studio-1",
+    "contentHash": "55a872961841e776604a935ae4b8e6243bb38972482923018b9488d5862dffe4"
+  },
+  "publishWindow": {
+    "notBefore": "2026-10-17T10:00:00.000Z",
+    "notAfter": "2026-10-20T10:00:00.000Z"
+  },
+  "status": "draft",
+  "checks": {
+    "schema": "pending",
+    "brand": "pending",
+    "claims": "pending",
+    "quill": "pending",
+    "keeper": "pending",
+    "duplicate": "pending",
+    "accessibility": "pending",
+    "budget": "pending",
+    "capability": "pending",
+    "authority": "pending",
+    "policy": "pending"
+  },
+  "approvalProvenance": {
+    "approvalRef": "awaiting-owner-approval",
+    "selectionRef": "state/social/recipes/2026-10-17-no-edition.json",
+    "policyRef": "D2-autonomy-build-2026-08-01"
+  },
+  "selectedBy": "PULSE",
+  "createdAt": "2026-10-17T03:13:08.106Z",
+  "attempt": null,
+  "receiptId": null,
+  "migration": null
+}

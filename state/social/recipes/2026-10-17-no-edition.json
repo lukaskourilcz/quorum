@@ -1,0 +1,53 @@
+{
+  "schemaVersion": "dneskai-recipe/1",
+  "id": "dneskai-no-edition-2026-10-17",
+  "recipe": "no-edition",
+  "date": "2026-10-17",
+  "window": {
+    "from": "2026-10-17",
+    "to": "2026-10-17"
+  },
+  "sourceRefs": [
+    "aifirst:data/ai-lessons.json#lex-049"
+  ],
+  "slides": [
+    {
+      "text": "Diffusion model: Generátor obrázků, který se učí ničením snímků šumem — a pak proces obrací",
+      "alt": "Slide 1: Diffusion model: Generátor obrázků, který se učí ničením snímků šumem — a pak proces obrací"
+    }
+  ],
+  "visual": {
+    "template_id": "quote-card",
+    "version": "1.0.0",
+    "content": {
+      "locale": "cs",
+      "strings": {
+        "quote": "Diffusion model: Generátor obrázků, který se učí ničením snímků šumem — a pak proces obrací",
+        "attribution": "Pojem dne · DNESKAi"
+      }
+    }
+  },
+  "frames": [
+    {
+      "path": "/social/caught-up/2026-10-17/no-edition/frame-01.jpg",
+      "sha256": "e472e1b56826b4363c0909525c49438be68c7fac08d0e3d3d0d3309cad57e816"
+    }
+  ],
+  "story": {
+    "frame": {
+      "path": "/social/caught-up/2026-10-17/no-edition/story.png",
+      "sha256": "ca6ab97370e51ba1d2d8d8a8f765dc83f5bffa7799684936ea02da16660db8c9"
+    },
+    "link": "https://dneskai.vercel.app/?utm_source=instagram&utm_medium=story&utm_campaign=no-edition"
+  },
+  "destination": "https://dneskai.vercel.app/?utm_source=instagram&utm_medium=post&utm_campaign=no-edition",
+  "instagram": {
+    "caption": "Dnes vydání DNESKAi nevyšlo. Pojem dne:\n\nDiffusion model: Difuzní modely se trénují přidáváním šumu do obrázků, dokud nezbude jen zrnění — a učí se každý krok vracet zpět. Generování pak spouští obrácený postup z čistého šumu, vedený vaším textovým zadáním. Takhle fungují Stable Diffusion, Midjourney i většina generátorů videa.\n\nZdroj: Ho et al., 2020; Stable Diffusion (2022)\n\nDalší vydání: https://dneskai.vercel.app/?utm_source=instagram&utm_medium=post&utm_campaign=no-edition\n\n#ai #umelainteligence #dneskai"
+  },
+  "threads": {
+    "text": "Dnes vydání DNESKAi nevyšlo. Pojem dne: Diffusion model: Difuzní modely se trénují přidáváním šumu do obrázků, dokud nezbude jen zrnění — a učí se každý krok vracet zpět. Generování pak spouští obrácený postup z čistého šumu, vedený vaším textovým zadáním. Takhle fungují Stable Diffusion, Midjourney i většina generátorů videa.\n\nZdroj: Ho et al., 2020; Stable Diffusion (2022)\n\nhttps://dneskai.vercel.app/?utm_source=threads&utm_medium=post&utm_campaign=no-edition"
+  },
+  "ownerSlots": [],
+  "status": "draft",
+  "spendUsd": 0
+}
