@@ -3,8 +3,8 @@
   "nodeId": "owner-attention",
   "displayName": "Owner attention",
   "policyVersion": "1.0.0",
-  "generatedAt": "2026-10-16T04:01:14.182Z",
-  "observedAt": "2026-10-16T04:01:14.182Z",
+  "generatedAt": "2026-10-17T04:01:15.292Z",
+  "observedAt": "2026-10-17T04:01:15.292Z",
   "lifecycleStage": "operating",
   "state": "unavailable",
   "reason": "No valid live or recovery receipt is available.",
@@ -47,5 +47,5 @@
   ],
   "ownerAttentionRefs": [],
   "latestRunReceiptRefs": [],
-  "snapshotHash": "03b002d84a6e3a9a662285509816dc92ef38a47ab9ff3be3fdb8f80aaa086c7f"
+  "snapshotHash": "5b175474f9c3cc6fdf65cd1a324de93a93c0262c16911e7286271d7c87177846"
 }

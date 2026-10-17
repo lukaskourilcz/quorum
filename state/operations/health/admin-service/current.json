@@ -3,8 +3,8 @@
   "nodeId": "admin-service",
   "displayName": "Admin service",
   "policyVersion": "1.0.0",
-  "generatedAt": "2026-10-16T04:01:14.182Z",
-  "observedAt": "2026-10-16T04:01:14.182Z",
+  "generatedAt": "2026-10-17T04:01:15.292Z",
+  "observedAt": "2026-10-17T04:01:15.292Z",
   "lifecycleStage": "setup-needed",
   "state": "setup-needed",
   "reason": "Owner setup is required before live operational evidence can exist.",
@@ -45,5 +45,5 @@
   "unavailableReasons": [],
   "ownerAttentionRefs": [],
   "latestRunReceiptRefs": [],
-  "snapshotHash": "b1adf116ff69c8a301a22807d6b364d35c821e3d2ccbaf33d95d0dabd931e48b"
+  "snapshotHash": "05c3f67832d088829f92f268cf386c4a556c25aeea1587a3669638a505329d7d"
 }

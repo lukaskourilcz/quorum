@@ -31,6 +31,7 @@ Collapsed superseded entries: 0.
 
 | ID | Title (≤8 words) | Current status | Last reason |
 | --- | --- | --- | --- |
+| idea-2026-10-17-faec8e12 | Add a Daily Publish Evidence Check | vetoed | VAULT hard stop: Proposes identical mechanism: one optional internal completion field per publishing record to confirm… |
 | idea-2026-10-11-bf2fb7ae | Add a Source-Review Prompt to Publishing Records | vetoed | VAULT hard stop: Identical core mechanism: optional internal prompt asking missing source perspective, periodic review… |
 | idea-2026-10-10-eb700cea | Add a Lightweight Source-Mix Reflection | vetoed | VAULT hard stop: Both propose adding one optional internal source-category note/label per published item, then reviewin… |
 | idea-2026-10-04-49afb292 | Add a Bounded Source-Mix Review Card | vetoed | VAULT hard stop: Proposal is substantively identical to candidate 250b2587: both add one internal card/review record pe… |

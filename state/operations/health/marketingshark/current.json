@@ -3,8 +3,8 @@
   "nodeId": "marketingshark",
   "displayName": "marketingShark",
   "policyVersion": "1.0.0",
-  "generatedAt": "2026-10-16T04:01:14.182Z",
-  "observedAt": "2026-10-16T04:01:14.182Z",
+  "generatedAt": "2026-10-17T04:01:15.292Z",
+  "observedAt": "2026-10-17T04:01:15.292Z",
   "lifecycleStage": "operating",
   "state": "unavailable",
   "reason": "No valid live or recovery receipt is available.",
@@ -50,5 +50,5 @@
   ],
   "ownerAttentionRefs": [],
   "latestRunReceiptRefs": [],
-  "snapshotHash": "e5b2142923a8249b7e0fc63eed2e8d6c7f22985fc1c8016fff02a20dc21529de"
+  "snapshotHash": "09c8c04f9e2a73c35bd052971cd25f070b58f1b73e897da246cd307585313394"
 }
