@@ -1,0 +1,159 @@
+{
+  "schemaVersion": 1,
+  "runId": "b3d02f7c-4647-4525-b96c-4e43f463ec7e",
+  "date": "2026-10-17",
+  "mode": "production",
+  "status": "no_edition",
+  "startedAt": "2026-10-17T03:01:36.847Z",
+  "completedAt": "2026-10-17T03:07:30.089Z",
+  "stages": [
+    {
+      "name": "curate",
+      "status": "success",
+      "startedAt": "2026-10-17T03:01:36.880Z",
+      "completedAt": "2026-10-17T03:01:59.140Z",
+      "durationMs": 22260
+    },
+    {
+      "name": "write",
+      "status": "failed",
+      "startedAt": "2026-10-17T03:01:59.140Z",
+      "completedAt": "2026-10-17T03:03:59.341Z",
+      "durationMs": 120201,
+      "errorCode": "InvalidModelOutputError",
+      "errorMessage": "write: [\n  {\n    \"expected\": \"array\",\n    \"code\": \"invalid_type\",\n    \"path\": [\n      \"uncertainty\"\n    ],\n    \"message\": \"Invalid input: expected array, received string\"\n  },\n  {\n    \"origin\": \"string\",\n    \"code\": \"too_big\",\n    \"maximum\": 3,\n    \"inclusive\": true,\n    \"path\": [\n      \"uncertainty\"\n    ],\n    \"message\": \"Too big: expected string to have <=3 characters\"\n  }\n]"
+    },
+    {
+      "name": "rewrite_1",
+      "status": "failed",
+      "startedAt": "2026-10-17T03:03:59.341Z",
+      "completedAt": "2026-10-17T03:05:43.788Z",
+      "durationMs": 104447,
+      "errorCode": "InvalidModelOutputError",
+      "errorMessage": "rewrite: [\n  {\n    \"origin\": \"array\",\n    \"code\": \"too_big\",\n    \"maximum\": 6,\n    \"inclusive\": true,\n    \"path\": [\n      \"wire\"\n    ],\n    \"message\": \"Too big: expected array to have <=6 items\"\n  }\n]"
+    },
+    {
+      "name": "rewrite_2",
+      "status": "failed",
+      "startedAt": "2026-10-17T03:05:43.788Z",
+      "completedAt": "2026-10-17T03:07:30.088Z",
+      "durationMs": 106300,
+      "errorCode": "InvalidModelOutputError",
+      "errorMessage": "rewrite: [\n  {\n    \"expected\": \"array\",\n    \"code\": \"invalid_type\",\n    \"path\": [\n      \"uncertainty\"\n    ],\n    \"message\": \"Invalid input: expected array, received string\"\n  },\n  {\n    \"origin\": \"string\",\n    \"code\": \"too_big\",\n    \"maximum\": 3,\n    \"inclusive\": true,\n    \"path\": [\n      \"uncertainty\"\n    ],\n    \"message\": \"Too big: expected string to have <=3 characters\"\n  },\n  {\n    \"expected\": \"array\",\n    \"code\": \"invalid_type\",\n    \"path\": [\n      \"dispatches\"\n    ],\n    \"message\": \"Invali"
+    }
+  ],
+  "regenerationAttempts": 2,
+  "stetBlocks": 0,
+  "hacekBlocks": 0,
+  "usage": [
+    {
+      "provider": "anthropic",
+      "model": "claude-sonnet-4-6",
+      "stage": "curate",
+      "inputTokens": 13034,
+      "outputTokens": 987,
+      "cacheReadTokens": 0,
+      "cacheWriteTokens": 0,
+      "costUsd": 0.053907
+    },
+    {
+      "provider": "anthropic",
+      "model": "claude-sonnet-4-6",
+      "stage": "write",
+      "inputTokens": 13039,
+      "outputTokens": 4930,
+      "cacheReadTokens": 0,
+      "cacheWriteTokens": 2470,
+      "costUsd": 0.1223295,
+      "contractRepairs": [
+        {
+          "field": "uncertainty",
+          "received": "[\n  \"Skutečný prodejní výsledek iPhone Duo není znám; „mimořádná\" poptávka je tvrzení Apple bez číselného doložení.\",\n  …",
+          "detail": "Expected ',' or ']' after array element in JSON at position 66 (line 2 column 65) near «kutečný prodejní výsledek iPhone Duo není znám; „mimořádná\" poptávka je tvrzení Apple bez číselného doložení.\",\n  \"Okoln»",
+          "reason": "json_string_undecodable"
+        }
+      ]
+    },
+    {
+      "provider": "anthropic",
+      "model": "claude-sonnet-4-6",
+      "stage": "rewrite",
+      "inputTokens": 13039,
+      "outputTokens": 4582,
+      "cacheReadTokens": 0,
+      "cacheWriteTokens": 2610,
+      "costUsd": 0.1176345
+    },
+    {
+      "provider": "anthropic",
+      "model": "claude-sonnet-4-6",
+      "stage": "rewrite",
+      "inputTokens": 13039,
+      "outputTokens": 4512,
+      "cacheReadTokens": 0,
+      "cacheWriteTokens": 2573,
+      "costUsd": 0.11644575,
+      "contractRepairs": [
+        {
+          "field": "uncertainty",
+          "received": "[\"Skutečný rozsah prodejů iPhonu Duo a to, zda „mimořádná\" poptávka přetrvá po uvolnění první vlny preobjednávek, není d…",
+          "detail": "Expected ',' or ']' after array element in JSON at position 59 (line 1 column 60) near «[\"Skutečný rozsah prodejů iPhonu Duo a to, zda „mimořádná\" poptávka přetrvá po uvolnění první vlny preobjednávek, není »",
+          "reason": "json_string_undecodable"
+        },
+        {
+          "field": "dispatches",
+          "received": "[{\"title\":\"Replit přešel od Anthropicu k OpenAI kvůli ceně\",\"body\":\"Generální ředitel Remplitu veřejně potvrdil, že firm…",
+          "detail": "Expected ',' or '}' after property value in JSON at position 822 (line 1 column 823) near «názvem IARA. Banka označuje přístup za strategii „AI First\" a uvádí, že systém slouží zákazníkům i zaměstnancům v jednom»",
+          "reason": "json_string_undecodable"
+        }
+      ]
+    }
+  ],
+  "measuredCostUsd": 0.41031675,
+  "imageProgram": {
+    "readiness": {
+      "providers": {
+        "openverse": "keyless",
+        "wikimedia": "keyless",
+        "pexels": "present",
+        "pixabay": "present"
+      },
+      "gateModelConfigured": true,
+      "caps": {
+        "perArticleUsd": 0.05,
+        "perDayUsd": 0.1,
+        "generatedImagesPerDay": 4
+      },
+      "spentToday": {
+        "usd": 0,
+        "generatedImages": 0
+      },
+      "illustrationRung": "armed"
+    },
+    "verdicts": []
+  },
+  "packageStatus": "no_edition",
+  "warnings": [
+    "content_invalid:write: [\n  {\n    \"expected\": \"array\",\n    \"code\": \"invalid_type\",\n    \"path\": [\n      \"uncertainty\"\n    ],\n    \"message\": \"Invalid input: expected array, received string\"\n  },\n  {\n    \"origin\": \"string\",\n    \"code\": \"too_big\",\n    \"maximum\": 3,\n    \"inclusive\": true,\n    \"path\": [\n      \"uncertainty\"\n    ],\n    \"message\": \"Too big: expected string to have <=3 characters\"\n  }\n]",
+    "content_invalid:rewrite: [\n  {\n    \"origin\": \"array\",\n    \"code\": \"too_big\",\n    \"maximum\": 6,\n    \"inclusive\": true,\n    \"path\": [\n      \"wire\"\n    ],\n    \"message\": \"Too big: expected array to have <=6 items\"\n  }\n]",
+    "content_invalid:rewrite: [\n  {\n    \"expected\": \"array\",\n    \"code\": \"invalid_type\",\n    \"path\": [\n      \"uncertainty\"\n    ],\n    \"message\": \"Invalid input: expected array, received string\"\n  },\n  {\n    \"origin\": \"string\",\n    \"code\": \"too_big\",\n    \"maximum\": 3,\n    \"inclusive\": true,\n    \"path\": [\n      \"uncertainty\"\n    ],\n    \"message\": \"Too big: expected string to have <=3 characters\"\n  },\n  {\n    \"expected\": \"array\",\n    \"code\": \"invalid_type\",\n    \"path\": [\n      \"dispatches\"\n    ],\n    \"message\": \"Invalid input: expected array, received string\"\n  },\n  {\n    \"origin\": \"string\",\n    \"code\": \"too_big\",\n    \"maximum\": 4,\n    \"inclusive\": true,\n    \"path\": [\n      \"dispatches\"\n    ],\n    \"message\": \"Too big: expected string to have <=4 characters\"\n  }\n]"
+  ],
+  "sourceSummary": {
+    "successfulSources": 29,
+    "candidateItems": 80,
+    "evidenceRefs": [
+      "source:404-media",
+      "source:anthropic-news",
+      "source:ars-technica",
+      "source:bluesky-language-models",
+      "source:deepmind-blog",
+      "source:digiday",
+      "source:github-ai-releases",
+      "source:google-research",
+      "source:hf-blog",
+      "source:hn-frontpage",
+      "source:import-ai",
+      "source:interconnects"
+    ]
+  }
+}
