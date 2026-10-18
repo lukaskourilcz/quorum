@@ -3,8 +3,8 @@
   "nodeId": "own-dashboard",
   "displayName": "OwnDashboard source bridge",
   "policyVersion": "1.0.1",
-  "generatedAt": "2026-10-17T04:01:15.292Z",
-  "observedAt": "2026-10-17T04:01:15.292Z",
+  "generatedAt": "2026-10-18T04:01:19.631Z",
+  "observedAt": "2026-10-18T04:01:19.631Z",
   "lifecycleStage": "setup-needed",
   "state": "setup-needed",
   "reason": "Owner setup is required before live operational evidence can exist.",
@@ -45,5 +45,5 @@
   "unavailableReasons": [],
   "ownerAttentionRefs": [],
   "latestRunReceiptRefs": [],
-  "snapshotHash": "93844b2fb2b4ed29687f4de48f16ddac18169ea5cc7e697f15da89fdfc93efaa"
+  "snapshotHash": "e3766577cb53402c182bf3b843ac188a184da860c2becd533e7c2d31269bfa4d"
 }
