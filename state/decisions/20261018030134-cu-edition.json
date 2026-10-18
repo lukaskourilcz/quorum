@@ -1,0 +1,18 @@
+{
+  "schemaVersion": 1,
+  "fixture": false,
+  "cycleId": "20261018030134-cu-edition",
+  "phase": "cu-edition",
+  "outcome": "EDITION",
+  "summary": "Přidání vrstvy ultrafast do OpenAI SDK a současné stažení svolení ke scrapování ze strany Mety přišly ve stejný den a společně vymezují, kdo bude platit za přístup k datům a kdo dostane výkonnější infrastrukturu jako první.",
+  "evidenceRefs": [
+    "source:github-ai-releases",
+    "source:the-verge",
+    "source:techcrunch-ai",
+    "source:interconnects",
+    "source:tensorfeed",
+    "source:the-register"
+  ],
+  "editionRef": "0a5ba72a6594ee9e5d6be2b9a372e62aca042f1e8d072609d3e4e5a7e776f055",
+  "generatedAt": "2026-10-18T03:01:39.332Z"
+}

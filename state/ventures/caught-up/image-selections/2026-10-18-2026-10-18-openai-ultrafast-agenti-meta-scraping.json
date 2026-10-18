@@ -1,0 +1,153 @@
+{
+  "schemaVersion": "image-selection/1",
+  "venture": "caught-up",
+  "slug": "2026-10-18-openai-ultrafast-agenti-meta-scraping",
+  "date": "2026-10-18",
+  "rung": "illustration",
+  "selected": null,
+  "verdicts": [
+    {
+      "mode": "search",
+      "considered": 6,
+      "selected": null,
+      "reason": "all-candidates-rejected",
+      "candidates": [
+        {
+          "candidateId": "pexels:40270826",
+          "provider": "pexels",
+          "fit": 1,
+          "vetoes": [
+            "dated-aesthetic",
+            "ai-generated-look"
+          ],
+          "reason": "Neon-glowing circuit board with magenta/purple lighting is visual cliché for AI topics and looks consciously stylised rather than documentary.",
+          "sceneCs": "zářící elektronické součástky"
+        },
+        {
+          "candidateId": "wikimedia:179520469",
+          "provider": "wikimedia",
+          "fit": 0,
+          "vetoes": [
+            "ai-generated-look"
+          ],
+          "reason": "Composited brain-as-circuit-board is stock AI metaphor imagery; plastic, artificial, and the canonical tired visual cliché for AI content.",
+          "sceneCs": "mozek z mikročipů"
+        },
+        {
+          "candidateId": "openverse:00de4c50-7cec-4609-9f6d-e605679a28a8",
+          "provider": "openverse",
+          "fit": 4,
+          "vetoes": [],
+          "reason": "Museum or educational display of working electronics and circuit boards with visitors present. Illustrates human engagement with technology and hardware development, though generic and not specific to OpenAI or Meta platforms.",
+          "sceneCs": "vzdělávací expozice s elektronickými komponentami"
+        },
+        {
+          "candidateId": "pixabay:3382521",
+          "provider": "pixabay",
+          "fit": 0,
+          "vetoes": [
+            "ai-generated-look",
+            "dated-aesthetic"
+          ],
+          "reason": "Glowing cyan brain with geometric grid overlay is quintessential mid-2010s AI stock imagery; entirely clichéd and consciously stylised.",
+          "sceneCs": "svítící mozek s geometrickou sítí"
+        },
+        {
+          "candidateId": "pexels:9242888",
+          "provider": "pexels",
+          "fit": 3,
+          "vetoes": [],
+          "reason": "Hands-on work with a real motherboard and cables shows practical hardware engineering and agent/system development, but the close-up framing and specific device may feel overly literal for a platform policy story.",
+          "sceneCs": "ruce pracující s deskou s plošnými spoji"
+        },
+        {
+          "candidateId": "pixabay:7649721",
+          "provider": "pixabay",
+          "fit": 1,
+          "vetoes": [
+            "ai-generated-look",
+            "dated-aesthetic"
+          ],
+          "reason": "Glowing wireframe brain with circuit patterns is stock AI imagery from ~2016-2020; synthetic-looking and thematically exhausted.",
+          "sceneCs": "drátěný mozek s elektronickými vzory"
+        }
+      ],
+      "skipped": [],
+      "costUsd": 0.005583
+    },
+    {
+      "mode": "generated",
+      "considered": 1,
+      "selected": "illustration:2026-10-18-candidate-1",
+      "reason": "Ilustrace abstraktního procesoru či systému s elektrickými spoji vizuálně reprezentuje AI infrastrukturu a technologické platformy, což odpovídá tématu SDK, agentů a modelů; nepředstírá konkrétní fotografi a je vhodná jako tematická ilustrace.",
+      "candidates": [
+        {
+          "candidateId": "illustration:2026-10-18-candidate-1",
+          "provider": "boardlessai",
+          "fit": 7,
+          "vetoes": [],
+          "reason": "Ilustrace abstraktního procesoru či systému s elektrickými spoji vizuálně reprezentuje AI infrastrukturu a technologické platformy, což odpovídá tématu SDK, agentů a modelů; nepředstírá konkrétní fotografi a je vhodná jako tematická ilustrace.",
+          "sceneCs": "modrý obvod s elektrickými spoji na černém pozadí"
+        }
+      ],
+      "skipped": [],
+      "costUsd": 0.0024
+    },
+    {
+      "mode": "generated",
+      "considered": 1,
+      "selected": "illustration:2026-10-18-candidate-2",
+      "reason": "Abstract blue circuitry on black background adequately illustrates the technical AI topic without showing faces, logos, or text; generic enough to serve as a technology briefing illustration.",
+      "candidates": [
+        {
+          "candidateId": "illustration:2026-10-18-candidate-2",
+          "provider": "boardlessai",
+          "fit": 7,
+          "vetoes": [],
+          "reason": "Abstract blue circuitry on black background adequately illustrates the technical AI topic without showing faces, logos, or text; generic enough to serve as a technology briefing illustration.",
+          "sceneCs": "abstraktní modrý obvod na černém pozadí"
+        }
+      ],
+      "skipped": [],
+      "costUsd": 0.00211
+    },
+    {
+      "mode": "generated",
+      "considered": 1,
+      "selected": "illustration:2026-10-18-candidate-3",
+      "reason": "Abstraktní ilustrace se kruhovými prvky a modrou elektronikou evokuje technické infrastruktury a AI systémy, která je vhodná pro článek o AI agentech a platformních změnách.",
+      "candidates": [
+        {
+          "candidateId": "illustration:2026-10-18-candidate-3",
+          "provider": "boardlessai",
+          "fit": 8,
+          "vetoes": [],
+          "reason": "Abstraktní ilustrace se kruhovými prvky a modrou elektronikou evokuje technické infrastruktury a AI systémy, která je vhodná pro článek o AI agentech a platformních změnách.",
+          "sceneCs": "abstraktní elektronický obvod"
+        }
+      ],
+      "skipped": [],
+      "costUsd": 0.002165
+    },
+    {
+      "mode": "generated",
+      "considered": 1,
+      "selected": "illustration:2026-10-18-candidate-4",
+      "reason": "Abstraktní, technologický vizuál s dráty a obvody vhodně ilustruje téma budoucnosti AI agentů a SDK; absence textů, tváří a log; čitý, neonový design odpovídá technologickému obsahu bez zavádějící specifičnosti.",
+      "candidates": [
+        {
+          "candidateId": "illustration:2026-10-18-candidate-4",
+          "provider": "boardlessai",
+          "fit": 7,
+          "vetoes": [],
+          "reason": "Abstraktní, technologický vizuál s dráty a obvody vhodně ilustruje téma budoucnosti AI agentů a SDK; absence textů, tváří a log; čitý, neonový design odpovídá technologickému obsahu bez zavádějící specifičnosti.",
+          "sceneCs": "modré obvody a neonové linie na černém pozadí"
+        }
+      ],
+      "skipped": [],
+      "costUsd": 0.00239
+    }
+  ],
+  "skippedProviders": [],
+  "recordedAt": "2026-10-18T03:01:34.332Z"
+}
