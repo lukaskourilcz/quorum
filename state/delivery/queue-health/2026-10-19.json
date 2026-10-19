@@ -1,6 +1,6 @@
 {
   "schemaVersion": "delivery-queue-health/1",
-  "checkedAt": "2026-10-19T03:16:49.824Z",
+  "checkedAt": "2026-10-19T04:05:41.165Z",
   "date": "2026-10-19",
   "ventures": [
     {
@@ -31,7 +31,15 @@
     {
       "venture": "caught-up",
       "waiting": [],
-      "parked": [],
+      "parked": [
+        {
+          "label": "2026-10-17 no_edition",
+          "packageHash": "50909fde81c0cd7e2a23761b7643cc7373292a18f389aec00f658bd7cd40d307",
+          "date": "2026-10-17",
+          "code": "hash_conflict",
+          "disposition": "retire"
+        }
+      ],
       "oldestWaitingDate": null,
       "stalledDays": null,
       "stalled": false,
