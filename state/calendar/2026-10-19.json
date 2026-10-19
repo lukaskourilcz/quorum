@@ -1,0 +1,92 @@
+{
+  "schemaVersion": "calendar/1",
+  "weekOf": "2026-10-19",
+  "slots": [
+    {
+      "at": "2026-10-19T03:00:00.000Z",
+      "tz": "Europe/Prague",
+      "kind": "cu-day",
+      "status": "held",
+      "meetingRef": "meetings/2026-10-19-cu-edition",
+      "decisionOneLiner": "Anthropic v jednom cyklu přijal tři opatření, která omezují jeho vlastní volnost jednání – to je jiná kategorie závazku než obvyklá prohlášení o hodnotách a nastavuje měřítko, s ní"
+    },
+    {
+      "at": "2026-10-19T04:00:00.000Z",
+      "tz": "Europe/Prague",
+      "kind": "venture-morning",
+      "status": "scheduled"
+    },
+    {
+      "at": "2026-10-20T03:00:00.000Z",
+      "tz": "Europe/Prague",
+      "kind": "cu-day",
+      "status": "scheduled"
+    },
+    {
+      "at": "2026-10-20T04:00:00.000Z",
+      "tz": "Europe/Prague",
+      "kind": "venture-morning",
+      "status": "scheduled"
+    },
+    {
+      "at": "2026-10-21T03:00:00.000Z",
+      "tz": "Europe/Prague",
+      "kind": "cu-day",
+      "status": "scheduled"
+    },
+    {
+      "at": "2026-10-21T04:00:00.000Z",
+      "tz": "Europe/Prague",
+      "kind": "venture-morning",
+      "status": "scheduled"
+    },
+    {
+      "at": "2026-10-22T03:00:00.000Z",
+      "tz": "Europe/Prague",
+      "kind": "cu-day",
+      "status": "scheduled"
+    },
+    {
+      "at": "2026-10-22T04:00:00.000Z",
+      "tz": "Europe/Prague",
+      "kind": "venture-morning",
+      "status": "scheduled"
+    },
+    {
+      "at": "2026-10-23T03:00:00.000Z",
+      "tz": "Europe/Prague",
+      "kind": "cu-day",
+      "status": "scheduled"
+    },
+    {
+      "at": "2026-10-23T04:00:00.000Z",
+      "tz": "Europe/Prague",
+      "kind": "venture-morning",
+      "status": "scheduled"
+    },
+    {
+      "at": "2026-10-24T03:00:00.000Z",
+      "tz": "Europe/Prague",
+      "kind": "cu-day",
+      "status": "scheduled"
+    },
+    {
+      "at": "2026-10-24T04:00:00.000Z",
+      "tz": "Europe/Prague",
+      "kind": "venture-morning",
+      "status": "scheduled"
+    },
+    {
+      "at": "2026-10-25T04:00:00.000Z",
+      "tz": "Europe/Prague",
+      "kind": "cu-day",
+      "status": "scheduled"
+    },
+    {
+      "at": "2026-10-25T05:00:00.000Z",
+      "tz": "Europe/Prague",
+      "kind": "venture-morning",
+      "status": "scheduled"
+    }
+  ]
+}

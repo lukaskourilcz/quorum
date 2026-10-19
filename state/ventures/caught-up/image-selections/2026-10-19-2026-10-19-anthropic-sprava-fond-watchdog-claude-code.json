@@ -1,0 +1,152 @@
+{
+  "schemaVersion": "image-selection/1",
+  "venture": "caught-up",
+  "slug": "2026-10-19-anthropic-sprava-fond-watchdog-claude-code",
+  "date": "2026-10-19",
+  "rung": "illustration",
+  "selected": null,
+  "verdicts": [
+    {
+      "mode": "search",
+      "considered": 6,
+      "selected": null,
+      "reason": "all-candidates-rejected",
+      "candidates": [
+        {
+          "candidateId": "pexels:40270826",
+          "provider": "pexels",
+          "fit": 1,
+          "vetoes": [
+            "dated-aesthetic",
+            "ai-generated-look"
+          ],
+          "reason": "Glowing neon circuit board is a dated stock aesthetic cliché for AI/tech that signals 2010s design rather than current events.",
+          "sceneCs": "rozsvícený procesně deska v neonové barvě"
+        },
+        {
+          "candidateId": "wikimedia:179520469",
+          "provider": "wikimedia",
+          "fit": 0,
+          "vetoes": [
+            "ai-generated-look"
+          ],
+          "reason": "This is the quintessential example of what to avoid: a digitally rendered brain made of circuit patterns, typifying the overused, machine-generated visual language of AI illustrations.",
+          "sceneCs": "mozek z obvody a čipů"
+        },
+        {
+          "candidateId": "openverse:00de4c50-7cec-4609-9f6d-e605679a28a8",
+          "provider": "openverse",
+          "fit": 3,
+          "vetoes": [],
+          "reason": "A museum display of electronics with visitors provides authentic context for technology and governance discussion, though the setting feels more historical/museum-specific than directly relevant to corporate AI governance.",
+          "sceneCs": "muzejní expozice elektroniky s návštěvníky"
+        },
+        {
+          "candidateId": "pixabay:3382521",
+          "provider": "pixabay",
+          "fit": 0,
+          "vetoes": [
+            "ai-generated-look",
+            "dated-aesthetic"
+          ],
+          "reason": "A holographic blue brain outline with circuit grid background is exactly the overworn AI stock imagery that violates the brief—dated mid-2010s visual language.",
+          "sceneCs": "svítící modrý mozek na síti"
+        },
+        {
+          "candidateId": "pexels:9242888",
+          "provider": "pexels",
+          "fit": 5,
+          "vetoes": [],
+          "reason": "A person working on real computer hardware captures authentic engagement with technology and structural systems, though the image's composition and lighting are slightly awkward for a lead picture.",
+          "sceneCs": "ruka s vývojovým nástrojem u desky plošných spojů"
+        },
+        {
+          "candidateId": "pixabay:7649721",
+          "provider": "pixabay",
+          "fit": 2,
+          "vetoes": [
+            "ai-generated-look"
+          ],
+          "reason": "A stylized, glowing circuit-brain outline is another tired AI visual metaphor that feels fabricated rather than documentary.",
+          "sceneCs": "mozek z elektrických čar na modré ploše"
+        }
+      ],
+      "skipped": [],
+      "costUsd": 0.005578
+    },
+    {
+      "mode": "generated",
+      "considered": 1,
+      "selected": "illustration:2026-10-19-candidate-1",
+      "reason": "Abstract circuit board pattern with glowing nodes effectively illustrates technology oversight and structural safeguards, though somewhat generic for AI governance specifically.",
+      "candidates": [
+        {
+          "candidateId": "illustration:2026-10-19-candidate-1",
+          "provider": "boardlessai",
+          "fit": 7,
+          "vetoes": [],
+          "reason": "Abstract circuit board pattern with glowing nodes effectively illustrates technology oversight and structural safeguards, though somewhat generic for AI governance specifically.",
+          "sceneCs": "abstraktní deska s plošnými spoji a modrými uzly"
+        }
+      ],
+      "skipped": [],
+      "costUsd": 0.00212
+    },
+    {
+      "mode": "generated",
+      "considered": 1,
+      "selected": "illustration:2026-10-19-candidate-2",
+      "reason": "Abstraktní technologická vizualizace velmi dobře odpovídá článku o AI bezpečnosti a kontrolních mechanismech společnosti Anthropic, ačkoli je spíše generickým symbolem technologie než specifickou ilustrací tématu.",
+      "candidates": [
+        {
+          "candidateId": "illustration:2026-10-19-candidate-2",
+          "provider": "boardlessai",
+          "fit": 7,
+          "vetoes": [],
+          "reason": "Abstraktní technologická vizualizace velmi dobře odpovídá článku o AI bezpečnosti a kontrolních mechanismech společnosti Anthropic, ačkoli je spíše generickým symbolem technologie než specifickou ilustrací tématu.",
+          "sceneCs": "modrý osvětlený obvod elektroniky"
+        }
+      ],
+      "skipped": [],
+      "costUsd": 0.002345
+    },
+    {
+      "mode": "generated",
+      "considered": 1,
+      "selected": "illustration:2026-10-19-candidate-3",
+      "reason": "Abstract circuit board and neon lines clearly illustrate the technology and AI governance theme of Anthropic's structural commitments without being tied to any specific event or person.",
+      "candidates": [
+        {
+          "candidateId": "illustration:2026-10-19-candidate-3",
+          "provider": "boardlessai",
+          "fit": 7,
+          "vetoes": [],
+          "reason": "Abstract circuit board and neon lines clearly illustrate the technology and AI governance theme of Anthropic's structural commitments without being tied to any specific event or person.",
+          "sceneCs": "neonové desky plošných spojů na černém pozadí"
+        }
+      ],
+      "skipped": [],
+      "costUsd": 0.002145
+    },
+    {
+      "mode": "generated",
+      "considered": 1,
+      "selected": "illustration:2026-10-19-candidate-4",
+      "reason": "Abstract blue circuit board pattern on black background effectively illustrates the technology/AI governance theme without depicting any specific person, event or identifiable content.",
+      "candidates": [
+        {
+          "candidateId": "illustration:2026-10-19-candidate-4",
+          "provider": "boardlessai",
+          "fit": 7,
+          "vetoes": [],
+          "reason": "Abstract blue circuit board pattern on black background effectively illustrates the technology/AI governance theme without depicting any specific person, event or identifiable content.",
+          "sceneCs": "abstraktní modrý vzor elektronických součástek"
+        }
+      ],
+      "skipped": [],
+      "costUsd": 0.002105
+    }
+  ],
+  "skippedProviders": [],
+  "recordedAt": "2026-10-19T03:01:29.182Z"
+}

@@ -1,0 +1,18 @@
+{
+  "schemaVersion": 1,
+  "fixture": false,
+  "cycleId": "20261019030129-cu-edition",
+  "phase": "cu-edition",
+  "outcome": "EDITION",
+  "summary": "Anthropic v jednom cyklu přijal tři opatření, která omezují jeho vlastní volnost jednání – to je jiná kategorie závazku než obvyklá prohlášení o hodnotách a nastavuje měřítko, s nímž budou porovnávány ostatní přední laboratoře.",
+  "evidenceRefs": [
+    "source:techcrunch-ai",
+    "source:ars-technica",
+    "source:tensorfeed",
+    "source:social-media-today",
+    "source:the-register",
+    "source:the-verge"
+  ],
+  "editionRef": "c679d475a36e53278b708807d98fde46d10e8bb6b49c934e24545cd1d75c3a8f",
+  "generatedAt": "2026-10-19T03:01:34.182Z"
+}
