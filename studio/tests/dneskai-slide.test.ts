@@ -100,6 +100,29 @@ describe("refusals", () => {
     expect(small.problems[0]!.message).toContain("1270 × 847");
     const enough = await renderDneskaiSlide({ type: "cover-photo", position: { index: 0, count: 5 }, headline: "Titulek", images: [{ slot: "image-1", bytes: await syntheticPhoto(1_600, 900, 22) }] });
     expect(enough.status).toBe("rendered");
+    // A 16:9 hero at the floor is a 720 × 900 region drawn at 1.5×: drawn, and said so.
+    expect(codes(enough.problems)).toEqual(["~image-upscaled"]);
+    expect(enough.problems[0]!.message).toContain("720 × 900 px of it at 1.50×");
+  }, 60_000);
+
+  it("measures a full-bleed photograph on the region its crop cuts, not on the file", async () => {
+    const large = await syntheticPhoto(1_200, 1_200, 25);
+    const cover = (crop?: { focal: { x: number; y: number }; zoom?: number }): DneskaiSlideInput => ({
+      type: "cover-photo", position: { index: 0, count: 5 }, headline: "Titulek", images: [{ slot: "image-1", bytes: large, ...(crop ? { crop } : {}) }]
+    });
+    // 960 × 1200 of a 1200 px square, drawn at 1.125×: nothing to say.
+    expect(codes(await validateDneskaiSlide(cover()))).toEqual([]);
+    // Zoom 4 cuts 240 × 300 px and would stretch it 4.5× to the whole slide.
+    const zoomed = await renderDneskaiSlide(cover({ focal: { x: 0.5, y: 0.5 }, zoom: 4 }));
+    expect(zoomed.status).toBe("refused");
+    expect(zoomed.png).toBeNull();
+    expect(codes(zoomed.problems)).toEqual(["!image-low-resolution"]);
+    expect(zoomed.problems[0]!.message).toContain("240 × 300 px of it at 4.50×");
+    // Zoom 1.2 cuts 800 × 1000 px, at 1.35×: drawn, and reported.
+    expect(codes(await validateDneskaiSlide(cover({ focal: { x: 0.5, y: 0.5 }, zoom: 1.2 })))).toEqual(["~image-upscaled"]);
+    // The single photo post bleeds the same way and is held to the same rule.
+    const single = await validateDneskaiSlide({ ...cover({ focal: { x: 0.3, y: 0.3 }, zoom: 2 }), type: "single", position: { index: 0, count: 1 } });
+    expect(codes(single)).toEqual(["!image-low-resolution"]);
   }, 60_000);
 
   it("refuses a slide without its required photograph instead of drawing it bare", async () => {

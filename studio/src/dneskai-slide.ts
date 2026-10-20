@@ -14,10 +14,11 @@ import { ImageCropSchema, type CarouselPayload, type CarouselTemplate, type Imag
  * the photographs, and renders through the same engine and gates as every other Design Lab slide.
  *
  * It refuses rather than degrades. A missing required photograph, a full-bleed photograph under
- * `DNESKAI_BLEED_MIN_SHORT_SIDE`, bytes that do not match the asset hash a crop was set on and an
- * image the slide has no place for each return the problem and no PNG — never a slide without its
- * picture, never a silent upscale. Words that would be cut still render, and every cut slot is in
- * `truncatedSlots` and in `problems`, so nothing is shortened without saying so.
+ * `DNESKAI_BLEED_MIN_SHORT_SIDE` or cropped past `DNESKAI_BLEED_MAX_UPSCALE`, bytes that do not
+ * match the asset hash a crop was set on and an image the slide has no place for each return the
+ * problem and no PNG — never a slide without its picture, never a silent upscale. Words that would
+ * be cut still render, and every cut slot is in `truncatedSlots` and in `problems`, so nothing is
+ * shortened without saying so; a picture stretched short of refusal is reported the same way.
  *
  * Deterministic: the same input renders the same PNG bytes, and the returned `payload` is the
  * exact record the slide was drawn from — the words, the variant and each photograph's crop with
@@ -29,6 +30,21 @@ export type DneskaiSlideType = (typeof DNESKAI_SLIDE_TYPES)[number];
 
 /** A photograph drawn to every edge needs this many pixels on its shorter side (report §5.3). */
 export const DNESKAI_BLEED_MIN_SHORT_SIDE = 900;
+
+/**
+ * The most a full-bleed crop may stretch the pixels it cuts; past it the slide is refused.
+ *
+ * The farthest a picture that passes the 900 px rule is ever stretched at zoom 1: a 16:9 hero
+ * 900 px tall gives a 720 × 900 region, drawn to the 1350 px edge. A zoom, or a crop that cuts
+ * less of the picture, may not stretch it further; that is refused like a smaller original.
+ */
+export const DNESKAI_BLEED_MAX_UPSCALE = MASTER_CANVAS.height / DNESKAI_BLEED_MIN_SHORT_SIDE;
+
+/**
+ * A full-bleed crop stretched past this, but within `DNESKAI_BLEED_MAX_UPSCALE`, renders and is
+ * reported as `image-upscaled`: 900 px across the 1080 px width.
+ */
+export const DNESKAI_BLEED_SOFT_UPSCALE = MASTER_CANVAS.width / DNESKAI_BLEED_MIN_SHORT_SIDE;
 
 /** A framed photograph resampled past this factor is reported, not refused. */
 export const DNESKAI_FRAME_MAX_UPSCALE = 1.5;
@@ -249,20 +265,24 @@ async function inspect(input: DneskaiSlideInput): Promise<Inspection> {
     // for a larger original of the same subject, and the payload says what would have been drawn.
     images[image.slot] = decoded;
     crops[image.slot] = crop.data;
-    const shorter = Math.min(size.width, size.height);
-    if (isBleed(layer) && shorter < DNESKAI_BLEED_MIN_SHORT_SIDE) {
-      problems.push(problem("image-low-resolution", true, image.slot,
-        `${image.slot} is ${size.width} × ${size.height} px; a photograph across the whole slide needs ${DNESKAI_BLEED_MIN_SHORT_SIDE} px on its shorter side. Use a larger original or a framed slide.`));
-      continue;
-    }
-    if (!isBleed(layer)) {
-      const frame = { width: layer.width * MASTER_CANVAS.width, height: layer.height * MASTER_CANVAS.height };
-      const region = cropRegion(size, crop.data, frame, crop.data.fit ?? layer.fit);
-      const upscale = region.outWidth / region.width;
-      if (upscale > DNESKAI_FRAME_MAX_UPSCALE) {
-        problems.push(problem("image-upscaled", false, image.slot,
-          `${image.slot} (${size.width} × ${size.height} px) is drawn at ${upscale.toFixed(1)}× its own pixels in this frame and may look soft.`));
+    // Measured on the region the crop actually cuts, not on the file: a zoom or a frame of another
+    // shape draws fewer of the picture's pixels, and those are the ones stretched to the frame.
+    const frame = { width: layer.width * MASTER_CANVAS.width, height: layer.height * MASTER_CANVAS.height };
+    const region = cropRegion(size, crop.data, frame, crop.data.fit ?? layer.fit);
+    const upscale = Math.max(region.outWidth / region.width, region.outHeight / region.height);
+    const drawn = `${image.slot} is ${size.width} × ${size.height} px and this crop draws ${region.width} × ${region.height} px of it at ${upscale.toFixed(2)}×`;
+    if (isBleed(layer)) {
+      const shorter = Math.min(size.width, size.height);
+      if (shorter < DNESKAI_BLEED_MIN_SHORT_SIDE || upscale > DNESKAI_BLEED_MAX_UPSCALE) {
+        problems.push(problem("image-low-resolution", true, image.slot,
+          `${drawn}; a photograph across the whole slide needs ${DNESKAI_BLEED_MIN_SHORT_SIDE} px on its shorter side and at most ${DNESKAI_BLEED_MAX_UPSCALE}× once cropped. Use a larger original, zoom out or use a framed slide.`));
+        continue;
       }
+      if (upscale > DNESKAI_BLEED_SOFT_UPSCALE) {
+        problems.push(problem("image-upscaled", false, image.slot, `${drawn} across the whole slide and may look soft.`));
+      }
+    } else if (upscale > DNESKAI_FRAME_MAX_UPSCALE) {
+      problems.push(problem("image-upscaled", false, image.slot, `${drawn} in this frame and may look soft.`));
     }
   }
   for (const [slot, layer] of layers) {
