@@ -14,13 +14,16 @@
       "at": "2026-10-19T04:00:00.000Z",
       "tz": "Europe/Prague",
       "kind": "venture-morning",
-      "status": "scheduled"
+      "status": "skipped",
+      "decisionOneLiner": "The meeting ran, but what it wrote failed the checks that come before it is saved, so its record was not kept."
     },
     {
       "at": "2026-10-20T03:00:00.000Z",
       "tz": "Europe/Prague",
       "kind": "cu-day",
-      "status": "scheduled"
+      "status": "held",
+      "meetingRef": "meetings/2026-10-20-cu-edition",
+      "decisionOneLiner": "The article failed its own checks on every attempt the budget allowed, so nothing was published."
     },
     {
       "at": "2026-10-20T04:00:00.000Z",

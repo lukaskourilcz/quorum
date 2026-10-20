@@ -1,0 +1,179 @@
+{
+  "schemaVersion": 1,
+  "runId": "c616088c-b7d6-441c-9e71-2522b58ae326",
+  "date": "2026-10-20",
+  "mode": "production",
+  "status": "no_edition",
+  "startedAt": "2026-10-20T03:01:50.998Z",
+  "completedAt": "2026-10-20T03:08:51.351Z",
+  "stages": [
+    {
+      "name": "curate",
+      "status": "success",
+      "startedAt": "2026-10-20T03:01:51.033Z",
+      "completedAt": "2026-10-20T03:02:16.826Z",
+      "durationMs": 25793
+    },
+    {
+      "name": "write",
+      "status": "failed",
+      "startedAt": "2026-10-20T03:02:16.826Z",
+      "completedAt": "2026-10-20T03:04:36.601Z",
+      "durationMs": 139775,
+      "errorCode": "InvalidModelOutputError",
+      "errorMessage": "write: [\n  {\n    \"expected\": \"array\",\n    \"code\": \"invalid_type\",\n    \"path\": [\n      \"wire\"\n    ],\n    \"message\": \"Invalid input: expected array, received string\"\n  },\n  {\n    \"origin\": \"string\",\n    \"code\": \"too_big\",\n    \"maximum\": 6,\n    \"inclusive\": true,\n    \"path\": [\n      \"wire\"\n    ],\n    \"message\": \"Too big: expected string to have <=6 characters\"\n  }\n]"
+    },
+    {
+      "name": "rewrite_1",
+      "status": "failed",
+      "startedAt": "2026-10-20T03:04:36.601Z",
+      "completedAt": "2026-10-20T03:06:48.580Z",
+      "durationMs": 131979,
+      "errorCode": "InvalidModelOutputError",
+      "errorMessage": "rewrite: [\n  {\n    \"expected\": \"array\",\n    \"code\": \"invalid_type\",\n    \"path\": [\n      \"wire\"\n    ],\n    \"message\": \"Invalid input: expected array, received string\"\n  },\n  {\n    \"origin\": \"string\",\n    \"code\": \"too_big\",\n    \"maximum\": 6,\n    \"inclusive\": true,\n    \"path\": [\n      \"wire\"\n    ],\n    \"message\": \"Too big: expected string to have <=6 characters\"\n  },\n  {\n    \"expected\": \"array\",\n    \"code\": \"invalid_type\",\n    \"path\": [\n      \"dispatches\"\n    ],\n    \"message\": \"Invalid input: expec"
+    },
+    {
+      "name": "rewrite_2",
+      "status": "failed",
+      "startedAt": "2026-10-20T03:06:48.580Z",
+      "completedAt": "2026-10-20T03:08:51.350Z",
+      "durationMs": 122770,
+      "errorCode": "InvalidModelOutputError",
+      "errorMessage": "rewrite: [\n  {\n    \"expected\": \"array\",\n    \"code\": \"invalid_type\",\n    \"path\": [\n      \"wire\"\n    ],\n    \"message\": \"Invalid input: expected array, received string\"\n  },\n  {\n    \"origin\": \"string\",\n    \"code\": \"too_big\",\n    \"maximum\": 6,\n    \"inclusive\": true,\n    \"path\": [\n      \"wire\"\n    ],\n    \"message\": \"Too big: expected string to have <=6 characters\"\n  },\n  {\n    \"expected\": \"array\",\n    \"code\": \"invalid_type\",\n    \"path\": [\n      \"uncertainty\"\n    ],\n    \"message\": \"Invalid input: expe"
+    }
+  ],
+  "regenerationAttempts": 2,
+  "stetBlocks": 0,
+  "hacekBlocks": 0,
+  "usage": [
+    {
+      "provider": "anthropic",
+      "model": "claude-sonnet-4-6",
+      "stage": "curate",
+      "inputTokens": 11664,
+      "outputTokens": 1134,
+      "cacheReadTokens": 0,
+      "cacheWriteTokens": 0,
+      "costUsd": 0.052002
+    },
+    {
+      "provider": "anthropic",
+      "model": "claude-sonnet-4-6",
+      "stage": "write",
+      "inputTokens": 14807,
+      "outputTokens": 5088,
+      "cacheReadTokens": 0,
+      "cacheWriteTokens": 2470,
+      "costUsd": 0.1300035,
+      "contractRepairs": [
+        {
+          "field": "wire",
+          "received": "[{\"title\":\"DeepSeek deep-sixed at all US federal civilian agencies\", \"url\":\"https://www.theregister.com/security/2026/10…",
+          "detail": "Expected ',' or '}' after property value in JSON at position 1144 (line 1 column 1145) near «he Verge\"}, {\"title\":\"Accused OpenAI spy had folder called \"Saudi Gov Docs,\" FBI says\", \"url\":\"https://arstechnica.com/t»",
+          "reason": "json_string_undecodable"
+        }
+      ]
+    },
+    {
+      "provider": "anthropic",
+      "model": "claude-sonnet-4-6",
+      "stage": "rewrite",
+      "inputTokens": 14929,
+      "outputTokens": 5379,
+      "cacheReadTokens": 0,
+      "cacheWriteTokens": 2610,
+      "costUsd": 0.1352595,
+      "contractRepairs": [
+        {
+          "field": "wire",
+          "received": "[\n  {\"title\": \"DeepSeek deep-sixed at all US federal civilian agencies\", \"url\": \"https://www.theregister.com/security/20…",
+          "detail": "Expected ',' or '}' after property value in JSON at position 1173 (line 7 column 52) near «Verge\"},\n  {\"title\": \"Accused OpenAI spy had folder called \"Saudi Gov Docs,\" FBI says\", \"url\": \"https://arstechnica.com/»",
+          "reason": "json_string_undecodable"
+        },
+        {
+          "field": "dispatches",
+          "received": "[\n  {\n    \"title\": \"WhatsApp skrýval pokyny pro AI v nápovědě: nedoporučuj regulátora\",\n    \"topic\": \"Transparentnost AI…",
+          "detail": "Expected ',' or '}' after property value in JSON at position 1073 (line 11 column 117) near «ížil ze vzdálenosti stovek kilometrů na „extrémní blízkost\" k satelitu ICEYE-X36, který aktivně využívá Ukrajina ke zpra»",
+          "reason": "json_string_undecodable"
+        }
+      ]
+    },
+    {
+      "provider": "anthropic",
+      "model": "claude-sonnet-4-6",
+      "stage": "rewrite",
+      "inputTokens": 14929,
+      "outputTokens": 5007,
+      "cacheReadTokens": 0,
+      "cacheWriteTokens": 2643,
+      "costUsd": 0.12980325,
+      "contractRepairs": [
+        {
+          "field": "wire",
+          "received": "[\n  {\"title\": \"DeepSeek deep-sixed at all US federal civilian agencies\", \"url\": \"https://www.theregister.com/security/20…",
+          "detail": "Expected ',' or '}' after property value in JSON at position 1173 (line 7 column 52) near «Media\"},\n  {\"title\": \"Accused OpenAI spy had folder called \"Saudi Gov Docs,\" FBI says\", \"url\": \"https://arstechnica.com/»",
+          "reason": "json_string_undecodable"
+        },
+        {
+          "field": "uncertainty",
+          "received": "[\n  \"Není jasné, jak federální agentury zjistí, které produkty třetích stran byly „vyvinuty s využitím DeepSeeku,\" ani j…",
+          "detail": "Expected ',' or ']' after array element in JSON at position 115 (line 2 column 114) near «rodukty třetích stran byly „vyvinuty s využitím DeepSeeku,\" ani jak se bude příkaz vymáhat.\",\n  \"WhatsApp tvrdí, že skry»",
+          "reason": "json_string_undecodable"
+        },
+        {
+          "field": "dispatches",
+          "received": "[\n  {\n    \"title\": \"WhatsApp skrýval instrukce pro AI v nápovědě\",\n    \"topic\": \"Transparentnost AI\",\n    \"body\": \"Výzku…",
+          "detail": "Expected ',' or '}' after property value in JSON at position 878 (line 11 column 117) near «ížil ze vzdálenosti stovek kilometrů na „extrémní blízkost\" k satelitu ICEYE-X36, který aktivně využívá Ukrajina. Jde o »",
+          "reason": "json_string_undecodable"
+        }
+      ]
+    }
+  ],
+  "measuredCostUsd": 0.44706825,
+  "imageProgram": {
+    "readiness": {
+      "providers": {
+        "openverse": "keyless",
+        "wikimedia": "keyless",
+        "pexels": "present",
+        "pixabay": "present"
+      },
+      "gateModelConfigured": true,
+      "caps": {
+        "perArticleUsd": 0.05,
+        "perDayUsd": 0.1,
+        "generatedImagesPerDay": 4
+      },
+      "spentToday": {
+        "usd": 0,
+        "generatedImages": 0
+      },
+      "illustrationRung": "armed"
+    },
+    "verdicts": []
+  },
+  "packageStatus": "no_edition",
+  "warnings": [
+    "content_invalid:write: [\n  {\n    \"expected\": \"array\",\n    \"code\": \"invalid_type\",\n    \"path\": [\n      \"wire\"\n    ],\n    \"message\": \"Invalid input: expected array, received string\"\n  },\n  {\n    \"origin\": \"string\",\n    \"code\": \"too_big\",\n    \"maximum\": 6,\n    \"inclusive\": true,\n    \"path\": [\n      \"wire\"\n    ],\n    \"message\": \"Too big: expected string to have <=6 characters\"\n  }\n]",
+    "content_invalid:rewrite: [\n  {\n    \"expected\": \"array\",\n    \"code\": \"invalid_type\",\n    \"path\": [\n      \"wire\"\n    ],\n    \"message\": \"Invalid input: expected array, received string\"\n  },\n  {\n    \"origin\": \"string\",\n    \"code\": \"too_big\",\n    \"maximum\": 6,\n    \"inclusive\": true,\n    \"path\": [\n      \"wire\"\n    ],\n    \"message\": \"Too big: expected string to have <=6 characters\"\n  },\n  {\n    \"expected\": \"array\",\n    \"code\": \"invalid_type\",\n    \"path\": [\n      \"dispatches\"\n    ],\n    \"message\": \"Invalid input: expected array, received string\"\n  },\n  {\n    \"origin\": \"string\",\n    \"code\": \"too_big\",\n    \"maximum\": 4,\n    \"inclusive\": true,\n    \"path\": [\n      \"dispatches\"\n    ],\n    \"message\": \"Too big: expected string to have <=4 characters\"\n  }\n]",
+    "content_invalid:rewrite: [\n  {\n    \"expected\": \"array\",\n    \"code\": \"invalid_type\",\n    \"path\": [\n      \"wire\"\n    ],\n    \"message\": \"Invalid input: expected array, received string\"\n  },\n  {\n    \"origin\": \"string\",\n    \"code\": \"too_big\",\n    \"maximum\": 6,\n    \"inclusive\": true,\n    \"path\": [\n      \"wire\"\n    ],\n    \"message\": \"Too big: expected string to have <=6 characters\"\n  },\n  {\n    \"expected\": \"array\",\n    \"code\": \"invalid_type\",\n    \"path\": [\n      \"uncertainty\"\n    ],\n    \"message\": \"Invalid input: expected array, received string\"\n  },\n  {\n    \"origin\": \"string\",\n    \"code\": \"too_big\",\n    \"maximum\": 3,\n    \"inclusive\": true,\n    \"path\": [\n      \"uncertainty\"\n    ],\n    \"message\": \"Too big: expected string to have <=3 characters\"\n  },\n  {\n    \"expected\": \"array\",\n    \"code\": \"invalid_type\",\n    \"path\": [\n      \"dispatches\"\n    ],\n    \"message\": \"Invalid input: expected array, received string\"\n  },\n  {\n    \"origin\": \"string\",\n    \"code\": \"too_big\",\n    \"maximum\": 4,\n    \"inclusive\": true,\n    \"path\": [\n      \"dispatches\"\n    ],\n    \"message\": \"Too big: expected string to have <=4 characters\"\n  }\n]"
+  ],
+  "sourceSummary": {
+    "successfulSources": 28,
+    "candidateItems": 80,
+    "evidenceRefs": [
+      "source:404-media",
+      "source:anthropic-news",
+      "source:ars-technica",
+      "source:arxiv-cs-ai",
+      "source:bluesky-language-models",
+      "source:deepmind-blog",
+      "source:digiday",
+      "source:github-ai-releases",
+      "source:google-research",
+      "source:hf-blog",
+      "source:hn-frontpage",
+      "source:import-ai"
+    ]
+  }
+}
