@@ -11,19 +11,17 @@ FightAIQ, Design Lab, MMA Files, Door Money, Tehdejší svět a Kvórum), dvě s
 (Personal Growth a WebDev Signal) a průzkum Contest Radar.
 Magazine Incubator byl uzavřen — nové magazíny se už nevymýšlejí.
 
-**Od 25. září 2026 (`operations-2026-09b`) běží jen DNESKAi, marketingShark (devShark),
-GoVIRAL, Design Lab a WebDev Signal.** BoardlessAI píše články a sociální obsah pro DNESKAi a
-sociální obsah pro devShark. MMA Files, FightAIQ, Titty Tuesdays, BOOKSOFHISTORY, Door Money,
-Tehdejší svět, Kvórum a Personal Growth jsou pozastavené: kód a stav zůstávají, na hodinách
+**Od 20. října 2026 (`state/decisions/2026-10-20-dneskai-articles-paused.md`) jsou
+pozastavené všechny projekty včetně Caught Up.** BoardlessAI nepíše články DNESKAi; sociální
+příspěvky DNESKAi připravuje OwnDashboard. Dál běží synchronizace streamů a akcí DNESKAi do
+aifirst a dvě podepsané cesty pro OwnDashboard (`/admin/api/marketing-collection` a
+`/admin/api/marketing-source`). Pozastavené projekty si nechávají kód i stav, na hodinách
 nemají žádný slot, v navigaci adminu chybí a vypisuje je jen Nastavení v tabulce „Paused
 ventures“. Popis níže platí pro ně jen do obnovení.
 
-**Co publikuje (k 26. září 2026):** jen DNESKAi, jedno denní vydání. Hotový článek posílá
-zároveň do Design Labu jako *summary* (titulek, perex a vybrané pasáže), ze kterého se
-skládají sociální karusely. MMA Files publikovalo do konce srpna a od 15. září je
-pozastavené. marketingShark zatím nepublikuje: jeho příspěvky pro devShark čekají jako
-koncepty ve frontě a rozhoduje o nich majitel. Na co který projekt čeká, je v
-`docs/NEEDED.md`.
+**Co publikuje (k 20. říjnu 2026):** žádné nové vydání DNESKAi; poslední článek vyšel 25. září.
+Web DNESKAi dál dostává streamy (`data/talked-about.json`, `data/podcasts.json`) a akce
+(`data/events.json`). Na co který projekt čeká, je v `docs/NEEDED.md`.
 
 ## Tech stack
 
@@ -174,18 +172,15 @@ modelům ani do podkladů porad.
 
 ## Denní rozpis a peníze
 
-Od 25. září (`operations-2026-09b`) má pražský rozpis pět slotů:
+Od 20. října 2026 má pražský rozpis jediný slot:
 
 | Praha | Slot | Kdy skutečně pracuje |
 | ---: | --- | --- |
-| 05:00 | den DNESKAi (`cu-day`) | krok WebDev Signal za `$0`, vydání a hned po něm produktová kontrola |
-| 06:00 | ranní rada | rozhodovací porada, denní kontrolní zápis a souhrn předchozího dne |
-| 07:00 | marketingShark | jeden příspěvek devSharku každý pracovní den; o víkendu se neschází |
-| 09:00 | opakování vydání DNESKAi | jen když vydání z 05:00 neprošlo |
-| 13:00 | GoVIRAL | placený brief jen v pondělí; jinak `$0` |
+| 06:00 | ranní rada | rozhodovací porada, denní kontrolní zápis, souhrn předchozího dne a synchronizace streamů a akcí DNESKAi, dokud je Caught Up pozastavené |
 
-Vercel drží pro každý slot dvě UTC varianty kvůli letnímu a zimnímu času, celkem deset
-záznamů v `site/vercel.json`. Tři záložní běhy GitHubu (03:55, 11:55 a 19:55 UTC) zachytí
+Den DNESKAi v 05:00 (`cu-day`) a jeho opakování v 09:00 se vrátí s obnovením Caught Up.
+Vercel drží pro každý slot dvě UTC varianty kvůli letnímu a zimnímu času, teď tedy dva
+záznamy v `site/vercel.json`. Tři záložní běhy GitHubu (03:55, 11:55 a 19:55 UTC) zachytí
 zmeškaný slot. Program přijme jen variantu, která odpovídá dnešnímu času v Praze.
 Pozastavené projekty na hodinách nemají žádný slot a `cycle.yml` jejich fáze nenabízí.
 

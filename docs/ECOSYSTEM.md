@@ -1,7 +1,7 @@
 # BoardlessAI ecosystem — standing full-context brief
 
 Updated: 2026-09-26
-Status: since `operations-2026-09b` only DNESKAi, marketingShark, GoVIRAL, the Design Lab and WebDev Signal run; every other public venture and Personal Growth are paused with their code and state kept, and Contest Radar stays an exploration with no room
+Status: since the 2026-10-20 article pause (`state/decisions/2026-10-20-dneskai-articles-paused.md`) every venture is paused with its code and state kept, Caught Up included; the DNESKAi stream and event sync and the OwnDashboard bridge routes keep running, and Contest Radar stays an exploration with no room
 Audience: owner, product partners and Fable brainstorming  
 Authority: current code, committed state, decisions D1–D14, the 2026-08-26 autonomy-first decision, the countersigned founding records and `operations-2026-09b`
 
@@ -62,7 +62,7 @@ Refreshed from committed state: **2026-10-20T04:02:15.148Z**. This block is gene
 
 | Project | Mode | Rooms | Disabled optional roles | Social readiness |
 | --- | --- | --- | --- | --- |
-| Caught Up | operating | cu-edition 05:00; cu-product 17:00 | SPARK, THREADS, INSTAGRAM, FRAME | locked (10/7) |
+| Caught Up | paused | cu-edition 05:00; cu-product 17:00 | SPARK, THREADS, INSTAGRAM, FRAME | locked (10/7) |
 | Titty Tuesdays | paused | tt-marketing 11:00 | QUILL, THREADS, INSTAGRAM | paused (0/4) |
 | GoVIRAL | paused | gv-brief 13:00 | none | not applicable |
 | BOOKSOFHISTORY | paused | bh-desk 12:00 | none | not applicable |

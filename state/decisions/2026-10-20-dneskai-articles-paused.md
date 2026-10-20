@@ -44,4 +44,4 @@ so the 05:00 slot fires again after `pnpm deploy:production`.
 
 - [x] Pause Caught Up in the registry and take its slots off the clock, the dispatch options and the Vercel crons.
 - [x] Keep the stream and event sync on the morning run while Caught Up is paused, and hold both delivery commands.
-- [ ] Prove the pause with dry and paused live runs, and update `CLAUDE.md` and `docs/NEEDED.md`.
+- [x] Prove the pause with dry and paused live runs, and update `CLAUDE.md` and `docs/NEEDED.md`.
