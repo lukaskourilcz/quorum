@@ -216,7 +216,7 @@ export function validateTemplateForBrand(
   format: CarouselFormat
 ): TemplateCheck[] {
   return [
-    { id: "schema", status: "pass", detail: "carousel-template/1 parsed" },
+    { id: "schema", status: "pass", detail: `${template.schemaVersion} parsed` },
     canvasCheck(template, format),
     platformLimitCheck(template, format),
     safeAreaCheck(template, format),
