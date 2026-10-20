@@ -83,6 +83,12 @@ export async function processStudioContribution(input: {
     ...(input.templateProposal as Record<string, unknown>),
     status: "draft"
   });
+  // carousel-template/2 is the DNESKAi photo kit's format: code-owned templates whose required
+  // photographs refuse a render without them. A council proposal stays v1, where a missing
+  // photograph never costs the words, until a consumer of stored v2 templates exists.
+  if (candidate.schemaVersion !== "carousel-template/1") {
+    throw new Error(`Studio template proposals must be carousel-template/1, not ${candidate.schemaVersion}`);
+  }
   const knownObservationRefs = new Set([
     ...input.allowedEvidenceRefs,
     ...observations.map((observation) => observation.id)
