@@ -139,6 +139,29 @@ describe("refusals", () => {
     expect(codes(await validateDneskaiSlide(await figure({ images: [{ slot: "image-1", bytes: Buffer.from("not an image") }] })))).toEqual(["!image-undecodable"]);
   });
 
+  it("records the hash of the bytes drawn, and refuses a crop record set on other bytes", async () => {
+    const before = await syntheticPhoto(900, 560, 26);
+    const after = await syntheticPhoto(900, 560, 27);
+    const sha = (bytes: Buffer) => createHash("sha256").update(bytes).digest("hex");
+    const first = await renderDneskaiSlide(await figure({ images: [{ slot: "image-1", bytes: before, crop: { focal: { x: 0.4, y: 0.5 } } }] }));
+    const recorded = first.payload!.images!["image-1"]!;
+    expect(recorded.assetSha256).toBe(sha(before));
+    // The round trip: the stored crop record passed back with the same bytes renders the same slide.
+    const again = await renderDneskaiSlide(await figure({ images: [{ slot: "image-1", bytes: before, crop: recorded }] }));
+    expect(again.pngHash).toBe(first.pngHash);
+    expect(again.payload!.images!["image-1"]!.assetSha256).toBe(sha(before));
+    // With refreshed bytes the old hash names another picture: refused, never recorded as drawn.
+    const stale = await renderDneskaiSlide(await figure({ images: [{ slot: "image-1", bytes: after, crop: recorded }] }));
+    expect(stale.status).toBe("refused");
+    expect(codes(stale.problems)).toEqual(["!image-hash-mismatch"]);
+    expect(stale.payload?.images?.["image-1"]).toBeUndefined();
+    // Without the old hash the crop is reused, and the record names the new bytes.
+    const { assetSha256: _old, ...reused } = recorded;
+    const fresh = await renderDneskaiSlide(await figure({ images: [{ slot: "image-1", bytes: after, crop: reused }] }));
+    expect(fresh.status).toBe("rendered");
+    expect(fresh.payload!.images!["image-1"]).toEqual({ ...reused, assetSha256: sha(after) });
+  });
+
   it("refuses a bad position, a missing headline, a wrong variant and a sources slide without sources", async () => {
     expect(codes(await validateDneskaiSlide(await figure({ position: { index: 5, count: 5 } })))).toEqual(["!position-invalid"]);
     expect(codes(await validateDneskaiSlide(await figure({ headline: "  " })))).toEqual(["!text-missing"]);

@@ -54,8 +54,13 @@ export interface DneskaiImageInput {
   slot: string;
   /** The stored file: JPEG, PNG or WebP. Decoded and oriented here. */
   bytes: Buffer | Uint8Array;
-  /** Where to keep the picture in view. Absent: centred, at zoom 1, in the template's own fit. */
-  crop?: Omit<ImageCrop, "assetSha256">;
+  /**
+   * Where to keep the picture in view. Absent: centred, at zoom 1, in the template's own fit.
+   * A crop record from an earlier `payload.images` may be passed back as it is; its
+   * `assetSha256`, when present, must be the hash of `bytes`. The returned payload always records
+   * the hash of `bytes`.
+   */
+  crop?: ImageCrop;
   /** The sha256 the caller stored the asset under. When given, the bytes must hash to it. */
   assetSha256?: string;
 }
@@ -245,7 +250,16 @@ async function inspect(input: DneskaiSlideInput): Promise<Inspection> {
       problems.push(problem("image-hash-mismatch", true, image.slot, `The bytes for ${image.slot} hash to ${sha256}, not the asset ${image.assetSha256}.`));
       continue;
     }
-    const crop = ImageCropSchema.safeParse({ assetSha256: sha256, focal: { x: 0.5, y: 0.5 }, ...image.crop });
+    // A crop handed back from an earlier payload names the asset it was set on. Other bytes mean
+    // another picture, so it is refused rather than recorded against bytes it never saw.
+    const cropAsset = image.crop?.assetSha256;
+    if (cropAsset !== undefined && cropAsset !== sha256) {
+      problems.push(problem("image-hash-mismatch", true, image.slot,
+        `The crop for ${image.slot} was set on the asset ${cropAsset}, but these bytes hash to ${sha256}. Drop the crop's assetSha256 to reuse it on another picture.`));
+      continue;
+    }
+    // The computed hash goes last, so the record always names the bytes that were drawn.
+    const crop = ImageCropSchema.safeParse({ focal: { x: 0.5, y: 0.5 }, ...image.crop, assetSha256: sha256 });
     if (!crop.success) {
       problems.push(problem("crop-invalid", true, image.slot, `The crop for ${image.slot} is not valid: ${crop.error.issues.map((issue) => issue.message).join("; ")}.`));
       continue;
