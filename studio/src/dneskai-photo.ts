@@ -1,5 +1,6 @@
 import { CarouselTemplateSchema, type CarouselLayerInput, type CarouselTemplate, type CarouselTemplateInput } from "./schema.js";
 import { MASTER_CANVAS, MASTER_FORMAT } from "./canvas.js";
+import { DNESKAI_THUMBNAIL_GRID } from "./dneskai-layout.js";
 
 /**
  * DNESKAi's photographic slides for Instagram (quorum#603), one single-slide template per type.
@@ -20,9 +21,17 @@ import { MASTER_CANVAS, MASTER_FORMAT } from "./canvas.js";
  *
  * Geometry is written in master pixels and converted once, so a reader can check it against the
  * 1080 × 1350 renders without dividing.
+ *
+ * The frames below are the largest each element may take: the words are fitted in them and the
+ * template checks pass on them. Every template but the cover is drawn laid out for its content
+ * (`dneskai-layout.ts`): frames shrink to the lines and pictures they hold and stack in reading
+ * order with the kit's gaps, and the height left over is set around them on purpose.
  */
 
 const { width: W, height: H } = MASTER_CANVAS;
+
+/** The version of a template the render lays out for its content (`dneskai-layout.ts`). */
+const FLOWED = "1.1.0";
 
 /** Margins: 72 px clears the 3:4 profile-grid crop of a 4:5 post (34 px a side) with room left. */
 const LEFT = 72;
@@ -124,13 +133,15 @@ function template(input: {
   backgroundToken: string;
   layers: CarouselLayerInput[];
   variants?: CarouselTemplateInput["slides"][number]["variants"];
+  /** 1.0.0 is the first composition; a template the render lays out for its content is 1.1.0. */
+  version?: string;
 }): CarouselTemplate {
   const slots = [...new Set(input.layers.flatMap((layer) => layer.type === "text" ? [layer.slot] : []))];
   return CarouselTemplateSchema.parse({
     schemaVersion: "carousel-template/2",
     id: input.id,
     name: input.name,
-    version: "1.0.0",
+    version: input.version ?? "1.0.0",
     status: "live",
     description: input.description,
     citedObservationRefs: ["quorum#603", "own-dashboard#110"],
@@ -161,6 +172,7 @@ const figure = template({
   name: "DNESKAi · figure",
   description: "A headline above a photograph or chart on a white plate, a serif explanation below and the source's credit at the foot.",
   backgroundToken: "surface",
+  version: FLOWED,
   layers: [
     logo,
     folio("muted"),
@@ -178,6 +190,7 @@ const split = template({
   name: "DNESKAi · split",
   description: "The words in the left column under a blue spine, one framed photograph or figure to the right, the explanation below both.",
   backgroundToken: "background",
+  version: FLOWED,
   layers: [
     spine,
     logo,
@@ -195,6 +208,7 @@ const splitPair = template({
   name: "DNESKAi · split, two images",
   description: "The words in the left column under a blue spine, two framed photographs or figures stacked to the right.",
   backgroundToken: "background",
+  version: FLOWED,
   layers: [
     spine,
     logo,
@@ -214,6 +228,7 @@ const statement = template({
   name: "DNESKAi · statement",
   description: "One sentence on a solid blueprint-blue or ink ground, with a quieter serif note under it.",
   backgroundToken: "accent",
+  version: FLOWED,
   variants: [{ id: "INK", backgroundToken: "foreground" }],
   layers: [
     logo,
@@ -232,18 +247,21 @@ export const dneskaiSourceSlot = (index: number): string => `source-${index + 1}
 
 const SOURCE_TOP = 250;
 const SOURCE_ROW = 92;
-/** The pictures and the disclosure stand at the foot as one colophon; the sources hang from the top. */
-const THUMB_TOP = 882;
-const THUMB_HEIGHT = 150;
+/**
+ * The declared frames: the largest each element may take, which the words are fitted in. The
+ * render stacks them from the top as one colophon, the thumbnails directly under the sources
+ * (`dneskai-layout.ts`).
+ */
+const THUMB_TOP = 676;
 
 function sources(thumbnails: number): CarouselTemplate {
-  const gap = 16;
-  const width = Math.min(220, Math.floor((MEASURE - gap * Math.max(0, thumbnails - 1)) / Math.max(1, thumbnails)));
+  const { columns, width, height, gap } = DNESKAI_THUMBNAIL_GRID;
   return template({
     id: `dneskai-sources-${thumbnails}`,
     name: `DNESKAi · sources, ${thumbnails} ${thumbnails === 1 ? "image" : "images"}`,
     description: "The sources the slides were written from, small copies of every picture the deck used, and how the text was made.",
     backgroundToken: "surface",
+    version: FLOWED,
     layers: [
       logo,
       folio("muted"),
@@ -252,8 +270,8 @@ function sources(thumbnails: number): CarouselTemplate {
         body(box(LEFT, SOURCE_TOP + index * SOURCE_ROW, MEASURE, 86), { slot: dneskaiSourceSlot(index), minFontSize: 25, maxFontSize: 27, maxChars: 190, maxLines: 3 })),
       ...(thumbnails > 0 ? [kicker("muted", box(LEFT, THUMB_TOP - 40, MEASURE, 26), 18, 40, "images-label")] : []),
       ...Array.from({ length: thumbnails }, (_, index) =>
-        plated(`image-${index + 1}`, LEFT + index * (width + gap), THUMB_TOP, width, THUMB_HEIGHT, { optional: false, fit: "cover" })).flat(),
-      text("disclosure", box(LEFT, 1_068, MEASURE, 124), { colorToken: "muted", fontToken: "mono", fontWeight: 400, minFontSize: 19, maxFontSize: 20, maxChars: 200, maxLines: 4 })
+        plated(`image-${index + 1}`, LEFT + (index % columns) * (width + gap), THUMB_TOP + Math.floor(index / columns) * (height + gap), width, height, { optional: false, fit: "cover" })).flat(),
+      text("disclosure", box(LEFT, 1_106, MEASURE, 90), { colorToken: "muted", fontToken: "mono", fontWeight: 400, minFontSize: 19, maxFontSize: 20, maxChars: 200, maxLines: 4 })
     ]
   });
 }
@@ -263,6 +281,7 @@ const singlePhoto = template({
   name: "DNESKAi · single, photo",
   description: "A one-image announcement: a colour photograph to every edge, the headline on a solid blue panel and one serif line under it.",
   backgroundToken: "foreground",
+  version: FLOWED,
   layers: [
     bleed("image-1"),
     logo,
@@ -281,6 +300,7 @@ const singleType = template({
   name: "DNESKAi · single, type",
   description: "A one-image announcement set in type alone: a blue rule and kicker, one large headline and a serif paragraph at the foot.",
   backgroundToken: "background",
+  version: FLOWED,
   layers: [
     logo,
     { type: "rule", ...box(LEFT, 172, 96, 8), colorToken: "accent", thickness: 8 },
