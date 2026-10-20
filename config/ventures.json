@@ -4,7 +4,8 @@
     {
       "id": "caught-up",
       "name": "Caught Up",
-      "status": "operating",
+      "status": "paused",
+      "pausedOn": "2026-10-20",
       "visibility": "public",
       "taste": false,
       "ledgerNamespace": "caught-up",

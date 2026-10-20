@@ -25,13 +25,11 @@ on:
         # can still name a single room, which is how a replay or a one-off repair is done. Only
         # operating ventures' phases are offered (operations-2026-09b); a paused venture's phases
         # come back with its registry status, and `pnpm cycle -- --phase <name>` still runs any
-        # registered phase locally.
+        # registered phase locally. DNESKAi's cu-day, cu-edition and cu-product left with the
+        # 2026-10-20 article pause (quorum#602) and return when Caught Up operates again.
         options:
-          - cu-day
-          - cu-edition
           - morning
           - afternoon
-          - cu-product
           - night
       trigger:
         # What kind of firing this dispatch is, which decides whether it claims a slot.

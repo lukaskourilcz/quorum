@@ -206,12 +206,30 @@ export const EDITION_RETRY_HOUR = 9;
 
 export const EDITION_RETRY_PHASE: ScheduledPhase = "cu-edition";
 
+/**
+ * Whether the edition retry is on the schedule at all.
+ *
+ * The retry is a second attempt at its venture's day, so it leaves the schedule when the owner
+ * pauses that venture, exactly as the day's own slot does (quorum#602). A dispatch would only
+ * reach the pause chokepoint in `runCycle` and stop there, after paying for a runner.
+ */
+export function editionRetryScheduled(registry: unknown): boolean {
+  const raw = registry as RawRegistry;
+  if (raw?.schemaVersion !== "venture-registry/1" || !Array.isArray(raw.ventures)) {
+    throw new Error("Invalid venture registry");
+  }
+  const owner = raw.ventures.find((venture) =>
+    ((venture as { meetings?: Array<{ kind?: unknown }> }).meetings ?? [])
+      .some((meeting) => meeting.kind === EDITION_RETRY_PHASE));
+  return owner !== undefined && (owner as { status?: unknown }).status !== "paused";
+}
+
 /** Every Prague hour a phase may be dispatched at: its slot, plus the edition retry. */
 export function dispatchHoursFor(registry: unknown, phase: ScheduledPhase): number[] {
   const slotHour = resolveCronSlots(registry).find((slot) => slot.phase === phase)?.hour;
   return [
     ...(slotHour === undefined ? [] : [slotHour]),
-    ...(phase === EDITION_RETRY_PHASE ? [EDITION_RETRY_HOUR] : [])
+    ...(phase === EDITION_RETRY_PHASE && editionRetryScheduled(registry) ? [EDITION_RETRY_HOUR] : [])
   ];
 }
 
@@ -231,7 +249,7 @@ export function cronPathForPhase(phase: ScheduledPhase): string {
 export function expectedCronEntries(registry: unknown): Array<{ path: string; schedule: string }> {
   const dispatches = [
     ...resolveCronSlots(registry),
-    { phase: EDITION_RETRY_PHASE, hour: EDITION_RETRY_HOUR }
+    ...(editionRetryScheduled(registry) ? [{ phase: EDITION_RETRY_PHASE, hour: EDITION_RETRY_HOUR }] : [])
   ];
   return dispatches.flatMap((slot) =>
     cronUtcHours(slot.hour).map((utcHour) => ({

@@ -395,8 +395,9 @@ describe("automation policy", () => {
       "cycle.yml and deployedCronExpressions disagree about the backstop sweeps"
     ).toEqual([...deployedCronExpressions()].sort());
     // The per-slot expressions still exist and still drive the Vercel side; what changed is that
-    // GitHub no longer deploys them.
-    expect(scheduledCronExpressions(readVentureRegistry()).length).toBe(3);
+    // GitHub no longer deploys them. Two since the 2026-10-20 article pause (quorum#602): the
+    // morning's two daylight-saving variants, with the DNESKAi day off the clock.
+    expect(scheduledCronExpressions(readVentureRegistry()).length).toBe(2);
   });
 
   it("keys the release-gate verdict on content, not on the moving cycle sha", async () => {

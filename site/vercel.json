@@ -5,28 +5,12 @@
   },
   "crons": [
     {
-      "path": "/api/cron/cu-day",
-      "schedule": "0 3 * * *"
-    },
-    {
-      "path": "/api/cron/cu-day",
-      "schedule": "0 4 * * *"
-    },
-    {
       "path": "/api/cron/morning",
       "schedule": "0 4 * * *"
     },
     {
       "path": "/api/cron/morning",
       "schedule": "0 5 * * *"
-    },
-    {
-      "path": "/api/cron/cu-edition",
-      "schedule": "0 7 * * *"
-    },
-    {
-      "path": "/api/cron/cu-edition",
-      "schedule": "0 8 * * *"
     }
   ]
 }
