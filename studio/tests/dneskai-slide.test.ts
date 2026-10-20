@@ -168,6 +168,20 @@ describe("refusals", () => {
     expect(codes(await validateDneskaiSlide(await figure({ variant: "ink" })))).toEqual(["!variant-invalid"]);
     expect(codes(await validateDneskaiSlide({ type: "sources", position: { index: 4, count: 5 }, sources: [] }))).toEqual(["!sources-missing"]);
     expect(codes(await validateDneskaiSlide({ type: "sources", position: { index: 4, count: 5 }, sources: ["a", "b", "c", "d", "e"] }))).toEqual(["!sources-too-many"]);
+    expect(codes(await validateDneskaiSlide({ type: "sources", position: { index: 4, count: 5 }, sources: ["  ", ""] }))).toEqual(["!sources-missing"]);
+  });
+
+  it("closes up blank source lines instead of drawing empty rows or counting them", async () => {
+    const result = await renderDneskaiSlide({ type: "sources", position: { index: 4, count: 5 }, sources: ["  ", "Zdroj B", "", "Zdroj C", "Zdroj D", " ", "Zdroj E"] });
+    expect(result.status).toBe("rendered");
+    expect(result.problems).toEqual([]);
+    expect(result.payload!.strings).toMatchObject({ "source-1": "Zdroj B", "source-2": "Zdroj C", "source-3": "Zdroj D", "source-4": "Zdroj E" });
+    const tidy = await renderDneskaiSlide({ type: "sources", position: { index: 4, count: 5 }, sources: ["Zdroj B", "Zdroj C", "Zdroj D", "Zdroj E"] });
+    expect(result.pngHash).toBe(tidy.pngHash);
+    // A cut line still names the entry the caller wrote, not its place after closing up.
+    const long = `Zdroj ${"s velmi dlouhým názvem článku, ".repeat(8)}`;
+    const cut = await validateDneskaiSlide({ type: "sources", position: { index: 4, count: 5 }, sources: ["", long] });
+    expect(cut.map((entry) => [entry.code, entry.field])).toEqual([["text-clipped", "sources[1]"]]);
   });
 
   it("renders words that do not fit, and says which were cut", async () => {

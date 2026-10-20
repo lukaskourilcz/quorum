@@ -133,9 +133,21 @@ const FIXED_STRINGS = {
   }
 } as const;
 
+/**
+ * The sources that say something, each with its place in the caller's list.
+ *
+ * A blank line is not a source: it is neither counted nor drawn as an empty row, and the lines
+ * after it close up. The original index stays, so a cut line names the entry the caller wrote.
+ */
+function sourceLines(input: DneskaiSlideInput): Array<{ text: string; index: number }> {
+  return (input.sources ?? []).flatMap((line, index) => line.trim() ? [{ text: line.trim(), index }] : []);
+}
+
 /** Which input field a text slot is filled from, so a cut slot names what to shorten. */
-function fieldOf(slot: string): string {
-  return slot.startsWith("source-") ? `sources[${Number(slot.slice("source-".length)) - 1}]` : slot;
+function fieldOf(slot: string, input: DneskaiSlideInput): string {
+  if (!slot.startsWith("source-")) return slot;
+  const line = sourceLines(input)[Number(slot.slice("source-".length)) - 1];
+  return `sources[${line?.index ?? Number(slot.slice("source-".length)) - 1}]`;
 }
 
 const problem = (code: DneskaiProblemCode, blocking: boolean, field: string | null, message: string): DneskaiSlideProblem => ({ code, blocking, field, message });
@@ -193,7 +205,7 @@ function strings(input: DneskaiSlideInput, template: CarouselTemplate): Record<s
     title: fixed.title,
     "images-label": fixed.imagesLabel,
     disclosure: fixed.disclosure,
-    ...Object.fromEntries(Array.from({ length: DNESKAI_MAX_SOURCES }, (_, index) => [dneskaiSourceSlot(index), input.sources?.[index]?.trim() ?? ""]))
+    ...Object.fromEntries(Array.from({ length: DNESKAI_MAX_SOURCES }, (_, index) => [dneskaiSourceSlot(index), sourceLines(input)[index]?.text ?? ""]))
   };
   return Object.fromEntries(template.requiredSlots.map((slot) => [slot, all[slot] ?? ""]));
 }
@@ -216,10 +228,10 @@ async function inspect(input: DneskaiSlideInput): Promise<Inspection> {
   const template = resolved;
 
   if (input.type === "sources") {
-    const lines = (input.sources ?? []).map((line) => line.trim()).filter(Boolean);
+    const lines = sourceLines(input);
     if (lines.length === 0) problems.push(problem("sources-missing", true, "sources", "A sources slide names at least one source."));
-    if ((input.sources ?? []).length > DNESKAI_MAX_SOURCES) {
-      problems.push(problem("sources-too-many", true, "sources", `A sources slide carries ${DNESKAI_MAX_SOURCES} sources; this one has ${input.sources!.length}.`));
+    if (lines.length > DNESKAI_MAX_SOURCES) {
+      problems.push(problem("sources-too-many", true, "sources", `A sources slide carries ${DNESKAI_MAX_SOURCES} sources; this one has ${lines.length}.`));
     }
     if ((input.images?.length ?? 0) > DNESKAI_MAX_THUMBNAILS) {
       problems.push(problem("image-unexpected", true, "images", `A sources slide shows ${DNESKAI_MAX_THUMBNAILS} thumbnails; this one was given ${input.images!.length}.`));
@@ -315,8 +327,8 @@ async function inspect(input: DneskaiSlideInput): Promise<Inspection> {
   // image problem stops the render.
   for (const fit of carouselTextFits({ template, payload, brand: CAROUSEL_BRANDS["caught-up"], format: MASTER_FORMAT })) {
     if (fit.fitted.truncated && payload.strings[fit.slot]) {
-      problems.push(problem("text-clipped", false, fieldOf(fit.slot),
-        `The ${fieldOf(fit.slot)} does not fit ${fit.slot} whole and would be cut; shorten it.`));
+      const field = fieldOf(fit.slot, input);
+      problems.push(problem("text-clipped", false, field, `The ${field} does not fit ${fit.slot} whole and would be cut; shorten it.`));
     }
   }
   return { problems, template, payload, images };
