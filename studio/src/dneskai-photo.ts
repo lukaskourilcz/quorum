@@ -298,7 +298,7 @@ const singlePhoto = template({
 const singleType = template({
   id: "dneskai-single-type",
   name: "DNESKAi · single, type",
-  description: "A one-image announcement set in type alone: a blue rule and kicker, one large headline and a serif paragraph at the foot.",
+  description: "A one-image announcement set in type alone: a blue rule and kicker, one large headline and a serif paragraph under it, standing as one block a little above the middle.",
   backgroundToken: "background",
   version: FLOWED,
   layers: [
