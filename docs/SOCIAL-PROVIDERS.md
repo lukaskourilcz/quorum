@@ -74,7 +74,7 @@ for them.
 | Platform | Formats | Host and scopes |
 | --- | --- | --- |
 | Threads | text alone (`TEXT`), one image (`IMAGE`), or a carousel of 2 to 10 frames (`is_carousel_item` children, then one `CAROUSEL` container); JPEG or PNG | `graph.threads.net`, `threads_basic` and `threads_content_publish` |
-| Instagram | one JPEG, or a carousel of 2 to 10 JPEGs; the caption goes on the single image or the carousel container, never on a child | Facebook Login: `graph.facebook.com` with `instagram_basic` and `instagram_content_publish` (DNESKAi's connection). Instagram Login: `graph.instagram.com` with `instagram_business_basic` and `instagram_business_content_publish` (devShark's). The adapter never mixes the two. |
+| Instagram | one JPEG, or a carousel of 2 to 10 JPEGs; the caption goes on the single image or the carousel container, never on a child | Facebook Login: `graph.facebook.com` with `instagram_basic` and `instagram_content_publish` (legacy connections). Instagram Login: `graph.instagram.com` with `instagram_business_basic` and `instagram_business_content_publish` (DNESKAi and devShark). The adapter never mixes the two. |
 
 Every image carries `alt_text`: each frame's own slide text when the approved package pairs frames
 with slides, otherwise the item's alt text for a single image. Meta fetches each image from a URL
