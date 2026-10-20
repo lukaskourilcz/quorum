@@ -171,7 +171,15 @@ master, which is the only canvas these templates declare. The kit dresses the `c
 Space Grotesk headlines, Source Serif 4 words and IBM Plex Mono labels, whatever the brand table
 above names for the undressed skin.
 
-| Element | Frame | Type |
+Every kit text slot sets `keepWithNext: "cs"`, so no line ends on v, k, s, z, o, u, a or i, and
+"10 000", "50 %" or "3 GB" never splits across two lines (`SPEC.md`, carousel-template/2).
+
+The frames below are declared frames: the largest each element may take. The words are fitted in
+them and the template checks pass on them. Every template except the cover is then laid out for
+what the slide holds (`studio/src/dneskai-layout.ts`, next table), so a short headline or a wide
+chart does not leave the rest of its frame as empty paper.
+
+| Element | Declared frame | Type |
 |---|---|---|
 | margins | 72 left and right (the 3:4 profile-grid crop takes 34) | |
 | logo | 72, 64, 230 × 52; the kit's file at about 34 high | outlines, never a font |
@@ -181,14 +189,36 @@ above names for the undressed skin.
 | figure headline | 72, 166, 936 × 200 | Space Grotesk 700, 40–58, 3 lines |
 | figure picture | 72, 396, 936 × 600, contain | 2 px `muted` border around the picture as drawn |
 | figure body | 72, 1030, 936 × 172 | Source Serif 4 400, 28–34, 5 lines, `muted` |
-| split | spine 12 px `accent`; text column 72–500; pictures 540–1008 | headline 38–52 (one picture) or 36–48 (two) |
-| statement | `accent` ground, `INK` variant on `foreground`; headline bottom-anchored to 856 | Space Grotesk 700, 52–80; note Source Serif 4, 30–36, `surface` |
-| sources | four source rows from 250, 92 apart; thumbnails 882–1032; disclosure from 1068 | rows Source Serif 4, 25–27, 3 lines; disclosure Plex Mono 19–20 |
+| split | spine 12 px `accent`; text column 72–500; pictures 540–1008, 640 high (one) or 360 each (two) | headline 38–52 (one picture) or 36–48 (two) |
+| statement | `accent` ground, `INK` variant on `foreground` | Space Grotesk 700, 52–80; note Source Serif 4, 30–36, `surface` |
+| sources | four source rows of 86; thumbnails 296 × 198, three to a row, 24 apart; disclosure 90 high | rows Source Serif 4, 25–27, 3 lines; disclosure Plex Mono 19–20 |
 | single, photo | headline on an `accent` panel hugging it, floor at 1096 | Space Grotesk 700, 48–76, 5 lines |
-| single, type | rule 96 × 8 at 172; headline from 262; body bottom-anchored to 1192 | Space Grotesk 700, 60–100 |
+| single, type | rule 96 × 8; headline 936 × 600; body 936 × 300 | Space Grotesk 700, 60–100 |
+
+The layout stacks elements in a band from 166 to 1196 (under the logotype row, above the credit
+line) with gaps on an 8 px unit, measured from cap line and baseline rather than from the empty top
+and bottom of a line box. The gaps are minimums. A group shorter than the band starts 42 % of the
+leftover below its top, which puts its centre a little above the middle.
+
+| Slide | Order and gaps | Leftover height |
+|---|---|---|
+| figure | headline; 40; picture (a contained one at the size it is drawn, a covering one fills the room); 32; caption | split evenly above the picture and below the caption |
+| split, one picture | kicker; 32; headline, centred by their ink against the picture; 48; explanation under both | around the group |
+| split, two pictures | kicker; 32; headline; 40; explanation, centred against the pictures, 24 apart, each up to half the band | around the group |
+| statement | sentence; 64; note | around the group |
+| single, type | rule; 24; kicker; 32; headline; 64; paragraph | around the group |
+| sources | title; 40; sources, 24 apart; 48; image label; 16; thumbnails; 32; disclosure | below, from the top of the band; four long sources shrink the thumbnails evenly instead of running past it |
 
 The cover and the single photo share one shade, in `foreground` ink: 0.50 at the top edge for the
 logotype, clear from 16 % to 36 %, 0.68 at 56 %, 0.90 at the floor. White type over a white
-photograph needs 0.58 of that ink to reach 4.5:1, so the headline frame starts below 56 %. The
-worst readability pair in the kit is Lc 77.4 (APCA) against the library's floor of 40.
+photograph needs 0.58 of that ink to reach 4.5:1, so the headline frame starts below 56 %.
+
+When a single photo's caller sets a focal point that lands under the headline band (within 48 px of
+its top or below it), and the point would stand farther from the band at the top, the band, its
+line, the kicker and the credit move up: the panel's top at 152, the headline 17 below it, the same 22 and
+28 under it as at the foot. The shade turns over with them: 0.90 at the top edge, 0.68 at the foot
+of the kicker row, clear 20 % lower and down to the floor. The decision reads where the focal point
+lands in the cropped frame, not its place in the source. The worst readability pair in the kit is
+then Lc 75.6 (APCA, that kicker row) against the library's floor of 40; laid out at the foot it is
+Lc 77.4.
 

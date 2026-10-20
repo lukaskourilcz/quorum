@@ -122,6 +122,7 @@ family hashes in `studio/golden/manifest.json` did not move.
 | `shade` | `image` | One colour token and two to six stops (`at`, `opacity`) running top to bottom of the image frame. Drawn only with the photograph, inside its window. |
 | `border` | `image` | A hairline (`colorToken`, `width`) around the picture as drawn: the frame for `cover`, the contained rectangle for `contain`, read from the PNG header. Drawn outside the picture's edge. |
 | `valign` | `text` | `top` (the absent default), `middle` or `bottom`. A bottom-anchored headline keeps its last line on the frame's floor at any line count. A `padText` panel follows the words it hugs. |
+| `keepWithNext` | `text` | `cs`, or absent for a break at any space. Czech ties: a one-letter v, k, s, z, o, u, a or i (either case) goes down with the next word instead of ending a line, the three-digit groups of one number stay together, a number keeps its unit, percent sign or currency, and a typed no-break space holds. Lines are drawn with ordinary spaces. |
 
 **Crops live in the payload.** `CarouselPayload.images` maps an image slot to
 `{ assetSha256?, focal: { x, y }, zoom?, fit? }`: the point that stays in view as fractions of the
