@@ -3,8 +3,8 @@
   "nodeId": "door-money",
   "displayName": "Door Money",
   "policyVersion": "1.0.0",
-  "generatedAt": "2026-10-18T04:01:19.631Z",
-  "observedAt": "2026-10-18T04:01:19.631Z",
+  "generatedAt": "2026-10-20T04:01:26.115Z",
+  "observedAt": "2026-10-20T04:01:26.115Z",
   "lifecycleStage": "operating",
   "state": "unavailable",
   "reason": "No valid live or recovery receipt is available.",
@@ -52,5 +52,5 @@
   ],
   "ownerAttentionRefs": [],
   "latestRunReceiptRefs": [],
-  "snapshotHash": "3708e74fa2b8d0fd55c9f596c163f189088d7de7e6c268902642cba0e9b355be"
+  "snapshotHash": "9ce0940b2b2ebf60555c1592f36e8e5237197d2e92d767be536da1b42434dcbb"
 }

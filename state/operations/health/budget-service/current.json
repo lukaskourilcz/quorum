@@ -3,8 +3,8 @@
   "nodeId": "budget-service",
   "displayName": "Budget service",
   "policyVersion": "1.0.0",
-  "generatedAt": "2026-10-18T04:01:19.631Z",
-  "observedAt": "2026-10-18T04:01:19.631Z",
+  "generatedAt": "2026-10-20T04:01:26.115Z",
+  "observedAt": "2026-10-20T04:01:26.115Z",
   "lifecycleStage": "operating",
   "state": "unavailable",
   "reason": "No valid live or recovery receipt is available.",
@@ -47,5 +47,5 @@
   ],
   "ownerAttentionRefs": [],
   "latestRunReceiptRefs": [],
-  "snapshotHash": "97c051581d0e229303f38c62a1df7f049948cd9caa2c4bac9afd7698929b7c6d"
+  "snapshotHash": "f56631004964898683c98494fac662bcc67d45ace2cf9258d4d575d666170dc9"
 }

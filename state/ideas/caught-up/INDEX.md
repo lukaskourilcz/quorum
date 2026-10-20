@@ -6,6 +6,7 @@
 
 | ID | Title (≤8 words) | Status | Last reason |
 | --- | --- | --- | --- |
+| idea-2026-10-20-9b8d0686 | Add a Missing-Publication Recovery Note | proposed | VAULT variant: Both add optional internal fields to publishing records to review periodically and improve reliability w… |
 | idea-2026-10-18-bf7df905 | Add a Missing-Run Escalation Note | proposed | VAULT variant: Both add optional internal notes to capture missing operational data (recovery vs. missing run), reviewe… |
 | idea-2026-10-16-9a32d939 | Add a Daily Publish Evidence Check | proposed | VAULT variant: Both add single internal metadata to publishing records for post-hoc review to identify gaps without wor… |
 | idea-2026-10-15-b30804a4 | Add a Source-Mix Decision Log | proposed | VAULT variant: Both add optional internal metadata to publishing records to identify source-mix gaps via periodic revie… |
@@ -23,9 +24,8 @@
 | idea-2026-08-17-8f179c62 | Source-Mix Provenance Tag | proposed | VAULT novel: Proposes retroactive source-category tagging of published items with periodic review for sourcing gaps. Ca… |
 | idea-2026-08-08-26fe9c94 | Reader Question Capture Card | proposed | VAULT variant: Both capture single bounded internal cards logging gaps/questions for future decisions. Material differe… |
 | idea-2026-08-06-c42b60b6 | MMA Files Slot Gap Review Card | proposed | VAULT variant: Proposes bounded internal review card for specific gaps (MMA Files slots + FightAIQ lag) with specialist… |
-| idea-2026-08-03-0e047a4b | Single-Gap Specialist Agenda Brief | proposed | VAULT novel: No candidate ideas provided for comparison. Proposal describes a documentation format for identifying sing… |
 
-Omitted older current entries: 0.
+Omitted older current entries: 1.
 Collapsed superseded entries: 0.
 
 ## All-time kill list

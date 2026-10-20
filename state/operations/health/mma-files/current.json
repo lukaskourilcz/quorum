@@ -3,8 +3,8 @@
   "nodeId": "mma-files",
   "displayName": "MMA Files",
   "policyVersion": "1.0.0",
-  "generatedAt": "2026-10-18T04:01:19.631Z",
-  "observedAt": "2026-10-18T04:01:19.631Z",
+  "generatedAt": "2026-10-20T04:01:26.115Z",
+  "observedAt": "2026-10-20T04:01:26.115Z",
   "lifecycleStage": "operating",
   "state": "unavailable",
   "reason": "No valid live or recovery receipt is available.",
@@ -50,5 +50,5 @@
   ],
   "ownerAttentionRefs": [],
   "latestRunReceiptRefs": [],
-  "snapshotHash": "7aeb20bc3c6352c8ba78350aedeebff6dbf8251435765e1f49ceac9ee4ccd8a9"
+  "snapshotHash": "e98e137a04fb7d9ecb95ab9bbfa7ace4da2cbdb959d5f80b8bf696be5fac9dfc"
 }
