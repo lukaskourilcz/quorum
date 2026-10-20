@@ -70,13 +70,14 @@ describe("topic sets follow the venture registry (operations-2026-09b)", () => {
     expect(registry.topicSets.dneskai?.ventureId).toBe("caught-up");
   });
 
-  it("drops every set whose venture is paused, leaving only DNESKAi eligible if scouting is explicitly restored", async () => {
+  it("drops every set whose venture is paused, leaving only the owner's set since the DNESKAi pause", async () => {
+    // Caught Up paused on 2026-10-20 (quorum#602), so its `dneskai` set left with the others.
     const [registry, ventures] = await Promise.all([apify.loadGoViralSourceRegistry(), loadVentureRegistry()]);
     const running = apify.runningTopicSets(registry, pausedVentureIds(ventures));
-    expect(Object.keys(running.topicSets).sort()).toEqual(["dneskai", "writer"]);
+    expect(Object.keys(running.topicSets).sort()).toEqual(["writer"]);
     for (const step of running.recipe) {
       for (const topicSet of stepTopicSets(step, running)) {
-        expect(["dneskai", null]).toContain(topicSet);
+        expect([null]).toContain(topicSet);
       }
     }
   });
