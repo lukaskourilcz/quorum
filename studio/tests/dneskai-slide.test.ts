@@ -10,6 +10,7 @@ import {
   validateDneskaiSlide,
   type DneskaiSlideInput
 } from "../src/index.js";
+import { ACCEPTANCE_TEMPLATES, acceptanceDeck } from "./fixtures/dneskai-acceptance-deck.js";
 
 /*
  * The API OwnDashboard renders DNESKAi slides through (quorum#603).
@@ -21,33 +22,12 @@ import {
 
 const codes = (problems: Array<{ code: string; blocking: boolean }>) => problems.map((entry) => `${entry.blocking ? "!" : "~"}${entry.code}`);
 
-async function acceptanceDeck(): Promise<DneskaiSlideInput[]> {
-  // Four assets, larger than their frames, so every crop really cuts and resamples.
-  const cover = await syntheticPhoto(1_600, 1_200, 11);
-  const chart = await syntheticPhoto(1_400, 800, 12);
-  const photo = await syntheticPhoto(1_200, 1_200, 13);
-  const detail = await syntheticPhoto(900, 700, 14);
-  const at = (index: number) => ({ index, count: 7 });
-  const all = [cover, chart, photo, detail];
-  return [
-    { type: "cover-photo", position: at(0), kicker: "Model · 20. 10. 2026", headline: "Smyšlený model, který si pustíte doma, a co z toho plyne", credit: "Foto: smyšlený zdroj", images: [{ slot: "image-1", bytes: cover, crop: { focal: { x: 0.7, y: 0.4 } } }] },
-    { type: "figure", position: at(1), headline: "Graf v rámu, nad ním titulek", body: "Popis pod grafem.", credit: "Graf: smyšlený zdroj", images: [{ slot: "image-1", bytes: chart, crop: { focal: { x: 0.5, y: 0.5 } } }] },
-    { type: "figure", position: at(2), headline: "Výřez fotky podle focal pointu", body: "Druhý obrázek, oříznutý na rám.", credit: "Foto: smyšlený zdroj", images: [{ slot: "image-1", bytes: photo, crop: { focal: { x: 0.3, y: 0.6 }, zoom: 1.4, fit: "cover" } }] },
-    { type: "split", position: at(3), kicker: "Detail", headline: "Text vlevo, dva obrázky vpravo", body: "Vysvětlení v levém sloupci.", credit: "Foto: smyšlený zdroj", images: [{ slot: "image-1", bytes: detail, crop: { focal: { x: 0.4, y: 0.5 } } }, { slot: "image-2", bytes: photo, crop: { focal: { x: 0.6, y: 0.2 }, fit: "cover" } }] },
-    { type: "statement", position: at(4), headline: "Jeden výrok na modré ploše.", body: "Tichá poznámka pod ním." },
-    { type: "figure", position: at(5), headline: "Návrat k prvnímu obrázku, jinak oříznutému", body: "Tentýž asset, jiný rám.", credit: "Foto: smyšlený zdroj", images: [{ slot: "image-1", bytes: cover, crop: { focal: { x: 0.2, y: 0.5 }, fit: "cover" } }] },
-    { type: "sources", position: at(6), sources: ["Smyšlený blog: Smyšlený model (20. 10. 2026)", "Obrázky: smyšlený zdroj"], images: all.map((bytes, index) => ({ slot: `image-${index + 1}`, bytes })) }
-  ];
-}
-
 describe("the acceptance deck", () => {
   it("renders seven 1080 × 1350 slides from four assets with focal points, and the same bytes twice", async () => {
     const deck = await acceptanceDeck();
     const first = await Promise.all(deck.map((slide) => renderDneskaiSlide(slide)));
     const second = await Promise.all(deck.map((slide) => renderDneskaiSlide(slide)));
-    expect(first.map((result) => result.template?.id)).toEqual([
-      "dneskai-cover-photo", "dneskai-figure", "dneskai-figure", "dneskai-split-pair", "dneskai-statement", "dneskai-figure", "dneskai-sources-4"
-    ]);
+    expect(first.map((result) => result.template?.id)).toEqual(ACCEPTANCE_TEMPLATES);
     for (const [index, result] of first.entries()) {
       expect(result.status, `slide ${index + 1}: ${result.problems.map((entry) => entry.message).join("; ")}`).toBe("rendered");
       expect(result.problems.filter((entry) => entry.blocking)).toEqual([]);
