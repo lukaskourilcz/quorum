@@ -135,9 +135,16 @@ point, slides it back inside the picture, and `cropImage` resamples it to the fr
 Equal bytes and an equal crop give an equal PNG hash. A slot is cut for the first layer that draws
 it; a reprise shows that cut through its own window. `prepareCarouselImages` crops and then treats,
 and returns the caller's record untouched when nothing asks for either. It is idempotent, so
-preparing and then rendering never crops a crop or tints a duotone twice. The synchronous
-`renderCarouselSvg` cannot run sharp, so it refuses raw bytes that carry a crop and names
-`prepareCarouselImages`.
+preparing and then rendering never crops a crop or tints a duotone twice. Each cut remembers the
+crop and frame it was made for, and bytes prepared for another crop are refused rather than drawn
+as this one. The synchronous `renderCarouselSvg` cannot run sharp, so it refuses bytes that were
+not cut for the payload's crop and names `prepareCarouselImages`.
+
+**Templates in state stay v1.** v2 is the code-owned DNESKAi kit's format. A council proposal in
+`carousel-template/2` is refused before it is written (`processStudioContribution`), and
+`resolveLiveCarouselTemplate` refuses a v2 file found under `state/ventures/carousel-studio/`,
+because a stored template rendered without its required photographs would throw, where v1 never
+lets a missing photograph cost the words.
 
 **Words over a photograph are measured.** In a v2 slide, a text frame inside an image frame is
 checked against a white photograph and a black one, each seen through the layer's scrim and shade

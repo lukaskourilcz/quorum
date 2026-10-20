@@ -167,35 +167,50 @@ OwnDashboard calls one function per slide:
 ```ts
 renderDneskaiSlide({
   type, variant?, headline, body?, kicker?, credit?, sources?,
-  images: [{ slot: "image-1", bytes, crop?: { focal: { x, y }, zoom?, fit? }, assetSha256? }],
+  images: [{ slot: "image-1", bytes, crop?: { assetSha256?, focal: { x, y }, zoom?, fit? }, assetSha256? }],
   position: { index, count },
   locale?: "cs" | "en"
 }) // → { status, png, pngHash, svgHash, truncatedSlots, problems, template, payload }
 ```
 
-`bytes` is the stored file (JPEG, PNG or WebP); the API orients and decodes it. `payload` is the
-exact record the slide was drawn from, crops and asset hashes included, for an approval to hash.
-`validateDneskaiSlide` returns the same problems without rendering.
+`bytes` is the stored file: JPEG, PNG or WebP, read from its signature before sharp opens it, at
+most 32 MiB and 64 megapixels. The API orients and decodes it. `payload` is the exact record the
+slide was drawn from, crops and asset hashes included, for an approval to hash. Each crop's
+`assetSha256` is always the hash of the bytes drawn; a stored crop can be passed back as it is,
+and if its own `assetSha256` names other bytes the slide is refused. `validateDneskaiSlide`
+returns the same problems without rendering.
 
-It refuses rather than degrades. These return `status: "refused"`, the problems and no PNG: a
-missing required photograph, a full-bleed photograph under 900 px on its shorter side
-(`DNESKAI_BLEED_MIN_SHORT_SIDE`, report §5.3), an image the slide has no place for or gets twice,
-bytes that do not hash to the given `assetSha256`, undecodable bytes, an invalid crop, position or
-variant, an empty headline, and a sources slide with no source or more than four. Two problems
-render and are reported: words that do not fit whole (the slot is in `truncatedSlots` and in
-`problems` as `text-clipped`), and a framed picture drawn at more than 1.5× its own pixels
-(`image-upscaled`). Nothing is shortened, upscaled to bleed or replaced without saying so.
+It refuses rather than degrades. These return `status: "refused"`, the problems and no PNG:
+
+- a missing required photograph;
+- a full-bleed photograph under 900 px on its shorter side (`DNESKAI_BLEED_MIN_SHORT_SIDE`,
+  report §5.3), or whose crop stretches the region it cuts more than 1.5× to the slide
+  (`DNESKAI_BLEED_MAX_UPSCALE`, the most a 900 px tall 16:9 hero is stretched at zoom 1). Both are
+  `image-low-resolution`, measured on the region the crop cuts, so a zoom cannot get round them;
+- an image the slide has no place for, or one slot given twice;
+- bytes that do not hash to the given `assetSha256` or to the crop's own;
+- another format, a file over the limits (`image-unsupported`) or undecodable bytes;
+- an invalid crop, position or variant, or an empty headline;
+- a sources slide with no source or more than four. Blank source lines are dropped first.
+
+Three problems render and are reported: words that do not fit whole (the slot is in
+`truncatedSlots` and in `problems` as `text-clipped`), a full-bleed crop stretched past 1.2×
+(`DNESKAI_BLEED_SOFT_UPSCALE`, 900 px across the 1080 px width) and a framed picture drawn at more
+than 1.5× its own pixels. The last two are `image-upscaled`. Nothing is shortened, upscaled to
+bleed or replaced without saying so.
 
 The folio, the sources slide's title, its image label and its disclosure are written by code, in
 Czech by default. No template draws a mono or duotone photograph, an emoji, a sticker or a
 hand-drawn mark.
 
-Receipts: `studio/golden/dneskai-photo.json` pins one slide per template, rendered through the API
-from stand-in pictures cut to their frames, and `golden:check` re-renders it.
-`studio/tests/dneskai-slide.test.ts` renders the issue's acceptance deck (cover photo, two figures,
-split, statement, figure, sources from four assets with focal points) twice and compares the
-bytes. `studio/tests/portable.test.ts` compiles the package into an empty directory with only
-`fonts` and `brand-kits/caught-up` beside it and renders a slide there in a separate process.
+Receipts: `studio/golden/dneskai-photo.json` pins one slide per template, plus a zoomed,
+off-centre cover crop, rendered through the API from stand-in pictures cut to their frames, and
+`golden:check` re-renders it. `studio/tests/fixtures/dneskai-acceptance-deck.ts` holds the issue's
+acceptance deck (cover photo, two figures, split, statement, figure, sources from four assets with
+focal points). `studio/tests/dneskai-slide.test.ts` renders it twice and compares the bytes.
+`studio/tests/portable.test.ts` compiles the package into an empty directory with only `fonts` and
+`brand-kits/caught-up` beside it. A separate process there renders the same deck twice and must
+match the in-repo hashes.
 The package's `files` ship `dist`, `fonts`, `golden` and `brand-kits` for that reason.
 
 ## Deep links
