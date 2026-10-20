@@ -452,6 +452,12 @@
                         "middle",
                         "bottom"
                       ]
+                    },
+                    "keepWithNext": {
+                      "type": "string",
+                      "enum": [
+                        "cs"
+                      ]
                     }
                   },
                   "required": [
