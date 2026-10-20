@@ -77,10 +77,18 @@ describe("the DNESKAi layout", () => {
     }
   });
 
-  it.each(FLOWED)("%s passes every kit check laid out for the longest and the shortest words", (id) => {
+  it.each(FLOWED)("%s passes every kit check laid out for the longest, the shortest and only the required words", (id) => {
     const template = DNESKAI_PHOTO_TEMPLATES.get(id)!;
-    for (const strings of [shortest(template), longest(template)]) {
-      const { laid } = laidOut(id, strings, picturesFor(template));
+    // Only what a slide must carry: an empty frame still stands somewhere and is still measured.
+    const required = { headline: "Jen titulek", title: "Zdroje", "source-1": "Jediný zdroj", "images-label": "Použité obrázky", disclosure: "Text připravil jazykový model." };
+    const slots = Object.keys(picturesFor(template));
+    const pictureSets = [
+      picturesFor(template),
+      // Covering pictures take all the height they are offered, and a low focal point moves a band.
+      Object.fromEntries(slots.map((slot) => [slot, picture(1_600, 900, { x: 0.5, y: 0.9 }, true, "cover")]))
+    ];
+    for (const strings of [shortest(template), longest(template), required]) for (const pictures of pictureSets) {
+      const { laid } = laidOut(id, strings, pictures);
       expect(validateTemplateAsRendered(laid, brand, MASTER_FORMAT).filter((check) => check.status === "fail"), id).toEqual([]);
       if (id === "dneskai-single-photo") continue;
       // Every flowed text frame stays in the band between the logotype row and the credit line.

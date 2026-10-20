@@ -448,8 +448,13 @@ function singlePhoto(input: DneskaiLayoutInput): CarouselTemplate {
   const credit = textLayer(template, "credit")!;
   const hasBody = (input.text.body?.lines ?? 0) > 0;
   const bodyTop = PANEL.top + band + PANEL.toBody;
-  const kickerTop = hasBody ? bodyTop + px.height(body) + PANEL.toKicker : PANEL.top + band + PANEL.toBody;
-  const headEnd = kickerTop + px.height(kicker);
+  const kickerTop = hasBody ? bodyTop + px.height(body) + PANEL.toKicker : bodyTop;
+  // An empty line draws nothing, but its frame is still measured against the shade, so it waits
+  // on the kicker row rather than below it in the clear part of the picture.
+  const bodyPlace = hasBody ? { y: bodyTop, height: px.height(body) } : { y: kickerTop, height: px.height(kicker) };
+  // Measured on the frames as `moved` rounds them, so the shade's hold reaches every one of them.
+  const bottom = (y: number, height: number) => Math.round(y) + Math.round(height);
+  const headEnd = Math.max(bottom(kickerTop, px.height(kicker)), bottom(kickerTop, px.height(credit)), bottom(bodyPlace.y, bodyPlace.height));
   const clearFoot = footTop - focalY;
   const clearHead = focalY - headEnd;
   if (clearFoot >= PANEL.clearance || clearHead <= clearFoot) return template;
@@ -458,14 +463,14 @@ function singlePhoto(input: DneskaiLayoutInput): CarouselTemplate {
   const places = new Map<Layer, Place>([
     [panel, { y: PANEL.top, height: Math.ceil(band) }],
     [headline, { y: PANEL.top + PANEL.inset, height: Math.ceil(block) }],
-    [body, { y: bodyTop, height: px.height(body) }],
+    [body, bodyPlace],
     [kicker, { y: kickerTop, height: px.height(kicker) }],
     [credit, { y: kickerTop, height: px.height(credit) }]
   ]);
   // The foot's shade turned over: deep behind the logotype and the words, clear from just under
   // the kicker row to the floor. Every line still stands on at least 0.68 of the ink, which is
   // what the cover's shade promises its headline.
-  const end = Math.round(headEnd) / H;
+  const end = headEnd / H;
   const fade = Math.min(1, end + 0.2);
   const shade = {
     colorToken: image.shade?.colorToken ?? "foreground",
