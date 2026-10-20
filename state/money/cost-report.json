@@ -1,16 +1,34 @@
 {
   "schemaVersion": "cost-report/1",
-  "generatedAt": "2026-10-19T09:23:53.573Z",
+  "generatedAt": "2026-10-20T03:20:22.767Z",
   "month": "2026-10",
   "currency": "USD",
   "metered": {
     "total": {
-      "totalUsd": 8.1183765,
-      "modelUsd": 7.9183765,
+      "totalUsd": 8.56544475,
+      "modelUsd": 8.36544475,
       "mediaUsd": 0.2,
-      "calls": 328
+      "calls": 332
     },
     "editions": [
+      {
+        "date": "2026-10-20",
+        "ventureId": "caught-up",
+        "phase": "cu-edition",
+        "cycleIds": [
+          "20261020030141-cu-edition"
+        ],
+        "status": "delivered",
+        "articleUrl": null,
+        "packageHash": "c53239dbcf40dafdddcea8af7b43be3cfd53773ada8e5a878eaccda562b34756",
+        "cost": {
+          "totalUsd": 0.44706825,
+          "modelUsd": 0.44706825,
+          "mediaUsd": 0,
+          "calls": 4
+        },
+        "note": null
+      },
       {
         "date": "2026-10-17",
         "ventureId": "caught-up",
@@ -122,6 +140,34 @@
       }
     ],
     "decisions": [
+      {
+        "cycleId": "20261020030141-cu-product",
+        "phase": "cu-product",
+        "ventureId": "caught-up",
+        "outcome": "defer",
+        "decidedAt": "2026-10-20T03:01:45.633Z",
+        "cost": {
+          "totalUsd": 0,
+          "modelUsd": 0,
+          "mediaUsd": 0,
+          "calls": 0
+        },
+        "note": "No ledger row carries this cycle id; the room decided without billing a call."
+      },
+      {
+        "cycleId": "20261020030141-cu-edition",
+        "phase": "cu-edition",
+        "ventureId": "caught-up",
+        "outcome": "NO_EDITION",
+        "decidedAt": "2026-10-20T03:01:46.633Z",
+        "cost": {
+          "totalUsd": 0.44706825,
+          "modelUsd": 0.44706825,
+          "mediaUsd": 0,
+          "calls": 4
+        },
+        "note": null
+      },
       {
         "cycleId": "20261019030129-cu-product",
         "phase": "cu-product",
@@ -743,13 +789,13 @@
       {
         "phase": "cu-edition",
         "ventureId": "caught-up",
-        "cycles": 20,
-        "meteredUsd": 5.5717025,
+        "cycles": 21,
+        "meteredUsd": 6.01877075,
         "comparable": {
-          "cycles": 20,
-          "envelopeUsd": 11.6,
-          "meteredUsd": 5.5717025,
-          "varianceUsd": -6.0282975,
+          "cycles": 21,
+          "envelopeUsd": 12.18,
+          "meteredUsd": 6.01877075,
+          "varianceUsd": -6.16122925,
           "overspentCycles": 0
         }
       },
@@ -759,11 +805,11 @@
         "cycles": 20,
         "meteredUsd": 2.546674,
         "comparable": {
-          "cycles": 17,
-          "envelopeUsd": 0.762042,
-          "meteredUsd": 2.165608,
-          "varianceUsd": 1.403566,
-          "overspentCycles": 17
+          "cycles": 16,
+          "envelopeUsd": 0.717216,
+          "meteredUsd": 2.034776,
+          "varianceUsd": 1.31756,
+          "overspentCycles": 16
         }
       }
     ]
@@ -771,14 +817,14 @@
   "billed": null,
   "reconciliation": {
     "status": "unavailable",
-    "meteredUsd": 8.1183765,
+    "meteredUsd": 8.56544475,
     "billedUsd": null,
     "differenceUsd": null,
     "toleranceUsd": 0.01,
     "note": "PROVIDER_BILLING_ENABLED is not set, so no billing request was made."
   },
   "unreadable": {
-    "decisions": 17,
+    "decisions": 16,
     "deliveries": 0,
     "envelopes": 0,
     "ledgerRows": 0
