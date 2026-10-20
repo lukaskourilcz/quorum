@@ -162,6 +162,16 @@ slide, chosen by what the day's story has.
 | `sources` | `dneskai-sources-0` … `-6` | Up to four source lines, small copies of the pictures the deck used, and the line that a language model drafted the text and the DNESKAi editors selected and approved it. |
 | `single` | `dneskai-single-photo`, `dneskai-single-type` | A one-image announcement: a full-bleed photograph with the headline on a blue panel, or type alone. |
 
+Each slide is laid out for what it holds before it is drawn (`studio/src/dneskai-layout.ts`). The
+words are fitted in the template's declared frames, then every frame shrinks to the lines or the
+picture it carries and the elements stack in reading order with the kit's gaps. A figure keeps its
+headline at the top and centres the picture and caption under it; a split centres its words
+against the picture; a statement or a type-only announcement stands at the optical centre; a
+sources slide hangs its thumbnails and disclosure directly under the sources. A single photo's band
+moves under the logotype when the caller's focal point would land under it. Shrinking a frame never
+changes how its words are set. The cover is drawn as declared. The gaps and rules are in
+`TOKENS.md`.
+
 OwnDashboard calls one function per slide:
 
 ```ts
@@ -204,8 +214,10 @@ Czech by default. No template draws a mono or duotone photograph, an emoji, a st
 hand-drawn mark.
 
 Receipts: `studio/golden/dneskai-photo.json` pins one slide per template, plus a zoomed,
-off-centre cover crop, rendered through the API from stand-in pictures cut to their frames, and
-`golden:check` re-renders it. `studio/tests/fixtures/dneskai-acceptance-deck.ts` holds the issue's
+off-centre cover crop and a single photo whose low focal point moves its band to the top, rendered
+through the API from stand-in pictures cut to their laid-out frames, and `golden:check` re-renders
+it. `studio/tests/dneskai-layout.test.ts` holds the layout's own rules: the same lines at the same
+size in every laid-out frame, nothing past the band at the longest copy, and each placement. `studio/tests/fixtures/dneskai-acceptance-deck.ts` holds the issue's
 acceptance deck (cover photo, two figures, split, statement, figure, sources from four assets with
 focal points). `studio/tests/dneskai-slide.test.ts` renders it twice and compares the bytes.
 `studio/tests/portable.test.ts` compiles the package into an empty directory with only `fonts` and
