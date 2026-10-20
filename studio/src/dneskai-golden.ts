@@ -14,7 +14,9 @@ import { GOLDEN_DIRECTORY } from "./golden.js";
  *
  * The stand-in photographs are drawn from integer arithmetic and are exactly the size of the frame
  * they fill, so the crop's resample is the identity and the pinned bytes do not lean on a resize
- * kernel. Only the PNG hash is pinned: the SVG embeds sharp's PNG encoding of each picture, which
+ * kernel. `cover-photo-crop` pins the crop arithmetic the same way: a picture twice the frame at
+ * zoom 2 around an off-centre focal point cuts a frame-sized region, so the extract offsets are
+ * pinned and the resample is still the identity. Only the PNG hash is pinned: the SVG embeds sharp's PNG encoding of each picture, which
  * is a property of the zlib build rather than of the slide.
  */
 
@@ -44,6 +46,7 @@ export async function syntheticPhoto(width: number, height: number, seed: number
 /** The pinned slides. Every sentence is invented and says so; a baseline is not an article. */
 export async function dneskaiGoldenCases(): Promise<Array<{ name: string; input: DneskaiSlideInput }>> {
   const bleed = await syntheticPhoto(1_080, 1_350, 1);
+  const double = await syntheticPhoto(2 * 1_080, 2 * 1_350, 10);
   const wide = await syntheticPhoto(936, 560, 2);
   const tall = await syntheticPhoto(468, 600, 3);
   const pairOne = await syntheticPhoto(468, 300, 4);
@@ -52,6 +55,7 @@ export async function dneskaiGoldenCases(): Promise<Array<{ name: string; input:
   const at = (index: number, count = 7) => ({ index, count });
   return [
     { name: "cover-photo", input: { type: "cover-photo", position: at(0), kicker: "Smyšlené téma · 20. 10. 2026", headline: "Smyšlený titulek stojí na spodním okraji fotky a nese jednu větu", credit: "Foto: smyšlený zdroj", images: [{ slot: "image-1", bytes: bleed }] } },
+    { name: "cover-photo-crop", input: { type: "cover-photo", position: at(0), kicker: "Smyšlené téma · 20. 10. 2026", headline: "Tentýž cover z výřezu: zoom 2 kolem bodu mimo střed", credit: "Foto: smyšlený zdroj", images: [{ slot: "image-1", bytes: double, crop: { focal: { x: 0.3, y: 0.7 }, zoom: 2 } }] } },
     { name: "figure", input: { type: "figure", position: at(1), headline: "Smyšlený graf v rámu pod titulkem o dvou řádcích", body: "Popis pod obrázkem vysvětluje, co graf ukazuje. Žluťoučký kůň úpěl ďábelské ódy.", credit: "Graf: smyšlený zdroj", images: [{ slot: "image-1", bytes: wide }] } },
     { name: "split", input: { type: "split", position: at(2), kicker: "Smyšlená rada", headline: "Text vlevo, jeden obrázek vpravo a modrý hřbet", body: "Odstavec pod oběma sloupci dokončí myšlenku jednou nebo dvěma větami.", credit: "Foto: smyšlený zdroj", images: [{ slot: "image-1", bytes: tall }] } },
     { name: "split-pair", input: { type: "split", position: at(3), kicker: "Smyšlené srovnání", headline: "Dva obrázky vpravo nad sebou", body: "Levý sloupec nese titulek i vysvětlení, pravý dva rámečky.", credit: "Schémata: smyšlený zdroj", images: [{ slot: "image-1", bytes: pairOne }, { slot: "image-2", bytes: pairTwo }] } },

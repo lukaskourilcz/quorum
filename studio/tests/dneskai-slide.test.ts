@@ -3,6 +3,7 @@ import { describe, expect, it } from "vitest";
 import sharp from "sharp";
 import {
   DNESKAI_BLEED_MIN_SHORT_SIDE,
+  cropRegion,
   dneskaiGoldenCases,
   readDneskaiGolden,
   renderDneskaiSlide,
@@ -199,6 +200,11 @@ describe("refusals", () => {
 });
 
 describe("the DNESKAi golden slides", () => {
+  it("pin a crop that cuts off-centre without resampling", () => {
+    expect(cropRegion({ width: 2_160, height: 2_700 }, { focal: { x: 0.3, y: 0.7 }, zoom: 2 }, { width: 1_080, height: 1_350 }, "cover"))
+      .toEqual({ left: 108, top: 1_215, width: 1_080, height: 1_350, outWidth: 1_080, outHeight: 1_350 });
+  });
+
   it("render the committed bytes", async () => {
     const committed = readDneskaiGolden();
     const cases = await dneskaiGoldenCases();

@@ -13,6 +13,12 @@
       "pngHash": "0fe4b5a2ef8b3fc008ec75ccf7fa868cd938126b15e3c5071d3e0084faef41a4"
     },
     {
+      "name": "cover-photo-crop",
+      "templateId": "dneskai-cover-photo",
+      "version": "1.0.0",
+      "pngHash": "2780e681546579b766d2e7c2a865f40f73edb4076de7fd764076c51ff3458edb"
+    },
+    {
       "name": "figure",
       "templateId": "dneskai-figure",
       "version": "1.0.0",
