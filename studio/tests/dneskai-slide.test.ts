@@ -136,8 +136,26 @@ describe("refusals", () => {
     expect(codes(await validateDneskaiSlide({ type: "statement", position: { index: 0, count: 3 }, headline: "Výrok", images: [{ slot: "image-1", bytes }] }))).toEqual(["!image-unexpected"]);
     expect(codes(await validateDneskaiSlide(await figure({ images: [{ slot: "image-1", bytes }, { slot: "image-1", bytes }] })))).toEqual(["!image-duplicate"]);
     expect(codes(await validateDneskaiSlide(await figure({ images: [{ slot: "image-1", bytes, assetSha256: "0".repeat(64) }] })))).toEqual(["!image-hash-mismatch"]);
-    expect(codes(await validateDneskaiSlide(await figure({ images: [{ slot: "image-1", bytes: Buffer.from("not an image") }] })))).toEqual(["!image-undecodable"]);
+    const truncated = bytes.subarray(0, 64);
+    expect(codes(await validateDneskaiSlide(await figure({ images: [{ slot: "image-1", bytes: truncated }] })))).toEqual(["!image-undecodable"]);
   });
+
+  it("decodes only JPEG, PNG and WebP, and only up to a bounded size", async () => {
+    const png = await syntheticPhoto(900, 560, 28);
+    const as = async (format: "jpeg" | "webp" | "gif" | "tiff") => sharp(png)[format]().toBuffer();
+    expect(codes(await validateDneskaiSlide(await figure({ images: [{ slot: "image-1", bytes: await as("jpeg") }] })))).toEqual([]);
+    expect(codes(await validateDneskaiSlide(await figure({ images: [{ slot: "image-1", bytes: await as("webp") }] })))).toEqual([]);
+    const svg = Buffer.from('<svg xmlns="http://www.w3.org/2000/svg" width="900" height="560"><rect width="900" height="560" fill="#2f5ae6"/></svg>');
+    for (const bytes of [svg, await as("gif"), await as("tiff"), Buffer.from("not an image")]) {
+      const result = await renderDneskaiSlide(await figure({ images: [{ slot: "image-1", bytes }] }));
+      expect(result.status).toBe("refused");
+      expect(codes(result.problems)).toEqual(["!image-unsupported"]);
+    }
+    const huge = await sharp({ create: { width: 8_001, height: 8_001, channels: 3, background: "#808080" } }).png({ compressionLevel: 1 }).toBuffer();
+    const tooLarge = await validateDneskaiSlide(await figure({ images: [{ slot: "image-1", bytes: huge }] }));
+    expect(codes(tooLarge)).toEqual(["!image-unsupported"]);
+    expect(tooLarge[0]!.message).toContain("8001 × 8001 px");
+  }, 60_000);
 
   it("records the hash of the bytes drawn, and refuses a crop record set on other bytes", async () => {
     const before = await syntheticPhoto(900, 560, 26);

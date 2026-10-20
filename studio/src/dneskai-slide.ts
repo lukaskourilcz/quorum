@@ -46,13 +46,31 @@ export const DNESKAI_BLEED_MAX_UPSCALE = MASTER_CANVAS.height / DNESKAI_BLEED_MI
  */
 export const DNESKAI_BLEED_SOFT_UPSCALE = MASTER_CANVAS.width / DNESKAI_BLEED_MIN_SHORT_SIDE;
 
+/** The stored file formats a slide decodes. Anything else, SVG included, is refused unread. */
+export const DNESKAI_IMAGE_FORMATS = ["jpeg", "png", "webp"] as const;
+
+/** Which of `DNESKAI_IMAGE_FORMATS` a file is, by its signature, or null for anything else. */
+export function sniffImageFormat(bytes: Uint8Array): (typeof DNESKAI_IMAGE_FORMATS)[number] | null {
+  const at = (offset: number, ...values: number[]) => values.every((value, index) => bytes[offset + index] === value);
+  if (at(0, 0xff, 0xd8, 0xff)) return "jpeg";
+  if (at(0, 0x89, 0x50, 0x4e, 0x47, 0x0d, 0x0a, 0x1a, 0x0a)) return "png";
+  if (at(0, 0x52, 0x49, 0x46, 0x46) && at(8, 0x57, 0x45, 0x42, 0x50)) return "webp";
+  return null;
+}
+
+/** The largest file a slide takes, in bytes. */
+export const DNESKAI_MAX_IMAGE_BYTES = 32 * 1024 * 1024;
+
+/** The most pixels a slide decodes from one file, so a fetched picture has a bounded cost. */
+export const DNESKAI_MAX_IMAGE_PIXELS = 64_000_000;
+
 /** A framed photograph resampled past this factor is reported, not refused. */
 export const DNESKAI_FRAME_MAX_UPSCALE = 1.5;
 
 export interface DneskaiImageInput {
   /** `image-1`, `image-2`, … in the order the slide type places them. */
   slot: string;
-  /** The stored file: JPEG, PNG or WebP. Decoded and oriented here. */
+  /** The stored file: JPEG, PNG or WebP, at most 32 MiB and 64 megapixels. Decoded and oriented here. */
   bytes: Buffer | Uint8Array;
   /**
    * Where to keep the picture in view. Absent: centred, at zoom 1, in the template's own fit.
@@ -92,6 +110,7 @@ export type DneskaiProblemCode =
   | "image-unexpected"
   | "image-duplicate"
   | "image-undecodable"
+  | "image-unsupported"
   | "image-hash-mismatch"
   | "image-low-resolution"
   | "image-upscaled"
@@ -276,11 +295,30 @@ async function inspect(input: DneskaiSlideInput): Promise<Inspection> {
       problems.push(problem("crop-invalid", true, image.slot, `The crop for ${image.slot} is not valid: ${crop.error.issues.map((issue) => issue.message).join("; ")}.`));
       continue;
     }
+    if (bytes.length > DNESKAI_MAX_IMAGE_BYTES) {
+      problems.push(problem("image-unsupported", true, image.slot,
+        `The file for ${image.slot} is ${bytes.length} bytes; this renderer takes at most ${DNESKAI_MAX_IMAGE_BYTES}.`));
+      continue;
+    }
     let decoded: Buffer;
     let size: { width: number; height: number };
     try {
+      // The format is read from the file's signature before sharp sees it: sharp would also open
+      // SVG through librsvg, GIF, TIFF and HEIF, and a fetched third-party file must not reach
+      // those decoders. libvips picks its loader from the same signature.
+      if (!sniffImageFormat(bytes)) {
+        problems.push(problem("image-unsupported", true, image.slot,
+          `The file for ${image.slot} is not ${DNESKAI_IMAGE_FORMATS.join(", ")}; this renderer takes no other format.`));
+        continue;
+      }
+      const meta = await sharp(bytes, { limitInputPixels: false }).metadata();
+      if ((meta.width ?? 0) * (meta.height ?? 0) > DNESKAI_MAX_IMAGE_PIXELS) {
+        problems.push(problem("image-unsupported", true, image.slot,
+          `${image.slot} is ${meta.width} × ${meta.height} px; this renderer decodes at most ${DNESKAI_MAX_IMAGE_PIXELS / 1_000_000} megapixels.`));
+        continue;
+      }
       // rotate() with no angle applies the file's own orientation, so a phone photograph stands up.
-      const { data, info } = await sharp(bytes).rotate().png().toBuffer({ resolveWithObject: true });
+      const { data, info } = await sharp(bytes, { limitInputPixels: DNESKAI_MAX_IMAGE_PIXELS }).rotate().png().toBuffer({ resolveWithObject: true });
       decoded = data;
       size = { width: info.width, height: info.height };
     } catch {
