@@ -1,6 +1,9 @@
 import { mkdirSync, writeFileSync } from "node:fs";
 import path from "node:path";
 import {
+  DNESKAI_GOLDEN_PATH,
+  buildDneskaiGolden,
+  readDneskaiGolden,
   DECK_FAMILIES,
   GOLDEN_DIRECTORY,
   GOLDEN_MANIFEST_PATH,
@@ -74,9 +77,10 @@ async function check(): Promise<number> {
   for (const family of stranded) {
     process.stderr.write(`STRANDED ${family} is in the manifest and not in DECK_FAMILIES\n`);
   }
+  const kitDrift = await checkDneskai();
   if (!failures.length && !stranded.length) {
     process.stdout.write(`${verdicts.length} families match the committed golden manifest\n`);
-    return 0;
+    return kitDrift ? 1 : 0;
   }
   for (const verdict of failures) {
     process.stderr.write(
@@ -89,6 +93,20 @@ async function check(): Promise<number> {
   return 1;
 }
 
+/** The DNESKAi photo kit's pinned slides (quorum#603), compared by name. True when any moved. */
+async function checkDneskai(): Promise<boolean> {
+  const committed = readDneskaiGolden();
+  const current = await buildDneskaiGolden(committed.updatedAt);
+  const expected = new Map(committed.entries.map((entry) => [entry.name, entry.pngHash]));
+  let drift = current.entries.length !== committed.entries.length;
+  for (const entry of current.entries) {
+    const ok = expected.get(entry.name) === entry.pngHash;
+    drift ||= !ok;
+    process.stdout.write(`${ok ? "ok  " : "DRIFT"} dneskai ${entry.name} ${entry.pngHash.slice(0, 12)}\n`);
+  }
+  return drift;
+}
+
 async function record(): Promise<number> {
   const date = argument("date");
   if (!date || !/^\d{4}-\d{2}-\d{2}$/.test(date)) {
@@ -99,6 +117,9 @@ async function record(): Promise<number> {
   mkdirSync(GOLDEN_DIRECTORY, { recursive: true });
   writeFileSync(GOLDEN_MANIFEST_PATH, `${JSON.stringify(manifest, null, 2)}\n`);
   process.stdout.write(`Recorded ${manifest.entries.length} of ${DECK_FAMILIES.length} families to ${GOLDEN_MANIFEST_PATH}\n`);
+  const kit = await buildDneskaiGolden(date);
+  writeFileSync(DNESKAI_GOLDEN_PATH, `${JSON.stringify(kit, null, 2)}\n`);
+  process.stdout.write(`Recorded ${kit.entries.length} DNESKAi photo-kit slides to ${DNESKAI_GOLDEN_PATH}\n`);
   return 0;
 }
 

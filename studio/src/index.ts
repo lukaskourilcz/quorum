@@ -29,3 +29,5 @@ export * from "./quiz-deck.js";
 export * from "./post-deck.js";
 export * from "./kit-style.js";
 export * from "./dneskai-photo.js";
+export * from "./dneskai-slide.js";
+export * from "./dneskai-golden.js";
