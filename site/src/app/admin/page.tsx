@@ -954,7 +954,11 @@ export default async function AdminPage({
         <div data-admin-paused-venture={selectedVenture.id}>
           <AdminStateMessage
             action={<Link className="admin-focus-ring font-semibold text-[var(--admin-link)]" href="/admin/settings">Open Settings</Link>}
-            description={selectedVenture.id === "carousel-studio" ? "Manual content and carousel curation remains available here. Scheduled production is paused." : "Nothing runs for it and it is not in the navigation. What it made is below; Settings lists it under Paused ventures, where Resume puts it back on the schedule."}
+            description={selectedVenture.id === "carousel-studio"
+              ? "Manual content and carousel curation remains available here. Scheduled production is paused."
+              : selectedVenture.id === "caught-up"
+                ? "Article production is paused, so it is not in the navigation. The stream and event sync keeps running, and events you save here still reach the magazine. Resume in Settings brings the daily edition back."
+                : "Nothing runs for it and it is not in the navigation. What it made is below; Settings lists it under Paused ventures, where Resume puts it back on the schedule."}
             state="paused"
             title={`${ventureName(selectedVenture.id, selectedVenture.name)} is paused`}
           />

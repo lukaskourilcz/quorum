@@ -78,11 +78,15 @@ describe("the pause date", () => {
   });
 
   it("is refused on a venture that is not paused", () => {
+    // Set to operating here rather than found: since the 2026-10-20 article pause (quorum#602) the
+    // live registry may hold no operating venture at all, and the refusal must hold regardless.
     const registry = readVentureRegistry();
-    const running = registry.ventures.find((venture) => venture.status === "operating")!;
+    const running = registry.ventures[0]!;
     expect(() => parseVentureRegistry({
       ...registry,
-      ventures: registry.ventures.map((venture) => venture.id === running.id ? { ...venture, pausedOn: "2026-09-25" } : venture)
+      ventures: registry.ventures.map((venture) => venture.id === running.id
+        ? { ...venture, status: "operating", pausedOn: "2026-09-25" }
+        : venture)
     })).toThrow(/records pausedOn but is operating/u);
   });
 });

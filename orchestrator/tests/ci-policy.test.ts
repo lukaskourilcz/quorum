@@ -32,10 +32,13 @@ describe("automation policy", () => {
       expect(start, `${name} is missing`).toBeGreaterThan(-1);
       return cycle.slice(start, cycle.indexOf("\n      - name: ", start + 1));
     };
+    expect(step("Select the oldest Caught Up delivery")).toContain("steps.mode.outputs.caught_up_delivery == 'true'");
+    // The stream and event sync rides the same runs, through an output that starts as the
+    // delivery decision and adds only the morning handoff a paused Caught Up needs (quorum#602).
+    expect(step("Mint bounded aifirst token for the stream and event sync")).toContain("steps.mode.outputs.caught_up_sync == 'true'");
+    expect(cycle).toContain('caught_up_sync="$caught_up_delivery"');
     for (const name of ["Select the oldest Caught Up delivery", "Mint bounded aifirst token for the stream and event sync"]) {
-      const gate = step(name);
-      expect(gate, name).toContain("steps.mode.outputs.caught_up_delivery == 'true'");
-      expect(gate, name).not.toContain("steps.mode.outputs.phase == 'cu-edition'");
+      expect(step(name), name).not.toContain("steps.mode.outputs.phase == 'cu-edition'");
     }
     const deliveryOnlyGate = cycle.slice(
       cycle.indexOf('          if test "$delivery_only" = "true"; then'),
@@ -395,8 +398,9 @@ describe("automation policy", () => {
       "cycle.yml and deployedCronExpressions disagree about the backstop sweeps"
     ).toEqual([...deployedCronExpressions()].sort());
     // The per-slot expressions still exist and still drive the Vercel side; what changed is that
-    // GitHub no longer deploys them.
-    expect(scheduledCronExpressions(readVentureRegistry()).length).toBe(3);
+    // GitHub no longer deploys them. Two since the 2026-10-20 article pause (quorum#602): the
+    // morning's two daylight-saving variants, with the DNESKAi day off the clock.
+    expect(scheduledCronExpressions(readVentureRegistry()).length).toBe(2);
   });
 
   it("keys the release-gate verdict on content, not on the moving cycle sha", async () => {

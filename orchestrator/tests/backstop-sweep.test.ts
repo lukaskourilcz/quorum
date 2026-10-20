@@ -39,8 +39,9 @@ describe("the backstop sweep", () => {
     for (const expression of deployed) {
       expect(expression).toMatch(new RegExp(`^${CRON_MINUTE} \\d{1,2} \\* \\* \\*$`, "u"));
     }
-    // Only the DNESKAi desk and company checkpoint remain on the clock.
-    expect(resolveScheduledClock(liveRegistry).map(slot => slot.phase)).toEqual(["cu-day", "morning"]);
+    // Only the company checkpoint remains on the clock: the DNESKAi desk left it with the
+    // 2026-10-20 article pause (quorum#602).
+    expect(resolveScheduledClock(liveRegistry).map(slot => slot.phase)).toEqual(["morning"]);
   });
 
   it("has no running slot after 21:00 Prague, which only the removed late sweeps could reach", () => {
