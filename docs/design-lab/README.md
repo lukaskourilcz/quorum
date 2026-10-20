@@ -172,6 +172,11 @@ moves under the logotype when the caller's focal point would land under it. Shri
 changes how its words are set. The cover is drawn as declared. The gaps and rules are in
 `TOKENS.md`.
 
+Every kit text slot keeps the Czech ties (`keepWithNext: "cs"`): a one-letter preposition or
+conjunction goes down with the next word instead of ending a line, and a number keeps its digit
+groups and its unit. A caller can also tie two words with a no-break space. v1 templates never set
+the field, so their lines break where they always did.
+
 OwnDashboard calls one function per slide:
 
 ```ts

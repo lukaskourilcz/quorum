@@ -171,6 +171,9 @@ master, which is the only canvas these templates declare. The kit dresses the `c
 Space Grotesk headlines, Source Serif 4 words and IBM Plex Mono labels, whatever the brand table
 above names for the undressed skin.
 
+Every kit text slot sets `keepWithNext: "cs"`, so no line ends on v, k, s, z, o, u, a or i, and
+"10 000", "50 %" or "3 GB" never splits across two lines (`SPEC.md`, carousel-template/2).
+
 The frames below are declared frames: the largest each element may take. The words are fitted in
 them and the template checks pass on them. Every template except the cover is then laid out for
 what the slide holds (`studio/src/dneskai-layout.ts`, next table), so a short headline or a wide
