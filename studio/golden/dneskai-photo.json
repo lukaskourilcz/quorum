@@ -34,7 +34,7 @@
       "name": "split-pair",
       "templateId": "dneskai-split-pair",
       "version": "1.1.0",
-      "pngHash": "7eea9ce6cf81f77ce53cad00256b66743d799e12fae504b452b8a89580f1f6cb"
+      "pngHash": "818421cf3c8929c28687d057f860504a7c00861204252d63945a24505bd3e52f"
     },
     {
       "name": "statement",
@@ -70,7 +70,7 @@
       "name": "single-type",
       "templateId": "dneskai-single-type",
       "version": "1.1.0",
-      "pngHash": "ea82edbf24265e5b9696f3d1632d2b71d535ac77d4197d991f1438b5efa7ca68"
+      "pngHash": "8c6c8bb832cda2f0758291ec56c85c3edd50321f5f831caea1428bbb1c8a1989"
     }
   ]
 }

@@ -53,6 +53,9 @@ const text = (slot: string, frame: Box, options: TextOptions): CarouselLayerInpu
   maxFontSize: 48,
   maxChars: 120,
   maxLines: 3,
+  // Every kit slot keeps the Czech ties: no line ends on v, k, s, z, o, u, a or i, and a number
+  // keeps its digit groups and its unit.
+  keepWithNext: "cs",
   ...options
 });
 
