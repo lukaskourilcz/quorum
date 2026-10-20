@@ -80,7 +80,7 @@ describe("the DNESKAi layout", () => {
   it.each(FLOWED)("%s passes every kit check laid out for the longest, the shortest and only the required words", (id) => {
     const template = DNESKAI_PHOTO_TEMPLATES.get(id)!;
     // Only what a slide must carry: an empty frame still stands somewhere and is still measured.
-    const required = { headline: "Jen titulek", title: "Zdroje", "source-1": "Jediný zdroj", "images-label": "Použité obrázky", disclosure: "Text připravil jazykový model." };
+    const required: Record<string, string> = { headline: "Jen titulek", title: "Zdroje", "source-1": "Jediný zdroj", "images-label": "Použité obrázky", disclosure: "Text připravil jazykový model." };
     const slots = Object.keys(picturesFor(template));
     const pictureSets = [
       picturesFor(template),
