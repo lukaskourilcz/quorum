@@ -7,6 +7,7 @@ import { appendFile, readFile } from "node:fs/promises";
 import path from "node:path";
 import { pathToFileURL } from "node:url";
 import { repoRoot } from "../paths.js";
+import { loadVentureRegistry, pausedVentureIds } from "../ventures/registry.js";
 import {
   DELIVERY_FAILURE_CODES,
   isDeliveryFailureCode,
@@ -60,10 +61,22 @@ async function runRecipes(date?: string): Promise<Awaited<ReturnType<typeof draf
   });
 }
 
-async function main(): Promise<void> {
-  const rawArgs = process.argv.slice(2);
+export async function main(rawArgs: string[] = process.argv.slice(2)): Promise<void> {
   const args = rawArgs[0] === "--" ? rawArgs.slice(1) : rawArgs;
   const command = args[0] ?? "next";
+  // The owner's article pause (quorum#602) holds both commands that move an article toward the
+  // magazine, before either reads the queue. A paused Caught Up releases no approved review,
+  // drafts no recipe post, selects no package and supersedes no stale notice, so every record
+  // stays exactly where it is until the owner resumes. `record` stays open: it only writes the
+  // receipt of a delivery that already ran.
+  if ((command === "reviewed" || command === "next") && pausedVentureIds(await loadVentureRegistry()).has("caught-up")) {
+    const output = valueAfter(args, "--github-output");
+    if (command === "next" && output) await appendFile(output, "has_package=false\n");
+    console.log(JSON.stringify(command === "next"
+      ? { has_package: "false", paused: "caught-up" }
+      : { artifacts: [], recipes: [], paused: "caught-up" }));
+    return;
+  }
   if (command === "reviewed") {
     const artifacts = await releaseReviewedArticles({
       readLesson: (date) => readDailyDatasetEntry({ dataset: "ai-lessons", date })

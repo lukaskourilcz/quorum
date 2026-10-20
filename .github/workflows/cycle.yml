@@ -415,11 +415,24 @@ jobs:
           # never delivered at all (14, 15, 17 and 23 September 2026). Both phases deliver now;
           # the outbox skips a date that already shipped, so the retry stays a no-op on a
           # delivered morning.
+          #
+          # A paused Caught Up delivers nothing (quorum#602). Its rooms end at the pause chokepoint
+          # in runCycle, and an approved article waits in the review queue until the owner resumes.
+          caught_up_status="$(jq -r '[.ventures[] | select(.id == "caught-up") | .status][0] // ""' config/ventures.json)"
           caught_up_delivery=false
-          if test "$phase" = "cu-day" || test "$phase" = "cu-edition"; then
+          if test "$caught_up_status" != "paused" && { test "$phase" = "cu-day" || test "$phase" = "cu-edition"; }; then
             caught_up_delivery=true
           fi
           echo "caught_up_delivery=$caught_up_delivery" >> "$GITHUB_OUTPUT"
+          # Which run syncs the DNESKAi streams and events. They ride the DNESKAi day, and when the
+          # owner pauses Caught Up that day stops firing while the reader files must keep moving.
+          # So a paused Caught Up hands the sync to the 06:00 morning, the one slot a venture pause
+          # never takes off the clock. Neither path calls a model.
+          caught_up_sync="$caught_up_delivery"
+          if test "$caught_up_status" = "paused" && test "$phase" = "morning"; then
+            caught_up_sync=true
+          fi
+          echo "caught_up_sync=$caught_up_sync" >> "$GITHUB_OUTPUT"
 
       # Skipped on a delivery-only dispatch, where "Run cycle" does not run, so this gate and
       # the post-cycle one would compile, test and build a byte-identical tree twice for one
@@ -1142,10 +1155,11 @@ jobs:
 
       # Streams and events are jobs inside the existing daily cycle, not a new
       # phase and not a new cron. They spend no model budget: nothing on this
-      # path calls a model, so they sit outside the model share entirely.
+      # path calls a model, so they sit outside the model share entirely. They
+      # ride the DNESKAi day, or the morning while Caught Up is paused.
       - name: Mint bounded aifirst token for the stream and event sync
         id: sync-token
-        if: ${{ steps.guard.outputs.proceed == 'true' && steps.mode.outputs.skip != 'true' && steps.mode.outputs.dry != 'true' && steps.mode.outputs.caught_up_delivery == 'true' && vars.CAUGHT_UP_STREAMS_ENABLED == 'true' }}
+        if: ${{ steps.guard.outputs.proceed == 'true' && steps.mode.outputs.skip != 'true' && steps.mode.outputs.dry != 'true' && steps.mode.outputs.caught_up_sync == 'true' && vars.CAUGHT_UP_STREAMS_ENABLED == 'true' }}
         uses: actions/create-github-app-token@bcd2ba49218906704ab6c1aa796996da409d3eb1 # v3.0.0
         with:
           client-id: ${{ secrets.DELIVERY_APP_ID }}
