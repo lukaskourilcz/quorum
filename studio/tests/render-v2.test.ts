@@ -206,6 +206,31 @@ describe("rendering several photographs with crops", () => {
   });
 });
 
+describe("the border", () => {
+  it("frames a contained picture where it is drawn, and a covering one at its frame", async () => {
+    const wide = await quadrants(600, 200);
+    const layers = (fit: "cover" | "contain"): CarouselLayerInput[] => [
+      { type: "image", slot: "image-1", optional: false, fit, x: 0.1, y: 0.1, width: 0.8, height: 0.4, border: { colorToken: "muted", width: 2 } },
+      { ...headline, colorToken: "foreground", valign: undefined, y: 0.6 }
+    ];
+    const template = (fit: "cover" | "contain") => CarouselTemplateSchema.parse({ ...photoTemplate(), slides: [{ id: "slide-border", backgroundToken: "background", layers: layers(fit), variants: [] }] });
+    const [contained] = renderCarouselSvg(input(template("contain"), { "image-1": wide }));
+    // 864 × 540 frame at (108, 135); a 3:1 picture fills the width at 288 px high, centred.
+    expect(contained!.svg).toContain('<rect x="107" y="260" width="866" height="290" fill="none" stroke="#3c4149" stroke-width="2"/>');
+    const [covered] = renderCarouselSvg(input(template("cover"), { "image-1": wide }));
+    expect(covered!.svg).toContain('<rect x="107" y="134" width="866" height="542" fill="none" stroke="#3c4149" stroke-width="2"/>');
+  });
+
+  it("is a carousel-template/2 field", () => {
+    const parsed = CarouselTemplateSchema.safeParse({
+      ...photoTemplate(),
+      schemaVersion: "carousel-template/1",
+      slides: [{ id: "slide-v1", backgroundToken: "background", layers: [{ type: "image", slot: "image", optional: true, fit: "cover", x: 0, y: 0, width: 1, height: 0.5, border: { colorToken: "muted", width: 2 } }, { ...headline, valign: undefined }] }]
+    });
+    expect(parsed.success ? [] : parsed.error.issues.map((issue) => issue.message)).toContain("border is a carousel-template/2 field");
+  });
+});
+
 describe("contrast over a photograph", () => {
   const check = (template: ReturnType<typeof photoTemplate>) =>
     validateTemplateAsRendered(template, brand, "instagram-portrait").find((entry) => entry.id === "contrast")!;

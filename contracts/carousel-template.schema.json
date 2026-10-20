@@ -780,6 +780,25 @@
                         "stops"
                       ],
                       "additionalProperties": false
+                    },
+                    "border": {
+                      "type": "object",
+                      "properties": {
+                        "colorToken": {
+                          "type": "string",
+                          "pattern": "^[a-z][a-z0-9-]*$"
+                        },
+                        "width": {
+                          "type": "number",
+                          "minimum": 0.5,
+                          "maximum": 12
+                        }
+                      },
+                      "required": [
+                        "colorToken",
+                        "width"
+                      ],
+                      "additionalProperties": false
                     }
                   },
                   "required": [

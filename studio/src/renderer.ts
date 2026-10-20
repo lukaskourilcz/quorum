@@ -193,10 +193,17 @@ function layerSvg(input: {
     // A cropped photograph has been cut to the frame's shape (or, contained, kept whole) in sharp,
     // so `slice` and `meet` place it without cutting anything further.
     const fit = input.payload.images?.[layer.slot]?.fit ?? layer.fit;
+    let border = "";
+    if (layer.border) {
+      const drawn = fit === "contain" ? containedRect(bytes, { x, y, w, h }) : { x, y, w, h };
+      const line = layer.border.width;
+      border = `<rect x="${round(drawn.x - line / 2)}" y="${round(drawn.y - line / 2)}" width="${round(drawn.w + line)}" height="${round(drawn.h + line)}" fill="none" stroke="${color(layer.border.colorToken)}" stroke-width="${line}"/>`;
+    }
     return `<defs><clipPath id="${id}-clip">${window}</clipPath></defs>`
       + `<image href="${href}" x="${x}" y="${y}" width="${w}" height="${h}" preserveAspectRatio="${fit === "cover" ? "xMidYMid slice" : "xMidYMid meet"}" clip-path="url(#${id}-clip)"/>`
       + scrim
-      + shade;
+      + shade
+      + border;
   }
   const fitted = fitTextLayer(layer, payload, brand, width, height);
   if (fitted.truncated) input.truncatedSlots?.push(layer.slot);
@@ -227,6 +234,25 @@ function layerSvg(input: {
   // legacy name its recorded hashes were drawn with, until those are re-recorded on purpose.
   const family = brand.kit ? face.rasterFamily : face.familyName;
   return `${glow}<text x="${textX}" y="${baseline}" text-anchor="${anchor}" fill="${color(layer.colorToken)}" font-family="${escapeXml(family)}" font-size="${fitted.fontSize}" font-weight="${face.weight}"${tracking}${filter}>${tspans}</text>`;
+}
+
+/**
+ * Where a contained picture lands inside its frame: centred, at the largest scale that fits.
+ *
+ * Read from the PNG's own header, which every caller hands over (`toRenderablePng` and the crop
+ * both emit PNG). Bytes that are not PNG fall back to the whole frame, which frames the window
+ * rather than the picture — a looser line, never a line through the picture.
+ */
+function containedRect(bytes: Buffer, frame: { x: number; y: number; w: number; h: number }): { x: number; y: number; w: number; h: number } {
+  const isPng = bytes.length >= 24 && bytes.readUInt32BE(0) === 0x89504e47 && bytes.toString("ascii", 12, 16) === "IHDR";
+  if (!isPng) return frame;
+  const width = bytes.readUInt32BE(16);
+  const height = bytes.readUInt32BE(20);
+  if (!width || !height) return frame;
+  const scale = Math.min(frame.w / width, frame.h / height);
+  const w = width * scale;
+  const h = height * scale;
+  return { x: frame.x + (frame.w - w) / 2, y: frame.y + (frame.h - h) / 2, w, h };
 }
 
 /**

@@ -223,7 +223,13 @@ const ImageLayerSchema = FrameSchema.extend({
    */
   reprise: z.boolean().default(false),
   /** v2 only. See `ShadeSchema`. */
-  shade: ShadeSchema.optional()
+  shade: ShadeSchema.optional(),
+  /**
+   * v2 only: a hairline around the picture as drawn — the frame for `cover`, the contained
+   * rectangle for `contain` — so a wide chart in a tall frame is framed where it is, not where its
+   * frame is. Drawn outside the picture's edge, so it never covers a pixel of it.
+   */
+  border: z.object({ colorToken: TokenNameSchema, width: z.number().finite().min(0.5).max(12) }).optional()
 });
 
 /**
@@ -385,6 +391,9 @@ export const CarouselTemplateSchema = z.object({
         }
         if (!v2 && layer.shade !== undefined) {
           context.addIssue({ code: "custom", message: `shade is a ${CAROUSEL_TEMPLATE_V2} field`, path: at("shade") });
+        }
+        if (!v2 && layer.border !== undefined) {
+          context.addIssue({ code: "custom", message: `border is a ${CAROUSEL_TEMPLATE_V2} field`, path: at("border") });
         }
         // One slot is one photograph. Required on one slide and optional on another would make
         // the same missing bytes a refusal or a bare slide depending on which slide was asked for.
