@@ -452,9 +452,6 @@ export const BrandTokensSchema = z.object({
   })
 });
 
-// Strict at the final render boundary: metadata from upstream records must be selected into
-// strings deliberately. In particular, an admin-only BOOKSOFHISTORY coverRef cannot hitch a ride
-// into a payload and become artwork merely because a caller spread a seed record here.
 /**
  * How one photograph is framed in its slot: the point to keep in view, how far to zoom in, and
  * whether the frame is filled or the whole picture shown.
@@ -473,6 +470,11 @@ export const ImageCropSchema = z.strictObject({
   fit: z.enum(["cover", "contain"]).optional()
 });
 
+// Strict at the final render boundary: metadata from upstream records must be selected into
+// strings deliberately. In particular, an admin-only BOOKSOFHISTORY coverRef cannot hitch a ride
+// into a payload and become artwork merely because a caller spread a seed record here. The one
+// non-string key, `images`, holds crop records only — a focal point, a zoom, a fit and an asset
+// hash — never bytes, a URL or a reference a photograph could be fetched from.
 export const CarouselPayloadSchema = z.strictObject({
   locale: z.enum(["en", "cs"]),
   strings: z.record(SlotNameSchema, z.string().max(2_000)),
