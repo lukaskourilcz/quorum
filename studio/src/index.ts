@@ -10,6 +10,7 @@ export * from "./validation.js";
 export * from "./platform-limits.js";
 export * from "./contrast-apca.js";
 export * from "./renderer.js";
+export { cropImage, cropRegion, type CropRegion } from "./images.js";
 export * from "./lifecycle.js";
 export * from "./designs.js";
 export * from "./library.js";
