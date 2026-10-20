@@ -79,8 +79,9 @@ brand skins. Separate regression assertions prove that A/B, type scale 0.9/1/1.1
 - **overflow** — the resolved face's committed average advance plus tracking proves the declared
   character limit can fit at minimum size
 - **contrast** — every text and logo colour ≥ 4.5:1 on every ground the rendering can place under it
-- **frames** — every layer stays inside the canvas, no slide exceeds 24 layers, and there is at
-  most one distinct optional image slot
+- **frames** — every layer stays inside the canvas, no slide exceeds 24 layers, and a
+  `carousel-template/1` template has at most one distinct optional image slot (a
+  `carousel-template/2` template may hold twenty, see below)
 
 Contrast reads what is actually behind the words: the slide's ground, any mesh over it, and the
 topmost opaque `shape`, gradient or duotone image whose frame contains the text. Containment is
@@ -89,9 +90,10 @@ covers its passage is measured against the ground, so it passes the check while 
 illegible type on colour. Every family that sets words on a field draws that field so it contains
 the frame.
 
-One limit is real and stated rather than papered over: an untreated photograph cannot be checked,
-because its pixels are the article's and not the template's. A slide carrying one relies on the
-scrim its image layer draws.
+One limit is real and stated rather than papered over: in a `carousel-template/1` slide an
+untreated photograph cannot be checked, because its pixels are the article's and not the
+template's, and the slide relies on the scrim its image layer draws. A `carousel-template/2` slide
+is measured against the photograph instead; see below.
 
 ## Additive fields now shipped
 
@@ -104,6 +106,55 @@ scrim its image layer draws.
 
 Anything marked `"v2": true` in the founding JSON is one of these additions. The current schema
 accepts them directly with backward-compatible defaults where applicable.
+
+## carousel-template/2
+
+The second template language (quorum#603), added beside the first rather than over it. It exists
+because a DNESKAi Instagram post carries several pictures from its sources, and v1 allowed one.
+`schemaVersion` is the switch: every field below is refused in a `carousel-template/1` document,
+so a v1 template parses to the object it always did and renders the bytes it always did. The 30
+family hashes in `studio/golden/manifest.json` did not move.
+
+| Field | Layer | What it does |
+|---|---|---|
+| `slot` | `image` | `image`, or `image-1` to `image-99` (`IMAGE_SLOT_PATTERN`). Several distinct slots per template, several on one slide, at most twenty (`MAX_IMAGE_SLOTS`). v1 keeps the one slot named `image`. |
+| `optional: false` | `image` | A required photograph. The renderer throws when its slot has no bytes, for every slide of the template, instead of drawing the slide bare. One slot cannot be required on one slide and optional on another. |
+| `shade` | `image` | One colour token and two to six stops (`at`, `opacity`) running top to bottom of the image frame. Drawn only with the photograph, inside its window. |
+| `border` | `image` | A hairline (`colorToken`, `width`) around the picture as drawn: the frame for `cover`, the contained rectangle for `contain`, read from the PNG header. Drawn outside the picture's edge. |
+| `valign` | `text` | `top` (the absent default), `middle` or `bottom`. A bottom-anchored headline keeps its last line on the frame's floor at any line count. A `padText` panel follows the words it hugs. |
+
+**Crops live in the payload.** `CarouselPayload.images` maps an image slot to
+`{ assetSha256?, focal: { x, y }, zoom?, fit? }`: the point that stays in view as fractions of the
+source, a zoom of 1 to 8, and an optional override of the layer's fit. It is hashed with the words,
+so an approval covers the crop that was seen. The bytes are not in the payload; `assetSha256` names
+which file the crop was set on.
+
+**Crops are cut in sharp, before embedding.** `cropRegion` takes the largest region of the frame's
+own shape (`cover`) or the whole picture (`contain`), divides it by the zoom around the focal
+point, slides it back inside the picture, and `cropImage` resamples it to the frame's pixel size.
+Equal bytes and an equal crop give an equal PNG hash. A slot is cut for the first layer that draws
+it; a reprise shows that cut through its own window. `prepareCarouselImages` crops and then treats,
+and returns the caller's record untouched when nothing asks for either. It is idempotent, so
+preparing and then rendering never crops a crop or tints a duotone twice. Each cut remembers the
+crop and frame it was made for, and bytes prepared for another crop are refused rather than drawn
+as this one. The synchronous `renderCarouselSvg` cannot run sharp, so it refuses bytes that were
+not cut for the payload's crop and names `prepareCarouselImages`.
+
+**Templates in state stay v1.** v2 is the code-owned DNESKAi kit's format. A council proposal in
+`carousel-template/2` is refused before it is written (`processStudioContribution`), and
+`resolveLiveCarouselTemplate` refuses a v2 file found under `state/ventures/carousel-studio/`,
+because a stored template rendered without its required photographs would throw, where v1 never
+lets a missing photograph cost the words.
+
+**Words over a photograph are measured.** In a v2 slide, a text frame inside an image frame is
+checked against a white photograph and a black one, each seen through the layer's scrim and shade
+at the weakest point under the frame (`photographGrounds` in `studio/src/grounds.ts`). Words on a
+bare photograph therefore fail both readability floors. An optional photograph's words are also
+measured against the ground they stand on without it. Logos keep the v1 rule: the renderer draws
+the kit's file approved for photographs.
+
+The DNESKAi photo kit (`studio/src/dneskai-photo.ts`) is the first set written in v2. Its layouts
+and the API that renders them are in `README.md`; its measurements are in `TOKENS.md`.
 
 ## When there is no photograph
 

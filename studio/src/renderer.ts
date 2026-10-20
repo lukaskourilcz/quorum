@@ -10,7 +10,8 @@ import {
   type CarouselPayload,
   type CarouselTemplate
 } from "./schema.js";
-import { fitText } from "./text.js";
+import { fitText, type FittedText } from "./text.js";
+import { isCutFor, prepareCarouselImages } from "./images.js";
 import { fontFiles, measureEm, resolveFace } from "./fonts.js";
 import { validateTemplateForBrand, type TemplateCheck } from "./validation.js";
 import { groundsBehindLayer, type SlideRendering } from "./grounds.js";
@@ -93,7 +94,13 @@ function layerSvg(input: {
     const hug = layer.padText === undefined ? null : input.hugged?.[layer.padText];
     const padding = px(layer.padding, Math.min(width, height));
     const panelHeight = hug === undefined || hug === null ? h : Math.min(h, hug + padding * 2);
-    return `<rect x="${x}" y="${y}" width="${w}" height="${panelHeight}" rx="${px(layer.radius, Math.min(w, panelHeight))}" fill="${token(brand, fill)}"${stroke}/>`;
+    // A panel hugging bottom- or middle-anchored words sits where the words do, not at its top.
+    const anchor = layer.padText === undefined
+      ? undefined
+      : input.slide.slide.layers.find((candidate) => candidate.type === "text" && candidate.slot === layer.padText);
+    const valign = anchor?.type === "text" ? anchor.valign : undefined;
+    const panelY = valign === "bottom" ? round(y + h - panelHeight) : valign === "middle" ? round(y + (h - panelHeight) / 2) : y;
+    return `<rect x="${x}" y="${panelY}" width="${w}" height="${panelHeight}" rx="${px(layer.radius, Math.min(w, panelHeight))}" fill="${token(brand, fill)}"${stroke}/>`;
   }
   if (layer.type === "rule") {
     const thickness = Math.max(layer.thickness, h);
@@ -177,15 +184,39 @@ function layerSvg(input: {
     const scrim = layer.scrim === "none" ? "" : layer.scrim === "full"
       ? `<rect x="${x}" y="${y}" width="${w}" height="${h}" fill="${token(brand, "background")}" opacity="0.55"/>`
       : `<defs><linearGradient id="${id}-scrim" x1="0" y1="0" x2="0" y2="1"><stop offset="55%" stop-color="${token(brand, "background")}" stop-opacity="0"/><stop offset="100%" stop-color="${token(brand, "background")}" stop-opacity="0.96"/></linearGradient></defs><rect x="${x}" y="${y}" width="${w}" height="${h}" fill="url(#${id}-scrim)"/>`;
+    // One ink at varying opacity, inside the photograph's own window and only with a photograph.
+    const shade = layer.shade
+      ? `<defs><linearGradient id="${id}-shade" x1="0" y1="0" x2="0" y2="1">${layer.shade.stops.map((stop) =>
+        `<stop offset="${round(stop.at)}" stop-color="${color(layer.shade!.colorToken)}" stop-opacity="${round(stop.opacity)}"/>`).join("")}</linearGradient></defs>`
+        + `<rect x="${x}" y="${y}" width="${w}" height="${h}" fill="url(#${id}-shade)" clip-path="url(#${id}-clip)"/>`
+      : "";
+    // A cropped photograph has been cut to the frame's shape (or, contained, kept whole) in sharp,
+    // so `slice` and `meet` place it without cutting anything further.
+    const fit = input.payload.images?.[layer.slot]?.fit ?? layer.fit;
+    let border = "";
+    if (layer.border) {
+      const drawn = fit === "contain" ? containedRect(bytes, { x, y, w, h }) : { x, y, w, h };
+      const line = layer.border.width;
+      border = `<rect x="${round(drawn.x - line / 2)}" y="${round(drawn.y - line / 2)}" width="${round(drawn.w + line)}" height="${round(drawn.h + line)}" fill="none" stroke="${color(layer.border.colorToken)}" stroke-width="${line}"/>`;
+    }
     return `<defs><clipPath id="${id}-clip">${window}</clipPath></defs>`
-      + `<image href="${href}" x="${x}" y="${y}" width="${w}" height="${h}" preserveAspectRatio="${layer.fit === "cover" ? "xMidYMid slice" : "xMidYMid meet"}" clip-path="url(#${id}-clip)"/>`
-      + scrim;
+      + `<image href="${href}" x="${x}" y="${y}" width="${w}" height="${h}" preserveAspectRatio="${fit === "cover" ? "xMidYMid slice" : "xMidYMid meet"}" clip-path="url(#${id}-clip)"/>`
+      + scrim
+      + shade
+      + border;
   }
   const fitted = fitTextLayer(layer, payload, brand, width, height);
   if (fitted.truncated) input.truncatedSlots?.push(layer.slot);
   const anchor = layer.align === "start" ? "start" : layer.align;
   const textX = layer.align === "start" ? x : layer.align === "middle" ? x + w / 2 : x + w;
   const lineHeight = fitted.fontSize * 1.12;
+  // The block is the same height a hugging panel measures, so a panel and its words agree.
+  const block = fitted.lines.length * lineHeight;
+  const baseline = layer.valign === "bottom"
+    ? round(y + h - block + fitted.fontSize)
+    : layer.valign === "middle"
+      ? round(y + (h - block) / 2 + fitted.fontSize)
+      : y + fitted.fontSize;
   const tspans = fitted.lines.map((line, index) =>
     `<tspan x="${textX}" dy="${index === 0 ? 0 : lineHeight}">${escapeXml(line)}</tspan>`
   ).join("");
@@ -202,7 +233,26 @@ function layerSvg(input: {
   // A kitted brand names the face the way the rasteriser finds it. Every other brand keeps the
   // legacy name its recorded hashes were drawn with, until those are re-recorded on purpose.
   const family = brand.kit ? face.rasterFamily : face.familyName;
-  return `${glow}<text x="${textX}" y="${y + fitted.fontSize}" text-anchor="${anchor}" fill="${color(layer.colorToken)}" font-family="${escapeXml(family)}" font-size="${fitted.fontSize}" font-weight="${face.weight}"${tracking}${filter}>${tspans}</text>`;
+  return `${glow}<text x="${textX}" y="${baseline}" text-anchor="${anchor}" fill="${color(layer.colorToken)}" font-family="${escapeXml(family)}" font-size="${fitted.fontSize}" font-weight="${face.weight}"${tracking}${filter}>${tspans}</text>`;
+}
+
+/**
+ * Where a contained picture lands inside its frame: centred, at the largest scale that fits.
+ *
+ * Read from the PNG's own header, which every caller hands over (`toRenderablePng` and the crop
+ * both emit PNG). Bytes that are not PNG fall back to the whole frame, which frames the window
+ * rather than the picture — a looser line, never a line through the picture.
+ */
+function containedRect(bytes: Buffer, frame: { x: number; y: number; w: number; h: number }): { x: number; y: number; w: number; h: number } {
+  const isPng = bytes.length >= 24 && bytes.readUInt32BE(0) === 0x89504e47 && bytes.toString("ascii", 12, 16) === "IHDR";
+  if (!isPng) return frame;
+  const width = bytes.readUInt32BE(16);
+  const height = bytes.readUInt32BE(20);
+  if (!width || !height) return frame;
+  const scale = Math.min(frame.w / width, frame.h / height);
+  const w = width * scale;
+  const h = height * scale;
+  return { x: frame.x + (frame.w - w) / 2, y: frame.y + (frame.h - h) / 2, w, h };
 }
 
 /**
@@ -276,6 +326,35 @@ function fitTextLayer(
     fontFamily: brand.fonts[layer.fontToken],
     fontWeight: layer.fontWeight
   });
+}
+
+/** One text slot as the renderer sets it: its lines, its size and whether anything was cut. */
+export interface TextSlotFit {
+  slideIndex: number;
+  slideId: string;
+  slot: string;
+  fitted: FittedText;
+}
+
+/**
+ * Every text slot of a template fitted exactly as the renderer will fit it, without drawing.
+ *
+ * For a caller that has to say "this headline will be cut" before it has the photographs a render
+ * needs. Same parse, same kit faces and the same canvas as `renderSlides`; the ground a slide
+ * stands on changes colours, never faces, so it is not needed here.
+ */
+export function carouselTextFits(input: Pick<CarouselRenderInput, "template" | "payload" | "brand" | "format">): TextSlotFit[] {
+  const parsed = CarouselTemplateSchema.parse(input.template);
+  const payload = CarouselPayloadSchema.parse(input.payload);
+  const declared = BrandTokensSchema.parse(input.brand);
+  const style = kitStyleFor(declared);
+  const brand = style ? dressBrand(declared, style) : declared;
+  const template = style ? kitTemplate(parsed, style) : parsed;
+  const canvas = template.formats[carouselCanvas(input.format)];
+  return template.slides.flatMap((slide, slideIndex) => slide.layers.flatMap((layer) =>
+    layer.type === "text"
+      ? [{ slideIndex, slideId: slide.id, slot: layer.slot, fitted: fitTextLayer(layer, payload, brand, canvas.width, canvas.height) }]
+      : []));
 }
 
 export interface RenderedSlide {
@@ -401,6 +480,7 @@ function renderSlides(input: CarouselRenderInput, wanted?: number): RenderedSlid
   const template = style ? kitTemplate(parsed, style) : parsed;
   const missing = template.requiredSlots.filter((slot) => payload.strings[slot] === undefined);
   if (missing.length) throw new Error(`Carousel payload is missing slots: ${missing.join(", ")}`);
+  checkImages(template, payload, input);
   // Every ground the deck's slides stand on is checked, whichever slide was asked for.
   const grounded = template.slides.map((_, index) => slideBrand(brand, style, positionOf(input, index, template.slides.length)));
   const checked = new Set<string | null>();
@@ -461,6 +541,33 @@ function renderSlides(input: CarouselRenderInput, wanted?: number): RenderedSlid
   return slide ? [build(slide, wanted)] : [];
 }
 
+/**
+ * The photographs a render was handed, judged against what the template asks for.
+ *
+ * Whole-template, like the slot and brand checks: slide one of a deck whose slide five lacks its
+ * required photograph is refused, because a preview that passes and a deck that throws are one
+ * deck answering two ways. A crop for a slot the template does not carry is refused too — it can
+ * only be a payload written for some other template. And a crop is applied in sharp, which the
+ * synchronous SVG path cannot do, so bytes that `prepareCarouselImages` did not cut for this very
+ * crop and frame are refused rather than drawn uncropped or cut for another crop.
+ */
+function checkImages(template: CarouselTemplate, payload: CarouselPayload, input: CarouselRenderInput): void {
+  const images = input.images;
+  const layers = template.slides.flatMap((slide) => slide.layers.flatMap((layer) => layer.type === "image" ? [layer] : []));
+  const slots = new Set(layers.map((layer) => layer.slot));
+  const required = [...new Set(layers.filter((layer) => !layer.optional).map((layer) => layer.slot))];
+  const absent = required.filter((slot) => !images?.[slot]);
+  if (absent.length) throw new Error(`Carousel images are missing required slots: ${absent.join(", ")}`);
+  const crops = Object.keys(payload.images ?? {});
+  const stray = crops.filter((slot) => !slots.has(slot));
+  if (stray.length) throw new Error(`Carousel payload crops image slots the template does not carry: ${stray.join(", ")}`);
+  const uncut = crops.filter((slot) => images?.[slot] !== undefined && !isCutFor(input, slot, payload.images![slot]!, images[slot]!));
+  if (uncut.length) throw new Error(`Image slots ${uncut.join(", ")} carry a crop their bytes were not cut for; pass the original images through prepareCarouselImages first`);
+}
+
+// The photograph pipeline lives in images.ts; its two long-standing entry points stay importable here.
+export { prepareCarouselImages, treatImage } from "./images.js";
+
 export function renderCarouselSvg(input: CarouselRenderInput): RenderedSlide[] {
   return renderSlides(input);
 }
@@ -472,64 +579,6 @@ export function renderCarouselSvg(input: CarouselRenderInput): RenderedSlide[] {
  */
 export function renderCarouselSlideSvg(input: CarouselRenderInput & { index: number }): RenderedSlide | null {
   return renderSlides(input, input.index)[0] ?? null;
-}
-
-/**
- * The photograph, as the template asked for it.
- *
- * Done with sharp before the bytes reach the SVG, never as an SVG filter: librsvg's filter
- * support is the same quiet-failure surface as its WebP handling, and a treatment that silently
- * does nothing is worse than one that is not offered. `duotone` multiplies the greyscale by the
- * slide's accent, which is what makes it read as the venture's own colour rather than as a filter.
- *
- * Returns the input untouched when nothing asks for a treatment, so a v1 template's bytes — and
- * therefore its hashes — are exactly what they were.
- */
-export async function treatImage(
-  bytes: Buffer,
-  treatment: "none" | "mono" | "duotone",
-  accentHex: string
-): Promise<Buffer> {
-  if (treatment === "none") return bytes;
-  const { default: sharp } = await import("sharp");
-  const grey = sharp(bytes).greyscale();
-  if (treatment === "mono") return grey.png().toBuffer();
-  const [red, green, blue] = [1, 3, 5].map((offset) => Number.parseInt(accentHex.slice(offset, offset + 2), 16));
-  // Materialize RGB first: greyscale temporarily has one band inside a sharp pipeline,
-  // while toColourspace is an output conversion and runs after linear.
-  const rgb = await grey.toColourspace("srgb").png().toBuffer();
-  return sharp(rgb)
-    .linear([red! / 255, green! / 255, blue! / 255], [0, 0, 0])
-    .png()
-    .toBuffer();
-}
-
-async function treatedImages(input: CarouselRenderInput): Promise<CarouselRenderInput["images"]> {
-  const images = input.images;
-  if (!images) return images;
-  const wanted = new Map<string, "mono" | "duotone">();
-  for (const slide of input.template.slides) {
-    const variant = input.payload.variant
-      ? slide.variants.find((candidate) => candidate.id === input.payload.variant)
-      : undefined;
-    for (const layer of slide.layers) {
-      if (layer.type !== "image" || layer.treatment === "none") continue;
-      // One slot may appear twice — a reprise — and both appearances share the treated bytes.
-      wanted.set(`${layer.slot}\0${variant?.accentToken ?? "accent"}`, layer.treatment);
-    }
-  }
-  if (wanted.size === 0) return images;
-  // The kit's accent, not the tokens a caller passed: a duotone is drawn in the brand's colour.
-  const style = kitStyleFor(input.brand);
-  const brand = style ? dressBrand(input.brand, style) : input.brand;
-  const treated: Record<string, Buffer> = { ...images };
-  for (const [key, treatment] of wanted) {
-    const [slot, accentToken] = key.split("\0") as [string, string];
-    const source = images[slot];
-    if (!source) continue;
-    treated[slot] = await treatImage(source, treatment, token(brand, accentToken));
-  }
-  return treated;
 }
 
 /*
@@ -561,7 +610,7 @@ async function rasterise(
 export async function renderCarouselPng(
   input: CarouselRenderInput
 ): Promise<Array<RenderedSlide & { png: Buffer; pngHash: string }>> {
-  return rasterise(renderSlides({ ...input, images: await treatedImages(input) }));
+  return rasterise(renderSlides({ ...input, images: await prepareCarouselImages(input) }));
 }
 
 /**
@@ -574,7 +623,7 @@ export async function renderCarouselPng(
 export async function renderCarouselSlidePng(
   input: CarouselRenderInput & { index: number }
 ): Promise<(RenderedSlide & { png: Buffer; pngHash: string }) | null> {
-  const [rendered] = await rasterise(renderSlides({ ...input, images: await treatedImages(input) }, input.index));
+  const [rendered] = await rasterise(renderSlides({ ...input, images: await prepareCarouselImages(input) }, input.index));
   return rendered ?? null;
 }
 

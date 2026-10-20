@@ -106,6 +106,58 @@
                         "variant": {
                           "type": "string",
                           "pattern": "^[A-Z][A-Z0-9-]*$"
+                        },
+                        "images": {
+                          "type": "object",
+                          "propertyNames": {
+                            "type": "string",
+                            "pattern": "^image(?:-[1-9][0-9]?)?$"
+                          },
+                          "additionalProperties": {
+                            "type": "object",
+                            "properties": {
+                              "assetSha256": {
+                                "type": "string",
+                                "pattern": "^[0-9a-f]{64}$"
+                              },
+                              "focal": {
+                                "type": "object",
+                                "properties": {
+                                  "x": {
+                                    "type": "number",
+                                    "minimum": 0,
+                                    "maximum": 1
+                                  },
+                                  "y": {
+                                    "type": "number",
+                                    "minimum": 0,
+                                    "maximum": 1
+                                  }
+                                },
+                                "required": [
+                                  "x",
+                                  "y"
+                                ],
+                                "additionalProperties": false
+                              },
+                              "zoom": {
+                                "type": "number",
+                                "minimum": 1,
+                                "maximum": 8
+                              },
+                              "fit": {
+                                "type": "string",
+                                "enum": [
+                                  "cover",
+                                  "contain"
+                                ]
+                              }
+                            },
+                            "required": [
+                              "focal"
+                            ],
+                            "additionalProperties": false
+                          }
                         }
                       },
                       "required": [
@@ -211,6 +263,58 @@
                         "variant": {
                           "type": "string",
                           "pattern": "^[A-Z][A-Z0-9-]*$"
+                        },
+                        "images": {
+                          "type": "object",
+                          "propertyNames": {
+                            "type": "string",
+                            "pattern": "^image(?:-[1-9][0-9]?)?$"
+                          },
+                          "additionalProperties": {
+                            "type": "object",
+                            "properties": {
+                              "assetSha256": {
+                                "type": "string",
+                                "pattern": "^[0-9a-f]{64}$"
+                              },
+                              "focal": {
+                                "type": "object",
+                                "properties": {
+                                  "x": {
+                                    "type": "number",
+                                    "minimum": 0,
+                                    "maximum": 1
+                                  },
+                                  "y": {
+                                    "type": "number",
+                                    "minimum": 0,
+                                    "maximum": 1
+                                  }
+                                },
+                                "required": [
+                                  "x",
+                                  "y"
+                                ],
+                                "additionalProperties": false
+                              },
+                              "zoom": {
+                                "type": "number",
+                                "minimum": 1,
+                                "maximum": 8
+                              },
+                              "fit": {
+                                "type": "string",
+                                "enum": [
+                                  "cover",
+                                  "contain"
+                                ]
+                              }
+                            },
+                            "required": [
+                              "focal"
+                            ],
+                            "additionalProperties": false
+                          }
                         }
                       },
                       "required": [
@@ -333,6 +437,58 @@
                         "variant": {
                           "type": "string",
                           "pattern": "^[A-Z][A-Z0-9-]*$"
+                        },
+                        "images": {
+                          "type": "object",
+                          "propertyNames": {
+                            "type": "string",
+                            "pattern": "^image(?:-[1-9][0-9]?)?$"
+                          },
+                          "additionalProperties": {
+                            "type": "object",
+                            "properties": {
+                              "assetSha256": {
+                                "type": "string",
+                                "pattern": "^[0-9a-f]{64}$"
+                              },
+                              "focal": {
+                                "type": "object",
+                                "properties": {
+                                  "x": {
+                                    "type": "number",
+                                    "minimum": 0,
+                                    "maximum": 1
+                                  },
+                                  "y": {
+                                    "type": "number",
+                                    "minimum": 0,
+                                    "maximum": 1
+                                  }
+                                },
+                                "required": [
+                                  "x",
+                                  "y"
+                                ],
+                                "additionalProperties": false
+                              },
+                              "zoom": {
+                                "type": "number",
+                                "minimum": 1,
+                                "maximum": 8
+                              },
+                              "fit": {
+                                "type": "string",
+                                "enum": [
+                                  "cover",
+                                  "contain"
+                                ]
+                              }
+                            },
+                            "required": [
+                              "focal"
+                            ],
+                            "additionalProperties": false
+                          }
                         }
                       },
                       "required": [
@@ -438,6 +594,58 @@
                         "variant": {
                           "type": "string",
                           "pattern": "^[A-Z][A-Z0-9-]*$"
+                        },
+                        "images": {
+                          "type": "object",
+                          "propertyNames": {
+                            "type": "string",
+                            "pattern": "^image(?:-[1-9][0-9]?)?$"
+                          },
+                          "additionalProperties": {
+                            "type": "object",
+                            "properties": {
+                              "assetSha256": {
+                                "type": "string",
+                                "pattern": "^[0-9a-f]{64}$"
+                              },
+                              "focal": {
+                                "type": "object",
+                                "properties": {
+                                  "x": {
+                                    "type": "number",
+                                    "minimum": 0,
+                                    "maximum": 1
+                                  },
+                                  "y": {
+                                    "type": "number",
+                                    "minimum": 0,
+                                    "maximum": 1
+                                  }
+                                },
+                                "required": [
+                                  "x",
+                                  "y"
+                                ],
+                                "additionalProperties": false
+                              },
+                              "zoom": {
+                                "type": "number",
+                                "minimum": 1,
+                                "maximum": 8
+                              },
+                              "fit": {
+                                "type": "string",
+                                "enum": [
+                                  "cover",
+                                  "contain"
+                                ]
+                              }
+                            },
+                            "required": [
+                              "focal"
+                            ],
+                            "additionalProperties": false
+                          }
                         }
                       },
                       "required": [
@@ -539,6 +747,58 @@
                 "variant": {
                   "type": "string",
                   "pattern": "^[A-Z][A-Z0-9-]*$"
+                },
+                "images": {
+                  "type": "object",
+                  "propertyNames": {
+                    "type": "string",
+                    "pattern": "^image(?:-[1-9][0-9]?)?$"
+                  },
+                  "additionalProperties": {
+                    "type": "object",
+                    "properties": {
+                      "assetSha256": {
+                        "type": "string",
+                        "pattern": "^[0-9a-f]{64}$"
+                      },
+                      "focal": {
+                        "type": "object",
+                        "properties": {
+                          "x": {
+                            "type": "number",
+                            "minimum": 0,
+                            "maximum": 1
+                          },
+                          "y": {
+                            "type": "number",
+                            "minimum": 0,
+                            "maximum": 1
+                          }
+                        },
+                        "required": [
+                          "x",
+                          "y"
+                        ],
+                        "additionalProperties": false
+                      },
+                      "zoom": {
+                        "type": "number",
+                        "minimum": 1,
+                        "maximum": 8
+                      },
+                      "fit": {
+                        "type": "string",
+                        "enum": [
+                          "cover",
+                          "contain"
+                        ]
+                      }
+                    },
+                    "required": [
+                      "focal"
+                    ],
+                    "additionalProperties": false
+                  }
                 }
               },
               "required": [
@@ -623,6 +883,58 @@
                 "variant": {
                   "type": "string",
                   "pattern": "^[A-Z][A-Z0-9-]*$"
+                },
+                "images": {
+                  "type": "object",
+                  "propertyNames": {
+                    "type": "string",
+                    "pattern": "^image(?:-[1-9][0-9]?)?$"
+                  },
+                  "additionalProperties": {
+                    "type": "object",
+                    "properties": {
+                      "assetSha256": {
+                        "type": "string",
+                        "pattern": "^[0-9a-f]{64}$"
+                      },
+                      "focal": {
+                        "type": "object",
+                        "properties": {
+                          "x": {
+                            "type": "number",
+                            "minimum": 0,
+                            "maximum": 1
+                          },
+                          "y": {
+                            "type": "number",
+                            "minimum": 0,
+                            "maximum": 1
+                          }
+                        },
+                        "required": [
+                          "x",
+                          "y"
+                        ],
+                        "additionalProperties": false
+                      },
+                      "zoom": {
+                        "type": "number",
+                        "minimum": 1,
+                        "maximum": 8
+                      },
+                      "fit": {
+                        "type": "string",
+                        "enum": [
+                          "cover",
+                          "contain"
+                        ]
+                      }
+                    },
+                    "required": [
+                      "focal"
+                    ],
+                    "additionalProperties": false
+                  }
                 }
               },
               "required": [
@@ -695,6 +1007,58 @@
                 "variant": {
                   "type": "string",
                   "pattern": "^[A-Z][A-Z0-9-]*$"
+                },
+                "images": {
+                  "type": "object",
+                  "propertyNames": {
+                    "type": "string",
+                    "pattern": "^image(?:-[1-9][0-9]?)?$"
+                  },
+                  "additionalProperties": {
+                    "type": "object",
+                    "properties": {
+                      "assetSha256": {
+                        "type": "string",
+                        "pattern": "^[0-9a-f]{64}$"
+                      },
+                      "focal": {
+                        "type": "object",
+                        "properties": {
+                          "x": {
+                            "type": "number",
+                            "minimum": 0,
+                            "maximum": 1
+                          },
+                          "y": {
+                            "type": "number",
+                            "minimum": 0,
+                            "maximum": 1
+                          }
+                        },
+                        "required": [
+                          "x",
+                          "y"
+                        ],
+                        "additionalProperties": false
+                      },
+                      "zoom": {
+                        "type": "number",
+                        "minimum": 1,
+                        "maximum": 8
+                      },
+                      "fit": {
+                        "type": "string",
+                        "enum": [
+                          "cover",
+                          "contain"
+                        ]
+                      }
+                    },
+                    "required": [
+                      "focal"
+                    ],
+                    "additionalProperties": false
+                  }
                 }
               },
               "required": [
@@ -852,6 +1216,58 @@
                 "variant": {
                   "type": "string",
                   "pattern": "^[A-Z][A-Z0-9-]*$"
+                },
+                "images": {
+                  "type": "object",
+                  "propertyNames": {
+                    "type": "string",
+                    "pattern": "^image(?:-[1-9][0-9]?)?$"
+                  },
+                  "additionalProperties": {
+                    "type": "object",
+                    "properties": {
+                      "assetSha256": {
+                        "type": "string",
+                        "pattern": "^[0-9a-f]{64}$"
+                      },
+                      "focal": {
+                        "type": "object",
+                        "properties": {
+                          "x": {
+                            "type": "number",
+                            "minimum": 0,
+                            "maximum": 1
+                          },
+                          "y": {
+                            "type": "number",
+                            "minimum": 0,
+                            "maximum": 1
+                          }
+                        },
+                        "required": [
+                          "x",
+                          "y"
+                        ],
+                        "additionalProperties": false
+                      },
+                      "zoom": {
+                        "type": "number",
+                        "minimum": 1,
+                        "maximum": 8
+                      },
+                      "fit": {
+                        "type": "string",
+                        "enum": [
+                          "cover",
+                          "contain"
+                        ]
+                      }
+                    },
+                    "required": [
+                      "focal"
+                    ],
+                    "additionalProperties": false
+                  }
                 }
               },
               "required": [

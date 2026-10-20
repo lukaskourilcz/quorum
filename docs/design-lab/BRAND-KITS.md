@@ -90,6 +90,12 @@ Flat and square, per `BRAND_SYSTEM.md` ("flat surfaces, zero radii"; no gradient
 White, paper and blueprint blue; Space Grotesk headlines, Source Serif 4 words, IBM Plex Mono labels.
 The logo appears on every slide, in the file its ground calls for.
 
+The photo kit (quorum#603) keeps one gradient the flat rule allows: the `shade` over a full-bleed
+photograph, a single `foreground` ink at varying opacity drawn only with the photograph and inside
+its window. It is a legibility device, not a surface, and the contrast check measures the words
+over it against a white and a black photograph. Photographs stay in colour; no DNESKAi template
+asks for `mono` or `duotone`.
+
 ### devShark
 
 The base palette is the pale ground. Slides stand on Ink `#132019`, Pale `#f3f6f1`, Green `#2d7a2d`,

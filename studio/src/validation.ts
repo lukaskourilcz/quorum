@@ -136,6 +136,8 @@ function brandTokenCheck(template: CarouselTemplate, brand: BrandTokens): Templa
       // throw at render time, which is the worst of both: a green check and a broken deck.
       if (layer.type === "mesh") layer.blobs.forEach((blob) => expect(blob.colorToken));
       if (layer.type === "linear-gradient") layer.stops.forEach((stop) => expect(stop.colorToken));
+      if (layer.type === "image" && layer.shade) expect(layer.shade.colorToken);
+      if (layer.type === "image" && layer.border) expect(layer.border.colorToken);
     });
   });
   return failures.size
@@ -216,7 +218,7 @@ export function validateTemplateForBrand(
   format: CarouselFormat
 ): TemplateCheck[] {
   return [
-    { id: "schema", status: "pass", detail: "carousel-template/1 parsed" },
+    { id: "schema", status: "pass", detail: `${template.schemaVersion} parsed` },
     canvasCheck(template, format),
     platformLimitCheck(template, format),
     safeAreaCheck(template, format),
