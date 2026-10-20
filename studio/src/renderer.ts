@@ -11,7 +11,7 @@ import {
   type CarouselTemplate
 } from "./schema.js";
 import { fitText, type FittedText } from "./text.js";
-import { isPrepared, prepareCarouselImages } from "./images.js";
+import { isCutFor, prepareCarouselImages } from "./images.js";
 import { fontFiles, measureEm, resolveFace } from "./fonts.js";
 import { validateTemplateForBrand, type TemplateCheck } from "./validation.js";
 import { groundsBehindLayer, type SlideRendering } from "./grounds.js";
@@ -480,7 +480,7 @@ function renderSlides(input: CarouselRenderInput, wanted?: number): RenderedSlid
   const template = style ? kitTemplate(parsed, style) : parsed;
   const missing = template.requiredSlots.filter((slot) => payload.strings[slot] === undefined);
   if (missing.length) throw new Error(`Carousel payload is missing slots: ${missing.join(", ")}`);
-  checkImages(template, payload, input.images);
+  checkImages(template, payload, input);
   // Every ground the deck's slides stand on is checked, whichever slide was asked for.
   const grounded = template.slides.map((_, index) => slideBrand(brand, style, positionOf(input, index, template.slides.length)));
   const checked = new Set<string | null>();
@@ -548,10 +548,11 @@ function renderSlides(input: CarouselRenderInput, wanted?: number): RenderedSlid
  * required photograph is refused, because a preview that passes and a deck that throws are one
  * deck answering two ways. A crop for a slot the template does not carry is refused too — it can
  * only be a payload written for some other template. And a crop is applied in sharp, which the
- * synchronous SVG path cannot do, so cropped bytes that did not come through
- * `prepareCarouselImages` are refused rather than drawn uncropped.
+ * synchronous SVG path cannot do, so bytes that `prepareCarouselImages` did not cut for this very
+ * crop and frame are refused rather than drawn uncropped or cut for another crop.
  */
-function checkImages(template: CarouselTemplate, payload: CarouselPayload, images: CarouselRenderInput["images"]): void {
+function checkImages(template: CarouselTemplate, payload: CarouselPayload, input: CarouselRenderInput): void {
+  const images = input.images;
   const layers = template.slides.flatMap((slide) => slide.layers.flatMap((layer) => layer.type === "image" ? [layer] : []));
   const slots = new Set(layers.map((layer) => layer.slot));
   const required = [...new Set(layers.filter((layer) => !layer.optional).map((layer) => layer.slot))];
@@ -560,8 +561,8 @@ function checkImages(template: CarouselTemplate, payload: CarouselPayload, image
   const crops = Object.keys(payload.images ?? {});
   const stray = crops.filter((slot) => !slots.has(slot));
   if (stray.length) throw new Error(`Carousel payload crops image slots the template does not carry: ${stray.join(", ")}`);
-  const uncut = crops.filter((slot) => images?.[slot] !== undefined && !isPrepared(images[slot]!));
-  if (uncut.length) throw new Error(`Image slots ${uncut.join(", ")} carry a crop; pass the images through prepareCarouselImages first`);
+  const uncut = crops.filter((slot) => images?.[slot] !== undefined && !isCutFor(input, slot, payload.images![slot]!, images[slot]!));
+  if (uncut.length) throw new Error(`Image slots ${uncut.join(", ")} carry a crop their bytes were not cut for; pass the original images through prepareCarouselImages first`);
 }
 
 // The photograph pipeline lives in images.ts; its two long-standing entry points stay importable here.

@@ -122,10 +122,12 @@ export async function treatImage(
  *
  * `prepareCarouselImages` is exported so a caller can draw the SVG itself, and `renderCarouselPng`
  * prepares too. Without this a caller that prepared and then rendered would crop a crop — the
- * focal point read against an already-cut picture — or tint a duotone twice. A WeakSet keyed by
- * the buffer object, because the bytes are only "prepared" for the render that produced them.
+ * focal point read against an already-cut picture — or tint a duotone twice. Keyed by the buffer
+ * object, because the bytes are only "prepared" for the render that produced them, and a cut
+ * remembers which crop and frame it was made for: bytes cut for one crop are refused for another
+ * instead of being drawn as if they were it.
  */
-const CROPPED = new WeakSet<Buffer>();
+const CROPPED = new WeakMap<Buffer, string>();
 const TREATED = new WeakSet<Buffer>();
 
 function marked(set: WeakSet<Buffer>, bytes: Buffer): Buffer {
@@ -137,6 +139,24 @@ export function isPrepared(bytes: Buffer): boolean {
   return CROPPED.has(bytes) || TREATED.has(bytes);
 }
 
+/** The crop, fit and frame size a slot's cut is made for: equal keys cut equal pixels. */
+function cutFor(input: Pick<CarouselRenderInput, "template" | "format">, slot: string, crop: ImageCrop) {
+  const template = CarouselTemplateSchema.parse(input.template);
+  const canvas = template.formats[carouselCanvas(input.format)];
+  const layer = template.slides.flatMap((slide) => slide.layers).find((candidate) => candidate.type === "image" && candidate.slot === slot);
+  if (layer?.type !== "image") throw new Error(`Carousel payload crops image slot ${slot}, which the template does not carry`);
+  const frame = { width: layer.width * canvas.width, height: layer.height * canvas.height };
+  const fit = crop.fit ?? layer.fit;
+  const key = JSON.stringify([crop.focal.x, crop.focal.y, crop.zoom ?? 1, fit, Math.round(frame.width), Math.round(frame.height)]);
+  return { frame, fit, key };
+}
+
+/** Whether `bytes` are the cut this render's crop of `slot` asks for, made by this module. */
+export function isCutFor(input: Pick<CarouselRenderInput, "template" | "format">, slot: string, crop: ImageCrop, bytes: Buffer): boolean {
+  const made = CROPPED.get(bytes);
+  return made !== undefined && made === cutFor(input, slot, crop).key;
+}
+
 /**
  * Each cropped slot cut for the first layer that draws it.
  *
@@ -146,16 +166,19 @@ export function isPrepared(bytes: Buffer): boolean {
 async function croppedImages(input: CarouselRenderInput, images: Readonly<Record<string, Buffer>>): Promise<Readonly<Record<string, Buffer>>> {
   const crops = CarouselPayloadSchema.parse(input.payload).images;
   if (!crops || Object.keys(crops).length === 0) return images;
-  const template = CarouselTemplateSchema.parse(input.template);
-  const canvas = template.formats[carouselCanvas(input.format)];
   const cut: Record<string, Buffer> = { ...images };
   for (const [slot, crop] of Object.entries(crops)) {
     const bytes = images[slot];
-    if (!bytes || isPrepared(bytes)) continue;
-    const layer = template.slides.flatMap((slide) => slide.layers).find((candidate) => candidate.type === "image" && candidate.slot === slot);
-    if (layer?.type !== "image") throw new Error(`Carousel payload crops image slot ${slot}, which the template does not carry`);
-    const frame = { width: layer.width * canvas.width, height: layer.height * canvas.height };
-    cut[slot] = marked(CROPPED, await cropImage(bytes, crop, frame, crop.fit ?? layer.fit));
+    if (!bytes) continue;
+    const target = cutFor(input, slot, crop);
+    const made = CROPPED.get(bytes);
+    if (made === target.key) continue;
+    if (made !== undefined || TREATED.has(bytes)) {
+      throw new Error(`Image slot ${slot} holds bytes already prepared for another crop or frame; pass the original photograph`);
+    }
+    const bytesCut = await cropImage(bytes, crop, target.frame, target.fit);
+    CROPPED.set(bytesCut, target.key);
+    cut[slot] = bytesCut;
   }
   return cut;
 }
@@ -197,7 +220,11 @@ async function treatedImages(input: CarouselRenderInput): Promise<CarouselRender
     const source = images[slot];
     if (!source) continue;
     if (TREATED.has(source)) continue;
-    treated[slot] = marked(TREATED, await treatImage(source, treatment, tokenValue(brand, accentToken)));
+    const bytes = marked(TREATED, await treatImage(source, treatment, tokenValue(brand, accentToken)));
+    // A treated cut is still that cut, so preparing it again passes it through.
+    const made = CROPPED.get(source);
+    if (made !== undefined) CROPPED.set(bytes, made);
+    treated[slot] = bytes;
   }
   return treated;
 }

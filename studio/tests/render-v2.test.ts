@@ -162,6 +162,31 @@ describe("rendering several photographs with crops", () => {
     expect(svg!.svgHash).toBe(fromRaw!.svgHash);
   });
 
+  it("refuses bytes prepared for another crop instead of drawing them as this one", async () => {
+    const source = await quadrants(1_600, 1_000);
+    const raw = input(photoTemplate(), { "image-1": source }, { "image-1": { focal: { x: 0.3, y: 0.4 }, zoom: 1.4 } });
+    const prepared = await prepareCarouselImages(raw);
+    const other = input(photoTemplate(), prepared!, { "image-1": { focal: { x: 0.8, y: 0.4 }, zoom: 1.4 } });
+    await expect(prepareCarouselImages(other)).rejects.toThrow(/already prepared for another crop or frame/);
+    await expect(renderCarouselPng(other)).rejects.toThrow(/already prepared for another crop or frame/);
+    expect(() => renderCarouselSvg(other)).toThrow(/were not cut for/);
+  });
+
+  it("passes a cropped and treated photograph through a second preparation unchanged", async () => {
+    const plain = photoTemplate();
+    const mono = CarouselTemplateSchema.parse({
+      ...plain,
+      slides: plain.slides.map((slide) => ({ ...slide, layers: slide.layers.map((layer) => layer.type === "image" ? { ...layer, treatment: "mono" } : layer) }))
+    });
+    const raw = input(mono, { "image-1": await quadrants(1_600, 1_000) }, { "image-1": { focal: { x: 0.3, y: 0.4 } } });
+    const prepared = await prepareCarouselImages(raw);
+    const twice = await prepareCarouselImages({ ...raw, images: prepared });
+    expect(twice!["image-1"]).toBe(prepared!["image-1"]);
+    const [fromRaw] = await renderCarouselPng(raw);
+    const [svg] = renderCarouselSvg({ ...raw, images: prepared });
+    expect(svg!.svgHash).toBe(fromRaw!.svgHash);
+  });
+
   it("refuses to draw a crop the synchronous SVG path cannot apply", async () => {
     const source = await quadrants(1_600, 1_000);
     expect(() => renderCarouselSvg(input(photoTemplate(), { "image-1": source }, { "image-1": { focal: { x: 0.3, y: 0.4 } } })))
