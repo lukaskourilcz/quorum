@@ -313,6 +313,14 @@ describe("cycle preflight", () => {
   });
 
   it("carries one VAULT-screened dry morning idea into the product-room verdict", async () => {
+    // The handoff is the subject, not today's Settings: Caught Up paused on 2026-10-20
+    // (quorum#602), and a paused venture never holds the rotation.
+    const registry = await ventureRegistry.loadVentureRegistry();
+    const caughtUp = registry.ventures.find(venture => venture.id === "caught-up")!;
+    caughtUp.status = "operating";
+    delete caughtUp.pausedOn;
+    const registryMock = vi.spyOn(ventureRegistry, "loadVentureRegistry").mockResolvedValue(registry);
+    try {
     // Resolve the date from the live ring. Registering a venture changes the modulo denominator;
     // pinning a historical date made this test silently ask the wrong venture for an idea.
     const date = await dateForRotationTarget("caught-up");
@@ -363,6 +371,9 @@ describe("cycle preflight", () => {
     expect(record.ideaVerdicts).toEqual([
       expect.objectContaining({ ideaId: standup.caughtUpIdeaRef, verdict: expected })
     ]);
+    } finally {
+      registryMock.mockRestore();
+    }
   });
 
   it("rotates the morning idea across the portfolio and leaves the Caught Up room alone", async () => {

@@ -66,7 +66,7 @@ describe("the Design Lab's venture sections", () => {
 });
 
 describe("the Design Lab offers running ventures only (operations-2026-09b)", () => {
-  it("lists only DNESKAi with today's registry", async () => {
+  it("lists DNESKAi and devShark for hand curation with today's registry", async () => {
     expect(await activeDesignLabVentureIds()).toEqual(["caught-up", "devshark"]);
     expect((await readDesignLabSections()).map((section) => section.id)).toEqual(["caught-up", "devshark"]);
   });
@@ -89,6 +89,23 @@ describe("the Design Lab offers running ventures only (operations-2026-09b)", ()
     expect(await activeDesignLabVentureIds(root)).toEqual(["caught-up", "titty-tuesdays", "devshark"]);
     // The renderer's registry is untouched: a paused brand's recorded decks still render.
     expect(isDesignLabVenture("mma-files")).toBe(true);
+  });
+
+  it("keeps DNESKAi for hand curation while its article production is paused (quorum#602)", async () => {
+    const root = await mkdtemp(path.join(os.tmpdir(), "design-lab-dneskai-paused-"));
+    await mkdir(path.join(root, "config"), { recursive: true });
+    await writeFile(path.join(root, "config", "ventures.json"), JSON.stringify({
+      schemaVersion: "venture-registry/1",
+      ventures: [
+        { id: "caught-up", status: "paused" },
+        { id: "mma-files", status: "paused" },
+        { id: "marketingshark", status: "paused" }
+      ]
+    }));
+    await writeFile(path.join(root, "config", "marketingshark.json"), JSON.stringify({
+      brands: [{ id: "devshark", enabled: true }]
+    }));
+    expect(await activeDesignLabVentureIds(root)).toEqual(["caught-up", "devshark"]);
   });
 
   it("offers every brand rather than none when the registry cannot be read", async () => {

@@ -4,7 +4,10 @@
   "properties": {
     "schemaVersion": {
       "type": "string",
-      "const": "carousel-template/1"
+      "enum": [
+        "carousel-template/1",
+        "carousel-template/2"
+      ]
     },
     "id": {
       "type": "string",
@@ -441,6 +444,14 @@
                         "en",
                         "uk"
                       ]
+                    },
+                    "valign": {
+                      "type": "string",
+                      "enum": [
+                        "top",
+                        "middle",
+                        "bottom"
+                      ]
                     }
                   },
                   "required": [
@@ -669,11 +680,10 @@
                     },
                     "slot": {
                       "type": "string",
-                      "const": "image"
+                      "pattern": "^image(?:-[1-9][0-9]?)?$"
                     },
                     "optional": {
-                      "type": "boolean",
-                      "const": true
+                      "type": "boolean"
                     },
                     "fit": {
                       "type": "string",
@@ -731,6 +741,64 @@
                     "reprise": {
                       "default": false,
                       "type": "boolean"
+                    },
+                    "shade": {
+                      "type": "object",
+                      "properties": {
+                        "colorToken": {
+                          "type": "string",
+                          "pattern": "^[a-z][a-z0-9-]*$"
+                        },
+                        "stops": {
+                          "minItems": 2,
+                          "maxItems": 6,
+                          "type": "array",
+                          "items": {
+                            "type": "object",
+                            "properties": {
+                              "at": {
+                                "type": "number",
+                                "minimum": 0,
+                                "maximum": 1
+                              },
+                              "opacity": {
+                                "type": "number",
+                                "minimum": 0,
+                                "maximum": 1
+                              }
+                            },
+                            "required": [
+                              "at",
+                              "opacity"
+                            ],
+                            "additionalProperties": false
+                          }
+                        }
+                      },
+                      "required": [
+                        "colorToken",
+                        "stops"
+                      ],
+                      "additionalProperties": false
+                    },
+                    "border": {
+                      "type": "object",
+                      "properties": {
+                        "colorToken": {
+                          "type": "string",
+                          "pattern": "^[a-z][a-z0-9-]*$"
+                        },
+                        "width": {
+                          "type": "number",
+                          "minimum": 0.5,
+                          "maximum": 12
+                        }
+                      },
+                      "required": [
+                        "colorToken",
+                        "width"
+                      ],
+                      "additionalProperties": false
                     }
                   },
                   "required": [

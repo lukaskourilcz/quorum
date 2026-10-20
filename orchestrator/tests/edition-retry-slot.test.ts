@@ -13,6 +13,28 @@ vi.mock("../src/paths.js", async (importOriginal) => {
   return { ...actual, stateRoot: root };
 });
 
+// The retry is a DNESKAi mechanism, and whether the owner has Caught Up paused today is
+// operational state, not this test's subject: it paused on 2026-10-20 (quorum#602), and the pause
+// chokepoint would end every case below before the retry logic ran. The registry is read with
+// the venture operating so these cases hold whatever Settings says.
+vi.mock("../src/ventures/registry.js", async (importOriginal) => {
+  const actual = await importOriginal<typeof import("../src/ventures/registry.js")>();
+  return {
+    ...actual,
+    loadVentureRegistry: async (...args: Parameters<typeof actual.loadVentureRegistry>) => {
+      const registry = await actual.loadVentureRegistry(...args);
+      return {
+        ...registry,
+        ventures: registry.ventures.map((venture) => {
+          if (venture.id !== "caught-up") return venture;
+          const { pausedOn: _pausedOn, ...running } = venture;
+          return { ...running, status: "operating" as const };
+        })
+      };
+    }
+  };
+});
+
 const { runCycle } = await import("../src/cycle.js");
 
 const testStateRoot = process.env.EDITION_RETRY_TEST_STATE_ROOT!;

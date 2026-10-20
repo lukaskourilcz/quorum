@@ -31,6 +31,24 @@ const UnitSchema = z.number().finite().min(0).max(1);
 const TokenNameSchema = z.string().regex(/^[a-z][a-z0-9-]*$/);
 const SlotNameSchema = z.string().regex(/^[a-z][a-z0-9-]*$/);
 
+/** The first template language: one optional photograph per template, in the slot `image`. */
+export const CAROUSEL_TEMPLATE_V1 = "carousel-template/1" as const;
+/**
+ * The second (quorum#603): several photographs per template and per slide, each in its own slot,
+ * a required photograph that refuses to render without its bytes, a shade over a photograph and
+ * bottom- or middle-anchored text. Everything it adds is refused in a v1 document, so a v1
+ * template parses to exactly the object it always did and renders the bytes it always did.
+ */
+export const CAROUSEL_TEMPLATE_V2 = "carousel-template/2" as const;
+export const CAROUSEL_TEMPLATE_VERSIONS = [CAROUSEL_TEMPLATE_V1, CAROUSEL_TEMPLATE_V2] as const;
+
+/** An image slot: `image`, or `image-1` to `image-99`. v1 allows only `image`. */
+export const IMAGE_SLOT_PATTERN = /^image(?:-[1-9][0-9]?)?$/;
+export const ImageSlotSchema = z.string().regex(IMAGE_SLOT_PATTERN);
+
+/** The most distinct photographs one v2 template may hold: Instagram's own per-post ceiling. */
+export const MAX_IMAGE_SLOTS = 20;
+
 const FrameSchema = z.object({
   x: UnitSchema,
   y: UnitSchema,
@@ -86,7 +104,15 @@ const TextLayerSchema = FrameSchema.extend({
    * advance widths and needs no hint; the capacity arithmetic has no string to measure and would
    * otherwise charge a Cyrillic line the Latin average.
    */
-  lang: PublishingLocaleSchema.optional()
+  lang: PublishingLocaleSchema.optional(),
+  /**
+   * Where the fitted lines sit inside the frame. v2 only, and absent means top.
+   *
+   * The engine top-anchored every passage, so a cover whose headline has to stand on its kicker
+   * line left a gap that grew with every word the headline did not have. A bottom-anchored frame
+   * keeps the last line on the frame's floor whatever the line count.
+   */
+  valign: z.enum(["top", "middle", "bottom"]).optional()
 }).superRefine((layer, context) => {
   if (layer.minFontSize > layer.maxFontSize) {
     context.addIssue({ code: "custom", message: "minFontSize cannot exceed maxFontSize" });
@@ -144,10 +170,35 @@ const LogoLayerSchema = FrameSchema.extend({
   fontToken: z.enum(["headline", "body", "mono"]).default("headline")
 });
 
+/**
+ * A single-ink opacity ramp drawn over a photograph, top to bottom of the image frame.
+ *
+ * A legibility device, not a surface: it is drawn only when the photograph is, inside the
+ * photograph's window, in one token at varying opacity. That is why a flat kit keeps it while it
+ * evens out a fading `scrim` — the flat rule governs grounds, and a shade is never a ground on its
+ * own. The contrast check reads it: text inside the frame is measured against a white and a black
+ * photograph each seen through the shade's weakest point under the text.
+ */
+const ShadeSchema = z.object({
+  colorToken: TokenNameSchema,
+  stops: z.array(z.object({ at: UnitSchema, opacity: UnitSchema })).min(2).max(6)
+}).superRefine((shade, context) => {
+  shade.stops.forEach((stop, index) => {
+    if (index > 0 && stop.at < shade.stops[index - 1]!.at) {
+      context.addIssue({ code: "custom", message: "Shade stops must run top to bottom", path: ["stops", index, "at"] });
+    }
+  });
+});
+
 const ImageLayerSchema = FrameSchema.extend({
   type: z.literal("image"),
-  slot: z.literal("image"),
-  optional: z.literal(true),
+  /** `image` in v1. In v2 any `image-N`, so one template can carry several photographs. */
+  slot: ImageSlotSchema,
+  /**
+   * Whether the slide may draw without the photograph. Always true in v1. A v2 layer that sets it
+   * false makes the renderer throw when the slot has no bytes, instead of drawing the slide bare.
+   */
+  optional: z.boolean(),
   fit: z.enum(["cover", "contain"]),
   /** A soft fade to the slide background, so text over the lower edge stays legible. */
   scrim: z.enum(["none", "bottom", "full"]).default("none"),
@@ -170,7 +221,15 @@ const ImageLayerSchema = FrameSchema.extend({
    * One slot used twice rather than a second picture, which is why the template check counts
    * distinct image slots and not image layers.
    */
-  reprise: z.boolean().default(false)
+  reprise: z.boolean().default(false),
+  /** v2 only. See `ShadeSchema`. */
+  shade: ShadeSchema.optional(),
+  /**
+   * v2 only: a hairline around the picture as drawn — the frame for `cover`, the contained
+   * rectangle for `contain` — so a wide chart in a tall frame is framed where it is, not where its
+   * frame is. Drawn outside the picture's edge, so it never covers a pixel of it.
+   */
+  border: z.object({ colorToken: TokenNameSchema, width: z.number().finite().min(0.5).max(12) }).optional()
 });
 
 /**
@@ -257,7 +316,7 @@ const CanvasSchema = z.object({
 });
 
 export const CarouselTemplateSchema = z.object({
-  schemaVersion: z.literal("carousel-template/1"),
+  schemaVersion: z.enum(CAROUSEL_TEMPLATE_VERSIONS),
   id: z.string().regex(/^[a-z0-9]+(?:-[a-z0-9]+)*$/),
   name: z.string().trim().min(2).max(80),
   version: z.string().regex(/^\d+\.\d+\.\d+$/),
@@ -309,14 +368,41 @@ export const CarouselTemplateSchema = z.object({
   }
   const slots = new Set(template.requiredSlots);
   const referencedSlots = new Set<string>();
+  const v2 = template.schemaVersion === CAROUSEL_TEMPLATE_V2;
   // Distinct slots, not layers. A photograph returning small on the outro is the same picture
   // used twice — one slot, two layers — and counting layers made that impossible to express.
   const imageSlots = new Set<string>();
+  const optionalBySlot = new Map<string, boolean>();
   template.slides.forEach((slide, slideIndex) => {
     const textSlotsHere = new Set(slide.layers.flatMap((layer) => layer.type === "text" ? [layer.slot] : []));
     slide.layers.forEach((layer, layerIndex) => {
+      const at = (field: string) => ["slides", slideIndex, "layers", layerIndex, field];
       if (layer.type === "text") referencedSlots.add(layer.slot);
-      if (layer.type === "image") imageSlots.add(layer.slot);
+      if (layer.type === "text" && layer.valign !== undefined && !v2) {
+        context.addIssue({ code: "custom", message: `valign is a ${CAROUSEL_TEMPLATE_V2} field`, path: at("valign") });
+      }
+      if (layer.type === "image") {
+        imageSlots.add(layer.slot);
+        if (!v2 && layer.slot !== "image") {
+          context.addIssue({ code: "custom", message: `${CAROUSEL_TEMPLATE_V1} has one image slot, named image`, path: at("slot") });
+        }
+        if (!v2 && !layer.optional) {
+          context.addIssue({ code: "custom", message: `Every ${CAROUSEL_TEMPLATE_V1} image is optional`, path: at("optional") });
+        }
+        if (!v2 && layer.shade !== undefined) {
+          context.addIssue({ code: "custom", message: `shade is a ${CAROUSEL_TEMPLATE_V2} field`, path: at("shade") });
+        }
+        if (!v2 && layer.border !== undefined) {
+          context.addIssue({ code: "custom", message: `border is a ${CAROUSEL_TEMPLATE_V2} field`, path: at("border") });
+        }
+        // One slot is one photograph. Required on one slide and optional on another would make
+        // the same missing bytes a refusal or a bare slide depending on which slide was asked for.
+        const declared = optionalBySlot.get(layer.slot);
+        if (declared !== undefined && declared !== layer.optional) {
+          context.addIssue({ code: "custom", message: `Image slot ${layer.slot} is both optional and required`, path: at("optional") });
+        }
+        optionalBySlot.set(layer.slot, layer.optional);
+      }
       if (layer.type === "text" && !slots.has(layer.slot)) {
         context.addIssue({
           code: "custom",
@@ -335,8 +421,11 @@ export const CarouselTemplateSchema = z.object({
       }
     });
   });
-  if (imageSlots.size > 1) {
+  if (!v2 && imageSlots.size > 1) {
     context.addIssue({ code: "custom", message: "A template may contain at most one optional image slot", path: ["slides"] });
+  }
+  if (v2 && imageSlots.size > MAX_IMAGE_SLOTS) {
+    context.addIssue({ code: "custom", message: `A template may hold at most ${MAX_IMAGE_SLOTS} image slots`, path: ["slides"] });
   }
   for (const slot of slots) {
     if (!referencedSlots.has(slot)) {
@@ -363,13 +452,35 @@ export const BrandTokensSchema = z.object({
   })
 });
 
+/**
+ * How one photograph is framed in its slot: the point to keep in view, how far to zoom in, and
+ * whether the frame is filled or the whole picture shown.
+ *
+ * Part of the payload, so it is hashed with the words: an approval covers the crop that was seen.
+ * The bytes are not — they travel beside the payload, and `assetSha256` names which ones the crop
+ * was set on, so a reader holding the original file can prove it is the same picture.
+ */
+export const ImageCropSchema = z.strictObject({
+  assetSha256: z.string().regex(/^[0-9a-f]{64}$/).optional(),
+  /** The point that stays in view, as fractions of the source image. */
+  focal: z.strictObject({ x: UnitSchema, y: UnitSchema }),
+  /** 1 shows the largest region the frame allows; 2 shows half of it, around the focal point. */
+  zoom: z.number().finite().min(1).max(8).optional(),
+  /** Overrides the layer's own fit for this photograph. */
+  fit: z.enum(["cover", "contain"]).optional()
+});
+
 // Strict at the final render boundary: metadata from upstream records must be selected into
 // strings deliberately. In particular, an admin-only BOOKSOFHISTORY coverRef cannot hitch a ride
-// into a payload and become artwork merely because a caller spread a seed record here.
+// into a payload and become artwork merely because a caller spread a seed record here. The one
+// non-string key, `images`, holds crop records only — a focal point, a zoom, a fit and an asset
+// hash — never bytes, a URL or a reference a photograph could be fetched from.
 export const CarouselPayloadSchema = z.strictObject({
   locale: z.enum(["en", "cs"]),
   strings: z.record(SlotNameSchema, z.string().max(2_000)),
-  variant: z.string().regex(/^[A-Z][A-Z0-9-]*$/).optional()
+  variant: z.string().regex(/^[A-Z][A-Z0-9-]*$/).optional(),
+  /** Per image slot, how its photograph is cropped. Absent: drawn as the layer's fit draws it. */
+  images: z.record(ImageSlotSchema, ImageCropSchema).optional()
 });
 
 export const TemplateReferenceSchema = z.object({
@@ -410,4 +521,5 @@ export type CarouselTemplate = z.infer<typeof CarouselTemplateSchema>;
 export type CarouselTemplateInput = z.input<typeof CarouselTemplateSchema>;
 export type BrandTokens = z.infer<typeof BrandTokensSchema>;
 export type CarouselPayload = z.infer<typeof CarouselPayloadSchema>;
+export type ImageCrop = z.infer<typeof ImageCropSchema>;
 export type TemplateReference = z.infer<typeof TemplateReferenceSchema>;

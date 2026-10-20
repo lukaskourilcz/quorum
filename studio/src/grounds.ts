@@ -57,6 +57,56 @@ const LOGO_MIN_FONT_SIZE = 18;
 const LOGO_FONT_WEIGHT = 800;
 
 type Slide = CarouselTemplate["slides"][number];
+type Layer = Slide["layers"][number];
+type ImageLayer = Extract<Layer, { type: "image" }>;
+
+/** The opacity of a vertical ramp at one point of its frame, held flat past its end stops. */
+function rampAt(stops: ReadonlyArray<{ at: number; opacity: number }>, t: number): number {
+  const first = stops[0]!;
+  const last = stops.at(-1)!;
+  if (t <= first.at) return first.opacity;
+  if (t >= last.at) return last.opacity;
+  for (let index = 1; index < stops.length; index += 1) {
+    const from = stops[index - 1]!;
+    const to = stops[index]!;
+    if (t <= to.at) return to.at === from.at ? to.opacity : from.opacity + ((t - from.at) / (to.at - from.at)) * (to.opacity - from.opacity);
+  }
+  return last.opacity;
+}
+
+/** The weakest point of a ramp across a span: a ramp is linear between stops, so ends and stops. */
+function weakestOf(stops: ReadonlyArray<{ at: number; opacity: number }>, from: number, to: number): number {
+  const points = [from, to, ...stops.map((stop) => stop.at).filter((at) => at > from && at < to)];
+  return Math.min(...points.map((t) => rampAt(stops, t)));
+}
+
+/** The renderer's own fading scrim, as a ramp: clear to 55 % of the frame, then to 0.96. */
+const BOTTOM_SCRIM = [{ at: 0.55, opacity: 0 }, { at: 1, opacity: 0.96 }] as const;
+
+/**
+ * What a photograph puts behind a text frame, in a carousel-template/2 slide.
+ *
+ * The photograph's pixels are the article's, so both extremes stand in for them: a white picture
+ * and a black one, each seen through whatever the layer draws over it at that drawing's weakest
+ * point under the frame. A v2 slide that sets words on a bare photograph therefore fails, which
+ * is the point — v1 measured such words against the slide's ground and passed a design no reader
+ * could be promised.
+ */
+function photographGrounds(image: ImageLayer, layer: Layer, brand: BrandTokens, resolve: (name: string) => string | undefined): string[] {
+  const span = (value: number) => (value - image.y) / image.height;
+  const from = span(layer.y);
+  const to = span(layer.y + layer.height);
+  let seen = ["#ffffff", "#000000"];
+  const scrim = brand.colors.background;
+  if (scrim && image.scrim === "full") seen = seen.map((colour) => composite(colour, scrim, 0.55));
+  if (scrim && image.scrim === "bottom") seen = seen.map((colour) => composite(colour, scrim, weakestOf(BOTTOM_SCRIM, from, to)));
+  const ink = image.shade ? resolve(image.shade.colorToken) : undefined;
+  if (image.shade && ink) {
+    const alpha = weakestOf(image.shade.stops, from, to);
+    seen = seen.map((colour) => composite(colour, ink, alpha));
+  }
+  return seen;
+}
 
 /** One rendering of a slide: which token is the ground and which the accent resolves to. */
 export interface SlideRendering {
@@ -74,14 +124,22 @@ export interface SlideRendering {
  * a panel, a gradient whose two stops are two grounds, or a duotone photograph, which runs from
  * black to its tint — is what the reader sees, so that is what is measured.
  *
- * An untreated photograph still cannot be checked: its pixels are the article's, not the
- * template's, and a slide carrying one relies on the scrim its image layer draws. That is a real
- * limit and is stated rather than papered over.
+ * In a carousel-template/1 slide an untreated photograph still cannot be checked: its pixels are
+ * the article's, not the template's, and the slide relies on the scrim its image layer draws. A
+ * carousel-template/2 slide is measured against the photograph's two extremes instead (see
+ * `photographGrounds`), which is what lets a v2 template promise words over any picture.
  *
  * Exported because the renderer asks the same question when it picks which logotype file to draw,
  * and a second answer would be a logo checked against one ground and drawn on another.
  */
-export function groundsBehindLayer(slide: Slide, layerIndex: number, brand: BrandTokens, rendering: SlideRendering): string[] {
+export function groundsBehindLayer(
+  slide: Slide,
+  layerIndex: number,
+  brand: BrandTokens,
+  rendering: SlideRendering,
+  /** True for a carousel-template/2 slide: words over a photograph are measured against it. */
+  options: { photographs?: boolean } = {}
+): string[] {
   const resolve = (name: string) => brand.colors[name === "accent" ? rendering.accent : name];
   const background = brand.colors[rendering.background];
   if (!background) return [];
@@ -115,6 +173,10 @@ export function groundsBehindLayer(slide: Slide, layerIndex: number, brand: Bran
     if (under.type === "image" && under.treatment === "duotone" && under.scrim === "none") {
       const tint = resolve("accent");
       if (tint) ground = [tint, "#000000"];
+    } else if (under.type === "image" && options.photographs && layer.type === "text") {
+      // An optional photograph may be absent, so the words may also stand on what is under it.
+      const seen = photographGrounds(under, layer, brand, resolve);
+      ground = under.optional ? [...ground, ...seen] : seen;
     }
   }
   return [
@@ -155,7 +217,7 @@ export function textGroundPairs(
       if (!brand.colors[rendering.background]) continue;
       slide.layers.forEach((layer, layerIndex) => {
         if (layer.type !== "text" && layer.type !== "logo") return;
-        const candidates = groundsBehindLayer(slide, layerIndex, brand, rendering);
+        const candidates = groundsBehindLayer(slide, layerIndex, brand, rendering, { photographs: template.schemaVersion === "carousel-template/2" });
         let foreground = brand.colors[layer.colorToken === "accent" ? rendering.accent : layer.colorToken];
         if (!foreground) return;
         if (layer.type === "logo" && logotype) {

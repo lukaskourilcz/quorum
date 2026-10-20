@@ -10,6 +10,7 @@ import {
 } from "../src/meetings/clock.js";
 import { findSlotRecord, slotRecordPath } from "../src/meetings/slot-record.js";
 import { ScheduledPhaseSchema } from "../src/types.js";
+import { pausedVentureForPhase, readVentureRegistry } from "../src/ventures/registry.js";
 
 const repoRoot = path.resolve(import.meta.dirname, "../..");
 
@@ -64,9 +65,11 @@ describe("the deployed Vercel schedule matches the meeting clock", () => {
     // Every meeting slot, plus one dispatch that is not a meeting: the edition slot's same-day
     // retry. It carries no Prague hour of its own on the clock -- 09:00 belongs to the story
     // meeting -- because it is a second attempt at the 05:00 slot rather than a room of its own.
+    // It leaves the schedule with that slot when the owner pauses Caught Up (quorum#602).
+    const retryScheduled = pausedVentureForPhase(readVentureRegistry(), EDITION_RETRY_PHASE) === null;
     const dispatches = [
       ...MEETING_CLOCK,
-      { phase: EDITION_RETRY_PHASE, hour: EDITION_RETRY_HOUR }
+      ...(retryScheduled ? [{ phase: EDITION_RETRY_PHASE, hour: EDITION_RETRY_HOUR }] : [])
     ];
     const expected = dispatches.flatMap((slot) => [
       { path: `/api/cron/${slot.phase}`, schedule: `0 ${(slot.hour - 2 + 24) % 24} * * *` },

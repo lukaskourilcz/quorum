@@ -1,9 +1,11 @@
-import { mkdtemp, readFile } from "node:fs/promises";
+import { mkdir, mkdtemp, readFile, writeFile } from "node:fs/promises";
+import { existsSync } from "node:fs";
 import os from "node:os";
 import path from "node:path";
 import { describe, expect, it } from "vitest";
-import { SEED_TEMPLATES } from "@boardlessai/carousel-studio";
+import { DNESKAI_PHOTO_TEMPLATES, SEED_TEMPLATES } from "@boardlessai/carousel-studio";
 import { LiveTemplateReferenceSchema } from "../src/contracts/carousel-template.js";
+import { resolveLiveCarouselTemplate } from "../src/studio/catalog.js";
 import { processStudioContribution, StudioObservationSchema } from "../src/studio/lifecycle.js";
 
 describe("Carousel Studio lifecycle", () => {
@@ -23,6 +25,22 @@ describe("Carousel Studio lifecycle", () => {
     expect(result.checks.every((entry) => entry.checks.every((check) => check.status === "pass"))).toBe(true);
     const stored = await readFile(path.join(root, "ventures/carousel-studio/templates/original-quote-study/1.0.0.json"), "utf8");
     expect(stored).not.toContain("data:image");
+  });
+
+  it("keeps council proposals and stored templates on carousel-template/1", async () => {
+    const root = await mkdtemp(path.join(os.tmpdir(), "carousel-studio-"));
+    const observation = { id: "observation-layout", sourceUrl: "https://example.com/article/layout", retrievedAt: "2026-08-02T10:00:00.000Z", appliesTo: ["caught-up"], principle: "A clear hierarchy gives the fact one visual job per frame.", originalityBoundary: "Keep the principle, but do not copy the source wording, colors or composition." };
+    const photoKit = DNESKAI_PHOTO_TEMPLATES.get("dneskai-cover-photo")!;
+    expect(photoKit.schemaVersion).toBe("carousel-template/2");
+    const proposal = { ...photoKit, id: "photo-cover-study", name: "Photo cover study", version: "1.0.0", status: "draft", citedObservationRefs: [observation.id] };
+    await expect(processStudioContribution({ root, observations: [observation], templateProposal: proposal, allowedEvidenceRefs: [observation.sourceUrl], allowLive: true }))
+      .rejects.toThrow(/must be carousel-template\/1, not carousel-template\/2/);
+    expect(existsSync(path.join(root, "ventures/carousel-studio/templates/photo-cover-study"))).toBe(false);
+    // A v2 file placed in state by hand, even marked live, is not resolved for a render.
+    const directory = path.join(root, "ventures/carousel-studio/templates/photo-cover-study");
+    await mkdir(directory, { recursive: true });
+    await writeFile(path.join(directory, "1.0.0.json"), JSON.stringify({ ...proposal, status: "live" }));
+    expect(() => resolveLiveCarouselTemplate("photo-cover-study", "1.0.0", root)).toThrow(/stored templates must be carousel-template\/1/);
   });
 
   it("rejects social visuals without a known live template reference", () => {

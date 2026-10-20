@@ -2,7 +2,10 @@ import { readFile } from "node:fs/promises";
 import path from "node:path";
 import { describe, expect, it } from "vitest";
 import {
+  EDITION_RETRY_HOUR,
   cronUtcHours,
+  dispatchHoursFor,
+  editionRetryScheduled,
   expectedCronEntries,
   parseScheduledPhase,
   pragueHour,
@@ -20,9 +23,9 @@ describe("the slot table the cron route dispatches from", () => {
   it("reads every scheduled slot out of the venture registry", async () => {
     const slots = await resolveCronSlots(await registry());
     // One slot per running venture and one company meeting, per `operations-2026-08c`. A paused
-    // venture holds no slot (`operations-2026-09b`); its rooms stay dispatchable by name.
+    // venture holds no slot (`operations-2026-09b`); its rooms stay dispatchable by name. Caught Up
+    // paused on 2026-10-20 (quorum#602), so the company morning is the whole clock today.
     expect(slots.map((slot) => `${slot.hour}:${slot.phase}`)).toEqual([
-      "5:cu-day",
       "6:morning"
     ]);
   });
@@ -144,9 +147,56 @@ describe("the deployed vercel.json", () => {
     const key = (entry: { path: string; schedule: string }) => `${entry.path} ${entry.schedule}`;
     expect(deployed.crons.map(key).sort()).toEqual(expectedCronEntries(await registry()).map(key).sort());
     // One entry per daylight-saving variant for every slot the clock actually holds, plus the two
-    // the edition's same-day retry adds. Counted off the clock rather than off SCHEDULED_PHASES:
-    // that list also names every room a venture day dispatches, and those are dispatchable by
-    // hand without holding an hour or a cron of their own.
-    expect(deployed.crons).toHaveLength((resolveCronSlots(await registry()).length + 1) * 2);
+    // the edition's same-day retry adds while its venture runs. Counted off the clock rather than
+    // off SCHEDULED_PHASES: that list also names every room a venture day dispatches, and those
+    // are dispatchable by hand without holding an hour or a cron of their own.
+    const retries = editionRetryScheduled(await registry()) ? 1 : 0;
+    expect(deployed.crons).toHaveLength((resolveCronSlots(await registry()).length + retries) * 2);
+  });
+});
+
+/**
+ * The retry is a second attempt at the DNESKAi day, so it follows that venture's pause. A retry
+ * dispatched for a paused venture would start a runner only for `runCycle` to stop it at $0.
+ */
+describe("the edition retry", () => {
+  type Registry = { schemaVersion: string; ventures: Array<Record<string, unknown>> };
+  const withCaughtUp = async (status: string): Promise<Registry> => {
+    const live = (await registry()) as Registry;
+    return {
+      ...live,
+      ventures: live.ventures.map((venture) => {
+        if (venture.id !== "caught-up") return venture;
+        const next: Record<string, unknown> = { ...venture, status };
+        if (status !== "paused") delete next.pausedOn;
+        return next;
+      })
+    };
+  };
+
+  it("is scheduled while Caught Up runs, at the day's slot and the retry hour", async () => {
+    const running = await withCaughtUp("operating");
+    expect(editionRetryScheduled(running)).toBe(true);
+    expect(dispatchHoursFor(running, "cu-edition")).toEqual([EDITION_RETRY_HOUR]);
+    expect(dispatchHoursFor(running, "cu-day")).toEqual([5]);
+    const paths = expectedCronEntries(running).map((entry) => `${entry.path} ${entry.schedule}`);
+    expect(paths).toEqual(expect.arrayContaining([
+      "/api/cron/cu-day 0 3 * * *",
+      "/api/cron/cu-day 0 4 * * *",
+      "/api/cron/cu-edition 0 7 * * *",
+      "/api/cron/cu-edition 0 8 * * *"
+    ]));
+  });
+
+  it("leaves the schedule with the day when the owner pauses Caught Up", async () => {
+    const paused = await withCaughtUp("paused");
+    expect(editionRetryScheduled(paused)).toBe(false);
+    expect(dispatchHoursFor(paused, "cu-edition")).toEqual([]);
+    expect(dispatchHoursFor(paused, "cu-day")).toEqual([]);
+    expect(expectedCronEntries(paused).map((entry) => entry.path)).not.toContain("/api/cron/cu-edition");
+  });
+
+  it("refuses a registry it cannot read", () => {
+    expect(() => editionRetryScheduled({})).toThrow(/Invalid venture registry/u);
   });
 });

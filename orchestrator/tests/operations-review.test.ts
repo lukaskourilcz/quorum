@@ -1,13 +1,31 @@
 import { mkdir, mkdtemp, readFile, writeFile } from "node:fs/promises";
 import os from "node:os";
 import path from "node:path";
-import { describe, expect, it } from "vitest";
+import { describe, expect, it, vi } from "vitest";
 import { buildOperationsPacket, mondayOf } from "../src/operations/packet.js";
 import { MAX_FIX_TASKS, MAX_GROWTH_IDEAS, resolveOperationsReview, writeOperationsDecision } from "../src/operations/review.js";
 import { resolveRotationTarget } from "../src/operations/rotation.js";
 import { roleSystem } from "../src/standup/live.js";
 import { repoRoot } from "../src/paths.js";
+import * as ventureRegistryModule from "../src/ventures/registry.js";
 import { ideaDestination, readVentureRegistry, ventureShowsIdeas } from "../src/ventures/registry.js";
+
+/**
+ * The real registry with Caught Up operating. It paused on 2026-10-20 (quorum#602), which leaves
+ * no idea-capable venture running at all, so the ring's rules are proved against this copy.
+ */
+async function withCaughtUpOperating<T>(run: (registry: ReturnType<typeof readVentureRegistry>) => Promise<T>): Promise<T> {
+  const registry = readVentureRegistry();
+  const caughtUp = registry.ventures.find((venture) => venture.id === "caught-up")!;
+  caughtUp.status = "operating";
+  delete caughtUp.pausedOn;
+  const spy = vi.spyOn(ventureRegistryModule, "loadVentureRegistry").mockResolvedValue(registry);
+  try {
+    return await run(registry);
+  } finally {
+    spy.mockRestore();
+  }
+}
 
 async function json(file: string, value: unknown) {
   await mkdir(path.dirname(file), { recursive: true });
@@ -202,14 +220,24 @@ describe("resolving what the board asked for", () => {
 describe("the ideation rotation", () => {
   it("keeps the sole operating idea venture as the daily target", async () => {
     const stateRoot = path.join(repoRoot, "state");
-    const monday = await resolveRotationTarget({ stateRoot, now: new Date("2026-08-03T04:00:00.000Z") });
-    const again = await resolveRotationTarget({ stateRoot, now: new Date("2026-08-03T23:00:00.000Z") });
-    const tuesday = await resolveRotationTarget({ stateRoot, now: new Date("2026-08-04T04:00:00.000Z") });
+    await withCaughtUpOperating(async () => {
+      const monday = await resolveRotationTarget({ stateRoot, now: new Date("2026-08-03T04:00:00.000Z") });
+      const again = await resolveRotationTarget({ stateRoot, now: new Date("2026-08-03T23:00:00.000Z") });
+      const tuesday = await resolveRotationTarget({ stateRoot, now: new Date("2026-08-04T04:00:00.000Z") });
 
-    expect(monday?.ventureId).toBe(again?.ventureId);
-    expect(monday?.ventureId).toBe("caught-up");
-    expect(tuesday?.ventureId).toBe("caught-up");
-    expect(monday?.growthObjective.length).toBeGreaterThan(0);
+      expect(monday?.ventureId).toBe(again?.ventureId);
+      expect(monday?.ventureId).toBe("caught-up");
+      expect(tuesday?.ventureId).toBe("caught-up");
+      expect(monday?.growthObjective.length).toBeGreaterThan(0);
+    });
+  });
+
+  it("names no target while every idea venture is paused", async () => {
+    // Today's registry (quorum#602): nothing that can show an idea is running.
+    const stateRoot = path.join(repoRoot, "state");
+    const registry = readVentureRegistry();
+    expect(registry.ventures.filter((venture) => venture.status !== "paused").filter(ventureShowsIdeas)).toEqual([]);
+    expect(await resolveRotationTarget({ stateRoot, now: new Date("2026-10-21T04:00:00.000Z") })).toBeNull();
   });
 
   /*
@@ -221,7 +249,7 @@ describe("the ideation rotation", () => {
    */
   it("names only a venture whose workspace can show the idea, and every such venture in turn", async () => {
     const stateRoot = path.join(repoRoot, "state");
-    const registry = readVentureRegistry();
+    await withCaughtUpOperating(async (registry) => {
     const running = registry.ventures.filter((venture) => venture.status !== "paused");
     expect(running.some((venture) => !ventureShowsIdeas(venture)), "the real registry no longer tests the rule").toBe(true);
     const seen = new Set<string>();
@@ -236,6 +264,7 @@ describe("the ideation rotation", () => {
     }
     expect([...seen].sort()).toEqual(running.filter(ventureShowsIdeas).map((venture) => venture.id).sort());
     expect(seen.has("caught-up")).toBe(true);
+    });
   });
 
   it("refuses a growth idea for a workspace that cannot show it, and files one that can", () => {

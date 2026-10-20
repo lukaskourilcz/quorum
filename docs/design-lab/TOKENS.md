@@ -133,8 +133,11 @@ The canonical receipt is executable rather than a hand-maintained ratio table:
 - **Platform limits** are checked on the template, not only on the deck: at most 20 slides
   (Instagram), at most 10 (the guarded connector), and every declared canvas is 1:1, 4:5 or 9:16.
   This repository produces no PDF, so the PDF size and page limits in the source idea do not apply.
-- Untreated photographs are the honest limit: their article pixels are not known at template
-  validation time, so photo-bearing designs rely on the declared scrim.
+- Untreated photographs in a `carousel-template/1` slide are the honest limit: their pixels are
+  not known at template validation time, so those designs rely on the declared scrim. A
+  `carousel-template/2` slide measures its words against a white and a black photograph seen
+  through its scrim and shade, so a v2 template that passes promises legible words over any
+  picture.
 - Overflow uses the resolved face's committed average advance and the layer's tracking. Runtime
   fitting measures every glyph, shrinks until whole words fit, and reports unavoidable breaking
   or contract clipping instead of hiding it.
@@ -152,6 +155,40 @@ that preserve older stored documents:
 - the fitter uses committed per-face metrics, respects tracking, keeps Czech and Ukrainian
   graphemes intact, and surfaces clipped/broken output.
 
+`carousel-template/2` adds, refused in any v1 document: several image slots (`image-1` to
+`image-99`) per template and per slide, required photographs, a `shade` over a photograph, a
+`border` around the picture as drawn, `valign` on text, and per-slot crop records in the payload,
+cut in sharp before embedding. `SPEC.md` has the field table.
+
 `glow` exists in the schema and renderer but is reserved by design; the current family set does
 not need it to pass. Recipe rhythm is recorded as `phaseSeed` in `carousel-recipe/1`, not as a
 template-level backdrop field.
+
+## DNESKAi photo kit
+
+The measurements of `studio/src/dneskai-photo.ts` (quorum#603), in pixels on the 1080 × 1350
+master, which is the only canvas these templates declare. The kit dresses the `caught-up` brand in
+Space Grotesk headlines, Source Serif 4 words and IBM Plex Mono labels, whatever the brand table
+above names for the undressed skin.
+
+| Element | Frame | Type |
+|---|---|---|
+| margins | 72 left and right (the 3:4 profile-grid crop takes 34) | |
+| logo | 72, 64, 230 × 52; the kit's file at about 34 high | outlines, never a font |
+| folio | right-aligned to 1008, top 76 | Plex Mono 400, 20, tracked 0.04, `02 / 07` |
+| cover headline | 72, 778, 936 × 372, bottom-anchored | Space Grotesk 700, 50–84, 4 lines, `background` |
+| cover rule, kicker, credit | rule 64 × 6 at 1176; kicker at 1204; credit at 1246 | kicker Plex Mono 22 uppercase tracked 0.08; credit Plex Mono 18 |
+| figure headline | 72, 166, 936 × 200 | Space Grotesk 700, 40–58, 3 lines |
+| figure picture | 72, 396, 936 × 600, contain | 2 px `muted` border around the picture as drawn |
+| figure body | 72, 1030, 936 × 172 | Source Serif 4 400, 28–34, 5 lines, `muted` |
+| split | spine 12 px `accent`; text column 72–500; pictures 540–1008 | headline 38–52 (one picture) or 36–48 (two) |
+| statement | `accent` ground, `INK` variant on `foreground`; headline bottom-anchored to 856 | Space Grotesk 700, 52–80; note Source Serif 4, 30–36, `surface` |
+| sources | four source rows from 250, 92 apart; thumbnails 882–1032; disclosure from 1068 | rows Source Serif 4, 25–27, 3 lines; disclosure Plex Mono 19–20 |
+| single, photo | headline on an `accent` panel hugging it, floor at 1096 | Space Grotesk 700, 48–76, 5 lines |
+| single, type | rule 96 × 8 at 172; headline from 262; body bottom-anchored to 1192 | Space Grotesk 700, 60–100 |
+
+The cover and the single photo share one shade, in `foreground` ink: 0.50 at the top edge for the
+logotype, clear from 16 % to 36 %, 0.68 at 56 %, 0.90 at the floor. White type over a white
+photograph needs 0.58 of that ink to reach 4.5:1, so the headline frame starts below 56 %. The
+worst readability pair in the kit is Lc 77.4 (APCA) against the library's floor of 40.
+

@@ -4,8 +4,11 @@ Scope: [quorum #598](https://github.com/lukaskourilcz/quorum/issues/598), parent
 [own-dashboard #93](https://github.com/lukaskourilcz/own-dashboard/issues/93).
 Authority: [2026-10-13 owner request](../state/decisions/2026-10-13-dneskai-own-dashboard-source.md).
 
-BoardlessAI continues to produce and deliver articles. The bridge reads existing editorial
-reviews and owner decisions through `approvedEditorialPackage`. It exports the selected Czech
+The owner paused DNESKAi article production on 2026-10-20
+([decision](../state/decisions/2026-10-20-dneskai-articles-paused.md)). Both routes below keep
+answering signed queries. The source export still reports every article it already exported,
+and it creates no new packet while the pause holds, because no new article reaches approval.
+The bridge reads existing editorial reviews and owner decisions through `approvedEditorialPackage`. It exports the selected Czech
 headline, full article body, selected image and recorded citations. It calls no model and creates
 no social content. OwnDashboard approves each social revision separately.
 

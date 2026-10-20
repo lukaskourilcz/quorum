@@ -1,4 +1,6 @@
-import { readFileSync } from "node:fs";
+import { execFileSync } from "node:child_process";
+import { mkdirSync, mkdtempSync, readFileSync, rmSync, writeFileSync } from "node:fs";
+import { tmpdir } from "node:os";
 import path from "node:path";
 import { describe, expect, it } from "vitest";
 import { repoRoot } from "../src/paths.js";
@@ -72,6 +74,43 @@ describe("how the sync steps are gated", () => {
     expect(schedules).toBe(deployedCronExpressions().length);
     expect(workflow).not.toContain("phase == 'cu-streams'");
     expect(workflow).not.toContain("phase == 'cu-events'");
+  });
+
+  it("keeps syncing on the morning run while Caught Up is paused, and delivers no edition then", () => {
+    // quorum#602. The sync rides the DNESKAi day, which leaves the clock with the pause, so the
+    // decision is run here exactly as the workflow writes it, against both registry states.
+    const start = workflow.indexOf("          caught_up_status=");
+    const marker = 'echo "caught_up_sync=$caught_up_sync" >> "$GITHUB_OUTPUT"';
+    const end = workflow.indexOf(marker, start);
+    expect(start, "the mode step no longer reads Caught Up's status").toBeGreaterThan(-1);
+    expect(end).toBeGreaterThan(start);
+    const decision = workflow.slice(start, end + marker.length);
+    const outputs = (status: string, phase: string) => {
+      const root = mkdtempSync(path.join(tmpdir(), "caught-up-sync-"));
+      try {
+        mkdirSync(path.join(root, "config"));
+        writeFileSync(path.join(root, "config", "ventures.json"), JSON.stringify({
+          schemaVersion: "venture-registry/1",
+          ventures: [{ id: "caught-up", status }, { id: "goviral", status: "paused" }]
+        }));
+        const output = path.join(root, "github-output");
+        writeFileSync(output, "");
+        execFileSync("bash", ["-eo", "pipefail", "-c", decision], {
+          cwd: root,
+          env: { PATH: process.env.PATH ?? "", phase, GITHUB_OUTPUT: output }
+        });
+        return Object.fromEntries(readFileSync(output, "utf8").trim().split("\n").map((line) => line.split("=", 2)));
+      } finally {
+        rmSync(root, { recursive: true, force: true });
+      }
+    };
+    expect(outputs("operating", "cu-day")).toEqual({ caught_up_delivery: "true", caught_up_sync: "true" });
+    expect(outputs("operating", "cu-edition")).toEqual({ caught_up_delivery: "true", caught_up_sync: "true" });
+    expect(outputs("operating", "morning")).toEqual({ caught_up_delivery: "false", caught_up_sync: "false" });
+    expect(outputs("paused", "morning")).toEqual({ caught_up_delivery: "false", caught_up_sync: "true" });
+    expect(outputs("paused", "cu-day")).toEqual({ caught_up_delivery: "false", caught_up_sync: "false" });
+    expect(outputs("paused", "cu-edition")).toEqual({ caught_up_delivery: "false", caught_up_sync: "false" });
+    expect(outputs("paused", "afternoon")).toEqual({ caught_up_delivery: "false", caught_up_sync: "false" });
   });
 
   it("is quiet on a day with no change", () => {

@@ -1,4 +1,5 @@
-import { readFile } from "node:fs/promises";
+import { mkdir, mkdtemp, readFile, rm, writeFile } from "node:fs/promises";
+import { tmpdir } from "node:os";
 import path from "node:path";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 
@@ -27,6 +28,29 @@ function call(phase: string, header?: string, headers: Record<string, string> = 
   );
 }
 
+let fixtureRoot = "";
+
+/** Point the route at a copy of the registry in which Caught Up runs. */
+async function withCaughtUpRunning(): Promise<void> {
+  const repoRoot = path.resolve(import.meta.dirname, "../../../../../..");
+  const live = JSON.parse(await readFile(path.join(repoRoot, "config", "ventures.json"), "utf8")) as {
+    ventures: Array<Record<string, unknown>>;
+  };
+  const running = {
+    ...live,
+    ventures: live.ventures.map((venture) => {
+      if (venture.id !== "caught-up") return venture;
+      const copy: Record<string, unknown> = { ...venture, status: "operating" };
+      delete copy.pausedOn;
+      return copy;
+    })
+  };
+  fixtureRoot = await mkdtemp(path.join(tmpdir(), "cron-route-"));
+  await mkdir(path.join(fixtureRoot, "config"), { recursive: true });
+  await writeFile(path.join(fixtureRoot, "config", "ventures.json"), JSON.stringify(running));
+  vi.stubEnv("BOARDLESSAI_REPO_ROOT", fixtureRoot);
+}
+
 beforeEach(() => {
   calls = [];
   githubStatus = 204;
@@ -40,15 +64,18 @@ beforeEach(() => {
     });
     return new Response(githubStatus === 204 ? null : "rejected", { status: githubStatus });
   });
-  // 05:00 Prague on 4 August 2026 (CEST), DNESKAi's daily article slot.
+  // 06:00 Prague on 4 August 2026 (CEST), the company morning. It is the one slot that holds
+  // whatever the owner pauses, so the dispatch mechanics below do not depend on a venture's status.
   vi.useFakeTimers();
-  vi.setSystemTime(new Date("2026-08-04T03:00:00.000Z"));
+  vi.setSystemTime(new Date("2026-08-04T04:00:00.000Z"));
 });
 
-afterEach(() => {
+afterEach(async () => {
   vi.useRealTimers();
   vi.unstubAllEnvs();
   vi.unstubAllGlobals();
+  if (fixtureRoot) await rm(fixtureRoot, { recursive: true, force: true });
+  fixtureRoot = "";
 });
 
 /**
@@ -122,9 +149,9 @@ describe("the cron route refuses anything that is not Vercel's cron", () => {
 
 describe("the cron route dispatches the slot it was called for", () => {
   it("dispatches the phase in the path as a scheduled firing", async () => {
-    const response = await call("cu-day", `Bearer ${SECRET}`);
+    const response = await call("morning", `Bearer ${SECRET}`);
     expect(response.status).toBe(202);
-    expect(await response.json()).toEqual({ dispatched: true, phase: "cu-day" });
+    expect(await response.json()).toEqual({ dispatched: true, phase: "morning" });
     expect(calls).toHaveLength(1);
     expect(calls[0]!.url).toBe(
       "https://api.github.com/repos/lukaskourilcz/quorum/actions/workflows/cycle.yml/dispatches"
@@ -134,28 +161,28 @@ describe("the cron route dispatches the slot it was called for", () => {
     // this route cannot ask for a dry run or for the owner's delivery-only mode.
     expect(calls[0]!.body).toEqual({
       ref: "main",
-      inputs: { phase: "cu-day", trigger: "vercel-cron" }
+      inputs: { phase: "morning", trigger: "vercel-cron" }
     });
   });
 
   it("does nothing for the daylight-saving variant that is not in force", async () => {
-    // cu-day is the 05:00 Prague slot, so under CEST its live entry is 03:00 UTC. The 04:00 UTC
-    // entry exists for winter and fires today too; it must dispatch nothing.
-    vi.setSystemTime(new Date("2026-08-04T04:00:00.000Z"));
-    const response = await call("cu-day", `Bearer ${SECRET}`);
+    // The morning is the 06:00 Prague slot, so under CEST its live entry is 04:00 UTC. The 05:00
+    // UTC entry exists for winter and fires today too; it must dispatch nothing.
+    vi.setSystemTime(new Date("2026-08-04T05:00:00.000Z"));
+    const response = await call("morning", `Bearer ${SECRET}`);
     expect(response.status).toBe(200);
     expect(await response.json()).toMatchObject({ dispatched: false, reason: "inactive-dst-variant" });
     expect(calls).toHaveLength(0);
   });
 
   it("dispatches from the winter entry once the clocks have gone back", async () => {
-    // Same slot, same two entries; in January it is the 04:00 UTC one that is live.
-    vi.setSystemTime(new Date("2026-01-04T04:00:00.000Z"));
-    expect((await call("cu-day", `Bearer ${SECRET}`)).status).toBe(202);
+    // Same slot, same two entries; in January it is the 05:00 UTC one that is live.
+    vi.setSystemTime(new Date("2026-01-04T05:00:00.000Z"));
+    expect((await call("morning", `Bearer ${SECRET}`)).status).toBe(202);
     expect(calls).toHaveLength(1);
     calls = [];
-    vi.setSystemTime(new Date("2026-01-04T03:00:00.000Z"));
-    expect((await call("cu-day", `Bearer ${SECRET}`)).status).toBe(200);
+    vi.setSystemTime(new Date("2026-01-04T04:00:00.000Z"));
+    expect((await call("morning", `Bearer ${SECRET}`)).status).toBe(200);
     expect(calls).toHaveLength(0);
   });
 
@@ -163,7 +190,9 @@ describe("the cron route dispatches the slot it was called for", () => {
     // Every delivered edition except 6 August needed a second run, and every second run that ran
     // succeeded. The 05:00 Prague slot is DNESKAi's whole day now; the retry is still a second
     // dispatch of the edition room alone, which resumes the one thing the day may have left
-    // undone. The run itself decides whether there is anything left to do.
+    // undone. The run itself decides whether there is anything left to do. Caught Up is paused
+    // in the live registry (quorum#602), so this reads a copy in which it runs.
+    await withCaughtUpRunning();
     vi.setSystemTime(new Date("2026-08-04T03:00:00.000Z"));
     expect((await call("cu-day", `Bearer ${SECRET}`)).status).toBe(202);
     expect(calls).toHaveLength(1);
@@ -184,6 +213,21 @@ describe("the cron route dispatches the slot it was called for", () => {
     expect((await call("cu-edition", `Bearer ${SECRET}`)).status).toBe(200);
     vi.setSystemTime(new Date("2026-08-04T09:00:00.000Z"));
     expect((await call("cu-edition", `Bearer ${SECRET}`)).status).toBe(200);
+    expect(calls).toHaveLength(0);
+  });
+
+  it("starts no DNESKAi run while the owner has Caught Up paused", async () => {
+    // The live registry (quorum#602). The day and its retry leave the schedule together, so a
+    // cron entry left over from an older deployment dispatches nothing at either hour.
+    for (const [instant, phase] of [
+      ["2026-08-04T03:00:00.000Z", "cu-day"],
+      ["2026-08-04T07:00:00.000Z", "cu-edition"]
+    ] as const) {
+      vi.setSystemTime(new Date(instant));
+      const response = await call(phase, `Bearer ${SECRET}`);
+      expect(response.status, phase).toBe(404);
+      expect(await response.json()).toMatchObject({ dispatched: false, reason: "phase-has-no-slot" });
+    }
     expect(calls).toHaveLength(0);
   });
 
@@ -211,13 +255,13 @@ describe("the cron route dispatches the slot it was called for", () => {
 
   it("refuses to fire when the dispatch token is missing", async () => {
     vi.stubEnv("QUORUM_DISPATCH_TOKEN", undefined);
-    expect((await call("cu-day", `Bearer ${SECRET}`)).status).toBe(503);
+    expect((await call("morning", `Bearer ${SECRET}`)).status).toBe(503);
     expect(calls).toHaveLength(0);
   });
 
   it("reports a dispatch GitHub rejected instead of claiming success", async () => {
     githubStatus = 422;
-    const response = await call("cu-day", `Bearer ${SECRET}`);
+    const response = await call("morning", `Bearer ${SECRET}`);
     expect(response.status).toBe(502);
     expect(await response.json()).toMatchObject({ dispatched: false, status: 422 });
   });

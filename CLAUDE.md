@@ -13,13 +13,15 @@ Council runs via API in `orchestrator/`; you are the human-invoked engineer.
   Tuesdays, GoVIRAL, BOOKSOFHISTORY, FightAIQ, Design Lab, marketingShark, MMA Files,
   Door Money, Tehdejší svět and Kvórum, plus three owner-only entries: the Personal Growth
   workspace, WebDev Signal and the Contest Radar exploration.
-  Since the owner's 2026-09-28 scope decision, only DNESKAi article production operates.
-  GoVIRAL, Marketing Shark, Design Lab and WebDev Signal are paused alongside the other ventures.
+  Since the owner's 2026-10-20 decision (#602), Caught Up joins the paused ventures, so
+  BoardlessAI produces no DNESKAi article; OwnDashboard prepares DNESKAi's social posts. The
+  DNESKAi stream and event sync, `/admin/api/marketing-collection` and `/admin/api/marketing-source`
+  keep running, and resuming is one registry flip plus the steps in that decision.
   Design Lab remains in Admin for manual content and carousel curation; pause affects scheduling.
   Contest Radar remains exploration with no room. Records are retained. The registry owns each
   venture room and envelope; `config/venture-capabilities.json` retains the deny-by-default graph.
-  Article review requires four headline and four reviewed image choices; the owner selects before
-  delivery. No social drafts or devShark marketing automation are produced.
+  A resumed article review requires four headline and four reviewed image choices, and the owner
+  selects before delivery. No social drafts or devShark marketing automation are produced.
 - `studio/` — `@boardlessai/carousel-studio`, the deterministic render package. It is
   consumed as built output (`dist/`, gitignored). `pnpm install` builds it through the
   studio's `prepare`, and the gates rebuild it through `pre*` scripts in `site` and
@@ -193,7 +195,8 @@ the reader has no memory of the previous copy. Sharing one contract would make
 - **Two more delivery kinds, two more allowlists.** `^data/(talked-about|podcasts)\.json$`
   and `^data/events\.json$` in `.github/workflows/cycle.yml`, beside the edition
   and dataset ones and never merged with them. Both steps run inside the existing
-  daily cycle: no new job, no new cron, no new council phase.
+  daily cycle: no new job, no new cron, no new council phase. They ride the DNESKAi
+  day, and the 06:00 morning while Caught Up is paused (#602).
 - **The switch.** `CAUGHT_UP_STREAMS_ENABLED` gates both steps. Off is the
   default and off is silent.
 - **Cost.** Zero model calls anywhere in the stream path, so it sits outside the

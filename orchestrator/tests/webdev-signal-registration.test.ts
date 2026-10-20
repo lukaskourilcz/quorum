@@ -115,7 +115,17 @@ describe("WebDev Signal registration", () => {
   });
 
   it("shares the 05:00 dispatcher across DST without adding a cron, room or collision", async () => {
-    const registry = await loadVentureRegistry();
+    // Read with DNESKAi operating: its day is the anchor, and it left the clock with the
+    // 2026-10-20 article pause (quorum#602). The sharing is what this proves, not today's status.
+    const live = await loadVentureRegistry();
+    const registry = parseVentureRegistry({
+      ...live,
+      ventures: live.ventures.map((venture) => {
+        if (venture.id !== "caught-up") return venture;
+        const { pausedOn: _pausedOn, ...running } = venture;
+        return { ...running, status: "operating" };
+      })
+    });
     const registration = await loadWebDevSignalRegistration();
     const withoutWebDev = parseVentureRegistry({
       ...registry,
