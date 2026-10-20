@@ -1,0 +1,53 @@
+{
+  "schemaVersion": "dneskai-recipe/1",
+  "id": "dneskai-no-edition-2026-10-20",
+  "recipe": "no-edition",
+  "date": "2026-10-20",
+  "window": {
+    "from": "2026-10-20",
+    "to": "2026-10-20"
+  },
+  "sourceRefs": [
+    "aifirst:data/ai-lessons.json#lex-052"
+  ],
+  "slides": [
+    {
+      "text": "Data center: Fyzický domov AI: haly plné GPU, měřené v megawattech, ne v metrech čtverečních",
+      "alt": "Slide 1: Data center: Fyzický domov AI: haly plné GPU, měřené v megawattech, ne v metrech čtverečních"
+    }
+  ],
+  "visual": {
+    "template_id": "quote-card",
+    "version": "1.0.0",
+    "content": {
+      "locale": "cs",
+      "strings": {
+        "quote": "Data center: Fyzický domov AI: haly plné GPU, měřené v megawattech, ne v metrech čtverečních",
+        "attribution": "Pojem dne · DNESKAi"
+      }
+    }
+  },
+  "frames": [
+    {
+      "path": "/social/caught-up/2026-10-20/no-edition/frame-01.jpg",
+      "sha256": "3675d564e98a1838b71c0ca408b3c7febd9f43c755881dc08ce3a2279a0cb5cb"
+    }
+  ],
+  "story": {
+    "frame": {
+      "path": "/social/caught-up/2026-10-20/no-edition/story.png",
+      "sha256": "24ae0d5562bac962ba8b156272968fa509c5da9c0a5337ad019a471ca588b0f0"
+    },
+    "link": "https://dneskai.vercel.app/?utm_source=instagram&utm_medium=story&utm_campaign=no-edition"
+  },
+  "destination": "https://dneskai.vercel.app/?utm_source=instagram&utm_medium=post&utm_campaign=no-edition",
+  "instagram": {
+    "caption": "Dnes vydání DNESKAi nevyšlo. Pojem dne:\n\nData center: AI bydlí v datacentrech — halách s racky GPU, průmyslovým napájením a chlazením. Nové AI stavby se popisují odběrem (stovky megawattů, v plánech gigawatty), protože limitem je elektřina, ne podlahová plocha; o umístění dnes rozhoduje kapacita sítě a chladicí voda.\n\nZdroj: IEA Energy and AI (2025); hyperscaler disclosures\n\nDalší vydání: https://dneskai.vercel.app/?utm_source=instagram&utm_medium=post&utm_campaign=no-edition\n\n#ai #umelainteligence #dneskai"
+  },
+  "threads": {
+    "text": "Dnes vydání DNESKAi nevyšlo. Pojem dne: Data center: AI bydlí v datacentrech — halách s racky GPU, průmyslovým napájením a chlazením. Nové AI stavby se popisují odběrem (stovky megawattů, v plánech gigawatty), protože limitem je elektřina, ne podlahová plocha; o umístění dnes rozhoduje kapacita sítě a chladicí voda.\n\nZdroj: IEA Energy and AI (2025); hyperscaler disclosures\n\nhttps://dneskai.vercel.app/?utm_source=threads&utm_medium=post&utm_campaign=no-edition"
+  },
+  "ownerSlots": [],
+  "status": "draft",
+  "spendUsd": 0
+}

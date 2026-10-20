@@ -1,0 +1,73 @@
+{
+  "schemaVersion": 2,
+  "id": "caught-up-2026-10-20-cs-recipe-no-edition-threads",
+  "sourceVentureId": "caught-up",
+  "releaseId": "caught-up-2026-10-20-cs-recipe-no-edition",
+  "campaignId": "caught-up-2026-10-20-cs-recipe-no-edition",
+  "experimentId": null,
+  "target": {
+    "profileId": "social-profile-caught-up",
+    "profileRole": "venture-primary",
+    "role": "primary",
+    "connectionBindingRef": "social-connection-caught-up-threads",
+    "capabilityRef": null,
+    "amplifierEligibilityRef": null,
+    "campaignApprovalRef": null
+  },
+  "action": "publish-original",
+  "sourcePackage": {
+    "schemaVersion": "approved-publish-package/1",
+    "artifactRef": "state/social/recipes/2026-10-20-no-edition.json",
+    "packageHash": "b7c1a23fcf5eaeecfc67963619212713e0976d2e53968e012976b434a811ab88"
+  },
+  "locale": "cs",
+  "variant": "A",
+  "channel": "threads",
+  "objective": "trust",
+  "audience": "Caught Up readers (cs)",
+  "destination": "https://dneskai.vercel.app/?utm_source=instagram&utm_medium=post&utm_campaign=no-edition",
+  "utm": {
+    "source": "threads",
+    "medium": "organic_social",
+    "campaign": "no-edition",
+    "content": "2026-10-20-no-edition"
+  },
+  "content": {
+    "text": "Dnes vydání DNESKAi nevyšlo. Pojem dne: Data center: AI bydlí v datacentrech — halách s racky GPU, průmyslovým napájením a chlazením. Nové AI stavby se popisují odběrem (stovky megawattů, v plánech gigawatty), protože limitem je elektřina, ne podlahová plocha; o umístění dnes rozhoduje kapacita sítě a chladicí voda.\n\nZdroj: IEA Energy and AI (2025); hyperscaler disclosures\n\nhttps://dneskai.vercel.app/?utm_source=threads&utm_medium=post&utm_campaign=no-edition",
+    "altText": "Textový příspěvek bez obrázku.",
+    "assetPaths": [],
+    "factualClaimRefs": [
+      "aifirst:data/ai-lessons.json#lex-052"
+    ],
+    "rendererVersion": "carousel-studio-1",
+    "contentHash": "6f9e461b3a2843f283d9b1344468845bc987fd58ced25b616ac0a7a8d917cef9"
+  },
+  "publishWindow": {
+    "notBefore": "2026-10-20T10:00:00.000Z",
+    "notAfter": "2026-10-23T10:00:00.000Z"
+  },
+  "status": "draft",
+  "checks": {
+    "schema": "pending",
+    "brand": "pending",
+    "claims": "pending",
+    "quill": "pending",
+    "keeper": "pending",
+    "duplicate": "pending",
+    "accessibility": "pending",
+    "budget": "pending",
+    "capability": "pending",
+    "authority": "pending",
+    "policy": "pending"
+  },
+  "approvalProvenance": {
+    "approvalRef": "awaiting-owner-approval",
+    "selectionRef": "state/social/recipes/2026-10-20-no-edition.json",
+    "policyRef": "D2-autonomy-build-2026-08-01"
+  },
+  "selectedBy": "PULSE",
+  "createdAt": "2026-10-20T03:14:28.840Z",
+  "attempt": null,
+  "receiptId": null,
+  "migration": null
+}
