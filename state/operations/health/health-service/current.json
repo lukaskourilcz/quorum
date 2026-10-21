@@ -3,8 +3,8 @@
   "nodeId": "health-service",
   "displayName": "Health service",
   "policyVersion": "1.0.0",
-  "generatedAt": "2026-10-20T04:01:26.115Z",
-  "observedAt": "2026-10-20T04:01:26.115Z",
+  "generatedAt": "2026-10-21T04:08:35.113Z",
+  "observedAt": "2026-10-21T04:08:35.113Z",
   "lifecycleStage": "operating",
   "state": "unavailable",
   "reason": "No valid live or recovery receipt is available.",
@@ -47,5 +47,5 @@
   ],
   "ownerAttentionRefs": [],
   "latestRunReceiptRefs": [],
-  "snapshotHash": "bcab2b2b98024ed0108320a13e2b1a9307181037f3c45d847f952496051fe7a3"
+  "snapshotHash": "5ee51c167a327666fcc4dac3118772945d9d637bb92635ecba914984b7b6c1ca"
 }

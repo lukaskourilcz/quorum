@@ -3,8 +3,8 @@
   "nodeId": "metrics-service",
   "displayName": "Metrics service",
   "policyVersion": "1.0.0",
-  "generatedAt": "2026-10-20T04:01:26.115Z",
-  "observedAt": "2026-10-20T04:01:26.115Z",
+  "generatedAt": "2026-10-21T04:08:35.113Z",
+  "observedAt": "2026-10-21T04:08:35.113Z",
   "lifecycleStage": "operating",
   "state": "unavailable",
   "reason": "No valid live or recovery receipt is available.",
@@ -47,5 +47,5 @@
   ],
   "ownerAttentionRefs": [],
   "latestRunReceiptRefs": [],
-  "snapshotHash": "0d1ae6e9e71a0a598385c55e80138a0e8ea8be6b7725ca94b6ad96cbc42e804e"
+  "snapshotHash": "3317a046a732fdf149f6476d80e3535db2050bacf18664cda9e287456b6331bc"
 }
