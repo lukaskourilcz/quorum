@@ -23,7 +23,7 @@ drafts of quorum #592 ride the `reviewed` step and stop with it.
   (`data/events.json`) into aifirst, behind `CAUGHT_UP_STREAMS_ENABLED`. They call no model. While
   Caught Up is paused they ride the 06:00 morning run, because `cu-day` no longer fires.
 - `/admin/api/marketing-collection` (`DNESKAI_COLLECTION_ENABLED`) keeps answering signed queries
-  until OwnDashboard switches to its native feeds.
+  until OwnDashboard switches to its native feeds. It switched on 2026-10-21; see `docs/NEEDED.md`.
 - `/admin/api/marketing-source` stays up. It reports the articles it already exported, and no new
   packet appears because no new article reaches approval.
 - Every record stays where it is: `state/editorial/reviews/`, `state/edition/`, image selections

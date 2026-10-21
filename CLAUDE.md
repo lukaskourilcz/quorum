@@ -15,8 +15,10 @@ Council runs via API in `orchestrator/`; you are the human-invoked engineer.
   workspace, WebDev Signal and the Contest Radar exploration.
   Since the owner's 2026-10-20 decision (#602), Caught Up joins the paused ventures, so
   BoardlessAI produces no DNESKAi article; OwnDashboard prepares DNESKAi's social posts. The
-  DNESKAi stream and event sync, `/admin/api/marketing-collection` and `/admin/api/marketing-source`
-  keep running, and resuming is one registry flip plus the steps in that decision.
+  DNESKAi stream and event sync and `/admin/api/marketing-source` keep running, and resuming is one
+  registry flip plus the steps in that decision. `/admin/api/marketing-collection` answers 503 since
+  2026-10-21, when OwnDashboard moved to native feeds; `DNESKAI_COLLECTION_ENABLED=true` and a
+  redeploy bring it back as OwnDashboard's rollback.
   Design Lab remains in Admin for manual content and carousel curation; pause affects scheduling.
   Contest Radar remains exploration with no room. Records are retained. The registry owns each
   venture room and envelope; `config/venture-capabilities.json` retains the deny-by-default graph.
