@@ -1,3 +1,4 @@
+import { EDITORIAL_KIT } from "../src/dneskai-kits/editorial.js";
 import { describe, expect, it } from "vitest";
 import {
   DNESKAI_AREA,
@@ -35,6 +36,7 @@ function laidOut(id: string, strings: Record<string, string>, pictures: Record<s
   const payload = { locale: "cs" as const, strings: Object.fromEntries(template.requiredSlots.map((slot) => [slot, strings[slot] ?? ""])) };
   const fits = carouselTextFits({ template, payload, brand, format: MASTER_FORMAT });
   const laid = layoutDneskaiSlide({
+    flow: EDITORIAL_KIT.flows.get(template.id)!, metrics: EDITORIAL_KIT.metrics,
     template,
     text: Object.fromEntries(fits.map((fit) => [fit.slot, { lines: fit.fitted.lines.length, fontSize: fit.fitted.fontSize }])),
     pictures

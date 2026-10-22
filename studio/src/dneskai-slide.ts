@@ -1,3 +1,4 @@
+import { EDITORIAL_KIT } from "./dneskai-kits/editorial.js";
 import { createHash } from "node:crypto";
 import { CONNECTOR_MAX_SLIDES, MASTER_CANVAS, MASTER_FORMAT } from "./canvas.js";
 import { layoutDneskaiSlide, type DneskaiLaidPicture } from "./dneskai-layout.js";
@@ -365,8 +366,9 @@ async function inspect(input: DneskaiSlideInput): Promise<Inspection> {
     }
   }
   const laid = layoutDneskaiSlide({
+    flow: EDITORIAL_KIT.flows.get(template.id)!, metrics: EDITORIAL_KIT.metrics,
     template,
-    text: Object.fromEntries(fits.map((fit) => [fit.slot, { lines: fit.fitted.lines.length, fontSize: fit.fitted.fontSize }])),
+    text: Object.fromEntries(fits.map((fit) => [fit.slot, { lines: fit.fitted.lines.length, fontSize: fit.fitted.fontSize, capHeight: fit.face.capHeight / 1000 }])),
     pictures
   });
 

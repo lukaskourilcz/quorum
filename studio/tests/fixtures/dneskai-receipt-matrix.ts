@@ -1,3 +1,4 @@
+import { EDITORIAL_KIT } from "../../src/dneskai-kits/editorial.js";
 import { createHash } from "node:crypto";
 import { layoutDneskaiSlide, type DneskaiLaidPicture } from "../../src/dneskai-layout.js";
 import { CAROUSEL_BRANDS, DNESKAI_PHOTO_TEMPLATES, MASTER_FORMAT, carouselTextFits, type CarouselTemplate } from "../../src/index.js";
@@ -58,7 +59,7 @@ export type ReceiptLayout = (input: {
 }) => CarouselTemplate;
 
 /** Today's call. The kit work changes this adapter, never the recorded frames. */
-export const receiptLayout: ReceiptLayout = (input) => layoutDneskaiSlide(input);
+export const receiptLayout: ReceiptLayout = (input) => layoutDneskaiSlide({...input,flow:EDITORIAL_KIT.flows.get(input.template.id)!,metrics:EDITORIAL_KIT.metrics});
 
 /** One case's frames: `[x, y, width, height]` per layer, and `shade` per shaded picture. */
 export interface ReceiptFrames {
