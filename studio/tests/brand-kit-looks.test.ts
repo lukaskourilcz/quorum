@@ -13,7 +13,7 @@ import { CAROUSEL_BRANDS } from "../src/library.js";
  * made before looks existed byte-identical.
  */
 
-const DNESKAI_LOOKS = ["editorial"];
+const DNESKAI_LOOKS = ["editorial", "magazine"];
 
 const temporary: string[] = [];
 afterEach(() => {
@@ -128,7 +128,7 @@ describe("brand kit looks: the kit style", () => {
 
   it("folds every look's colours into the kit's colours and lists every look family", () => {
     for (const look of style.looks.values()) for (const colour of look.colours) expect(style.colours.has(colour), `${look.id} ${colour}`).toBe(true);
-    expect(kitLookFamilies(style).sort()).toEqual(["IBM Plex Mono", "Source Serif 4", "Space Grotesk"]);
+    expect(kitLookFamilies(style).sort()).toEqual(["IBM Plex Mono", "Literata", "Petrona", "Source Serif 4", "Space Grotesk"]);
   });
 
   it("refuses a look that names a family the studio does not ship", () => {

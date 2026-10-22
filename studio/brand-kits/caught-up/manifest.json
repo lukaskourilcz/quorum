@@ -189,7 +189,8 @@
   "carouselLooks": {
     "default": "editorial",
     "ids": [
-      "editorial"
+      "editorial",
+      "magazine"
     ]
   },
   "rules": [
