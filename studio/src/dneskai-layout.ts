@@ -51,7 +51,7 @@ export const DNESKAI_GAPS = {
   headlineToNote: 8,
   /** Two stacked pictures, and the rows and columns of the sources slide's thumbnails. */
   pictureToPicture: 3,
-  /** The single type slide's blue rule above its kicker. */
+  /** A rule above a label line. Unused since single type lost its kicker; kept so every metrics table names thirteen gaps. */
   ruleToLabel: 3,
   /** The sources slide's title above its first source. */
   titleToSources: 5,
@@ -73,10 +73,12 @@ export const DNESKAI_GAPS = {
 export const DNESKAI_THUMBNAIL_GRID = { columns: 3, width: 296, height: 198, gap: 24 } as const;
 
 /**
- * The band every flowed slide is composed in: under the logotype row, above the credit line.
- * A slide whose words and pictures are shorter than it gives the rest back as described above.
+ * The band every flowed slide is composed in: under the logotype row, down to 86 px above the
+ * foot. It ended at 1196 above a credit line until the owner's decision of 22 October 2026 took
+ * credits off the slides; the band now takes that height. A slide whose words and pictures are
+ * shorter than it gives the rest back as described above.
  */
-export const DNESKAI_AREA = { top: 166, bottom: 1_196 } as const;
+export const DNESKAI_AREA = { top: 166, bottom: 1_264 } as const;
 
 /**
  * The share of the leftover height set above a centred group. Under a half, so the group's centre
@@ -158,7 +160,8 @@ export const DNESKAI_EDITORIAL_METRICS: DneskaiLayoutMetrics = {
 };
 export const DNESKAI_STACK_PRESETS: { readonly statement: DneskaiFlow; readonly singleType: DneskaiFlow } = {
   statement: { kind: "stack", anchor: "centre", items: [{ key: "headline", gap: 0 }, { key: "body", gap: "headlineToNote" }] },
-  singleType: { kind: "stack", anchor: "centre", items: [{ key: "rule", gap: 0 }, { key: "kicker", gap: "ruleToLabel" }, { key: "headline", gap: "labelToText" }, { key: "body", gap: "headlineToNote" }] }
+  // A type-only post carries its headline alone (owner decision, 22 October 2026): the rule opens it.
+  singleType: { kind: "stack", anchor: "centre", items: [{ key: "rule", gap: 0 }, { key: "headline", gap: "labelToText" }] }
 };
 
 /** One text slot as the fitter set it: how many lines, at what size. No lines means empty. */
@@ -487,7 +490,7 @@ function heightsOf(input: DneskaiLayoutInput): Map<string, number> {
 
 /**
  * Single, photo: the band stays at the foot, as declared, unless the caller's focal point lands
- * under it. Then the whole lower group — band, line, kicker and credit — moves under the
+ * under it. Then the whole lower group — the band and any line, kicker or credit — moves under the
  * logotype, and the shade follows it, so the subject the editor pointed at stays clear.
  *
  * Decided on where the focal point lands in the cropped frame, not on its place in the source: a
@@ -506,18 +509,25 @@ function singlePhoto(input: DneskaiLayoutInput): CarouselTemplate {
   const block = measured.lines * measured.fontSize * 1.12;
   const band = block + input.metrics.panel.padding * 2;
   const footTop = px.y(panel) + px.height(panel) - band;
-  const body = textLayer(template, "body")!;
-  const kicker = textLayer(template, "kicker")!;
-  const credit = textLayer(template, "credit")!;
-  const hasBody = (input.text.body?.lines ?? 0) > 0;
+  // The line, the kicker and the credit are each optional: a panel that carries the headline alone
+  // moves alone, and the shade then holds to the panel's floor.
+  const body = textLayer(template, "body");
+  const kicker = textLayer(template, "kicker");
+  const credit = textLayer(template, "credit");
+  const hasBody = Boolean(body) && (input.text.body?.lines ?? 0) > 0;
   const bodyTop = input.metrics.panel.top + band + input.metrics.panel.toBody;
-  const kickerTop = hasBody ? bodyTop + px.height(body) + input.metrics.panel.toKicker : bodyTop;
+  const kickerTop = hasBody ? bodyTop + px.height(body!) + input.metrics.panel.toKicker : bodyTop;
   // An empty line draws nothing, but its frame is still measured against the shade, so it waits
   // on the kicker row rather than below it in the clear part of the picture.
-  const bodyPlace = hasBody ? { y: bodyTop, height: px.height(body) } : { y: kickerTop, height: px.height(kicker) };
+  const bodyPlace = body ? (hasBody ? { y: bodyTop, height: px.height(body) } : { y: kickerTop, height: kicker ? px.height(kicker) : px.height(body) }) : null;
   // Measured on the frames as `moved` rounds them, so the shade's hold reaches every one of them.
   const bottom = (y: number, height: number) => Math.round(y) + Math.round(height);
-  const headEnd = Math.max(bottom(kickerTop, px.height(kicker)), bottom(kickerTop, px.height(credit)), bottom(bodyPlace.y, bodyPlace.height));
+  const headEnd = Math.max(
+    bottom(input.metrics.panel.top, Math.ceil(band)),
+    ...(kicker ? [bottom(kickerTop, px.height(kicker))] : []),
+    ...(credit ? [bottom(kickerTop, px.height(credit))] : []),
+    ...(bodyPlace ? [bottom(bodyPlace.y, bodyPlace.height)] : [])
+  );
   const clearFoot = footTop - focalY;
   const clearHead = focalY - headEnd;
   if (clearFoot >= input.metrics.panel.clearance || clearHead <= clearFoot) return template;
@@ -525,11 +535,11 @@ function singlePhoto(input: DneskaiLayoutInput): CarouselTemplate {
   const headline = textLayer(template, "headline")!;
   const places = new Map<Layer, Place>([
     [panel, { y: input.metrics.panel.top, height: Math.ceil(band) }],
-    [headline, { y: input.metrics.panel.top + input.metrics.panel.inset, height: Math.ceil(block) }],
-    [body, bodyPlace],
-    [kicker, { y: kickerTop, height: px.height(kicker) }],
-    [credit, { y: kickerTop, height: px.height(credit) }]
+    [headline, { y: input.metrics.panel.top + input.metrics.panel.inset, height: Math.ceil(block) }]
   ]);
+  if (body && bodyPlace) places.set(body, bodyPlace);
+  if (kicker) places.set(kicker, { y: kickerTop, height: px.height(kicker) });
+  if (credit) places.set(credit, { y: kickerTop, height: px.height(credit) });
   // The foot's shade turned over: deep behind the logotype and the words, clear from just under
   // the kicker row to the floor. Every line still stands on at least 0.68 of the ink, which is
   // what the cover's shade promises its headline.
