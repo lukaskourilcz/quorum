@@ -1,4 +1,4 @@
-export const DNESKAI_KIT_IDS = ["editorial", "bold", "explainer", "magazine", "ticker"] as const;
+export const DNESKAI_KIT_IDS = ["editorial", "bold", "explainer", "magazine", "ticker", "spotlight"] as const;
 export type DneskaiKitId = (typeof DNESKAI_KIT_IDS)[number];
 export const DNESKAI_DEFAULT_KIT: DneskaiKitId = "editorial";
 
