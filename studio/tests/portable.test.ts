@@ -1,5 +1,5 @@
 import { execFileSync } from "node:child_process";
-import { cpSync, mkdirSync, mkdtempSync, readFileSync, rmSync, symlinkSync, writeFileSync } from "node:fs";
+import { cpSync, mkdirSync, mkdtempSync, realpathSync, readFileSync, rmSync, symlinkSync, writeFileSync } from "node:fs";
 import { createRequire } from "node:module";
 import { tmpdir } from "node:os";
 import path from "node:path";
@@ -29,7 +29,8 @@ describe("the package outside the repository", () => {
   });
 
   it("renders the seven-slide acceptance deck from a directory holding only dist, fonts and brand-kits/caught-up", async () => {
-    const directory = mkdtempSync(path.join(tmpdir(), "carousel-studio-"));
+    // The real path: on macOS the temp directory is a symlink into /private, which import.meta.url resolves.
+    const directory = realpathSync(mkdtempSync(path.join(tmpdir(), "carousel-studio-")));
     try {
       // The exact build `pnpm build` runs, into the empty directory. Not a copy of studio/dist:
       // that holds whatever the last build left there, which is not necessarily this source.
