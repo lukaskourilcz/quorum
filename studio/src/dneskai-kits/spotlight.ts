@@ -160,3 +160,12 @@ const split = template({
   version: FLOWED,
   layers: [photo("image-1", 0, W, DEPTH, DEPTH_FADE), logo, ...quote(330)]
 });
+
+const splitPair = template({
+  id: "dneskai-spotlight-split-pair",
+  name: "DNESKAi spotlight · split, two images",
+  description: "Two photographs side by side, each half the width and edge to edge, fading into ink, with the quote, the speaker and the explanation centred under them.",
+  backgroundToken: "background",
+  version: FLOWED,
+  layers: [photo("image-1", 0, W / 2, DEPTH, DEPTH_FADE), photo("image-2", W / 2, W / 2, DEPTH, DEPTH_FADE), logo, ...quote(320)]
+});
