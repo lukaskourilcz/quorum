@@ -1,6 +1,7 @@
 import { readFileSync } from "node:fs";
 import path from "node:path";
 import { BRAND_KITS_DIRECTORY, brandKitVentures, logotypeForBrand, logotypeMarkup, readBrandKit, type BrandKitManifest, type LogotypeVariant } from "./brand-kit.js";
+import { FONT_FAMILIES } from "./fonts.js";
 import type { BrandTokens, CarouselTemplate } from "./schema.js";
 
 /**
@@ -11,6 +12,11 @@ import type { BrandTokens, CarouselTemplate } from "./schema.js";
  * mark. When the kit is missing, fails its hashes or does not set a carousel palette, nothing is
  * drawn for that brand: the old palette and wordmark are exactly what the owner replaced, and a
  * card in them would ship looking finished.
+ *
+ * Looks (`brand-kits/<kit>/looks/<id>.json`) layer on top, in this precedence: a ground from
+ * `groundSequence` replaces the palette per slide position, as before; a look replaces the kit's
+ * base palette, faces and flags; the kit's base is what a render without a look draws. Grounds and
+ * corner marks stay kit-level. A look can set `flat` or `squareCorners` and never clear them.
  */
 
 type Palette = Readonly<Record<string, string>>;
@@ -20,6 +26,22 @@ export interface KitCornerMark {
   widthPx: number;
   marginPx: number;
   storyTopPx: number;
+}
+
+/** One named look of a kit, resolved against the kit's own flags. */
+export interface KitLook {
+  id: string;
+  label: string;
+  purpose: string;
+  palette: Palette;
+  fonts: BrandTokens["fonts"];
+  /** Resolved: the kit's flag or the look's, whichever is set. */
+  flat: boolean;
+  squareCorners: boolean;
+  /** The look's placement when set, else the kit's. */
+  logo: "every-slide" | "last-slide";
+  /** Every colour this look's palette draws. */
+  colours: ReadonlySet<string>;
 }
 
 export interface KitStyle {
@@ -33,8 +55,12 @@ export interface KitStyle {
   grounds: ReadonlyMap<string, Palette>;
   groundSequence: readonly string[];
   cornerMark: KitCornerMark | null;
-  /** Every colour the kit declares: its palettes, its grounds, its files' inks and its neutrals. */
+  /** Every colour the kit declares: its palettes, its grounds, its looks, its files' inks and its neutrals. */
   colours: ReadonlySet<string>;
+  /** The kit's looks by id, in manifest order. Empty for a kit that declares none. */
+  looks: ReadonlyMap<string, KitLook>;
+  /** The look a render uses when none is asked for; null when the kit declares none. */
+  defaultLook: string | null;
 }
 
 /** A slide's place in the deck it ships in. */
@@ -66,7 +92,29 @@ export function readKitStyle(venture: string, root?: string): KitStyle {
     };
   };
   const grounds = new Map((style?.grounds ?? []).map((ground) => [ground.id, paletteValues(ground.palette)] as const));
+  const flat = style?.flat ?? false;
+  const squareCorners = style?.squareCorners ?? false;
+  const logo = style?.logo ?? "every-slide";
+  const looks = new Map(reading.looks.map((look) => {
+    for (const family of [look.fonts.headline.family, look.fonts.body.family, look.fonts.mono.family]) {
+      if (!FONT_FAMILIES.includes(family)) throw new Error(`Brand kit ${venture} look ${look.id} names a family the studio does not ship: ${family}`);
+    }
+    const palette = paletteValues(look.palette);
+    const resolved: KitLook = {
+      id: look.id,
+      label: look.label,
+      purpose: look.purpose,
+      palette,
+      fonts: { headline: look.fonts.headline.family, body: look.fonts.body.family, mono: look.fonts.mono.family },
+      flat: flat || (look.style.flat ?? false),
+      squareCorners: squareCorners || (look.style.squareCorners ?? false),
+      logo: look.style.logo ?? logo,
+      colours: new Set(Object.values(palette))
+    };
+    return [look.id, resolved] as const;
+  }));
   const colours = new Set<string>([
+    ...[...looks.values()].flatMap((look) => [...look.colours]),
     ...Object.values(paletteValues(manifest.carouselPalette)),
     ...[...grounds.values()].flatMap((palette) => Object.values(palette)),
     ...manifest.palettes.flatMap((palette) => [...palette.grounds, ...palette.colors.map((colour) => colour.value)]),
@@ -80,16 +128,53 @@ export function readKitStyle(venture: string, root?: string): KitStyle {
     fonts: manifest.carouselFonts
       ? { headline: manifest.carouselFonts.headline.family, body: manifest.carouselFonts.body.family, mono: manifest.carouselFonts.mono.family }
       : null,
-    flat: style?.flat ?? false,
-    squareCorners: style?.squareCorners ?? false,
-    logo: style?.logo ?? "every-slide",
+    flat,
+    squareCorners,
+    logo,
     grounds,
     groundSequence: style?.groundSequence ?? [],
     cornerMark: style?.cornerMark
       ? { variants: style.cornerMark.roles.map(markFor), widthPx: style.cornerMark.widthPx, marginPx: style.cornerMark.marginPx, storyTopPx: style.cornerMark.storyTopPx }
       : null,
-    colours
+    colours,
+    looks,
+    defaultLook: manifest.carouselLooks?.default ?? null
   };
+}
+
+const dressedStyles = new WeakMap<KitStyle, Map<string, KitStyle>>();
+
+/**
+ * The kit style as one of its looks dresses it. The style itself when no look is asked for, so a
+ * caller that passes nothing receives the object it received before looks existed. Throws for a
+ * look the kit does not declare, and for a look asked of a brand that has no kit.
+ */
+export function kitStyleWithLook(style: KitStyle, look?: string): KitStyle;
+export function kitStyleWithLook(style: KitStyle | null, look?: string): KitStyle | null;
+export function kitStyleWithLook(style: KitStyle | null, look?: string): KitStyle | null {
+  if (look === undefined) return style;
+  if (!style) throw new Error(`Look ${look} was asked of a brand that names no brand kit`);
+  const found = style.looks.get(look);
+  if (!found) throw new Error(`Brand kit ${style.venture} declares no look ${look}${style.looks.size ? `; it has ${[...style.looks.keys()].join(", ")}` : ""}`);
+  const cache = dressedStyles.get(style) ?? new Map<string, KitStyle>();
+  dressedStyles.set(style, cache);
+  const cached = cache.get(look);
+  if (cached) return cached;
+  const dressed: KitStyle = {
+    ...style,
+    palette: found.palette,
+    fonts: found.fonts,
+    flat: found.flat,
+    squareCorners: found.squareCorners,
+    logo: found.logo
+  };
+  cache.set(look, dressed);
+  return dressed;
+}
+
+/** Every family any look of the kit binds, de-duplicated, for the coverage gates. */
+export function kitLookFamilies(style: KitStyle): string[] {
+  return [...new Set([...style.looks.values()].flatMap((look) => [look.fonts.headline, look.fonts.body, look.fonts.mono]))];
 }
 
 const styleCache = new Map<string, KitStyle>();

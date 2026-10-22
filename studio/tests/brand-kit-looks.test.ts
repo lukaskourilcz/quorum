@@ -3,6 +3,8 @@ import { tmpdir } from "node:os";
 import path from "node:path";
 import { afterEach, describe, expect, it } from "vitest";
 import { BRAND_KITS_DIRECTORY, CarouselLookSchema, readBrandKit } from "../src/brand-kit.js";
+import { dressBrand, kitLookFamilies, kitStyleFor, kitStyleWithLook, readKitStyle } from "../src/kit-style.js";
+import { CAROUSEL_BRANDS } from "../src/library.js";
 
 /*
  * Brand kit looks (docs/design-lab/dneskai-kits/ADR.md §4): named overlays of a kit's carousel
@@ -94,5 +96,51 @@ describe("brand kit looks: the manifest and the files", () => {
   it("refuses a manifest whose default look is not listed", () => {
     const root = tampered((kit) => rewriteJson(path.join(kit, "manifest.json"), (manifest) => { manifest.carouselLooks.default = "absent"; }));
     expect(readBrandKit("caught-up", root).problems).toEqual(["carouselLooks.default: The default look absent is not listed"]);
+  });
+});
+
+describe("brand kit looks: the kit style", () => {
+  const brand = CAROUSEL_BRANDS["caught-up"];
+  const style = kitStyleFor(brand)!;
+
+  it("exposes the kit's looks and its default", () => {
+    expect([...style.looks.keys()]).toEqual(DNESKAI_LOOKS);
+    expect(style.defaultLook).toBe("editorial");
+  });
+
+  it("returns the cached style itself when no look is asked for", () => {
+    expect(kitStyleWithLook(style)).toBe(style);
+    expect(kitStyleWithLook(style, undefined)).toBe(style);
+    expect(kitStyleWithLook(null)).toBeNull();
+  });
+
+  it("throws for a look the kit does not declare, and for a look on a brand with no kit", () => {
+    expect(() => kitStyleWithLook(style, "no-such")).toThrow(/declares no look no-such/);
+    expect(() => kitStyleWithLook(null, "editorial")).toThrow(/names no brand kit/);
+  });
+
+  it("dresses the brand in the default look exactly as in the kit's base palette", () => {
+    expect(dressBrand(brand, kitStyleWithLook(style, "editorial"))).toEqual(dressBrand(brand, style));
+    const dressed = kitStyleWithLook(style, "editorial");
+    expect([dressed.flat, dressed.squareCorners, dressed.logo]).toEqual([style.flat, style.squareCorners, style.logo]);
+    expect(kitStyleWithLook(style, "editorial")).toBe(dressed);
+  });
+
+  it("folds every look's colours into the kit's colours and lists every look family", () => {
+    for (const look of style.looks.values()) for (const colour of look.colours) expect(style.colours.has(colour), `${look.id} ${colour}`).toBe(true);
+    expect(kitLookFamilies(style).sort()).toEqual(["IBM Plex Mono", "Source Serif 4", "Space Grotesk"]);
+  });
+
+  it("refuses a look that names a family the studio does not ship", () => {
+    const root = tampered((kit) => {
+      rewriteJson(path.join(kit, "manifest.json"), (manifest) => { manifest.carouselLooks.ids.push("odd"); });
+      rewriteJson(path.join(kit, "looks", "editorial.json"), () => undefined);
+      const odd = JSON.parse(readFileSync(path.join(kit, "looks", "editorial.json"), "utf8"));
+      odd.id = "odd";
+      odd.fonts.headline.family = "Comic Sans";
+      writeFileSync(path.join(kit, "looks", "odd.json"), JSON.stringify(odd));
+    });
+    expect(readBrandKit("caught-up", root).problems).toEqual([]);
+    expect(() => readKitStyle("caught-up", root)).toThrow("Brand kit caught-up look odd names a family the studio does not ship: Comic Sans");
   });
 });
