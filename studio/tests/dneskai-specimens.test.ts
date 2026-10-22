@@ -1,6 +1,6 @@
 import sharp from 'sharp';
 import { beforeAll, describe, expect, it } from 'vitest';
-import { DNESKAI_SPECIMEN_DECKS, SPECIMEN_PHOTO_SIZES, materializeSpecimenDeck, syntheticAbstractPhoto } from '../scripts/dneskai-specimen-decks.js';
+import { DNESKAI_SPECIMEN_DECKS, DNESKAI_SPECIMEN_INSET_DECK, SPECIMEN_PHOTO_SIZES, materializeSpecimenDeck, syntheticAbstractPhoto } from '../scripts/dneskai-specimen-decks.js';
 import { refusalTile, sheetLayout } from '../scripts/dneskai-specimens.js';
 import { DNESKAI_KITS, renderDneskaiSlide, validateDneskaiSlide } from '../src/dneskai-slide.js';
 let photos:Buffer[];
@@ -19,6 +19,14 @@ describe('authentic local DNESKAi specimens',()=>{
    expect(blocking,`${kit}/${deck.id}/${index}`).toEqual(deck.id==='low-res'&&index===0&&bleeds?['image-low-resolution']:[]);
   }
  },300000);
+ it('renders the inset cover only in a kit whose cover takes a second photograph',async()=>{
+  const slide=materializeSpecimenDeck(DNESKAI_SPECIMEN_INSET_DECK,photos)[0]!;
+  for(const kit of DNESKAI_KITS.keys()){
+   const takes=DNESKAI_KITS.get(kit)!.resolve('cover-photo',undefined,['image-1','image-2']).slides[0]!.layers.some(l=>l.type==='image'&&l.slot==='image-2');
+   expect((await validateDneskaiSlide({...slide,kit})).filter(p=>p.blocking).map(p=>p.code),kit).toEqual(takes?[]:['image-unexpected']);
+  }
+  expect([...DNESKAI_KITS.keys()].filter(kit=>DNESKAI_KITS.get(kit)!.resolve('cover-photo',undefined,['image-1']).slides[0]!.layers.some(l=>l.type==='image'&&l.slot==='image-2'))).toEqual(['spotlight']);
+ },120000);
  it('puts a dense and short field in each deck without exceeding template limits',()=>{
   const kit=DNESKAI_KITS.get('editorial')!;
   for(const deck of DNESKAI_SPECIMEN_DECKS){
