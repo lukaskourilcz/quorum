@@ -43,6 +43,21 @@ describe('kit-owned DNESKAi flows',()=>{
   expect(Math.round(frame(plain,'body').y*1350)-Math.round(frame(pulled,'body').y*1350)).toBe(12);
   expect(frame(pulled,'headline')).toEqual(frame(plain,'headline'));
  });
+ it('moves the following shade stops down by as far as the group landed, and leaves the rest',async()=>{
+  const {SPOTLIGHT_KIT}=await import('../src/dneskai-kits/spotlight.js');
+  const id='dneskai-spotlight-figure',template=SPOTLIGHT_KIT.templates.get(id)!,flow=SPOTLIGHT_KIT.flows.get(id)! as Extract<DneskaiLayoutInput['flow'],{kind:'stack'}>;
+  const shade=(value:ReturnType<typeof layoutDneskaiSlide>)=>value.slides[0]!.layers.find(l=>l.type==='image')!.shade!.stops;
+  const base:DneskaiLayoutInput={template,flow,metrics:SPOTLIGHT_KIT.metrics,text:{headline:{lines:1,fontSize:60,capHeight:0.686},body:{lines:1,fontSize:30,capHeight:0.728}},pictures:{}};
+  const declared=template.slides[0]!.layers.find(l=>l.type==='image')!.shade!.stops;
+  const laid=layoutDneskaiSlide(base),headline=frame(laid,'headline');
+  const drop=(Math.round(headline.y*1350)-Math.round(template.slides[0]!.layers.find(l=>l.type==='text'&&l.slot==='headline')!.y*1350))/1296;
+  expect(drop).toBeGreaterThan(0);
+  expect(shade(laid).slice(0,2)).toEqual(declared.slice(0,2));
+  shade(laid).slice(2).forEach((stop,i)=>expect(stop.at).toBeCloseTo(Math.min(1,declared[i+2]!.at+drop),3));
+  expect(shade(laid).map(s=>s.opacity)).toEqual(declared.map(s=>s.opacity));
+  const {follow:_,...still}=flow;
+  expect(shade(layoutDneskaiSlide({...base,flow:still}))).toEqual(declared);
+ });
  it('rejects a stack item the template cannot serve with its key named',()=>{
   expect(()=>layoutDneskaiSlide({...input(),flow:{kind:'stack',anchor:'centre',items:[{key:'missing-picture',gap:0}]}})).toThrow('Flow item missing-picture names no layer');
  });
