@@ -30,10 +30,10 @@ const imageLayers = (template: CarouselTemplate) => template.slides[0]!.layers.f
 
 function longest(template: CarouselTemplate): Record<string, string> {
   return Object.fromEntries(template.slides[0]!.layers.flatMap((layer) =>
-    layer.type === "text" ? [[layer.slot, layer.slot === "folio" ? "07 / 07" : PANGRAM.repeat(20).slice(0, layer.maxChars).trim()]] : []));
+    layer.type === "text" ? [[layer.slot, PANGRAM.repeat(20).slice(0, layer.maxChars).trim()]] : []));
 }
 function shortest(template: CarouselTemplate): Record<string, string> {
-  return Object.fromEntries(template.requiredSlots.map((slot) => [slot, slot === "folio" ? "02 / 07" : "Krátce."]));
+  return Object.fromEntries(template.requiredSlots.map((slot) => [slot, "Krátce."]));
 }
 const picture = (width: number, height: number, fit?: "cover" | "contain"): DneskaiLaidPicture =>
   ({ width, height, crop: { focal: { x: 0.5, y: 0.5 }, ...(fit ? { fit } : {}) }, focalGiven: false });
@@ -69,10 +69,9 @@ describe("the explainer kit contract", () => {
       headline: { family: "IBM Plex Sans", weight: 700, uppercase: false },
       body: { family: "IBM Plex Sans", weight: 400, uppercase: false },
       kicker: { family: "IBM Plex Mono", weight: 400, uppercase: true },
-      credit: { family: "IBM Plex Mono", weight: 400, uppercase: false },
       sources: { family: "IBM Plex Sans", weight: 400, uppercase: false }
     });
-    expect(kit.placedFields).toEqual({ "cover-photo": ["headline", "kicker", "credit"], figure: ["headline", "body", "credit"], split: ["headline", "body", "kicker", "credit"], statement: ["headline", "body"], sources: ["sources"], single: ["headline", "body", "kicker", "credit"] });
+    expect(kit.placedFields).toEqual({ "cover-photo": ["headline"], figure: ["headline", "body"], split: ["headline", "body", "kicker"], statement: ["headline", "body"], sources: ["sources"], single: ["headline"] });
   });
 
   it("frames every picture: nothing bleeds, nothing is treated, corners are square and nothing glows", () => {
@@ -110,7 +109,7 @@ describe("the explainer kit as its look draws it", () => {
     }
   });
 
-  it("moves a figure's white plate with its picture and keeps it clear of the words and the foot", () => {
+  it("moves a figure's white plate with its picture and keeps it clear of the words and inside the content area", () => {
     for (const role of ["figure", "cover-photo", "single-photo"] as const) {
       const template = kit.resolve(role === "single-photo" ? "single" : role, role === "single-photo" ? "photo" : undefined, ["image-1"]);
       for (const strings of [shortest(template), longest(template)]) for (const shape of [picture(2_000, 600, "contain"), picture(1_600, 900, "cover")]) {
@@ -121,7 +120,7 @@ describe("the explainer kit as its look draws it", () => {
         expect(plate.type).toBe("shape");
         expect(px(image.y) - px(plate.y), template.id).toBe(24);
         expect(px(plate.y + plate.height) - px(image.y + image.height), template.id).toBe(24);
-        expect(px(plate.y + plate.height), template.id).toBeLessThanOrEqual(1_166);
+        expect(px(plate.y + plate.height), template.id).toBeLessThanOrEqual(kit.metrics.area.bottom);
         const headline = layers.find((layer) => layer.type === "text" && layer.slot === "headline")!;
         expect(px(headline.y + headline.height), template.id).toBeLessThan(px(plate.y));
       }
