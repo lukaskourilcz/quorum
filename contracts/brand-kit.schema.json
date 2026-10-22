@@ -742,6 +742,31 @@
       ],
       "additionalProperties": false
     },
+    "carouselLooks": {
+      "type": "object",
+      "properties": {
+        "default": {
+          "type": "string",
+          "maxLength": 40,
+          "pattern": "^[a-z][a-z0-9-]*$"
+        },
+        "ids": {
+          "minItems": 1,
+          "maxItems": 12,
+          "type": "array",
+          "items": {
+            "type": "string",
+            "maxLength": 40,
+            "pattern": "^[a-z][a-z0-9-]*$"
+          }
+        }
+      },
+      "required": [
+        "default",
+        "ids"
+      ],
+      "additionalProperties": false
+    },
     "rules": {
       "minItems": 1,
       "maxItems": 20,

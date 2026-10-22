@@ -38,8 +38,11 @@ describe("brand kits", () => {
   });
 
   it.each(kits.map((kit) => [path.basename(kit.directory), kit] as const))("%s: holds no file the manifest does not name", (_venture, kit) => {
-    const named = new Set(["manifest.json", ...(kit.manifest?.assets.map((asset) => asset.file) ?? [])]);
+    const looks = kit.manifest?.carouselLooks;
+    const named = new Set(["manifest.json", ...(kit.manifest?.assets.map((asset) => asset.file) ?? []), ...(looks ? ["looks"] : [])]);
     expect(readdirSync(kit.directory).filter((file) => !named.has(file))).toEqual([]);
+    // A kit that declares looks holds exactly one file per declared look in looks/.
+    if (looks) expect(readdirSync(path.join(kit.directory, "looks")).sort()).toEqual(looks.ids.map((id) => `${id}.json`).sort());
   });
 
   it.each(kits.map((kit) => [path.basename(kit.directory), kit] as const))("%s: records the fills and viewBox each SVG actually draws", (_venture, kit) => {

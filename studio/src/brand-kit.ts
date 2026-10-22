@@ -93,6 +93,11 @@ const CarouselPaletteSchema = z.strictObject({
 /** One of the studio's three type slots: a committed family (`studio/src/fonts.ts`) and why. */
 const CarouselFontSchema = z.strictObject({ family: z.string().trim().min(2).max(100), source: NoteSchema });
 
+/** The studio's three type slots, as `carouselFonts` spells them. Named so a look reuses it. */
+const CarouselFontsSchema = z.strictObject({ headline: CarouselFontSchema, body: CarouselFontSchema, mono: CarouselFontSchema });
+
+const LookIdSchema = z.string().regex(/^[a-z][a-z0-9-]*$/).max(40);
+
 const GroundIdSchema = z.string().regex(/^[a-z][a-z0-9-]*$/).max(40);
 
 /**
@@ -187,8 +192,14 @@ export const BrandKitManifestSchema = z.strictObject({
    */
   carouselPalette: CarouselPaletteSchema.optional(),
   /** The studio's three type slots, when this kit sets them. `library.ts` carries the same families. */
-  carouselFonts: z.strictObject({ headline: CarouselFontSchema, body: CarouselFontSchema, mono: CarouselFontSchema }).optional(),
+  carouselFonts: CarouselFontsSchema.optional(),
   carouselStyle: CarouselStyleSchema.optional(),
+  /**
+   * Named looks, one file each in `looks/<id>.json`. `default` is the look a render uses when none
+   * is asked for; its palette and fonts must equal `carouselPalette` and `carouselFonts` entry for
+   * entry, which is what keeps every render made before looks existed byte-identical.
+   */
+  carouselLooks: z.strictObject({ default: LookIdSchema, ids: z.array(LookIdSchema).min(1).max(12) }).optional(),
   rules: z.array(NoteSchema).min(1).max(20),
   doNots: z.array(NoteSchema).min(1).max(20),
   /** How the brand's social posts are built, when the spec says. */
@@ -240,6 +251,14 @@ export const BrandKitManifestSchema = z.strictObject({
       }
     });
   }
+  if (kit.carouselLooks) {
+    const looks = kit.carouselLooks;
+    if (new Set(looks.ids).size !== looks.ids.length) context.addIssue({ code: "custom", message: "Look ids repeat", path: ["carouselLooks", "ids"] });
+    if (!looks.ids.includes(looks.default)) context.addIssue({ code: "custom", message: `The default look ${looks.default} is not listed`, path: ["carouselLooks", "default"] });
+    if (!kit.carouselPalette || !kit.carouselFonts) {
+      context.addIssue({ code: "custom", message: "Carousel looks need the carousel palette and fonts the default look equals", path: ["carouselLooks"] });
+    }
+  }
   const [, , width, height] = kit.logotype.viewBox;
   if (Math.abs(width / height - kit.logotype.aspectRatio) > 0.01) {
     context.addIssue({ code: "custom", message: `aspectRatio ${kit.logotype.aspectRatio} disagrees with the viewBox (${(width / height).toFixed(3)})`, path: ["logotype", "aspectRatio"] });
@@ -249,11 +268,93 @@ export const BrandKitManifestSchema = z.strictObject({
 export type BrandKitManifest = z.infer<typeof BrandKitManifestSchema>;
 export type BrandKitAsset = BrandKitManifest["assets"][number];
 
+/**
+ * One named look of a kit (`looks/<id>.json`): a full carousel palette, the three type slots and
+ * the style flags the look sets. A studio file format, not a published contract.
+ */
+export const CarouselLookSchema = z.strictObject({
+  schemaVersion: z.literal("brand-kit-look/1"),
+  id: LookIdSchema,
+  label: z.string().trim().min(2).max(80),
+  /** What the look is for, for the Design Lab and the kit author. */
+  purpose: NoteSchema,
+  /** The seven carousel tokens, each with its value and where it came from. */
+  palette: CarouselPaletteSchema,
+  /** The three type slots. Families are checked against `FONT_FAMILIES` in `kit-style.ts`. */
+  fonts: CarouselFontsSchema,
+  /**
+   * Flags the look sets over the kit's `carouselStyle`. A look may set `flat` or `squareCorners`
+   * where the kit leaves them unset and may not clear one the kit sets: those are the spec's
+   * do-nots and a look is not a spec change. `logo` is the look's own.
+   */
+  style: z.strictObject({
+    flat: z.boolean().optional(),
+    squareCorners: z.boolean().optional(),
+    logo: z.enum(["every-slide", "last-slide"]).optional()
+  }).default({})
+});
+export type CarouselLook = z.infer<typeof CarouselLookSchema>;
+
+/** The directory inside a kit that holds its look files. */
+export const BRAND_KIT_LOOKS_DIRECTORY = "looks";
+
 /** What reading one kit directory found. A problem is a reason the kit cannot be used as it is. */
 export interface BrandKitReading {
   directory: string;
   manifest: BrandKitManifest | null;
+  /** The parsed look files in manifest order. Empty when the manifest lists none or any failed. */
+  looks: CarouselLook[];
   problems: string[];
+}
+
+/** Every problem the kit's look files have, and the looks when there is none. */
+function readLooks(directory: string, manifest: BrandKitManifest): { looks: CarouselLook[]; problems: string[] } {
+  const problems: string[] = [];
+  const looks: CarouselLook[] = [];
+  const declared = manifest.carouselLooks?.ids ?? [];
+  const folder = path.join(directory, BRAND_KIT_LOOKS_DIRECTORY);
+  if (existsSync(folder)) {
+    for (const file of readdirSync(folder).sort()) {
+      if (!declared.some((id) => `${id}.json` === file)) problems.push(`${BRAND_KIT_LOOKS_DIRECTORY}/ holds ${file} the manifest does not list`);
+    }
+  }
+  for (const id of declared) {
+    const name = `${BRAND_KIT_LOOKS_DIRECTORY}/${id}.json`;
+    const file = path.join(folder, `${id}.json`);
+    if (!existsSync(file)) {
+      problems.push(`${name} is missing`);
+      continue;
+    }
+    let raw: unknown;
+    try {
+      raw = JSON.parse(readFileSync(file, "utf8"));
+    } catch (error) {
+      problems.push(`${name} is not JSON: ${error instanceof Error ? error.message : String(error)}`);
+      continue;
+    }
+    const parsed = CarouselLookSchema.safeParse(raw);
+    if (!parsed.success) {
+      problems.push(...parsed.error.issues.map((issue) => `${name}: ${issue.path.join(".") || "look"}: ${issue.message}`));
+      continue;
+    }
+    const look = parsed.data;
+    if (look.id !== id) problems.push(`${name} names look ${look.id}, file is ${id}`);
+    for (const flag of ["flat", "squareCorners"] as const) {
+      if (manifest.carouselStyle?.[flag] === true && look.style[flag] === false) problems.push(`look ${id} clears ${flag}, which the kit sets`);
+    }
+    if (id === manifest.carouselLooks?.default) {
+      for (const [token, entry] of Object.entries(manifest.carouselPalette ?? {})) {
+        const mine = look.palette[token as keyof CarouselLook["palette"]];
+        if (mine.value !== entry.value || mine.source !== entry.source) problems.push(`the default look ${id} differs from carouselPalette at ${token}`);
+      }
+      for (const [slot, entry] of Object.entries(manifest.carouselFonts ?? {})) {
+        const mine = look.fonts[slot as keyof CarouselLook["fonts"]];
+        if (mine.family !== entry.family || mine.source !== entry.source) problems.push(`the default look ${id} differs from carouselFonts at ${slot}`);
+      }
+    }
+    looks.push(look);
+  }
+  return { looks: problems.length ? [] : looks, problems };
 }
 
 function sha256(bytes: Buffer): string {
@@ -270,16 +371,16 @@ function sha256(bytes: Buffer): string {
 export function readBrandKit(venture: string, root = BRAND_KITS_DIRECTORY): BrandKitReading {
   const directory = path.join(root, venture);
   const manifestPath = path.join(directory, "manifest.json");
-  if (!existsSync(manifestPath)) return { directory, manifest: null, problems: ["manifest.json is missing"] };
+  if (!existsSync(manifestPath)) return { directory, manifest: null, looks: [], problems: ["manifest.json is missing"] };
   let raw: unknown;
   try {
     raw = JSON.parse(readFileSync(manifestPath, "utf8"));
   } catch (error) {
-    return { directory, manifest: null, problems: [`manifest.json is not JSON: ${error instanceof Error ? error.message : String(error)}`] };
+    return { directory, manifest: null, looks: [], problems: [`manifest.json is not JSON: ${error instanceof Error ? error.message : String(error)}`] };
   }
   const parsed = BrandKitManifestSchema.safeParse(raw);
   if (!parsed.success) {
-    return { directory, manifest: null, problems: parsed.error.issues.map((issue) => `${issue.path.join(".") || "manifest"}: ${issue.message}`) };
+    return { directory, manifest: null, looks: [], problems: parsed.error.issues.map((issue) => `${issue.path.join(".") || "manifest"}: ${issue.message}`) };
   }
   const manifest = parsed.data;
   const problems: string[] = [];
@@ -294,7 +395,9 @@ export function readBrandKit(venture: string, root = BRAND_KITS_DIRECTORY): Bran
     if (bytes.length !== asset.bytes) problems.push(`${asset.file} is ${bytes.length} bytes, manifest says ${asset.bytes}`);
     if (sha256(bytes) !== asset.sha256) problems.push(`${asset.file} does not match its recorded sha256`);
   }
-  return { directory, manifest, problems };
+  const looks = readLooks(directory, manifest);
+  problems.push(...looks.problems);
+  return { directory, manifest, looks: looks.looks, problems };
 }
 
 /** Every kit directory, in name order. A directory without a manifest is still listed. */
