@@ -19,14 +19,16 @@ import { box, text, logo, kicker, body, template, FLOWED, LEFT, MEASURE, W, H } 
  *
  * Grid. One centred column, the full 936 px measure between the 72 px margins. Every flowed group
  * stands on one floor, 100 px above the foot: its last baseline sits there whatever its length,
- * so a short quote leaves the photograph clear and a long one climbs into the fade. The covers and
- * the single photo bleed to every edge; the figure and split photographs fill the width and the
- * top 1 040 px, which keeps them out of the full-bleed resolution rule, and their fade ends in the
- * ink ground so the seam does not show. Gaps are whole 8 px units, measured ink to ink.
+ * so a short quote leaves the photograph clear and a long one climbs into the fade. The fade
+ * follows the words: its ramp is declared for the largest frames and moves down with the group
+ * when the words are shorter (`follow` on the stack flow). The cover and the single photo bleed to
+ * every edge; the figure and split photographs fill the width and the top 1 296 px, which keeps
+ * them out of the full-bleed resolution rule, and their fade ends in the ink ground so the seam
+ * does not show. Gaps are whole 8 px units, measured ink to ink.
  *
  * Type. Archivo 800 for every headline and quote, one face per field as the contract requires;
  * Inter 400 for the copy and Inter 700 uppercase for the speaker line; IBM Plex Mono only for the
- * sources slide's disclosure. The quotation marks are Archivo 800 at 120 px, written by the API.
+ * sources slide's disclosure. The quotation marks are Archivo 800 at 160 px, written by the API.
  *
  * Palette. Ink #14161a is the ground and the shade; white type, #efefec copy. The accent statement
  * stands on blueprint blue; its INK variant, the type-only post and the sources slide on ink. The
@@ -44,14 +46,14 @@ import { box, text, logo, kicker, body, template, FLOWED, LEFT, MEASURE, W, H } 
 const FLOOR = 1_250;
 
 /** The figure and split photographs' depth from the top edge; below it the ground is ink. */
-const DEPTH = 1_040;
+const DEPTH = 1_296;
 
 /** The headline face's case, one for the whole kit: a field keeps one face (`fieldFaces`). */
 const UPPERCASE = false;
 
 /** The quotation marks' size, and how far the headline under them is pulled up (see `DneskaiStackItem.pull`). */
-const MARK = 120;
-const MARK_PULL = 50;
+const MARK = 160;
+const MARK_PULL = 92;
 
 /**
  * The shade over a photograph that bleeds: a touch of ink behind the logotype, clear through the
@@ -75,10 +77,10 @@ const DEPTH_FADE = {
   colorToken: "background",
   stops: [
     { at: 0, opacity: 0.5 },
-    { at: 0.14, opacity: 0 },
-    { at: 0.36, opacity: 0 },
-    { at: 0.56, opacity: 0.72 },
-    { at: 0.8, opacity: 0.94 },
+    { at: 0.1, opacity: 0 },
+    { at: 0.34, opacity: 0 },
+    { at: 0.515, opacity: 0.72 },
+    { at: 0.72, opacity: 0.92 },
     { at: 1, opacity: 1 }
   ]
 };
@@ -111,7 +113,7 @@ const mark = (frame: Frame): CarouselLayerInput =>
 
 /** The speaker line under a quote: Inter 700, uppercase, centred. */
 const speaker = (frame: Frame): CarouselLayerInput =>
-  text("kicker", frame, { colorToken: "foreground", fontToken: "body", fontWeight: 700, minFontSize: 25, maxFontSize: 25, maxChars: 28, maxLines: 1, uppercase: true, tracking: 0.04, align: "middle" });
+  text("kicker", frame, { colorToken: "foreground", fontToken: "body", fontWeight: 700, minFontSize: 30, maxFontSize: 30, maxChars: 28, maxLines: 1, uppercase: true, tracking: 0.02, align: "middle" });
 
 const copy = (frame: Frame, options: Parameters<typeof body>[1]): CarouselLayerInput =>
   body(frame, { colorToken: "surface", align: "middle", ...options });
@@ -121,12 +123,12 @@ const coverPhoto = template({
   name: "DNESKAi spotlight · cover photo",
   description: "A colour photograph to every edge fading into ink, an optional second photograph as a ringed disc top right, and one white headline centred on the fade.",
   backgroundToken: "background",
+  version: FLOWED,
   layers: [
     photo("image-1", 0, W, H, BLEED_FADE),
     inset,
     logo,
-    // Bottom-anchored: the last line stands on the floor whatever the headline's length.
-    headline(box(LEFT, 772, MEASURE, 490), { minFontSize: 48, maxFontSize: 72, maxChars: 110, maxLines: 6, valign: "bottom" })
+    headline(box(LEFT, 772, MEASURE, 490), { minFontSize: 46, maxFontSize: 64, maxChars: 110, maxLines: 6 })
   ]
 });
 
@@ -139,17 +141,17 @@ const figure = template({
   layers: [
     photo("image-1", 0, W, DEPTH, DEPTH_FADE),
     logo,
-    headline(box(LEFT, 600, MEASURE, 340), { minFontSize: 42, maxFontSize: 60, maxChars: 110, maxLines: 6 }),
-    copy(box(LEFT, 968, MEASURE, 290), { minFontSize: 26, maxFontSize: 30, maxChars: 260, maxLines: 8 })
+    headline(box(LEFT, 668, MEASURE, 290), { minFontSize: 42, maxFontSize: 64, maxChars: 110, maxLines: 5 }),
+    copy(box(LEFT, 1_000, MEASURE, 260), { minFontSize: 27, maxFontSize: 30, maxChars: 260, maxLines: 7 })
   ]
 });
 
 /** The quote group's declared frames, the largest each may take, stacked on the floor by the flow. */
 const quote = (bodyChars: number): CarouselLayerInput[] => [
-  mark(box(LEFT, 592, MEASURE, 136)),
-  speaker(box(LEFT, 984, MEASURE, 30)),
-  headline(box(LEFT, 728, MEASURE, 250), { minFontSize: 42, maxFontSize: 64, maxChars: 110, maxLines: 5 }),
-  copy(box(LEFT, 1_020, MEASURE, 240), { minFontSize: 25, maxFontSize: 28, maxChars: bodyChars, maxLines: 8 })
+  mark(box(LEFT, 668, MEASURE, 180)),
+  speaker(box(LEFT, 1_088, MEASURE, 34)),
+  headline(box(LEFT, 850, MEASURE, 236), { minFontSize: 42, maxFontSize: 96, maxChars: 110, maxLines: 5 }),
+  copy(box(LEFT, 1_126, MEASURE, 160), { minFontSize: 25, maxFontSize: 28, maxChars: bodyChars, maxLines: 6 })
 ];
 
 const split = template({
@@ -179,8 +181,8 @@ const statement = template({
   variants: [{ id: "INK", backgroundToken: "background" }],
   layers: [
     logo,
-    mark(box(LEFT, 296, MEASURE, 136)),
-    headline(box(LEFT, 436, MEASURE, 500), { minFontSize: 50, maxFontSize: 84, maxChars: 170, maxLines: 8 }),
+    mark(box(LEFT, 256, MEASURE, 180)),
+    headline(box(LEFT, 440, MEASURE, 500), { minFontSize: 50, maxFontSize: 104, maxChars: 170, maxLines: 8 }),
     copy(box(LEFT, 960, MEASURE, 290), { minFontSize: 28, maxFontSize: 32, maxChars: 240, maxLines: 8 })
   ]
 });
@@ -217,10 +219,11 @@ const singlePhoto = template({
   name: "DNESKAi spotlight · single, photo",
   description: "A one-image post drawn like the cover without its inset: the photograph to every edge fading into ink and the headline centred on the fade.",
   backgroundToken: "background",
+  version: FLOWED,
   layers: [
     photo("image-1", 0, W, H, BLEED_FADE),
     logo,
-    headline(box(LEFT, 772, MEASURE, 490), { minFontSize: 48, maxFontSize: 72, maxChars: 110, maxLines: 6, valign: "bottom" })
+    headline(box(LEFT, 772, MEASURE, 490), { minFontSize: 46, maxFontSize: 64, maxChars: 110, maxLines: 6 })
   ]
 });
 
@@ -243,7 +246,7 @@ const singleType = template({
  */
 export const SPOTLIGHT_METRICS: DneskaiLayoutMetrics = {
   unit: 8,
-  gaps: { ...DNESKAI_GAPS, labelToText: 3, headlineToBody: 4, headlineToNote: 6, titleToSources: 5, sourceToSource: 3, sourcesToColophon: 5 },
+  gaps: { ...DNESKAI_GAPS, labelToText: 4, headlineToBody: 4, headlineToNote: 6, titleToSources: 5, sourceToSource: 3, sourcesToColophon: 5 },
   area: { top: 184, bottom: FLOOR },
   opticalShare: 0.45,
   thumbnails: SPOT_THUMBNAILS,
@@ -252,8 +255,11 @@ export const SPOTLIGHT_METRICS: DneskaiLayoutMetrics = {
 
 type Item = [string, DneskaiGapName | number, number?];
 const items = (list: Item[]) => list.map(([key, gap, pull]) => ({ key, gap, ...(pull ? { pull } : {}) }));
-/** A group standing on the floor, under a photograph's fade. */
-const floor = (...list: Item[]): DneskaiFlow => ({ kind: "stack", anchor: "floor", items: items(list) });
+/**
+ * A group standing on the floor, under a photograph's fade. The fade's ramp (its stops from the
+ * third on) follows the group down, so a short headline leaves the picture clear above it.
+ */
+const floor = (...list: Item[]): DneskaiFlow => ({ kind: "stack", anchor: "floor", items: items(list), follow: 2 });
 /** A group centred on a plain ground. */
 const centre = (...list: Item[]): DneskaiFlow => ({ kind: "stack", anchor: "centre", items: items(list) });
 
@@ -262,13 +268,13 @@ const QUOTE: Item[] = [["quote-mark", 0], ["headline", 2, MARK_PULL], ["kicker",
 const SOURCES = Array.from({ length: DNESKAI_MAX_THUMBNAILS + 1 }, (_, count) => sources(count));
 
 const TEMPLATES: DneskaiKitTemplate[] = [
-  { role: "cover-photo", template: coverPhoto, flow: { kind: "cover-static" } },
+  { role: "cover-photo", template: coverPhoto, flow: floor(["headline", 0]) },
   { role: "figure", template: figure, flow: floor(["headline", 0], ["body", "headlineToBody"]) },
   { role: "split", template: split, flow: floor(...QUOTE) },
   { role: "split-pair", template: splitPair, flow: floor(...QUOTE) },
   { role: "statement", template: statement, flow: centre(["quote-mark", 0], ["headline", 2, MARK_PULL], ["body", "headlineToNote"]) },
   ...SOURCES.map((entry, thumbnails) => ({ role: "sources" as const, thumbnails, template: entry, flow: { kind: "sources" } as const })),
-  { role: "single-photo", template: singlePhoto, flow: { kind: "cover-static" } },
+  { role: "single-photo", template: singlePhoto, flow: floor(["headline", 0]) },
   { role: "single-type", template: singleType, flow: centre(["headline", 0]) }
 ];
 
