@@ -53,7 +53,7 @@ const UPPERCASE = false;
 
 /** The quotation marks' size, and how far the headline under them is pulled up (see `DneskaiStackItem.pull`). */
 const MARK = 160;
-const MARK_PULL = 92;
+const MARK_PULL = 76;
 
 /**
  * The shade over a photograph that bleeds: a touch of ink behind the logotype, clear through the
@@ -80,7 +80,7 @@ const DEPTH_FADE = {
     { at: 0.1, opacity: 0 },
     { at: 0.34, opacity: 0 },
     { at: 0.515, opacity: 0.72 },
-    { at: 0.72, opacity: 0.92 },
+    { at: 0.86, opacity: 0.94 },
     { at: 1, opacity: 1 }
   ]
 };
@@ -256,10 +256,12 @@ export const SPOTLIGHT_METRICS: DneskaiLayoutMetrics = {
 type Item = [string, DneskaiGapName | number, number?];
 const items = (list: Item[]) => list.map(([key, gap, pull]) => ({ key, gap, ...(pull ? { pull } : {}) }));
 /**
- * A group standing on the floor, under a photograph's fade. The fade's ramp (its stops from the
- * third on) follows the group down, so a short headline leaves the picture clear above it.
+ * A group standing on the floor, under a photograph's fade. The fade's ramp (its third and fourth
+ * stops: the last clear point and the first deep one) follows the group down, so a short headline
+ * leaves the picture clear above it; the deep stops at the foot stay put, so the fade still ends
+ * in ink.
  */
-const floor = (...list: Item[]): DneskaiFlow => ({ kind: "stack", anchor: "floor", items: items(list), follow: 2 });
+const floor = (...list: Item[]): DneskaiFlow => ({ kind: "stack", anchor: "floor", items: items(list), follow: { from: 2, to: 4 } });
 /** A group centred on a plain ground. */
 const centre = (...list: Item[]): DneskaiFlow => ({ kind: "stack", anchor: "centre", items: items(list) });
 
