@@ -31,6 +31,10 @@ interface Face {
   rasterFamily: string;
   unitsPerEm: number;
   advances: Map<number, number>;
+  /** Cap height and x-height in thousandths of an em, and whether they were assumed. */
+  capHeight: number;
+  xHeight: number;
+  verticalAssumed: boolean;
 }
 
 function tables(data: Buffer): Map<string, { offset: number; length: number }> {
@@ -156,6 +160,48 @@ function characterSet(): number[] {
   return [...codes].sort((left, right) => left - right);
 }
 
+/**
+ * The face's cap height and x-height in thousandths of an em.
+ *
+ * OS/2 version 2 and later carry both (`sxHeight` at byte 86, `sCapHeight` at byte 88). A face
+ * without them is measured from its outlines: the yMax of the H and x glyphs in `glyf`. A face
+ * with neither is assumed at 700 and 500 and says so on stderr and in the generated table. On the
+ * committed set every face takes the table path.
+ */
+function verticalMetrics(
+  data: Buffer,
+  found: Map<string, { offset: number; length: number }>,
+  glyphs: Map<number, number>,
+  unitsPerEm: number,
+  label: string
+): { capHeight: number; xHeight: number; assumed: boolean } {
+  const os2 = found.get("OS/2")!;
+  const version = data.readUInt16BE(os2.offset);
+  const fromTable = (offset: number) => (version >= 2 ? data.readInt16BE(os2.offset + offset) : 0);
+  const fromGlyph = (character: string) => {
+    const glyph = glyphs.get(character.codePointAt(0)!);
+    const loca = found.get("loca");
+    const glyf = found.get("glyf");
+    const head = found.get("head")!;
+    if (glyph === undefined || !loca || !glyf) return 0;
+    const long = data.readInt16BE(head.offset + 50) === 1;
+    const start = long ? data.readUInt32BE(loca.offset + glyph * 4) : data.readUInt16BE(loca.offset + glyph * 2) * 2;
+    const end = long ? data.readUInt32BE(loca.offset + (glyph + 1) * 4) : data.readUInt16BE(loca.offset + (glyph + 1) * 2) * 2;
+    return end > start ? data.readInt16BE(glyf.offset + start + 8) : 0;
+  };
+  let assumed = false;
+  const pick = (table: number, glyph: number, fallback: number, name: string) => {
+    if (table > 0) return Math.round((table / unitsPerEm) * 1_000);
+    if (glyph > 0) return Math.round((glyph / unitsPerEm) * 1_000);
+    process.stderr.write(`${label}: no OS/2 ${name} and no glyph bounds, assuming ${fallback}\n`);
+    assumed = true;
+    return fallback;
+  };
+  const capHeight = pick(fromTable(88), fromGlyph("H"), 700, "sCapHeight");
+  const xHeight = pick(fromTable(86), fromGlyph("x"), 500, "sxHeight");
+  return { capHeight, xHeight, assumed };
+}
+
 function readFace(slug: string, file: string): Face {
   const data = readFileSync(path.join(fontsDirectory, slug, file));
   const found = tables(data);
@@ -177,7 +223,18 @@ function readFace(slug: string, file: string): Face {
     if (glyph === undefined) continue;
     advances.set(code, Math.round((advanceOf(glyph) / unitsPerEm) * 1_000));
   }
-  return { slug, file, weight, ...familyNames(data, found.get("name")!.offset), unitsPerEm, advances };
+  const vertical = verticalMetrics(data, found, glyphs, unitsPerEm, `${slug}/${file}`);
+  return {
+    slug,
+    file,
+    weight,
+    ...familyNames(data, found.get("name")!.offset),
+    unitsPerEm,
+    advances,
+    capHeight: vertical.capHeight,
+    xHeight: vertical.xHeight,
+    verticalAssumed: vertical.assumed
+  };
 }
 
 const faces = readdirSync(fontsDirectory, { withFileTypes: true })
@@ -209,6 +266,10 @@ const lines: string[] = [
   "  readonly average: number;",
   "  /** What an unmapped character is charged. */",
   "  readonly fallback: number;",
+  "  /** The cap height in thousandths of an em: OS/2 sCapHeight over unitsPerEm, else the H glyph's yMax from glyf, else 700 (assumed). */",
+  "  readonly capHeight: number;",
+  "  /** The x-height in thousandths of an em: OS/2 sxHeight over unitsPerEm, else the x glyph's yMax from glyf, else 500 (assumed). */",
+  "  readonly xHeight: number;",
   "  readonly widths: Readonly<Record<string, string>>;",
   "}",
   "",
@@ -246,6 +307,9 @@ for (const face of faces) {
   lines.push(`    file: ${JSON.stringify(`${face.slug}/${face.file}`)},`);
   lines.push(`    average: ${average},`);
   lines.push(`    fallback: ${unknown},`);
+  if (face.verticalAssumed) lines.push("    // capHeight and xHeight assumed: no OS/2 v2 table and no glyf outline for H and x");
+  lines.push(`    capHeight: ${face.capHeight},`);
+  lines.push(`    xHeight: ${face.xHeight},`);
   lines.push("    widths: {");
   lines.push(widths);
   lines.push("    }");

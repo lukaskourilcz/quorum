@@ -16,6 +16,10 @@ export interface FaceMetrics {
   readonly average: number;
   /** What an unmapped character is charged. */
   readonly fallback: number;
+  /** The cap height in thousandths of an em: OS/2 sCapHeight over unitsPerEm, else the H glyph's yMax from glyf, else 700 (assumed). */
+  readonly capHeight: number;
+  /** The x-height in thousandths of an em: OS/2 sxHeight over unitsPerEm, else the x glyph's yMax from glyf, else 500 (assumed). */
+  readonly xHeight: number;
   readonly widths: Readonly<Record<string, string>>;
 }
 
@@ -27,6 +31,8 @@ export const FONT_METRICS: Readonly<Record<string, FaceMetrics>> = {
     file: "anton/anton-400.ttf",
     average: 460,
     fallback: 492,
+    capHeight: 859,
+    xHeight: 732,
     widths: {
       "212": "¹",
       "214": "'",
@@ -146,6 +152,8 @@ export const FONT_METRICS: Readonly<Record<string, FaceMetrics>> = {
     file: "archivo/archivo-600.ttf",
     average: 598,
     fallback: 613,
+    capHeight: 686,
+    xHeight: 526,
     widths: {
       "128": "ʼ",
       "200": "  ",
@@ -253,6 +261,8 @@ export const FONT_METRICS: Readonly<Record<string, FaceMetrics>> = {
     file: "archivo/archivo-700.ttf",
     average: 616,
     fallback: 613,
+    capHeight: 686,
+    xHeight: 526,
     widths: {
       "133": "ʼ",
       "196": "  ",
@@ -354,6 +364,8 @@ export const FONT_METRICS: Readonly<Record<string, FaceMetrics>> = {
     file: "archivo/archivo-800.ttf",
     average: 643,
     fallback: 612,
+    capHeight: 686,
+    xHeight: 526,
     widths: {
       "141": "ʼ",
       "189": "  ",
@@ -451,6 +463,8 @@ export const FONT_METRICS: Readonly<Record<string, FaceMetrics>> = {
     file: "archivo/archivo-900.ttf",
     average: 681,
     fallback: 611,
+    capHeight: 686,
+    xHeight: 526,
     widths: {
       "152": "ʼ",
       "180": "  ",
@@ -505,6 +519,8 @@ export const FONT_METRICS: Readonly<Record<string, FaceMetrics>> = {
     file: "barlow/barlow-400.ttf",
     average: 538,
     fallback: 461,
+    capHeight: 700,
+    xHeight: 506,
     widths: {
       "132": "'",
       "140": "¸ʼ‘’",
@@ -634,6 +650,8 @@ export const FONT_METRICS: Readonly<Record<string, FaceMetrics>> = {
     file: "barlow/barlow-700.ttf",
     average: 552,
     fallback: 521,
+    capHeight: 700,
+    xHeight: 514,
     widths: {
       "168": "'",
       "169": "¸",
@@ -772,6 +790,8 @@ export const FONT_METRICS: Readonly<Record<string, FaceMetrics>> = {
     file: "barlow-condensed/barlow-condensed-600.ttf",
     average: 425,
     fallback: 413,
+    capHeight: 700,
+    xHeight: 511,
     widths: {
       "140": "¸",
       "152": "'",
@@ -892,6 +912,8 @@ export const FONT_METRICS: Readonly<Record<string, FaceMetrics>> = {
     file: "barlow-condensed/barlow-condensed-700.ttf",
     average: 435,
     fallback: 437,
+    capHeight: 700,
+    xHeight: 514,
     widths: {
       "151": "¸",
       "157": "¹",
@@ -1019,6 +1041,8 @@ export const FONT_METRICS: Readonly<Record<string, FaceMetrics>> = {
     file: "barlow-condensed/barlow-condensed-800.ttf",
     average: 445,
     fallback: 462,
+    capHeight: 700,
+    xHeight: 517,
     widths: {
       "161": "¹",
       "162": "¸",
@@ -1136,6 +1160,8 @@ export const FONT_METRICS: Readonly<Record<string, FaceMetrics>> = {
     file: "barlow-condensed/barlow-condensed-900.ttf",
     average: 454,
     fallback: 483,
+    capHeight: 700,
+    xHeight: 520,
     widths: {
       "165": "¹",
       "172": "¸",
@@ -1249,6 +1275,8 @@ export const FONT_METRICS: Readonly<Record<string, FaceMetrics>> = {
     file: "figtree/figtree-600.ttf",
     average: 586,
     fallback: 509,
+    capHeight: 700,
+    xHeight: 500,
     widths: {
       "204": "‘’",
       "227": "'¸",
@@ -1381,6 +1409,8 @@ export const FONT_METRICS: Readonly<Record<string, FaceMetrics>> = {
     file: "figtree/figtree-700.ttf",
     average: 593,
     fallback: 513,
+    capHeight: 700,
+    xHeight: 500,
     widths: {
       "219": "‘’",
       "235": "¸",
@@ -1513,6 +1543,8 @@ export const FONT_METRICS: Readonly<Record<string, FaceMetrics>> = {
     file: "figtree/figtree-800.ttf",
     average: 601,
     fallback: 518,
+    capHeight: 700,
+    xHeight: 500,
     widths: {
       "234": "  ",
       "236": "‘’",
@@ -1647,6 +1679,8 @@ export const FONT_METRICS: Readonly<Record<string, FaceMetrics>> = {
     file: "figtree/figtree-900.ttf",
     average: 610,
     fallback: 522,
+    capHeight: 700,
+    xHeight: 500,
     widths: {
       "230": "  ",
       "254": "¸‘’",
@@ -1773,6 +1807,8 @@ export const FONT_METRICS: Readonly<Record<string, FaceMetrics>> = {
     file: "ibm-plex-mono/ibm-plex-mono-400.ttf",
     average: 600,
     fallback: 600,
+    capHeight: 698,
+    xHeight: 516,
     widths: {
       "600": " !\"#$%&'()*+,-./0123456789:;<=>?@ABCDEFGHIJKLMNOPQRSTUVWXYZ[\\]^_`abcdefghijklmnopqrstuvwxyz{|}~ ¡¢£¤¥¦§¨©ª«¬­®¯°±²³´µ¶·¸¹º»¼½¾¿ÀÁÂÃÄÅÆÇÈÉÊËÌÍÎÏÐÑÒÓÔÕÖ×ØÙÚÛÜÝÞßàáâãäåæçèéêëìíîïðñòóôõö÷øùúûüýþÿĀāĂăĄąĆćĈĉĊċČčĎďĐđĒēĔĕĖėĘęĚěĜĝĞğĠġĢģĤĥĦħĨĩĪīĬĭĮįİıĲĳĴĵĶķĸĹĺĻļĽľĿŀŁłŃńŅņŇňŉŊŋŌōŎŏŐőŒœŔŕŖŗŘřŚśŜŝŞşŠšŢţŤťŦŧŨũŪūŬŭŮůŰűŲųŴŵŶŷŸŹźŻżŽžſʼЀЁЂЃЄЅІЇЈЉЊЋЌЍЎЏАБВГДЕЖЗИЙКЛМНОПРСТУФХЦЧШЩЪЫЬЭЮЯабвгдежзийклмнопрстуфхцчшщъыьэюяѐёђѓєѕіїјљњћќѝўџѲѳҐґҒғҔҕҖҗҘҙҚқҜҝҠҡҢңҤҥҪҫҮүҰұҲҳҶҷҸҹҺһӀӁӂӏӐӑӒӓӔӕӖӗӘәӜӝӞӟӢӣӤӥӦӧӨөӮӯӰӱӲӳӴӵӸӹ–—‘’“”„…€→"
     }
@@ -1784,6 +1820,8 @@ export const FONT_METRICS: Readonly<Record<string, FaceMetrics>> = {
     file: "ibm-plex-mono/ibm-plex-mono-700.ttf",
     average: 600,
     fallback: 600,
+    capHeight: 698,
+    xHeight: 516,
     widths: {
       "600": " !\"#$%&'()*+,-./0123456789:;<=>?@ABCDEFGHIJKLMNOPQRSTUVWXYZ[\\]^_`abcdefghijklmnopqrstuvwxyz{|}~ ¡¢£¤¥¦§¨©ª«¬­®¯°±²³´µ¶·¸¹º»¼½¾¿ÀÁÂÃÄÅÆÇÈÉÊËÌÍÎÏÐÑÒÓÔÕÖ×ØÙÚÛÜÝÞßàáâãäåæçèéêëìíîïðñòóôõö÷øùúûüýþÿĀāĂăĄąĆćĈĉĊċČčĎďĐđĒēĔĕĖėĘęĚěĜĝĞğĠġĢģĤĥĦħĨĩĪīĬĭĮįİıĲĳĴĵĶķĸĹĺĻļĽľĿŀŁłŃńŅņŇňŉŊŋŌōŎŏŐőŒœŔŕŖŗŘřŚśŜŝŞşŠšŢţŤťŦŧŨũŪūŬŭŮůŰűŲųŴŵŶŷŸŹźŻżŽžſʼЀЁЂЃЄЅІЇЈЉЊЋЌЍЎЏАБВГДЕЖЗИЙКЛМНОПРСТУФХЦЧШЩЪЫЬЭЮЯабвгдежзийклмнопрстуфхцчшщъыьэюяѐёђѓєѕіїјљњћќѝўџѲѳҐґҒғҔҕҖҗҘҙҚқҜҝҠҡҢңҤҥҪҫҮүҰұҲҳҶҷҸҹҺһӀӁӂӏӐӑӒӓӔӕӖӗӘәӜӝӞӟӢӣӤӥӦӧӨөӮӯӰӱӲӳӴӵӸӹ–—‘’“”„…€→"
     }
@@ -1795,6 +1833,8 @@ export const FONT_METRICS: Readonly<Record<string, FaceMetrics>> = {
     file: "ibm-plex-sans/ibm-plex-sans-400.ttf",
     average: 563,
     fallback: 477,
+    capHeight: 698,
+    xHeight: 516,
     widths: {
       "0": "­",
       "236": "  ",
@@ -1978,6 +2018,8 @@ export const FONT_METRICS: Readonly<Record<string, FaceMetrics>> = {
     file: "ibm-plex-sans/ibm-plex-sans-700.ttf",
     average: 595,
     fallback: 500,
+    capHeight: 698,
+    xHeight: 525,
     widths: {
       "0": "­",
       "236": "  ",
@@ -2174,6 +2216,8 @@ export const FONT_METRICS: Readonly<Record<string, FaceMetrics>> = {
     file: "inter/inter-400.ttf",
     average: 603,
     fallback: 511,
+    capHeight: 728,
+    xHeight: 546,
     widths: {
       "0": "҃҄҅҆҇҈҉",
       "242": "ijlìíîïĩīĭįıĵĺļłіїјӏ",
@@ -2370,6 +2414,8 @@ export const FONT_METRICS: Readonly<Record<string, FaceMetrics>> = {
     file: "inter/inter-600.ttf",
     average: 617,
     fallback: 543,
+    capHeight: 728,
+    xHeight: 546,
     widths: {
       "0": "҃҄҅҆҇҈҉",
       "252": "  ",
@@ -2570,6 +2616,8 @@ export const FONT_METRICS: Readonly<Record<string, FaceMetrics>> = {
     file: "inter/inter-700.ttf",
     average: 625,
     fallback: 560,
+    capHeight: 728,
+    xHeight: 546,
     widths: {
       "0": "҃҄҅҆҇҈҉",
       "237": "  ",
@@ -2773,6 +2821,8 @@ export const FONT_METRICS: Readonly<Record<string, FaceMetrics>> = {
     file: "jetbrains-mono/jetbrains-mono-400.ttf",
     average: 600,
     fallback: 600,
+    capHeight: 730,
+    xHeight: 550,
     widths: {
       "600": " !\"#$%&'()*+,-./0123456789:;<=>?@ABCDEFGHIJKLMNOPQRSTUVWXYZ[\\]^_`abcdefghijklmnopqrstuvwxyz{|}~ ¡¢£¤¥¦§¨©ª«¬®¯°±²³´µ¶·¸¹º»¼½¾¿ÀÁÂÃÄÅÆÇÈÉÊËÌÍÎÏÐÑÒÓÔÕÖ×ØÙÚÛÜÝÞßàáâãäåæçèéêëìíîïðñòóôõö÷øùúûüýþÿĀāĂăĄąĆćĈĉĊċČčĎďĐđĒēĔĕĖėĘęĚěĜĝĞğĠġĢģĤĥĦħĨĩĪīĬĭĮįİıĲĳĴĵĶķĸĹĺĻļĽľĿŀŁłŃńŅņŇňŉŊŋŌōŎŏŐőŒœŔŕŖŗŘřŚśŜŝŞşŠšŢţŤťŦŧŨũŪūŬŭŮůŰűŲųŴŵŶŷŸŹźŻżŽžſʼЁЂЃЄЅІЇЈЉЊЋЌЎЏАБВГДЕЖЗИЙКЛМНОПРСТУФХЦЧШЩЪЫЬЭЮЯабвгдежзийклмнопрстуфхцчшщъыьэюяёђѓєѕіїјљњћќўџҐґҒғҚқҢңҮүҰұҶҷҺһӘәӜӝӞӟӤӥӦӧӨөӴӵ–—‘’“”„…€→"
     }
@@ -2784,6 +2834,8 @@ export const FONT_METRICS: Readonly<Record<string, FaceMetrics>> = {
     file: "karla/karla-400.ttf",
     average: 555,
     fallback: 499,
+    capHeight: 628,
+    xHeight: 478,
     widths: {
       "136": "'",
       "179": ".·",
@@ -2898,6 +2950,8 @@ export const FONT_METRICS: Readonly<Record<string, FaceMetrics>> = {
     file: "karla/karla-700.ttf",
     average: 583,
     fallback: 517,
+    capHeight: 649,
+    xHeight: 486,
     widths: {
       "180": "'",
       "215": ".·",
@@ -3014,6 +3068,8 @@ export const FONT_METRICS: Readonly<Record<string, FaceMetrics>> = {
     file: "literata/literata-400.ttf",
     average: 630,
     fallback: 538,
+    capHeight: 701,
+    xHeight: 507,
     widths: {
       "0": "­",
       "200": "  ",
@@ -3200,6 +3256,8 @@ export const FONT_METRICS: Readonly<Record<string, FaceMetrics>> = {
     file: "literata/literata-600.ttf",
     average: 648,
     fallback: 550,
+    capHeight: 701,
+    xHeight: 510,
     widths: {
       "0": "­",
       "200": "  ",
@@ -3393,6 +3451,8 @@ export const FONT_METRICS: Readonly<Record<string, FaceMetrics>> = {
     file: "literata/literata-700.ttf",
     average: 659,
     fallback: 559,
+    capHeight: 701,
+    xHeight: 512,
     widths: {
       "0": "­",
       "200": "  ",
@@ -3587,6 +3647,8 @@ export const FONT_METRICS: Readonly<Record<string, FaceMetrics>> = {
     file: "manrope/manrope-700.ttf",
     average: 599,
     fallback: 553,
+    capHeight: 720,
+    xHeight: 540,
     widths: {
       "200": "  ",
       "261": "'",
@@ -3745,6 +3807,8 @@ export const FONT_METRICS: Readonly<Record<string, FaceMetrics>> = {
     file: "manrope/manrope-800.ttf",
     average: 609,
     fallback: 563,
+    capHeight: 720,
+    xHeight: 540,
     widths: {
       "200": "  ",
       "276": "'",
@@ -3906,6 +3970,8 @@ export const FONT_METRICS: Readonly<Record<string, FaceMetrics>> = {
     file: "outfit/outfit-600.ttf",
     average: 587,
     fallback: 503,
+    capHeight: 703,
+    xHeight: 483,
     widths: {
       "164": "·",
       "195": "  ",
@@ -4034,6 +4100,8 @@ export const FONT_METRICS: Readonly<Record<string, FaceMetrics>> = {
     file: "outfit/outfit-700.ttf",
     average: 597,
     fallback: 499,
+    capHeight: 706,
+    xHeight: 486,
     widths: {
       "182": "·",
       "190": "  ",
@@ -4162,6 +4230,8 @@ export const FONT_METRICS: Readonly<Record<string, FaceMetrics>> = {
     file: "outfit/outfit-800.ttf",
     average: 607,
     fallback: 496,
+    capHeight: 709,
+    xHeight: 489,
     widths: {
       "185": "  ",
       "199": "·",
@@ -4291,6 +4361,8 @@ export const FONT_METRICS: Readonly<Record<string, FaceMetrics>> = {
     file: "outfit/outfit-900.ttf",
     average: 616,
     fallback: 492,
+    capHeight: 712,
+    xHeight: 492,
     widths: {
       "180": "  ",
       "217": "·",
@@ -4418,6 +4490,8 @@ export const FONT_METRICS: Readonly<Record<string, FaceMetrics>> = {
     file: "petrona/petrona-600.ttf",
     average: 577,
     fallback: 439,
+    capHeight: 641,
+    xHeight: 443,
     widths: {
       "114": "ʼ",
       "149": "'",
@@ -4541,6 +4615,8 @@ export const FONT_METRICS: Readonly<Record<string, FaceMetrics>> = {
     file: "petrona/petrona-700.ttf",
     average: 586,
     fallback: 442,
+    capHeight: 641,
+    xHeight: 443,
     widths: {
       "123": "ʼ",
       "159": "'",
@@ -4664,6 +4740,8 @@ export const FONT_METRICS: Readonly<Record<string, FaceMetrics>> = {
     file: "petrona/petrona-800.ttf",
     average: 598,
     fallback: 446,
+    capHeight: 641,
+    xHeight: 443,
     widths: {
       "135": "ʼ",
       "173": "'",
@@ -4787,6 +4865,8 @@ export const FONT_METRICS: Readonly<Record<string, FaceMetrics>> = {
     file: "petrona/petrona-900.ttf",
     average: 615,
     fallback: 451,
+    capHeight: 641,
+    xHeight: 443,
     widths: {
       "151": "ʼ",
       "193": "'",
@@ -4905,6 +4985,8 @@ export const FONT_METRICS: Readonly<Record<string, FaceMetrics>> = {
     file: "public-sans/public-sans-400.ttf",
     average: 592,
     fallback: 521,
+    capHeight: 723,
+    xHeight: 517,
     widths: {
       "219": "`´ʼ",
       "225": ".",
@@ -5041,6 +5123,8 @@ export const FONT_METRICS: Readonly<Record<string, FaceMetrics>> = {
     file: "public-sans/public-sans-700.ttf",
     average: 611,
     fallback: 535,
+    capHeight: 723,
+    xHeight: 517,
     widths: {
       "226": "  ",
       "255": "ʼ",
@@ -5183,6 +5267,8 @@ export const FONT_METRICS: Readonly<Record<string, FaceMetrics>> = {
     file: "source-serif-4/source-serif-4-400.ttf",
     average: 574,
     fallback: 416,
+    capHeight: 670,
+    xHeight: 475,
     widths: {
       "183": "'",
       "212": "ʼ‘’",
@@ -5344,6 +5430,8 @@ export const FONT_METRICS: Readonly<Record<string, FaceMetrics>> = {
     file: "source-serif-4/source-serif-4-600.ttf",
     average: 580,
     fallback: 431,
+    capHeight: 670,
+    xHeight: 479,
     widths: {
       "207": "'",
       "217": "ʼ‘’",
@@ -5508,6 +5596,8 @@ export const FONT_METRICS: Readonly<Record<string, FaceMetrics>> = {
     file: "source-serif-4/source-serif-4-700.ttf",
     average: 587,
     fallback: 449,
+    capHeight: 670,
+    xHeight: 483,
     widths: {
       "214": "  ",
       "223": "ʼ‘’",
@@ -5674,6 +5764,8 @@ export const FONT_METRICS: Readonly<Record<string, FaceMetrics>> = {
     file: "space-grotesk/space-grotesk-400.ttf",
     average: 585,
     fallback: 580,
+    capHeight: 700,
+    xHeight: 489,
     widths: {
       "187": "·",
       "240": "|¦",
@@ -5785,6 +5877,8 @@ export const FONT_METRICS: Readonly<Record<string, FaceMetrics>> = {
     file: "space-grotesk/space-grotesk-500.ttf",
     average: 586,
     fallback: 579,
+    capHeight: 700,
+    xHeight: 493,
     widths: {
       "203": "·",
       "249": "|¦",
@@ -5894,6 +5988,8 @@ export const FONT_METRICS: Readonly<Record<string, FaceMetrics>> = {
     file: "space-grotesk/space-grotesk-700.ttf",
     average: 588,
     fallback: 578,
+    capHeight: 700,
+    xHeight: 496,
     widths: {
       "218": "·",
       "254": "  ",
