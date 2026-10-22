@@ -118,6 +118,11 @@ export interface DneskaiStackItem {
   key: string;
   /** Visual space above the item, ink to ink: a named gap reads the kit's table, a number is units. Ignored on the first item. */
   gap: DneskaiGapName | number;
+  /**
+   * Pixels the item moves up after its gap: for the item under a glyph whose ink stops well above
+   * its baseline, such as a quotation mark, which the line-box arithmetic cannot see. Absent: 0.
+   */
+  pull?: number;
 }
 
 export type DneskaiFlow =
@@ -136,7 +141,8 @@ export type DneskaiFlow =
   | { kind: "sources" }
   | { kind: "single-type" }
   | { kind: "single-photo" }
-  | { kind: "stack"; anchor: "centre" | "top"; items: readonly DneskaiStackItem[] };
+  /** `floor` stands the group's last line on the area's floor, whatever the kit's optical share. */
+  | { kind: "stack"; anchor: "centre" | "top" | "floor"; items: readonly DneskaiStackItem[] };
 
 export interface DneskaiLayoutMetrics {
   readonly unit: number;
@@ -270,14 +276,14 @@ interface Stacked { tops: Map<string, number>; height: number; inkTop: number; i
  * Elements one under another, each `gap` units of visual space under the one before it. Empty
  * elements (null) take no room and no gap, so an absent kicker does not leave its line behind.
  */
-function stack(metrics: DneskaiLayoutMetrics, items: ReadonlyArray<{ key: string; block: Block | null; gap: number }>): Stacked {
+function stack(metrics: DneskaiLayoutMetrics, items: ReadonlyArray<{ key: string; block: Block | null; gap: number; pull?: number }>): Stacked {
   const tops = new Map<string, number>();
   let y = 0;
   let previous: Block | null = null;
   let first: Block | null = null;
-  for (const { key, block, gap } of items) {
+  for (const { key, block, gap, pull } of items) {
     if (!block) continue;
-    if (previous) y += Math.max(0, gap * metrics.unit - previous.inkBottom - block.inkTop);
+    if (previous) y += Math.max(0, gap * metrics.unit - previous.inkBottom - block.inkTop) - (pull ?? 0);
     tops.set(key, y);
     y += block.height;
     previous = block;
@@ -430,10 +436,11 @@ function stacked(input:DneskaiLayoutInput,flow:Extract<DneskaiFlow,{kind:"stack"
       block=box(Math.round(px.height(rule)));others.set(item.key,rule);
     } else throw new Error(`Flow item ${item.key} names no layer on ${template.id}`);
     if(block)heights.set(item.key,block.height);
-    return {key:item.key,block,gap:typeof item.gap==="number"?item.gap:input.metrics.gaps[item.gap]};
+    return {key:item.key,block,gap:typeof item.gap==="number"?item.gap:input.metrics.gaps[item.gap],...(item.pull?{pull:item.pull}:{})};
   });
   const group=stack(input.metrics,items),places=new Map<Layer,Place>();
-  placeStack(template,group,flow.anchor==="top"?input.metrics.area.top:centredTop(group.height,input.metrics),heights,places,others);
+  const top=flow.anchor==="top"?input.metrics.area.top:flow.anchor==="floor"?Math.max(input.metrics.area.top,input.metrics.area.bottom-group.height+group.inkBottom):centredTop(group.height,input.metrics);
+  placeStack(template,group,top,heights,places,others);
   return moved(template,places);
 }
 
