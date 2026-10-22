@@ -52,3 +52,66 @@ const UPPERCASE = false;
 /** The quotation marks' size, and how far the headline under them is pulled up (see `DneskaiStackItem.pull`). */
 const MARK = 120;
 const MARK_PULL = 50;
+
+/**
+ * The shade over a photograph that bleeds: a touch of ink behind the logotype, clear through the
+ * picture's upper half, then deep enough from the headline frame's top that white type clears
+ * 4.5:1 over a white photograph (the contrast check reads the weakest point under the words).
+ */
+const BLEED_FADE = {
+  colorToken: "background",
+  stops: [
+    { at: 0, opacity: 0.5 },
+    { at: 0.14, opacity: 0 },
+    { at: 0.36, opacity: 0 },
+    { at: 0.56, opacity: 0.7 },
+    { at: 0.78, opacity: 0.88 },
+    { at: 1, opacity: 0.94 }
+  ]
+};
+
+/** The shade over a figure or split photograph: it ends in solid ink, the ground under it. */
+const DEPTH_FADE = {
+  colorToken: "background",
+  stops: [
+    { at: 0, opacity: 0.5 },
+    { at: 0.14, opacity: 0 },
+    { at: 0.36, opacity: 0 },
+    { at: 0.56, opacity: 0.72 },
+    { at: 0.8, opacity: 0.94 },
+    { at: 1, opacity: 1 }
+  ]
+};
+
+type Frame = ReturnType<typeof box>;
+
+/** A colour photograph in a rectangle from the top edge, covering it, under its shade. */
+const photo = (slot: string, x: number, width: number, height: number, shade: typeof BLEED_FADE): CarouselLayerInput =>
+  ({ type: "image", slot, optional: false, fit: "cover", scrim: "none", treatment: "none", ...box(x, 0, width, height), shade });
+
+/** The cover's optional second photograph: a disc in the top right, ringed in white. */
+const inset: CarouselLayerInput = {
+  type: "image",
+  slot: "image-2",
+  optional: true,
+  fit: "cover",
+  scrim: "none",
+  treatment: "none",
+  clip: "circle",
+  ...box(600, 160, 408, 408),
+  border: { colorToken: "foreground", width: 6 }
+};
+
+const headline = (frame: Frame, options: Parameters<typeof text>[2]): CarouselLayerInput =>
+  text("headline", frame, { colorToken: "foreground", fontToken: "headline", fontWeight: 800, align: "middle", uppercase: UPPERCASE, ...options });
+
+/** The pair of quotation marks above a quote; the API writes them. */
+const mark = (frame: Frame): CarouselLayerInput =>
+  text("quote-mark", frame, { colorToken: "foreground", fontToken: "headline", fontWeight: 800, align: "middle", minFontSize: MARK, maxFontSize: MARK, maxChars: 2, maxLines: 1 });
+
+/** The speaker line under a quote: Inter 700, uppercase, centred. */
+const speaker = (frame: Frame): CarouselLayerInput =>
+  text("kicker", frame, { colorToken: "foreground", fontToken: "body", fontWeight: 700, minFontSize: 25, maxFontSize: 25, maxChars: 28, maxLines: 1, uppercase: true, tracking: 0.04, align: "middle" });
+
+const copy = (frame: Frame, options: Parameters<typeof body>[1]): CarouselLayerInput =>
+  body(frame, { colorToken: "surface", align: "middle", ...options });
