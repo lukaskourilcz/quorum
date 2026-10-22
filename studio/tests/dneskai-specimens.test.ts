@@ -13,6 +13,8 @@ describe('authentic local DNESKAi specimens',()=>{
  });
  it('validates every implemented kit, except the intentionally undersized cover',async()=>{
   for(const kit of DNESKAI_KITS.keys())for(const deck of DNESKAI_SPECIMEN_DECKS)for(const [index,slide] of materializeSpecimenDeck(deck,photos).entries()){
+   // Only a cover that bleeds its photograph is held to the full-bleed resolution rule.
+   const bleeds=DNESKAI_KITS.get(kit)!.resolve('cover-photo',undefined,['image-1']).slides[0]!.layers.some(l=>l.type==='image'&&l.x<=0&&l.y<=0&&l.width>=1&&l.height>=1);
    const blocking=(await validateDneskaiSlide({...slide,kit})).filter(p=>p.blocking).map(p=>p.code);
    // Only a cover that bleeds needs a large original; a kit that frames the cover picture takes the small one.
    const cover=DNESKAI_KITS.get(kit)!.resolve('cover-photo',undefined,['image-1']).slides[0]!.layers.find(l=>l.type==='image')!;
