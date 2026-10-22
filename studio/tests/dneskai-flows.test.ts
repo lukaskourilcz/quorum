@@ -27,6 +27,22 @@ describe('kit-owned DNESKAi flows',()=>{
   expect(layoutDneskaiSlide(taller)).toEqual(layoutDneskaiSlide(base));
   expect(layoutDneskaiSlide({...taller,metrics:dynamic.metrics})).not.toEqual(layoutDneskaiSlide(base));
  });
+ it('stands a floor-anchored group\'s last baseline on the area floor, whatever the optical share',()=>{
+  const base=input();base.text={headline:{lines:2,fontSize:50},body:{lines:1,fontSize:30}};
+  const flow={kind:'stack' as const,anchor:'floor' as const,items:[{key:'headline',gap:0},{key:'body',gap:'headlineToNote' as const}]};
+  const laid=layoutDneskaiSlide({...base,flow}),body=frame(laid,'body');
+  // One 30 px line: its frame is 34 px tall (30 × 1.12, rounded up) and its baseline 30 px below the top.
+  expect(Math.round(body.y*1350)).toBe(base.metrics.area.bottom-30);
+  expect(layoutDneskaiSlide({...base,flow,metrics:{...base.metrics,opticalShare:0.1}})).toEqual(laid);
+ });
+ it('moves a pulled item up by its pull after the gap, and nothing else',()=>{
+  const base=input();base.text={headline:{lines:2,fontSize:50},body:{lines:1,fontSize:30}};
+  const items=(pull?:number)=>[{key:'headline',gap:0},{key:'body',gap:'headlineToNote' as const,...(pull===undefined?{}:{pull})}];
+  const plain=layoutDneskaiSlide({...base,flow:{kind:'stack',anchor:'top',items:items()}});
+  const pulled=layoutDneskaiSlide({...base,flow:{kind:'stack',anchor:'top',items:items(12)}});
+  expect(Math.round(frame(plain,'body').y*1350)-Math.round(frame(pulled,'body').y*1350)).toBe(12);
+  expect(frame(pulled,'headline')).toEqual(frame(plain,'headline'));
+ });
  it('rejects a stack item the template cannot serve with its key named',()=>{
   expect(()=>layoutDneskaiSlide({...input(),flow:{kind:'stack',anchor:'centre',items:[{key:'missing-picture',gap:0}]}})).toThrow('Flow item missing-picture names no layer');
  });
