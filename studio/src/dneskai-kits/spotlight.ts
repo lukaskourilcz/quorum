@@ -1,0 +1,54 @@
+import type { CarouselLayerInput, CarouselTemplate } from "../schema.js";
+import { DNESKAI_GAPS, DNESKAI_PANEL, type DneskaiFlow, type DneskaiGapName, type DneskaiLayoutMetrics } from "../dneskai-layout.js";
+import { defineDneskaiKit, type DneskaiKitTemplate } from "./kit.js";
+import { DNESKAI_MAX_SOURCES, DNESKAI_MAX_THUMBNAILS, dneskaiSourceSlot } from "./contract.js";
+import { box, text, logo, kicker, body, template, FLOWED, LEFT, MEASURE, W, H } from "./compose.js";
+
+/**
+ * Spotlight: the photo-led viral news kit, for a story with a face in it.
+ *
+ * Direction. The owner's reference is the celebrity-news carousel: a colour photograph to the
+ * edges, the lower part fading into ink, and the words standing white and centred on the fade. The
+ * cover sets a second photograph as a circular inset in the top right, ringed in white, the way
+ * those accounts put "now" beside "then". The quote slides put two photographs side by side, edge
+ * to edge, and set the sentence as a quote under a pair of quotation marks with the speaker under
+ * it. The owner asked for this style for this kit only, so it is the one DNESKAi kit that centres
+ * its words and draws a circle; the flat rules still hold everywhere else: square corners, no
+ * glow, no blur, no ornament, colour photographs, and the only gradient is the shade over a
+ * photograph.
+ *
+ * Grid. One centred column, the full 936 px measure between the 72 px margins. Every flowed group
+ * stands on one floor, 100 px above the foot: its last baseline sits there whatever its length,
+ * so a short quote leaves the photograph clear and a long one climbs into the fade. The covers and
+ * the single photo bleed to every edge; the figure and split photographs fill the width and the
+ * top 1 040 px, which keeps them out of the full-bleed resolution rule, and their fade ends in the
+ * ink ground so the seam does not show. Gaps are whole 8 px units, measured ink to ink.
+ *
+ * Type. Archivo 800 for every headline and quote, one face per field as the contract requires;
+ * Inter 400 for the copy and Inter 700 uppercase for the speaker line; IBM Plex Mono only for the
+ * sources slide's disclosure. The quotation marks are Archivo 800 at 120 px, written by the API.
+ *
+ * Palette. Ink #14161a is the ground and the shade; white type, #efefec copy. The accent statement
+ * stands on blueprint blue; its INK variant, the type-only post and the sources slide on ink. The
+ * logotype is the approved file on ink and the white mono file on a photograph or on blue.
+ *
+ * Owner decision, 22 October 2026: no folio, no credit, and the first or only slide of a post
+ * carries its headline alone. The cover's second photograph is optional; without it the cover
+ * draws no circle.
+ *
+ * Swipe device: the fade. Every photograph ends in the same ink at the same height, so the words
+ * sit in the same place on every slide and the eye has nowhere else to go.
+ */
+
+/** The line every flowed group's last baseline stands on: 100 px above the foot. */
+const FLOOR = 1_250;
+
+/** The figure and split photographs' depth from the top edge; below it the ground is ink. */
+const DEPTH = 1_040;
+
+/** The headline face's case, one for the whole kit: a field keeps one face (`fieldFaces`). */
+const UPPERCASE = false;
+
+/** The quotation marks' size, and how far the headline under them is pulled up (see `DneskaiStackItem.pull`). */
+const MARK = 120;
+const MARK_PULL = 50;
