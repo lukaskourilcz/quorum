@@ -1,6 +1,6 @@
 {
   "schemaVersion": "owner-attention/1",
-  "generatedAt": "2026-10-21T04:08:35.113Z",
+  "generatedAt": "2026-10-22T04:01:19.150Z",
   "approvals": [],
   "manualTasks": [
     {
@@ -26,6 +26,18 @@
       },
       "since": null,
       "urgency": "soon"
+    },
+    {
+      "id": "delete-the-merged-session-branches",
+      "title": "Delete the merged session branches.",
+      "plain": "The git relay refuses remote branch deletes (it hangs up on git push --delete). Delete these merged branches on GitHub: claude/amazing-hawking-gu086p (merged through #604 and #608).",
+      "steps": [],
+      "source": {
+        "kind": "needed",
+        "ref": "docs/NEEDED.md"
+      },
+      "since": null,
+      "urgency": "whenever"
     },
     {
       "id": "resume-dneskai-articles-when-you-want-them-back",
