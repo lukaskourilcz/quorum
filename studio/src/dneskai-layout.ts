@@ -141,8 +141,14 @@ export type DneskaiFlow =
   | { kind: "sources" }
   | { kind: "single-type" }
   | { kind: "single-photo" }
-  /** `floor` stands the group's last line on the area's floor, whatever the kit's optical share. */
-  | { kind: "stack"; anchor: "centre" | "top" | "floor"; items: readonly DneskaiStackItem[] };
+  /**
+   * `floor` stands the group's last line on the area's floor, whatever the kit's optical share.
+   * `follow`: the index of the first stop of every image shade that moves with the group. Those
+   * stops are declared for the group at its declared frames; when the group lands lower, they
+   * move down by as much, so the shade deepens where the words actually start and the picture
+   * stays clear above them. Absent: shades stay as declared.
+   */
+  | { kind: "stack"; anchor: "centre" | "top" | "floor"; items: readonly DneskaiStackItem[]; follow?: number };
 
 export interface DneskaiLayoutMetrics {
   readonly unit: number;
@@ -441,7 +447,19 @@ function stacked(input:DneskaiLayoutInput,flow:Extract<DneskaiFlow,{kind:"stack"
   const group=stack(input.metrics,items),places=new Map<Layer,Place>();
   const top=flow.anchor==="top"?input.metrics.area.top:flow.anchor==="floor"?Math.max(input.metrics.area.top,input.metrics.area.bottom-group.height+group.inkBottom):centredTop(group.height,input.metrics);
   placeStack(template,group,top,heights,places,others);
-  return moved(template,places);
+  if(flow.follow===undefined)return moved(template,places);
+  // How far the group's first element landed below its declared frame.
+  const [firstKey,firstOffset]=[...group.tops][0]??[];
+  const firstLayer=firstKey===undefined?undefined:textLayer(template,firstKey)??imageLayer(template,firstKey)??others.get(firstKey);
+  const drop=firstLayer&&firstOffset!==undefined?Math.round(top+firstOffset)-Math.round(px.y(firstLayer)):0;
+  const from=flow.follow;
+  return moved(template,places,layer=>{
+   if(layer.type!=="image"||!layer.shade||drop===0)return layer;
+   const shift=drop/px.height(layer);
+   const stops:Array<{at:number;opacity:number}>=[];
+   layer.shade.stops.forEach((stop,index)=>stops.push(index<from?stop:{...stop,at:Math.round(Math.min(1,Math.max(stops[index-1]?.at??0,stop.at+shift))*10_000)/10_000}));
+   return {...layer,shade:{...layer.shade,stops}};
+  });
 }
 
 /**
