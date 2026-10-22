@@ -246,6 +246,23 @@ describe("the border", () => {
     expect(covered!.svg).toContain('<rect x="107" y="134" width="866" height="542" fill="none" stroke="#3c4149" stroke-width="2"/>');
   });
 
+  it("rings a circular window on the disc's edge instead of framing its square", async () => {
+    const wide = await quadrants(600, 200);
+    const layers: CarouselLayerInput[] = [
+      { type: "image", slot: "image-1", optional: true, fit: "cover", clip: "circle", x: 0.5, y: 0.1, width: 0.4, height: 0.32, border: { colorToken: "foreground", width: 6 } },
+      { ...headline, colorToken: "foreground", valign: undefined, y: 0.6 }
+    ];
+    const template = CarouselTemplateSchema.parse({ ...photoTemplate(), slides: [{ id: "slide-ring", backgroundToken: "background", layers, variants: [] }] });
+    const [ringed] = renderCarouselSvg(input(template, { "image-1": wide }));
+    // A 432 × 432 frame at (540, 135): the disc's radius is 216 and the 6 px ring is centred 3 px outside it.
+    expect(ringed!.svg).toContain('<clipPath id="img-');
+    expect(ringed!.svg).toContain('<circle cx="756" cy="351" r="216"/>');
+    expect(ringed!.svg).toMatch(/<circle cx="756" cy="351" r="219" fill="none" stroke="#[0-9a-f]{6}" stroke-width="6"\/>/);
+    expect(ringed!.svg).not.toMatch(/<rect [^>]*stroke-width="6"/);
+    const [bare] = renderCarouselSvg(input(template, {}));
+    expect(bare!.svg).not.toContain("r=\"219\"");
+  });
+
   it("is a carousel-template/2 field", () => {
     const parsed = CarouselTemplateSchema.safeParse({
       ...photoTemplate(),
