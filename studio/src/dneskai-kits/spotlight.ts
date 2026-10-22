@@ -129,3 +129,17 @@ const coverPhoto = template({
     headline(box(LEFT, 772, MEASURE, 490), { minFontSize: 48, maxFontSize: 72, maxChars: 110, maxLines: 6, valign: "bottom" })
   ]
 });
+
+const figure = template({
+  id: "dneskai-spotlight-figure",
+  name: "DNESKAi spotlight · figure",
+  description: "A photograph across the top fading into ink, the headline and its explanation centred on the fade, standing on the floor.",
+  backgroundToken: "background",
+  version: FLOWED,
+  layers: [
+    photo("image-1", 0, W, DEPTH, DEPTH_FADE),
+    logo,
+    headline(box(LEFT, 600, MEASURE, 340), { minFontSize: 42, maxFontSize: 60, maxChars: 110, maxLines: 6 }),
+    copy(box(LEFT, 968, MEASURE, 290), { minFontSize: 26, maxFontSize: 30, maxChars: 260, maxLines: 8 })
+  ]
+});
