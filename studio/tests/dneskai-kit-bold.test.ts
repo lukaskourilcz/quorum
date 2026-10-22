@@ -27,7 +27,7 @@ function longest(template: CarouselTemplate): Record<string, string> {
     layer.type === "text" ? [[layer.slot, PANGRAM.repeat(20).slice(0, layer.maxChars).trim()]] : []));
 }
 function shortest(template: CarouselTemplate): Record<string, string> {
-  return Object.fromEntries(template.requiredSlots.map((slot) => [slot, slot === "folio" ? "02 / 07" : "Krátce."]));
+  return Object.fromEntries(template.requiredSlots.map((slot) => [slot, "Krátce."]));
 }
 const REQUIRED: Record<string, string> = { headline: "Jen titulek", title: "Zdroje", "source-1": "Jediný zdroj", "images-label": "Použité obrázky", disclosure: "Text připravil jazykový model." };
 
@@ -73,9 +73,9 @@ describe("the bold kit contract", () => {
   it("derives one face per field and the placed fields", () => {
     expect(BOLD_KIT.fieldFaces).toEqual({
       headline: { family: "Barlow Condensed", weight: 700, uppercase: false }, body: { family: "Inter", weight: 400, uppercase: false },
-      kicker: { family: "IBM Plex Mono", weight: 400, uppercase: true }, credit: { family: "IBM Plex Mono", weight: 400, uppercase: false }, sources: { family: "Inter", weight: 400, uppercase: false }
+      kicker: { family: "IBM Plex Mono", weight: 400, uppercase: true }, sources: { family: "Inter", weight: 400, uppercase: false }
     });
-    expect(BOLD_KIT.placedFields).toEqual({ "cover-photo": ["headline", "kicker", "credit"], figure: ["headline", "body", "credit"], split: ["headline", "body", "kicker", "credit"], statement: ["headline", "body"], sources: ["sources"], single: ["headline", "body", "kicker", "credit"] });
+    expect(BOLD_KIT.placedFields).toEqual({ "cover-photo": ["headline"], figure: ["headline", "body"], split: ["headline", "body", "kicker"], statement: ["headline", "body"], sources: ["sources"], single: ["headline"] });
   });
 
   it("resolves the acceptance deck to the bold templates", async () => {
@@ -102,7 +102,7 @@ describe("the bold kit as drawn", () => {
       const laid = laidOut(template, strings, pictures);
       expect(validateTemplateAsRendered(laid, brand, MASTER_FORMAT, "bold").filter((check) => check.status === "fail"), id).toEqual([]);
       for (const layer of laid.slides[0]!.layers) {
-        if (layer.type !== "text" || layer.slot === "folio" || layer.slot === "credit" || layer.slot === "kicker" || !strings[layer.slot]) continue;
+        if (layer.type !== "text" || !strings[layer.slot]) continue;
         expect(layer.y * 1_350, `${id} ${layer.slot}`).toBeGreaterThanOrEqual(BOLD_KIT.metrics.area.top - 1);
         expect((layer.y + layer.height) * 1_350, `${id} ${layer.slot}`).toBeLessThanOrEqual(BOLD_KIT.metrics.area.bottom + 1);
       }
