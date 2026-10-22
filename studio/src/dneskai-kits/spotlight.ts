@@ -184,3 +184,30 @@ const statement = template({
     copy(box(LEFT, 960, MEASURE, 290), { minFontSize: 28, maxFontSize: 32, maxChars: 240, maxLines: 8 })
   ]
 });
+
+/** The editorial thumbnail grid, framed in hairlines on ink. */
+const SPOT_THUMBNAILS = { columns: 3, width: 296, height: 198, gap: 24 } as const;
+
+function sources(thumbnails: number): CarouselTemplate {
+  const { columns, width, height, gap } = SPOT_THUMBNAILS;
+  return template({
+    id: `dneskai-spotlight-sources-${thumbnails}`,
+    name: `DNESKAi spotlight · sources, ${thumbnails} ${thumbnails === 1 ? "image" : "images"}`,
+    description: "The sources on ink, read top down: the title, the sources, small copies of every picture the deck used, and how the text was made.",
+    backgroundToken: "background",
+    version: FLOWED,
+    layers: [
+      logo,
+      text("title", box(LEFT, 184, MEASURE, 52), { colorToken: "foreground", fontWeight: 800, minFontSize: 44, maxFontSize: 44, maxChars: 30, maxLines: 1 }),
+      ...Array.from({ length: DNESKAI_MAX_SOURCES }, (_, index) =>
+        body(box(LEFT, 256 + index * 116, MEASURE, 110), { slot: dneskaiSourceSlot(index), colorToken: "surface", minFontSize: 24, maxFontSize: 27, maxChars: 190, maxLines: 4 })),
+      ...(thumbnails > 0 ? [kicker("muted", box(LEFT, 736, MEASURE, 26), 18, 40, "images-label")] : []),
+      ...Array.from({ length: thumbnails }, (_, index): CarouselLayerInput => ({
+        type: "image", slot: `image-${index + 1}`, optional: false, fit: "cover", scrim: "none", treatment: "none",
+        ...box(LEFT + (index % columns) * (width + gap), 776 + Math.floor(index / columns) * (height + gap), width, height),
+        border: { colorToken: "surface-strong", width: 2 }
+      })),
+      text("disclosure", box(LEFT, 1_140, MEASURE, 90), { colorToken: "muted", fontToken: "mono", fontWeight: 400, minFontSize: 18, maxFontSize: 19, maxChars: 200, maxLines: 4 })
+    ]
+  });
+}
