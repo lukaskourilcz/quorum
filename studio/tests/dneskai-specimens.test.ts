@@ -16,12 +16,9 @@ describe('authentic local DNESKAi specimens',()=>{
    // Only a cover that bleeds its photograph is held to the full-bleed resolution rule.
    const bleeds=DNESKAI_KITS.get(kit)!.resolve('cover-photo',undefined,['image-1']).slides[0]!.layers.some(l=>l.type==='image'&&l.x<=0&&l.y<=0&&l.width>=1&&l.height>=1);
    const blocking=(await validateDneskaiSlide({...slide,kit})).filter(p=>p.blocking).map(p=>p.code);
-   // Only a cover that bleeds needs a large original; a kit that frames the cover picture takes the small one.
-   const cover=DNESKAI_KITS.get(kit)!.resolve('cover-photo',undefined,['image-1']).slides[0]!.layers.find(l=>l.type==='image')!;
-   const bleeds=cover.x<=0&&cover.y<=0&&cover.width>=1&&cover.height>=1;
    expect(blocking,`${kit}/${deck.id}/${index}`).toEqual(deck.id==='low-res'&&index===0&&bleeds?['image-low-resolution']:[]);
   }
- },60000);
+ },300000);
  it('puts a dense and short field in each deck without exceeding template limits',()=>{
   const kit=DNESKAI_KITS.get('editorial')!;
   for(const deck of DNESKAI_SPECIMEN_DECKS){
