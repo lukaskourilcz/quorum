@@ -120,9 +120,16 @@ export interface DneskaiStackItem {
 
 export type DneskaiFlow =
   | { kind: "cover-static" }
-  | { kind: "figure" }
-  | { kind: "split" }
-  | { kind: "split-pair" }
+  /**
+   * `plate`: the shape layer drawn directly before the picture is its plate, moved with it and
+   * standing `plate` px clear of it above and below; the gaps are measured to the plate. `top`: where
+   * the headline starts, when a slide sets a label line above it under the header. Both absent:
+   * the editorial figure.
+   */
+  | { kind: "figure"; plate?: number; top?: number }
+  /** `align: "top"` stands the words and the pictures on one top line instead of centring the shorter column. */
+  | { kind: "split"; align?: "top" }
+  | { kind: "split-pair"; align?: "top" }
   | { kind: "statement" }
   | { kind: "sources" }
   | { kind: "single-type" }
@@ -322,16 +329,25 @@ function placeStack(
 /** Figure: the headline at the top, the picture and its caption centred in the height under it. */
 function figure(input: DneskaiLayoutInput): CarouselTemplate {
   const { template } = input;
+  const flow = input.flow.kind === "figure" ? input.flow : { kind: "figure" as const };
+  const pad = flow.plate ?? 0;
+  const areaTop = flow.top ?? input.metrics.area.top;
   const headline = textBlock(input, "headline");
   const body = textBlock(input, "body");
   const picture = imageLayer(template, "image-1")!;
-  const above = headline ? Math.max(0, input.metrics.gaps.headlineToPicture * input.metrics.unit - headline.inkBottom) : 0;
-  const below = body ? Math.max(0, input.metrics.gaps.pictureToText * input.metrics.unit - body.inkTop) : 0;
-  const room = input.metrics.area.bottom - input.metrics.area.top - (headline?.height ?? 0) - above - below - (body?.height ?? 0);
+  const above = (headline ? Math.max(0, input.metrics.gaps.headlineToPicture * input.metrics.unit - headline.inkBottom) : 0) + pad;
+  const below = (body ? Math.max(0, input.metrics.gaps.pictureToText * input.metrics.unit - body.inkTop) : 0) + pad;
+  const room = input.metrics.area.bottom - areaTop - (headline?.height ?? 0) - above - below - (body?.height ?? 0);
   const drawn = pictureHeight(input, "image-1", Math.round(px.width(picture)), room);
-  const pictureTop = input.metrics.area.top + (headline?.height ?? 0) + above + Math.floor((room - drawn) / 2);
+  const pictureTop = areaTop + (headline?.height ?? 0) + above + Math.floor((room - drawn) / 2);
   const places = new Map<Layer, Place>([[picture, { y: pictureTop, height: drawn }]]);
-  if (headline) places.set(textLayer(template, "headline")!, { y: input.metrics.area.top, height: headline.height });
+  if (pad) {
+    const layers = layersOf(template);
+    const plate = layers[layers.indexOf(picture) - 1];
+    if (plate?.type !== "shape") throw new Error(`Flow plate names no shape before image-1 on ${template.id}`);
+    places.set(plate, { y: pictureTop - pad, height: drawn + 2 * pad });
+  }
+  if (headline) places.set(textLayer(template, "headline")!, { y: areaTop, height: headline.height });
   if (body) places.set(textLayer(template, "body")!, { y: pictureTop + drawn + below, height: body.height });
   return moved(template, places);
 }
@@ -340,8 +356,9 @@ function figure(input: DneskaiLayoutInput): CarouselTemplate {
  * A row of two columns, the shorter centred against the taller by its ink. Returns each column's
  * top offset inside the row and the row's height.
  */
-function row(left: Stacked, right: Stacked): { left: number; right: number; height: number } {
+function row(left: Stacked, right: Stacked, align?: "top"): { left: number; right: number; height: number } {
   const height = Math.max(left.height, right.height);
+  if (align === "top") return { left: 0, right: 0, height };
   const centre = (column: Stacked) => column.height === height ? 0 : Math.max(0, (height - column.height) / 2 - (column.inkTop - column.inkBottom) / 2);
   return { left: centre(left), right: centre(right), height };
 }
@@ -360,7 +377,7 @@ function split(input: DneskaiLayoutInput): CarouselTemplate {
   const declared = Math.round(px.height(picture));
   const drawn = pictureHeight(input, "image-1", Math.round(px.width(picture)), Math.min(room, declared));
   const pictures = stack(input.metrics, [{ key: "image-1", block: box(drawn), gap: 0 }]);
-  const laid = row(words, pictures);
+  const laid = row(words, pictures, input.flow.kind === "split" ? input.flow.align : undefined);
   const top = centredTop(laid.height + under + (body?.height ?? 0), input.metrics);
   const places = new Map<Layer, Place>();
   placeStack(template, words, top + laid.left, heightsOf(input), places);
@@ -388,7 +405,7 @@ function splitPair(input: DneskaiLayoutInput): CarouselTemplate {
     { key: first.slot, block: box(drawn.get(first.slot)!), gap: 0 },
     { key: second.slot, block: box(drawn.get(second.slot)!), gap: input.metrics.gaps.pictureToPicture }
   ]);
-  const laid = row(words, pictures);
+  const laid = row(words, pictures, input.flow.kind === "split-pair" ? input.flow.align : undefined);
   const top = centredTop(laid.height, input.metrics);
   const places = new Map<Layer, Place>();
   placeStack(template, words, top + laid.left, heightsOf(input), places);
