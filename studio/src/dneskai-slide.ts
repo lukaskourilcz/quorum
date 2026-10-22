@@ -2,7 +2,7 @@ import { dneskaiKit } from "./dneskai-kits/registry.js";
 import { DNESKAI_DEFAULT_KIT, DNESKAI_VARIANTS, DNESKAI_INK_VARIANT, type DneskaiKitId, type DneskaiSlideType, type DneskaiVariant } from "./dneskai-kits/contract.js";
 import type { DneskaiKit } from "./dneskai-kits/kit.js";
 export { DNESKAI_KITS, dneskaiKit } from "./dneskai-kits/registry.js";
-export { DNESKAI_KIT_IDS, DNESKAI_DEFAULT_KIT, DNESKAI_SLIDE_TYPES, DNESKAI_VARIANTS, DNESKAI_TEMPLATE_ROLES, dneskaiRoleOf, DNESKAI_TEXT_FIELDS, DNESKAI_CODE_OWNED_SLOTS, DNESKAI_TEXT_LIMITS, dneskaiImageSlots, DNESKAI_TEMPLATE_VARIANTS } from "./dneskai-kits/contract.js";
+export { DNESKAI_KIT_IDS, DNESKAI_DEFAULT_KIT, DNESKAI_SLIDE_TYPES, DNESKAI_VARIANTS, DNESKAI_TEMPLATE_ROLES, dneskaiRoleOf, DNESKAI_TEXT_FIELDS, DNESKAI_CODE_OWNED_SLOTS, DNESKAI_TEXT_LIMITS, dneskaiImageSlots, DNESKAI_OPTIONAL_IMAGE_SLOTS, DNESKAI_TEMPLATE_VARIANTS } from "./dneskai-kits/contract.js";
 export type { DneskaiKitId, DneskaiSlideType, DneskaiVariant, DneskaiTemplateRole, DneskaiTextField } from "./dneskai-kits/contract.js";
 export type { DneskaiKit, DneskaiKitTemplate, DneskaiFieldFace } from "./dneskai-kits/kit.js";
 export type { DneskaiFlow, DneskaiLayoutMetrics } from "./dneskai-layout.js";

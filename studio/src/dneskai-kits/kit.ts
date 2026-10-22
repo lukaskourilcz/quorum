@@ -3,7 +3,7 @@ import type { DneskaiFlow, DneskaiLayoutMetrics } from '../dneskai-layout.js';
 import { kitStyleFor, kitStyleWithLook } from '../kit-style.js';
 import { CAROUSEL_BRANDS } from '../library.js';
 import { resolveFace } from '../fonts.js';
-import { DNESKAI_CODE_OWNED_SLOTS, DNESKAI_MAX_THUMBNAILS, DNESKAI_SLIDE_TYPES, DNESKAI_TEMPLATE_ROLES, DNESKAI_TEXT_FIELDS, dneskaiRoleOf,
+import { DNESKAI_CODE_OWNED_SLOTS, DNESKAI_MAX_THUMBNAILS, DNESKAI_SLIDE_TYPES, DNESKAI_TEMPLATE_ROLES, DNESKAI_TEXT_FIELDS, dneskaiImageSlots, dneskaiRoleOf,
   type DneskaiKitId, type DneskaiSlideType, type DneskaiTemplateRole, type DneskaiTextField, type DneskaiVariant } from './contract.js';
 
 export interface DneskaiFieldFace { family: string; weight: number; uppercase: boolean }
@@ -33,6 +33,9 @@ export function defineDneskaiKit(input:{id:DneskaiKitId;label:string;purpose:str
   const t=row.template,key=row.role==='sources'?`sources-${row.thumbnails}`:row.role;
   if(templates.has(t.id)||byRole.has(key))throw new Error(`Duplicate DNESKAi template ${t.id} or role ${key}`);
   if(t.schemaVersion!=='carousel-template/2'||t.slides.length!==1||t.canvas?.master!=='instagram-portrait'||!row.flow)throw new Error(`Invalid DNESKAi kit template ${t.id}`);
+  // The image layers are the contract's slots for the role in this kit, in order, with their optional flags.
+  const images=t.slides[0]!.layers.flatMap(layer=>layer.type==='image'?[{slot:layer.slot,optional:layer.optional}]:[]);
+  if(JSON.stringify(images)!==JSON.stringify(dneskaiImageSlots(row.role,row.thumbnails??0,input.id)))throw new Error(`Kit ${input.id} template ${t.id} has image slots ${JSON.stringify(images)}, not the contract's for ${key}`);
   templates.set(t.id,t);roles.set(t.id,row.role);flows.set(t.id,row.flow);byRole.set(key,t);
  }
  for(const role of DNESKAI_TEMPLATE_ROLES){

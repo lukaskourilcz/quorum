@@ -56,11 +56,26 @@ export const DNESKAI_TEXT_LIMITS: Readonly<Record<DneskaiTemplateRole, Readonly<
   "single-type": { headline: 120 }
 };
 
-/** The image slots a role carries, each with its `optional` flag; sources carries `image-1` to `image-N`, all required. */
-export function dneskaiImageSlots(role: DneskaiTemplateRole, thumbnails = 0): readonly { slot: string; optional: boolean }[] {
+/**
+ * Extra image slots a kit may declare for a role, every one optional, after the role's shared
+ * slots. A kit absent here carries exactly the shared slots. The spotlight cover takes a second
+ * picture, drawn as a circular inset; without it the cover draws no circle. The slide API refuses
+ * a slot the resolved template has no layer for (`image-unexpected`), so `image-2` on a cover is
+ * accepted only by a kit listed here.
+ */
+export const DNESKAI_OPTIONAL_IMAGE_SLOTS: Readonly<Partial<Record<DneskaiKitId, Readonly<Partial<Record<DneskaiTemplateRole, readonly string[]>>>>>> = {
+  spotlight: { "cover-photo": ["image-2"] }
+};
+
+/**
+ * The image slots a role carries, each with its `optional` flag; sources carries `image-1` to
+ * `image-N`, all required. Given a kit, the kit's optional slots for the role follow the shared ones.
+ */
+export function dneskaiImageSlots(role: DneskaiTemplateRole, thumbnails = 0, kit?: DneskaiKitId): readonly { slot: string; optional: boolean }[] {
+ const extra=(kit?DNESKAI_OPTIONAL_IMAGE_SLOTS[kit]?.[role]??[]:[]).map(slot=>({slot,optional:true}));
  if(role==="sources")return Array.from({length:thumbnails},(_,n)=>({slot:`image-${n+1}`,optional:false}));
- if(role==="statement"||role==="single-type")return [];
- return [{slot:"image-1",optional:false},...(role==="split-pair"?[{slot:"image-2",optional:false}]:[])];
+ if(role==="statement"||role==="single-type")return extra;
+ return [{slot:"image-1",optional:false},...(role==="split-pair"?[{slot:"image-2",optional:false}]:[]),...extra];
 }
 /** The slide variant ids a role's template declares: statement `["INK"]`, every other role `[]`. */
 export const DNESKAI_TEMPLATE_VARIANTS: Readonly<Record<DneskaiTemplateRole, readonly string[]>> = Object.fromEntries(DNESKAI_TEMPLATE_ROLES.map(role=>[role,role==="statement"?["INK"]:[]])) as unknown as Readonly<Record<DneskaiTemplateRole, readonly string[]>>;
