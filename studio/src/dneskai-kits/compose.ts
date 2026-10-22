@@ -154,4 +154,3 @@ export function template(input: {
     slides: [{ id: `slide-${input.id}`, backgroundToken: input.backgroundToken, layers: input.layers, variants: input.variants ?? [] }]
   });
 }
-
