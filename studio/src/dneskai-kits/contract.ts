@@ -29,9 +29,12 @@ export const DNESKAI_TEXT_FIELDS = ["headline", "body", "kicker", "credit", "sou
 export type DneskaiTextField = (typeof DNESKAI_TEXT_FIELDS)[number];
 /**
  * Slots code writes: never a field OwnDashboard gates. `folio` stays named so a template from before
- * the owner's 22 October 2026 decision still parses; no current template places it.
+ * the owner's 22 October 2026 decision still parses; no current template places it. `quote-mark`
+ * is the pair of quotation marks a kit may set above a quoted headline (`DNESKAI_QUOTE_MARK`).
  */
-export const DNESKAI_CODE_OWNED_SLOTS = ["folio", "title", "images-label", "disclosure"] as const;
+export const DNESKAI_CODE_OWNED_SLOTS = ["folio", "title", "images-label", "disclosure", "quote-mark"] as const;
+/** What the `quote-mark` slot holds in every locale: an opening and a closing double quotation mark. */
+export const DNESKAI_QUOTE_MARK = "\u201c\u201d";
 
 /**
  * The character limit of every text slot of every role, which every kit's templates must set
