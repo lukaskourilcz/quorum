@@ -60,6 +60,14 @@ describe('kit-owned DNESKAi flows',()=>{
   const {follow:_,...still}=flow;
   expect(shade(layoutDneskaiSlide({...base,flow:still}))).toEqual(declared);
  });
+ it('never moves the shade past an empty text frame left where it was declared',async()=>{
+  const {SPOTLIGHT_KIT}=await import('../src/dneskai-kits/spotlight.js');
+  const id='dneskai-spotlight-figure',template=SPOTLIGHT_KIT.templates.get(id)!;
+  const laid=layoutDneskaiSlide({template,flow:SPOTLIGHT_KIT.flows.get(id)!,metrics:SPOTLIGHT_KIT.metrics,text:{headline:{lines:1,fontSize:60,capHeight:0.686},body:{lines:0,fontSize:30}},pictures:{}});
+  const body=frame(laid,'body'),stops=laid.slides[0]!.layers.find(l=>l.type==='image')!.shade!.stops;
+  expect(body.y).toBe(template.slides[0]!.layers.find(l=>l.type==='text'&&l.slot==='body')!.y);
+  expect(stops[3]!.at*1296).toBeLessThanOrEqual(Math.round(body.y*1350)+0.01);
+ });
  it('rejects a stack item the template cannot serve with its key named',()=>{
   expect(()=>layoutDneskaiSlide({...input(),flow:{kind:'stack',anchor:'centre',items:[{key:'missing-picture',gap:0}]}})).toThrow('Flow item missing-picture names no layer');
  });
