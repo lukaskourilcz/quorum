@@ -56,10 +56,9 @@ describe('the ticker kit contract', () => {
   it('derives one face per field and the fields each slide type places', () => {
     expect(TICKER_KIT.fieldFaces).toEqual({
       headline: { family: 'Inter', weight: 700, uppercase: false }, body: { family: 'Inter', weight: 400, uppercase: false },
-      kicker: { family: 'JetBrains Mono', weight: 400, uppercase: true }, credit: { family: 'JetBrains Mono', weight: 400, uppercase: false },
-      sources: { family: 'JetBrains Mono', weight: 400, uppercase: false }
+      kicker: { family: 'JetBrains Mono', weight: 400, uppercase: true }, sources: { family: 'JetBrains Mono', weight: 400, uppercase: false }
     });
-    expect(TICKER_KIT.placedFields).toEqual({ 'cover-photo': ['headline', 'kicker', 'credit'], figure: ['headline', 'body', 'credit'], split: ['headline', 'body', 'kicker', 'credit'], statement: ['headline', 'body'], sources: ['sources'], single: ['headline', 'body', 'kicker', 'credit'] });
+    expect(TICKER_KIT.placedFields).toEqual({ 'cover-photo': ['headline'], figure: ['headline', 'body'], split: ['headline', 'body', 'kicker'], statement: ['headline', 'body'], sources: ['sources'], single: ['headline'] });
   });
 });
 
@@ -93,15 +92,15 @@ describe('the ticker kit renders', () => {
     const at = { index: 1, count: 5 };
     const f = (role: keyof typeof DNESKAI_TEXT_LIMITS, slot: string) => length(DNESKAI_TEXT_LIMITS[role][slot]!);
     return [
-      ['cover-photo', { type: 'cover-photo', position: { index: 0, count: 5 }, headline: f('cover-photo', 'headline')!, kicker: f('cover-photo', 'kicker'), credit: f('cover-photo', 'credit'), images: [image(1)] }],
-      ['figure', { type: 'figure', position: at, headline: f('figure', 'headline')!, body: f('figure', 'body'), credit: f('figure', 'credit'), images: [image(1, 1)] }],
-      ['split', { type: 'split', position: at, headline: f('split', 'headline')!, body: f('split', 'body'), kicker: f('split', 'kicker'), credit: f('split', 'credit'), images: [image(1, 2)] }],
-      ['split-pair', { type: 'split', position: at, headline: f('split-pair', 'headline')!, body: f('split-pair', 'body'), kicker: f('split-pair', 'kicker'), credit: f('split-pair', 'credit'), images: [image(1), image(2)] }],
+      ['cover-photo', { type: 'cover-photo', position: { index: 0, count: 5 }, headline: f('cover-photo', 'headline')!, images: [image(1)] }],
+      ['figure', { type: 'figure', position: at, headline: f('figure', 'headline')!, body: f('figure', 'body'), images: [image(1, 1)] }],
+      ['split', { type: 'split', position: at, headline: f('split', 'headline')!, body: f('split', 'body'), kicker: f('split', 'kicker'), images: [image(1, 2)] }],
+      ['split-pair', { type: 'split', position: at, headline: f('split-pair', 'headline')!, body: f('split-pair', 'body'), kicker: f('split-pair', 'kicker'), images: [image(1), image(2)] }],
       ['statement', { type: 'statement', position: at, headline: f('statement', 'headline')!, body: f('statement', 'body') }],
       ['statement-ink', { type: 'statement', variant: 'ink', position: at, headline: f('statement', 'headline')!, body: f('statement', 'body') }],
       ...Array.from({ length: DNESKAI_MAX_THUMBNAILS + 1 }, (_, n): [string, DneskaiSlideInput] => [`sources-${n}`, { type: 'sources', position: { index: 4, count: 5 }, sources: length(DNESKAI_TEXT_LIMITS.sources['source-1']!) ? Array.from({ length: 4 }, () => length(DNESKAI_TEXT_LIMITS.sources['source-1']!)!) : ['Zdroj'], images: Array.from({ length: n }, (_, i) => image(i + 1)) }]),
-      ['single-photo', { type: 'single', variant: 'photo', position: { index: 0, count: 1 }, headline: f('single-photo', 'headline')!, body: f('single-photo', 'body'), kicker: f('single-photo', 'kicker'), credit: f('single-photo', 'credit'), images: [image(1)] }],
-      ['single-type', { type: 'single', variant: 'type', position: { index: 0, count: 1 }, headline: f('single-type', 'headline')!, body: f('single-type', 'body'), kicker: f('single-type', 'kicker'), credit: f('single-type', 'credit') }]
+      ['single-photo', { type: 'single', variant: 'photo', position: { index: 0, count: 1 }, headline: f('single-photo', 'headline')!, images: [image(1)] }],
+      ['single-type', { type: 'single', variant: 'type', position: { index: 0, count: 1 }, headline: f('single-type', 'headline')! }]
     ];
   };
 
