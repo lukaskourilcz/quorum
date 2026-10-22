@@ -143,3 +143,20 @@ const figure = template({
     copy(box(LEFT, 968, MEASURE, 290), { minFontSize: 26, maxFontSize: 30, maxChars: 260, maxLines: 8 })
   ]
 });
+
+/** The quote group's declared frames, the largest each may take, stacked on the floor by the flow. */
+const quote = (bodyChars: number): CarouselLayerInput[] => [
+  mark(box(LEFT, 592, MEASURE, 136)),
+  speaker(box(LEFT, 984, MEASURE, 30)),
+  headline(box(LEFT, 728, MEASURE, 250), { minFontSize: 42, maxFontSize: 64, maxChars: 110, maxLines: 5 }),
+  copy(box(LEFT, 1_020, MEASURE, 240), { minFontSize: 25, maxFontSize: 28, maxChars: bodyChars, maxLines: 8 })
+];
+
+const split = template({
+  id: "dneskai-spotlight-split",
+  name: "DNESKAi spotlight · split",
+  description: "A photograph across the top fading into ink, a quote under a pair of quotation marks, the speaker in capitals under it and the explanation below.",
+  backgroundToken: "background",
+  version: FLOWED,
+  layers: [photo("image-1", 0, W, DEPTH, DEPTH_FADE), logo, ...quote(330)]
+});
