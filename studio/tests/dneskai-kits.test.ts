@@ -38,6 +38,15 @@ describe('the editorial kit contract',()=>{
   expect(()=>defineDneskaiKit({...base,templates:templates.slice(1)})).toThrow('lacks role');
   expect(()=>defineDneskaiKit({...base,templates:[...templates,templates[0]!]})).toThrow('Duplicate');
  });
+ it('adds a kit\'s optional image slots after the shared ones and holds every kit to its table',()=>{
+  expect(dneskaiImageSlots('cover-photo')).toEqual([{slot:'image-1',optional:false}]);
+  expect(dneskaiImageSlots('cover-photo',0,'editorial')).toEqual([{slot:'image-1',optional:false}]);
+  expect(dneskaiImageSlots('cover-photo',0,'spotlight')).toEqual([{slot:'image-1',optional:false},{slot:'image-2',optional:true}]);
+  expect(dneskaiImageSlots('figure',0,'spotlight')).toEqual([{slot:'image-1',optional:false}]);
+  const templates=[...EDITORIAL_KIT.templates.values()].map(template=>({template,role:EDITORIAL_KIT.roles.get(template.id)!,flow:EDITORIAL_KIT.flows.get(template.id)!,...(template.id.includes('sources-')?{thumbnails:Number(template.id.split('-').at(-1))}:{})}));
+  // Editorial's cover carries image-1 alone, so it is not a spotlight cover.
+  expect(()=>defineDneskaiKit({id:'spotlight',label:'Test',purpose:'Test',look:'editorial',metrics:EDITORIAL_KIT.metrics,templates})).toThrow('image slots');
+ });
  it('keeps the slide import graph away from hooks',()=>{
   const seen=new Set<string>(),root=path.resolve(import.meta.dirname,'../src');
   function walk(file:string){
