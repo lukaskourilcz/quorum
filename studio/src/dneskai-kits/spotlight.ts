@@ -256,12 +256,12 @@ export const SPOTLIGHT_METRICS: DneskaiLayoutMetrics = {
 type Item = [string, DneskaiGapName | number, number?];
 const items = (list: Item[]) => list.map(([key, gap, pull]) => ({ key, gap, ...(pull ? { pull } : {}) }));
 /**
- * A group standing on the floor, under a photograph's fade. The fade's ramp (its third and fourth
- * stops: the last clear point and the first deep one) follows the group down, so a short headline
- * leaves the picture clear above it; the deep stops at the foot stay put, so the fade still ends
- * in ink.
+ * A group standing on the floor, under a photograph's fade. The fade's ramp (every stop from the
+ * last clear point on, but the one at the foot) follows the group down, so a short headline leaves
+ * the picture clear above it and the fade still ends at the foot; the fourth stop, the one the
+ * words were checked on, stays above the highest text frame.
  */
-const floor = (...list: Item[]): DneskaiFlow => ({ kind: "stack", anchor: "floor", items: items(list), follow: { from: 2, to: 4 } });
+const floor = (...list: Item[]): DneskaiFlow => ({ kind: "stack", anchor: "floor", items: items(list), follow: { from: 2, to: 5, under: 3 } });
 /** A group centred on a plain ground. */
 const centre = (...list: Item[]): DneskaiFlow => ({ kind: "stack", anchor: "centre", items: items(list) });
 
