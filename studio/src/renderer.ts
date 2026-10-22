@@ -10,6 +10,7 @@ import {
   type CarouselPayload,
   type CarouselTemplate
 } from "./schema.js";
+import type { FaceMetrics } from "./font-metrics.generated.js";
 import { fitText, type FittedText } from "./text.js";
 import { isCutFor, prepareCarouselImages } from "./images.js";
 import { fontFiles, measureEm, resolveFace } from "./fonts.js";
@@ -21,6 +22,7 @@ import {
   dressBrand,
   groundAt,
   kitStyleFor,
+  kitStyleWithLook,
   kitTemplate,
   logoAllowedAt,
   type DeckPosition,
@@ -336,6 +338,8 @@ export interface TextSlotFit {
   slideId: string;
   slot: string;
   fitted: FittedText;
+  /** The committed face used for fitting, including cap height for layout. */
+  face: FaceMetrics;
 }
 
 /**
@@ -345,17 +349,17 @@ export interface TextSlotFit {
  * needs. Same parse, same kit faces and the same canvas as `renderSlides`; the ground a slide
  * stands on changes colours, never faces, so it is not needed here.
  */
-export function carouselTextFits(input: Pick<CarouselRenderInput, "template" | "payload" | "brand" | "format">): TextSlotFit[] {
+export function carouselTextFits(input: Pick<CarouselRenderInput, "template" | "payload" | "brand" | "format" | "look">): TextSlotFit[] {
   const parsed = CarouselTemplateSchema.parse(input.template);
   const payload = CarouselPayloadSchema.parse(input.payload);
   const declared = BrandTokensSchema.parse(input.brand);
-  const style = kitStyleFor(declared);
+  const style = kitStyleWithLook(kitStyleFor(declared), input.look);
   const brand = style ? dressBrand(declared, style) : declared;
   const template = style ? kitTemplate(parsed, style) : parsed;
   const canvas = template.formats[carouselCanvas(input.format)];
   return template.slides.flatMap((slide, slideIndex) => slide.layers.flatMap((layer) =>
     layer.type === "text"
-      ? [{ slideIndex, slideId: slide.id, slot: layer.slot, fitted: fitTextLayer(layer, payload, brand, canvas.width, canvas.height) }]
+      ? [{ slideIndex, slideId: slide.id, slot: layer.slot, fitted: fitTextLayer(layer, payload, brand, canvas.width, canvas.height), face: resolveFace(brand.fonts[layer.fontToken], layer.fontWeight) }]
       : []));
 }
 
@@ -370,6 +374,8 @@ export interface RenderedSlide {
 }
 
 export interface CarouselRenderInput {
+  /** Named kit look; absent preserves the kit palette and faces. */
+  look?: string;
   template: CarouselTemplate;
   payload: CarouselPayload;
   brand: BrandTokens;
@@ -425,10 +431,10 @@ function cornerMarkSvg(input: {
  * template it shows as passing is one the renderer will draw. A brand whose kit cannot be used
  * fails every template, with the kit's reason.
  */
-export function validateTemplateAsRendered(template: CarouselTemplate, brand: BrandTokens, format: CarouselFormat): TemplateCheck[] {
+export function validateTemplateAsRendered(template: CarouselTemplate, brand: BrandTokens, format: CarouselFormat, look?: string): TemplateCheck[] {
   let style: KitStyle | null;
   try {
-    style = kitStyleFor(brand);
+    style = kitStyleWithLook(kitStyleFor(brand), look);
   } catch (error) {
     return [{ id: "brand-tokens", status: "fail", detail: error instanceof Error ? error.message : String(error) }];
   }
@@ -476,7 +482,7 @@ function renderSlides(input: CarouselRenderInput, wanted?: number): RenderedSlid
   const declared = BrandTokensSchema.parse(input.brand);
   // A kitted brand is drawn from its kit or not at all: `kitStyleFor` throws for a missing or
   // damaged kit, and so does a kit that gives the logo slot nothing to draw.
-  const style = kitStyleFor(declared);
+  const style = kitStyleWithLook(kitStyleFor(declared), input.look);
   if (style && !logotypeForBrand(declared.id)) throw new Error(`Brand kit ${style.venture} marks no logotype file for the logo slot`);
   const brand = style ? dressBrand(declared, style) : declared;
   const template = style ? kitTemplate(parsed, style) : parsed;

@@ -1157,3 +1157,7 @@ Source Serif 4 (version 3), and every face is TrueType.
 | Public Sans | 400, 700 | 723 | 517 |
 | Source Serif 4 | 400, 600, 700 | 670 | 475, 479, 483 |
 | Space Grotesk | 400, 500, 700 | 700 | 489, 493, 496 |
+
+## Implementation progress (22 October 2026)
+
+Steps 1–4 are committed: baseline receipts, cap/x heights, editorial look manifest and look style resolution. Step 5 now passes the named look through fitting, template validation and SVG/PNG rendering. Text fits expose their committed face. Absent-look output and the editorial look remain byte-identical. Four future kit designs and their naming remain owner decisions.

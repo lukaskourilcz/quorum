@@ -144,3 +144,29 @@ describe("brand kit looks: the kit style", () => {
     expect(() => readKitStyle("caught-up", root)).toThrow("Brand kit caught-up look odd names a family the studio does not ship: Comic Sans");
   });
 });
+
+
+describe("brand kit looks: renderer", () => {
+  it("preserves editorial SVG bytes and exposes the committed fitting face", async () => {
+    const { carouselTextFits, renderCarouselSvg } = await import("../src/renderer.js");
+    const { DNESKAI_PHOTO_TEMPLATES } = await import("../src/dneskai-photo.js");
+    const template=DNESKAI_PHOTO_TEMPLATES.get("dneskai-single-type")!;
+    const input={template,brand:CAROUSEL_BRANDS["caught-up"],format:"instagram-portrait" as const,payload:{locale:"cs" as const,strings:{headline:"Testovací titulek",body:"Ověřený popis.",kicker:"AI",credit:"Zdroj: test"}}};
+    expect(renderCarouselSvg({...input,look:"editorial"})).toEqual(renderCarouselSvg(input));
+    const fit=carouselTextFits({...input,look:"editorial"}).find(row=>row.slot==="headline")!;
+    expect(fit.face.familyName).toBe("Space Grotesk");expect(fit.face.weight).toBe(700);expect(fit.face.capHeight).toBe(700);
+  });
+  it("refuses unknown looks in fits, render and template validation", async () => {
+    const { carouselTextFits, renderCarouselSvg, validateTemplateAsRendered } = await import("../src/renderer.js");
+    const { DNESKAI_PHOTO_TEMPLATES } = await import("../src/dneskai-photo.js");
+    const template=DNESKAI_PHOTO_TEMPLATES.get("dneskai-single-type")!;
+    const input={template,brand:CAROUSEL_BRANDS["caught-up"],format:"instagram-portrait" as const,payload:{locale:"cs" as const,strings:{}},look:"absent"};
+    expect(()=>carouselTextFits(input)).toThrow(/declares no look absent/);
+    expect(()=>renderCarouselSvg(input)).toThrow(/declares no look absent/);
+    expect(validateTemplateAsRendered(template,input.brand,input.format,input.look)).toEqual([expect.objectContaining({id:"brand-tokens",status:"fail"})]);
+    const brand=CAROUSEL_BRANDS["mma-files"];
+    expect(()=>carouselTextFits({...input,brand})).toThrow(/names no brand kit/);
+    expect(()=>renderCarouselSvg({...input,brand})).toThrow(/names no brand kit/);
+    expect(validateTemplateAsRendered(template,brand,input.format,"editorial")).toEqual([expect.objectContaining({id:"brand-tokens",status:"fail"})]);
+  });
+});
