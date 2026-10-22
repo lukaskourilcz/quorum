@@ -58,6 +58,6 @@ describe('named kit slide API',()=>{
   const refused=await renderDneskaiSlide({...slide,kit:'unknown' as never});
   expect(refused).toMatchObject({status:'refused',kit:null,png:null,template:null,payload:null,problems:[{code:'kit-invalid',blocking:true,field:'kit',message:expect.any(String)}]});
   expect(await validateDneskaiSlide({...slide,kit:'unknown' as never})).toEqual(refused.problems);
-  expect(dneskaiKit('bold')).toBeNull();expect([...DNESKAI_KITS.keys()]).toEqual(['editorial']);
+  expect(dneskaiKit('bold')).toBeNull();expect([...DNESKAI_KITS.keys()]).toEqual(['editorial','ticker']);
  });
 });
