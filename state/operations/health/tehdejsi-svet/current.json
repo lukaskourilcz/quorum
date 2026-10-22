@@ -3,8 +3,8 @@
   "nodeId": "tehdejsi-svet",
   "displayName": "Tehdejší svět",
   "policyVersion": "1.0.0",
-  "generatedAt": "2026-10-21T04:08:35.113Z",
-  "observedAt": "2026-10-21T04:08:35.113Z",
+  "generatedAt": "2026-10-22T04:01:19.150Z",
+  "observedAt": "2026-10-22T04:01:19.150Z",
   "lifecycleStage": "operating",
   "state": "unavailable",
   "reason": "No valid live or recovery receipt is available.",
@@ -47,5 +47,5 @@
   ],
   "ownerAttentionRefs": [],
   "latestRunReceiptRefs": [],
-  "snapshotHash": "9109b666a094c34616e86fc1475c52a357830357b4701785722cddec58907f69"
+  "snapshotHash": "d14476b5cb52c660e5b7e621b8d7a75e9b9698728b7519e43f0f30e25abb2c74"
 }
