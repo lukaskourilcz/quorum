@@ -15,7 +15,8 @@ export interface DneskaiKit {
  readonly flows:ReadonlyMap<string,DneskaiFlow>;
  readonly metrics:DneskaiLayoutMetrics;
  resolve(type:DneskaiSlideType,variant:DneskaiVariant|undefined,imageSlots:readonly string[]):CarouselTemplate;
- readonly fieldFaces:Readonly<Record<DneskaiTextField,DneskaiFieldFace>>;
+ /** One face per field the kit places, in `DNESKAI_TEXT_FIELDS` order. A field no template places (since 22 October 2026, `credit`) has no face. */
+ readonly fieldFaces:Readonly<Partial<Record<DneskaiTextField,DneskaiFieldFace>>>;
  readonly placedFields:Readonly<Record<DneskaiSlideType,readonly DneskaiTextField[]>>;
 }
 const fieldOf=(slot:string):DneskaiTextField|null=>{
@@ -45,7 +46,7 @@ export function defineDneskaiKit(input:{id:DneskaiKitId;label:string;purpose:str
   for(const row of input.templates)if(serve.has(row.role))for(const layer of row.template.slides[0]!.layers)if(layer.type==='text'){const field=fieldOf(layer.slot);if(field)fields.add(field);}
   return [type,DNESKAI_TEXT_FIELDS.filter(field=>fields.has(field))];
  })) as unknown as Record<DneskaiSlideType,readonly DneskaiTextField[]>;
- let fieldFaces:Readonly<Record<DneskaiTextField,DneskaiFieldFace>>|undefined;
+ let fieldFaces:Readonly<Partial<Record<DneskaiTextField,DneskaiFieldFace>>>|undefined;
  return {
   id:input.id,label:input.label,purpose:input.purpose,look:input.look,templates,roles,flows,metrics:input.metrics,placedFields,
   resolve(type,variant,imageSlots){const {role,thumbnails}=dneskaiRoleOf(type,variant,imageSlots);return byRole.get(role==='sources'?`sources-${thumbnails}`:role)!;},
@@ -60,8 +61,7 @@ export function defineDneskaiKit(input:{id:DneskaiKitId;label:string;purpose:str
     if(found[field]&&JSON.stringify(found[field])!==JSON.stringify(face))throw new Error(`Kit ${input.id} field ${field} differs between ${origins.get(field)} and ${t.id}: ${JSON.stringify(found[field])} / ${JSON.stringify(face)}`);
     found[field]=face;origins.set(field,t.id);
    }
-   for(const field of DNESKAI_TEXT_FIELDS)if(!found[field])throw new Error(`Kit ${input.id} lacks face for ${field}`);
-   fieldFaces=found as Record<DneskaiTextField,DneskaiFieldFace>;return fieldFaces;
+   fieldFaces=Object.fromEntries(DNESKAI_TEXT_FIELDS.flatMap(field=>found[field]?[[field,found[field]]]:[])) as Partial<Record<DneskaiTextField,DneskaiFieldFace>>;return fieldFaces;
   }
  };
 }
