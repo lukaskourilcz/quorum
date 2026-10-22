@@ -47,10 +47,9 @@ describe("the magazine kit contract", () => {
       headline: { family: "Petrona", weight: 800, uppercase: false },
       body: { family: "Literata", weight: 400, uppercase: false },
       kicker: { family: "IBM Plex Mono", weight: 400, uppercase: true },
-      credit: { family: "IBM Plex Mono", weight: 400, uppercase: false },
       sources: { family: "Literata", weight: 400, uppercase: false }
     });
-    expect(kit.placedFields).toEqual({ "cover-photo": ["headline", "kicker", "credit"], figure: ["headline", "body", "credit"], split: ["headline", "body", "kicker", "credit"], statement: ["headline", "body"], sources: ["sources"], single: ["headline", "body", "kicker", "credit"] });
+    expect(kit.placedFields).toEqual({ "cover-photo": ["headline"], figure: ["headline", "body"], split: ["headline", "body", "kicker"], statement: ["headline", "body"], sources: ["sources"], single: ["headline"] });
   });
 
   it("resolves the acceptance deck to the prefixed templates", async () => {
@@ -66,7 +65,6 @@ describe("the magazine kit contract", () => {
 describe("the magazine kit keeps the flat brand rules", () => {
   it.each(templates.map((t) => [t.id, t] as const))("%s: colour photographs, Czech ties, square and flat, logotype top left", (_id, template) => {
     const style = kitStyleWithLook(kitStyleFor(brand)!, kit.look);
-    const role = kit.roles.get(template.id)! as DneskaiTemplateRole;
     const layers = template.slides[0]!.layers;
     for (const layer of layers) {
       if (layer.type === "image") expect(layer.treatment).toBe("none");
@@ -76,7 +74,6 @@ describe("the magazine kit keeps the flat brand rules", () => {
     }
     const logo = layers.find((l) => l.type === "logo")!;
     expect([Math.round(logo.x * 1_080), Math.round(logo.y * 1_350)]).toEqual([72, 64]);
-    if (!["cover-photo", "single-photo", "single-type"].includes(role)) expect(layers.some((l) => l.type === "text" && l.slot === "folio" && l.align === "end")).toBe(true);
     const images = Object.fromEntries(layers.flatMap((l) => l.type === "image" ? [[l.slot, PIXEL]] : []));
     for (const variant of [undefined, ...template.slides[0]!.variants.map((v) => v.id)]) {
       const strings = Object.fromEntries(template.requiredSlots.map((slot) => [slot, `Věta pro ${slot}: co se dnes stalo.`]));
@@ -95,18 +92,18 @@ const filled = (length: number) => "Žluťoučký kůň úpěl ďábelské ódy 
 
 describe("the magazine kit renders at both ends of the limits", () => {
   const roles: Array<{ role: DneskaiTemplateRole; slide: (fill: (field: string) => string | undefined) => Omit<DneskaiSlideInput, "images">; images: number }> = [
-    { role: "cover-photo", images: 1, slide: (f) => ({ type: "cover-photo", position: { index: 0, count: 5 }, headline: f("headline")!, kicker: f("kicker"), credit: f("credit") }) },
-    { role: "figure", images: 1, slide: (f) => ({ type: "figure", position: { index: 1, count: 5 }, headline: f("headline")!, body: f("body"), credit: f("credit") }) },
-    { role: "split", images: 1, slide: (f) => ({ type: "split", position: { index: 2, count: 5 }, headline: f("headline")!, body: f("body"), kicker: f("kicker"), credit: f("credit") }) },
-    { role: "split-pair", images: 2, slide: (f) => ({ type: "split", position: { index: 2, count: 5 }, headline: f("headline")!, body: f("body"), kicker: f("kicker"), credit: f("credit") }) },
+    { role: "cover-photo", images: 1, slide: (f) => ({ type: "cover-photo", position: { index: 0, count: 5 }, headline: f("headline")! }) },
+    { role: "figure", images: 1, slide: (f) => ({ type: "figure", position: { index: 1, count: 5 }, headline: f("headline")!, body: f("body") }) },
+    { role: "split", images: 1, slide: (f) => ({ type: "split", position: { index: 2, count: 5 }, headline: f("headline")!, body: f("body"), kicker: f("kicker") }) },
+    { role: "split-pair", images: 2, slide: (f) => ({ type: "split", position: { index: 2, count: 5 }, headline: f("headline")!, body: f("body"), kicker: f("kicker") }) },
     { role: "statement", images: 0, slide: (f) => ({ type: "statement", position: { index: 3, count: 5 }, headline: f("headline")!, body: f("body") }) },
     { role: "sources", images: 6, slide: (f) => ({ type: "sources", position: { index: 4, count: 5 }, sources: [f("source-1")!, f("source-2"), f("source-3"), f("source-4")].filter((s): s is string => Boolean(s)) }) },
-    { role: "single-photo", images: 1, slide: (f) => ({ type: "single", variant: "photo", position: { index: 0, count: 1 }, headline: f("headline")!, body: f("body"), kicker: f("kicker"), credit: f("credit") }) },
-    { role: "single-type", images: 0, slide: (f) => ({ type: "single", variant: "type", position: { index: 0, count: 1 }, headline: f("headline")!, body: f("body"), kicker: f("kicker"), credit: f("credit") }) }
+    { role: "single-photo", images: 1, slide: (f) => ({ type: "single", variant: "photo", position: { index: 0, count: 1 }, headline: f("headline")! }) },
+    { role: "single-type", images: 0, slide: (f) => ({ type: "single", variant: "type", position: { index: 0, count: 1 }, headline: f("headline")! }) }
   ];
   const ends = {
     longest: (role: DneskaiTemplateRole) => (field: string) => filled(DNESKAI_TEXT_LIMITS[role][field]!),
-    shortest: () => (field: string) => field === "credit" ? "Foto: Y." : field === "kicker" ? "AI" : "Krátce.",
+    shortest: () => (field: string) => field === "kicker" ? "AI" : "Krátce.",
     "required-only": () => (field: string) => field === "headline" || field === "source-1" ? "Jen titulek." : undefined
   };
   it.each(roles.flatMap((r) => Object.keys(ends).map((end) => [r.role, end] as const)))("%s, %s strings", async (role, end) => {
