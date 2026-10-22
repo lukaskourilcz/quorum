@@ -235,3 +235,48 @@ const singleType = template({
     headline(box(LEFT, 196, MEASURE, 1_054), { minFontSize: 60, maxFontSize: 104, maxChars: 120, maxLines: 10 })
   ]
 });
+
+/**
+ * The editorial gaps with a tighter quote group, the area from under the logotype row to the
+ * floor, and a near-even optical share for the groups centred on a plain ground (the statement
+ * and the type-only post). The photograph slides stand on the floor instead (`anchor: "floor"`).
+ */
+export const SPOTLIGHT_METRICS: DneskaiLayoutMetrics = {
+  unit: 8,
+  gaps: { ...DNESKAI_GAPS, labelToText: 3, headlineToBody: 4, headlineToNote: 6, titleToSources: 5, sourceToSource: 3, sourcesToColophon: 5 },
+  area: { top: 184, bottom: FLOOR },
+  opticalShare: 0.45,
+  thumbnails: SPOT_THUMBNAILS,
+  panel: DNESKAI_PANEL
+};
+
+type Item = [string, DneskaiGapName | number, number?];
+const items = (list: Item[]) => list.map(([key, gap, pull]) => ({ key, gap, ...(pull ? { pull } : {}) }));
+/** A group standing on the floor, under a photograph's fade. */
+const floor = (...list: Item[]): DneskaiFlow => ({ kind: "stack", anchor: "floor", items: items(list) });
+/** A group centred on a plain ground. */
+const centre = (...list: Item[]): DneskaiFlow => ({ kind: "stack", anchor: "centre", items: items(list) });
+
+const QUOTE: Item[] = [["quote-mark", 0], ["headline", 2, MARK_PULL], ["kicker", "labelToText"], ["body", "headlineToBody"]];
+
+const SOURCES = Array.from({ length: DNESKAI_MAX_THUMBNAILS + 1 }, (_, count) => sources(count));
+
+const TEMPLATES: DneskaiKitTemplate[] = [
+  { role: "cover-photo", template: coverPhoto, flow: { kind: "cover-static" } },
+  { role: "figure", template: figure, flow: floor(["headline", 0], ["body", "headlineToBody"]) },
+  { role: "split", template: split, flow: floor(...QUOTE) },
+  { role: "split-pair", template: splitPair, flow: floor(...QUOTE) },
+  { role: "statement", template: statement, flow: centre(["quote-mark", 0], ["headline", 2, MARK_PULL], ["body", "headlineToNote"]) },
+  ...SOURCES.map((entry, thumbnails) => ({ role: "sources" as const, thumbnails, template: entry, flow: { kind: "sources" } as const })),
+  { role: "single-photo", template: singlePhoto, flow: { kind: "cover-static" } },
+  { role: "single-type", template: singleType, flow: centre(["headline", 0]) }
+];
+
+export const SPOTLIGHT_KIT = defineDneskaiKit({
+  id: "spotlight",
+  label: "Spotlight",
+  purpose: "Photo-led viral news: colour photographs to the edge fading into ink, white words centred on the fade, a ringed circular inset on the cover and quotes under a pair of quotation marks.",
+  look: "spotlight",
+  metrics: SPOTLIGHT_METRICS,
+  templates: TEMPLATES
+});
