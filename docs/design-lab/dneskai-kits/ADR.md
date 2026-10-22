@@ -1167,3 +1167,5 @@ Step 6 extracts the existing builders verbatim into `compose.ts` and the approve
 Step 7 dispatches layout by each kit's flow and metrics. Statement and single-type share the general stack executor; empty items take no gap and unknown items fail by name. The editorial kit pins its original 0.3 cap offset. Other metrics may use the fitter's committed cap height. The recorded frame matrix and all golden bytes remain unchanged.
 
 Step 8 adds the named-kit slide API and registry. Both absent and explicit `editorial` inputs reproduce the acceptance hashes. Invalid or unimplemented kit ids return a blocking `kit-invalid` result with `kit: null`. Only editorial is registered; no duplicate stub is offered as a distinct visual design while the owner decision remains open.
+
+Step 10 includes every declared look family in the glyph and raster-face coverage gates. The editorial look adds no new family, so the existing sixteen bindings and Outfit's unbound status remain. Every committed weight the editorial look binds passes the Czech alphabet check.

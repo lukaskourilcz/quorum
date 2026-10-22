@@ -1,3 +1,4 @@
+import {kitStyleFor,kitLookFamilies} from "../src/kit-style.js";
 import { readFileSync } from "node:fs";
 import path from "node:path";
 import { describe, expect, it } from "vitest";
@@ -26,7 +27,8 @@ import type { PublishingLocale } from "../src/schema.js";
 const FAMILY_LOCALES = (() => {
   const grouped = new Map<string, Set<PublishingLocale>>();
   for (const brand of Object.values(CAROUSEL_BRANDS)) {
-    for (const family of familiesOf(brand)) {
+    const style=kitStyleFor(brand);
+    for (const family of new Set([...familiesOf(brand),...(style?kitLookFamilies(style):[])])) {
       const locales = grouped.get(family) ?? new Set<PublishingLocale>();
       for (const locale of publishingLocalesFor(brand.id)) locales.add(locale);
       grouped.set(family, locales);

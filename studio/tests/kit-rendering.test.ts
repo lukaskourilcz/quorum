@@ -1,3 +1,4 @@
+import {kitLookFamilies} from "../src/kit-style.js";
 import { createHash } from "node:crypto";
 import { cpSync, mkdtempSync, readFileSync, rmSync, writeFileSync } from "node:fs";
 import { tmpdir } from "node:os";
@@ -250,7 +251,7 @@ describe("the kitted brands' faces", () => {
     const svg = `<svg xmlns="http://www.w3.org/2000/svg" width="400" height="60"><text x="5" y="45" font-family="${family}" font-size="40" font-weight="${weight}">agq Rř 0{}</text></svg>`;
     return createHash("sha256").update(new Resvg(svg, { font: { loadSystemFonts: false, fontFiles: files, defaultFontFamily: fallback } }).render().asPng()).digest("hex");
   };
-  const bound = new Set(["caught-up", "devshark"].flatMap((id) => Object.values(CAROUSEL_BRANDS[id as "devshark"].fonts)));
+  const bound = new Set(["caught-up", "devshark"].flatMap((id) => [...Object.values(CAROUSEL_BRANDS[id as "devshark"].fonts),...kitLookFamilies(kitStyleFor(CAROUSEL_BRANDS[id as "devshark"])!)]));
   const faces = Object.values(FONT_METRICS).filter((face) => bound.has(face.rasterFamily));
 
   it.each(faces.map((face) => [face.file, face] as const))("%s draws as itself", async (_file, face) => {

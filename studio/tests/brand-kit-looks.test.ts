@@ -170,3 +170,17 @@ describe("brand kit looks: renderer", () => {
     expect(validateTemplateAsRendered(template,brand,input.format,"editorial")).toEqual([expect.objectContaining({id:"brand-tokens",status:"fail"})]);
   });
 });
+
+
+describe("look face alphabet coverage",()=>{
+ it("covers Czech in every committed weight a look binds",async()=>{
+  const {FONT_METRICS}=await import("../src/font-metrics.generated.js");
+  const {missingCommittedGlyphs,resolveFace}=await import("../src/fonts.js");
+  const {requiredCharacters}=await import("../src/locales.js");
+  for(const family of kitLookFamilies(kitStyleFor(CAROUSEL_BRANDS["caught-up"])!)){
+   const weights=Object.values(FONT_METRICS).filter(face=>face.familyName===family||face.rasterFamily===family).map(face=>face.weight);
+   expect(weights.length,family).toBeGreaterThan(0);
+   for(const weight of weights)expect(missingCommittedGlyphs(resolveFace(family,weight),requiredCharacters(["cs"])),`${family} ${weight}`).toEqual([]);
+  }
+ });
+});
