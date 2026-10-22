@@ -53,9 +53,9 @@ describe('kit-owned DNESKAi flows',()=>{
   const drop=(Math.round(headline.y*1350)-Math.round(template.slides[0]!.layers.find(l=>l.type==='text'&&l.slot==='headline')!.y*1350))/1296;
   expect(drop).toBeGreaterThan(0);
   expect(shade(laid).slice(0,2)).toEqual(declared.slice(0,2));
-  // Stops 2 and 3 move, never past stop 4; stops 4 and 5 stay at the foot.
-  shade(laid).slice(2,4).forEach((stop,i)=>expect(stop.at).toBeCloseTo(Math.min(declared[4]!.at,declared[i+2]!.at+drop),3));
-  expect(shade(laid).slice(4)).toEqual(declared.slice(4));
+  // Stops 2 to 4 move, never past stop 5 at the foot, which stays.
+  shade(laid).slice(2,5).forEach((stop,i)=>expect(stop.at).toBeCloseTo(Math.min(declared[5]!.at,declared[i+2]!.at+drop),3));
+  expect(shade(laid).slice(5)).toEqual(declared.slice(5));
   expect(shade(laid).map(s=>s.opacity)).toEqual(declared.map(s=>s.opacity));
   const {follow:_,...still}=flow;
   expect(shade(layoutDneskaiSlide({...base,flow:still}))).toEqual(declared);

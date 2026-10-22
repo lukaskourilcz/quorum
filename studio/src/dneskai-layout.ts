@@ -145,12 +145,13 @@ export type DneskaiFlow =
    * `floor` stands the group's last line on the area's floor, whatever the kit's optical share.
    * `follow`: the stops of every image shade, by index from `from` up to but not including `to`,
    * that move with the group. They are declared for the group at its declared frames; when the
-   * group lands lower they move down by as much, never past the first stop after them, so the
-   * shade deepens where the words actually start and the picture stays clear above them while the
-   * deep stops at the foot stay where they are. The last moving stop never passes the top of any
-   * text frame over the picture, an empty one included. Absent: shades stay as declared.
+   * group lands lower they move down by as much, each held between the stop before it and the
+   * first fixed stop after it, so the shade deepens where the words actually start and the
+   * picture stays clear above them. The stop at `under`, the one the words were checked on, never
+   * passes the top of any text frame over the picture, an empty one included. Absent: shades stay
+   * as declared.
    */
-  | { kind: "stack"; anchor: "centre" | "top" | "floor"; items: readonly DneskaiStackItem[]; follow?: { from: number; to: number } };
+  | { kind: "stack"; anchor: "centre" | "top" | "floor"; items: readonly DneskaiStackItem[]; follow?: { from: number; to: number; under: number } };
 
 export interface DneskaiLayoutMetrics {
   readonly unit: number;
@@ -454,13 +455,13 @@ function stacked(input:DneskaiLayoutInput,flow:Extract<DneskaiFlow,{kind:"stack"
   const [firstKey,firstOffset]=[...group.tops][0]??[];
   const firstLayer=firstKey===undefined?undefined:textLayer(template,firstKey)??imageLayer(template,firstKey)??others.get(firstKey);
   const drop=firstLayer&&firstOffset!==undefined?Math.round(top+firstOffset)-Math.round(px.y(firstLayer)):0;
-  const {from,to}=flow.follow;
+  const {from,to,under}=flow.follow;
   // Every text frame as it will stand, an empty one where it was declared: the last moving stop
   // never passes the highest of them, so each still stands on the shade it was checked on.
   const textTops=layersOf(template).flatMap(layer=>layer.type==="text"?[Math.round(places.get(layer)?.y??px.y(layer))]:[]);
   return moved(template,places,layer=>{
    if(layer.type!=="image"||!layer.shade||drop===0)return layer;
-   const declared=layer.shade.stops,ceiling=declared[to]?.at??1,last=declared[to-1]?.at??0;
+   const declared=layer.shade.stops,ceiling=declared[to]?.at??1,last=declared[under]?.at??0;
    const highest=Math.min(...textTops.filter(y=>y>=px.y(layer)&&y<px.y(layer)+px.height(layer)));
    const room=Number.isFinite(highest)?Math.max(0,(highest-px.y(layer))/px.height(layer)-last):Infinity;
    const shift=Math.min(drop/px.height(layer),room);
