@@ -10,25 +10,25 @@
       "name": "acceptance-1-cover-photo",
       "templateId": "dneskai-spotlight-cover-photo",
       "version": "1.1.0",
-      "pngHash": "343d650b36b233dcd43dfe1d76975ceefa36c571e0041c3512fc50334154e871"
+      "pngHash": "75a6453c93a7d4323e6cac4e78f9e21dafe31d57b5fab9d4a3a1a61509c2d9a5"
     },
     {
       "name": "acceptance-2-figure",
       "templateId": "dneskai-spotlight-figure",
       "version": "1.1.0",
-      "pngHash": "c9aa8ce0bb0fab24a3e0838b73283b14bf7cc475cb835d3acc5d5f9ae2b1ba8f"
+      "pngHash": "10230dd2b6cdfb157827f3fd1e785ae27a6b9615e0afa4c19649789937dd6919"
     },
     {
       "name": "acceptance-3-figure",
       "templateId": "dneskai-spotlight-figure",
       "version": "1.1.0",
-      "pngHash": "bc34c47a8a112bbe9e456120cb1ef7a29ab6e7e96e65e5b81f0e1c2f894d71b7"
+      "pngHash": "2762ce233195adf5e09c03ebb8242a55ee1e1fe0a933c30bcb72ca2fa5891b33"
     },
     {
       "name": "acceptance-4-split",
       "templateId": "dneskai-spotlight-split-pair",
       "version": "1.1.0",
-      "pngHash": "87121b69947662ab260134c5718fcf21ba03f6c65689d455c03834d991031e52"
+      "pngHash": "bf4802a914b0d3e4242069dd87094cf069d0276c58b1f4846749e1bb5bec0bcf"
     },
     {
       "name": "acceptance-5-statement",
@@ -40,7 +40,7 @@
       "name": "acceptance-6-figure",
       "templateId": "dneskai-spotlight-figure",
       "version": "1.1.0",
-      "pngHash": "3c939873469fe528ea926b0bf7a31e81b47c343823099112125c1b97a76d6f27"
+      "pngHash": "328bbceb88ffd9aede22daf9eeb302a193f0689da11ff283835c4af8b9f2eab6"
     },
     {
       "name": "acceptance-7-sources",
@@ -52,31 +52,31 @@
       "name": "cover-photo",
       "templateId": "dneskai-spotlight-cover-photo",
       "version": "1.1.0",
-      "pngHash": "ba0f307c481d2eb11e88be7dcc87d9e54a0d7a91124678520d8ae8d8f2d1ea49"
+      "pngHash": "e37b8205280dff2a8950bf480f5893445bde6ed48b86bfe8f5c6bc60f2f9c505"
     },
     {
       "name": "cover-photo-crop",
       "templateId": "dneskai-spotlight-cover-photo",
       "version": "1.1.0",
-      "pngHash": "0e84f46633e828a6124ddebe30a054ea22e9120a31e23b8e790232b398152e0c"
+      "pngHash": "f9b25f2847008e92eef0b4b391f4ff7bf39dfb5e2debe46178ad11da389c6a8d"
     },
     {
       "name": "figure",
       "templateId": "dneskai-spotlight-figure",
       "version": "1.1.0",
-      "pngHash": "82baad0c4cc96413985d5123eb50a437fdc75e33c7ca570ccd18f5508dcb7419"
+      "pngHash": "8fd274b276c5944cb4dde1fb1d5009fdef0ac76e118485e4af1de9973ede7aa1"
     },
     {
       "name": "split",
       "templateId": "dneskai-spotlight-split",
       "version": "1.1.0",
-      "pngHash": "789a19ddfd5085671a6a68b38886f0d15bb89f4bbc21bdbbeeb290a28843bbd8"
+      "pngHash": "d530d2db241e1670f1a69ab0cc39626aa9f0637abdfe2744b5c634664bfce97a"
     },
     {
       "name": "split-pair",
       "templateId": "dneskai-spotlight-split-pair",
       "version": "1.1.0",
-      "pngHash": "da7a2d77e2da62c8f909f83055ab5e2380a02c4671d07e2a2a34c32781541278"
+      "pngHash": "a3705bd1c462a210f51d36fc4b4b794ef9a33e2635fd375bd42af3f648b8ec8a"
     },
     {
       "name": "statement",
@@ -100,13 +100,13 @@
       "name": "single-photo",
       "templateId": "dneskai-spotlight-single-photo",
       "version": "1.1.0",
-      "pngHash": "88312fe636bc50f27537ce7538ed892d0a0426998f47b82db47a44a6278e8576"
+      "pngHash": "e48b84bc9ce9bf9e6b32f407d8f5325d05a6e4ec09a976b8938514d1f155780e"
     },
     {
       "name": "single-photo-focal",
       "templateId": "dneskai-spotlight-single-photo",
       "version": "1.1.0",
-      "pngHash": "903c172ad301d67cc94219c8ebdc643f1173444443d5b4b2687f6609c073b809"
+      "pngHash": "6b2efdc2cecd6265337362b4a4b0123f3bef7352e3f714384bebebf4a5791f28"
     },
     {
       "name": "single-type",
@@ -118,7 +118,7 @@
       "name": "spotlight-cover-inset",
       "templateId": "dneskai-spotlight-cover-photo",
       "version": "1.1.0",
-      "pngHash": "a400fd1428f60db0e78aafc6ddf1073853547c194bde7112d1b018379fb65ea4"
+      "pngHash": "afdaf31ab5ad6298d7d0037aad74d73d345d82a60232492af350cb2ede033b1d"
     }
   ]
 }
