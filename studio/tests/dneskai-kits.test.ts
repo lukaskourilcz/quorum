@@ -59,7 +59,7 @@ describe('the editorial kit contract',()=>{
 });
 
 describe('the owner decision of 22 October 2026 in every kit',()=>{
- it.each(['editorial','bold','explainer','magazine','ticker'] as const)('%s shows no folio or credit, and the first or only slide carries the headline alone',async id=>{
+ it.each(['editorial','bold','explainer','magazine','ticker','spotlight'] as const)('%s shows no folio or credit, and the first or only slide carries the headline alone',async id=>{
   const {DNESKAI_KITS}=await import('../src/dneskai-kits/registry.js');
   const kit=DNESKAI_KITS.get(id)!;
   for(const t of kit.templates.values()){
@@ -75,6 +75,21 @@ describe('the owner decision of 22 October 2026 in every kit',()=>{
 });
 
 describe('named kit slide API',()=>{
+ it('takes a second cover photograph only in a kit that declares the slot',async()=>{
+  const {renderDneskaiSlide,validateDneskaiSlide,DNESKAI_KITS}=await import('../src/dneskai-slide.js');
+  const {syntheticPhoto}=await import('../src/index.js');
+  const [main,face]=await Promise.all([syntheticPhoto(1_600,1_200,51),syntheticPhoto(800,800,52)]);
+  const cover={type:'cover-photo' as const,position:{index:0,count:3},headline:'Model X má nový obličej (příklad).',images:[{slot:'image-1',bytes:main},{slot:'image-2',bytes:face}]};
+  for(const kit of DNESKAI_KITS.keys()){
+   const codes=(await validateDneskaiSlide({...cover,kit})).map(p=>p.code);
+   expect(codes,kit).toEqual(kit==='spotlight'?[]:['image-unexpected']);
+  }
+  const ringed=await renderDneskaiSlide({...cover,kit:'spotlight'}),bare=await renderDneskaiSlide({...cover,images:[cover.images[0]!],kit:'spotlight'});
+  expect([ringed.status,bare.status]).toEqual(['rendered','rendered']);
+  expect(ringed.template).toEqual(bare.template);
+  expect(ringed.pngHash).not.toBe(bare.pngHash);
+  expect(Object.keys(ringed.payload!.images!)).toEqual(['image-1','image-2']);
+ },60_000);
  it('names the default and explicit editorial kit and refuses an unimplemented id',async()=>{
   const {renderDneskaiSlide,validateDneskaiSlide,dneskaiKit,DNESKAI_KITS}=await import('../src/dneskai-slide.js');
   const slide=(await acceptanceDeck())[2]!;
@@ -83,6 +98,6 @@ describe('named kit slide API',()=>{
   const refused=await renderDneskaiSlide({...slide,kit:'unknown' as never});
   expect(refused).toMatchObject({status:'refused',kit:null,png:null,template:null,payload:null,problems:[{code:'kit-invalid',blocking:true,field:'kit',message:expect.any(String)}]});
   expect(await validateDneskaiSlide({...slide,kit:'unknown' as never})).toEqual(refused.problems);
-  expect(dneskaiKit('bold')?.id).toBe('bold');expect([...DNESKAI_KITS.keys()]).toEqual(['editorial','bold','explainer','magazine','ticker']);
+  expect(dneskaiKit('bold')?.id).toBe('bold');expect([...DNESKAI_KITS.keys()]).toEqual(['editorial','bold','explainer','magazine','ticker','spotlight']);
  });
 });
