@@ -211,3 +211,15 @@ function sources(thumbnails: number): CarouselTemplate {
     ]
   });
 }
+
+const singlePhoto = template({
+  id: "dneskai-spotlight-single-photo",
+  name: "DNESKAi spotlight · single, photo",
+  description: "A one-image post drawn like the cover without its inset: the photograph to every edge fading into ink and the headline centred on the fade.",
+  backgroundToken: "background",
+  layers: [
+    photo("image-1", 0, W, H, BLEED_FADE),
+    logo,
+    headline(box(LEFT, 772, MEASURE, 490), { minFontSize: 48, maxFontSize: 72, maxChars: 110, maxLines: 6, valign: "bottom" })
+  ]
+});
