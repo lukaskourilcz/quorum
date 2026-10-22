@@ -31,12 +31,12 @@ const PANGRAM = "Žluťoučký kůň úpěl ďábelské ódy a přes noc se nau�
 
 type Frame = { x: number; y: number; width: number; height: number; bottom: number };
 
-function laidOut(id: string, strings: Record<string, string>, pictures: Record<string, DneskaiLaidPicture> = {}) {
+function laidOut(id: string, strings: Record<string, string>, pictures: Record<string, DneskaiLaidPicture> = {}, metrics = EDITORIAL_KIT.metrics) {
   const template = DNESKAI_PHOTO_TEMPLATES.get(id)!;
   const payload = { locale: "cs" as const, strings: Object.fromEntries(template.requiredSlots.map((slot) => [slot, strings[slot] ?? ""])) };
   const fits = carouselTextFits({ template, payload, brand, format: MASTER_FORMAT });
   const laid = layoutDneskaiSlide({
-    flow: EDITORIAL_KIT.flows.get(template.id)!, metrics: EDITORIAL_KIT.metrics,
+    flow: EDITORIAL_KIT.flows.get(template.id)!, metrics,
     template,
     text: Object.fromEntries(fits.map((fit) => [fit.slot, { lines: fit.fitted.lines.length, fontSize: fit.fitted.fontSize }])),
     pictures
@@ -58,7 +58,7 @@ function longest(template: CarouselTemplate): Record<string, string> {
 }
 
 function shortest(template: CarouselTemplate): Record<string, string> {
-  return Object.fromEntries(template.requiredSlots.map((slot) => [slot, slot === "folio" ? "02 / 07" : "Krátce."]));
+  return Object.fromEntries(template.requiredSlots.map((slot) => [slot, "Krátce."]));
 }
 
 const picture = (width: number, height: number, focal = { x: 0.5, y: 0.5 }, focalGiven = false, fit?: "cover" | "contain"): DneskaiLaidPicture =>
@@ -93,9 +93,9 @@ describe("the DNESKAi layout", () => {
       const { laid } = laidOut(id, strings, pictures);
       expect(validateTemplateAsRendered(laid, brand, MASTER_FORMAT).filter((check) => check.status === "fail"), id).toEqual([]);
       if (id === "dneskai-single-photo") continue;
-      // Every flowed text frame stays in the band between the logotype row and the credit line.
+      // Every flowed text frame stays in the band under the logotype row.
       for (const layer of laid.slides[0]!.layers) {
-        if (layer.type !== "text" || layer.slot === "folio" || layer.slot === "credit" || !strings[layer.slot]) continue;
+        if (layer.type !== "text" || !strings[layer.slot]) continue;
         const frame = frameOf(laid, layer.slot);
         expect(frame.y, `${id} ${layer.slot}`).toBeGreaterThanOrEqual(DNESKAI_AREA.top);
         expect(frame.bottom, `${id} ${layer.slot}`).toBeLessThanOrEqual(DNESKAI_AREA.bottom);
@@ -173,27 +173,28 @@ describe("the DNESKAi layout", () => {
   it("shrinks the thumbnails evenly when four long sources leave them less room", () => {
     const template = DNESKAI_PHOTO_TEMPLATES.get("dneskai-sources-6")!;
     const pictures = Object.fromEntries([1, 2, 3, 4, 5, 6].map((index) => [`image-${index}`, picture(1_200, 800)]));
-    const { laid } = laidOut("dneskai-sources-6", longest(template), pictures);
+    // The band ended at 1196 above a credit line before 22 October 2026; at that height four long
+    // sources leave two full rows too little room.
+    const short = { ...EDITORIAL_KIT.metrics, area: { top: DNESKAI_AREA.top, bottom: 1_196 } };
+    const { laid } = laidOut("dneskai-sources-6", longest(template), pictures, short);
     const tiles = [1, 2, 3, 4, 5, 6].map((index) => frameOf(laid, `image-${index}`));
     expect(tiles[0]!.height).toBeLessThan(DNESKAI_THUMBNAIL_GRID.height);
     expect(new Set(tiles.map((tile) => `${tile.width}×${tile.height}`)).size).toBe(1);
-    expect(frameOf(laid, "disclosure").bottom).toBeLessThanOrEqual(DNESKAI_AREA.bottom);
+    expect(frameOf(laid, "disclosure").bottom).toBeLessThanOrEqual(short.area.bottom);
   });
 
   it("moves the single photo's band to the top when the focal point would sit under it, and only then", () => {
-    const strings = { kicker: "Oznámení", headline: "Jedna věta na modrém panelu", body: "Řádek pod panelem.", credit: "Foto: smyšlený zdroj" };
+    const strings = { headline: "Jedna věta na modrém panelu" };
     const declared = DNESKAI_PHOTO_TEMPLATES.get("dneskai-single-photo")!;
     // Focal points high in the picture, or a centre nobody chose, keep the band at the foot.
     expect(laidOut("dneskai-single-photo", strings, { "image-1": picture(1_080, 1_350, { x: 0.5, y: 0.3 }, true) }).laid).toBe(declared);
     expect(laidOut("dneskai-single-photo", strings, { "image-1": picture(1_080, 1_350, { x: 0.5, y: 0.85 }, false) }).laid).toBe(declared);
-    // A low focal point moves the band, its line, the kicker and the credit under the logotype.
+    // A low focal point moves the band, which carries the headline alone, under the logotype.
     const { laid } = laidOut("dneskai-single-photo", strings, { "image-1": picture(1_080, 1_350, { x: 0.5, y: 0.85 }, true) });
     const panel = laid.slides[0]!.layers.find((layer) => layer.type === "shape" && layer.padText === "headline")!;
-    const kicker = frameOf(laid, "kicker");
     expect(Math.round(panel.y * 1_350)).toBe(152);
     expect(frameOf(laid, "headline").y).toBe(169);
-    expect(kicker.bottom).toBeLessThan(0.85 * 1_350 - 48);
-    expect(frameOf(laid, "credit").y).toBe(kicker.y);
+    expect(Math.round((panel.y + panel.height) * 1_350)).toBeLessThan(0.85 * 1_350 - 48);
     // Its shade follows it: every line clears the kit's floors over a white and a black picture,
     // at the longest words too.
     expect(validateTemplateAsRendered(laid, brand, MASTER_FORMAT).filter((check) => check.status === "fail")).toEqual([]);
@@ -209,7 +210,7 @@ describe("the DNESKAi layout", () => {
     const bytes = await syntheticPhoto(1_080, 1_350, 31);
     const input = {
       type: "single" as const, variant: "photo" as const, position: { index: 0, count: 1 },
-      kicker: "Smyšlené oznámení", headline: "Jeden obrázek, jedna věta", body: "Řádek pod panelem.", credit: "Foto: smyšlený zdroj",
+      headline: "Jeden obrázek, jedna věta",
       images: [{ slot: "image-1", bytes, crop: { focal: { x: 0.5, y: 0.8 } } }]
     };
     const first = await renderDneskaiSlide(input);

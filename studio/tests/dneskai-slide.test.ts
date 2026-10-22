@@ -40,12 +40,14 @@ describe("the acceptance deck", () => {
     expect(new Set(first.map((result) => result.pngHash)).size).toBe(7);
   }, 120_000);
 
-  it("records what was drawn: the folio, the crop and the hash of the bytes it was set on", async () => {
+  it("records what was drawn: the crop and the hash of the bytes it was set on, and no folio or credit", async () => {
     const [cover, figure, , , statement, , sources] = await acceptanceDeck();
     const coverResult = await renderDneskaiSlide(cover!);
     const sha = createHash("sha256").update(cover!.images![0]!.bytes).digest("hex");
     expect(coverResult.payload!.images).toEqual({ "image-1": { assetSha256: sha, focal: { x: 0.7, y: 0.4 } } });
-    expect((await renderDneskaiSlide(figure!)).payload!.strings.folio).toBe("02 / 07");
+    const figureStrings = (await renderDneskaiSlide(figure!)).payload!.strings;
+    expect(Object.keys(figureStrings)).toEqual(["headline", "body"]);
+    expect(Object.keys(coverResult.payload!.strings)).toEqual(["headline"]);
     expect((await renderDneskaiSlide({ ...statement!, variant: "ink" })).payload!.variant).toBe("INK");
     const sourcesResult = await renderDneskaiSlide(sources!);
     expect(sourcesResult.payload!.strings).toMatchObject({

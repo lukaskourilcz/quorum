@@ -27,7 +27,8 @@ describe('authentic local DNESKAi specimens',()=>{
     return t.slides[0]!.layers.flatMap(layer=>layer.type==='text'&&layer.slot in slide?[[String(slide[layer.slot as keyof typeof slide]??'').length,layer.maxChars]]:[]);
    });
    expect(lengths.some(([length,max])=>max!-length!>=0&&max!-length!<=10),deck.id).toBe(true);
-   expect(lengths.some(([length])=>length!<60),deck.id).toBe(true);
+   // A one-slide post since 22 October 2026 carries its headline alone, so it has no second, short field.
+   if(lengths.length>1)expect(lengths.some(([length])=>length!<60),deck.id).toBe(true);
   }
  });
  it('renders a visible refusal PNG and deterministically renders an accepted slide',async()=>{
