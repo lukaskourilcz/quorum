@@ -17,9 +17,9 @@ describe('the editorial kit contract',()=>{
  it('derives the field and placed-field tables held by OwnDashboard',()=>{
   expect(EDITORIAL_KIT.fieldFaces).toEqual({
    headline:{family:'Space Grotesk',weight:700,uppercase:false},body:{family:'Source Serif 4',weight:400,uppercase:false},
-   kicker:{family:'IBM Plex Mono',weight:400,uppercase:true},credit:{family:'IBM Plex Mono',weight:400,uppercase:false},sources:{family:'Source Serif 4',weight:400,uppercase:false}
+   kicker:{family:'IBM Plex Mono',weight:400,uppercase:true},sources:{family:'Source Serif 4',weight:400,uppercase:false}
   });
-  expect(EDITORIAL_KIT.placedFields).toEqual({'cover-photo':['headline','kicker','credit'],figure:['headline','body','credit'],split:['headline','body','kicker','credit'],statement:['headline','body'],sources:['sources'],single:['headline','body','kicker','credit']});
+  expect(EDITORIAL_KIT.placedFields).toEqual({ 'cover-photo': ['headline'], figure: ['headline', 'body'], split: ['headline', 'body', 'kicker'], statement: ['headline', 'body'], sources: ['sources'], single: ['headline'] });
   expect(EDITORIAL_KIT.fieldFaces).toBe(EDITORIAL_KIT.fieldFaces);
  });
  it('pins each role limits, image slots and template variants',()=>{
@@ -46,6 +46,22 @@ describe('the editorial kit contract',()=>{
    for(const m of source.matchAll(/(?:from\s*|import\s*\()\s*["'](\.\.?\/[^"']+)["']/g))walk(path.resolve(path.dirname(file),m[1]!.replace(/\.js$/,'.ts')));
   }
   walk(path.join(root,'dneskai-slide.ts'));expect(seen.size).toBeGreaterThan(15);
+ });
+});
+
+describe('the owner decision of 22 October 2026 in every kit',()=>{
+ it.each(['editorial','bold','explainer','magazine','ticker'] as const)('%s shows no folio or credit, and the first or only slide carries the headline alone',async id=>{
+  const {DNESKAI_KITS}=await import('../src/dneskai-kits/registry.js');
+  const kit=DNESKAI_KITS.get(id)!;
+  for(const t of kit.templates.values()){
+   const role=kit.roles.get(t.id)!;
+   const text=t.slides[0]!.layers.flatMap(l=>l.type==='text'?[l.slot]:[]);
+   expect(text,t.id).not.toContain('folio');
+   if(role==='sources')continue;
+   expect(text,t.id).not.toContain('credit');
+   if(role==='cover-photo'||role==='single-photo'||role==='single-type')expect(text,t.id).toEqual(['headline']);
+  }
+  expect(kit.fieldFaces.credit).toBeUndefined();
  });
 });
 
