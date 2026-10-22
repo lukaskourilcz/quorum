@@ -223,3 +223,15 @@ const singlePhoto = template({
     headline(box(LEFT, 772, MEASURE, 490), { minFontSize: 48, maxFontSize: 72, maxChars: 110, maxLines: 6, valign: "bottom" })
   ]
 });
+
+const singleType = template({
+  id: "dneskai-spotlight-single-type",
+  name: "DNESKAi spotlight · single, type",
+  description: "A one-image post set in type alone: one heavy white headline centred on ink.",
+  backgroundToken: "background",
+  version: FLOWED,
+  layers: [
+    logo,
+    headline(box(LEFT, 196, MEASURE, 1_054), { minFontSize: 60, maxFontSize: 104, maxChars: 120, maxLines: 10 })
+  ]
+});
