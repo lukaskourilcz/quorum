@@ -38,6 +38,13 @@ export const DNESKAI_SPECIMEN_DECKS:readonly SpecimenDeck[]=[
  {id:'single-photo-post',slides:[{type:'single',variant:'photo',headline:longHeadline,body:'Firma Y jej teprve ověřuje (příklad).',kicker:'Příklad',credit:'Syntetický příklad',images:[{...image(1),crop:{focal:{x:.5,y:.8},fit:'cover'}}]}]},
  {id:'single-type-post',slides:[{type:'single',variant:'type',headline:longHeadline+' právě dnes',body:note,kicker:'Smyšlený příklad',credit:'Zdroj: smyšlená laboratoř Z'}]}
 ];
+/**
+ * A cover with its second photograph, for the kits whose cover declares the optional `image-2`
+ * (`DNESKAI_OPTIONAL_IMAGE_SLOTS`): the spotlight's ringed inset. Kept out of the six decks above
+ * so the other kits' sheets do not change.
+ */
+export const DNESKAI_SPECIMEN_INSET_DECK:SpecimenDeck={id:'cover-inset',slides:[
+ {type:'cover-photo',headline:'Laboratoř Z ukázala Model X před rokem a dnes (příklad).',images:[image(0),image(4,'image-2')]}]};
 export function materializeSpecimenDeck(deck:SpecimenDeck,photos:readonly Buffer[]):DneskaiSlideInput[]{
  return deck.slides.map(({images,...slide},index)=>({...slide,position:{index,count:deck.slides.length},...(images?{images:images.map(({photo,...image})=>({...image,bytes:photos[photo]!}))}:{})}));
 }

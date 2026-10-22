@@ -6,7 +6,8 @@ import sharp from 'sharp';
 import { Resvg } from '@resvg/resvg-js';
 import { fontFiles } from '../src/fonts.js';
 import { renderDneskaiSlide, DNESKAI_KITS, dneskaiKit, type DneskaiKitId } from '../src/dneskai-slide.js';
-import { DNESKAI_SPECIMEN_DECKS, SPECIMEN_PHOTO_SIZES, materializeSpecimenDeck, syntheticAbstractPhoto } from './dneskai-specimen-decks.js';
+import { DNESKAI_SPECIMEN_DECKS, DNESKAI_SPECIMEN_INSET_DECK, SPECIMEN_PHOTO_SIZES, materializeSpecimenDeck, syntheticAbstractPhoto } from './dneskai-specimen-decks.js';
+import { DNESKAI_OPTIONAL_IMAGE_SLOTS } from '../src/dneskai-kits/contract.js';
 
 const escape=(s:string)=>s.replaceAll('&','&amp;').replaceAll('<','&lt;').replaceAll('>','&gt;').replaceAll('"','&quot;');
 const raster=(svg:string)=>new Resvg(svg,{font:{fontFiles:fontFiles(),loadSystemFonts:false}}).render().asPng();
@@ -32,7 +33,9 @@ export async function renderSpecimens(options:{kits?:readonly string[];photos?:s
  for(const id of ids){
   const kit=dneskaiKit(id)!,directory=path.join(out,id);await mkdir(directory,{recursive:true});
   const tiles:Buffer[]=[],receipts=[];
-  for(const deck of DNESKAI_SPECIMEN_DECKS){
+  // A kit whose cover takes a second photograph also shows that cover.
+  const decks=DNESKAI_OPTIONAL_IMAGE_SLOTS[id as DneskaiKitId]?.['cover-photo']?.includes('image-2')?[...DNESKAI_SPECIMEN_DECKS,DNESKAI_SPECIMEN_INSET_DECK]:DNESKAI_SPECIMEN_DECKS;
+  for(const deck of decks){
    const slides=materializeSpecimenDeck(deck,photos);
    for(const [index,slide] of slides.entries()){
     const result=await renderDneskaiSlide({...slide,kit:id as DneskaiKitId});
