@@ -169,3 +169,18 @@ const splitPair = template({
   version: FLOWED,
   layers: [photo("image-1", 0, W / 2, DEPTH, DEPTH_FADE), photo("image-2", W / 2, W / 2, DEPTH, DEPTH_FADE), logo, ...quote(320)]
 });
+
+const statement = template({
+  id: "dneskai-spotlight-statement",
+  name: "DNESKAi spotlight · statement",
+  description: "One sentence set as a quote under a pair of quotation marks, centred on blueprint blue, or on ink in the INK variant, with a quieter note under it.",
+  backgroundToken: "accent",
+  version: FLOWED,
+  variants: [{ id: "INK", backgroundToken: "background" }],
+  layers: [
+    logo,
+    mark(box(LEFT, 296, MEASURE, 136)),
+    headline(box(LEFT, 436, MEASURE, 500), { minFontSize: 50, maxFontSize: 84, maxChars: 170, maxLines: 8 }),
+    copy(box(LEFT, 960, MEASURE, 290), { minFontSize: 28, maxFontSize: 32, maxChars: 240, maxLines: 8 })
+  ]
+});
