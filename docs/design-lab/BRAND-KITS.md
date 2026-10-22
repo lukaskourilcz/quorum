@@ -27,6 +27,7 @@ The manifest records:
   when the spec gives one), a minimum height in pixels, and the spec's size table.
 - `palettes` for each ground the logo is approved on, and `carouselPalette` when the kit sets the
   studio's seven carousel tokens. Each token names the design-system value it came from.
+- Optional `carouselLooks`: a default id and listed ids, each with `looks/<id>.json` following `brand-kit-look/1`. The default must equal the base palette and fonts. Each file holds a full palette, three font slots and optional style flags.
 - `carouselFonts`: the family for each of the studio's three type slots, from `studio/fonts/`.
 - `carouselStyle`: `flat` (no mesh, glow, blur or fading scrim; gradient seams stay hard),
   `squareCorners` (zero radii), `logo` (`every-slide` or `last-slide`), named `grounds` with a full
@@ -49,13 +50,14 @@ A brand whose tokens in `library.ts` name a `kit` is drawn from that kit and fro
    palette or a wordmark set in a font.
 2. Takes the colours from `carouselPalette` and the faces from `carouselFonts`, whatever tokens the
    caller passed.
-3. Applies `carouselStyle` to the template (`kitTemplate`), and the contrast gates measure the
+3. Overlays an explicitly requested look through `kitStyleWithLook`; absent look preserves the cached base style. A look replaces palette and faces; a ground from the kit sequence then replaces palette per slide. A look cannot clear flat or square-corner flags the kit sets.
+4. Applies `carouselStyle` to the template (`kitTemplate`), and the contrast gates measure the
    result, so they check the slide that is drawn.
-4. Gives each slide its ground from `groundSequence` by its place in the deck. Quiz and post decks
+5. Gives each slide its ground from `groundSequence` by its place in the deck. Quiz and post decks
    are single-slide templates, so they pass the position (`deck` on the render input). A deck of
    another length keeps the first and last ground and walks the ones between. Every ground a deck
    uses is validated.
-5. Draws the logo layer only where `logo` allows it, and the corner mark on every slide.
+6. Draws the logo layer only where `logo` allows it, and the corner mark on every slide.
 
 `logotypeForBrand(studioBrand)` reads the files marked `logoSlot`, in manifest order, and a logo
 layer nests the chosen SVG. The file, like the corner mark's, is picked from the grounds behind its
@@ -115,3 +117,5 @@ words, JetBrains Mono code.
    for them, and add `carouselPalette`, `carouselFonts` and `carouselStyle` together with the
    matching `library.ts` change, including `kit` on the brand's tokens.
 4. Check the Brand tab in the admin.
+
+The DNESKAi kit currently declares only `editorial`. Four additional looks require approved designs; the runtime registry does not expose them as copies of editorial. Look families participate in the locale/glyph and raster-face tests.

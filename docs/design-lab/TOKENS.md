@@ -166,7 +166,7 @@ template-level backdrop field.
 
 ## DNESKAi photo kit
 
-The measurements of `studio/src/dneskai-photo.ts` (quorum#603), in pixels on the 1080 × 1350
+The editorial measurements in `studio/src/dneskai-kits/editorial.ts` (quorum#603), in pixels on the 1080 × 1350
 master, which is the only canvas these templates declare. The kit dresses the `caught-up` brand in
 Space Grotesk headlines, Source Serif 4 words and IBM Plex Mono labels, whatever the brand table
 above names for the undressed skin.
@@ -222,3 +222,5 @@ lands in the cropped frame, not its place in the source. The worst readability p
 then Lc 75.6 (APCA, that kicker row) against the library's floor of 40; laid out at the foot it is
 Lc 77.4.
 
+
+The table above describes `DNESKAI_EDITORIAL_METRICS`; another kit carries its own metrics and flow. Editorial pins `capOffset: 0.3` to preserve recorded frames. Without that pin, layout uses one minus the fitted face cap height. The committed cap heights are Space Grotesk 700: 0.700 em, IBM Plex Mono 400: 0.698 em and Source Serif 4 400: 0.670 em.

@@ -1171,3 +1171,5 @@ Step 8 adds the named-kit slide API and registry. Both absent and explicit `edit
 Step 10 includes every declared look family in the glyph and raster-face coverage gates. The editorial look adds no new family, so the existing sixteen bindings and Outfit's unbound status remain. Every committed weight the editorial look binds passes the Czech alphabet check.
 
 Step 11 adds deterministic synthetic fixtures, the specimen CLI, visible refusal tiles, receipts and the editorial contact sheet. Arithmetic correction: the six specified deck lengths are 7+5+5+5+1+1 = 24, not the 26 stated above. The sheet renders those six decks as written (five rows); the layout utility also tests 26 tiles in six rows. Only implemented kits may be requested. Four future sheets remain dependent on their approved designs.
+
+Step 12 documents the implemented named-kit API, look precedence, metrics, unchanged editorial receipts and the specimen command. The docs identify the four unimplemented designs and correct the fixture tile count. No consolidation or brand re-pin has occurred.

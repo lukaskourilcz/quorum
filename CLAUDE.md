@@ -82,7 +82,7 @@ Council runs via API in `orchestrator/`; you are the human-invoked engineer.
   and Tehdejší svět reuse it through venture-owned briefs, dossiers and ledgers. A provider may
   gather bounded evidence; it cannot publish, pick a second implementation silently or escape
   the caller's tighter research envelope.
-- **The studio's fonts are build inputs.** Font files live in `studio/fonts/`; measurements live
+- **The studio's fonts are build inputs.** Font files live in `studio/fonts/`; measurements, including cap and x heights, live
   in generated `studio/src/font-metrics.generated.ts`. Run `pnpm -C studio fonts:metrics` after a
   font-file change and commit both. Literata and Inter are the Cyrillic-complete Tehdejší svět
   faces, and the Ukrainian alphabet coverage test is a release gate, not a visual nicety.
