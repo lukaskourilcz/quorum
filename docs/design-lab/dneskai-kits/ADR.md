@@ -1161,3 +1161,5 @@ Source Serif 4 (version 3), and every face is TrueType.
 ## Implementation progress (22 October 2026)
 
 Steps 1–4 are committed: baseline receipts, cap/x heights, editorial look manifest and look style resolution. Step 5 now passes the named look through fitting, template validation and SVG/PNG rendering. Text fits expose their committed face. Absent-look output and the editorial look remain byte-identical. Four future kit designs and their naming remain owner decisions.
+
+Step 6 extracts the existing builders verbatim into `compose.ts` and the approved compositions into `editorial.ts`, with `dneskai-photo.ts` as a compatibility facade. The kit contract derives field faces lazily and placed fields from its templates. It validates role completeness without reading files at import. Flow and metric declarations are additive; layout still uses its original dispatch until step 7.

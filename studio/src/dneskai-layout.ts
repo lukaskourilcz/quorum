@@ -89,10 +89,11 @@ export const DNESKAI_OPTICAL_SHARE = 0.42;
  * Grotesk and IBM Plex Mono have caps 0.70 em tall and Source Serif 4 0.67, under a baseline the
  * renderer sets one em below the frame's top.
  */
-const CAP_OFFSET = 0.3;
+export const DNESKAI_CAP_OFFSET = 0.3;
+const CAP_OFFSET = DNESKAI_CAP_OFFSET;
 
 /** The single photo's headline panel, as `dneskai-photo.ts` draws it at the foot. */
-const PANEL = {
+export const DNESKAI_PANEL = {
   /** The panel's top when the band stands at the top of the slide, under the logotype row. */
   top: 152,
   /** The panel's padding on each side of the hugged lines (the template's `padding`). */
@@ -105,6 +106,53 @@ const PANEL = {
   /** Clearance the focal point keeps from the band before the band moves out of its way. */
   clearance: 48
 } as const;
+
+const PANEL = DNESKAI_PANEL;
+
+export type DneskaiGapName = keyof typeof DNESKAI_GAPS;
+
+export interface DneskaiStackItem {
+  /** A text slot, an image slot, `rule` (the slide's first rule layer) or `thumbnails` (sources only). */
+  key: string;
+  /** Visual space above the item, ink to ink: a named gap reads the kit's table, a number is units. Ignored on the first item. */
+  gap: DneskaiGapName | number;
+}
+
+export type DneskaiFlow =
+  | { kind: "cover-static" }
+  | { kind: "figure" }
+  | { kind: "split" }
+  | { kind: "split-pair" }
+  | { kind: "statement" }
+  | { kind: "sources" }
+  | { kind: "single-type" }
+  | { kind: "single-photo" }
+  | { kind: "stack"; anchor: "centre" | "top"; items: readonly DneskaiStackItem[] };
+
+export interface DneskaiLayoutMetrics {
+  readonly unit: number;
+  /** All thirteen gaps; a kit copies the editorial table and changes what it wants. */
+  readonly gaps: Readonly<Record<DneskaiGapName, number>>;
+  readonly area: { readonly top: number; readonly bottom: number };
+  readonly opticalShare: number;
+  readonly thumbnails: { readonly columns: number; readonly width: number; readonly height: number; readonly gap: number };
+  readonly panel: { readonly top: number; readonly padding: number; readonly inset: number; readonly toBody: number; readonly toKicker: number; readonly clearance: number };
+  /**
+   * Where the cap line sits under the top of a line box, in em, for every face. Absent: one minus
+   * the face's own cap height from the metrics table. The editorial kit pins 0.3, the constant its
+   * recorded hashes were laid out with.
+   */
+  readonly capOffset?: number;
+}
+
+export const DNESKAI_EDITORIAL_METRICS: DneskaiLayoutMetrics = {
+ unit:DNESKAI_SPACE_UNIT,gaps:DNESKAI_GAPS,area:DNESKAI_AREA,opticalShare:DNESKAI_OPTICAL_SHARE,
+ thumbnails:DNESKAI_THUMBNAIL_GRID,panel:DNESKAI_PANEL,capOffset:DNESKAI_CAP_OFFSET
+};
+export const DNESKAI_STACK_PRESETS: { readonly statement: DneskaiFlow; readonly singleType: DneskaiFlow } = {
+  statement: { kind: "stack", anchor: "centre", items: [{ key: "headline", gap: 0 }, { key: "body", gap: "headlineToNote" }] },
+  singleType: { kind: "stack", anchor: "centre", items: [{ key: "rule", gap: 0 }, { key: "kicker", gap: "ruleToLabel" }, { key: "headline", gap: "labelToText" }, { key: "body", gap: "headlineToNote" }] }
+};
 
 /** One text slot as the fitter set it: how many lines, at what size. No lines means empty. */
 export interface DneskaiMeasuredText {
