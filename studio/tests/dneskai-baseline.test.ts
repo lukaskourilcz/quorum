@@ -19,7 +19,7 @@ const receipts = JSON.parse(readFileSync(path.join(import.meta.dirname, "fixture
   frames: Record<string, unknown>;
 };
 
-const variants: Array<[string, (input: DneskaiSlideInput) => DneskaiSlideInput]> = [["no kit", (input) => input]];
+const variants: Array<[string, (input: DneskaiSlideInput) => DneskaiSlideInput]> = [["no kit", (input) => input], ["editorial", (input) => ({...input,kit:"editorial"})]];
 
 describe("the DNESKAi editorial receipts", () => {
   it("composes the editorial templates to the recorded bytes", () => {

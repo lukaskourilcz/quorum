@@ -48,3 +48,16 @@ describe('the editorial kit contract',()=>{
   walk(path.join(root,'dneskai-slide.ts'));expect(seen.size).toBeGreaterThan(15);
  });
 });
+
+describe('named kit slide API',()=>{
+ it('names the default and explicit editorial kit and refuses an unimplemented id',async()=>{
+  const {renderDneskaiSlide,validateDneskaiSlide,dneskaiKit,DNESKAI_KITS}=await import('../src/dneskai-slide.js');
+  const slide=(await acceptanceDeck())[2]!;
+  const defaultRender=await renderDneskaiSlide(slide),explicit=await renderDneskaiSlide({...slide,kit:'editorial'});
+  expect(defaultRender.kit).toBe('editorial');expect(explicit.kit).toBe('editorial');expect(explicit.pngHash).toBe(defaultRender.pngHash);
+  const refused=await renderDneskaiSlide({...slide,kit:'unknown' as never});
+  expect(refused).toMatchObject({status:'refused',kit:null,png:null,template:null,payload:null,problems:[{code:'kit-invalid',blocking:true,field:'kit',message:expect.any(String)}]});
+  expect(await validateDneskaiSlide({...slide,kit:'unknown' as never})).toEqual(refused.problems);
+  expect(dneskaiKit('bold')).toBeNull();expect([...DNESKAI_KITS.keys()]).toEqual(['editorial']);
+ });
+});
