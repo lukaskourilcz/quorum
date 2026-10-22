@@ -115,3 +115,17 @@ const speaker = (frame: Frame): CarouselLayerInput =>
 
 const copy = (frame: Frame, options: Parameters<typeof body>[1]): CarouselLayerInput =>
   body(frame, { colorToken: "surface", align: "middle", ...options });
+
+const coverPhoto = template({
+  id: "dneskai-spotlight-cover-photo",
+  name: "DNESKAi spotlight · cover photo",
+  description: "A colour photograph to every edge fading into ink, an optional second photograph as a ringed disc top right, and one white headline centred on the fade.",
+  backgroundToken: "background",
+  layers: [
+    photo("image-1", 0, W, H, BLEED_FADE),
+    inset,
+    logo,
+    // Bottom-anchored: the last line stands on the floor whatever the headline's length.
+    headline(box(LEFT, 772, MEASURE, 490), { minFontSize: 48, maxFontSize: 72, maxChars: 110, maxLines: 6, valign: "bottom" })
+  ]
+});
