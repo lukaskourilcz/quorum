@@ -54,3 +54,10 @@ state/cache/
 
 # Door Money manuscript input is private source material and must never enter this public repo.
 state/ventures/door-money/manuscript/
+
+# Full-size specimen tiles; tracked sheets and receipts stay beside these directories.
+/docs/design-lab/dneskai-kits/editorial/
+/docs/design-lab/dneskai-kits/bold/
+/docs/design-lab/dneskai-kits/explainer/
+/docs/design-lab/dneskai-kits/magazine/
+/docs/design-lab/dneskai-kits/ticker/

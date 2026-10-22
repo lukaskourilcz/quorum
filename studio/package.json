@@ -26,7 +26,8 @@
     "fonts:metrics": "tsx scripts/generate-font-metrics.ts",
     "golden": "tsx scripts/golden.ts",
     "golden:check": "tsx scripts/golden.ts --check",
-    "specimens": "tsx scripts/specimens.ts"
+    "specimens": "tsx scripts/specimens.ts",
+    "specimens:dneskai": "tsx scripts/dneskai-specimens.ts"
   },
   "dependencies": {
     "@resvg/resvg-js": "^2.6.2",
