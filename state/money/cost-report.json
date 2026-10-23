@@ -1,14 +1,14 @@
 {
   "schemaVersion": "cost-report/1",
-  "generatedAt": "2026-10-22T04:12:06.098Z",
+  "generatedAt": "2026-10-23T04:20:05.331Z",
   "month": "2026-10",
   "currency": "USD",
   "metered": {
     "total": {
-      "totalUsd": 8.95562375,
-      "modelUsd": 8.75562375,
+      "totalUsd": 9.08566275,
+      "modelUsd": 8.88566275,
       "mediaUsd": 0.2,
-      "calls": 356
+      "calls": 364
     },
     "editions": [
       {
@@ -816,14 +816,14 @@
       {
         "phase": "morning",
         "ventureId": "global",
-        "cycles": 23,
-        "meteredUsd": 2.936853,
+        "cycles": 24,
+        "meteredUsd": 3.066892,
         "comparable": {
-          "cycles": 19,
-          "envelopeUsd": 0.851694,
-          "meteredUsd": 2.424955,
-          "varianceUsd": 1.573261,
-          "overspentCycles": 19
+          "cycles": 20,
+          "envelopeUsd": 0.89652,
+          "meteredUsd": 2.554994,
+          "varianceUsd": 1.658474,
+          "overspentCycles": 20
         }
       }
     ]
@@ -831,14 +831,14 @@
   "billed": null,
   "reconciliation": {
     "status": "unavailable",
-    "meteredUsd": 8.95562375,
+    "meteredUsd": 9.08566275,
     "billedUsd": null,
     "differenceUsd": null,
     "toleranceUsd": 0.01,
     "note": "PROVIDER_BILLING_ENABLED is not set, so no billing request was made."
   },
   "unreadable": {
-    "decisions": 19,
+    "decisions": 20,
     "deliveries": 0,
     "envelopes": 0,
     "ledgerRows": 0
