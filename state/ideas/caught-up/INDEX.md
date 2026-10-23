@@ -6,6 +6,7 @@
 
 | ID | Title (≤8 words) | Status | Last reason |
 | --- | --- | --- | --- |
+| idea-2026-10-23-589d1628 | Add an Unaccounted Meeting Review Note | proposed | VAULT variant: Both add optional reconciliation notes to daily records for unaccounted items (meetings vs. attendance s… |
 | idea-2026-10-22-21c72b2a | Add a Bounded Attendance Reconciliation Note | proposed | VAULT variant: Both add one optional internal reconciliation note to periodic records (meeting slots vs. daily runs) to… |
 | idea-2026-10-21-c01e271a | Add a Missing-Run Reconciliation Note | proposed | VAULT variant: Both add optional internal notes when a run/record is missing, review periodically to improve operationa… |
 | idea-2026-10-20-9b8d0686 | Add a Missing-Publication Recovery Note | proposed | VAULT variant: Both add optional internal fields to publishing records to review periodically and improve reliability w… |
@@ -23,9 +24,8 @@
 | idea-2026-09-30-7da53b53 | Add a Post-Publish Source Coverage Snapshot | proposed | VAULT variant: Both add internal source-category recording to publishing records for post-hoc review. Key difference: p… |
 | idea-2026-09-25-c635e115 | Add a Source-Mix Review Field | proposed | VAULT variant: Both add internal metadata (source category, coverage gaps) to publishing records and review periodicall… |
 | idea-2026-08-28-a468c2d0 | Add a Pre-Publish Source Check | proposed | VAULT variant: Both introduce source provenance tracking to guide sourcing decisions. Key difference: proposal adds pre… |
-| idea-2026-08-17-8f179c62 | Source-Mix Provenance Tag | proposed | VAULT novel: Proposes retroactive source-category tagging of published items with periodic review for sourcing gaps. Ca… |
 
-Omitted older current entries: 3.
+Omitted older current entries: 4.
 Collapsed superseded entries: 0.
 
 ## All-time kill list

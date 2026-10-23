@@ -1,0 +1,14 @@
+{
+  "schemaVersion": 1,
+  "fixture": false,
+  "cycleId": "20261023040914-morning",
+  "outcome": "NO_ACTION",
+  "selectedOpportunityId": null,
+  "reasons": [
+    "Opportunity gate dormant — no live opportunity on file."
+  ],
+  "evidenceRefs": [],
+  "caughtUpIdeaRef": "idea-2026-10-23-589d1628",
+  "meetingAgendaIds": [],
+  "generatedAt": "2026-10-23T04:09:14.361Z"
+}
