@@ -3,8 +3,8 @@
   "nodeId": "personal-growth",
   "displayName": "Lukáš Growth Desk",
   "policyVersion": "1.1.0",
-  "generatedAt": "2026-10-23T04:09:14.361Z",
-  "observedAt": "2026-10-23T04:09:14.361Z",
+  "generatedAt": "2026-10-24T04:01:24.554Z",
+  "observedAt": "2026-10-24T04:01:24.554Z",
   "lifecycleStage": "operating",
   "state": "unavailable",
   "reason": "No valid live or recovery receipt is available.",
@@ -47,5 +47,5 @@
   ],
   "ownerAttentionRefs": [],
   "latestRunReceiptRefs": [],
-  "snapshotHash": "1703f99edbd1ac1bb114151634125259ee58c3eef98a03768a391663e8cdd27e"
+  "snapshotHash": "ac947e9f88393766920ca667f2fa1f8e6e2d3283220f2cc7b76b244443183cad"
 }

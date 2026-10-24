@@ -6,6 +6,7 @@
 
 | ID | Title (≤8 words) | Status | Last reason |
 | --- | --- | --- | --- |
+| idea-2026-10-24-8bbf19cb | Add a Daily Venture Status Snapshot | proposed | VAULT variant: Both add optional internal snapshot/note to periodic records to distinguish inactivity/missing evidence… |
 | idea-2026-10-23-589d1628 | Add an Unaccounted Meeting Review Note | proposed | VAULT variant: Both add optional reconciliation notes to daily records for unaccounted items (meetings vs. attendance s… |
 | idea-2026-10-22-21c72b2a | Add a Bounded Attendance Reconciliation Note | proposed | VAULT variant: Both add one optional internal reconciliation note to periodic records (meeting slots vs. daily runs) to… |
 | idea-2026-10-21-c01e271a | Add a Missing-Run Reconciliation Note | proposed | VAULT variant: Both add optional internal notes when a run/record is missing, review periodically to improve operationa… |
@@ -23,9 +24,8 @@
 | idea-2026-10-01-a7cc5384 | Add a Source-Category Coverage Dashboard | proposed | VAULT variant: Proposes dashboard visualization of source-category coverage data already captured in existing field-bas… |
 | idea-2026-09-30-7da53b53 | Add a Post-Publish Source Coverage Snapshot | proposed | VAULT variant: Both add internal source-category recording to publishing records for post-hoc review. Key difference: p… |
 | idea-2026-09-25-c635e115 | Add a Source-Mix Review Field | proposed | VAULT variant: Both add internal metadata (source category, coverage gaps) to publishing records and review periodicall… |
-| idea-2026-08-28-a468c2d0 | Add a Pre-Publish Source Check | proposed | VAULT variant: Both introduce source provenance tracking to guide sourcing decisions. Key difference: proposal adds pre… |
 
-Omitted older current entries: 4.
+Omitted older current entries: 5.
 Collapsed superseded entries: 0.
 
 ## All-time kill list
