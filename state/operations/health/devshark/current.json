@@ -3,8 +3,8 @@
   "nodeId": "devshark",
   "displayName": "devShark",
   "policyVersion": "1.0.0",
-  "generatedAt": "2026-10-24T04:01:24.554Z",
-  "observedAt": "2026-10-24T04:01:24.554Z",
+  "generatedAt": "2026-10-25T05:01:15.071Z",
+  "observedAt": "2026-10-25T05:01:15.071Z",
   "lifecycleStage": "planned",
   "state": "held",
   "reason": "The node is not yet scheduled for live operation.",
@@ -45,5 +45,5 @@
   "unavailableReasons": [],
   "ownerAttentionRefs": [],
   "latestRunReceiptRefs": [],
-  "snapshotHash": "d811ef040d151cc589e193dc62c0af401d752a7a3b82e5af6ff6f2ceb03056f4"
+  "snapshotHash": "687e32a6a5320a183b67de26786e92661aad385ff06f5762e1c07e4e22939eaf"
 }
