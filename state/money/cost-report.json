@@ -1,14 +1,14 @@
 {
   "schemaVersion": "cost-report/1",
-  "generatedAt": "2026-10-26T09:29:51.494Z",
+  "generatedAt": "2026-10-27T05:07:45.409Z",
   "month": "2026-10",
   "currency": "USD",
   "metered": {
     "total": {
-      "totalUsd": 9.60438175,
-      "modelUsd": 9.40438175,
+      "totalUsd": 9.73271575,
+      "modelUsd": 9.53271575,
       "mediaUsd": 0.2,
-      "calls": 396
+      "calls": 404
     },
     "editions": [
       {
@@ -816,13 +816,13 @@
       {
         "phase": "morning",
         "ventureId": "global",
-        "cycles": 28,
-        "meteredUsd": 3.585611,
+        "cycles": 29,
+        "meteredUsd": 3.713945,
         "comparable": {
           "cycles": 23,
           "envelopeUsd": 1.030998,
-          "meteredUsd": 2.943724,
-          "varianceUsd": 1.912726,
+          "meteredUsd": 2.941488,
+          "varianceUsd": 1.91049,
           "overspentCycles": 23
         }
       }
@@ -831,7 +831,7 @@
   "billed": null,
   "reconciliation": {
     "status": "unavailable",
-    "meteredUsd": 9.60438175,
+    "meteredUsd": 9.73271575,
     "billedUsd": null,
     "differenceUsd": null,
     "toleranceUsd": 0.01,
