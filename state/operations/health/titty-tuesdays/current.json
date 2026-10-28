@@ -3,8 +3,8 @@
   "nodeId": "titty-tuesdays",
   "displayName": "Titty Tuesdays",
   "policyVersion": "1.0.0",
-  "generatedAt": "2026-10-27T05:01:01.898Z",
-  "observedAt": "2026-10-27T05:01:01.898Z",
+  "generatedAt": "2026-10-28T05:01:10.791Z",
+  "observedAt": "2026-10-28T05:01:10.791Z",
   "lifecycleStage": "operating",
   "state": "unavailable",
   "reason": "No valid live or recovery receipt is available.",
@@ -47,5 +47,5 @@
   ],
   "ownerAttentionRefs": [],
   "latestRunReceiptRefs": [],
-  "snapshotHash": "375e8c75207ce24a9f303347f47c8e3ccd91bc02bb8eb27aa25f28db9e861b15"
+  "snapshotHash": "dee170a4d30d5abe531ab0e6c8c65c0046f30637bd2be392717c51eacccbf22b"
 }

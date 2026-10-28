@@ -6,6 +6,7 @@
 
 | ID | Title (≤8 words) | Status | Last reason |
 | --- | --- | --- | --- |
+| idea-2026-10-28-4c216bf3 | Add a Daily Evidence Completeness Flag | proposed | VAULT variant: Both add a bounded internal flag to daily records assessing evidence completeness across multiple activi… |
 | idea-2026-10-27-3b9d2192 | Add a Bounded Record Acceptance Check | proposed | VAULT variant: Both add a bounded internal check at save-time for missing required fields, capture the failure reason,… |
 | idea-2026-10-25-7d64a3d0 | Add a Daily Record Reconciliation Note | proposed | VAULT variant: Proposal expands scope to four reconciliation areas (meetings, publishing, ratings, spend) vs. candidate… |
 | idea-2026-10-24-8bbf19cb | Add a Daily Venture Status Snapshot | proposed | VAULT variant: Both add optional internal snapshot/note to periodic records to distinguish inactivity/missing evidence… |
@@ -23,9 +24,8 @@
 | idea-2026-10-07-afab85ef | Add a Source Diversity Reflection Prompt | proposed | VAULT variant: Both add internal metadata to publishing records to identify source gaps without workflow changes. Key d… |
 | idea-2026-10-06-cae8d86a | Add a Reader Question Tag to Publishing Records | proposed | VAULT variant: Both add one internal tag/card per published item to identify underrepresented coverage gaps without cha… |
 | idea-2026-10-03-250b2587 | Add a Bounded Source-Mix Review Card | proposed | VAULT variant: Both add internal source-category field to publishing records to track mix and flag gaps without workflo… |
-| idea-2026-10-01-a7cc5384 | Add a Source-Category Coverage Dashboard | proposed | VAULT variant: Proposes dashboard visualization of source-category coverage data already captured in existing field-bas… |
 
-Omitted older current entries: 7.
+Omitted older current entries: 8.
 Collapsed superseded entries: 0.
 
 ## All-time kill list
