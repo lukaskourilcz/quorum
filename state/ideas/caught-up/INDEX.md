@@ -23,15 +23,15 @@
 | idea-2026-10-08-de5fc836 | Add a Source-Mix Reflection Label | proposed | VAULT variant: Both add optional internal source-category metadata to publishing records for periodic review to guide h… |
 | idea-2026-10-07-afab85ef | Add a Source Diversity Reflection Prompt | proposed | VAULT variant: Both add internal metadata to publishing records to identify source gaps without workflow changes. Key d… |
 | idea-2026-10-06-cae8d86a | Add a Reader Question Tag to Publishing Records | proposed | VAULT variant: Both add one internal tag/card per published item to identify underrepresented coverage gaps without cha… |
-| idea-2026-10-03-250b2587 | Add a Bounded Source-Mix Review Card | proposed | VAULT variant: Both add internal source-category field to publishing records to track mix and flag gaps without workflo… |
 
-Omitted older current entries: 8.
+Omitted older current entries: 9.
 Collapsed superseded entries: 0.
 
 ## All-time kill list
 
 | ID | Title (≤8 words) | Current status | Last reason |
 | --- | --- | --- | --- |
+| idea-2026-10-29-2ed4599e | Add a Daily Evidence Completeness Flag | vetoed | VAULT hard stop: Both add a bounded internal flag to daily venture records assessing evidence completeness (complete/pa… |
 | idea-2026-10-17-faec8e12 | Add a Daily Publish Evidence Check | vetoed | VAULT hard stop: Proposes identical mechanism: one optional internal completion field per publishing record to confirm… |
 | idea-2026-10-11-bf2fb7ae | Add a Source-Review Prompt to Publishing Records | vetoed | VAULT hard stop: Identical core mechanism: optional internal prompt asking missing source perspective, periodic review… |
 | idea-2026-10-10-eb700cea | Add a Lightweight Source-Mix Reflection | vetoed | VAULT hard stop: Both propose adding one optional internal source-category note/label per published item, then reviewin… |

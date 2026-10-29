@@ -1,6 +1,6 @@
 {
   "schemaVersion": "operations-snapshot/1",
-  "generatedAt": "2026-10-28T05:01:10.791Z",
+  "generatedAt": "2026-10-29T05:01:04.641Z",
   "nodes": [
     {
       "nodeId": "admin-service",
@@ -414,7 +414,7 @@
       "health": "unavailable",
       "reason": "No valid live or recovery receipt is available.",
       "lastValidAt": null,
-      "nextExpectedAt": "2026-10-29T05:01:10.791Z",
+      "nextExpectedAt": "2026-10-30T05:01:04.641Z",
       "sloSatisfied": null,
       "failureCount": 0,
       "recoveryRefs": [],
@@ -482,5 +482,5 @@
   ],
   "malformedAdapterCount": 0,
   "unavailableAdapterCount": 0,
-  "snapshotHash": "009552966a6279b499711eb09302c55b3097c7bb4414ecce0587cc081421177f"
+  "snapshotHash": "977021aff8d24ca5b34acfd223abc6c194e936126bc85ff9418a61a6d5c38fed"
 }
