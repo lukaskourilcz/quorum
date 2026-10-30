@@ -1,11 +1,11 @@
 {
   "schemaVersion": "money-public/1",
-  "generatedAt": "2026-10-29T05:01:04.641Z",
+  "generatedAt": "2026-10-30T05:01:17.468Z",
   "quarter": {
     "id": "2026-Q1",
     "start": "2026-08-03",
     "end": "2026-10-31",
-    "daysRemaining": 2,
+    "daysRemaining": 1,
     "statuses": [
       {
         "id": "company.valid-window-rate",
@@ -17,7 +17,7 @@
         "direction": "at-least",
         "critical": true,
         "status": "off-track",
-        "paceTarget": 0.92888889,
+        "paceTarget": 0.93944444,
         "attainmentRatio": 0.60646121,
         "rampActive": false,
         "reason": null
@@ -32,7 +32,7 @@
         "direction": "at-most",
         "critical": true,
         "status": "on-track",
-        "paceTarget": 48.88888889,
+        "paceTarget": 49.44444444,
         "attainmentRatio": 1,
         "rampActive": false,
         "reason": null
@@ -47,7 +47,7 @@
         "direction": "at-most",
         "critical": true,
         "status": "on-track",
-        "paceTarget": 24.44444444,
+        "paceTarget": 24.72222222,
         "attainmentRatio": 1,
         "rampActive": false,
         "reason": null
@@ -62,7 +62,7 @@
         "direction": "at-least",
         "critical": false,
         "status": "off-track",
-        "paceTarget": 175.26315789,
+        "paceTarget": 177.63157895,
         "attainmentRatio": 0.28333333,
         "rampActive": false,
         "reason": null
@@ -77,7 +77,7 @@
         "direction": "at-least",
         "critical": false,
         "status": "on-track",
-        "paceTarget": 0.92888889,
+        "paceTarget": 0.93944444,
         "attainmentRatio": 1.02695764,
         "rampActive": false,
         "reason": null
@@ -92,7 +92,7 @@
         "direction": "at-least",
         "critical": false,
         "status": "off-track",
-        "paceTarget": 19.55555556,
+        "paceTarget": 19.77777778,
         "attainmentRatio": 0.25,
         "rampActive": false,
         "reason": null
@@ -107,7 +107,7 @@
         "direction": "at-least",
         "critical": false,
         "status": "off-track",
-        "paceTarget": 63.28947368,
+        "paceTarget": 64.14473684,
         "attainmentRatio": 0.46153846,
         "rampActive": false,
         "reason": null
@@ -122,7 +122,7 @@
         "direction": "at-least",
         "critical": false,
         "status": "at-risk",
-        "paceTarget": 0.97368421,
+        "paceTarget": 0.98684211,
         "attainmentRatio": 0.93333333,
         "rampActive": false,
         "reason": null
@@ -137,7 +137,7 @@
         "direction": "at-least",
         "critical": false,
         "status": "on-track",
-        "paceTarget": 29.33333333,
+        "paceTarget": 29.66666667,
         "attainmentRatio": 1,
         "rampActive": false,
         "reason": null
@@ -152,7 +152,7 @@
         "direction": "at-least",
         "critical": false,
         "status": "off-track",
-        "paceTarget": 116.84210526,
+        "paceTarget": 118.42105263,
         "attainmentRatio": 0.175,
         "rampActive": false,
         "reason": null
@@ -167,7 +167,7 @@
         "direction": "at-least",
         "critical": false,
         "status": "on-track",
-        "paceTarget": 0.97368421,
+        "paceTarget": 0.98684211,
         "attainmentRatio": 1,
         "rampActive": false,
         "reason": null
@@ -182,7 +182,7 @@
         "direction": "at-least",
         "critical": false,
         "status": "on-track",
-        "paceTarget": 0.97777778,
+        "paceTarget": 0.98888889,
         "attainmentRatio": 1,
         "rampActive": false,
         "reason": null
@@ -197,7 +197,7 @@
         "direction": "at-least",
         "critical": false,
         "status": "at-risk",
-        "paceTarget": 0.97777778,
+        "paceTarget": 0.98888889,
         "attainmentRatio": 0.85714286,
         "rampActive": false,
         "reason": null
@@ -212,7 +212,7 @@
         "direction": "at-least",
         "critical": false,
         "status": "on-track",
-        "paceTarget": 58.66666667,
+        "paceTarget": 59.33333333,
         "attainmentRatio": 1.42895299,
         "rampActive": false,
         "reason": null
@@ -242,7 +242,7 @@
         "direction": "at-least",
         "critical": false,
         "status": "off-track",
-        "paceTarget": 0.88,
+        "paceTarget": 0.89,
         "attainmentRatio": 0,
         "rampActive": false,
         "reason": null
@@ -257,7 +257,7 @@
         "direction": "at-least",
         "critical": false,
         "status": "off-track",
-        "paceTarget": 7.82222222,
+        "paceTarget": 7.91111111,
         "attainmentRatio": 0,
         "rampActive": false,
         "reason": null
@@ -272,7 +272,7 @@
         "direction": "at-least",
         "critical": false,
         "status": "off-track",
-        "paceTarget": 2.93333333,
+        "paceTarget": 2.96666667,
         "attainmentRatio": 0,
         "rampActive": false,
         "reason": null
@@ -287,7 +287,7 @@
         "direction": "at-least",
         "critical": false,
         "status": "off-track",
-        "paceTarget": 7.78947368,
+        "paceTarget": 7.89473684,
         "attainmentRatio": 0,
         "rampActive": false,
         "reason": null
@@ -317,7 +317,7 @@
         "direction": "at-least",
         "critical": true,
         "status": "on-track",
-        "paceTarget": 0.97777778,
+        "paceTarget": 0.98888889,
         "attainmentRatio": 1,
         "rampActive": false,
         "reason": null
@@ -332,7 +332,7 @@
         "direction": "at-least",
         "critical": false,
         "status": "on-track",
-        "paceTarget": 0.97368421,
+        "paceTarget": 0.98684211,
         "attainmentRatio": 1,
         "rampActive": false,
         "reason": null
@@ -522,13 +522,13 @@
         "venture": "caught-up",
         "name": "Proposed ideas with no recorded near-duplicate",
         "unit": "ratio",
-        "actual": 0.04411765,
+        "actual": 0.04285714,
         "target": 0.8,
         "direction": "at-least",
         "critical": false,
         "status": "off-track",
         "paceTarget": 0.8,
-        "attainmentRatio": 0.05514706,
+        "attainmentRatio": 0.05357142,
         "rampActive": false,
         "reason": null
       },
@@ -537,13 +537,13 @@
         "venture": "caught-up",
         "name": "Days ending with an edition or a stated reason",
         "unit": "ratio",
-        "actual": 0.43181818,
+        "actual": 0.42696629,
         "target": 1,
         "direction": "at-least",
         "critical": false,
         "status": "off-track",
         "paceTarget": 1,
-        "attainmentRatio": 0.43181818,
+        "attainmentRatio": 0.42696629,
         "rampActive": false,
         "reason": null
       },
@@ -552,13 +552,13 @@
         "venture": "mma-files",
         "name": "Days ending with a published run record",
         "unit": "ratio",
-        "actual": 0.23863636,
+        "actual": 0.23595506,
         "target": 1,
         "direction": "at-least",
         "critical": false,
         "status": "off-track",
         "paceTarget": 1,
-        "attainmentRatio": 0.23863636,
+        "attainmentRatio": 0.23595506,
         "rampActive": false,
         "reason": null
       },
@@ -597,13 +597,13 @@
         "venture": "titty-tuesdays",
         "name": "Marketing ideas recorded per week",
         "unit": "count",
-        "actual": 0.875,
+        "actual": 0.86516854,
         "target": 5,
         "direction": "at-least",
         "critical": false,
         "status": "off-track",
         "paceTarget": 5,
-        "attainmentRatio": 0.175,
+        "attainmentRatio": 0.17303371,
         "rampActive": false,
         "reason": null
       },
@@ -617,7 +617,7 @@
         "direction": "at-least",
         "critical": false,
         "status": "off-track",
-        "paceTarget": 7.78947368,
+        "paceTarget": 7.89473684,
         "attainmentRatio": 0.125,
         "rampActive": false,
         "reason": null
@@ -642,13 +642,13 @@
         "venture": "goviral",
         "name": "Trend snapshots stored per week",
         "unit": "count",
-        "actual": 0.07954545,
+        "actual": 0.07865169,
         "target": 1,
         "direction": "at-least",
         "critical": false,
         "status": "off-track",
         "paceTarget": 1,
-        "attainmentRatio": 0.07954545,
+        "attainmentRatio": 0.07865169,
         "rampActive": false,
         "reason": null
       },
@@ -657,13 +657,13 @@
         "venture": "goviral",
         "name": "Marketing ideas recorded per week",
         "unit": "count",
-        "actual": 0.47727273,
+        "actual": 0.47191011,
         "target": 3,
         "direction": "at-least",
         "critical": false,
         "status": "off-track",
         "paceTarget": 3,
-        "attainmentRatio": 0.15909091,
+        "attainmentRatio": 0.15730337,
         "rampActive": false,
         "reason": null
       },
@@ -677,7 +677,7 @@
         "direction": "at-least",
         "critical": false,
         "status": "off-track",
-        "paceTarget": 1.94736842,
+        "paceTarget": 1.97368421,
         "attainmentRatio": 0,
         "rampActive": false,
         "reason": null
@@ -1260,8 +1260,8 @@
     "currency": "USD",
     "api": {
       "month": "2026-10",
-      "monthlyUsd": 9.85969175,
-      "cumulativeUsd": 35.04671495
+      "monthlyUsd": 9.98382375,
+      "cumulativeUsd": 35.17084695
     },
     "fixed": {
       "monthlyUsd": 22.99,
@@ -1353,8 +1353,8 @@
         "sourceNote": null
       }
     ],
-    "totalMonthlyBurnUsd": 32.84969175,
-    "cumulativeSpendUsd": 81.02671495
+    "totalMonthlyBurnUsd": 32.97382375,
+    "cumulativeSpendUsd": 81.15084695
   },
   "revenue": {
     "recognizedUsd": 0
