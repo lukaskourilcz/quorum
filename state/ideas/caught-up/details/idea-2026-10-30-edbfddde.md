@@ -17,3 +17,4 @@ Meeting: standups/2026-10-30-morning
 ## Similar ideas
 
 - variant of: idea-2026-10-24-8bbf19cb (55% lexical similarity)
+- variant of: idea-2026-10-31-c56fe3bf (46% lexical similarity)

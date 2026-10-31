@@ -3,8 +3,8 @@
   "nodeId": "social-distribution",
   "displayName": "Social Distribution",
   "policyVersion": "1.1.0",
-  "generatedAt": "2026-10-30T05:01:17.468Z",
-  "observedAt": "2026-10-30T05:01:17.468Z",
+  "generatedAt": "2026-10-31T05:01:17.777Z",
+  "observedAt": "2026-10-31T05:01:17.777Z",
   "lifecycleStage": "operating",
   "state": "unavailable",
   "reason": "No valid live or recovery receipt is available.",
@@ -13,7 +13,7 @@
   "lastSuccessfulAt": null,
   "lastNonEmptyAt": null,
   "lastExternallyVerifiedAt": null,
-  "nextExpectedAt": "2026-10-31T05:01:17.468Z",
+  "nextExpectedAt": "2026-11-01T05:01:17.777Z",
   "dueWindow": "daily deterministic profile operation; weekly learning in the existing checkpoint",
   "latenessMinutes": null,
   "rollingOutcomes": {
@@ -47,5 +47,5 @@
   ],
   "ownerAttentionRefs": [],
   "latestRunReceiptRefs": [],
-  "snapshotHash": "6874f2bc35c6db13f3f921b8b7a4429b50a98ab37d9c9c129d04173a41360d7c"
+  "snapshotHash": "5d0132286606c37c638948d865fffbdd3163eb84f486d191bf176a4a213e3803"
 }
