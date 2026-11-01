@@ -1,0 +1,24 @@
+{
+  "schemaVersion": "strategy-reassessment/1",
+  "quarterId": "2026-Q1",
+  "venture": "door-money",
+  "title": "Strategy reassessment: door-money",
+  "decisionAtStake": "continue / pivot / stop",
+  "mandatoryBoardSession": true,
+  "priorityItemId": "priority-36a2ad2fa5c6eeb6",
+  "missedKpiIds": [
+    "door-money.desk-reliability",
+    "door-money.approved-packages-weekly",
+    "door-money.approval-rate-trending-up",
+    "door-money.owner-actions-weekly",
+    "door-money.passage-depletion-watch",
+    "door-money.cash-spend"
+  ],
+  "criticalMisses": [
+    "door-money.desk-reliability",
+    "door-money.cash-spend"
+  ],
+  "completionRate": 0.14285714,
+  "reportRef": "kpis/reports/2026-Q1.json",
+  "createdAt": "2026-11-01T05:01:16.285Z"
+}

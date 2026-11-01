@@ -1,0 +1,23 @@
+{
+  "schemaVersion": "strategy-reassessment/1",
+  "quarterId": "2026-Q1",
+  "venture": "marketingshark",
+  "title": "Strategy reassessment: marketingshark",
+  "decisionAtStake": "continue / pivot / stop",
+  "mandatoryBoardSession": true,
+  "priorityItemId": "priority-0b44def54b7a886b",
+  "missedKpiIds": [
+    "marketingshark.daily-package-rate",
+    "marketingshark.package-completeness",
+    "marketingshark.truth-gate-violations",
+    "marketingshark.hook-rotation-coverage",
+    "marketingshark.cost-per-package"
+  ],
+  "criticalMisses": [
+    "marketingshark.package-completeness",
+    "marketingshark.truth-gate-violations"
+  ],
+  "completionRate": 0,
+  "reportRef": "kpis/reports/2026-Q1.json",
+  "createdAt": "2026-11-01T05:01:16.285Z"
+}

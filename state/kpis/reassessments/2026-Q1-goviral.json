@@ -1,0 +1,19 @@
+{
+  "schemaVersion": "strategy-reassessment/1",
+  "quarterId": "2026-Q1",
+  "venture": "goviral",
+  "title": "Strategy reassessment: goviral",
+  "decisionAtStake": "continue / pivot / stop",
+  "mandatoryBoardSession": true,
+  "priorityItemId": "priority-8482d67e9477edeb",
+  "missedKpiIds": [
+    "goviral.weekly-briefs",
+    "goviral.trend-snapshots",
+    "goviral.ideas-recorded",
+    "goviral.cross-venture-agendas"
+  ],
+  "criticalMisses": [],
+  "completionRate": 0,
+  "reportRef": "kpis/reports/2026-Q1.json",
+  "createdAt": "2026-11-01T05:01:16.285Z"
+}

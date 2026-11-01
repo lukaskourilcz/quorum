@@ -1,0 +1,24 @@
+{
+  "schemaVersion": "strategy-reassessment/1",
+  "quarterId": "2026-Q1",
+  "venture": "tehdejsi-svet",
+  "title": "Strategy reassessment: tehdejsi-svet",
+  "decisionAtStake": "continue / pivot / stop",
+  "mandatoryBoardSession": true,
+  "priorityItemId": "priority-46de79f37ca55729",
+  "missedKpiIds": [
+    "tehdejsi-svet.cycle-reliability",
+    "tehdejsi-svet.features-per-month",
+    "tehdejsi-svet.research-efficiency",
+    "tehdejsi-svet.language-parity",
+    "tehdejsi-svet.research-spend-usd"
+  ],
+  "criticalMisses": [
+    "tehdejsi-svet.cycle-reliability",
+    "tehdejsi-svet.language-parity",
+    "tehdejsi-svet.research-spend-usd"
+  ],
+  "completionRate": 0.16666667,
+  "reportRef": "kpis/reports/2026-Q1.json",
+  "createdAt": "2026-11-01T05:01:16.285Z"
+}

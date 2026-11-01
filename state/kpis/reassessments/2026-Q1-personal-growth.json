@@ -1,0 +1,21 @@
+{
+  "schemaVersion": "strategy-reassessment/1",
+  "quarterId": "2026-Q1",
+  "venture": "personal-growth",
+  "title": "Strategy reassessment: personal-growth",
+  "decisionAtStake": "continue / pivot / stop",
+  "mandatoryBoardSession": true,
+  "priorityItemId": "priority-7e284843b9fb0e63",
+  "missedKpiIds": [
+    "personal-growth.deadline-reliability-rate",
+    "personal-growth.unavailable-honesty-rate",
+    "personal-growth.owner-action-completion-rate",
+    "personal-growth.missed-deadline-rate"
+  ],
+  "criticalMisses": [
+    "personal-growth.unavailable-honesty-rate"
+  ],
+  "completionRate": 0.66666667,
+  "reportRef": "kpis/reports/2026-Q1.json",
+  "createdAt": "2026-11-01T05:01:16.285Z"
+}

@@ -1,0 +1,17 @@
+{
+  "schemaVersion": "strategy-reassessment/1",
+  "quarterId": "2026-Q1",
+  "venture": "mma-files",
+  "title": "Strategy reassessment: MMA Files",
+  "decisionAtStake": "continue / pivot / stop",
+  "mandatoryBoardSession": true,
+  "priorityItemId": "priority-0820e4759aada107",
+  "missedKpiIds": [
+    "mma-files.articles",
+    "mma-files.delivery-reliability"
+  ],
+  "criticalMisses": [],
+  "completionRate": 0.6,
+  "reportRef": "kpis/reports/2026-Q1.json",
+  "createdAt": "2026-11-01T05:01:16.285Z"
+}

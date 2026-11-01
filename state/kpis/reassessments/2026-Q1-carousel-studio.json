@@ -1,0 +1,17 @@
+{
+  "schemaVersion": "strategy-reassessment/1",
+  "quarterId": "2026-Q1",
+  "venture": "carousel-studio",
+  "title": "Strategy reassessment: carousel-studio",
+  "decisionAtStake": "continue / pivot / stop",
+  "mandatoryBoardSession": true,
+  "priorityItemId": "priority-f666f76511d29c95",
+  "missedKpiIds": [
+    "carousel-studio.engine-post-rate",
+    "carousel-studio.released-deck-rate"
+  ],
+  "criticalMisses": [],
+  "completionRate": 0.5,
+  "reportRef": "kpis/reports/2026-Q1.json",
+  "createdAt": "2026-11-01T05:01:16.285Z"
+}

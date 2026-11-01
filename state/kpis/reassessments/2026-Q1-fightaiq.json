@@ -1,0 +1,20 @@
+{
+  "schemaVersion": "strategy-reassessment/1",
+  "quarterId": "2026-Q1",
+  "venture": "fightaiq",
+  "title": "Strategy reassessment: FightAIQ",
+  "decisionAtStake": "continue / pivot / stop",
+  "mandatoryBoardSession": true,
+  "priorityItemId": "priority-aeb9e1fbf3cb9e53",
+  "missedKpiIds": [
+    "fightaiq.active-roster-coverage",
+    "fightaiq.event-card-minimum-completeness",
+    "fightaiq.prediction-coverage",
+    "fightaiq.evaluated-events",
+    "fightaiq.calibration-reports"
+  ],
+  "criticalMisses": [],
+  "completionRate": 0.16666667,
+  "reportRef": "kpis/reports/2026-Q1.json",
+  "createdAt": "2026-11-01T05:01:16.285Z"
+}

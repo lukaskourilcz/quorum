@@ -1,0 +1,18 @@
+{
+  "schemaVersion": "strategy-reassessment/1",
+  "quarterId": "2026-Q1",
+  "venture": "titty-tuesdays",
+  "title": "Strategy reassessment: Titty Tuesdays",
+  "decisionAtStake": "continue / pivot / stop",
+  "mandatoryBoardSession": true,
+  "priorityItemId": "priority-ea5e51fae699ae43",
+  "missedKpiIds": [
+    "titty-tuesdays.launch-ready-campaigns",
+    "titty-tuesdays.ideas-recorded",
+    "titty-tuesdays.ideas-advanced"
+  ],
+  "criticalMisses": [],
+  "completionRate": 0,
+  "reportRef": "kpis/reports/2026-Q1.json",
+  "createdAt": "2026-11-01T05:01:16.285Z"
+}

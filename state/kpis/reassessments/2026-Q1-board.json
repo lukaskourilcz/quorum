@@ -1,0 +1,16 @@
+{
+  "schemaVersion": "strategy-reassessment/1",
+  "quarterId": "2026-Q1",
+  "venture": "board",
+  "title": "Strategy reassessment: Board",
+  "decisionAtStake": "continue / pivot / stop",
+  "mandatoryBoardSession": true,
+  "priorityItemId": "priority-6005ec38ad359c44",
+  "missedKpiIds": [
+    "board.starvation-resolution-rate"
+  ],
+  "criticalMisses": [],
+  "completionRate": 0.5,
+  "reportRef": "kpis/reports/2026-Q1.json",
+  "createdAt": "2026-11-01T05:01:16.285Z"
+}

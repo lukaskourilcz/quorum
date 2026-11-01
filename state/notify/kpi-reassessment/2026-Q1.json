@@ -1,0 +1,83 @@
+{
+  "schemaVersion": "quarter-end-owner-packet/1",
+  "quarterId": "2026-Q1",
+  "generatedAt": "2026-11-01T05:01:16.285Z",
+  "companyStrategyReassessment": true,
+  "companyMissedKpiIds": [
+    "company.valid-window-rate",
+    "company.content-units",
+    "company.agenda-outcome-review"
+  ],
+  "boardStrategyPacket": {
+    "required": true,
+    "decisionAtStake": "continue / change the board operating pattern",
+    "reportRef": "kpis/reports/2026-Q1.json"
+  },
+  "ventureReassessments": [
+    {
+      "venture": "caught-up",
+      "decisionAtStake": "continue / pivot / stop",
+      "packetRef": "kpis/reassessments/2026-Q1-caught-up.json"
+    },
+    {
+      "venture": "mma-files",
+      "decisionAtStake": "continue / pivot / stop",
+      "packetRef": "kpis/reassessments/2026-Q1-mma-files.json"
+    },
+    {
+      "venture": "fightaiq",
+      "decisionAtStake": "continue / pivot / stop",
+      "packetRef": "kpis/reassessments/2026-Q1-fightaiq.json"
+    },
+    {
+      "venture": "titty-tuesdays",
+      "decisionAtStake": "continue / pivot / stop",
+      "packetRef": "kpis/reassessments/2026-Q1-titty-tuesdays.json"
+    },
+    {
+      "venture": "carousel-studio",
+      "decisionAtStake": "continue / pivot / stop",
+      "packetRef": "kpis/reassessments/2026-Q1-carousel-studio.json"
+    },
+    {
+      "venture": "board",
+      "decisionAtStake": "continue / pivot / stop",
+      "packetRef": "kpis/reassessments/2026-Q1-board.json"
+    },
+    {
+      "venture": "goviral",
+      "decisionAtStake": "continue / pivot / stop",
+      "packetRef": "kpis/reassessments/2026-Q1-goviral.json"
+    },
+    {
+      "venture": "marketingshark",
+      "decisionAtStake": "continue / pivot / stop",
+      "packetRef": "kpis/reassessments/2026-Q1-marketingshark.json"
+    },
+    {
+      "venture": "booksofhistory",
+      "decisionAtStake": "continue / pivot / stop",
+      "packetRef": "kpis/reassessments/2026-Q1-booksofhistory.json"
+    },
+    {
+      "venture": "door-money",
+      "decisionAtStake": "continue / pivot / stop",
+      "packetRef": "kpis/reassessments/2026-Q1-door-money.json"
+    },
+    {
+      "venture": "tehdejsi-svet",
+      "decisionAtStake": "continue / pivot / stop",
+      "packetRef": "kpis/reassessments/2026-Q1-tehdejsi-svet.json"
+    },
+    {
+      "venture": "kvorum",
+      "decisionAtStake": "continue / pivot / stop",
+      "packetRef": "kpis/reassessments/2026-Q1-kvorum.json"
+    },
+    {
+      "venture": "personal-growth",
+      "decisionAtStake": "continue / pivot / stop",
+      "packetRef": "kpis/reassessments/2026-Q1-personal-growth.json"
+    }
+  ]
+}

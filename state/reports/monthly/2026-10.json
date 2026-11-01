@@ -1,0 +1,374 @@
+{
+  "schemaVersion": "ops-report/1",
+  "period": "monthly",
+  "periodKey": "2026-10",
+  "generatedAt": "2026-11-01T05:01:16.285Z",
+  "meetings": {
+    "scheduled": 50,
+    "held": 35,
+    "skipped": [
+      {
+        "date": "2026-10-05",
+        "phase": "morning",
+        "reason": "The meeting ran, but what it wrote failed the checks that come before it is saved, so its record was not kept."
+      },
+      {
+        "date": "2026-10-12",
+        "phase": "morning",
+        "reason": "The meeting ran, but what it wrote failed the checks that come before it is saved, so its record was not kept."
+      },
+      {
+        "date": "2026-10-15",
+        "phase": "cu-day",
+        "reason": "The run behind this meeting finished without writing anything down about it."
+      },
+      {
+        "date": "2026-10-16",
+        "phase": "cu-day",
+        "reason": "The run behind this meeting finished without writing anything down about it."
+      },
+      {
+        "date": "2026-10-17",
+        "phase": "cu-day",
+        "reason": "The run behind this meeting finished without writing anything down about it."
+      },
+      {
+        "date": "2026-10-18",
+        "phase": "cu-day",
+        "reason": "The run behind this meeting finished without writing anything down about it."
+      },
+      {
+        "date": "2026-10-19",
+        "phase": "morning",
+        "reason": "The meeting ran, but what it wrote failed the checks that come before it is saved, so its record was not kept."
+      },
+      {
+        "date": "2026-10-20",
+        "phase": "cu-day",
+        "reason": "The run behind this meeting finished without writing anything down about it."
+      },
+      {
+        "date": "2026-10-26",
+        "phase": "morning",
+        "reason": "The meeting ran, but what it wrote failed the checks that come before it is saved, so its record was not kept."
+      }
+    ],
+    "missingDays": [
+      "2026-10-26",
+      "2026-10-27",
+      "2026-10-28",
+      "2026-10-29",
+      "2026-10-30",
+      "2026-10-31"
+    ]
+  },
+  "spend": {
+    "periodUsd": 10.24070175,
+    "mtdUsd": 10.24070175,
+    "capUsd": 50,
+    "byVenture": {
+      "caught-up": 6.01877075,
+      "global": 4.221931
+    }
+  },
+  "content": {
+    "published": [],
+    "scores": null
+  },
+  "quality": {
+    "vetoRate": 0.0718,
+    "firstPassRate": null,
+    "retryRate": null
+  },
+  "incidents": [
+    {
+      "kind": "dropped-seat",
+      "date": "2026-10-01",
+      "note": "VIZE: Unparsable on both attempts: Response Response truncated at the 700-token cap for claude-sonnet-5; raise maxOutputTokens at the 700-token cap for claude-sonnet-5; raise maxOutputTokens"
+    },
+    {
+      "kind": "dropped-seat",
+      "date": "2026-10-01",
+      "note": "FORGE: Unparsable on both attempts: Response Response truncated at the 700-token cap for claude-sonnet-5; raise maxOutputTokens at the 700-token cap for claude-sonnet-5; raise maxOutputTokens"
+    },
+    {
+      "kind": "dropped-seat",
+      "date": "2026-10-02",
+      "note": "VIZE: Unparsable on both attempts: Response Response truncated at the 700-token cap for claude-sonnet-5; raise maxOutputTokens at the 700-token cap for claude-sonnet-5; raise maxOutputTokens"
+    },
+    {
+      "kind": "dropped-seat",
+      "date": "2026-10-02",
+      "note": "FORGE: Unparsable on both attempts: Response Response truncated at the 700-token cap for claude-sonnet-5; raise maxOutputTokens at the 700-token cap for claude-sonnet-5; raise maxOutputTokens"
+    },
+    {
+      "kind": "dropped-seat",
+      "date": "2026-10-03",
+      "note": "VIZE: Unparsable on both attempts: Response Response truncated at the 700-token cap for claude-sonnet-5; raise maxOutputTokens at the 700-token cap for claude-sonnet-5; raise maxOutputTokens"
+    },
+    {
+      "kind": "dropped-seat",
+      "date": "2026-10-03",
+      "note": "FORGE: Unparsable on both attempts: Response Response truncated at the 700-token cap for claude-sonnet-5; raise maxOutputTokens at the 700-token cap for claude-sonnet-5; raise maxOutputTokens"
+    },
+    {
+      "kind": "dropped-seat",
+      "date": "2026-10-04",
+      "note": "VIZE: Unparsable on both attempts: Response Response truncated at the 700-token cap for claude-sonnet-5; raise maxOutputTokens at the 700-token cap for claude-sonnet-5; raise maxOutputTokens"
+    },
+    {
+      "kind": "dropped-seat",
+      "date": "2026-10-04",
+      "note": "FORGE: Unparsable on both attempts: Response Response truncated at the 700-token cap for claude-sonnet-5; raise maxOutputTokens at the 700-token cap for claude-sonnet-5; raise maxOutputTokens"
+    },
+    {
+      "kind": "dropped-seat",
+      "date": "2026-10-06",
+      "note": "VIZE: Unparsable on both attempts: Response Response truncated at the 700-token cap for claude-sonnet-5; raise maxOutputTokens at the 700-token cap for claude-sonnet-5; raise maxOutputTokens"
+    },
+    {
+      "kind": "dropped-seat",
+      "date": "2026-10-06",
+      "note": "FORGE: Unparsable on both attempts: Response Response truncated at the 700-token cap for claude-sonnet-5; raise maxOutputTokens at the 700-token cap for claude-sonnet-5; raise maxOutputTokens"
+    },
+    {
+      "kind": "dropped-seat",
+      "date": "2026-10-07",
+      "note": "VIZE: Unparsable on both attempts: Response Response truncated at the 700-token cap for claude-sonnet-5; raise maxOutputTokens at the 700-token cap for claude-sonnet-5; raise maxOutputTokens"
+    },
+    {
+      "kind": "dropped-seat",
+      "date": "2026-10-07",
+      "note": "FORGE: Unparsable on both attempts: Response Response truncated at the 700-token cap for claude-sonnet-5; raise maxOutputTokens at the 700-token cap for claude-sonnet-5; raise maxOutputTokens"
+    },
+    {
+      "kind": "dropped-seat",
+      "date": "2026-10-08",
+      "note": "VIZE: Unparsable on both attempts: Response Response truncated at the 700-token cap for claude-sonnet-5; raise maxOutputTokens at the 700-token cap for claude-sonnet-5; raise maxOutputTokens"
+    },
+    {
+      "kind": "dropped-seat",
+      "date": "2026-10-08",
+      "note": "FORGE: Unparsable on both attempts: Response Response truncated at the 700-token cap for claude-sonnet-5; raise maxOutputTokens at the 700-token cap for claude-sonnet-5; raise maxOutputTokens"
+    },
+    {
+      "kind": "dropped-seat",
+      "date": "2026-10-09",
+      "note": "VIZE: Unparsable on both attempts: Response Response truncated at the 700-token cap for claude-sonnet-5; raise maxOutputTokens at the 700-token cap for claude-sonnet-5; raise maxOutputTokens"
+    },
+    {
+      "kind": "dropped-seat",
+      "date": "2026-10-09",
+      "note": "FORGE: Unparsable on both attempts: Response Response truncated at the 700-token cap for claude-sonnet-5; raise maxOutputTokens at the 700-token cap for claude-sonnet-5; raise maxOutputTokens"
+    },
+    {
+      "kind": "dropped-seat",
+      "date": "2026-10-10",
+      "note": "VIZE: Unparsable on both attempts: Response Response truncated at the 700-token cap for claude-sonnet-5; raise maxOutputTokens at the 700-token cap for claude-sonnet-5; raise maxOutputTokens"
+    },
+    {
+      "kind": "dropped-seat",
+      "date": "2026-10-10",
+      "note": "FORGE: Unparsable on both attempts: Response Response truncated at the 700-token cap for claude-sonnet-5; raise maxOutputTokens at the 700-token cap for claude-sonnet-5; raise maxOutputTokens"
+    },
+    {
+      "kind": "dropped-seat",
+      "date": "2026-10-11",
+      "note": "VIZE: Unparsable on both attempts: Response Response truncated at the 700-token cap for claude-sonnet-5; raise maxOutputTokens at the 700-token cap for claude-sonnet-5; raise maxOutputTokens"
+    },
+    {
+      "kind": "dropped-seat",
+      "date": "2026-10-11",
+      "note": "FORGE: Unparsable on both attempts: Response Response truncated at the 700-token cap for claude-sonnet-5; raise maxOutputTokens at the 700-token cap for claude-sonnet-5; raise maxOutputTokens"
+    },
+    {
+      "kind": "dropped-seat",
+      "date": "2026-10-13",
+      "note": "VIZE: Unparsable on both attempts: Response Response truncated at the 700-token cap for claude-sonnet-5; raise maxOutputTokens at the 700-token cap for claude-sonnet-5; raise maxOutputTokens"
+    },
+    {
+      "kind": "dropped-seat",
+      "date": "2026-10-13",
+      "note": "FORGE: Unparsable on both attempts: Response Response truncated at the 700-token cap for claude-sonnet-5; raise maxOutputTokens at the 700-token cap for claude-sonnet-5; raise maxOutputTokens"
+    },
+    {
+      "kind": "dropped-seat",
+      "date": "2026-10-14",
+      "note": "VIZE: Unparsable on both attempts: Response Response truncated at the 700-token cap for claude-sonnet-5; raise maxOutputTokens at the 700-token cap for claude-sonnet-5; raise maxOutputTokens"
+    },
+    {
+      "kind": "dropped-seat",
+      "date": "2026-10-14",
+      "note": "FORGE: Unparsable on both attempts: Response Response truncated at the 700-token cap for claude-sonnet-5; raise maxOutputTokens at the 700-token cap for claude-sonnet-5; raise maxOutputTokens"
+    },
+    {
+      "kind": "dropped-seat",
+      "date": "2026-10-15",
+      "note": "VIZE: Unparsable on both attempts: Response Response truncated at the 700-token cap for claude-sonnet-5; raise maxOutputTokens at the 700-token cap for claude-sonnet-5; raise maxOutputTokens"
+    },
+    {
+      "kind": "dropped-seat",
+      "date": "2026-10-15",
+      "note": "FORGE: Unparsable on both attempts: Response Response truncated at the 700-token cap for claude-sonnet-5; raise maxOutputTokens at the 700-token cap for claude-sonnet-5; raise maxOutputTokens"
+    },
+    {
+      "kind": "dropped-seat",
+      "date": "2026-10-16",
+      "note": "VIZE: Unparsable on both attempts: Response Response truncated at the 700-token cap for claude-sonnet-5; raise maxOutputTokens at the 700-token cap for claude-sonnet-5; raise maxOutputTokens"
+    },
+    {
+      "kind": "dropped-seat",
+      "date": "2026-10-16",
+      "note": "FORGE: Unparsable on both attempts: Response Response truncated at the 700-token cap for claude-sonnet-5; raise maxOutputTokens at the 700-token cap for claude-sonnet-5; raise maxOutputTokens"
+    },
+    {
+      "kind": "dropped-seat",
+      "date": "2026-10-17",
+      "note": "VIZE: Unparsable on both attempts: Response Response truncated at the 700-token cap for claude-sonnet-5; raise maxOutputTokens at the 700-token cap for claude-sonnet-5; raise maxOutputTokens"
+    },
+    {
+      "kind": "dropped-seat",
+      "date": "2026-10-17",
+      "note": "FORGE: Unparsable on both attempts: Response Response truncated at the 700-token cap for claude-sonnet-5; raise maxOutputTokens at the 700-token cap for claude-sonnet-5; raise maxOutputTokens"
+    },
+    {
+      "kind": "dropped-seat",
+      "date": "2026-10-18",
+      "note": "VIZE: Unparsable on both attempts: Response Response truncated at the 700-token cap for claude-sonnet-5; raise maxOutputTokens at the 700-token cap for claude-sonnet-5; raise maxOutputTokens"
+    },
+    {
+      "kind": "dropped-seat",
+      "date": "2026-10-18",
+      "note": "FORGE: Unparsable on both attempts: Response Response truncated at the 700-token cap for claude-sonnet-5; raise maxOutputTokens at the 700-token cap for claude-sonnet-5; raise maxOutputTokens"
+    },
+    {
+      "kind": "dropped-seat",
+      "date": "2026-10-20",
+      "note": "VIZE: Unparsable on both attempts: Response Response truncated at the 700-token cap for claude-sonnet-5; raise maxOutputTokens at the 700-token cap for claude-sonnet-5; raise maxOutputTokens"
+    },
+    {
+      "kind": "dropped-seat",
+      "date": "2026-10-20",
+      "note": "FORGE: Unparsable on both attempts: Response Response truncated at the 700-token cap for claude-sonnet-5; raise maxOutputTokens at the 700-token cap for claude-sonnet-5; raise maxOutputTokens"
+    },
+    {
+      "kind": "dropped-seat",
+      "date": "2026-10-21",
+      "note": "VIZE: Unparsable on both attempts: Response Response truncated at the 700-token cap for claude-sonnet-5; raise maxOutputTokens at the 700-token cap for claude-sonnet-5; raise maxOutputTokens"
+    },
+    {
+      "kind": "dropped-seat",
+      "date": "2026-10-21",
+      "note": "FORGE: Unparsable on both attempts: Response Response truncated at the 700-token cap for claude-sonnet-5; raise maxOutputTokens at the 700-token cap for claude-sonnet-5; raise maxOutputTokens"
+    },
+    {
+      "kind": "dropped-seat",
+      "date": "2026-10-22",
+      "note": "VIZE: Unparsable on both attempts: Response Response truncated at the 700-token cap for claude-sonnet-5; raise maxOutputTokens at the 700-token cap for claude-sonnet-5; raise maxOutputTokens"
+    },
+    {
+      "kind": "dropped-seat",
+      "date": "2026-10-22",
+      "note": "FORGE: Unparsable on both attempts: Response Response truncated at the 700-token cap for claude-sonnet-5; raise maxOutputTokens at the 700-token cap for claude-sonnet-5; raise maxOutputTokens"
+    },
+    {
+      "kind": "dropped-seat",
+      "date": "2026-10-23",
+      "note": "VIZE: Unparsable on both attempts: Response Response truncated at the 700-token cap for claude-sonnet-5; raise maxOutputTokens at the 700-token cap for claude-sonnet-5; raise maxOutputTokens"
+    },
+    {
+      "kind": "dropped-seat",
+      "date": "2026-10-23",
+      "note": "FORGE: Unparsable on both attempts: Response Response truncated at the 700-token cap for claude-sonnet-5; raise maxOutputTokens at the 700-token cap for claude-sonnet-5; raise maxOutputTokens"
+    },
+    {
+      "kind": "dropped-seat",
+      "date": "2026-10-24",
+      "note": "VIZE: Unparsable on both attempts: Response Response truncated at the 700-token cap for claude-sonnet-5; raise maxOutputTokens at the 700-token cap for claude-sonnet-5; raise maxOutputTokens"
+    },
+    {
+      "kind": "dropped-seat",
+      "date": "2026-10-24",
+      "note": "FORGE: Unparsable on both attempts: Response Response truncated at the 700-token cap for claude-sonnet-5; raise maxOutputTokens at the 700-token cap for claude-sonnet-5; raise maxOutputTokens"
+    },
+    {
+      "kind": "dropped-seat",
+      "date": "2026-10-25",
+      "note": "VIZE: Unparsable on both attempts: Response Response truncated at the 700-token cap for claude-sonnet-5; raise maxOutputTokens at the 700-token cap for claude-sonnet-5; raise maxOutputTokens"
+    },
+    {
+      "kind": "dropped-seat",
+      "date": "2026-10-25",
+      "note": "FORGE: Unparsable on both attempts: Response Response truncated at the 700-token cap for claude-sonnet-5; raise maxOutputTokens at the 700-token cap for claude-sonnet-5; raise maxOutputTokens"
+    },
+    {
+      "kind": "dropped-seat",
+      "date": "2026-10-27",
+      "note": "VIZE: Unparsable on both attempts: Response Response truncated at the 700-token cap for claude-sonnet-5; raise maxOutputTokens at the 700-token cap for claude-sonnet-5; raise maxOutputTokens"
+    },
+    {
+      "kind": "dropped-seat",
+      "date": "2026-10-27",
+      "note": "FORGE: Unparsable on both attempts: Response Response truncated at the 700-token cap for claude-sonnet-5; raise maxOutputTokens at the 700-token cap for claude-sonnet-5; raise maxOutputTokens"
+    },
+    {
+      "kind": "dropped-seat",
+      "date": "2026-10-28",
+      "note": "VIZE: Unparsable on both attempts: Response Response truncated at the 700-token cap for claude-sonnet-5; raise maxOutputTokens at the 700-token cap for claude-sonnet-5; raise maxOutputTokens"
+    },
+    {
+      "kind": "dropped-seat",
+      "date": "2026-10-28",
+      "note": "FORGE: Unparsable on both attempts: Response Response truncated at the 700-token cap for claude-sonnet-5; raise maxOutputTokens at the 700-token cap for claude-sonnet-5; raise maxOutputTokens"
+    },
+    {
+      "kind": "dropped-seat",
+      "date": "2026-10-29",
+      "note": "VIZE: Unparsable on both attempts: Response Response truncated at the 700-token cap for claude-sonnet-5; raise maxOutputTokens at the 700-token cap for claude-sonnet-5; raise maxOutputTokens"
+    },
+    {
+      "kind": "dropped-seat",
+      "date": "2026-10-29",
+      "note": "FORGE: Unparsable on both attempts: Response Response truncated at the 700-token cap for claude-sonnet-5; raise maxOutputTokens at the 700-token cap for claude-sonnet-5; raise maxOutputTokens"
+    },
+    {
+      "kind": "dropped-seat",
+      "date": "2026-10-30",
+      "note": "VIZE: Unparsable on both attempts: Response Response truncated at the 700-token cap for claude-sonnet-5; raise maxOutputTokens at the 700-token cap for claude-sonnet-5; raise maxOutputTokens"
+    },
+    {
+      "kind": "dropped-seat",
+      "date": "2026-10-30",
+      "note": "FORGE: Unparsable on both attempts: Response Response truncated at the 700-token cap for claude-sonnet-5; raise maxOutputTokens at the 700-token cap for claude-sonnet-5; raise maxOutputTokens"
+    },
+    {
+      "kind": "dropped-seat",
+      "date": "2026-10-31",
+      "note": "VIZE: Unparsable on both attempts: Response Response truncated at the 700-token cap for claude-sonnet-5; raise maxOutputTokens at the 700-token cap for claude-sonnet-5; raise maxOutputTokens"
+    },
+    {
+      "kind": "dropped-seat",
+      "date": "2026-10-31",
+      "note": "FORGE: Unparsable on both attempts: Response Response truncated at the 700-token cap for claude-sonnet-5; raise maxOutputTokens at the 700-token cap for claude-sonnet-5; raise maxOutputTokens"
+    }
+  ],
+  "fixTasks": {
+    "opened": 4,
+    "closed": 5
+  },
+  "perVenture": [
+    {
+      "ventureId": "caught-up",
+      "verdictSummary": "no verdict recorded this period",
+      "outputs": 0,
+      "spendUsd": 6.01877075
+    },
+    {
+      "ventureId": "global",
+      "verdictSummary": "no verdict recorded this period",
+      "outputs": 0,
+      "spendUsd": 4.221931
+    }
+  ],
+  "narrative": null
+}

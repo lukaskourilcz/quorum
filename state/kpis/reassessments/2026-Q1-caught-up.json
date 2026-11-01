@@ -1,0 +1,27 @@
+{
+  "schemaVersion": "strategy-reassessment/1",
+  "quarterId": "2026-Q1",
+  "venture": "caught-up",
+  "title": "Strategy reassessment: Caught Up",
+  "decisionAtStake": "continue / pivot / stop",
+  "mandatoryBoardSession": true,
+  "priorityItemId": "priority-41d4cfa0ca87acd9",
+  "missedKpiIds": [
+    "caught-up.editions",
+    "caught-up.published-hero-rate",
+    "edition.no_edition_rate",
+    "copy.slop_block_rate",
+    "localization.copy_block_rate",
+    "copy.rewrite_pass_rate",
+    "localization.register_pass_rate",
+    "ops.delivery_success_rate",
+    "media.cost_usd",
+    "growth.idea_novelty_rate",
+    "caught-up.delivery-reliability",
+    "caught-up.cost-per-edition"
+  ],
+  "criticalMisses": [],
+  "completionRate": 0.25,
+  "reportRef": "kpis/reports/2026-Q1.json",
+  "createdAt": "2026-11-01T05:01:16.285Z"
+}

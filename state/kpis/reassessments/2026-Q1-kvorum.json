@@ -1,0 +1,25 @@
+{
+  "schemaVersion": "strategy-reassessment/1",
+  "quarterId": "2026-Q1",
+  "venture": "kvorum",
+  "title": "Strategy reassessment: kvorum",
+  "decisionAtStake": "continue / pivot / stop",
+  "mandatoryBoardSession": true,
+  "priorityItemId": "priority-b164a5522e06382b",
+  "missedKpiIds": [
+    "kvorum.desk-reliability",
+    "kvorum.approved-packages-per-week",
+    "kvorum.approval-rate-trending-up",
+    "kvorum.published-claim-reference-rate",
+    "kvorum.corrections-within-24h",
+    "kvorum.apify-monthly-usd"
+  ],
+  "criticalMisses": [
+    "kvorum.desk-reliability",
+    "kvorum.published-claim-reference-rate",
+    "kvorum.apify-monthly-usd"
+  ],
+  "completionRate": 0.14285714,
+  "reportRef": "kpis/reports/2026-Q1.json",
+  "createdAt": "2026-11-01T05:01:16.285Z"
+}

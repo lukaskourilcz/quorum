@@ -1,0 +1,20 @@
+{
+  "schemaVersion": "strategy-reassessment/1",
+  "quarterId": "2026-Q1",
+  "venture": "booksofhistory",
+  "title": "Strategy reassessment: BOOKSOFHISTORY",
+  "decisionAtStake": "continue / pivot / stop",
+  "mandatoryBoardSession": true,
+  "priorityItemId": "priority-df36730913ed1e5a",
+  "missedKpiIds": [
+    "booksofhistory.cycle-reliability",
+    "booksofhistory.features-per-month",
+    "booksofhistory.research-efficiency",
+    "booksofhistory.verification-state-coverage",
+    "booksofhistory.legend-as-fact-violations"
+  ],
+  "criticalMisses": [],
+  "completionRate": 0.16666667,
+  "reportRef": "kpis/reports/2026-Q1.json",
+  "createdAt": "2026-11-01T05:01:16.285Z"
+}

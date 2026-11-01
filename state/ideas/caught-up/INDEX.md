@@ -6,6 +6,7 @@
 
 | ID | Title (≤8 words) | Status | Last reason |
 | --- | --- | --- | --- |
+| idea-2026-11-01-99513de1 | Add a Daily Pause Context Note | proposed | VAULT variant: Both add optional internal notes to daily/venture records to distinguish deliberate inactivity from miss… |
 | idea-2026-10-31-c56fe3bf | Add an Exploration Exit Note | proposed | VAULT variant: Both add optional internal notes to venture records to distinguish deliberate pauses/exploration from mi… |
 | idea-2026-10-30-edbfddde | Add a Venture Pause Reason Label | proposed | VAULT variant: Both add optional internal labels to venture records to distinguish deliberate inactivity from missing e… |
 | idea-2026-10-28-4c216bf3 | Add a Daily Evidence Completeness Flag | proposed | VAULT variant: Both add a bounded internal flag to daily records assessing evidence completeness across multiple activi… |
@@ -22,9 +23,8 @@
 | idea-2026-10-14-e43f8bd8 | Add a Source-Question Review Prompt | proposed | VAULT variant: Both add optional internal prompts to publishing records for source-mix analysis without changing workfl… |
 | idea-2026-10-13-22835b7d | Add a Save-Check Recovery Note | proposed | VAULT novel: Closest prior idea overlaps only 0.41. |
 | idea-2026-10-09-d6fbcf2b | Add a One-Line Source Rationale | proposed | VAULT variant: Both add one optional internal line per publishing record to review periodically for sourcing insights w… |
-| idea-2026-10-08-de5fc836 | Add a Source-Mix Reflection Label | proposed | VAULT variant: Both add optional internal source-category metadata to publishing records for periodic review to guide h… |
 
-Omitted older current entries: 11.
+Omitted older current entries: 12.
 Collapsed superseded entries: 0.
 
 ## All-time kill list
