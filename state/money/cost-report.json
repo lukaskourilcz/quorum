@@ -1,14 +1,14 @@
 {
   "schemaVersion": "cost-report/1",
-  "generatedAt": "2026-11-01T05:12:34.821Z",
+  "generatedAt": "2026-11-02T05:10:06.116Z",
   "month": "2026-11",
   "currency": "USD",
   "metered": {
     "total": {
-      "totalUsd": 0.179002,
-      "modelUsd": 0.179002,
+      "totalUsd": 0.355673,
+      "modelUsd": 0.355673,
       "mediaUsd": 0,
-      "calls": 8
+      "calls": 13
     },
     "editions": [],
     "decisions": [],
@@ -16,8 +16,8 @@
       {
         "phase": "morning",
         "ventureId": "global",
-        "cycles": 1,
-        "meteredUsd": 0.179002,
+        "cycles": 2,
+        "meteredUsd": 0.355673,
         "comparable": {
           "cycles": 1,
           "envelopeUsd": 0.044826,
@@ -31,7 +31,7 @@
   "billed": null,
   "reconciliation": {
     "status": "unavailable",
-    "meteredUsd": 0.179002,
+    "meteredUsd": 0.355673,
     "billedUsd": null,
     "differenceUsd": null,
     "toleranceUsd": 0.01,
