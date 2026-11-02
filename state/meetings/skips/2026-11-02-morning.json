@@ -1,0 +1,8 @@
+{
+  "schemaVersion": "meeting-skip/1",
+  "date": "2026-11-02",
+  "phase": "morning",
+  "reason": "The day's spending limit was reached part-way through, so this meeting stopped early. $0.18 of the day's $1.00 limit is spent; nobody left to speak was asked.",
+  "stopReason": "room_cap",
+  "decidedAt": "2026-11-02T05:01:15.586Z"
+}

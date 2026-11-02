@@ -1,0 +1,49 @@
+{
+  "schemaVersion": "calendar/1",
+  "weekOf": "2026-11-02",
+  "slots": [
+    {
+      "at": "2026-11-02T05:00:00.000Z",
+      "tz": "Europe/Prague",
+      "kind": "venture-morning",
+      "status": "skipped",
+      "decisionOneLiner": "The day's spending limit was reached part-way through, so this meeting stopped early. $0.18 of the day's $1.00 limit is spent; nobody left to speak was asked."
+    },
+    {
+      "at": "2026-11-03T05:00:00.000Z",
+      "tz": "Europe/Prague",
+      "kind": "venture-morning",
+      "status": "scheduled"
+    },
+    {
+      "at": "2026-11-04T05:00:00.000Z",
+      "tz": "Europe/Prague",
+      "kind": "venture-morning",
+      "status": "scheduled"
+    },
+    {
+      "at": "2026-11-05T05:00:00.000Z",
+      "tz": "Europe/Prague",
+      "kind": "venture-morning",
+      "status": "scheduled"
+    },
+    {
+      "at": "2026-11-06T05:00:00.000Z",
+      "tz": "Europe/Prague",
+      "kind": "venture-morning",
+      "status": "scheduled"
+    },
+    {
+      "at": "2026-11-07T05:00:00.000Z",
+      "tz": "Europe/Prague",
+      "kind": "venture-morning",
+      "status": "scheduled"
+    },
+    {
+      "at": "2026-11-08T05:00:00.000Z",
+      "tz": "Europe/Prague",
+      "kind": "venture-morning",
+      "status": "scheduled"
+    }
+  ]
+}
