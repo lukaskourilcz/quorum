@@ -1,6 +1,6 @@
 {
   "schemaVersion": "money-public/1",
-  "generatedAt": "2026-11-02T05:01:15.586Z",
+  "generatedAt": "2026-11-07T10:43:50.324Z",
   "quarter": {
     "id": "2026-Q1",
     "start": "2026-08-03",
@@ -12,13 +12,13 @@
         "venture": "company",
         "name": "Scheduled windows with a valid recorded result",
         "unit": "ratio",
-        "actual": 0.57613815,
+        "actual": 0.57076205,
         "target": 0.95,
         "direction": "at-least",
         "critical": true,
         "status": "off-track",
         "paceTarget": 0.95,
-        "attainmentRatio": 0.60646121,
+        "attainmentRatio": 0.60080216,
         "rampActive": false,
         "reason": null
       },
@@ -537,13 +537,13 @@
         "venture": "caught-up",
         "name": "Days ending with an edition or a stated reason",
         "unit": "ratio",
-        "actual": 0.41304348,
+        "actual": 0.39175258,
         "target": 1,
         "direction": "at-least",
         "critical": false,
         "status": "off-track",
         "paceTarget": 1,
-        "attainmentRatio": 0.41304348,
+        "attainmentRatio": 0.39175258,
         "rampActive": false,
         "reason": null
       },
@@ -552,13 +552,13 @@
         "venture": "mma-files",
         "name": "Days ending with a published run record",
         "unit": "ratio",
-        "actual": 0.22826087,
+        "actual": 0.21649485,
         "target": 1,
         "direction": "at-least",
         "critical": false,
         "status": "off-track",
         "paceTarget": 1,
-        "attainmentRatio": 0.22826087,
+        "attainmentRatio": 0.21649485,
         "rampActive": false,
         "reason": null
       },
@@ -597,13 +597,13 @@
         "venture": "titty-tuesdays",
         "name": "Marketing ideas recorded per week",
         "unit": "count",
-        "actual": 0.83695652,
+        "actual": 0.79381443,
         "target": 5,
         "direction": "at-least",
         "critical": false,
         "status": "off-track",
         "paceTarget": 5,
-        "attainmentRatio": 0.1673913,
+        "attainmentRatio": 0.15876289,
         "rampActive": false,
         "reason": null
       },
@@ -642,13 +642,13 @@
         "venture": "goviral",
         "name": "Trend snapshots stored per week",
         "unit": "count",
-        "actual": 0.07608696,
+        "actual": 0.07216495,
         "target": 1,
         "direction": "at-least",
         "critical": false,
         "status": "off-track",
         "paceTarget": 1,
-        "attainmentRatio": 0.07608696,
+        "attainmentRatio": 0.07216495,
         "rampActive": false,
         "reason": null
       },
@@ -657,13 +657,13 @@
         "venture": "goviral",
         "name": "Marketing ideas recorded per week",
         "unit": "count",
-        "actual": 0.45652174,
+        "actual": 0.43298969,
         "target": 3,
         "direction": "at-least",
         "critical": false,
         "status": "off-track",
         "paceTarget": 3,
-        "attainmentRatio": 0.15217391,
+        "attainmentRatio": 0.1443299,
         "rampActive": false,
         "reason": null
       },
@@ -1260,8 +1260,8 @@
     "currency": "USD",
     "api": {
       "month": "2026-11",
-      "monthlyUsd": 0.179002,
-      "cumulativeUsd": 35.60672695
+      "monthlyUsd": 0.355673,
+      "cumulativeUsd": 35.78339795
     },
     "fixed": {
       "monthlyUsd": 22.99,
@@ -1353,8 +1353,8 @@
         "sourceNote": null
       }
     ],
-    "totalMonthlyBurnUsd": 23.169002,
-    "cumulativeSpendUsd": 104.57672695
+    "totalMonthlyBurnUsd": 23.345673,
+    "cumulativeSpendUsd": 104.75339795
   },
   "revenue": {
     "recognizedUsd": 0
