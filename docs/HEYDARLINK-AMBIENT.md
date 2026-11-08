@@ -1,5 +1,10 @@
 # HeyDarlink ambient photos
 
+> **Moved on 2026-11-08.** The pipeline now runs in OwnDashboard (`lukaskourilcz/own-dashboard`, PR #263,
+> `docs/heydarlink-ambient.md`), on demand in batches of ten shots per persona, with Claude as the vision gate.
+> The workflow below no longer runs on a schedule; a manual dispatch remains as a fallback until this package is
+> removed. Everything below describes the retired Quorum job.
+
 The four HeyDarlink Instagram accounts (Nina, Fatimah, Teresa, Michaela) post two kinds of frame.
 Frames with the girl in them come from Foxy. Every frame without her (views, food, drinks,
 interiors, flat lays, city details, sunsets, outfits on hangers, books, flowers) comes from this
