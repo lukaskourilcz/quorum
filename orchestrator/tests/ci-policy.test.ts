@@ -77,6 +77,7 @@ describe("automation policy", () => {
       "cycle.yml",
       "delivery-doctor.yml",
       "health.yml",
+      "heydarlink-ambient.yml",
       "marketing-source.yml",
       "social-publisher.yml",
       "social-references.yml"
@@ -354,9 +355,10 @@ describe("automation policy", () => {
         schedules.push({ file: name, expression: match[1]! });
       }
     }
-    // Backstop sweeps plus daily health; retired social workflows have no schedule.
+    // Backstop sweeps plus daily health and the daily HeyDarlink ambient run; retired social
+    // workflows have no schedule.
     expect(schedules.length, "no schedules found; the cron guard is asserting nothing")
-      .toBe(deployedCronExpressions().length + 1);
+      .toBe(deployedCronExpressions().length + 2);
 
     for (const { file, expression } of schedules) {
       const minute = expression.trim().split(/\s+/u)[0]!;

@@ -1,0 +1,136 @@
+name: HeyDarlink ambient photos
+
+# Girl-free ambient frames (views, food, drinks, interiors, flat lays, city details, sunsets,
+# outfits on hangers, books, flowers) for the four HeyDarlink Instagram accounts. The owner's
+# 2026-11-08 decision: fully automatic, no manual or Discord approval, only automatic gates; Foxy
+# credits stay for frames with the girl in them. docs/HEYDARLINK-AMBIENT.md has the whole pipeline.
+#
+# Every frame is rendered natively at 4:5 or 9:16, graded, gated (format, duplicate, renderer
+# NSFW flag, moderation, a vision check for people, faces, body parts and lettering) and uploaded
+# to HeyDarlink's ingest route. Any gate that cannot answer rejects the frame. The ledger under
+# state/heydarlink-ambient/ carries the spend, so AMBIENT_DAILY_USD holds across reruns.
+on:
+  schedule:
+    # 04:55 UTC, before the Prague and London mornings and the 06:00 Dubai feed window.
+    - cron: "55 4 * * *"
+  workflow_dispatch:
+    inputs:
+      persona:
+        description: Which persona to render for
+        type: choice
+        options: [all, nina, fatimah, teresa, michaela]
+        default: all
+      count:
+        description: Shots per persona (each shot renders every aspect it lists)
+        type: string
+        default: "1"
+      dry_run:
+        description: Render and gate, keep the frames as an artifact, upload nothing
+        type: boolean
+        default: false
+
+permissions:
+  contents: write
+
+concurrency:
+  group: heydarlink-ambient
+  cancel-in-progress: false
+
+jobs:
+  ambient:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    env:
+      AMBIENT_PERSONA: ${{ inputs.persona || 'all' }}
+      AMBIENT_COUNT: ${{ inputs.count || '1' }}
+      AMBIENT_DRY_RUN: ${{ inputs.dry_run && 'true' || 'false' }}
+      # Optional repository variable; without it the config default ($1.00 a day) applies.
+      AMBIENT_DAILY_USD: ${{ vars.AMBIENT_DAILY_USD }}
+    steps:
+      - name: Checkout
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          # Full history so the ledger commit can rebase onto a cycle push that landed meanwhile.
+          fetch-depth: 0
+          persist-credentials: true
+
+      - name: Honor repository pause
+        run: test ! -e state/PAUSED
+
+      # Names only. A real run without the ingest pair stops here, before any paid render: frames
+      # that cannot be delivered would spend the day's cap on nothing.
+      - name: Check required secrets
+        env:
+          HAS_FAL_KEY: ${{ secrets.FAL_KEY != '' }}
+          HAS_OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY != '' }}
+          HAS_INGEST_URL: ${{ secrets.HEYDARLINK_INGEST_URL != '' }}
+          HAS_INGEST_TOKEN: ${{ secrets.HEYDARLINK_INGEST_TOKEN != '' }}
+        run: |
+          missing=()
+          test "$HAS_FAL_KEY" = "true" || missing+=("FAL_KEY")
+          test "$HAS_OPENAI_API_KEY" = "true" || missing+=("OPENAI_API_KEY")
+          if test "$AMBIENT_DRY_RUN" != "true"; then
+            test "$HAS_INGEST_URL" = "true" || missing+=("HEYDARLINK_INGEST_URL")
+            test "$HAS_INGEST_TOKEN" = "true" || missing+=("HEYDARLINK_INGEST_TOKEN")
+          fi
+          if test "${#missing[@]}" -gt 0; then
+            echo "::error::HeyDarlink ambient is missing secrets: ${missing[*]}. Nothing was rendered or uploaded. See docs/HEYDARLINK-AMBIENT.md."
+            exit 1
+          fi
+
+      - name: Install pnpm
+        uses: pnpm/action-setup@0ebf47130e4866e96fce0953f49152a61190b271 # v6.0.9
+
+      - name: Install Node.js
+        uses: actions/setup-node@249970729cb0ef3589644e2896645e5dc5ba9c38 # v6.5.0
+        with:
+          node-version: "22"
+          package-manager-cache: false
+
+      - name: Install the ambient package only
+        run: pnpm install --frozen-lockfile --filter @boardlessai/heydarlink-ambient
+
+      - name: Render, grade, gate and upload
+        env:
+          FAL_KEY: ${{ secrets.FAL_KEY }}
+          OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
+          # Optional; the chain skips Gemini when the secret does not exist.
+          GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
+          PEXELS_API_KEY: ${{ secrets.PEXELS_API_KEY }}
+          PIXABAY_API_KEY: ${{ secrets.PIXABAY_API_KEY }}
+          HEYDARLINK_INGEST_URL: ${{ secrets.HEYDARLINK_INGEST_URL }}
+          HEYDARLINK_INGEST_TOKEN: ${{ secrets.HEYDARLINK_INGEST_TOKEN }}
+          AMBIENT_OUT_DIR: ${{ github.workspace }}/ambient-out
+        run: pnpm --filter @boardlessai/heydarlink-ambient run ambient
+
+      - name: Keep the frames and the run report
+        if: ${{ !cancelled() && hashFiles('ambient-out/report.json') != '' }}
+        uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
+        with:
+          name: heydarlink-ambient-${{ github.run_id }}
+          path: ambient-out/
+          retention-days: 14
+          if-no-files-found: ignore
+
+      # The ledger is written even when a frame failed: the spend happened either way, and a cap
+      # that forgets a failed run's renders does not hold on the rerun.
+      - name: Commit the ledger
+        if: ${{ !cancelled() }}
+        run: |
+          if test -z "$(git status --porcelain --untracked-files=all -- state/heydarlink-ambient)"; then
+            exit 0
+          fi
+          git config user.name "boardlessai-ambient[bot]"
+          git config user.email "boardlessai-ambient[bot]@users.noreply.github.com"
+          git add -A -- state/heydarlink-ambient
+          git commit -m "heydarlink-ambient($(date -u +%F)): record spend, frames and rotation"
+          pushed=false
+          for attempt in 1 2 3; do
+            if git push origin "HEAD:${GITHUB_REF_NAME}"; then pushed=true; break; fi
+            git fetch origin "$GITHUB_REF_NAME"
+            git rebase --autostash "origin/$GITHUB_REF_NAME" || { git rebase --abort || true; break; }
+          done
+          if test "$pushed" != "true"; then
+            echo "::error::Could not push the ambient ledger after three attempts; tomorrow's cap would not see today's spend." >&2
+            exit 1
+          fi
