@@ -94,7 +94,7 @@ export async function runAmbient(options: RunOptions): Promise<RunReport> {
           acceptedHashes.push(outcome.hash!);
           if (options.dryRun || !options.upload) {
             if (options.outDir) await writeFrame(options.outDir, persona, shot, aspect, jpeg, "accepted");
-            frames.push(record(base, now, "dry-run", [], render, cost, outcome.hash, jpeg));
+            frames.push(record(base, now, "dry-run", outcome.reasons, render, cost, outcome.hash, jpeg));
             continue;
           }
           const result = await options.upload(jpeg, {
@@ -114,7 +114,7 @@ export async function runAmbient(options: RunOptions): Promise<RunReport> {
             base,
             now,
             result.kind === "stored" ? "uploaded" : result.kind === "duplicate" ? "duplicate-on-server" : "upload-failed",
-            result.kind === "stored" ? [] : [`ingest:${result.code}`],
+            result.kind === "stored" ? outcome.reasons : [...outcome.reasons, `ingest:${result.code}`],
             render,
             cost,
             outcome.hash,
