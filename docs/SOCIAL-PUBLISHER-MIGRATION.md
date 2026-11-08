@@ -4,6 +4,19 @@ Version: 2026-08-27
 
 Authority: GitHub #409, consuming #405, #406, #415 and the exact capability/isolation map in #424.
 
+> **Retired, 8 November 2026.** DNESKAi and devShark are now rendered **and** published entirely by
+> OwnDashboard (`own-dashboard`: `src/lib/carousel-studio` renders the slides; `src/lib/marketing`
+> publishes to Instagram and Threads). The GitHub Actions workflow `.github/workflows/social-publisher.yml`
+> renders and publishes nothing any more: it is held behind `if: ${{ false }}` with its schedule removed,
+> and no other Quorum workflow renders or publishes DNESKAi/devShark. The file is kept rather than deleted
+> only because `orchestrator/tests/ci-policy.test.ts` and the admin-queue dispatch (`site/`) still assert on
+> it; removing it outright is a separate Quorum-internal change. The publish credentials it names
+> (`CAUGHT_UP_INSTAGRAM_ACCESS_TOKEN`, `CAUGHT_UP_THREADS_ACCESS_TOKEN`, `DEVSHARK_INSTAGRAM_ACCESS_TOKEN`)
+> and its publishing vars (`SOCIAL_KILL_SWITCH`, `SOCIAL_ASSET_BASE`, the `CAUGHT_UP_*`/`DEVSHARK_*`
+> user-id vars) are never used at runtime (the job never starts) and can be removed from the repository
+> settings. The `DNESKAi source bridge` (`marketing-source.yml`) stays: it sends approved **sources**
+> (never posts) to OwnDashboard. The text below is the historical publisher design, kept for provenance.
+
 ## Runtime truth
 
 `config/social-publisher-registry.json` is the versioned profile/connection registry used by the
