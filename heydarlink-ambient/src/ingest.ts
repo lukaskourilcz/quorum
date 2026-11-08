@@ -87,7 +87,13 @@ export async function uploadFrame(input: {
   sleep?: (ms: number) => Promise<void>;
 }): Promise<IngestResult> {
   const sleep = input.sleep ?? ((ms: number) => new Promise((resolve) => setTimeout(resolve, ms)));
-  const target = checkUrl(input.url, [hostOf(input.url)], input.allowInsecureLoopback);
+  let target: URL;
+  try {
+    target = checkUrl(input.url, [hostOf(input.url)], input.allowInsecureLoopback);
+  } catch {
+    // HTTPS only: the token must never travel in clear text, so a wrong URL sends nothing.
+    return { kind: "failed", status: 0, code: "INVALID_URL" };
+  }
   let last: IngestResult = { kind: "failed", status: 0, code: "NOT_ATTEMPTED" };
   for (let attempt = 0; attempt < 3; attempt++) {
     const { init } = ingestRequest(input);
