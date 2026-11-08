@@ -62,3 +62,6 @@ state/ventures/door-money/manuscript/
 /docs/design-lab/dneskai-kits/magazine/
 /docs/design-lab/dneskai-kits/ticker/
 /docs/design-lab/dneskai-kits/spotlight/
+
+# HeyDarlink ambient: dry-run frames and the run report (uploaded as a workflow artifact)
+ambient-out/
