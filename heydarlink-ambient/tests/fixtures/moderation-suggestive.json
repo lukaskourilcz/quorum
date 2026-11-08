@@ -1,0 +1,1 @@
+{"id":"modr-fixture","model":"omni-moderation-latest","results":[{"flagged":false,"categories":{"sexual":false},"category_scores":{"sexual":0.41,"violence":0.0004}}]}
