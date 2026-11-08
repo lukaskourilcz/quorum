@@ -34,11 +34,11 @@ export function pickShots(input: {
       cycle += 1;
       continue;
     }
-    picked.push(...fresh.slice(0, count - picked.length));
+    const take = fresh.slice(0, count - picked.length);
+    picked.push(...take);
+    used = [...used, ...take.map((shot) => shot.id)];
   }
-  const pickedIds = picked.map((shot) => shot.id);
-  const nextUsed = [...used, ...pickedIds.filter((id) => !used.includes(id))];
-  return { picked, used: nextUsed.length >= input.shots.length ? [] : nextUsed };
+  return { picked, used: used.length >= input.shots.length ? [] : used };
 }
 
 function shuffle<T extends { id: string }>(items: T[], key: string): T[] {
