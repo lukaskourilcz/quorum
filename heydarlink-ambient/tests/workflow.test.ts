@@ -12,9 +12,9 @@ const step = (source: string, name: string) => {
 };
 
 describe("the ambient workflow", () => {
-  it("runs daily and by hand with persona, count and dry_run, one run at a time", async () => {
+  it("runs only by hand since the move to OwnDashboard, with persona, count and dry_run, one run at a time", async () => {
     const source = await workflow();
-    expect(source).toMatch(/- cron: "55 \d{1,2} \* \* \*"/u);
+    expect(source).not.toMatch(/^\s+schedule:/mu);
     expect(source).toContain("workflow_dispatch:");
     for (const input of ["persona:", "count:", "dry_run:"]) expect(source).toContain(`      ${input}`);
     expect(source).toMatch(/dry_run:[\s\S]*?default: false/u);

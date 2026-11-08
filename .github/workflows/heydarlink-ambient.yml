@@ -9,10 +9,11 @@ name: HeyDarlink ambient photos
 # NSFW flag, moderation, a vision check for people, faces, body parts and lettering) and uploaded
 # to HeyDarlink's ingest route. Any gate that cannot answer rejects the frame. The ledger under
 # state/heydarlink-ambient/ carries the spend, so AMBIENT_DAILY_USD holds across reruns.
+#
+# Retired on 2026-11-08: the pipeline moved to OwnDashboard (lukaskourilcz/own-dashboard PR #263,
+# docs/heydarlink-ambient.md there), which renders batches on demand. The daily schedule is gone;
+# a manual dispatch still works as a fallback until the package is removed.
 on:
-  schedule:
-    # 04:55 UTC, before the Prague and London mornings and the 06:00 Dubai feed window.
-    - cron: "55 4 * * *"
   workflow_dispatch:
     inputs:
       persona:
