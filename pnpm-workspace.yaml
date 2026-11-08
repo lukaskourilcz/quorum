@@ -1,4 +1,5 @@
 packages:
+  - heydarlink-ambient
   - orchestrator
   - site
   - studio

@@ -1,0 +1,25 @@
+{
+  "name": "@boardlessai/heydarlink-ambient",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "description": "Daily girl-free ambient photos for the HeyDarlink Instagram accounts: generate, grade, gate, ingest.",
+  "engines": {
+    "node": ">=22"
+  },
+  "scripts": {
+    "ambient": "tsx src/cli.ts",
+    "test": "vitest run --passWithNoTests",
+    "typecheck": "tsc --noEmit"
+  },
+  "dependencies": {
+    "sharp": "0.35.4",
+    "zod": "4.4.3"
+  },
+  "devDependencies": {
+    "@types/node": "22.20.1",
+    "tsx": "4.23.1",
+    "typescript": "5.9.3",
+    "vitest": "4.1.11"
+  }
+}
